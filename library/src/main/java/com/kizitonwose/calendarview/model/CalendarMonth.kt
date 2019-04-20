@@ -17,7 +17,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
 
     val weekDays: List<List<CalendarDay>> by lazy {
         val thisMonthDays = (1..yearMonth.lengthOfMonth()).map {
-            CalendarDay(LocalDate.of(it, month, year), DayOwner.THIS_MONTH)
+            CalendarDay(LocalDate.of(year, month, it), DayOwner.THIS_MONTH)
         }
 
         // Group days by week of month
@@ -30,7 +30,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
             val previousMonth = yearMonth.minusMonths(1)
             val inDates = (1..previousMonth.lengthOfMonth()).toList()
                 .takeLast(7 - firstWeek.size).map {
-                    CalendarDay(LocalDate.of(it, previous.month, previous.year), DayOwner.PREVIOUS_MONTH)
+                    CalendarDay(LocalDate.of(previous.year, previous.month, it), DayOwner.PREVIOUS_MONTH)
                 }
             weekDaysGroup[0] = inDates + firstWeek
         }
@@ -39,7 +39,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
         val lastWeek = weekDaysGroup.last()
         if (lastWeek.size < 7) {
             val outDates = (1..7 - lastWeek.size).map {
-                CalendarDay(LocalDate.of(it, next.month, next.year), DayOwner.NEXT_MONTH)
+                CalendarDay(LocalDate.of(next.year, next.month, it), DayOwner.NEXT_MONTH)
             }
             weekDaysGroup[weekDaysGroup.lastIndex] = lastWeek + outDates
         }
