@@ -23,8 +23,6 @@ class CalendarView : RecyclerView {
 
     var monthFooterBinder: MonthHeaderFooterBinder? = null
 
-    var allowsMultipleSelection: Boolean = false
-
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -96,9 +94,5 @@ class CalendarView : RecyclerView {
 
     fun scrollToMonth(date: LocalDate) {
         adapter.scrollToMonth(date)
-    }
-
-    fun clearSelection() {
-        adapter.clearSelection()
     }
 }
