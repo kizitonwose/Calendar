@@ -3,20 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
-    android:orientation="vertical">
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/itemOptionTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
         android:fontFamily="sans-serif-medium"
         android:textColor="@android:color/black"
         android:textSize="24sp"
         tools:text="This is a title" />
 
     <TextView
+        android:layout_marginTop="4dp"
         android:id="@+id/itemOptionSubtitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
