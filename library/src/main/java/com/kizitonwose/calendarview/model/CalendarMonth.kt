@@ -8,8 +8,8 @@ import java.io.Serializable
 
 class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<CalendarMonth>, Serializable {
 
-    val year: Int = yearMonth.year
-    val month: Int = yearMonth.month.value
+    private val year: Int = yearMonth.year
+    private val month: Int = yearMonth.month.value
 
     val days: List<CalendarDay> by lazy {
         weekDays.flatten().filter { it.owner == DayOwner.THIS_MONTH }
@@ -17,7 +17,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
 
     val weekDays: List<List<CalendarDay>> by lazy {
         val thisMonthDays = (1..yearMonth.lengthOfMonth()).map {
-            CalendarDay(it, month, year, DayOwner.THIS_MONTH)
+            CalendarDay(LocalDate.of(it, month, year), DayOwner.THIS_MONTH)
         }
 
         // Group days by week of month
@@ -30,7 +30,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
             val previousMonth = yearMonth.minusMonths(1)
             val inDates = (1..previousMonth.lengthOfMonth()).toList()
                 .takeLast(7 - firstWeek.size).map {
-                    CalendarDay(it, previous.month, previous.year, DayOwner.PREVIOUS_MONTH)
+                    CalendarDay(LocalDate.of(it, previous.month, previous.year), DayOwner.PREVIOUS_MONTH)
                 }
             weekDaysGroup[0] = inDates + firstWeek
         }
@@ -39,7 +39,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
         val lastWeek = weekDaysGroup.last()
         if (lastWeek.size < 7) {
             val outDates = (1..7 - lastWeek.size).map {
-                CalendarDay(it, next.month, next.year, DayOwner.NEXT_MONTH)
+                CalendarDay(LocalDate.of(it, next.month, next.year), DayOwner.NEXT_MONTH)
             }
             weekDaysGroup[weekDaysGroup.lastIndex] = lastWeek + outDates
         }
@@ -51,7 +51,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
         weekDaysGroup
     }
 
-    val dates: List<LocalDate>
+    internal val dates: List<LocalDate>
         get() = days.map { it.date }
 
     val previous: CalendarMonth

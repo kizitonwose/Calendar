@@ -8,10 +8,8 @@ enum class DayOwner {
     PREVIOUS_MONTH, THIS_MONTH, NEXT_MONTH
 }
 
-data class CalendarDay internal constructor(val day: Int, val month: Int, val year: Int, val owner: DayOwner) :
+data class CalendarDay internal constructor(val date: LocalDate, val owner: DayOwner) :
     Comparable<CalendarDay>, Serializable {
-
-    val date: LocalDate = LocalDate.of(year, month, day)
 
     override fun toString(): String {
         return "CalendarDay { date =  $date, owner = $owner}"
