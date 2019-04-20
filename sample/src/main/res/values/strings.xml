@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CalendarView Sample</string>
+    <string name="example_1">Example 1</string>
 </resources>
