@@ -13,10 +13,8 @@ data class CalendarDay internal constructor(val day: Int, val month: Int, val ye
 
     val date: LocalDate = LocalDate.of(year, month, day)
 
-    var isSelected = false
-
     override fun toString(): String {
-        return "CalendarDay { date =  $date, owner = $owner, isSelected = $isSelected}"
+        return "CalendarDay { date =  $date, owner = $owner}"
     }
 
     override fun compareTo(other: CalendarDay): Int {
