@@ -1,15 +1,22 @@
 package com.kizitonwose.calendarviewsample
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_home.*
 
+
 class HomeActivity : AppCompatActivity() {
 
     private val examplesAdapter = ExamplesAdapter {
-
+        val instance = it.clazz.getConstructor().newInstance() as Fragment
+        supportFragmentManager.beginTransaction()
+            .add(R.id.homeContainer, instance, it.clazz.simpleName)
+            .addToBackStack(it.clazz.simpleName)
+            .commit()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,5 +24,12 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         examplesRv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         examplesRv.adapter = examplesAdapter
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> onBackPressed().let { true }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

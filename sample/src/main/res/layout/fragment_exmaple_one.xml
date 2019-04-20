@@ -3,12 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/homeContainer"
-    tools:context=".HomeActivity">
+    android:background="@color/colorAccent"
+    tools:context=".ExampleOneFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/examplesRv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 </FrameLayout>
