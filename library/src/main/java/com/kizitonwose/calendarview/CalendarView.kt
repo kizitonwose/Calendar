@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.adapter.CalendarAdapter
 import com.kizitonwose.calendarview.adapter.DateClickListener
 import com.kizitonwose.calendarview.adapter.DateViewBinder
@@ -40,6 +41,8 @@ class CalendarView : RecyclerView {
         val monthFooterRes = a.getResourceId(R.styleable.CalendarView_monthFooterResource, 0)
         val orientation = a.getInt(R.styleable.CalendarView_calendarOrientation, RecyclerView.VERTICAL)
         a.recycle()
+
+        AndroidThreeTen.init(context) // The library checks for multiple calls.
 
         clipToPadding = false
         layoutManager = LinearLayoutManager(context, orientation, false)
