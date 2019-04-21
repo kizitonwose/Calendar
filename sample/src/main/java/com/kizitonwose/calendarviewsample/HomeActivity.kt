@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_home.*
@@ -25,6 +26,7 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(homeToolbar)
         examplesRv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         examplesRv.adapter = examplesAdapter
+        examplesRv.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
