@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.utils.inflate
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -29,7 +30,7 @@ open class CalendarAdapter(
 
     private val months = mutableListOf<CalendarMonth>()
 
-    private val config = CalendarConfig(DayOfWeek.MONDAY)
+    private val config = CalendarConfig(DayOfWeek.SUNDAY)
 
     init {
         months.add(CalendarMonth.now())
@@ -107,8 +108,15 @@ open class CalendarAdapter(
     }
 
     fun reloadDate(date: LocalDate) {
-        val adapterPos = months.indexOfFirst { it.ownedDates.contains(date) }
-        val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos) as? MonthViewHolder
-        viewHolder?.reloadDate(getItem(adapterPos).ownedDays[date.dayOfMonth.dec()])
+        reloadDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    }
+
+    fun reloadDay(day: CalendarDay) {
+        val adapterPos = months.indexOfFirst { it.weekDays.flatten().contains(day) }
+        if (adapterPos != -1) {
+            val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos) as? MonthViewHolder
+            viewHolder?.reloadDay(day)
+        }
+
     }
 }

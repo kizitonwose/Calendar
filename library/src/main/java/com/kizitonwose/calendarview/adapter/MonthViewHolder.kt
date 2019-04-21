@@ -47,11 +47,8 @@ class MonthViewHolder constructor(
         }
     }
 
-    fun reloadDate(day: CalendarDay) {
-        val date = day.date
-        val weekOfMonthField = calendarConfig.weekFields.weekOfMonth()
-        val field = date.get(weekOfMonthField)
-        weekHolders[field.dec()].reloadDate(day)
+    fun reloadDay(day: CalendarDay) {
+        weekHolders.map { it.dayHolders }.flatten().firstOrNull { it.currentDay == day }?.reloadView()
     }
 
 }

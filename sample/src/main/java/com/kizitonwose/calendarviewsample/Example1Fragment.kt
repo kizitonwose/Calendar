@@ -55,7 +55,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                 } else {
                     selectedDates.add(it.date)
                 }
-                exOneCalendar.reloadDate(it.date)
+                exOneCalendar.reloadDay(it)
             }
         }
 

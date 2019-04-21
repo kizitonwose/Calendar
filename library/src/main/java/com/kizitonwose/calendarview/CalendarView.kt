@@ -10,6 +10,7 @@ import com.kizitonwose.calendarview.adapter.CalendarAdapter
 import com.kizitonwose.calendarview.adapter.DateClickListener
 import com.kizitonwose.calendarview.adapter.DateViewBinder
 import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.model.CalendarDay
 import org.threeten.bp.LocalDate
 
 class CalendarView : RecyclerView {
@@ -97,6 +98,10 @@ class CalendarView : RecyclerView {
 
     fun scrollToMonth(date: LocalDate) {
         adapter.scrollToMonth(date)
+    }
+
+    fun reloadDay(day: CalendarDay) {
+        adapter.reloadDay(day)
     }
 
     fun reloadDate(date: LocalDate) {

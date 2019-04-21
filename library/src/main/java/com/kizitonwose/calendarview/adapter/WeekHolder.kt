@@ -12,7 +12,7 @@ class WeekHolder(
     private var calendarConfig: CalendarConfig
 ) {
 
-    private val dayHolders = (1..7).map { DayHolder(dayViewRes, dateClickListener, dateViewBinder, calendarConfig) }
+    val dayHolders = (1..7).map { DayHolder(dayViewRes, dateClickListener, dateViewBinder, calendarConfig) }
 
     private lateinit var container: LinearLayout
 
@@ -40,7 +40,7 @@ class WeekHolder(
         }
     }
 
-    fun reloadDate(day: CalendarDay) {
+    fun reloadDay(day: CalendarDay) {
         dayHolders.first { it.currentDay == day }.reloadView()
     }
 }
