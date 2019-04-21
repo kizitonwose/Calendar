@@ -17,10 +17,11 @@
         tools:text="This is a title" />
 
     <TextView
-        android:layout_marginTop="4dp"
         android:id="@+id/itemOptionSubtitle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:textSize="16sp"
         tools:text="This is a subtitle" />
 
 

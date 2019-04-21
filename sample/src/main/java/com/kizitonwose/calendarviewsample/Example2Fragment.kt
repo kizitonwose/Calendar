@@ -24,7 +24,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
     override val toolbar: Toolbar?
         get() = exTwoToolbar
 
-    override val titleRes: Int = R.string.example_2
+    override val titleRes: Int = R.string.example_2_title
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.exmaple_2_fragment, container, false)

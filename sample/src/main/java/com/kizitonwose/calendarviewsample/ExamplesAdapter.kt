@@ -16,8 +16,8 @@ class ExamplesAdapter(val onClick: (ExampleItem) -> Unit) :
     RecyclerView.Adapter<ExamplesAdapter.BaseObjectViewHolder>() {
 
     val examples = mutableListOf<ExampleItem>().apply {
-        add(ExampleItem(R.string.example_1, 0, Example1Fragment::class.java))
-        add(ExampleItem(R.string.example_2, 0, Example2Fragment::class.java))
+        add(ExampleItem(R.string.example_1_title, R.string.example_1_subtitle, Example1Fragment::class.java))
+        add(ExampleItem(R.string.example_2_title, R.string.example_2_subtitle, Example2Fragment::class.java))
         Unit
     }
 

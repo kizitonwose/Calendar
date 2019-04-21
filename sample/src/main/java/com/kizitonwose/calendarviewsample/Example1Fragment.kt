@@ -23,7 +23,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
     override val toolbar: Toolbar?
         get() = null
 
-    override val titleRes: Int = R.string.example_1
+    override val titleRes: Int = R.string.example_1_title
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.exmaple_1_fragment, container, false)
