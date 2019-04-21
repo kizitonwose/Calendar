@@ -45,6 +45,7 @@ open class CalendarAdapter(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         rv = recyclerView as CalendarView
+        rv.post { findVisibleMonthAndNotify() }
     }
 
     private fun getItem(position: Int): CalendarMonth = months[position]
