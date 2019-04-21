@@ -10,6 +10,8 @@ interface HasToolbar {
     val toolbar: Toolbar? // Return null to hide the toolbar
 }
 
+interface HasBackButton
+
 abstract class BaseFragment : Fragment() {
 
     override fun onStart() {
@@ -17,7 +19,9 @@ abstract class BaseFragment : Fragment() {
         if (this is HasToolbar) {
             requireActivity().homeToolbar.makeGone()
             (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
-        } else {
+        }
+
+        if (this is HasBackButton) {
             val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
             actionBar?.title = context?.getString(titleRes)
             actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -29,7 +33,9 @@ abstract class BaseFragment : Fragment() {
         if (this is HasToolbar) {
             requireActivity().homeToolbar.makeVisible()
             (requireActivity() as AppCompatActivity).setSupportActionBar(requireActivity().homeToolbar)
-        } else {
+        }
+
+        if (this is HasBackButton) {
             val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
             actionBar?.title = context?.getString(R.string.app_name)
             actionBar?.setDisplayHomeAsUpEnabled(false)

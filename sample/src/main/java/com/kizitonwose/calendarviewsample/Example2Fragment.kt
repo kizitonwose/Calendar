@@ -17,7 +17,7 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 
 
-class Example2Fragment : BaseFragment(), HasToolbar {
+class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     override val toolbar: Toolbar?
         get() = exTwoToolbar
@@ -79,7 +79,7 @@ class Example2Fragment : BaseFragment(), HasToolbar {
         legendLayout.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text = DayOfWeek.values()[index].name.first().toString()
-                setTextColorRes(R.color.example_2_black)
+                setTextColorRes(R.color.example_2_white)
             }
         }
 
