@@ -128,4 +128,9 @@ class CalendarView : RecyclerView {
         adapter.reloadDate(date)
     }
 
+    fun reloadDates(vararg date: LocalDate) {
+        date.forEach {
+            adapter.reloadDate(it)
+        }
+    }
 }

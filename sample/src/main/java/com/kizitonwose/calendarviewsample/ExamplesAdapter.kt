@@ -17,6 +17,7 @@ class ExamplesAdapter(val onClick: (ExampleItem) -> Unit) :
 
     val examples = mutableListOf<ExampleItem>().apply {
         add(ExampleItem(R.string.example_1, 0, Example1Fragment::class.java))
+        add(ExampleItem(R.string.example_2, 0, Example2Fragment::class.java))
         Unit
     }
 

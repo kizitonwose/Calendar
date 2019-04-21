@@ -8,6 +8,7 @@
     tools:ignore="HardcodedText">
 
     <TextView
+        android:id="@+id/legendText1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -17,6 +18,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/legendText2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -26,6 +28,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/legendText3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -35,6 +38,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/legendText4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -44,6 +48,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/legendText5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -53,6 +58,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/legendText6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -62,6 +68,7 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/legendText7"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
