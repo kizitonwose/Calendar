@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.utils.getColorCompat
+import com.kizitonwose.calendarview.utils.setTextColorRes
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
@@ -28,7 +30,12 @@ class Example1Fragment : BaseFragment(), HasToolbar {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exOneCalendar.dateViewBinder = { view, day ->
-            view.exOneText.text = day.date.dayOfMonth.toString()
+            val textView = view.exOneText
+            textView.text = day.date.dayOfMonth.toString()
+            when(day.owner) {
+                DayOwner.THIS_MONTH -> textView.setTextColorRes(R.color.example_1_white)
+                else -> textView.setTextColorRes(R.color.example_1_white_light)
+            }
         }
         legendLayout.children.forEach {
             (it as TextView).setTextColor(it.context.getColorCompat(R.color.example_1_white_light))
