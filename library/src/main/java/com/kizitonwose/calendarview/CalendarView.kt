@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.OutDateStyle
+import com.kizitonwose.calendarview.model.ScrollMode
 import org.threeten.bp.LocalDate
 
 class CalendarView : RecyclerView {
@@ -40,7 +42,9 @@ class CalendarView : RecyclerView {
         val dayViewRes = a.getResourceId(R.styleable.CalendarView_dayViewResource, 0)
         val monthHeaderRes = a.getResourceId(R.styleable.CalendarView_monthHeaderResource, 0)
         val monthFooterRes = a.getResourceId(R.styleable.CalendarView_monthFooterResource, 0)
-        val orientation = a.getInt(R.styleable.CalendarView_calendarOrientation, RecyclerView.VERTICAL)
+        val orientation = a.getInt(R.styleable.CalendarView_orientation, RecyclerView.VERTICAL)
+        val scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_scrollMode, 0)]
+        val outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_outDateStyle, 0)]
         a.recycle()
 
         AndroidThreeTen.init(context) // The library checks for multiple calls.
@@ -50,7 +54,10 @@ class CalendarView : RecyclerView {
         adapter = CalendarAdapter(dayViewRes, monthHeaderRes, monthFooterRes)
         setAdapter(adapter)
 
-        PagerSnapHelper().attachToRecyclerView(this)
+        if (scrollMode == ScrollMode.PAGED) {
+            PagerSnapHelper().attachToRecyclerView(this)
+        }
+
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

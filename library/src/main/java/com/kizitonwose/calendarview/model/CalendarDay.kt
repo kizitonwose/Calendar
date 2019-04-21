@@ -4,10 +4,6 @@ import org.threeten.bp.LocalDate
 import java.io.Serializable
 
 
-enum class DayOwner {
-    PREVIOUS_MONTH, THIS_MONTH, NEXT_MONTH
-}
-
 data class CalendarDay internal constructor(val date: LocalDate, val owner: DayOwner) :
     Comparable<CalendarDay>, Serializable {
 

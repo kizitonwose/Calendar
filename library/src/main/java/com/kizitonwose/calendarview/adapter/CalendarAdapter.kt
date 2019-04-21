@@ -40,7 +40,6 @@ open class CalendarAdapter(
         months.add(months.first().next)
         months.add(months.last().next)
         months.add(months.last().next)
-
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

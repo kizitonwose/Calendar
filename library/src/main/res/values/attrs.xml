@@ -4,9 +4,17 @@
         <attr name="dayViewResource" format="reference" />
         <attr name="monthHeaderResource" format="reference" />
         <attr name="monthFooterResource" format="reference" />
-        <attr name="calendarOrientation" format="enum">
+        <attr name="orientation" format="enum">
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
+        </attr>
+        <attr name="outDateStyle" format="enum">
+            <enum name="tillEndOfRow" value="0" />
+            <enum name="tillEndOfGrid" value="1" />
+        </attr>
+        <attr name="scrollMode" format="enum">
+            <enum name="continuous" value="0" />
+            <enum name="paged" value="1" />
         </attr>
     </declare-styleable>
 </resources>
