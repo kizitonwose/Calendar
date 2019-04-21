@@ -11,7 +11,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
     private val year: Int = yearMonth.year
     private val month: Int = yearMonth.month.value
 
-    val days: List<CalendarDay> by lazy {
+    val ownedDays: List<CalendarDay> by lazy {
         weekDays.flatten().filter { it.owner == DayOwner.THIS_MONTH }
     }
 
@@ -51,8 +51,8 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
         weekDaysGroup
     }
 
-    internal val dates: List<LocalDate>
-        get() = days.map { it.date }
+    internal val ownedDates: List<LocalDate>
+        get() = ownedDays.map { it.date }
 
     val previous: CalendarMonth
         get() = CalendarMonth(yearMonth.minusMonths(1))

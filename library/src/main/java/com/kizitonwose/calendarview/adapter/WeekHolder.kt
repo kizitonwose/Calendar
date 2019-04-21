@@ -8,10 +8,11 @@ import com.kizitonwose.calendarview.model.CalendarDay
 class WeekHolder(
     @LayoutRes dayViewRes: Int,
     dateClickListener: DateClickListener,
-    dateViewBinder: DateViewBinder
+    dateViewBinder: DateViewBinder,
+    private var calendarConfig: CalendarConfig
 ) {
 
-    private val dayHolders = (1..7).map { DayHolder(dayViewRes, dateClickListener, dateViewBinder) }
+    private val dayHolders = (1..7).map { DayHolder(dayViewRes, dateClickListener, dateViewBinder, calendarConfig) }
 
     private lateinit var container: LinearLayout
 
@@ -37,5 +38,9 @@ class WeekHolder(
         for (i in daysOfWeek.indices) {
             dayHolders[i].bindDayView(daysOfWeek[i])
         }
+    }
+
+    fun reloadDate(day: CalendarDay) {
+        dayHolders.first { it.currentDay == day }.reloadView()
     }
 }

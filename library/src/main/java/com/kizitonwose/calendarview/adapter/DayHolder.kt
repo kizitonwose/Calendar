@@ -11,12 +11,13 @@ import com.kizitonwose.calendarview.utils.inflate
 class DayHolder(
     @LayoutRes private val dayViewRes: Int,
     private val dateClickListener: DateClickListener,
-    private val dateViewBinder: DateViewBinder
+    private val dateViewBinder: DateViewBinder,
+    private val calendarConfig: CalendarConfig
 ) {
     private lateinit var dateView: View
     private lateinit var containerView: SquareFrameLayout
 
-    private var currentDay: CalendarDay? = null
+    var currentDay: CalendarDay? = null
 
     fun inflateDayView(parent: LinearLayout): View {
         if (::dateView.isInitialized.not()) {
@@ -46,6 +47,10 @@ class DayHolder(
     fun bindDayView(currentDay: CalendarDay) {
         this.currentDay = currentDay
         dateViewBinder.invoke(dateView, currentDay)
+    }
+
+    fun reloadView() {
+        currentDay?.let { bindDayView(it) }
     }
 
 }

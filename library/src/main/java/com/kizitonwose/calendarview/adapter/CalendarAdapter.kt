@@ -9,6 +9,7 @@ import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.utils.inflate
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 
 
@@ -28,17 +29,14 @@ open class CalendarAdapter(
 
     private val months = mutableListOf<CalendarMonth>()
 
-    private val days: List<CalendarDay>
-        get() = months.map { it.days.toList() }.flatten()
-
-    private val dates: List<LocalDate>
-        get() = days.map { it.date }
+    private val config = CalendarConfig(DayOfWeek.MONDAY)
 
     init {
         months.add(CalendarMonth.now())
         months.add(months.first().next)
         months.add(months.last().next)
         months.add(months.last().next)
+
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -85,7 +83,7 @@ open class CalendarAdapter(
             rv.onDateClick?.invoke(it)
         }, { view, day ->
             rv.dateViewBinder?.invoke(view, day)
-        }, rv.monthHeaderBinder, rv.monthFooterBinder)
+        }, rv.monthHeaderBinder, rv.monthFooterBinder, config)
     }
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int) {
@@ -93,14 +91,24 @@ open class CalendarAdapter(
     }
 
     private fun refreshMonth(date: LocalDate) {
-        notifyItemChanged(months.indexOfFirst { it.dates.contains(date) })
+        notifyItemChanged(months.indexOfFirst { it.ownedDates.contains(date) })
     }
 
     fun scrollToMonth(date: LocalDate) {
         rv.scrollToPosition(getAdapterPosition(date))
     }
 
+    fun scrollToDate(date: LocalDate) {
+
+    }
+
     private fun getAdapterPosition(date: LocalDate): Int {
-        return months.indexOfFirst { it.dates.contains(date) }
+        return months.indexOfFirst { it.ownedDates.contains(date) }
+    }
+
+    fun reloadDate(date: LocalDate) {
+        val adapterPos = months.indexOfFirst { it.ownedDates.contains(date) }
+        val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos) as? MonthViewHolder
+        viewHolder?.reloadDate(getItem(adapterPos).ownedDays[date.dayOfMonth.dec()])
     }
 }

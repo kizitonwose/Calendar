@@ -98,4 +98,8 @@ class CalendarView : RecyclerView {
     fun scrollToMonth(date: LocalDate) {
         adapter.scrollToMonth(date)
     }
+
+    fun reloadDate(date: LocalDate) {
+        adapter.reloadDate(date)
+    }
 }
