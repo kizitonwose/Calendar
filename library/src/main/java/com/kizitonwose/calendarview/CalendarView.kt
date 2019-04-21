@@ -4,12 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.kizitonwose.calendarview.adapter.CalendarAdapter
-import com.kizitonwose.calendarview.adapter.DateClickListener
-import com.kizitonwose.calendarview.adapter.DateViewBinder
-import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.CalendarDay
 import org.threeten.bp.LocalDate
 
@@ -17,13 +15,15 @@ class CalendarView : RecyclerView {
 
     private lateinit var adapter: CalendarAdapter
 
-    var onDateClick: DateClickListener? = null
+    var dateClickListener: DateClickListener? = null
 
     var dateViewBinder: DateViewBinder? = null
 
     var monthHeaderBinder: MonthHeaderFooterBinder? = null
 
     var monthFooterBinder: MonthHeaderFooterBinder? = null
+
+    var monthScrollListener: MonthScrollListener? = null
 
     constructor(context: Context) : super(context)
 
@@ -49,6 +49,16 @@ class CalendarView : RecyclerView {
         layoutManager = LinearLayoutManager(context, orientation, false)
         adapter = CalendarAdapter(dayViewRes, monthHeaderRes, monthFooterRes)
         setAdapter(adapter)
+
+        PagerSnapHelper().attachToRecyclerView(this)
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    adapter.findVisibleMonthAndNotify()
+                }
+            }
+        })
     }
 
     var monthPaddingStart = 0
@@ -91,7 +101,6 @@ class CalendarView : RecyclerView {
         recycledViewPool.clear()
     }
 
-
     fun reloadCalendar() {
         adapter.notifyDataSetChanged()
     }
@@ -107,4 +116,5 @@ class CalendarView : RecyclerView {
     fun reloadDate(date: LocalDate) {
         adapter.reloadDate(date)
     }
+
 }

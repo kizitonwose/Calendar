@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/example_1_bg"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
     tools:context=".Example1Fragment">
 
@@ -16,25 +18,27 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <LinearLayout
-            android:padding="14dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="14dp">
 
             <TextView
+                android:id="@+id/exOneYearText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
                 android:textColor="@color/example_1_white_light"
-                android:text="2019" />
+                android:textSize="24sp"
+                tools:text="2019" />
 
             <TextView
-                android:textColor="@color/example_1_white"
+                android:id="@+id/exOneMonthText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
+                android:textColor="@color/example_1_white"
                 android:textSize="38sp"
-                android:text="April" />
+                tools:text="April" />
 
         </LinearLayout>
 
@@ -45,14 +49,14 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp" />
 
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/exOneCalendar"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        app:dayViewResource="@layout/example_1_calendar_day"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:calendarOrientation="horizontal"
+        app:dayViewResource="@layout/example_1_calendar_day" />
 
 </LinearLayout>

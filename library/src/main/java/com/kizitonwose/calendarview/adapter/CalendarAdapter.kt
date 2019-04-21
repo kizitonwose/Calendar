@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -19,6 +20,8 @@ typealias DateClickListener = (CalendarDay) -> Unit
 typealias DateViewBinder = (view: View, currentDay: CalendarDay) -> Unit
 
 typealias MonthHeaderFooterBinder = (view: View, calendarMonth: CalendarMonth) -> Unit
+
+typealias MonthScrollListener = (calendarMonth: CalendarMonth) -> Unit
 
 open class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
@@ -81,7 +84,7 @@ open class CalendarAdapter(
         }
 
         return MonthViewHolder(rootLayout, MonthViews(monthHeaderView, monthBodyLayout, monthFooterView), dayViewRes, {
-            rv.onDateClick?.invoke(it)
+            rv.dateClickListener?.invoke(it)
         }, { view, day ->
             rv.dateViewBinder?.invoke(view, day)
         }, rv.monthHeaderBinder, rv.monthFooterBinder, config)
@@ -117,6 +120,17 @@ open class CalendarAdapter(
             val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos) as? MonthViewHolder
             viewHolder?.reloadDay(day)
         }
+    }
 
+    private var visibleMonth: CalendarMonth? = null
+    fun findVisibleMonthAndNotify() {
+        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        if (visibleItemPos != RecyclerView.NO_POSITION) {
+            val visibleMonth = months[visibleItemPos]
+            if (visibleMonth != this.visibleMonth) {
+                rv.monthScrollListener?.invoke(visibleMonth)
+                this.visibleMonth = visibleMonth
+            }
+        }
     }
 }
