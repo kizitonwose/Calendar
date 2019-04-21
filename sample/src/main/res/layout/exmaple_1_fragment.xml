@@ -6,19 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/example_1_bg"
     android:orientation="vertical"
-    tools:context=".ExampleOneFragment">
+    tools:context=".Example1Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exOneAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/exOneToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <LinearLayout
             android:padding="12dp"
@@ -53,8 +47,10 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.kizitonwose.calendarview.CalendarView
+        android:id="@+id/exOneCalendar"
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        app:dayViewResource="@layout/example_1_calendar_day"
         android:layout_height="match_parent"/>
 
 </LinearLayout>

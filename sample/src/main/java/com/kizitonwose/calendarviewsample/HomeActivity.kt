@@ -22,6 +22,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        setSupportActionBar(homeToolbar)
         examplesRv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         examplesRv.adapter = examplesAdapter
     }
