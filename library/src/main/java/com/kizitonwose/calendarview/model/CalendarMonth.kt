@@ -9,8 +9,8 @@ import java.io.Serializable
 class CalendarMonth internal constructor(val yearMonth: YearMonth, private val config: CalendarConfig) :
     Comparable<CalendarMonth>, Serializable {
 
-    private val year: Int = yearMonth.year
-    private val month: Int = yearMonth.month.value
+    val year: Int = yearMonth.year
+    val month: Int = yearMonth.month.value
 
     private val ownedDays: List<CalendarDay> by lazy {
         weekDays.flatten().filter { it.owner == DayOwner.THIS_MONTH }
