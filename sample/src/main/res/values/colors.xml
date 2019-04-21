@@ -6,4 +6,6 @@
     <color name="white">#fff</color>
     <color name="example_1_bg">#3A284C</color>
     <color name="black">#000</color>
+    <color name="example_1_white_light">#33FFFFFF</color>
+    <color name="example_1_white">#E6FFFFFF</color>
 </resources>

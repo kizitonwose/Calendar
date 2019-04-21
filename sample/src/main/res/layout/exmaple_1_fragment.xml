@@ -12,10 +12,11 @@
         android:id="@+id/exOneAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#433254"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <LinearLayout
-            android:padding="12dp"
+            android:padding="14dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -24,13 +25,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:textColor="@color/white"
+                android:textColor="@color/example_1_white_light"
                 android:text="2019" />
 
             <TextView
-                android:textColor="@color/white"
+                android:textColor="@color/example_1_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
                 android:textSize="38sp"
                 android:text="April" />
 
@@ -40,8 +42,8 @@
             layout="@layout/calendar_day_legend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="14dp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
 
 
     </com.google.android.material.appbar.AppBarLayout>
