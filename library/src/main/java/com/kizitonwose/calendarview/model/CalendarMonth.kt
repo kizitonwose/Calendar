@@ -6,7 +6,8 @@ import org.threeten.bp.YearMonth
 import java.io.Serializable
 
 
-class CalendarMonth internal constructor(val yearMonth: YearMonth, private val config: CalendarConfig) : Comparable<CalendarMonth>, Serializable {
+class CalendarMonth internal constructor(val yearMonth: YearMonth, private val config: CalendarConfig) :
+    Comparable<CalendarMonth>, Serializable {
 
     private val year: Int = yearMonth.year
     private val month: Int = yearMonth.month.value
@@ -46,7 +47,21 @@ class CalendarMonth internal constructor(val yearMonth: YearMonth, private val c
 
         // Ensure we have a representation of all 6 week rows
         while (weekDaysGroup.size < 6) {
-            weekDaysGroup.add(emptyList())
+            if (config.outDateStyle == OutDateStyle.END_OF_GRID) {
+                val lastDay = weekDaysGroup.last().last()
+                val newRowDates = if (lastDay.owner == DayOwner.THIS_MONTH) {
+                    (1..7).map {
+                        CalendarDay(LocalDate.of(next.year, next.month, it), DayOwner.NEXT_MONTH)
+                    }
+                } else {
+                    (1..7).map {
+                        CalendarDay(LocalDate.of(next.year, next.month, it + lastDay.day), DayOwner.NEXT_MONTH)
+                    }
+                }
+                weekDaysGroup.add(newRowDates)
+            } else {
+                weekDaysGroup.add(emptyList())
+            }
         }
         weekDaysGroup
     }
