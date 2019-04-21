@@ -1,6 +1,7 @@
 package com.kizitonwose.calendarviewsample
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.utils.setTextColorRes
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_2_calendar_day.view.*
+import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -34,7 +36,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exTwoCalendar.dateViewBinder = { view, day ->
-            val textView = view.exTwoText
+            val textView = view.exTwoDayText
             textView.text = day.date.dayOfMonth.toString()
 
             when (day.owner) {
@@ -74,6 +76,11 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
                     exTwoCalendar.reloadDate(oldDate ?: return@dateClick)
                 }
             }
+        }
+
+        exTwoCalendar.monthHeaderBinder = { view, calMonth ->
+            @SuppressLint("SetTextI18n") // Fix concatenation warning for `seText` call.
+            view.exTwoHeaderText.text = "${calMonth.yearMonth.month.name.toLowerCase().capitalize()} ${calMonth.year}"
         }
 
         legendLayout.children.forEachIndexed { index, view ->

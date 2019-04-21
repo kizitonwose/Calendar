@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".Example2Fragment">
 
@@ -36,8 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:orientation="vertical"
+        app:dayViewResource="@layout/example_2_calendar_day"
         app:firstDayOfWeek="monday"
-        app:dayViewResource="@layout/example_2_calendar_day" />
+        app:monthHeaderResource="@layout/example_2_calendar_header"
+        app:orientation="vertical" />
 
 </LinearLayout>

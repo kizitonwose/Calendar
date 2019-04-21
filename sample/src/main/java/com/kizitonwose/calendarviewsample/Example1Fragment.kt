@@ -35,7 +35,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exOneCalendar.dateViewBinder = { view, day ->
-            val textView = view.exOneText
+            val textView = view.exOneDayText
             textView.text = day.date.dayOfMonth.toString()
             when (day.owner) {
                 DayOwner.THIS_MONTH -> textView.setTextColorRes(R.color.example_1_white)
