@@ -6,12 +6,18 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.OutDateStyle
+import com.kizitonwose.calendarview.model.ScrollMode
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.temporal.WeekFields
 
 data class MonthViews(val header: View?, val body: LinearLayout, val footer: View?)
 
-data class CalendarConfig(val firstDayOfWeek: DayOfWeek) {
+data class CalendarConfig(
+    val firstDayOfWeek: DayOfWeek,
+    val outDateStyle: OutDateStyle,
+    val scrollMode: ScrollMode
+) {
     val weekFields: WeekFields by lazy { WeekFields.of(firstDayOfWeek, 1) }
 }
 

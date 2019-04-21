@@ -1,12 +1,12 @@
 package com.kizitonwose.calendarview.model
 
+import com.kizitonwose.calendarview.adapter.CalendarConfig
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
-import org.threeten.bp.temporal.WeekFields
 import java.io.Serializable
 
 
-class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<CalendarMonth>, Serializable {
+class CalendarMonth internal constructor(val yearMonth: YearMonth, private val config: CalendarConfig) : Comparable<CalendarMonth>, Serializable {
 
     private val year: Int = yearMonth.year
     private val month: Int = yearMonth.month.value
@@ -21,7 +21,7 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
         }
 
         // Group days by week of month
-        val weekOfMonthField = WeekFields.SUNDAY_START.weekOfMonth()
+        val weekOfMonthField = config.weekFields.weekOfMonth()
         val weekDaysGroup = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
 
         // Add in-dates if necessary
@@ -55,19 +55,13 @@ class CalendarMonth private constructor(val yearMonth: YearMonth) : Comparable<C
         get() = ownedDays.map { it.date }
 
     val previous: CalendarMonth
-        get() = CalendarMonth(yearMonth.minusMonths(1))
+        get() = CalendarMonth(yearMonth.minusMonths(1), config)
 
     val next: CalendarMonth
-        get() = CalendarMonth(yearMonth.plusMonths(1))
+        get() = CalendarMonth(yearMonth.plusMonths(1), config)
 
 
     override fun compareTo(other: CalendarMonth): Int {
         return yearMonth.compareTo(other.yearMonth)
-    }
-
-    companion object {
-        fun now(): CalendarMonth {
-            return CalendarMonth(YearMonth.now())
-        }
     }
 }

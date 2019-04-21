@@ -11,8 +11,8 @@ import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.utils.inflate
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
+import org.threeten.bp.YearMonth
 
 
 typealias DateClickListener = (CalendarDay) -> Unit
@@ -26,17 +26,16 @@ typealias MonthScrollListener = (calendarMonth: CalendarMonth) -> Unit
 open class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
     @LayoutRes private val monthHeaderRes: Int,
-    @LayoutRes private val monthFooterRes: Int
+    @LayoutRes private val monthFooterRes: Int,
+    private val config: CalendarConfig
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
     private lateinit var rv: CalendarView
 
     private val months = mutableListOf<CalendarMonth>()
 
-    private val config = CalendarConfig(DayOfWeek.SUNDAY)
-
     init {
-        months.add(CalendarMonth.now())
+        months.add(CalendarMonth(YearMonth.now(), config))
         months.add(months.first().next)
         months.add(months.last().next)
         months.add(months.last().next)

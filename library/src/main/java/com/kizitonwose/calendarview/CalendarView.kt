@@ -11,6 +11,7 @@ import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.OutDateStyle
 import com.kizitonwose.calendarview.model.ScrollMode
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 
 class CalendarView : RecyclerView {
@@ -38,6 +39,7 @@ class CalendarView : RecyclerView {
     }
 
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
+        if (isInEditMode) return
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
         val dayViewRes = a.getResourceId(R.styleable.CalendarView_dayViewResource, 0)
         val monthHeaderRes = a.getResourceId(R.styleable.CalendarView_monthHeaderResource, 0)
@@ -45,13 +47,15 @@ class CalendarView : RecyclerView {
         val orientation = a.getInt(R.styleable.CalendarView_orientation, RecyclerView.VERTICAL)
         val scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_scrollMode, 0)]
         val outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_outDateStyle, 0)]
+        val firstDayOfWeek = DayOfWeek.values()[a.getInt(R.styleable.CalendarView_firstDayOfWeek, DayOfWeek.SUNDAY.ordinal)]
         a.recycle()
 
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
         clipToPadding = false
         layoutManager = LinearLayoutManager(context, orientation, false)
-        adapter = CalendarAdapter(dayViewRes, monthHeaderRes, monthFooterRes)
+        val config = CalendarConfig(firstDayOfWeek, outDateStyle, scrollMode)
+        adapter = CalendarAdapter(dayViewRes, monthHeaderRes, monthFooterRes, config)
         setAdapter(adapter)
 
         if (scrollMode == ScrollMode.PAGED) {
