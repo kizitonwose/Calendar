@@ -32,7 +32,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
     private val eventsAdapter = Example3EventsAdapter {
         AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.example_3_dialog_delete_confirmation))
+            .setMessage(R.string.example_3_dialog_delete_confirmation)
             .setPositiveButton(R.string.delete) { _, _ ->
                 deleteEvent(it)
             }
@@ -87,6 +87,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         if (savedInstanceState == null) {
             exThreeCalendar.post {
                 // Show today's events initially.
+                selectedDate = today
                 updateAdapterForDate(today)
             }
         }
@@ -120,10 +121,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
         exThreeCalendar.dateClickListener = dateClick@{
             if (it.owner == DayOwner.THIS_MONTH) {
-                if (selectedDate == it.date) {
-                    selectedDate = null
-                    exThreeCalendar.reloadDay(it)
-                } else {
+                if (selectedDate != it.date) {
                     val oldDate = selectedDate
                     selectedDate = it.date
                     exThreeCalendar.reloadDate(it.date)
@@ -178,6 +176,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
     private fun updateAdapterForDate(date: LocalDate) {
         eventsAdapter.events.clear()
         eventsAdapter.events.addAll(events[date].orEmpty())
+        eventsAdapter.notifyDataSetChanged()
         exThreeSelectedDateText.text = selectionFormatter.format(date)
     }
 }
