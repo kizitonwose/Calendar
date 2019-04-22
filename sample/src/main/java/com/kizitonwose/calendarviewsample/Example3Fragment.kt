@@ -84,6 +84,13 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         exThreeCalendar.setDateRange(now.minusMonths(10), now.plusMonths(10))
         exThreeCalendar.scrollToMonth(now)
 
+        if (savedInstanceState == null) {
+            exThreeCalendar.post {
+                // Show today's events initially.
+                updateAdapterForDate(today)
+            }
+        }
+
         exThreeCalendar.dateViewBinder = { view, day ->
             val textView = view.exThreeDayText
             textView.text = day.date.dayOfMonth.toString()
