@@ -87,8 +87,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         if (savedInstanceState == null) {
             exThreeCalendar.post {
                 // Show today's events initially.
-                selectedDate = today
-                updateAdapterForDate(today)
+                selectDate(today)
             }
         }
 
@@ -121,13 +120,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
         exThreeCalendar.dateClickListener = dateClick@{
             if (it.owner == DayOwner.THIS_MONTH) {
-                if (selectedDate != it.date) {
-                    val oldDate = selectedDate
-                    selectedDate = it.date
-                    exThreeCalendar.reloadDate(it.date)
-                    oldDate?.let { exThreeCalendar.reloadDate(it) }
-                    updateAdapterForDate(it.date)
-                }
+                selectDate(it.date)
             }
         }
 
@@ -136,6 +129,11 @@ class Example3Fragment : BaseFragment(), HasBackButton {
                 titleSameYearFormatter.format(it.yearMonth)
             } else {
                 titleFormatter.format(it.yearMonth)
+            }
+            if (it.yearMonth == today.yearMonth) {
+                selectDate(today)
+            } else {
+                selectDate(it.yearMonth.atDay(1))
             }
         }
 
@@ -153,6 +151,16 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
         exThreeAddButton.setOnClickListener {
             inputDialog.show()
+        }
+    }
+
+    private fun selectDate(date: LocalDate) {
+        if (selectedDate != date) {
+            val oldDate = selectedDate
+            selectedDate = date
+            exThreeCalendar.reloadDate(date)
+            oldDate?.let { exThreeCalendar.reloadDate(it) }
+            updateAdapterForDate(date)
         }
     }
 
