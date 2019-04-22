@@ -5,7 +5,7 @@
     <string name="example_2_title">Example 2</string>
     <string name="example_2_subtitle">Month header view, single selection, week starts on monday, vertical scrolling, hides in and out dates.</string>
     <string name="example_3_title">Example 3</string>
-    <string name="example_3_subtitle">Agenda style implementation, day labels as header view, single selection</string>
+    <string name="example_3_subtitle">Event style implementation, day labels as header view, single selection, month scroll listener. Similar to what is in the Google Calendar app.</string>
     <string name="save">Save</string>
     <string name="close">Close</string>
     <string name="example_3_input_dialog_title">Enter event title</string>
