@@ -24,8 +24,9 @@ import kotlinx.android.synthetic.main.home_activity.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.*
 
-data class Event(val text: String, val date: LocalDate)
+data class Event(val id: String, val text: String, val date: LocalDate)
 
 class Example3Fragment : BaseFragment(), HasBackButton {
 
@@ -173,7 +174,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             Toast.makeText(requireContext(), R.string.example_3_empty_input_text, Toast.LENGTH_LONG).show()
         } else {
             selectedDate?.let {
-                events[it] = events[it].orEmpty().plus(Event(text, it))
+                events[it] = events[it].orEmpty().plus(Event(UUID.randomUUID().toString(), text, it))
                 updateAdapterForDate(it)
             }
         }
