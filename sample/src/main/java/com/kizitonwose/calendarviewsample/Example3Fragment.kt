@@ -135,6 +135,9 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             } else {
                 selectDate(it.yearMonth.atDay(1))
             }
+            exThreeCalendar.post {
+                exThreeCalendar.requestLayout()
+            }
         }
 
         exThreeCalendar.monthHeaderBinder = { view, _ ->
@@ -158,8 +161,8 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         if (selectedDate != date) {
             val oldDate = selectedDate
             selectedDate = date
-            exThreeCalendar.reloadDate(date)
             oldDate?.let { exThreeCalendar.reloadDate(it) }
+            exThreeCalendar.reloadDate(date)
             updateAdapterForDate(date)
         }
     }
