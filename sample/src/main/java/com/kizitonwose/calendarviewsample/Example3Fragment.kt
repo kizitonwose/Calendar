@@ -54,6 +54,9 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             .setView(layout)
             .setPositiveButton(R.string.save) { _, _ ->
                 saveEvent(editText.text.toString())
+                // Clear the EditText since we're reusing
+                // one instance whenever the dialog is shown.
+                editText.setText("")
             }
             .setNegativeButton(R.string.close, null)
             .create()
