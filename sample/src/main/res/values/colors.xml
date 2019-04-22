@@ -12,4 +12,7 @@
     <color name="example_2_white">#D9FFFFFF</color>
     <color name="example_2_red">#F44336</color>
     <color name="example_3_black">#D9000000</color>
+    <color name="example_3_white">#D9FFFFFF</color>
+    <color name="example_3_blue">#1973E8</color>
+    <color name="example_3_blue_light">#D2E3FC</color>
 </resources>

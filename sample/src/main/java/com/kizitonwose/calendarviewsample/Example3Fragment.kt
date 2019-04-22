@@ -96,10 +96,33 @@ class Example3Fragment : BaseFragment(), HasBackButton {
                     textView.makeInVisible()
                 }
             }
+            when (day.date) {
+                today -> {
+                    textView.setTextColorRes(R.color.example_3_white)
+                    textView.setBackgroundResource(R.drawable.example_3_today_bg)
+                }
+                selectedDate -> {
+                    textView.setTextColorRes(R.color.example_3_blue)
+                    textView.setBackgroundResource(R.drawable.example_3_selected_bg)
+
+                }
+                else -> textView.background = null
+            }
         }
 
         exThreeCalendar.dateClickListener = dateClick@{
-
+            if (it.owner == DayOwner.THIS_MONTH) {
+                if (selectedDate == it.date) {
+                    selectedDate = null
+                    exThreeCalendar.reloadDay(it)
+                } else {
+                    val oldDate = selectedDate
+                    selectedDate = it.date
+                    exThreeCalendar.reloadDate(it.date)
+                    oldDate?.let { exThreeCalendar.reloadDate(it) }
+                    updateAdapterForDate(it.date)
+                }
+            }
         }
 
         exThreeCalendar.monthScrollListener = {

@@ -52,13 +52,12 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 }
             }
 
-            when {
-                selectedDate == day.date -> {
+            when (day.date) {
+                selectedDate -> {
                     textView.setTextColorRes(R.color.example_2_white)
                     textView.setBackgroundResource(R.drawable.example_2_selected_bg)
-
                 }
-                today == day.date -> {
+                today -> {
                     textView.setTextColorRes(R.color.example_2_red)
                     textView.background = null
                 }
