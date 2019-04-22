@@ -85,7 +85,7 @@ open class CalendarAdapter(
         holder.bindMonth(getItem(position))
     }
 
-    private fun refreshMonth(date: LocalDate) {
+    private fun reloadMonth(date: LocalDate) {
         notifyItemChanged(months.indexOfFirst { it.ownedDates.contains(date) })
     }
 
@@ -100,8 +100,15 @@ open class CalendarAdapter(
     fun reloadDay(day: CalendarDay) {
         val adapterPos = months.indexOfFirst { it.weekDays.flatten().contains(day) }
         if (adapterPos != -1) {
-            val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos) as? MonthViewHolder
-            viewHolder?.reloadDay(day)
+            // Notify the adapter to reload the month if we cannot find the ViewHolder.
+            // `findViewHolderForAdapterPosition` can return null if the month is not
+            // currently visible on the screen.
+            val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos)
+            if (viewHolder != null) {
+                (viewHolder as  MonthViewHolder).reloadDay(day)
+            } else {
+                notifyItemChanged(adapterPos)
+            }
         }
     }
 
