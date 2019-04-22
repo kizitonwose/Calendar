@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
 
-    private val examplesAdapter = ExamplesAdapter {
+    private val examplesAdapter = HomeOptionsAdapter {
         val instance = it.clazz.getConstructor().newInstance() as Fragment
         supportFragmentManager.beginTransaction()
             .add(R.id.homeContainer, instance, it.clazz.simpleName)

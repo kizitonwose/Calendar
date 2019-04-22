@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.options_item_view.*
 data class ExampleItem(@StringRes val titleRes: Int, @StringRes val subtitleRes: Int, val clazz: Class<*>)
 
 
-class ExamplesAdapter(val onClick: (ExampleItem) -> Unit) :
-    RecyclerView.Adapter<ExamplesAdapter.BaseObjectViewHolder>() {
+class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
+    RecyclerView.Adapter<HomeOptionsAdapter.HomeOptionsViewHolder>() {
 
     val examples = mutableListOf<ExampleItem>().apply {
         add(ExampleItem(R.string.example_1_title, R.string.example_1_subtitle, Example1Fragment::class.java))
@@ -22,19 +22,19 @@ class ExamplesAdapter(val onClick: (ExampleItem) -> Unit) :
         Unit
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseObjectViewHolder {
-        return BaseObjectViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {
+        return HomeOptionsViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.options_item_view, parent, false)
         )
     }
 
-    override fun onBindViewHolder(viewHolder: BaseObjectViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: HomeOptionsViewHolder, position: Int) {
         viewHolder.bind(examples[position])
     }
 
     override fun getItemCount(): Int = examples.size
 
-    inner class BaseObjectViewHolder(override val containerView: View) :
+    inner class HomeOptionsViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         init {
