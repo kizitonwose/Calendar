@@ -14,10 +14,10 @@
         android:id="@+id/exThreeCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:dayViewResource="@layout/example_2_calendar_day"
-        app:firstDayOfWeek="monday"
-        app:monthHeaderResource="@layout/example_2_calendar_header"
-        app:orientation="vertical" />
+        app:dayViewResource="@layout/example_3_calendar_day"
+        app:firstDayOfWeek="sunday"
+        app:scrollMode="paged"
+        app:monthHeaderResource="@layout/example_3_calendar_header"
+        app:orientation="horizontal" />
 
 </LinearLayout>

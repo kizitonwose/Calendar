@@ -55,7 +55,6 @@
         android:id="@+id/exOneCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         app:orientation="horizontal"
         app:scrollMode="paged"
         app:dayViewResource="@layout/example_1_calendar_day" />

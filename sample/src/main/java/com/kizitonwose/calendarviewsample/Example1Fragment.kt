@@ -31,6 +31,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
     private val selectedDates = mutableSetOf<LocalDate>()
     private val today = LocalDate.now()
+    private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +76,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
         exOneCalendar.monthScrollListener = {
             exOneYearText.text = it.yearMonth.year.toString()
-            exOneMonthText.text = DateTimeFormatter.ofPattern("MMMM").format(it.yearMonth)
+            exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
         }
 
         legendLayout.children.forEach {

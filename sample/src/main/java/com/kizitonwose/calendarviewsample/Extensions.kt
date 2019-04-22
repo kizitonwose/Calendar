@@ -9,6 +9,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
@@ -39,3 +40,5 @@ internal fun TextView.setTextColorRes(@ColorRes color: Int) = setTextColor(conte
 
 val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)
+
+fun daysOfWeekFromSunday() = listOf(DayOfWeek.SUNDAY).plus(DayOfWeek.values().dropLast(1))

@@ -1,22 +1,21 @@
 package com.kizitonwose.calendarviewsample
 
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
+import android.widget.TextView
+import androidx.core.view.children
 import com.kizitonwose.calendarview.model.DayOwner
-import kotlinx.android.synthetic.main.exmaple_2_fragment.*
+import kotlinx.android.synthetic.main.calendar_day_legend.view.*
+import kotlinx.android.synthetic.main.example_3_calendar_day.view.*
+import kotlinx.android.synthetic.main.exmaple_3_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
 
-class Example3Fragment : BaseFragment(), HasToolbar, HasBackButton {
-
-    override val toolbar: Toolbar?
-        get() = exThreeToolbar
+class Example3Fragment : BaseFragment(), HasBackButton {
 
     override val titleRes: Int = R.string.example_3_title
 
@@ -39,31 +38,33 @@ class Example3Fragment : BaseFragment(), HasToolbar, HasBackButton {
             when (day.owner) {
                 DayOwner.THIS_MONTH -> {
                     textView.makeVisible()
-                    textView.setTextColorRes(R.color.example_2_black)
+                    textView.setTextColorRes(R.color.example_3_black)
                 }
                 else -> {
                     textView.makeInVisible()
-                    textView.setTextColorRes(R.color.example_1_white_light)
                 }
             }
+        }
+
+        exThreeCalendar.dateClickListener = dateClick@{
 
         }
 
-        exTwoCalendar.dateClickListener = dateClick@{
+        exThreeCalendar.monthScrollListener = {
 
         }
 
-        exThreeCalendar.monthHeaderBinder = { view, calMonth ->
-            @SuppressLint("SetTextI18n") // Fix concatenation warning for `seText` call.
-            view.exThreeHeaderText.text = "${calMonth.yearMonth.month.name.toLowerCase().capitalize()} ${calMonth.year}"
+        exThreeCalendar.monthHeaderBinder = { view, _ ->
+            val legendLayout = view.legendLayout
+            // Setup each header day text if we have not done that already.
+            if ((legendLayout.children.first() as TextView).text.count() != 1) {
+                val days = daysOfWeekFromSunday()
+                legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
+                    tv.text = days[index].name.first().toString()
+                    tv.setTextColorRes(R.color.example_3_black)
+                }
+            }
         }
-
-//        legendLayout.children.forEachIndexed { index, view ->
-//            (view as TextView).apply {
-//                text = DayOfWeek.values()[index].name.first().toString()
-//                setTextColorRes(R.color.example_2_white)
-//            }
-//        }
 
     }
 

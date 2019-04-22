@@ -49,7 +49,6 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 }
                 else -> {
                     textView.makeInVisible()
-                    textView.setTextColorRes(R.color.example_1_white_light)
                 }
             }
 
@@ -82,7 +81,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
         }
 
         exTwoCalendar.monthHeaderBinder = { view, calMonth ->
-            @SuppressLint("SetTextI18n") // Fix concatenation warning for `seText` call.
+            @SuppressLint("SetTextI18n") // Fix concatenation warning for `setText` call.
             view.exTwoHeaderText.text = "${calMonth.yearMonth.month.name.toLowerCase().capitalize()} ${calMonth.year}"
         }
 
