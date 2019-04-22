@@ -10,5 +10,7 @@
     <string name="close">Close</string>
     <string name="example_3_input_dialog_title">Enter item title</string>
     <string name="example_3_empty_input_text">Text is empty</string>
+    <string name="example_3_dialog_delete_confirmation">Delete Event</string>
+    <string name="delete">Delete</string>
 
 </resources>

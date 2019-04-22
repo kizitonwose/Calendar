@@ -31,7 +31,13 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
 
     private val eventsAdapter = Example3EventsAdapter {
-
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.example_3_dialog_delete_confirmation))
+            .setPositiveButton(R.string.delete) { _, _ ->
+                deleteEvent(it)
+            }
+            .setNegativeButton(R.string.close, null)
+            .show()
     }
 
     private val inputDialog by lazy {
@@ -47,7 +53,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             .setTitle(getString(R.string.example_3_input_dialog_title))
             .setView(layout)
             .setPositiveButton(R.string.save) { _, _ ->
-                saveUserInput(editText.text.toString())
+                saveEvent(editText.text.toString())
             }
             .setNegativeButton(R.string.close, null)
             .create()
@@ -60,7 +66,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
     private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")
     private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyy")
-    private val events = mutableListOf<Event>()
+    private val events = mutableMapOf<LocalDate, List<Event>>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.exmaple_3_fragment, container, false)
@@ -121,14 +127,25 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         }
     }
 
-    private fun saveUserInput(text: String) {
+    private fun saveEvent(text: String) {
         if (text.isBlank()) {
             Toast.makeText(requireContext(), R.string.example_3_empty_input_text, Toast.LENGTH_LONG).show()
         } else {
             selectedDate?.let {
-                events.add(Event(text, it))
+                events[it] = events[it].orEmpty().plus(Event(text, it))
+                updateAdapterForDate(it)
             }
         }
     }
 
+    private fun deleteEvent(event: Event) {
+        val date = event.date
+        events[date] = events[date].orEmpty().minus(event)
+        updateAdapterForDate(date)
+    }
+
+    private fun updateAdapterForDate(date: LocalDate) {
+        eventsAdapter.events.clear()
+        eventsAdapter.events.addAll(events[date].orEmpty())
+    }
 }
