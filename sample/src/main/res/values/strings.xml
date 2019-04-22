@@ -6,5 +6,9 @@
     <string name="example_2_subtitle">Month header view, single selection, week starts on monday, vertical scrolling, hides in and out dates.</string>
     <string name="example_3_title">Example 3</string>
     <string name="example_3_subtitle">Agenda style implementation, day labels as header view, single selection</string>
+    <string name="save">Save</string>
+    <string name="close">Close</string>
+    <string name="example_3_input_dialog_title">Enter item title</string>
+    <string name="example_3_empty_input_text">Text is empty</string>
 
 </resources>

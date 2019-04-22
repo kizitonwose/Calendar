@@ -1,6 +1,7 @@
 package com.kizitonwose.calendarviewsample
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,12 @@ fun View.makeInVisible() {
 fun View.makeGone() {
     visibility = View.GONE
 }
+
+fun dpToPx(dp: Int, context: Context): Int =
+    TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(),
+        context.resources.displayMetrics
+    ).toInt()
 
 internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
