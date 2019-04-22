@@ -34,13 +34,6 @@ open class CalendarAdapter(
 
     private val months = mutableListOf<CalendarMonth>()
 
-    init {
-        months.add(CalendarMonth(YearMonth.now(), config))
-        months.add(months.first().next)
-        months.add(months.last().next)
-        months.add(months.last().next)
-    }
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         rv = recyclerView as CalendarView
         rv.post { findVisibleMonthAndNotify() }
@@ -131,5 +124,18 @@ open class CalendarAdapter(
                 this.visibleMonth = visibleMonth
             }
         }
+    }
+
+    fun setDateRange(startMonth: YearMonth, endMonth: YearMonth) {
+        val startCalMonth = CalendarMonth(startMonth, config)
+        val endCalMonth = CalendarMonth(endMonth, config)
+        var lastCalMonth = startCalMonth
+        months.clear()
+        while (lastCalMonth < endCalMonth) {
+            months.add(lastCalMonth)
+            lastCalMonth = lastCalMonth.next
+        }
+        months.add(endCalMonth)
+        notifyDataSetChanged()
     }
 }

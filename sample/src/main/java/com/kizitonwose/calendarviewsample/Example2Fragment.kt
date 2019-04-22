@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
+import org.threeten.bp.YearMonth
 
 
 class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
@@ -35,6 +36,9 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        exTwoCalendar.setDateRange(YearMonth.now(), YearMonth.now().plusMonths(5))
+
         exTwoCalendar.dateViewBinder = { view, day ->
             val textView = view.exTwoDayText
             textView.text = day.date.dayOfMonth.toString()

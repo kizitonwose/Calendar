@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import org.threeten.bp.LocalDate
+import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
 
@@ -34,6 +35,13 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        exOneCalendar.setDateRange(
+            YearMonth.now().minusMonths(5),
+            YearMonth.now().plusMonths(5)
+        )
+
+
         exOneCalendar.dateViewBinder = { view, day ->
             val textView = view.exOneDayText
             textView.text = day.date.dayOfMonth.toString()
