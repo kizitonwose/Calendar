@@ -9,15 +9,34 @@
     android:focusable="true"
     tools:context=".Example3Fragment">
 
-    <com.kizitonwose.calendarview.CalendarView
-        android:id="@+id/exThreeCalendar"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:dayViewResource="@layout/example_3_calendar_day"
-        app:firstDayOfWeek="sunday"
-        app:monthHeaderResource="@layout/example_3_calendar_header"
-        app:orientation="horizontal"
-        app:scrollMode="paged" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.kizitonwose.calendarview.CalendarView
+                android:id="@+id/exThreeCalendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dayViewResource="@layout/example_3_calendar_day"
+                app:firstDayOfWeek="sunday"
+                app:monthHeaderResource="@layout/example_3_calendar_header"
+                app:orientation="horizontal"
+                app:scrollMode="paged" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/exThreeRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/exThreeAddButton"

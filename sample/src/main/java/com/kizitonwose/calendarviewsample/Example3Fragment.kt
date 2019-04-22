@@ -13,18 +13,26 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.children
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.DayOwner
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_3_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_3_fragment.*
+import kotlinx.android.synthetic.main.home_activity.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
-data class Todo(val title: String, val date: LocalDate)
+data class Event(val text: String, val date: LocalDate)
 
 class Example3Fragment : BaseFragment(), HasBackButton {
+
+
+    private val eventsAdapter = Example3EventsAdapter {
+
+    }
 
     private val inputDialog by lazy {
         val editText = AppCompatEditText(requireContext())
@@ -47,19 +55,23 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
     override val titleRes: Int = R.string.example_3_title
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.exmaple_3_fragment, container, false)
-    }
-
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
 
     private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")
     private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyy")
-    private val todos = mutableListOf<Todo>()
+    private val events = mutableListOf<Event>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.exmaple_3_fragment, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        exThreeRv.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        exThreeRv.adapter = eventsAdapter
+        exThreeRv.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
 
         val now = YearMonth.now()
         exThreeCalendar.setDateRange(now.minusMonths(10), now.plusMonths(10))
@@ -114,7 +126,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             Toast.makeText(requireContext(), R.string.example_3_empty_input_text, Toast.LENGTH_LONG).show()
         } else {
             selectedDate?.let {
-                todos.add(Todo(text, it))
+                events.add(Event(text, it))
             }
         }
     }
