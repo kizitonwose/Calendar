@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.utils.setTextColorRes
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_2_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
