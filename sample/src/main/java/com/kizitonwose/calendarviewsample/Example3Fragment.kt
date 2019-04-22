@@ -130,11 +130,9 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             } else {
                 titleFormatter.format(it.yearMonth)
             }
-            if (it.yearMonth == today.yearMonth) {
-                selectDate(today)
-            } else {
-                selectDate(it.yearMonth.atDay(1))
-            }
+
+            selectDate(it.yearMonth.atDay(1))
+
             exThreeCalendar.post {
                 exThreeCalendar.requestLayout()
             }
