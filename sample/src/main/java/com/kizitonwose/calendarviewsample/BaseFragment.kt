@@ -4,7 +4,7 @@ package com.kizitonwose.calendarviewsample
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.home_activity.*
 
 interface HasToolbar {
     val toolbar: Toolbar? // Return null to hide the toolbar

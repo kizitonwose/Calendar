@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.home_activity.*
 
 
 class HomeActivity : AppCompatActivity() {
@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.home_activity)
         setSupportActionBar(homeToolbar)
         examplesRv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         examplesRv.adapter = examplesAdapter

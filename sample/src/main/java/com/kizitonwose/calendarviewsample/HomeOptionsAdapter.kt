@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.options_item_view.*
+import kotlinx.android.synthetic.main.home_options_item_view.*
 
 data class ExampleItem(@StringRes val titleRes: Int, @StringRes val subtitleRes: Int, val clazz: Class<*>)
 
@@ -24,7 +24,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {
         return HomeOptionsViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.options_item_view, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.home_options_item_view, parent, false)
         )
     }
 
