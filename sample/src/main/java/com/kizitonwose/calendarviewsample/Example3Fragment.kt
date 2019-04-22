@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
 import com.kizitonwose.calendarview.model.DayOwner
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_3_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_3_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
+import org.threeten.bp.format.DateTimeFormatter
 
 
 class Example3Fragment : BaseFragment(), HasBackButton {
@@ -26,10 +28,15 @@ class Example3Fragment : BaseFragment(), HasBackButton {
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
 
+    private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")
+    private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyy")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        exThreeCalendar.setDateRange(YearMonth.now(), YearMonth.now().plusMonths(5))
+        val now = YearMonth.now()
+        exThreeCalendar.setDateRange(now.minusMonths(10), now.plusMonths(10))
+        exThreeCalendar.scrollToMonth(now)
 
         exThreeCalendar.dateViewBinder = { view, day ->
             val textView = view.exThreeDayText
@@ -51,7 +58,11 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         }
 
         exThreeCalendar.monthScrollListener = {
-
+            requireActivity().homeToolbar.title = if (it.year == today.year) {
+                titleSameYearFormatter.format(it.yearMonth)
+            } else {
+                titleFormatter.format(it.yearMonth)
+            }
         }
 
         exThreeCalendar.monthHeaderBinder = { view, _ ->
