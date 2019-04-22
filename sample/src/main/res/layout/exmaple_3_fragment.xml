@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    tools:context=".Example3Fragment">
+
+    <com.kizitonwose.calendarview.CalendarView
+        android:id="@+id/exThreeCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:dayViewResource="@layout/example_2_calendar_day"
+        app:firstDayOfWeek="monday"
+        app:monthHeaderResource="@layout/example_2_calendar_header"
+        app:orientation="vertical" />
+
+</LinearLayout>

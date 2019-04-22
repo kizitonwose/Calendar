@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">CalendarView Sample</string>
     <string name="example_1_title">Example 1</string>
-    <string name="example_2_title">Example 2</string>
     <string name="example_1_subtitle">Multiple selection, week starts on sunday, horizontal scrolling, shows in and out dates.</string>
+    <string name="example_2_title">Example 2</string>
     <string name="example_2_subtitle">Month header view, single selection, week starts on monday, vertical scrolling, hides in and out dates.</string>
+    <string name="example_3_title">Example 3</string>
+    <string name="example_3_subtitle">Agenda style implementation, day labels as header view, single selection</string>
 
 </resources>
