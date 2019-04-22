@@ -65,7 +65,8 @@ class Example3Fragment : BaseFragment(), HasBackButton {
     private val today = LocalDate.now()
 
     private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")
-    private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyy")
+    private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
+    private val selectionFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
     private val events = mutableMapOf<LocalDate, List<Event>>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -170,5 +171,6 @@ class Example3Fragment : BaseFragment(), HasBackButton {
     private fun updateAdapterForDate(date: LocalDate) {
         eventsAdapter.events.clear()
         eventsAdapter.events.addAll(events[date].orEmpty())
+        exThreeSelectedDateText.text = selectionFormatter.format(date)
     }
 }

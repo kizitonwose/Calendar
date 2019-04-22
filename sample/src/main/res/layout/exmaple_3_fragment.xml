@@ -28,6 +28,22 @@
                 app:orientation="horizontal"
                 app:scrollMode="paged" />
 
+            <TextView
+                android:id="@+id/exThreeSelectedDateText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#EEEEEE"
+                android:fontFamily="sans-serif-medium"
+                android:paddingStart="20dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="12dp"
+                android:textAllCaps="true"
+                android:textColor="@color/example_3_black"
+                android:textSize="14sp"
+                tools:text="7 Jan, 2019" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/exThreeRv"
                 android:layout_width="match_parent"
