@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.utils.inflate
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -90,20 +89,12 @@ open class CalendarAdapter(
         notifyItemChanged(months.indexOfFirst { it.ownedDates.contains(date) })
     }
 
-    fun scrollToMonth(date: LocalDate) {
-        rv.scrollToPosition(getAdapterPosition(date))
+    fun scrollToMonth(month: YearMonth) {
+        rv.scrollToPosition(getAdapterPosition(month))
     }
 
     fun scrollToDate(date: LocalDate) {
 
-    }
-
-    private fun getAdapterPosition(date: LocalDate): Int {
-        return months.indexOfFirst { it.ownedDates.contains(date) }
-    }
-
-    fun reloadDate(date: LocalDate) {
-        reloadDay(CalendarDay(date, DayOwner.THIS_MONTH))
     }
 
     fun reloadDay(day: CalendarDay) {
@@ -111,18 +102,6 @@ open class CalendarAdapter(
         if (adapterPos != -1) {
             val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos) as? MonthViewHolder
             viewHolder?.reloadDay(day)
-        }
-    }
-
-    private var visibleMonth: CalendarMonth? = null
-    fun findVisibleMonthAndNotify() {
-        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-        if (visibleItemPos != RecyclerView.NO_POSITION) {
-            val visibleMonth = months[visibleItemPos]
-            if (visibleMonth != this.visibleMonth) {
-                rv.monthScrollListener?.invoke(visibleMonth)
-                this.visibleMonth = visibleMonth
-            }
         }
     }
 
@@ -137,5 +116,25 @@ open class CalendarAdapter(
         }
         months.add(endCalMonth)
         notifyDataSetChanged()
+    }
+
+    private var visibleMonth: CalendarMonth? = null
+    fun findVisibleMonthAndNotify() {
+        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        if (visibleItemPos != RecyclerView.NO_POSITION) {
+            val visibleMonth = months[visibleItemPos]
+            if (visibleMonth != this.visibleMonth) {
+                rv.monthScrollListener?.invoke(visibleMonth)
+                this.visibleMonth = visibleMonth
+            }
+        }
+    }
+
+    private fun getAdapterPosition(date: LocalDate): Int {
+        return months.indexOfFirst { it.ownedDates.contains(date) }
+    }
+
+    private fun getAdapterPosition(month: YearMonth): Int {
+        return months.indexOfFirst { it.yearMonth == month }
     }
 }

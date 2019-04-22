@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.OutDateStyle
 import com.kizitonwose.calendarview.model.ScrollMode
+import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -119,7 +121,11 @@ class CalendarView : RecyclerView {
     }
 
     fun scrollToMonth(date: LocalDate) {
-        adapter.scrollToMonth(date)
+        scrollToMonth(date.yearMonth)
+    }
+
+    fun scrollToMonth(month: YearMonth) {
+        adapter.scrollToMonth(month)
     }
 
     fun reloadDay(day: CalendarDay) {
@@ -127,17 +133,13 @@ class CalendarView : RecyclerView {
     }
 
     fun reloadDate(date: LocalDate) {
-        adapter.reloadDate(date)
+        reloadDay(CalendarDay(date, DayOwner.THIS_MONTH))
     }
 
     fun reloadDates(vararg date: LocalDate) {
         date.forEach {
-            adapter.reloadDate(it)
+            reloadDate(it)
         }
-    }
-
-    fun setDateRange(startMonth: YearMonth, endMonth: YearMonth) {
-        adapter.setDateRange(startMonth, endMonth)
     }
 
     fun setDateRange(startDate: LocalDate, endDate: LocalDate) {
@@ -146,4 +148,9 @@ class CalendarView : RecyclerView {
             YearMonth.of(endDate.year, endDate.month)
         )
     }
+
+    fun setDateRange(startMonth: YearMonth, endMonth: YearMonth) {
+        adapter.setDateRange(startMonth, endMonth)
+    }
+
 }
