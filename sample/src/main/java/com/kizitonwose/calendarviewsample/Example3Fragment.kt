@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.children
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -97,6 +98,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
 
         exThreeCalendar.dateViewBinder = { view, day ->
             val textView = view.exThreeDayText
+            val dotView = view.exThreeDotView
             textView.text = day.date.dayOfMonth.toString()
 
             when (day.owner) {
@@ -112,17 +114,21 @@ class Example3Fragment : BaseFragment(), HasBackButton {
                 today -> {
                     textView.setTextColorRes(R.color.example_3_white)
                     textView.setBackgroundResource(R.drawable.example_3_today_bg)
+                    dotView.makeInVisible()
                 }
                 selectedDate -> {
                     textView.setTextColorRes(R.color.example_3_blue)
                     textView.setBackgroundResource(R.drawable.example_3_selected_bg)
-
+                    dotView.makeInVisible()
                 }
-                else -> textView.background = null
+                else -> {
+                    textView.background = null
+                    dotView.isVisible = events[day.date].orEmpty().isNotEmpty() && day.owner == DayOwner.THIS_MONTH
+                }
             }
         }
 
-        exThreeCalendar.dateClickListener = dateClick@{
+        exThreeCalendar.dateClickListener = {
             if (it.owner == DayOwner.THIS_MONTH) {
                 selectDate(it.date)
             }

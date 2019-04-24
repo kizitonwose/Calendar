@@ -3,16 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp">
+    android:layout_margin="2dp">
 
     <TextView
         android:id="@+id/exThreeDayText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
         android:gravity="center"
-        android:textSize="16sp"
         android:textColor="@color/black"
+        android:textSize="16sp"
         tools:text="22" />
 
+    <View
+        android:id="@+id/exThreeDotView"
+        android:layout_width="4.5dp"
+        android:layout_height="4.5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@drawable/example_3_today_bg" />
 </FrameLayout>
 
