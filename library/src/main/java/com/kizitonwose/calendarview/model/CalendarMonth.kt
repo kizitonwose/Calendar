@@ -1,12 +1,18 @@
 package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.adapter.CalendarConfig
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
+import org.threeten.bp.temporal.WeekFields
 import java.io.Serializable
 
 
-class CalendarMonth internal constructor(val yearMonth: YearMonth, private val config: CalendarConfig) :
+class CalendarMonth internal constructor(
+    val yearMonth: YearMonth,
+    private val config: CalendarConfig,
+    private val firstDayOfWeek: DayOfWeek
+) :
     Comparable<CalendarMonth>, Serializable {
 
     val year: Int = yearMonth.year
@@ -22,7 +28,7 @@ class CalendarMonth internal constructor(val yearMonth: YearMonth, private val c
         }
 
         // Group days by week of month
-        val weekOfMonthField = config.weekFields.weekOfMonth()
+        val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
         val weekDaysGroup = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
 
         // Add in-dates if necessary
@@ -70,10 +76,10 @@ class CalendarMonth internal constructor(val yearMonth: YearMonth, private val c
         get() = ownedDays.map { it.date }
 
     val previous: CalendarMonth
-        get() = CalendarMonth(yearMonth.minusMonths(1), config)
+        get() = CalendarMonth(yearMonth.minusMonths(1), config, firstDayOfWeek)
 
     val next: CalendarMonth
-        get() = CalendarMonth(yearMonth.plusMonths(1), config)
+        get() = CalendarMonth(yearMonth.plusMonths(1), config, firstDayOfWeek)
 
 
     override fun compareTo(other: CalendarMonth): Int {

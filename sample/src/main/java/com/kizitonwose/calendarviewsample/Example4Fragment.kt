@@ -18,12 +18,9 @@ import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_4_fragment.*
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.temporal.WeekFields
-import java.util.*
 
 class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
@@ -68,8 +65,17 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Set the First day of week depending on Locale
+        val daysOfWeek = daysOfWeekFromLocale()
+        legendLayout.children.forEachIndexed { index, view ->
+            (view as TextView).apply {
+                text = daysOfWeek[index].name.take(3).toLowerCase().capitalize()
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            }
+        }
+
         val now = YearMonth.now()
-        exFourCalendar.setDateRange(now, now.plusMonths(12))
+        exFourCalendar.setup(now, now.plusMonths(12), daysOfWeek.first())
         exFourCalendar.scrollToMonth(now)
 
         exFourCalendar.dateViewBinder = { view, day ->
@@ -167,21 +173,6 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         exFourCalendar.monthHeaderBinder = { view, month ->
             val monthTitle = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
             view.exFourHeaderText.text = monthTitle
-        }
-
-        // Set the First day of week depending on Locale
-        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-        var daysOfWeek = DayOfWeek.values()
-        if (firstDayOfWeek != DayOfWeek.MONDAY) { // Index is not zero
-            val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
-            val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
-            daysOfWeek = rhs + lhs
-        }
-        legendLayout.children.forEachIndexed { index, view ->
-            (view as TextView).apply {
-                text = daysOfWeek[index].name.take(3).toLowerCase().capitalize()
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
-            }
         }
 
         bindViews()

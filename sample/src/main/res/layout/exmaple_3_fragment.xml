@@ -23,7 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:dayViewResource="@layout/example_3_calendar_day"
-                app:firstDayOfWeek="sunday"
                 app:monthHeaderResource="@layout/example_3_calendar_header"
                 app:orientation="horizontal"
                 app:scrollMode="paged" />

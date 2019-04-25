@@ -37,7 +37,6 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         app:dayViewResource="@layout/example_2_calendar_day"
-        app:firstDayOfWeek="monday"
         app:monthHeaderResource="@layout/example_2_calendar_header"
         app:orientation="vertical" />
 

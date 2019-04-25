@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
+import org.threeten.bp.temporal.WeekFields
+import java.util.*
 
 
 fun View.makeVisible() {
@@ -49,7 +51,16 @@ internal fun TextView.setTextColorRes(@ColorRes color: Int) = setTextColor(conte
 val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)
 
-fun daysOfWeekFromSunday() = listOf(DayOfWeek.SUNDAY).plus(DayOfWeek.values().dropLast(1))
+fun daysOfWeekFromLocale(): Array<DayOfWeek> {
+    val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+    var daysOfWeek = DayOfWeek.values()
+    if (firstDayOfWeek != DayOfWeek.MONDAY) { // Index is not zero
+        val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
+        val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
+        daysOfWeek = rhs + lhs
+    }
+    return daysOfWeek
+}
 
 fun GradientDrawable.setCornerRadius(
     topLeft: Float = 0F,

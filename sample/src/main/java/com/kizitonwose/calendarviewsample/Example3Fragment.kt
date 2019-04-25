@@ -92,8 +92,9 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         exThreeRv.adapter = eventsAdapter
         exThreeRv.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
 
+        val daysOfWeek = daysOfWeekFromLocale()
         val now = YearMonth.now()
-        exThreeCalendar.setDateRange(now.minusMonths(10), now.plusMonths(10))
+        exThreeCalendar.setup(now.minusMonths(10), now.plusMonths(10), daysOfWeek.first())
         exThreeCalendar.scrollToMonth(now)
 
         if (savedInstanceState == null) {
@@ -159,9 +160,8 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             val legendLayout = view.legendLayout
             // Setup each header day text if we have not done that already.
             if ((legendLayout.children.first() as TextView).text.count() != 1) {
-                val days = daysOfWeekFromSunday()
                 legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
-                    tv.text = days[index].name.first().toString()
+                    tv.text = daysOfWeek[index].name.first().toString()
                     tv.setTextColorRes(R.color.example_3_black)
                 }
             }

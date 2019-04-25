@@ -10,6 +10,7 @@ import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.utils.inflate
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
@@ -30,6 +31,8 @@ open class CalendarAdapter(
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
     private lateinit var rv: CalendarView
+
+    private lateinit var firstDayOfWeek: DayOfWeek
 
     private val months = mutableListOf<CalendarMonth>()
 
@@ -105,16 +108,17 @@ open class CalendarAdapter(
             // currently visible on the screen.
             val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos)
             if (viewHolder != null) {
-                (viewHolder as  MonthViewHolder).reloadDay(day)
+                (viewHolder as MonthViewHolder).reloadDay(day)
             } else {
                 notifyItemChanged(adapterPos)
             }
         }
     }
 
-    fun setDateRange(startMonth: YearMonth, endMonth: YearMonth) {
-        val startCalMonth = CalendarMonth(startMonth, config)
-        val endCalMonth = CalendarMonth(endMonth, config)
+    fun setupDates(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
+        this.firstDayOfWeek = firstDayOfWeek
+        val startCalMonth = CalendarMonth(startMonth, config, firstDayOfWeek)
+        val endCalMonth = CalendarMonth(endMonth, config, firstDayOfWeek)
         var lastCalMonth = startCalMonth
         months.clear()
         while (lastCalMonth < endCalMonth) {

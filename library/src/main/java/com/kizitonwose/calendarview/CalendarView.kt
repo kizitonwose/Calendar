@@ -50,15 +50,13 @@ class CalendarView : RecyclerView {
         val orientation = a.getInt(R.styleable.CalendarView_orientation, RecyclerView.VERTICAL)
         val scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_scrollMode, 0)]
         val outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_outDateStyle, 0)]
-        val firstDayOfWeek =
-            DayOfWeek.values()[a.getInt(R.styleable.CalendarView_firstDayOfWeek, DayOfWeek.SUNDAY.ordinal)]
         a.recycle()
 
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
         clipToPadding = false
         layoutManager = LinearLayoutManager(context, orientation, false)
-        val config = CalendarConfig(firstDayOfWeek, outDateStyle, scrollMode)
+        val config = CalendarConfig(outDateStyle, scrollMode)
         adapter = CalendarAdapter(dayViewRes, monthHeaderRes, monthFooterRes, config)
         setAdapter(adapter)
 
@@ -142,15 +140,8 @@ class CalendarView : RecyclerView {
         }
     }
 
-    fun setDateRange(startDate: LocalDate, endDate: LocalDate) {
-        setDateRange(
-            YearMonth.of(startDate.year, startDate.month),
-            YearMonth.of(endDate.year, endDate.month)
-        )
-    }
 
-    fun setDateRange(startMonth: YearMonth, endMonth: YearMonth) {
-        adapter.setDateRange(startMonth, endMonth)
+    fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
+        adapter.setupDates(startMonth, endMonth, firstDayOfWeek)
     }
-
 }

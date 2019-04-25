@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.example_2_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
 import kotlinx.android.synthetic.main.home_activity.*
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
@@ -38,7 +37,15 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        exTwoCalendar.setDateRange(YearMonth.now(), YearMonth.now().plusMonths(5))
+        val daysOfWeek = daysOfWeekFromLocale()
+        legendLayout.children.forEachIndexed { index, view ->
+            (view as TextView).apply {
+                text = daysOfWeek[index].name.first().toString()
+                setTextColorRes(R.color.example_2_white)
+            }
+        }
+
+        exTwoCalendar.setup(YearMonth.now(), YearMonth.now().plusMonths(5), daysOfWeek.first())
 
         exTwoCalendar.dateViewBinder = { view, day ->
             val textView = view.exTwoDayText
@@ -86,14 +93,6 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
             @SuppressLint("SetTextI18n") // Fix concatenation warning for `setText` call.
             view.exTwoHeaderText.text = "${calMonth.yearMonth.month.name.toLowerCase().capitalize()} ${calMonth.year}"
         }
-
-        legendLayout.children.forEachIndexed { index, view ->
-            (view as TextView).apply {
-                text = DayOfWeek.values()[index].name.first().toString()
-                setTextColorRes(R.color.example_2_white)
-            }
-        }
-
     }
 
     private lateinit var menuItem: MenuItem

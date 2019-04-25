@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.kizitonwose.calendarview.model.DayOwner
-
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
@@ -36,8 +35,16 @@ class Example1Fragment : BaseFragment(), HasToolbar {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val daysOfWeek = daysOfWeekFromLocale()
+        legendLayout.children.forEachIndexed { index, view ->
+            (view as TextView).apply {
+                text = daysOfWeek[index].name.take(3).toUpperCase()
+                setTextColorRes(R.color.example_2_white)
+            }
+        }
+
         val now = YearMonth.now()
-        exOneCalendar.setDateRange(now.minusMonths(5), now.plusMonths(5))
+        exOneCalendar.setup(now.minusMonths(5), now.plusMonths(5), daysOfWeek.first())
         exOneCalendar.scrollToMonth(now)
 
 
