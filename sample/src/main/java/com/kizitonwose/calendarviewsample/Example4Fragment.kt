@@ -1,22 +1,29 @@
 package com.kizitonwose.calendarviewsample
 
 
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.children
 import com.kizitonwose.calendarview.model.DayOwner
+import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_4_fragment.*
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.temporal.WeekFields
+import java.util.*
 
 class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
@@ -109,7 +116,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             } else {
                 textView.text = null
 
-                 // <--- This part is to make the coloured selection background continuous across various months ---->
+                // <--- This part is to make the coloured selection background continuous across various months ---->
 
                 val startDate = startDate
                 val endDate = endDate
@@ -162,6 +169,21 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             view.exFourHeaderText.text = monthTitle
         }
 
+        // Set the First day of week depending on Locale
+        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+        var daysOfWeek = DayOfWeek.values()
+        if (firstDayOfWeek != DayOfWeek.MONDAY) { // Index is not zero
+            val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
+            val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
+            daysOfWeek = rhs + lhs
+        }
+        legendLayout.children.forEachIndexed { index, view ->
+            (view as TextView).apply {
+                text = daysOfWeek[index].name.take(3).toLowerCase().capitalize()
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+            }
+        }
+
         bindViews()
     }
 
@@ -176,13 +198,17 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     private fun bindViews() {
         if (startDate != null) {
             exFourStartDateText.text = headerDateFormatter.format(startDate)
+            exFourStartDateText.setTextColorRes(R.color.example_4_grey)
         } else {
             exFourStartDateText.text = getString(R.string.start_date)
+            exFourStartDateText.setTextColor(Color.GRAY)
         }
         if (endDate != null) {
             exFourEndDateText.text = headerDateFormatter.format(endDate)
+            exFourEndDateText.setTextColorRes(R.color.example_4_grey)
         } else {
             exFourEndDateText.text = getString(R.string.end_date)
+            exFourEndDateText.setTextColor(Color.GRAY)
         }
 
         exFourSaveButton.isEnabled = startDate != null && endDate != null
