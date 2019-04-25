@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/exTwoDayText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp">
-
-    <TextView
-        android:id="@+id/exTwoDayText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        tools:text="22" />
-
-</FrameLayout>
-
+    android:layout_margin="5dp"
+    android:gravity="center"
+    android:textColor="@color/black"
+    android:textSize="16sp"
+    tools:text="22" />

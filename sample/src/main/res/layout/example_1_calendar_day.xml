@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/exOneDayText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp">
-
-    <TextView
-        android:id="@+id/exOneDayText"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:background="@color/example_1_bg"
-        android:textColor="@color/white"
-        tools:text="22" />
-
-</FrameLayout>
+    android:layout_margin="5dp"
+    android:background="@color/example_1_bg"
+    android:gravity="center"
+    android:textColor="@color/white"
+    android:textSize="16sp"
+    tools:text="22" />
 
