@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape android:shape="rectangle"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/example_4_green" />
+
+    <!--We update these values dynamically-->
+    <corners
+        android:bottomRightRadius="26dp"
+        android:topRightRadius="26dp" />
+</shape>

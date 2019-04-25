@@ -17,4 +17,5 @@
     <color name="example_3_blue_light">#D2E3FC</color>
     <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>
+    <color name="example_4_grey_past">#BEBEBE</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.kizitonwose.calendarviewsample
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -49,3 +50,17 @@ val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)
 
 fun daysOfWeekFromSunday() = listOf(DayOfWeek.SUNDAY).plus(DayOfWeek.values().dropLast(1))
+
+fun GradientDrawable.setCornerRadius(
+    topLeft: Float = 0F,
+    topRight: Float = 0F,
+    bottomRight: Float = 0F,
+    bottomLeft: Float = 0F
+) {
+    cornerRadii = arrayOf(
+        topLeft, topLeft,
+        topRight, topRight,
+        bottomRight, bottomRight,
+        bottomLeft, bottomLeft
+    ).toFloatArray()
+}

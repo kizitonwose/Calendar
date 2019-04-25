@@ -23,7 +23,7 @@ abstract class BaseFragment : Fragment() {
 
         if (this is HasBackButton) {
             val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
-            actionBar?.title = context?.getString(titleRes)
+            actionBar?.title = if (titleRes != null) context?.getString(titleRes!!) else ""
             actionBar?.setDisplayHomeAsUpEnabled(true)
         }
     }
@@ -42,5 +42,5 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    abstract val titleRes: Int
+    abstract val titleRes: Int?
 }

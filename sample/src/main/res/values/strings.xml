@@ -14,5 +14,7 @@
     <string name="example_3_empty_input_text">Text is empty</string>
     <string name="example_3_dialog_delete_confirmation">Delete this event?</string>
     <string name="delete">Delete</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 
 </resources>
