@@ -9,16 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.home_options_item_view.*
 
-data class ExampleItem(@StringRes val titleRes: Int, @StringRes val subtitleRes: Int, val clazz: Class<*>)
+data class ExampleItem(@StringRes val titleRes: Int, @StringRes val subtitleRes: Int)
 
 
 class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
     RecyclerView.Adapter<HomeOptionsAdapter.HomeOptionsViewHolder>() {
 
     val examples = mutableListOf<ExampleItem>().apply {
-        add(ExampleItem(R.string.example_1_title, R.string.example_1_subtitle, Example1Fragment::class.java))
-        add(ExampleItem(R.string.example_2_title, R.string.example_2_subtitle, Example2Fragment::class.java))
-        add(ExampleItem(R.string.example_3_title, R.string.example_3_subtitle, Example3Fragment::class.java))
+        add(ExampleItem(R.string.example_1_title, R.string.example_1_subtitle))
+        add(ExampleItem(R.string.example_2_title, R.string.example_2_subtitle))
+        add(ExampleItem(R.string.example_3_title, R.string.example_3_subtitle))
         Unit
     }
 

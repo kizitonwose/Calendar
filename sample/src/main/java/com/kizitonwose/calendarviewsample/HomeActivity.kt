@@ -3,7 +3,6 @@ package com.kizitonwose.calendarviewsample
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,10 +12,31 @@ import kotlinx.android.synthetic.main.home_activity.*
 class HomeActivity : AppCompatActivity() {
 
     private val examplesAdapter = HomeOptionsAdapter {
-        val instance = it.clazz.getConstructor().newInstance() as Fragment
+        val instance = when (it.titleRes) {
+            R.string.example_1_title -> Example1Fragment()
+            R.string.example_2_title -> Example2Fragment()
+            R.string.example_3_title -> Example3Fragment()
+            else -> throw IllegalArgumentException()
+        }
         supportFragmentManager.beginTransaction()
-            .add(R.id.homeContainer, instance, it.clazz.simpleName)
-            .addToBackStack(it.clazz.simpleName)
+            .run {
+                if (instance is Example1Fragment) {
+                    return@run setCustomAnimations(
+                        R.anim.slide_in_up,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out_down
+                    )
+                }
+                return@run setCustomAnimations(
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left,
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+                )
+            }
+            .add(R.id.homeContainer, instance, it.javaClass.simpleName)
+            .addToBackStack(it.javaClass.simpleName)
             .commit()
     }
 
