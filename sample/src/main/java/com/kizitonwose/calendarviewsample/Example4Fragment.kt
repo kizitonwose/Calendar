@@ -18,10 +18,6 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
-fun LocalDate.isInPast(): Boolean = LocalDate.now().isAfter(this)
-
-fun LocalDate.isInFuture(): Boolean = LocalDate.now().isBefore(this)
-
 class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     override val toolbar: Toolbar?
@@ -79,7 +75,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             if (day.owner == DayOwner.THIS_MONTH) {
                 textView.text = day.day.toString()
 
-                if (day.date.isInPast()) {
+                if (day.date.isBefore(today)) {
                     textView.setTextColorRes(R.color.example_4_grey_past)
                 } else {
                     when {
@@ -144,7 +140,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         }
 
         exFourCalendar.dateClickListener = {
-            if (it.owner == DayOwner.THIS_MONTH && (it.date == today || it.date.isInFuture())) {
+            if (it.owner == DayOwner.THIS_MONTH && (it.date == today || it.date.isAfter(today))) {
                 val date = it.date
                 if (startDate != null) {
                     if (date < startDate || endDate != null) {
