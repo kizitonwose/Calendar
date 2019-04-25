@@ -3,20 +3,21 @@ package com.kizitonwose.calendarviewsample
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
+import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_2_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
+import kotlinx.android.synthetic.main.home_activity.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
+import org.threeten.bp.format.DateTimeFormatter
 
 
 class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
@@ -27,6 +28,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
     override val titleRes: Int = R.string.example_2_title
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.exmaple_2_fragment, container, false)
     }
 
@@ -74,8 +76,9 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
                     val oldDate = selectedDate
                     selectedDate = it.date
                     exTwoCalendar.reloadDate(it.date)
-                    exTwoCalendar.reloadDate(oldDate ?: return@dateClick)
+                    oldDate?.let { exTwoCalendar.reloadDate(oldDate) }
                 }
+                menuItem.isVisible = selectedDate != null
             }
         }
 
@@ -93,4 +96,20 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     }
 
+    private lateinit var menuItem: MenuItem
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.example_2_menu, menu)
+        menuItem = menu.getItem(0)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menuItemDone) {
+            val date = selectedDate ?: return false
+            val text = "Selected: ${DateTimeFormatter.ofPattern("d MMMM yyyy").format(date)}"
+            Snackbar.make(requireActivity().homeRootLayout, text, Snackbar.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
