@@ -1,10 +1,13 @@
 package com.kizitonwose.calendarviewsample
 
 
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_4_fragment.*
@@ -12,17 +15,19 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
-class Example4Fragment : BaseFragment(), HasBackButton {
+class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
-    override val titleRes: Int = R.string.example_3_title
+    override val toolbar: Toolbar?
+        get() = exFourToolbar
+
+    override val titleRes: Int = R.string.example_4_title
 
     private val today = LocalDate.now()
 
     private var startDate: LocalDate? = null
     private var endDate: LocalDate? = null
 
-    private var headerDayFormatter = DateTimeFormatter.ofPattern("EEEE','")
-    private var headerDateFormatter = DateTimeFormatter.ofPattern("d MMM")
+    private var headerDateFormatter = DateTimeFormatter.ofPattern("d EEE'\n'MMM")
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,5 +68,13 @@ class Example4Fragment : BaseFragment(), HasBackButton {
         exFourCalendar.dateClickListener = {
 
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
+            setColorFilter(requireContext().getColorCompat(R.color.example_4_grey), PorterDuff.Mode.SRC_ATOP)
+        }
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
     }
 }

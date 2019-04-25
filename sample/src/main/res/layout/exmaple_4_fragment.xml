@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
     tools:context=".Example4Fragment">
 
@@ -18,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/Example4ToolbarTheme" />
+            app:theme="@style/Example4ToolbarTheme"
+            app:titleTextColor="@color/example_4_grey" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,78 +32,46 @@
             android:paddingEnd="14dp"
             android:paddingBottom="10dp">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/exFourStartDateText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
-                android:orientation="vertical"
+                android:gravity="start"
+                android:textColor="@color/example_4_grey"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/exFourHeaderDivider"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/startDayText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="start"
-                    android:maxLines="1"
-                    android:textColor="@color/example_4_grey"
-                    android:textSize="24sp"
-                    tools:text="Monday," />
-
-                <TextView
-                    android:id="@+id/startDateText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:textColor="@color/example_4_grey"
-                    android:textSize="24sp"
-                    tools:text="22 Apr" />
-            </LinearLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Mon\n22 Apr" />
 
             <View
                 android:id="@+id/exFourHeaderDivider"
                 android:layout_width="1.5dp"
                 android:layout_height="0dp"
-                android:background="@color/example_4_grey"
+                android:background="#EAEAEA"
                 android:rotation="45"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+
+            <TextView
+                android:id="@+id/exFourEndDateText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:orientation="vertical"
+                android:gravity="end"
+                android:textColor="@color/example_4_grey"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/exFourHeaderDivider"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Thu\n9 May" />
 
-                <TextView
-                    android:id="@+id/endDayText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="end"
-                    android:maxLines="1"
-                    android:textColor="@color/example_4_grey"
-                    android:textSize="24sp"
-                    tools:text="Thursday," />
-
-                <TextView
-                    android:id="@+id/endDateText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:textColor="@color/example_4_grey"
-                    android:textSize="24sp"
-                    tools:text="9 May" />
-            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
