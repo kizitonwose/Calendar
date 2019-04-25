@@ -19,6 +19,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
         add(ExampleItem(R.string.example_1_title, R.string.example_1_subtitle))
         add(ExampleItem(R.string.example_2_title, R.string.example_2_subtitle))
         add(ExampleItem(R.string.example_3_title, R.string.example_3_subtitle))
+        add(ExampleItem(R.string.example_4_title, R.string.example_4_subtitle))
         Unit
     }
 
