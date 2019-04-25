@@ -1,12 +1,14 @@
 package com.kizitonwose.calendarviewsample
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -30,7 +32,6 @@ import java.util.*
 data class Event(val id: String, val text: String, val date: LocalDate)
 
 class Example3Fragment : BaseFragment(), HasBackButton {
-
 
     private val eventsAdapter = Example3EventsAdapter {
         AlertDialog.Builder(requireContext())
@@ -56,12 +57,18 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             .setView(layout)
             .setPositiveButton(R.string.save) { _, _ ->
                 saveEvent(editText.text.toString())
-                // Clear the EditText since we're reusing
-                // one instance whenever the dialog is shown.
+                // Prepare EditText for reuse.
                 editText.setText("")
             }
             .setNegativeButton(R.string.close, null)
             .create()
+            .apply {
+                setOnShowListener {
+                    // Show the keyboard
+                    val imm = editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                }
+            }
     }
 
     override val titleRes: Int = R.string.example_3_title
