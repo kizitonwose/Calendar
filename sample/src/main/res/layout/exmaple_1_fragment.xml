@@ -57,6 +57,7 @@
         android:layout_height="match_parent"
         app:orientation="horizontal"
         app:scrollMode="paged"
+        app:outDateStyle="tillEndOfGrid"
         app:dayViewResource="@layout/example_1_calendar_day" />
 
 </LinearLayout>
