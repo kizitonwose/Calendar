@@ -106,7 +106,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val date = selectedDate ?: return false
             val text = "Selected: ${DateTimeFormatter.ofPattern("d MMMM yyyy").format(date)}"
             Snackbar.make(requireActivity().homeRootLayout, text, Snackbar.LENGTH_SHORT).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            fragmentManager?.popBackStack()
             return true
         }
         return super.onOptionsItemSelected(item)
