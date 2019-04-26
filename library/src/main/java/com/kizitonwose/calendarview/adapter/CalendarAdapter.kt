@@ -48,6 +48,9 @@ open class CalendarAdapter(
 
     override fun getItemCount(): Int = months.size
 
+    // Note: We don't set IDs for the header and footer views
+    // because it would overwrite the ID set by the user for
+    // the root view in the provided resource.
     private val bodyViewId = View.generateViewId()
     private val rootViewId = View.generateViewId()
 
@@ -115,6 +118,8 @@ open class CalendarAdapter(
                 var offset = 0
                 if (layoutManager.orientation == RecyclerView.VERTICAL) {
                     // Add header view height to offset if this is a vertical calendar with a header view.
+                    // See why we don't set IDs for header/footer views in the comment on the `bodyViewId`
+                    // field in this class.
                     val rootView = viewHolder.itemView.findViewById<LinearLayout>(rootViewId)
                     if (rootView.childCount >= 2 && rootView.getChildAt(1).id == bodyViewId) {
                         offset += rootView.getChildAt(0).height
