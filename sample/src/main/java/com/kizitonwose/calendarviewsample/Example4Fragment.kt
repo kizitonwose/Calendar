@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_4_fragment.*
-import kotlinx.android.synthetic.main.home_activity.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
@@ -182,7 +181,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val endDate = endDate ?: return@click
             val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
             val text = "Selected: ${formatter.format(startDate)} - ${formatter.format(endDate)}"
-            Snackbar.make(requireActivity().homeRootLayout, text, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
             fragmentManager?.popBackStack()
         }
 
