@@ -16,5 +16,6 @@
     <string name="delete">Delete</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
+    <string name="clear">Clear</string>
 
 </resources>

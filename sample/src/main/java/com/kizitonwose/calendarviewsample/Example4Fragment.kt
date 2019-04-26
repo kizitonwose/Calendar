@@ -7,9 +7,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -61,6 +59,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.exmaple_4_fragment, container, false)
     }
 
@@ -208,6 +207,27 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         exFourSaveButton.isEnabled = startDate != null && endDate != null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.example_4_menu, menu)
+        exFourToolbar.post {
+            // Configure menu text to match what is in the Airbnb app.
+            exFourToolbar.findViewById<TextView>(R.id.menuItemClear).apply {
+                setTextColor(requireContext().getColorCompat(R.color.example_4_grey))
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                isAllCaps = false
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menuItemClear) {
+            startDate = null
+            endDate = null
+            exFourCalendar.reloadCalendar()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -216,6 +236,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         }
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
         requireActivity().window.apply {
+            // Update statusbar color to match toolbar color.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 statusBarColor = requireContext().getColorCompat(R.color.white)
                 decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -228,6 +249,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     override fun onStop() {
         super.onStop()
         requireActivity().window.apply {
+            // Reset statusbar color.
             statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
             decorView.systemUiVisibility = 0
         }
