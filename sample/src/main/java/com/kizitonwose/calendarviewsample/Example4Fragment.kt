@@ -224,6 +224,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             startDate = null
             endDate = null
             exFourCalendar.reloadCalendar()
+            bindViews()
             return true
         }
         return super.onOptionsItemSelected(item)
