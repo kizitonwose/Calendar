@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.utils.inflate
+import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -45,6 +48,7 @@ open class CalendarAdapter(
 
     override fun getItemCount(): Int = months.size
 
+    val generateViewId = View.generateViewId()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
         val context = parent.context
         val rootLayout = LinearLayout(context).apply {
@@ -61,6 +65,7 @@ open class CalendarAdapter(
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             orientation = LinearLayout.VERTICAL
+            id = generateViewId
         }
 
         var monthHeaderView: View? = null
@@ -97,7 +102,29 @@ open class CalendarAdapter(
     }
 
     fun scrollToDate(date: LocalDate) {
-
+        if (config.scrollMode == ScrollMode.PAGED) {
+            scrollToMonth(date.yearMonth)
+        } else {
+            val day = CalendarDay(date, DayOwner.THIS_MONTH)
+            val layoutManager = rv.layoutManager as  LinearLayoutManager
+            val position = getAdapterPosition(date.yearMonth)
+            val month = months[position]
+            val weekInMonth = month.weekDays.indexOfFirst { it.contains(day) }
+            if (weekInMonth != -1) {
+                val visibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                if (visibleItemPosition != -1) {
+                    val viewHolder = rv.findViewHolderForAdapterPosition(visibleItemPosition) as? MonthViewHolder
+                    if (viewHolder != null) {
+                        // TODO ADD HEADER HEIGHT IN VERTICAL CALS
+                        val body = viewHolder.itemView.findViewById<LinearLayout>(generateViewId)
+                        val weekLayout = body.getChildAt(0) as LinearLayout
+                        val dayView = weekLayout.getChildAt(6) as ViewGroup
+                        val offset = dayView.height * weekInMonth
+                        layoutManager.scrollToPositionWithOffset(position, -offset)
+                    }
+                }
+            }
+        }
     }
 
     fun reloadDay(day: CalendarDay) {
