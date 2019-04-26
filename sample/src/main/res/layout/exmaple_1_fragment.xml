@@ -14,7 +14,7 @@
         android:id="@+id/exOneAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#433254"
+        android:background="@color/example_1_bg_light"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <LinearLayout

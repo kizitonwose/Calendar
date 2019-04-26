@@ -4,6 +4,7 @@ package com.kizitonwose.calendarviewsample
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -188,14 +189,6 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         bindViews()
     }
 
-    override fun onStart() {
-        super.onStart()
-        val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
-            setColorFilter(requireContext().getColorCompat(R.color.example_4_grey), PorterDuff.Mode.SRC_ATOP)
-        }
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
-    }
-
     private fun bindViews() {
         if (startDate != null) {
             exFourStartDateText.text = headerDateFormatter.format(startDate)
@@ -213,5 +206,30 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         }
 
         exFourSaveButton.isEnabled = startDate != null && endDate != null
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
+            setColorFilter(requireContext().getColorCompat(R.color.example_4_grey), PorterDuff.Mode.SRC_ATOP)
+        }
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
+        requireActivity().window.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                statusBarColor = requireContext().getColorCompat(R.color.white)
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                statusBarColor = Color.GRAY
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().window.apply {
+            statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
+            decorView.systemUiVisibility = 0
+        }
     }
 }
