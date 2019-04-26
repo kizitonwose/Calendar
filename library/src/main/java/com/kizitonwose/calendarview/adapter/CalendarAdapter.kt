@@ -144,8 +144,8 @@ open class CalendarAdapter(
         }
     }
 
-    private fun reloadMonth(date: LocalDate) {
-        notifyItemChanged(getAdapterPosition(date.yearMonth))
+    fun reloadMonth(month: YearMonth) {
+        notifyItemChanged(getAdapterPosition(month))
     }
 
     fun setupDates(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
