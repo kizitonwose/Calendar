@@ -177,11 +177,15 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         }
 
         exFourSaveButton.setOnClickListener click@{
-            val startDate = startDate ?: return@click
-            val endDate = endDate ?: return@click
-            val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-            val text = "Selected: ${formatter.format(startDate)} - ${formatter.format(endDate)}"
-            Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
+            val startDate = startDate
+            val endDate = endDate
+            if (startDate != null && endDate != null) {
+                val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+                val text = "Selected: ${formatter.format(startDate)} - ${formatter.format(endDate)}"
+                Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
+            } else {
+                Snackbar.make(requireView(), "No selection. Searching all Airbnb listings.", Snackbar.LENGTH_LONG).show()
+            }
             fragmentManager?.popBackStack()
         }
 
@@ -204,7 +208,8 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             exFourEndDateText.setTextColor(Color.GRAY)
         }
 
-        exFourSaveButton.isEnabled = startDate != null && endDate != null
+        // Enable save button if a range is selected or no date is selected at all, Airbnb style.
+        exFourSaveButton.isEnabled = endDate != null || (startDate == null && endDate == null)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
