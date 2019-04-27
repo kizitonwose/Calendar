@@ -72,6 +72,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             (view as TextView).apply {
                 text = daysOfWeek[index].name.take(3).toLowerCase().capitalize()
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
+                setTextColorRes(R.color.example_4_grey)
             }
         }
 

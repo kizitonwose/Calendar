@@ -39,7 +39,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         legendLayout.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text = daysOfWeek[index].name.take(3).toUpperCase()
-                setTextColorRes(R.color.example_2_white)
+                setTextColorRes(R.color.example_1_white_light)
             }
         }
 
@@ -84,11 +84,6 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         exOneCalendar.monthScrollListener = {
             exOneYearText.text = it.yearMonth.year.toString()
             exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
-        }
-
-        legendLayout.children.forEach {
-            // Change legend text colors to white
-            (it as TextView).setTextColor(it.context.getColorCompat(R.color.example_1_white_light))
         }
     }
 
