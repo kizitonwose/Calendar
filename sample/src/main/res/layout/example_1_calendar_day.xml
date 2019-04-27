@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
-    android:background="@color/example_1_bg"
     android:gravity="center"
     android:textColor="@color/white"
     android:textSize="16sp"
+    tools:background="@color/example_1_bg"
     tools:text="22" />
 

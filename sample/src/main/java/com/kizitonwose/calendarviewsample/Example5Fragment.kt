@@ -2,6 +2,7 @@ package com.kizitonwose.calendarviewsample
 
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
-import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_5_calendar_day.view.*
-import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import kotlinx.android.synthetic.main.exmaple_5_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -30,7 +29,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         return inflater.inflate(R.layout.exmaple_5_fragment, container, false)
     }
 
-    private val selectedDates = mutableSetOf<LocalDate>()
+    private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
 
@@ -41,7 +40,8 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         legendLayout.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text = daysOfWeek[index].name.take(3).toUpperCase()
-                setTextColorRes(R.color.example_2_white)
+                setTextColorRes(R.color.example_5_text_grey)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             }
         }
 
@@ -53,19 +53,17 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             val textView = view.exFiveDayText
             textView.text = day.date.dayOfMonth.toString()
             when (day.owner) {
-                DayOwner.THIS_MONTH -> textView.setTextColorRes(R.color.example_1_white)
-                else -> textView.setTextColorRes(R.color.example_1_white_light)
+                DayOwner.THIS_MONTH -> textView.setTextColorRes(R.color.example_5_text_grey)
+                else -> textView.setTextColorRes(R.color.example_5_text_grey_light)
             }
 
             when {
-                selectedDates.contains(day.date) -> {
-                    textView.setTextColorRes(R.color.example_1_bg)
-                    textView.setBackgroundResource(R.drawable.example_1_selected_bg)
+                selectedDate == day.date -> {
+
 
                 }
                 today == day.date -> {
-                    textView.setTextColorRes(R.color.example_1_white)
-                    textView.setBackgroundResource(R.drawable.example_1_today_bg)
+
                 }
                 else -> textView.background = null
             }
@@ -73,25 +71,32 @@ class Example5Fragment : BaseFragment(), HasToolbar {
 
         exFiveCalendar.dateClickListener = {
             if (it.owner == DayOwner.THIS_MONTH) {
-                if (selectedDates.contains(it.date)) {
-                    selectedDates.remove(it.date)
-                } else {
-                    selectedDates.add(it.date)
+                if (selectedDate != it.date) {
+                    val oldDate = selectedDate
+                    selectedDate = it.date
+                    exFiveCalendar.reloadDate(it.date)
+                    oldDate?.let { exFiveCalendar.reloadDate(oldDate) }
                 }
-                exFiveCalendar.reloadDay(it)
             }
         }
 
         exFiveCalendar.monthScrollListener = {
-            exFiveYearText.text = it.yearMonth.year.toString()
-            exFiveMonthText.text = monthTitleFormatter.format(it.yearMonth)
+            val title = "${monthTitleFormatter.format(it.yearMonth)} ${it.yearMonth.year}"
+            exFiveMonthYearText.text = title
         }
 
+        exFiveNextMonthImage.setOnClickListener {
+
+        }
+
+        exFivePreviousMonthImage.setOnClickListener {
+
+        }
     }
 
     override fun onStart() {
         super.onStart()
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_1_bg_light)
+        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_5_toolbar_color)
     }
 
     override fun onStop() {

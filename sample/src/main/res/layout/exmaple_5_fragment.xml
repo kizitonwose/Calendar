@@ -8,56 +8,76 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    tools:context=".Example1Fragment">
+    tools:context=".Example5Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exFiveAppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/example_1_bg_light"
+        android:background="@color/example_5_toolbar_color"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="14dp">
 
-            <TextView
-                android:id="@+id/exFiveYearText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/example_1_white_light"
-                android:textSize="24sp"
-                tools:text="2019" />
+            <ImageView
+                android:id="@+id/exFivePreviousMonthImage"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="22dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/example_5_text_grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_chevron_left" />
 
             <TextView
-                android:id="@+id/exFiveMonthText"
+                android:id="@+id/exFiveMonthYearText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/example_1_white"
-                android:textSize="38sp"
-                tools:text="April" />
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/example_5_text_grey"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/exFiveNextMonthImage"
+                app:layout_constraintStart_toEndOf="@id/exFivePreviousMonthImage"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="April 2018" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/exFiveNextMonthImage"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@color/example_5_text_grey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_chevron_right" />
 
-        <include
-            layout="@layout/calendar_day_legend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <include
+        layout="@layout/calendar_day_legend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/exFiveCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:dayViewResource="@layout/example_5_calendar_day"
         app:orientation="horizontal"
-        app:scrollMode="paged"
         app:outDateStyle="tillEndOfGrid"
-        app:dayViewResource="@layout/example_5_calendar_day" />
+        app:scrollMode="paged" />
 
 </LinearLayout>
