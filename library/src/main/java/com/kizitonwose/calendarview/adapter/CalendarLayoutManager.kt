@@ -31,46 +31,14 @@ class CalendarLayoutManager(private val recyclerView: CalendarView, private val 
     fun smoothScrollToMonth(month: YearMonth) {
         val position = adapter.getAdapterPosition(month)
         if (position != -1) {
-            val smoothScroller = object : LinearSmoothScroller(context) {
-                override fun getVerticalSnapPreference(): Int {
-                    return LinearSmoothScroller.SNAP_TO_START
-                }
-
-                override fun getHorizontalSnapPreference(): Int {
-                    return LinearSmoothScroller.SNAP_TO_START
-                }
-            }
-            smoothScroller.targetPosition = position
-            startSmoothScroll(smoothScroller)
+            startSmoothScroll(CalendarSmoothScroller(position, null))
         }
     }
 
     fun smoothScrollToDate(date: LocalDate) {
         val position = adapter.getAdapterPosition(date.yearMonth)
         if (position != -1) {
-            val smoothScroller = object : LinearSmoothScroller(context) {
-                override fun getVerticalSnapPreference(): Int {
-                    return LinearSmoothScroller.SNAP_TO_START
-                }
-
-                override fun getHorizontalSnapPreference(): Int {
-                    return LinearSmoothScroller.SNAP_TO_START
-                }
-
-                override fun calculateDyToMakeVisible(view: View, snapPreference: Int): Int {
-                    val dy = super.calculateDyToMakeVisible(view, snapPreference)
-                    val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
-                    return dy - offset
-                }
-
-                override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
-                    val dx = super.calculateDxToMakeVisible(view, snapPreference)
-                    val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
-                    return dx - offset
-                }
-            }
-            smoothScroller.targetPosition = position
-            startSmoothScroll(smoothScroller)
+            startSmoothScroll(CalendarSmoothScroller(position, date))
         }
     }
 
@@ -119,4 +87,37 @@ class CalendarLayoutManager(private val recyclerView: CalendarView, private val 
         return offset
     }
 
+    private inner class CalendarSmoothScroller(val position: Int, val date: LocalDate?) :
+        LinearSmoothScroller(context) {
+
+        init {
+            targetPosition = position
+        }
+
+        override fun getVerticalSnapPreference(): Int {
+            return LinearSmoothScroller.SNAP_TO_START
+        }
+
+        override fun getHorizontalSnapPreference(): Int {
+            return LinearSmoothScroller.SNAP_TO_START
+        }
+
+        override fun calculateDyToMakeVisible(view: View, snapPreference: Int): Int {
+            if (date == null) {
+                return super.calculateDyToMakeVisible(view, snapPreference)
+            }
+            val dy = super.calculateDyToMakeVisible(view, snapPreference)
+            val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
+            return dy - offset
+        }
+
+        override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
+            if (date == null) {
+                return super.calculateDxToMakeVisible(view, snapPreference)
+            }
+            val dx = super.calculateDxToMakeVisible(view, snapPreference)
+            val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
+            return dx - offset
+        }
+    }
 }
