@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -103,6 +104,19 @@ open class CalendarAdapter(
         rv.scrollToPosition(getAdapterPosition(month))
     }
 
+    fun smoothScrollToMonth(month: YearMonth) {
+        val position = getAdapterPosition(month)
+        if (position != -1) {
+            val smoothScroller = object : LinearSmoothScroller(rv.context) {
+                override fun getVerticalSnapPreference(): Int {
+                    return LinearSmoothScroller.SNAP_TO_START
+                }
+            }
+            smoothScroller.targetPosition = position
+            rv.layoutManager?.startSmoothScroll(smoothScroller)
+        }
+    }
+
     fun scrollToDate(date: LocalDate) {
         scrollToMonth(date.yearMonth)
         if (config.scrollMode == ScrollMode.PAGED) return
@@ -198,6 +212,7 @@ open class CalendarAdapter(
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             return months[visibleItemPos]
         }
-        return  null
+        return null
     }
+
 }

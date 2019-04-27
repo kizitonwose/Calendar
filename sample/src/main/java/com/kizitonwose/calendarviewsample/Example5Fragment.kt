@@ -83,13 +83,13 @@ class Example5Fragment : BaseFragment(), HasToolbar {
 
         exFiveNextMonthImage.setOnClickListener {
             exFiveCalendar.getFirstVisibleMonth()?.let {
-                exFiveCalendar.scrollToMonth(it.next.yearMonth)
+                exFiveCalendar.smoothScrollToMonth(it.next.yearMonth)
             }
         }
 
         exFivePreviousMonthImage.setOnClickListener {
             exFiveCalendar.getFirstVisibleMonth()?.let {
-                exFiveCalendar.scrollToMonth(it.previous.yearMonth)
+                exFiveCalendar.smoothScrollToMonth(it.previous.yearMonth)
             }
         }
     }
