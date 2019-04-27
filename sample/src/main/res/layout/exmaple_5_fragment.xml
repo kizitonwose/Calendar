@@ -64,18 +64,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-        layout="@layout/calendar_day_legend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
-
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/exFiveCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:dayViewResource="@layout/example_5_calendar_day"
+        app:monthHeaderResource="@layout/example_5_calendar_header"
         app:orientation="horizontal"
         app:outDateStyle="tillEndOfGrid"
         app:scrollMode="paged" />

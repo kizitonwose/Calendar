@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.kizitonwose.calendarview.model.DayOwner
-import kotlinx.android.synthetic.main.calendar_day_legend.*
+import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_5_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_5_fragment.*
 import org.threeten.bp.LocalDate
@@ -37,13 +37,6 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         super.onViewCreated(view, savedInstanceState)
 
         val daysOfWeek = daysOfWeekFromLocale()
-        legendLayout.children.forEachIndexed { index, view ->
-            (view as TextView).apply {
-                text = daysOfWeek[index].name.take(3).toUpperCase()
-                setTextColorRes(R.color.example_5_text_grey)
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-            }
-        }
 
         val currentMonth = YearMonth.now()
         exFiveCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
@@ -72,6 +65,19 @@ class Example5Fragment : BaseFragment(), HasToolbar {
                     selectedDate = it.date
                     exFiveCalendar.reloadDate(it.date)
                     oldDate?.let { exFiveCalendar.reloadDate(oldDate) }
+                }
+            }
+        }
+
+        exFiveCalendar.monthHeaderBinder = { view, month ->
+            val legendLayout = view.legendLayout
+            // Setup each header day text if we have not done that already.
+            if (legendLayout.tag == null) {
+                legendLayout.tag = month.yearMonth
+                legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
+                    tv.text = daysOfWeek[index].name.take(3)
+                    tv.setTextColorRes(R.color.example_5_text_grey)
+                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                 }
             }
         }

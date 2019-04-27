@@ -191,10 +191,11 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             }
         }
 
-        exThreeCalendar.monthHeaderBinder = { view, _ ->
+        exThreeCalendar.monthHeaderBinder = { view, month ->
             val legendLayout = view.legendLayout
             // Setup each header day text if we have not done that already.
-            if ((legendLayout.children.first() as TextView).text.count() != 1) {
+            if (legendLayout.tag == null) {
+                legendLayout.tag = month.yearMonth
                 legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
                     tv.text = daysOfWeek[index].name.first().toString()
                     tv.setTextColorRes(R.color.example_3_black)
