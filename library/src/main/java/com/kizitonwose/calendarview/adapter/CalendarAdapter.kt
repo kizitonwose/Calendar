@@ -111,9 +111,7 @@ open class CalendarAdapter(
             val layoutManager = rv.layoutManager as LinearLayoutManager
             val monthPosition = getAdapterPosition(date.yearMonth)
             if (monthPosition != -1) {
-                // Get the weekOfMonth for this date using its position in the weekDays array.
-                val weekOfMonth = months[monthPosition].weekDays.indexOfFirst { it.contains(day) }
-                // We already scrolled to this position to findViewHolder should not return null.
+                // We already scrolled to this position so findViewHolder should not return null.
                 val viewHolder = rv.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
                 var offset = 0
                 if (layoutManager.orientation == RecyclerView.VERTICAL) {
@@ -127,8 +125,20 @@ open class CalendarAdapter(
                 }
                 val bodyLayout = viewHolder.itemView.findViewById<LinearLayout>(bodyViewId)
                 val weekLayout = bodyLayout.getChildAt(0) as LinearLayout
-                // Multiply the height by the number of weeks before the target week.
-                offset += weekLayout.height * weekOfMonth
+                val dayLayout = weekLayout.getChildAt(0) as ViewGroup
+
+                val weekDays: List<List<CalendarDay>> = months[monthPosition].weekDays
+                // Get the row for this date in the month.
+                val weekOfMonthRow = weekDays.indexOfFirst { it.contains(day) }
+                // Get the column for this date in the month.
+                val dayInWeekColumn = weekDays[weekOfMonthRow].indexOf(day)
+                offset += if (layoutManager.orientation == RecyclerView.VERTICAL) {
+                    // Multiply the height by the number of weeks before the target week.
+                    dayLayout.height * weekOfMonthRow
+                } else {
+                    // Multiply the width by the number of days before the target day.
+                    dayLayout.width * dayInWeekColumn
+                }
                 layoutManager.scrollToPositionWithOffset(monthPosition, -offset)
             }
         }
