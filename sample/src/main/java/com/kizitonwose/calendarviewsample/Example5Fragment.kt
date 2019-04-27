@@ -47,14 +47,14 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             val container = view.exFiveDayLayout
             textView.text = day.date.dayOfMonth.toString()
             when (day.owner) {
-                DayOwner.THIS_MONTH -> textView.setTextColorRes(R.color.example_5_text_grey)
-                else -> textView.setTextColorRes(R.color.example_5_text_grey_light)
-            }
-
-            if (selectedDate == day.date) {
-                container.setBackgroundResource(R.drawable.example_5_selected_bg)
-            } else {
-                container.background = null
+                DayOwner.THIS_MONTH -> {
+                    textView.setTextColorRes(R.color.example_5_text_grey)
+                    container.setBackgroundResource(if (selectedDate == day.date) R.drawable.example_5_selected_bg else 0)
+                }
+                else -> {
+                    textView.setTextColorRes(R.color.example_5_text_grey_light)
+                    container.background = null
+                }
             }
         }
 
