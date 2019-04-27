@@ -117,8 +117,13 @@ class CalendarView : RecyclerView {
     fun smoothScrollToMonth(month: YearMonth) {
         adapter.smoothScrollToMonth(month)
     }
+
     fun scrollToDate(date: LocalDate) {
         adapter.scrollToDate(date)
+    }
+
+    fun smoothScrollToDate(date: LocalDate) {
+        adapter.smoothScrollToDate(date)
     }
 
     fun reloadDay(day: CalendarDay) {
