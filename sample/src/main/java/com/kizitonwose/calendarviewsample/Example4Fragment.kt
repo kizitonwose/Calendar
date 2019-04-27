@@ -76,9 +76,9 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             }
         }
 
-        val now = YearMonth.now()
-        exFourCalendar.setup(now, now.plusMonths(12), daysOfWeek.first())
-        exFourCalendar.scrollToMonth(now)
+        val currentMonth = YearMonth.now()
+        exFourCalendar.setup(currentMonth, currentMonth.plusMonths(12), daysOfWeek.first())
+        exFourCalendar.scrollToMonth(currentMonth)
 
         exFourCalendar.dateViewBinder = { view, day ->
             val textView = view.exFourDayText

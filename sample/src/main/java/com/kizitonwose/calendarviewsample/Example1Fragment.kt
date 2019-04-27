@@ -43,9 +43,9 @@ class Example1Fragment : BaseFragment(), HasToolbar {
             }
         }
 
-        val now = YearMonth.now()
-        exOneCalendar.setup(now.minusMonths(5), now.plusMonths(5), daysOfWeek.first())
-        exOneCalendar.scrollToMonth(now)
+        val currentMonth = YearMonth.now()
+        exOneCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
+        exOneCalendar.scrollToMonth(currentMonth)
 
 
         exOneCalendar.dateViewBinder = { view, day ->

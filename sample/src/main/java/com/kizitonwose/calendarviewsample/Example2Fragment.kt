@@ -44,7 +44,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
             }
         }
 
-        exTwoCalendar.setup(YearMonth.now(), YearMonth.now().plusMonths(5), daysOfWeek.first())
+        exTwoCalendar.setup(YearMonth.now(), YearMonth.now().plusMonths(10), daysOfWeek.first())
 
         exTwoCalendar.dateViewBinder = { view, day ->
             val textView = view.exTwoDayText

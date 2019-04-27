@@ -128,9 +128,9 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         exThreeRv.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
 
         val daysOfWeek = daysOfWeekFromLocale()
-        val now = YearMonth.now()
-        exThreeCalendar.setup(now.minusMonths(10), now.plusMonths(10), daysOfWeek.first())
-        exThreeCalendar.scrollToMonth(now)
+        val currentMonth = YearMonth.now()
+        exThreeCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
+        exThreeCalendar.scrollToMonth(currentMonth)
 
         if (savedInstanceState == null) {
             exThreeCalendar.post {
