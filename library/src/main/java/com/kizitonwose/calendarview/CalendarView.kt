@@ -8,10 +8,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.adapter.*
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.model.OutDateStyle
-import com.kizitonwose.calendarview.model.ScrollMode
+import com.kizitonwose.calendarview.model.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -145,5 +142,9 @@ class CalendarView : RecyclerView {
 
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
         adapter.setupDates(startMonth, endMonth, firstDayOfWeek)
+    }
+
+    fun getFirstVisibleMonth(): CalendarMonth? {
+        return adapter.getFirstVisibleMonth()
     }
 }
