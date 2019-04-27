@@ -17,11 +17,12 @@ class HomeActivity : AppCompatActivity() {
             R.string.example_2_title -> Example2Fragment()
             R.string.example_3_title -> Example3Fragment()
             R.string.example_4_title -> Example4Fragment()
+            R.string.example_5_title -> Example5Fragment()
             else -> throw IllegalArgumentException()
         }
         supportFragmentManager.beginTransaction()
             .run {
-                if (instance is Example1Fragment || instance is Example4Fragment) {
+                if (instance is Example1Fragment || instance is Example4Fragment || instance is Example5Fragment) {
                     return@run setCustomAnimations(
                         R.anim.slide_in_up,
                         R.anim.fade_out,

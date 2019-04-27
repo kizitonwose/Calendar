@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.home_options_item_view.*
 
 data class ExampleItem(@StringRes val titleRes: Int, @StringRes val subtitleRes: Int)
 
-
 class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
     RecyclerView.Adapter<HomeOptionsAdapter.HomeOptionsViewHolder>() {
 
@@ -20,6 +19,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
         add(ExampleItem(R.string.example_2_title, R.string.example_2_subtitle))
         add(ExampleItem(R.string.example_3_title, R.string.example_3_subtitle))
         add(ExampleItem(R.string.example_4_title, R.string.example_4_subtitle))
+        add(ExampleItem(R.string.example_5_title, R.string.example_5_subtitle))
         Unit
     }
 

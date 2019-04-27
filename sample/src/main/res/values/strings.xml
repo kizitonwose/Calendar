@@ -7,7 +7,9 @@
     <string name="example_3_title">Example 3</string>
     <string name="example_3_subtitle">Event style implementation, day labels as header view, single selection, month scroll listener. Similar to what is in the Google Calendar app.</string>
     <string name="example_4_title">Example 4</string>
-    <string name="example_4_subtitle">Continuous selection within one month and across multiple months. Set the first day of week from Locale, Similar to what is in the Airbnb app.</string>
+    <string name="example_4_subtitle">Continuous selection within one month and across multiple months, Similar to what is in the Airbnb app.</string>
+    <string name="example_5_title">Example 5</string>
+    <string name="example_5_subtitle">Single selection, custom day size, square selection background, programmatic calendar scrolling.</string>
     <string name="save">Save</string>
     <string name="close">Close</string>
     <string name="example_3_input_dialog_title">Enter event title</string>

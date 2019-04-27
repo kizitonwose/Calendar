@@ -19,4 +19,7 @@
     <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>
     <color name="example_4_grey_past">#BEBEBE</color>
+    <color name="example_5_page_bg_color">#0E0E0E</color>
+    <color name="example_5_item_view_bg_color">#1A1A1A</color>
+    <color name="example_5_bg_light">#433254</color>
 </resources>
