@@ -51,21 +51,17 @@ class Example5Fragment : BaseFragment(), HasToolbar {
 
         exFiveCalendar.dateViewBinder = { view, day ->
             val textView = view.exFiveDayText
+            val container = view.exFiveDayLayout
             textView.text = day.date.dayOfMonth.toString()
             when (day.owner) {
                 DayOwner.THIS_MONTH -> textView.setTextColorRes(R.color.example_5_text_grey)
                 else -> textView.setTextColorRes(R.color.example_5_text_grey_light)
             }
 
-            when {
-                selectedDate == day.date -> {
-
-
-                }
-                today == day.date -> {
-
-                }
-                else -> textView.background = null
+            if (selectedDate == day.date) {
+                container.setBackgroundResource(R.drawable.example_5_selected_bg)
+            } else {
+                container.background = null
             }
         }
 
