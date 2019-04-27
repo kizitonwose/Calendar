@@ -3,7 +3,6 @@ package com.kizitonwose.calendarview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -51,8 +50,8 @@ class CalendarView : RecyclerView {
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
         clipToPadding = false
-        layoutManager = LinearLayoutManager(context, orientation, false)
-        val config = CalendarConfig(outDateStyle, scrollMode)
+        val config = CalendarConfig(outDateStyle, scrollMode, orientation)
+        layoutManager = CalendarLayoutManager(this, config)
         adapter = CalendarAdapter(dayViewRes, monthHeaderRes, monthFooterRes, config)
         setAdapter(adapter)
 
@@ -106,24 +105,27 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    private val calendarLayoutManager: CalendarLayoutManager?
+        get() = layoutManager as CalendarLayoutManager
+
     private fun invalidateViewHolders() {
         recycledViewPool.clear()
     }
 
     fun scrollToMonth(month: YearMonth) {
-        adapter.scrollToMonth(month)
+        calendarLayoutManager?.scrollToMonth(month)
     }
 
     fun smoothScrollToMonth(month: YearMonth) {
-        adapter.smoothScrollToMonth(month)
+        calendarLayoutManager?.smoothScrollToMonth(month)
     }
 
     fun scrollToDate(date: LocalDate) {
-        adapter.scrollToDate(date)
+        calendarLayoutManager?.scrollToDate(date)
     }
 
     fun smoothScrollToDate(date: LocalDate) {
-        adapter.smoothScrollToDate(date)
+        calendarLayoutManager?.smoothScrollToDate(date)
     }
 
     fun reloadDay(day: CalendarDay) {
