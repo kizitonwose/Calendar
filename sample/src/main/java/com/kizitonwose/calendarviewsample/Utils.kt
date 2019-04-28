@@ -6,9 +6,9 @@ private typealias Airport = Flight.Airport
 
 fun generateFlights(): List<Flight> {
     val list = mutableListOf<Flight>()
-    val date18 = YearMonth.now().atDay(17).atTime(10, 0)
-    list.add(Flight(date18.plusHours(4), Airport("Lagos", "LOS"), Airport("Abuja", "ABV"), R.color.brown_700))
-    list.add(Flight(date18.plusHours(8), Airport("Enugu", "ENU"), Airport("Owerri", "QOW"), R.color.blue_grey_700))
+    val date18 = YearMonth.now().atDay(17)
+    list.add(Flight(date18.atTime(14, 0), Airport("Lagos", "LOS"), Airport("Abuja", "ABV"), R.color.brown_700))
+    list.add(Flight(date18.atTime(21, 30), Airport("Enugu", "ENU"), Airport("Owerri", "QOW"), R.color.blue_grey_700))
 
     val date23 = YearMonth.now().atDay(22)
     list.add(Flight(date23.atTime(13, 20), Airport("Ibadan", "IBA"), Airport("Benin", "BNI"), R.color.blue_800))

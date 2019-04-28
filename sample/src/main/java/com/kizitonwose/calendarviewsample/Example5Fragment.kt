@@ -2,8 +2,6 @@ package com.kizitonwose.calendarviewsample
 
 
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -54,15 +52,11 @@ class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Examp
             itemFlightDateText.text = formatter.format(flight.time)
             itemFlightDateText.setBackgroundColor(itemView.context.getColorCompat(flight.color))
 
-            // Make the airport code text bold
-            val departureSpannable = SpannableString("${flight.departure.code}\n${flight.departure.city}")
-            departureSpannable.setSpan(StyleSpan(android.graphics.Typeface.BOLD), 0, 3, 0)
-            itemFlightDepartureText.text = departureSpannable
+            itemDepartureAirportCodeText.text = flight.departure.code
+            itemDepartureAirportCityText.text = flight.departure.city
 
-            val destinationSpannable = SpannableString("${flight.destination.code}\n${flight.destination.city}")
-            destinationSpannable.setSpan(StyleSpan(android.graphics.Typeface.BOLD), 0, 3, 0)
-            itemFlightDestinationText.text = destinationSpannable
-
+            itemDestinationAirportCodeText.text = flight.destination.code
+            itemDestinationAirportCityText.text = flight.destination.city
         }
     }
 }

@@ -58,28 +58,46 @@
             app:srcCompat="@drawable/ic_airplane_takeoff" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/itemFlightDepartureText"
+    <LinearLayout
+        android:id="@+id/itemFlightDepartureLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
         android:gravity="center"
-        android:lineSpacingExtra="1dp"
-        android:textColor="@color/example_5_text_grey"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureImage"
         app:layout_constraintDimensionRatio="W,2:1"
         app:layout_constraintStart_toEndOf="@id/itemFlightDepartureImage"
-        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage"
-        tools:text="LOS\nLagos" />
+        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage">
+
+        <TextView
+            android:fontFamily="sans-serif-black"
+            android:id="@+id/itemDepartureAirportCodeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/example_5_text_grey"
+            android:textSize="16sp"
+            tools:text="LOS" />
+
+        <TextView
+            android:fontFamily="sans-serif-light"
+            android:id="@+id/itemDepartureAirportCityText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/example_5_text_grey"
+            android:textSize="16sp"
+            tools:text="Lagos" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/itemFlightDestinationImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureText"
+        app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureLayout"
         app:layout_constraintDimensionRatio="W,1:1"
-        app:layout_constraintStart_toEndOf="@id/itemFlightDepartureText"
-        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureText">
+        app:layout_constraintStart_toEndOf="@id/itemFlightDepartureLayout"
+        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureLayout">
 
         <ImageView
             android:layout_width="24dp"
@@ -89,19 +107,37 @@
             app:srcCompat="@drawable/ic_airplane_landing" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/itemFlightDestinationText"
+    <LinearLayout
+        android:id="@+id/itemFlightDestinationLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
         android:gravity="center"
-        android:lineSpacingExtra="1dp"
-        android:textColor="@color/example_5_text_grey"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/itemFlightDestinationImage"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="W,2:1"
         app:layout_constraintStart_toEndOf="@id/itemFlightDestinationImage"
-        app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage"
-        tools:text="ABV\nAbuja" />
+        app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage">
+
+        <TextView
+            android:fontFamily="sans-serif-black"
+            android:id="@+id/itemDestinationAirportCodeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/example_5_text_grey"
+            android:textSize="16sp"
+            tools:text="ABV" />
+
+        <TextView
+            android:fontFamily="sans-serif-light"
+            android:id="@+id/itemDestinationAirportCityText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/example_5_text_grey"
+            android:textSize="16sp"
+            tools:text="Abuja" />
+    </LinearLayout>
 
     <!--Departure/Destination dividers-->
     <View
@@ -109,7 +145,7 @@
         android:layout_height="0dp"
         android:background="@color/example_5_page_bg_color"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/itemFlightDepartureText"
+        app:layout_constraintEnd_toEndOf="@id/itemFlightDepartureLayout"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
