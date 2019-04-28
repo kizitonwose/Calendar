@@ -93,16 +93,34 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             val textView = view.exFiveDayText
             val container = view.exFiveDayLayout
             textView.text = day.date.dayOfMonth.toString()
+
+            val flightTopView = view.exFiveDayFlightTop
+            val flightBottomView = view.exFiveDayFlightBottom
+
+            flightTopView.background = null
+            flightBottomView.background = null
+
             when (day.owner) {
                 DayOwner.THIS_MONTH -> {
                     textView.setTextColorRes(R.color.example_5_text_grey)
                     container.setBackgroundResource(if (selectedDate == day.date) R.drawable.example_5_selected_bg else 0)
+
+                    val flights = flights[day.date]
+                    if (flights != null) {
+                        if (flights.count() == 1) {
+                            flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
+                        } else {
+                            flightTopView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
+                            flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[1].color))
+                        }
+                    }
                 }
                 else -> {
                     textView.setTextColorRes(R.color.example_5_text_grey_light)
                     container.background = null
                 }
             }
+
         }
 
         exFiveCalendar.dateClickListener = {

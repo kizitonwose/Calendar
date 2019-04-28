@@ -26,11 +26,11 @@
     <color name="example_5_text_grey_light">#616161</color>
     <color name="brown_700">#5D4037</color>
     <color name="blue_grey_700">#455A64</color>
-    <color name="orange_700">#F57C00</color>
+    <color name="orange_900">#E65100</color>
     <color name="green_700">#388E3C</color>
     <color name="teal_700">#00796B</color>
     <color name="pink_700">#C2185B</color>
-    <color name="red_700">#d32f2f</color>
-    <color name="blue_700">#1976D2</color>
+    <color name="red_900">#b71c1c</color>
+    <color name="blue_900">#0D47A1</color>
     <color name="cyan_700">#0097A7</color>
 </resources>
