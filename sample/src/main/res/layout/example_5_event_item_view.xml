@@ -6,7 +6,7 @@
     android:background="@color/example_5_item_view_bg_color">
 
     <TextView
-        android:id="@+id/exFlightDateText"
+        android:id="@+id/itemFlightDateText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#5D4037"
@@ -29,7 +29,7 @@
         android:layout_height="0dp"
         android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/exFlightDateText"
+        app:layout_constraintEnd_toEndOf="@id/itemFlightDateText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -37,17 +37,17 @@
         android:layout_height="0dp"
         android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/exFlightDateText"
+        app:layout_constraintStart_toEndOf="@id/itemFlightDateText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/itemFlightDepartureImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/exFlightDateText"
+        app:layout_constraintBottom_toBottomOf="@id/itemFlightDateText"
         app:layout_constraintDimensionRatio="W,1:1"
-        app:layout_constraintStart_toEndOf="@id/exFlightDateText"
-        app:layout_constraintTop_toTopOf="@id/exFlightDateText">
+        app:layout_constraintStart_toEndOf="@id/itemFlightDateText"
+        app:layout_constraintTop_toTopOf="@id/itemFlightDateText">
 
         <ImageView
             android:layout_width="24dp"

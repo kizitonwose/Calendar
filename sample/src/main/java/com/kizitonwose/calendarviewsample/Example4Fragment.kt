@@ -34,7 +34,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     private var startDate: LocalDate? = null
     private var endDate: LocalDate? = null
 
-    private var headerDateFormatter = DateTimeFormatter.ofPattern("EEE'\n'd MMM")
+    private val headerDateFormatter = DateTimeFormatter.ofPattern("EEE'\n'd MMM")
 
     private val startBackground: GradientDrawable by lazy {
         return@lazy requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start)!! as GradientDrawable
