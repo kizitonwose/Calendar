@@ -2,6 +2,8 @@ package com.kizitonwose.calendarviewsample
 
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
+
 
 data class Flight(val time: LocalDateTime, val departure: Airport, val destination: Airport, @ColorRes val color: Int) {
     data class Airport(val city: String, val code: String)
@@ -48,10 +51,18 @@ class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Examp
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         fun bind(flight: Flight) {
-            itemFlightDepartureText.text = "${flight.departure.code}\n${flight.departure.city}"
-            itemFlightDestinationText.text = "${flight.destination.code}\n${flight.destination.city}"
             itemFlightDateText.text = formatter.format(flight.time)
             itemFlightDateText.setBackgroundColor(itemView.context.getColorCompat(flight.color))
+
+            // Make the airport code text bold
+            val departureSpannable = SpannableString("${flight.departure.code}\n${flight.departure.city}")
+            departureSpannable.setSpan(StyleSpan(android.graphics.Typeface.BOLD), 0, 3, 0)
+            itemFlightDepartureText.text = departureSpannable
+
+            val destinationSpannable = SpannableString("${flight.destination.code}\n${flight.destination.city}")
+            destinationSpannable.setSpan(StyleSpan(android.graphics.Typeface.BOLD), 0, 3, 0)
+            itemFlightDestinationText.text = destinationSpannable
+
         }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/example_5_item_view_bg_color">
@@ -12,7 +13,6 @@
         android:background="#5D4037"
         android:gravity="center"
         android:lineSpacingExtra="2.5dp"
-        android:text="THU\nJUN 30\n14:00"
         android:textAllCaps="true"
         android:textColor="@color/example_5_text_grey"
         android:textSize="12sp"
@@ -21,7 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.143" />
+        app:layout_constraintWidth_percent="0.143"
+        tools:text="THU\nJUN 30\n14:00" />
 
     <!--Colored view dividers-->
     <View
@@ -62,13 +63,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="LOS\nLagos"
         android:textColor="@color/example_5_text_grey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureImage"
         app:layout_constraintDimensionRatio="W,2:1"
         app:layout_constraintStart_toEndOf="@id/itemFlightDepartureImage"
-        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage" />
+        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage"
+        tools:text="LOS\nLagos" />
 
     <FrameLayout
         android:id="@+id/itemFlightDestinationImage"
@@ -92,13 +93,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="ABV\nAbuja"
         android:textColor="@color/example_5_text_grey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/itemFlightDestinationImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/itemFlightDestinationImage"
-        app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage" />
+        app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage"
+        tools:text="ABV\nAbuja" />
 
     <!--Departure/Destination dividers-->
     <View
