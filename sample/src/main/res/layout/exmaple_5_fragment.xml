@@ -72,7 +72,7 @@
         <com.kizitonwose.calendarview.CalendarView
             android:id="@+id/exFiveCalendar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:dayViewResource="@layout/example_5_calendar_day"
             app:monthHeaderResource="@layout/example_5_calendar_header"
             app:orientation="horizontal"
