@@ -9,13 +9,46 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.DayOwner
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_5_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_5_fragment.*
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
+
+data class Flight(val time: LocalDateTime, val departure: Location, val destination: Location, val color: Int) {
+    data class Location(val city: String, val airportCode: String)
+}
+
+class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Example3FlightsViewHolder>() {
+
+    val flights = mutableListOf<Flight>()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example3FlightsViewHolder {
+        return Example3FlightsViewHolder(parent.inflate(R.layout.example_5_event_item_view))
+    }
+
+    override fun onBindViewHolder(viewHolder: Example3FlightsViewHolder, position: Int) {
+        viewHolder.bind(flights[position])
+    }
+
+    override fun getItemCount(): Int = flights.size
+
+    inner class Example3FlightsViewHolder(override val containerView: View) :
+        RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        fun bind(flight: Flight) {
+            //itemEventText.text = event.text
+        }
+    }
+
+}
 
 
 class Example5Fragment : BaseFragment(), HasToolbar {
@@ -30,11 +63,17 @@ class Example5Fragment : BaseFragment(), HasToolbar {
     }
 
     private var selectedDate: LocalDate? = null
-    private val today = LocalDate.now()
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
+
+    private val flightsAdapter = Example5FlightsAdapter()
+    private val flights = mutableMapOf<LocalDate, List<Flight>>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        exFiveRv.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        exFiveRv.adapter = flightsAdapter
+        exFiveRv.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
 
         val daysOfWeek = daysOfWeekFromLocale()
 
@@ -65,6 +104,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
                     selectedDate = it.date
                     exFiveCalendar.reloadDate(it.date)
                     oldDate?.let { exFiveCalendar.reloadDate(oldDate) }
+                    updateAdapterForDate(it.date)
                 }
             }
         }
@@ -108,6 +148,12 @@ class Example5Fragment : BaseFragment(), HasToolbar {
     override fun onStop() {
         super.onStop()
         requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
+    }
+
+    private fun updateAdapterForDate(date: LocalDate) {
+        flightsAdapter.flights.clear()
+        flightsAdapter.flights.addAll(flights[date].orEmpty())
+        flightsAdapter.notifyDataSetChanged()
     }
 
 }

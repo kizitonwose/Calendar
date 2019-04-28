@@ -64,14 +64,27 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.kizitonwose.calendarview.CalendarView
-        android:id="@+id/exFiveCalendar"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:dayViewResource="@layout/example_5_calendar_day"
-        app:monthHeaderResource="@layout/example_5_calendar_header"
-        app:orientation="horizontal"
-        app:outDateStyle="tillEndOfGrid"
-        app:scrollMode="paged" />
+        android:layout_height="match_parent">
+
+        <com.kizitonwose.calendarview.CalendarView
+            android:id="@+id/exFiveCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:dayViewResource="@layout/example_5_calendar_day"
+            app:monthHeaderResource="@layout/example_5_calendar_header"
+            app:orientation="horizontal"
+            app:outDateStyle="tillEndOfGrid"
+            app:scrollMode="paged" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exFiveRv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+    </LinearLayout>
+
 
 </LinearLayout>

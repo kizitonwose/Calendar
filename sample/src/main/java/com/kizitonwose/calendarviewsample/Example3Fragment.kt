@@ -34,23 +34,21 @@ import java.util.*
 data class Event(val id: String, val text: String, val date: LocalDate)
 
 class Example3EventsAdapter(val onClick: (Event) -> Unit) :
-    RecyclerView.Adapter<Example3EventsAdapter.Example3EventsAdapter>() {
+    RecyclerView.Adapter<Example3EventsAdapter.Example3EventsViewHolder>() {
 
     val events = mutableListOf<Event>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example3EventsAdapter {
-        return Example3EventsAdapter(
-            LayoutInflater.from(parent.context).inflate(R.layout.example_3_event_item_view, parent, false)
-        )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example3EventsViewHolder {
+        return Example3EventsViewHolder(parent.inflate(R.layout.example_3_event_item_view))
     }
 
-    override fun onBindViewHolder(viewHolder: Example3EventsAdapter, position: Int) {
+    override fun onBindViewHolder(viewHolder: Example3EventsViewHolder, position: Int) {
         viewHolder.bind(events[position])
     }
 
     override fun getItemCount(): Int = events.size
 
-    inner class Example3EventsAdapter(override val containerView: View) :
+    inner class Example3EventsViewHolder(override val containerView: View) :
         RecyclerView.ViewHolder(containerView), LayoutContainer {
 
         init {
@@ -184,6 +182,8 @@ class Example3Fragment : BaseFragment(), HasBackButton {
                 titleFormatter.format(it.yearMonth)
             }
 
+            // Select the first day of the month when
+            // we scroll to a new month.
             selectDate(it.yearMonth.atDay(1))
 
             exThreeCalendar.post {
