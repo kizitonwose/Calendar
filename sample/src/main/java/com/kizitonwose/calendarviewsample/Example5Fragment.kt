@@ -54,7 +54,6 @@ class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Examp
             itemFlightDateText.setBackgroundColor(itemView.context.getColorCompat(flight.color))
         }
     }
-
 }
 
 

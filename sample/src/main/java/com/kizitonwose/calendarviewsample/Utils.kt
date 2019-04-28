@@ -11,8 +11,8 @@ fun generateFlights(): List<Flight> {
     list.add(Flight(date18.plusHours(8), Airport("Enugu", "ENU"), Airport("Owerri", "QOW"), R.color.blue_grey_700))
 
     val date23 = YearMonth.now().atDay(22)
-    list.add(Flight(date23.atTime(13, 20), Airport("Ibadan", "IBA"), Airport("Benin", "BNI"), R.color.blue_900))
-    list.add(Flight(date23.atTime(17, 40), Airport("Sokoto", "SKO"), Airport("Ilorin", "ILR"), R.color.red_900))
+    list.add(Flight(date23.atTime(13, 20), Airport("Ibadan", "IBA"), Airport("Benin", "BNI"), R.color.blue_800))
+    list.add(Flight(date23.atTime(17, 40), Airport("Sokoto", "SKO"), Airport("Ilorin", "ILR"), R.color.red_800))
 
     list.add(
         Flight(
@@ -54,7 +54,7 @@ fun generateFlights(): List<Flight> {
             YearMonth.now().minusMonths(1).atDay(9).atTime(20, 15),
             Airport("Asaba", "ABB"),
             Airport("Port Harcourt", "PHC"),
-            R.color.orange_900
+            R.color.orange_800
         )
     )
 
