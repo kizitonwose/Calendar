@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/exFlightColorLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/example_5_text_grey"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.143">
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/itemFlightDepartureImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/exFlightColorLayout"
+        app:layout_constraintDimensionRatio="W,1:1"
+        app:layout_constraintStart_toEndOf="@id/exFlightColorLayout"
+        app:layout_constraintTop_toTopOf="@id/exFlightColorLayout"
+        app:srcCompat="@drawable/ic_airplane_takeoff" />
+
+    <TextView
+        android:id="@+id/itemFlightDepartureText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="LOS\nLagos"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureImage"
+        app:layout_constraintDimensionRatio="W,2:1"
+        app:layout_constraintStart_toEndOf="@id/itemFlightDepartureImage"
+        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage" />
+
+
+    <ImageView
+        android:id="@+id/itemFlightDestinationImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureText"
+        app:layout_constraintDimensionRatio="W,1:1"
+        app:layout_constraintStart_toEndOf="@id/itemFlightDepartureText"
+        app:layout_constraintTop_toTopOf="@id/itemFlightDepartureText"
+        app:srcCompat="@drawable/ic_airplane_landing" />
+
+    <TextView
+        android:id="@+id/itemFlightDestinationText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="ABV\nAbuja"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/itemFlightDestinationImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/itemFlightDestinationImage"
+        app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
