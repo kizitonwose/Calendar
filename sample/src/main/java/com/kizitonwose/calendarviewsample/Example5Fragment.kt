@@ -133,14 +133,14 @@ class Example5Fragment : BaseFragment(), HasToolbar {
 
         }
 
-        exFiveCalendar.dateClickListener = {
-            if (it.owner == DayOwner.THIS_MONTH) {
-                if (selectedDate != it.date) {
+        exFiveCalendar.dateClickListener = { day ->
+            if (day.owner == DayOwner.THIS_MONTH) {
+                if (selectedDate != day.date) {
                     val oldDate = selectedDate
-                    selectedDate = it.date
-                    exFiveCalendar.reloadDate(it.date)
-                    oldDate?.let { exFiveCalendar.reloadDate(oldDate) }
-                    updateAdapterForDate(it.date)
+                    selectedDate = day.date
+                    exFiveCalendar.reloadDate(day.date)
+                    oldDate?.let { exFiveCalendar.reloadDate(it) }
+                    updateAdapterForDate(day.date)
                 }
             }
         }
@@ -158,9 +158,16 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             }
         }
 
-        exFiveCalendar.monthScrollListener = {
-            val title = "${monthTitleFormatter.format(it.yearMonth)} ${it.yearMonth.year}"
+        exFiveCalendar.monthScrollListener = { month ->
+            val title = "${monthTitleFormatter.format(month.yearMonth)} ${month.yearMonth.year}"
             exFiveMonthYearText.text = title
+
+            selectedDate?.let {
+                // Clear selection if we scroll to a new month.
+                selectedDate = null
+                exFiveCalendar.reloadDate(it)
+                updateAdapterForDate(null)
+            }
         }
 
         exFiveNextMonthImage.setOnClickListener {
@@ -186,7 +193,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
 
-    private fun updateAdapterForDate(date: LocalDate) {
+    private fun updateAdapterForDate(date: LocalDate?) {
         flightsAdapter.flights.clear()
         flightsAdapter.flights.addAll(flights[date].orEmpty())
         flightsAdapter.notifyDataSetChanged()
