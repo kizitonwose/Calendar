@@ -51,22 +51,25 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         exOneCalendar.dateViewBinder = { view, day ->
             val textView = view.exOneDayText
             textView.text = day.date.dayOfMonth.toString()
-            when (day.owner) {
-                DayOwner.THIS_MONTH -> textView.setTextColorRes(R.color.example_1_white)
-                else -> textView.setTextColorRes(R.color.example_1_white_light)
-            }
+            if (day.owner == DayOwner.THIS_MONTH) {
+                when {
+                    selectedDates.contains(day.date) -> {
+                        textView.setTextColorRes(R.color.example_1_bg)
+                        textView.setBackgroundResource(R.drawable.example_1_selected_bg)
 
-            when {
-                selectedDates.contains(day.date) -> {
-                    textView.setTextColorRes(R.color.example_1_bg)
-                    textView.setBackgroundResource(R.drawable.example_1_selected_bg)
-
+                    }
+                    today == day.date -> {
+                        textView.setTextColorRes(R.color.example_1_white)
+                        textView.setBackgroundResource(R.drawable.example_1_today_bg)
+                    }
+                    else -> {
+                        textView.setTextColorRes(R.color.example_1_white)
+                        textView.background = null
+                    }
                 }
-                today == day.date -> {
-                    textView.setTextColorRes(R.color.example_1_white)
-                    textView.setBackgroundResource(R.drawable.example_1_today_bg)
-                }
-                else -> textView.background = null
+            } else {
+                textView.setTextColorRes(R.color.example_1_white_light)
+                textView.background = null
             }
         }
 

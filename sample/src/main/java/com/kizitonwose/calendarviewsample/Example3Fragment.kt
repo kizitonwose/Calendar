@@ -142,30 +142,28 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             val dotView = view.exThreeDotView
             textView.text = day.date.dayOfMonth.toString()
 
-            when (day.owner) {
-                DayOwner.THIS_MONTH -> {
-                    textView.makeVisible()
-                    textView.setTextColorRes(R.color.example_3_black)
+            if (day.owner == DayOwner.THIS_MONTH) {
+                textView.makeVisible()
+                when (day.date) {
+                    today -> {
+                        textView.setTextColorRes(R.color.example_3_white)
+                        textView.setBackgroundResource(R.drawable.example_3_today_bg)
+                        dotView.makeInVisible()
+                    }
+                    selectedDate -> {
+                        textView.setTextColorRes(R.color.example_3_blue)
+                        textView.setBackgroundResource(R.drawable.example_3_selected_bg)
+                        dotView.makeInVisible()
+                    }
+                    else -> {
+                        textView.setTextColorRes(R.color.example_3_black)
+                        textView.background = null
+                        dotView.isVisible = events[day.date].orEmpty().isNotEmpty()
+                    }
                 }
-                else -> {
-                    textView.makeInVisible()
-                }
-            }
-            when (day.date) {
-                today -> {
-                    textView.setTextColorRes(R.color.example_3_white)
-                    textView.setBackgroundResource(R.drawable.example_3_today_bg)
-                    dotView.makeInVisible()
-                }
-                selectedDate -> {
-                    textView.setTextColorRes(R.color.example_3_blue)
-                    textView.setBackgroundResource(R.drawable.example_3_selected_bg)
-                    dotView.makeInVisible()
-                }
-                else -> {
-                    textView.background = null
-                    dotView.isVisible = events[day.date].orEmpty().isNotEmpty() && day.owner == DayOwner.THIS_MONTH
-                }
+            } else {
+                textView.makeInVisible()
+                dotView.makeInVisible()
             }
         }
 

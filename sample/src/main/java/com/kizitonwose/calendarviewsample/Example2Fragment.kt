@@ -50,26 +50,24 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val textView = view.exTwoDayText
             textView.text = day.date.dayOfMonth.toString()
 
-            when (day.owner) {
-                DayOwner.THIS_MONTH -> {
-                    textView.makeVisible()
-                    textView.setTextColorRes(R.color.example_2_black)
+            if (day.owner == DayOwner.THIS_MONTH) {
+                textView.makeVisible()
+                when (day.date) {
+                    selectedDate -> {
+                        textView.setTextColorRes(R.color.example_2_white)
+                        textView.setBackgroundResource(R.drawable.example_2_selected_bg)
+                    }
+                    today -> {
+                        textView.setTextColorRes(R.color.example_2_red)
+                        textView.background = null
+                    }
+                    else -> {
+                        textView.setTextColorRes(R.color.example_2_black)
+                        textView.background = null
+                    }
                 }
-                else -> {
-                    textView.makeInVisible()
-                }
-            }
-
-            when (day.date) {
-                selectedDate -> {
-                    textView.setTextColorRes(R.color.example_2_white)
-                    textView.setBackgroundResource(R.drawable.example_2_selected_bg)
-                }
-                today -> {
-                    textView.setTextColorRes(R.color.example_2_red)
-                    textView.background = null
-                }
-                else -> textView.background = null
+            } else {
+                textView.makeInVisible()
             }
         }
 
