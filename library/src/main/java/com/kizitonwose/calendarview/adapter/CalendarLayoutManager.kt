@@ -103,19 +103,19 @@ class CalendarLayoutManager(private val recyclerView: CalendarView, private val 
         }
 
         override fun calculateDyToMakeVisible(view: View, snapPreference: Int): Int {
-            if (date == null) {
-                return super.calculateDyToMakeVisible(view, snapPreference)
-            }
             val dy = super.calculateDyToMakeVisible(view, snapPreference)
+            if (date == null) {
+                return dy
+            }
             val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
             return dy - offset
         }
 
         override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
-            if (date == null) {
-                return super.calculateDxToMakeVisible(view, snapPreference)
-            }
             val dx = super.calculateDxToMakeVisible(view, snapPreference)
+            if (date == null) {
+                return dx
+            }
             val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
             return dx - offset
         }

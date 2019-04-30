@@ -105,7 +105,7 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
-    private val calendarLayoutManager: CalendarLayoutManager?
+    private val calendarLayoutManager: CalendarLayoutManager
         get() = layoutManager as CalendarLayoutManager
 
     private fun invalidateViewHolders() {
@@ -113,19 +113,19 @@ class CalendarView : RecyclerView {
     }
 
     fun scrollToMonth(month: YearMonth) {
-        calendarLayoutManager?.scrollToMonth(month)
+        calendarLayoutManager.scrollToMonth(month)
     }
 
     fun smoothScrollToMonth(month: YearMonth) {
-        calendarLayoutManager?.smoothScrollToMonth(month)
+        calendarLayoutManager.smoothScrollToMonth(month)
     }
 
     fun scrollToDate(date: LocalDate) {
-        calendarLayoutManager?.scrollToDate(date)
+        calendarLayoutManager.scrollToDate(date)
     }
 
     fun smoothScrollToDate(date: LocalDate) {
-        calendarLayoutManager?.smoothScrollToDate(date)
+        calendarLayoutManager.smoothScrollToDate(date)
     }
 
     fun reloadDay(day: CalendarDay) {
