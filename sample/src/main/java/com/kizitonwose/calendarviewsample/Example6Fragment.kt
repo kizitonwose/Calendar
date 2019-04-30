@@ -18,7 +18,8 @@ import org.threeten.bp.format.DateTimeFormatter
 
 class Example6Fragment : BaseFragment(), HasBackButton {
 
-    override val titleRes: Int = R.string.example_3_title
+    override val titleRes: Int = R.string.example_6_title
+
     private val today = LocalDate.now()
 
     private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")

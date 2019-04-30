@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kizitonwose.calendarview.CalendarView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/exSixCalendar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:dayViewResource="@layout/example_6_calendar_day"
-    app:monthHeaderResource="@layout/example_6_calendar_header"
-    app:orientation="horizontal"
-    app:scrollMode="continuous"
-    tools:context=".Example6Fragment" />
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context=".Example6Fragment">
+
+    <com.kizitonwose.calendarview.CalendarView
+        android:id="@+id/exSixCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dayViewResource="@layout/example_6_calendar_day"
+        app:monthHeaderResource="@layout/example_6_calendar_header"
+        app:orientation="horizontal"
+        app:scrollMode="continuous" />
+
+</FrameLayout>
