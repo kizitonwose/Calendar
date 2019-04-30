@@ -76,7 +76,7 @@
             app:dayViewResource="@layout/example_5_calendar_day"
             app:monthHeaderResource="@layout/example_5_calendar_header"
             app:orientation="horizontal"
-            app:outDateStyle="tillEndOfGrid"
+            app:outDateStyle="endOfGrid"
             app:scrollMode="paged" />
 
         <androidx.recyclerview.widget.RecyclerView

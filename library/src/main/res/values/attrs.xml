@@ -9,8 +9,8 @@
             <enum name="vertical" value="1" />
         </attr>
         <attr name="outDateStyle" format="enum">
-            <enum name="tillEndOfRow" value="0" />
-            <enum name="tillEndOfGrid" value="1" />
+            <enum name="endOfRow" value="0" />
+            <enum name="endOfGrid" value="1" />
         </attr>
         <attr name="scrollMode" format="enum">
             <enum name="continuous" value="0" />
