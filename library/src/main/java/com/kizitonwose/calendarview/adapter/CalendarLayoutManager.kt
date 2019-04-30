@@ -51,28 +51,26 @@ class CalendarLayoutManager(private val recyclerView: CalendarView, private val 
             if (monthPosition != -1) {
                 // We already scrolled to this position so findViewHolder should not return null.
                 val viewHolder = recyclerView.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
-                val offset = getDateOffset(day, monthPosition, viewHolder.itemView)
+                val offset = calculateOffset(day, monthPosition, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
             }
         }
     }
 
-    private fun getDateOffset(day: CalendarDay, targetPosition: Int, itemView: View): Int {
+    private fun calculateOffset(day: CalendarDay, position: Int, itemView: View): Int {
         var offset = 0
+
+        // Add header view height to offset if this is a vertical calendar with a header view.
         if (config.orientation == RecyclerView.VERTICAL) {
-            // Add header view height to offset if this is a vertical calendar with a header view.
-            // See why we don't set IDs for header/footer views in the comment on the `bodyViewId`
-            // field in the CalendarConfig class.
-            val rootView = itemView.findViewById<LinearLayout>(config.rootViewId)
-            if (rootView.childCount >= 2 && rootView.getChildAt(1).id == config.bodyViewId) {
-                offset += rootView.getChildAt(0).height
+            itemView.findViewById<View?>(adapter.headerViewId)?.let {
+                offset += it.height
             }
         }
-        val bodyLayout = itemView.findViewById<LinearLayout>(config.bodyViewId)
+        val bodyLayout = itemView.findViewById<LinearLayout>(adapter.bodyViewId)
         val weekLayout = bodyLayout.getChildAt(0) as LinearLayout
         val dayLayout = weekLayout.getChildAt(0) as ViewGroup
 
-        val weekDays: List<List<CalendarDay>> = adapter.getMonthAtPosition(targetPosition).weekDays
+        val weekDays: List<List<CalendarDay>> = adapter.getMonthAtPosition(position).weekDays
         // Get the row for this date in the month.
         val weekOfMonthRow = weekDays.indexOfFirst { it.contains(day) }
         // Get the column for this date in the month.
@@ -107,7 +105,7 @@ class CalendarLayoutManager(private val recyclerView: CalendarView, private val 
             if (date == null) {
                 return dy
             }
-            val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
+            val offset = calculateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
             return dy - offset
         }
 
@@ -116,7 +114,7 @@ class CalendarLayoutManager(private val recyclerView: CalendarView, private val 
             if (date == null) {
                 return dx
             }
-            val offset = getDateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
+            val offset = calculateOffset(CalendarDay(date, DayOwner.THIS_MONTH), position, view)
             return dx - offset
         }
     }

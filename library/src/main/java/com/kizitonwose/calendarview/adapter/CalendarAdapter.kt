@@ -35,6 +35,14 @@ open class CalendarAdapter(
 
     private val months = mutableListOf<CalendarMonth>()
 
+    val bodyViewId = View.generateViewId()
+    val rootViewId = View.generateViewId()
+
+    // Values of headerViewId & footerViewId will be
+    // replaced with IDs set in the XML if present.
+    var headerViewId = View.generateViewId()
+    var footerViewId = View.generateViewId()
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         rv = recyclerView as CalendarView
         rv.post { findVisibleMonthAndNotify() }
@@ -53,12 +61,18 @@ open class CalendarAdapter(
                 rv.monthPaddingStart, rv.monthPaddingTop,
                 rv.monthPaddingEnd, rv.monthPaddingBottom
             )
-            id = config.rootViewId
+            id = rootViewId
         }
 
         var monthHeaderView: View? = null
         if (monthHeaderRes != 0) {
             monthHeaderView = rootLayout.inflate(monthHeaderRes)
+            // Don't overwrite ID set by the user.
+            if (monthHeaderView.id == View.NO_ID) {
+                monthHeaderView.id = headerViewId
+            } else {
+                headerViewId = monthHeaderView.id
+            }
             rootLayout.addView(monthHeaderView)
         }
 
@@ -68,13 +82,19 @@ open class CalendarAdapter(
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
             orientation = LinearLayout.VERTICAL
-            id = config.bodyViewId
+            id = bodyViewId
         }
         rootLayout.addView(monthBodyLayout)
 
         var monthFooterView: View? = null
         if (monthFooterRes != 0) {
             monthFooterView = rootLayout.inflate(monthFooterRes)
+            // Don't overwrite ID set by the user.
+            if (monthFooterView.id == View.NO_ID) {
+                monthFooterView.id = footerViewId
+            } else {
+                footerViewId = monthFooterView.id
+            }
             rootLayout.addView(monthFooterView)
         }
 
