@@ -162,7 +162,10 @@ open class CalendarAdapter(
                 // calculating height and uses the largest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next
                 // indices are also missing the last row. There should be a better way to fix this I think.
-                if (config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
+                if (rv.layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT &&
+                    config.orientation == RecyclerView.HORIZONTAL &&
+                    config.scrollMode == ScrollMode.PAGED
+                ) {
                     val visibleVH = rv.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
                     val newHeight = visibleVH.headerView?.height.orZero() +
                             // Note: For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
