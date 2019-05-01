@@ -156,8 +156,8 @@ open class CalendarAdapter(
                 this.visibleMonth = visibleMonth
                 rv.monthScrollListener?.invoke(visibleMonth)
 
-                // Fixes issue where the calendar does not resize its height when in horizontal, paged mode
-                // and the `outDateStyle` is not `endOfGrid` hence the last row is empty.
+                // Fixes issue where the calendar does not resize its height when in horizontal, paged mode and
+                // the `outDateStyle` is not `endOfGrid` hence the last row of a 5-row visible month is empty.
                 // We set such week row's container visibility to GONE in the WeekHolder but it seems the
                 // RecyclerView accounts for the items in the immediate previous and next indices when
                 // calculating height and uses the largest one of the three meaning that the current index's
