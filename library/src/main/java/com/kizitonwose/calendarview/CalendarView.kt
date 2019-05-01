@@ -2,7 +2,6 @@ package com.kizitonwose.calendarview
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -94,20 +93,6 @@ class CalendarView : RecyclerView {
 
     @Px
     var monthPaddingBottom = 0
-        set(value) {
-            field = value
-            invalidateViewHolders()
-        }
-
-    @Px
-    var monthWidth = ViewGroup.LayoutParams.MATCH_PARENT
-        set(value) {
-            field = value
-            invalidateViewHolders()
-        }
-
-    @Px
-    var monthHeight = ViewGroup.LayoutParams.WRAP_CONTENT
         set(value) {
             field = value
             invalidateViewHolders()

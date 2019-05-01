@@ -40,7 +40,7 @@ class DayHolder(
                     }
                 }
                 // We return this Layout as DayView which will be place in the WeekLayout(A LinearLayout)
-                // hence we use LinearLayout.LayoutParams for this and set width and weight appropriately.
+                // hence we use LinearLayout.LayoutParams and set the weight appropriately.
                 // The parent's wightSum is already set to 7 to accommodate seven week days.
                 layoutParams = LinearLayout.LayoutParams(daySize.width, daySize.height, 1F)
                 addView(dateView)

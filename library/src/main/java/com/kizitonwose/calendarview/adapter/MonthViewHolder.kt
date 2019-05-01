@@ -9,8 +9,6 @@ import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.OutDateStyle
 import com.kizitonwose.calendarview.model.ScrollMode
 
-data class MonthViews(val header: View?, val body: LinearLayout, val footer: View?)
-
 data class CalendarConfig(
     val outDateStyle: OutDateStyle,
     val scrollMode: ScrollMode,
@@ -18,8 +16,8 @@ data class CalendarConfig(
 )
 
 class MonthViewHolder constructor(
+    adapter: CalendarAdapter,
     rootContainer: LinearLayout,
-    private var monthViews: MonthViews,
     @LayoutRes dayViewRes: Int,
     daySize: DaySize,
     dateClickListener: DateClickListener,
@@ -29,20 +27,25 @@ class MonthViewHolder constructor(
     private var calendarConfig: CalendarConfig
 ) : RecyclerView.ViewHolder(rootContainer) {
 
-    private val weekHolders = (1..6).map { WeekHolder(dayViewRes, daySize, dateClickListener, dateViewBinder, calendarConfig) }
+    private val weekHolders =
+        (1..6).map { WeekHolder(dayViewRes, daySize, dateClickListener, dateViewBinder, calendarConfig) }
+
+    private var headerView: View? = rootContainer.findViewById(adapter.headerViewId)
+    private var footerView: View? = rootContainer.findViewById(adapter.footerViewId)
+    private var bodyLayout: LinearLayout = rootContainer.findViewById(adapter.bodyViewId)
 
     init {
+        // Add week rows.
         weekHolders.forEach {
-            val monthBodyLayout = monthViews.body
-            monthBodyLayout.addView(it.inflateWeekView(monthBodyLayout))
+            bodyLayout.addView(it.inflateWeekView(bodyLayout))
         }
     }
 
     fun bindMonth(month: CalendarMonth) {
-        monthViews.header?.let { header ->
+        headerView?.let { header ->
             monthHeaderBinder?.invoke(header, month)
         }
-        monthViews.footer?.let { footer ->
+        footerView?.let { footer ->
             monthFooterBinder?.invoke(footer, month)
         }
         weekHolders.forEachIndexed { index, week ->

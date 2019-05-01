@@ -55,7 +55,10 @@ open class CalendarAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
         val context = parent.context
         val rootLayout = LinearLayout(context).apply {
-            layoutParams = ViewGroup.LayoutParams(rv.monthWidth, rv.monthHeight)
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             orientation = LinearLayout.VERTICAL
             setPaddingRelative(
                 rv.monthPaddingStart, rv.monthPaddingTop,
@@ -64,9 +67,8 @@ open class CalendarAdapter(
             id = rootViewId
         }
 
-        var monthHeaderView: View? = null
         if (monthHeaderRes != 0) {
-            monthHeaderView = rootLayout.inflate(monthHeaderRes)
+            val monthHeaderView = rootLayout.inflate(monthHeaderRes)
             // Don't overwrite ID set by the user.
             if (monthHeaderView.id == View.NO_ID) {
                 monthHeaderView.id = headerViewId
@@ -78,17 +80,16 @@ open class CalendarAdapter(
 
         val monthBodyLayout = LinearLayout(context).apply {
             layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             )
             orientation = LinearLayout.VERTICAL
             id = bodyViewId
         }
         rootLayout.addView(monthBodyLayout)
 
-        var monthFooterView: View? = null
         if (monthFooterRes != 0) {
-            monthFooterView = rootLayout.inflate(monthFooterRes)
+            val monthFooterView = rootLayout.inflate(monthFooterRes)
             // Don't overwrite ID set by the user.
             if (monthFooterView.id == View.NO_ID) {
                 monthFooterView.id = footerViewId
@@ -98,11 +99,12 @@ open class CalendarAdapter(
             rootLayout.addView(monthFooterView)
         }
 
-        return MonthViewHolder(rootLayout, MonthViews(monthHeaderView, monthBodyLayout, monthFooterView), dayViewRes, rv.daySize, {
-            rv.dateClickListener?.invoke(it)
-        }, { view, day ->
-            rv.dateViewBinder?.invoke(view, day)
-        }, rv.monthHeaderBinder, rv.monthFooterBinder, config)
+        return MonthViewHolder(
+            this, rootLayout, dayViewRes, rv.daySize,
+            { rv.dateClickListener?.invoke(it) },
+            { view, day -> rv.dateViewBinder?.invoke(view, day) },
+            rv.monthHeaderBinder, rv.monthFooterBinder, config
+        )
     }
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int) {
