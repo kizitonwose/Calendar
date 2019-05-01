@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.utils.inflate
+import com.kizitonwose.calendarview.utils.orZero
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
 
@@ -150,8 +152,28 @@ open class CalendarAdapter(
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
             if (visibleMonth != this.visibleMonth) {
-                rv.monthScrollListener?.invoke(visibleMonth)
                 this.visibleMonth = visibleMonth
+                rv.monthScrollListener?.invoke(visibleMonth)
+
+                // Fixes issue where the calendar does not resize its height when in horizontal, paged mode
+                // and the `outDateStyle` is not `endOfGrid` hence the last row is empty.
+                // We set such week row's container visibility to GONE in the WeekHolder but it seems the
+                // RecyclerView accounts for the items in the immediate previous and next indices when
+                // calculating height and uses the largest one of the three meaning that the current index's
+                // view will end up having a blank space at the bottom unless the immediate previous and next
+                // indices are also missing the last row. There should be a better way to fix this I think.
+                if (config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
+                    val visibleVH = rv.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
+                    val newHeight = visibleVH.headerView?.height.orZero() +
+                            // Note: For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
+                            // so we calculate it again by checking the number of visible(non-empty) rows.
+                            visibleMonth.weekDays.takeWhile { it.isNotEmpty() }.size * rv.daySize.height +
+                            visibleVH.footerView?.height.orZero()
+                    if (rv.layoutParams.height != newHeight)
+                        rv.layoutParams = rv.layoutParams.apply {
+                            this.height = newHeight
+                        }
+                }
             }
         }
     }

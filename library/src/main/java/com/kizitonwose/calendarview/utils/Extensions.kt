@@ -20,6 +20,8 @@ internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean 
 
 internal inline fun Boolean?.orFalse(): Boolean = this ?: false
 
+internal inline fun Int?.orZero(): Int = this ?: 0
+
 internal fun Context.getDrawableCompat(@DrawableRes drawable: Int) = ContextCompat.getDrawable(this, drawable)
 
 internal fun Context.getColorCompat(@ColorRes color: Int) = ContextCompat.getColor(this, color)

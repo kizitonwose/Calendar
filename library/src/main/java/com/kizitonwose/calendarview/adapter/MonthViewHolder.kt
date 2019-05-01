@@ -30,9 +30,11 @@ class MonthViewHolder constructor(
     private val weekHolders =
         (1..6).map { WeekHolder(dayViewRes, daySize, dateClickListener, dateViewBinder, calendarConfig) }
 
-    private var headerView: View? = rootContainer.findViewById(adapter.headerViewId)
-    private var footerView: View? = rootContainer.findViewById(adapter.footerViewId)
-    private var bodyLayout: LinearLayout = rootContainer.findViewById(adapter.bodyViewId)
+    var headerView: View? = rootContainer.findViewById(adapter.headerViewId)
+    var footerView: View? = rootContainer.findViewById(adapter.footerViewId)
+    var bodyLayout: LinearLayout = rootContainer.findViewById(adapter.bodyViewId)
+
+    lateinit var month: CalendarMonth
 
     init {
         // Add week rows.
@@ -42,6 +44,7 @@ class MonthViewHolder constructor(
     }
 
     fun bindMonth(month: CalendarMonth) {
+        this.month = month
         headerView?.let { header ->
             monthHeaderBinder?.invoke(header, month)
         }

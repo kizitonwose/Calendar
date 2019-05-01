@@ -183,11 +183,6 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             // Select the first day of the month when
             // we scroll to a new month.
             selectDate(it.yearMonth.atDay(1))
-
-            exThreeCalendar.post {
-                exThreeCalendar.invalidate()
-                exThreeCalendar.requestLayout()
-            }
         }
 
         exThreeCalendar.monthHeaderBinder = { view, month ->
