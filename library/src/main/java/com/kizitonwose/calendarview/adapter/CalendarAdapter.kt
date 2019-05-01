@@ -146,7 +146,7 @@ open class CalendarAdapter(
 
     private var visibleMonth: CalendarMonth? = null
     fun findVisibleMonthAndNotify() {
-        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
             if (visibleMonth != this.visibleMonth) {
