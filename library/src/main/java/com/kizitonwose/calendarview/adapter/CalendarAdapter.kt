@@ -98,7 +98,7 @@ open class CalendarAdapter(
             rootLayout.addView(monthFooterView)
         }
 
-        return MonthViewHolder(rootLayout, MonthViews(monthHeaderView, monthBodyLayout, monthFooterView), dayViewRes, {
+        return MonthViewHolder(rootLayout, MonthViews(monthHeaderView, monthBodyLayout, monthFooterView), dayViewRes, rv.daySize, {
             rv.dateClickListener?.invoke(it)
         }, { view, day ->
             rv.dateViewBinder?.invoke(view, day)

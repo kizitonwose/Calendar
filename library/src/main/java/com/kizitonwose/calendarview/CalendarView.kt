@@ -3,11 +3,13 @@ package com.kizitonwose.calendarview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
+import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.*
+import com.kizitonwose.calendarview.utils.screenWidth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -69,37 +71,49 @@ class CalendarView : RecyclerView {
         })
     }
 
+    @Px
     var monthPaddingStart = 0
         set(value) {
             field = value
             invalidateViewHolders()
         }
 
+    @Px
     var monthPaddingEnd = 0
         set(value) {
             field = value
             invalidateViewHolders()
         }
 
+    @Px
     var monthPaddingTop = 0
         set(value) {
             field = value
             invalidateViewHolders()
         }
 
+    @Px
     var monthPaddingBottom = 0
         set(value) {
             field = value
             invalidateViewHolders()
         }
 
+    @Px
     var monthWidth = ViewGroup.LayoutParams.MATCH_PARENT
         set(value) {
             field = value
             invalidateViewHolders()
         }
 
+    @Px
     var monthHeight = ViewGroup.LayoutParams.WRAP_CONTENT
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    var daySize: DaySize = DaySize(context.screenWidth / 7, context.screenWidth / 7)
         set(value) {
             field = value
             invalidateViewHolders()

@@ -7,12 +7,13 @@ import com.kizitonwose.calendarview.model.CalendarDay
 
 class WeekHolder(
     @LayoutRes dayViewRes: Int,
+    daySize: DaySize,
     dateClickListener: DateClickListener,
     dateViewBinder: DateViewBinder,
     private var calendarConfig: CalendarConfig
 ) {
 
-    val dayHolders = (1..7).map { DayHolder(dayViewRes, dateClickListener, dateViewBinder, calendarConfig) }
+    val dayHolders = (1..7).map { DayHolder(dayViewRes, daySize, dateClickListener, dateViewBinder, calendarConfig) }
 
     private lateinit var container: LinearLayout
 

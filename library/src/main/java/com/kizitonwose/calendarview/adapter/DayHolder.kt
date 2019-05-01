@@ -2,42 +2,47 @@ package com.kizitonwose.calendarview.adapter
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
-import com.kizitonwose.calendarview.SquareFrameLayout
+import androidx.annotation.Px
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.utils.inflate
 
+data class DaySize(@Px val width: Int, @Px val height: Int)
+
 class DayHolder(
     @LayoutRes private val dayViewRes: Int,
+    private val daySize: DaySize,
     private val dateClickListener: DateClickListener,
     private val dateViewBinder: DateViewBinder,
     private val calendarConfig: CalendarConfig
 ) {
     private lateinit var dateView: View
-    private lateinit var containerView: SquareFrameLayout
+    private lateinit var containerView: FrameLayout
 
     var currentDay: CalendarDay? = null
 
     fun inflateDayView(parent: LinearLayout): View {
         if (::dateView.isInitialized.not()) {
             dateView = parent.inflate(dayViewRes).apply {
-                // We ensure the layout params of the child view is MATCH PARENT
-                // so it fills the SquareFrameLayout.
+                // We ensure the layout params of the supplied child view is
+                // MATCH_PARENT so it fills the parent container.
                 layoutParams = layoutParams.apply {
                     height = ViewGroup.LayoutParams.MATCH_PARENT
                     width = ViewGroup.LayoutParams.MATCH_PARENT
                 }
             }
-            containerView = SquareFrameLayout(parent.context).apply {
+            containerView = FrameLayout(parent.context).apply {
                 setOnClickListener {
                     currentDay?.let { day ->
                         dateClickListener.invoke(day)
                     }
                 }
-                // We wrap the view in a SquareFrameLayout for use in the Week row layout which is
-                // a LinearLayout hence we use LinearLayout.LayoutParams for the  SquareFrameLayout
-                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1F)
+                // We return this Layout as DayView which will be place in the WeekLayout(A LinearLayout)
+                // hence we use LinearLayout.LayoutParams for this and set width and weight appropriately.
+                // The parent's wightSum is already set to 7 to accommodate seven week days.
+                layoutParams = LinearLayout.LayoutParams(daySize.width, daySize.height, 1F)
                 addView(dateView)
             }
         }

@@ -21,6 +21,7 @@ class MonthViewHolder constructor(
     rootContainer: LinearLayout,
     private var monthViews: MonthViews,
     @LayoutRes dayViewRes: Int,
+    daySize: DaySize,
     dateClickListener: DateClickListener,
     dateViewBinder: DateViewBinder,
     private var monthHeaderBinder: MonthHeaderFooterBinder?,
@@ -28,7 +29,7 @@ class MonthViewHolder constructor(
     private var calendarConfig: CalendarConfig
 ) : RecyclerView.ViewHolder(rootContainer) {
 
-    private val weekHolders = (1..6).map { WeekHolder(dayViewRes, dateClickListener, dateViewBinder, calendarConfig) }
+    private val weekHolders = (1..6).map { WeekHolder(dayViewRes, daySize, dateClickListener, dateViewBinder, calendarConfig) }
 
     init {
         weekHolders.forEach {
