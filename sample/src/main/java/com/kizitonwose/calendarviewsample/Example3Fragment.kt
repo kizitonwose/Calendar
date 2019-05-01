@@ -185,6 +185,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             selectDate(it.yearMonth.atDay(1))
 
             exThreeCalendar.post {
+                exThreeCalendar.invalidate()
                 exThreeCalendar.requestLayout()
             }
         }

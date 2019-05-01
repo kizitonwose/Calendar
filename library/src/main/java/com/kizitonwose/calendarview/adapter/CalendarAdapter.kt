@@ -161,7 +161,7 @@ open class CalendarAdapter(
     }
 
     fun getFirstVisibleMonth(): CalendarMonth? {
-        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             return months[visibleItemPos]
         }
