@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:orientation="vertical"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/exSixMonthText"
+        android:textSize="26sp"
+        android:fontFamily="sans-serif-thin"
+        android:textColor="@color/example_6_black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        tools:text="June 2019" />
 
     <include layout="@layout/calendar_day_legend" />
 
-</FrameLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:background="#eeeeee"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</LinearLayout>
 

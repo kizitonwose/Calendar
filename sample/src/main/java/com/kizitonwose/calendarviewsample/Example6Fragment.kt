@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_6_calendar_day.view.*
+import kotlinx.android.synthetic.main.example_6_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_6_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -22,7 +25,6 @@ class Example6Fragment : BaseFragment(), HasBackButton {
 
     private val today = LocalDate.now()
 
-    private val titleSameYearFormatter = DateTimeFormatter.ofPattern("MMMM")
     private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,6 +38,7 @@ class Example6Fragment : BaseFragment(), HasBackButton {
         val currentMonth = YearMonth.now()
         exSixCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
         exSixCalendar.scrollToMonth(currentMonth)
+        exSixCalendar.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.HORIZONTAL))
 
         exSixCalendar.dateViewBinder = { view, day ->
             val textView = view.exSixDayText
@@ -52,6 +55,8 @@ class Example6Fragment : BaseFragment(), HasBackButton {
         }
 
         exSixCalendar.monthHeaderBinder = { view, month ->
+            view.exSixMonthText.text = titleFormatter.format(month.yearMonth)
+
             val legendLayout = view.legendLayout
             // Setup each header day text if we have not done that already.
             if (legendLayout.tag == null) {
