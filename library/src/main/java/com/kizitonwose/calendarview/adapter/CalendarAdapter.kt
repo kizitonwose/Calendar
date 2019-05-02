@@ -143,7 +143,7 @@ open class CalendarAdapter(
     }
 
     private var visibleMonth: CalendarMonth? = null
-    private var calWrapsContent: Boolean? = null
+    private var calWrapsHeight: Boolean? = null
     fun findVisibleMonthAndNotify() {
         val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
@@ -159,12 +159,12 @@ open class CalendarAdapter(
                 // calculating height and uses the largest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next
                 // indices are also missing the last row. There should be a better way to fix this I think.
-
-                if (calWrapsContent == null) {
-                    // We modify the layoutParams so we save the initial value set by the user.
-                    calWrapsContent = rv.layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT
-                }
-                if (calWrapsContent!! && config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
+                if (config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
+                    if (calWrapsHeight == null) {
+                        // We modify the layoutParams so we save the initial value set by the user.
+                        calWrapsHeight = rv.layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                    if (calWrapsHeight!!.not()) return // Bug only happens when the CalenderView wraps its height.
                     val visibleVH = rv.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
                     val newHeight = visibleVH.headerView?.height.orZero() +
                             // Note: For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
