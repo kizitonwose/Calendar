@@ -98,7 +98,15 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
-    var daySize: DaySize = DaySize(context.screenWidth / 7, context.screenWidth / 7)
+    @Px
+    var dayWidth: Int = context.screenWidth / 7
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px // A square calender is the default(dayHeight == dayWidth)
+    var dayHeight: Int = dayWidth
         set(value) {
             field = value
             invalidateViewHolders()

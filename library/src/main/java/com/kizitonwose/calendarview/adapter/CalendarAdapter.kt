@@ -101,12 +101,8 @@ open class CalendarAdapter(
             rootLayout.addView(monthFooterView)
         }
 
-        return MonthViewHolder(
-            this, rootLayout, dayViewRes, rv.daySize,
-            { rv.dateClickListener?.invoke(it) },
-            { view, day -> rv.dateViewBinder?.invoke(view, day) },
-            rv.monthHeaderBinder, rv.monthFooterBinder, config
-        )
+        val dayConfig = DayConfig(rv.dayWidth, rv.dayHeight, dayViewRes, rv.dateClickListener, rv.dateViewBinder)
+        return MonthViewHolder(this, rootLayout, dayConfig, rv.monthHeaderBinder, rv.monthFooterBinder)
     }
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int) {
@@ -173,7 +169,7 @@ open class CalendarAdapter(
                     val newHeight = visibleVH.headerView?.height.orZero() +
                             // Note: For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
                             // so we calculate it again by checking the number of visible(non-empty) rows.
-                            visibleMonth.weekDays.takeWhile { it.isNotEmpty() }.size * rv.daySize.height +
+                            visibleMonth.weekDays.takeWhile { it.isNotEmpty() }.size * rv.dayHeight +
                             visibleVH.footerView?.height.orZero()
                     if (rv.layoutParams.height != newHeight)
                         rv.layoutParams = rv.layoutParams.apply {

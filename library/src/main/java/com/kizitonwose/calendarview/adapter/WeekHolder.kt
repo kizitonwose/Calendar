@@ -3,18 +3,11 @@ package com.kizitonwose.calendarview.adapter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.annotation.LayoutRes
 import com.kizitonwose.calendarview.model.CalendarDay
 
-class WeekHolder(
-    @LayoutRes dayViewRes: Int,
-    private val daySize: DaySize,
-    dateClickListener: DateClickListener,
-    dateViewBinder: DateViewBinder,
-    private var calendarConfig: CalendarConfig
-) {
+class WeekHolder(dayConfig: DayConfig) {
 
-    val dayHolders = (1..7).map { DayHolder(dayViewRes, daySize, dateClickListener, dateViewBinder, calendarConfig) }
+    val dayHolders = (1..7).map { DayHolder(dayConfig) }
 
     private lateinit var container: LinearLayout
 
@@ -26,7 +19,7 @@ class WeekHolder(
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 orientation = LinearLayout.HORIZONTAL
-                weightSum =  dayHolders.count().toFloat()
+                weightSum = dayHolders.count().toFloat()
                 for (holder in dayHolders) {
                     addView(holder.inflateDayView(this))
                 }

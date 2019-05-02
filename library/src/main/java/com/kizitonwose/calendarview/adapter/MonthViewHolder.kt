@@ -2,7 +2,6 @@ package com.kizitonwose.calendarview.adapter
 
 import android.view.View
 import android.widget.LinearLayout
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -17,22 +16,17 @@ data class CalendarConfig(
 
 class MonthViewHolder constructor(
     adapter: CalendarAdapter,
-    rootContainer: LinearLayout,
-    @LayoutRes dayViewRes: Int,
-    daySize: DaySize,
-    dateClickListener: DateClickListener,
-    dateViewBinder: DateViewBinder,
+    rootLayout: LinearLayout,
+    dayConfig: DayConfig,
     private var monthHeaderBinder: MonthHeaderFooterBinder?,
-    private var monthFooterBinder: MonthHeaderFooterBinder?,
-    private var calendarConfig: CalendarConfig
-) : RecyclerView.ViewHolder(rootContainer) {
+    private var monthFooterBinder: MonthHeaderFooterBinder?
+) : RecyclerView.ViewHolder(rootLayout) {
 
-    private val weekHolders =
-        (1..6).map { WeekHolder(dayViewRes, daySize, dateClickListener, dateViewBinder, calendarConfig) }
+    private val weekHolders = (1..6).map { WeekHolder(dayConfig) }
 
-    var headerView: View? = rootContainer.findViewById(adapter.headerViewId)
-    var footerView: View? = rootContainer.findViewById(adapter.footerViewId)
-    var bodyLayout: LinearLayout = rootContainer.findViewById(adapter.bodyViewId)
+    var headerView: View? = rootLayout.findViewById(adapter.headerViewId)
+    var footerView: View? = rootLayout.findViewById(adapter.footerViewId)
+    var bodyLayout: LinearLayout = rootLayout.findViewById(adapter.bodyViewId)
 
     lateinit var month: CalendarMonth
 
