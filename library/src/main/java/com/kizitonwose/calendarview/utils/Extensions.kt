@@ -31,17 +31,17 @@ internal fun TextView.setTextColorRes(@ColorRes color: Int) = setTextColor(conte
 val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)
 
-val Context.windowManager
+internal val Context.windowManager
     get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-val Context.screenWidth: Int
+internal val Context.screenWidth: Int
     get() {
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         return displayMetrics.widthPixels
     }
 
-val Context.screenHeight: Int
+internal val Context.screenHeight: Int
     get() {
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)

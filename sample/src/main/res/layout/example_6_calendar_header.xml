@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="10dp">
+    android:paddingTop="6dp">
 
     <TextView
         android:id="@+id/exSixMonthText"
-        android:textSize="26sp"
-        android:fontFamily="sans-serif-thin"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/example_6_black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

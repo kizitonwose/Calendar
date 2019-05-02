@@ -33,6 +33,7 @@
     <color name="red_800">#c62828</color>
     <color name="blue_800">#1565C0</color>
     <color name="cyan_700">#0097A7</color>
-    <color name="example_6_black">#D9000000</color>
+    <color name="example_6_black">#BF000000</color>
+    <color name="example_6_light_black">#40000000</color>
 
 </resources>
