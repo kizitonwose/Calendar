@@ -116,7 +116,15 @@ class CalendarView : RecyclerView {
         get() = layoutManager as CalendarLayoutManager
 
     private fun invalidateViewHolders() {
-        recycledViewPool.clear()
+        // This does not remove visible views.
+        // recycledViewPool.clear()
+
+        // This removes all views but is internal.
+        // removeAndRecycleViews()
+
+        val state = calendarLayoutManager.onSaveInstanceState()
+        setAdapter(adapter)
+        calendarLayoutManager.onRestoreInstanceState(state)
     }
 
     fun scrollToMonth(month: YearMonth) {
