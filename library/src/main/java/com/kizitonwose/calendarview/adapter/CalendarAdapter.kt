@@ -156,7 +156,7 @@ open class CalendarAdapter(
                 // the `outDateStyle` is not `endOfGrid` hence the last row of a 5-row visible month is empty.
                 // We set such week row's container visibility to GONE in the WeekHolder but it seems the
                 // RecyclerView accounts for the items in the immediate previous and next indices when
-                // calculating height and uses the largest one of the three meaning that the current index's
+                // calculating height and uses the tallest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next
                 // indices are also missing the last row. There should be a better way to fix this I think.
                 if (config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
@@ -167,8 +167,8 @@ open class CalendarAdapter(
                     if (calWrapsHeight!!.not()) return // Bug only happens when the CalenderView wraps its height.
                     val visibleVH = rv.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
                     val newHeight = visibleVH.headerView?.height.orZero() +
-                            // Note: For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
-                            // so we calculate it again by checking the number of visible(non-empty) rows.
+                            // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
+                            // So we calculate it again by checking the number of visible(non-empty) rows.
                             visibleMonth.weekDays.takeWhile { it.isNotEmpty() }.size * rv.dayHeight +
                             visibleVH.footerView?.height.orZero()
                     if (rv.layoutParams.height != newHeight)
