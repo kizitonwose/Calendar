@@ -12,7 +12,7 @@
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/exSixCalendar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:dayViewResource="@layout/example_6_calendar_day"
         app:monthHeaderResource="@layout/example_6_calendar_header"
         app:orientation="horizontal"
