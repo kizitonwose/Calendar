@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
-import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.DayBinder
 import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -90,7 +90,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val textView = view.exFourDayText
             val roundBgView = view.exFourRoundBgView
         }
-        exFourCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+        exFourCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun provide(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView

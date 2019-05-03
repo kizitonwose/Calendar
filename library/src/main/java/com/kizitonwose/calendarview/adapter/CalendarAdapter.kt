@@ -18,7 +18,7 @@ import org.threeten.bp.YearMonth
 
 open class ViewContainer(val view: View)
 
-interface DateViewBinder<T : ViewContainer> {
+interface DayBinder<T : ViewContainer> {
     fun provide(view: View): T
     fun bind(container: T, day: CalendarDay)
 }
@@ -116,7 +116,7 @@ open class CalendarAdapter(
         val dayConfig = DayConfig(
             rv.dayWidth, rv.dayHeight, dayViewRes,
             { rv.dateClickListener?.invoke(it) },
-            rv.dateViewBinder as DateViewBinder<ViewContainer>
+            rv.dayBinder as DayBinder<ViewContainer>
         )
         return MonthViewHolder(
             this, rootLayout, dayConfig,
@@ -181,7 +181,7 @@ open class CalendarAdapter(
 
                 // Fixes issue where the calendar does not resize its height when in horizontal, paged mode and
                 // the `outDateStyle` is not `endOfGrid` hence the last row of a 5-row visible month is empty.
-                // We set such week row's dateViewBinder visibility to GONE in the WeekHolder but it seems the
+                // We set such week row's container visibility to GONE in the WeekHolder but it seems the
                 // RecyclerView accounts for the items in the immediate previous and next indices when
                 // calculating height and uses the tallest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next

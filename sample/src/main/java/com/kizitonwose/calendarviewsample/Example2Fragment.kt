@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
-import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.DayBinder
 import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -54,7 +54,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exTwoDayText
         }
-        exTwoCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+        exTwoCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun provide(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView

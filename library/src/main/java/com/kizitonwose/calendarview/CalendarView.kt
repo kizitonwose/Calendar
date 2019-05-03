@@ -15,7 +15,7 @@ import org.threeten.bp.YearMonth
 
 class CalendarView : RecyclerView {
 
-    lateinit var dateViewBinder: DateViewBinder<*>
+    lateinit var dayBinder: DayBinder<*>
 
     private lateinit var adapter: CalendarAdapter
 

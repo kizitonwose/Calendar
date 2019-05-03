@@ -19,7 +19,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.DayBinder
 import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -146,7 +146,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             val textView = view.exThreeDayText
             val dotView = view.exThreeDotView
         }
-        exThreeCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+        exThreeCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun provide(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView

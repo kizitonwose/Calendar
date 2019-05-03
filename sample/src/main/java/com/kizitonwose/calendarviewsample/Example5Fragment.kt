@@ -13,7 +13,7 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.DayBinder
 import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -104,7 +104,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             val flightTopView = view.exFiveDayFlightTop
             val flightBottomView = view.exFiveDayFlightBottom
         }
-        exFiveCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+        exFiveCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun provide(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView

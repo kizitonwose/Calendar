@@ -14,7 +14,7 @@ data class DayConfig(
     @Px val height: Int,
     @LayoutRes val dayViewRes: Int,
     val dateClickListener: DateClickListener,
-    val viewBinder: DateViewBinder<ViewContainer>
+    val viewBinder: DayBinder<ViewContainer>
 )
 
 class DayHolder(private val config: DayConfig) {
@@ -28,7 +28,7 @@ class DayHolder(private val config: DayConfig) {
     fun inflateDayView(parent: LinearLayout): View {
         dateView = parent.inflate(config.dayViewRes).apply {
             // We ensure the layout params of the supplied child view is
-            // MATCH_PARENT so it fills the parent dateViewBinder.
+            // MATCH_PARENT so it fills the parent container.
             layoutParams = layoutParams.apply {
                 height = ViewGroup.LayoutParams.MATCH_PARENT
                 width = ViewGroup.LayoutParams.MATCH_PARENT
@@ -40,8 +40,8 @@ class DayHolder(private val config: DayConfig) {
                     config.dateClickListener(day)
                 }
             }
-            // We return this Layout as DayView which will be place in the WeekLayout(A LinearLayout)
-            // hence we use LinearLayout.LayoutParams and set the weight appropriately.
+            // This will be placed in the WeekLayout(A LinearLayout) hence we
+            // use LinearLayout.LayoutParams and set the weight appropriately.
             // The parent's wightSum is already set to 7 to accommodate seven week days.
             layoutParams = LinearLayout.LayoutParams(config.width, config.height, 1F)
             addView(dateView)
