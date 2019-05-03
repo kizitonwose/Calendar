@@ -1,6 +1,8 @@
 package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.adapter.CalendarConfig
+import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.previous
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -76,10 +78,10 @@ class CalendarMonth internal constructor(
         get() = ownedDays.map { it.date }
 
     val previous: CalendarMonth
-        get() = CalendarMonth(yearMonth.minusMonths(1), config, firstDayOfWeek)
+        get() = CalendarMonth(yearMonth.previous, config, firstDayOfWeek)
 
     val next: CalendarMonth
-        get() = CalendarMonth(yearMonth.plusMonths(1), config, firstDayOfWeek)
+        get() = CalendarMonth(yearMonth.next, config, firstDayOfWeek)
 
 
     override fun compareTo(other: CalendarMonth): Int {

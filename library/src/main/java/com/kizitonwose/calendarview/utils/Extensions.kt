@@ -31,6 +31,12 @@ internal fun TextView.setTextColorRes(@ColorRes color: Int) = setTextColor(conte
 val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)
 
+val YearMonth.next: YearMonth
+    get() = this.plusMonths(1)
+
+val YearMonth.previous: YearMonth
+    get() = this.minusMonths(1)
+
 internal val Context.windowManager
     get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 

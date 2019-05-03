@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.ScrollMode
-import com.kizitonwose.calendarview.utils.inflate
-import com.kizitonwose.calendarview.utils.orZero
+import com.kizitonwose.calendarview.utils.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
 
@@ -120,9 +120,14 @@ open class CalendarAdapter(
     }
 
     fun reloadDay(day: CalendarDay) {
-        val adapterPos = months.indexOfFirst { it.weekDays.flatten().contains(day) }
-        if (adapterPos != -1) {
-            notifyItemChanged(adapterPos, day)
+        val yearMonth = when (day.owner) {
+            DayOwner.THIS_MONTH -> day.date.yearMonth
+            DayOwner.PREVIOUS_MONTH -> day.date.yearMonth.next
+            DayOwner.NEXT_MONTH -> day.date.yearMonth.previous
+        }
+        val position = months.indexOfFirst { it.yearMonth == yearMonth }
+        if (position != -1) {
+            notifyItemChanged(position, day)
         }
     }
 
