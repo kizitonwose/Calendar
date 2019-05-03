@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CalendarView">
-        <attr name="dayViewResource" format="reference" />
-        <attr name="monthHeaderResource" format="reference" />
-        <attr name="monthFooterResource" format="reference" />
-        <attr name="orientation" format="enum">
+        <attr name="cv_dayViewResource" format="reference" />
+        <attr name="cv_monthHeaderResource" format="reference" />
+        <attr name="cv_monthFooterResource" format="reference" />
+        <attr name="cv_orientation" format="enum">
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
         </attr>
-        <attr name="outDateStyle" format="enum">
+        <attr name="cv_outDateStyle" format="enum">
             <enum name="endOfRow" value="0" />
             <enum name="endOfGrid" value="1" />
         </attr>
-        <attr name="scrollMode" format="enum">
+        <attr name="cv_scrollMode" format="enum">
             <enum name="continuous" value="0" />
             <enum name="paged" value="1" />
         </attr>

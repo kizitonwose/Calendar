@@ -40,12 +40,12 @@ class CalendarView : RecyclerView {
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
-        val dayViewRes = a.getResourceId(R.styleable.CalendarView_dayViewResource, 0)
-        val monthHeaderRes = a.getResourceId(R.styleable.CalendarView_monthHeaderResource, 0)
-        val monthFooterRes = a.getResourceId(R.styleable.CalendarView_monthFooterResource, 0)
-        val orientation = a.getInt(R.styleable.CalendarView_orientation, RecyclerView.VERTICAL)
-        val scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_scrollMode, 0)]
-        val outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_outDateStyle, 0)]
+        val dayViewRes = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, 0)
+        val monthHeaderRes = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, 0)
+        val monthFooterRes = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, 0)
+        val orientation = a.getInt(R.styleable.CalendarView_cv_orientation, RecyclerView.VERTICAL)
+        val scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, 0)]
+        val outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, 0)]
         a.recycle()
 
         AndroidThreeTen.init(context) // The library checks for multiple calls.

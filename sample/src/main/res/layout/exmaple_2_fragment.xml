@@ -36,8 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:dayViewResource="@layout/example_2_calendar_day"
-        app:monthHeaderResource="@layout/example_2_calendar_header"
-        app:orientation="vertical" />
+        app:cv_dayViewResource="@layout/example_2_calendar_day"
+        app:cv_monthHeaderResource="@layout/example_2_calendar_header"
+        app:cv_orientation="vertical" />
 
 </LinearLayout>

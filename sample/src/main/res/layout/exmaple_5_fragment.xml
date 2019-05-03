@@ -73,11 +73,11 @@
             android:id="@+id/exFiveCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:dayViewResource="@layout/example_5_calendar_day"
-            app:monthHeaderResource="@layout/example_5_calendar_header"
-            app:orientation="horizontal"
-            app:outDateStyle="endOfGrid"
-            app:scrollMode="paged" />
+            app:cv_dayViewResource="@layout/example_5_calendar_day"
+            app:cv_monthHeaderResource="@layout/example_5_calendar_header"
+            app:cv_orientation="horizontal"
+            app:cv_outDateStyle="endOfGrid"
+            app:cv_scrollMode="paged" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exFiveRv"
