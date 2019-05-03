@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
@@ -196,14 +198,19 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             selectDate(it.yearMonth.atDay(1))
         }
 
-        exThreeCalendar.monthHeaderBinder = { view, month ->
+        class MonthViewContainer(view: View) : ViewContainer(view) {
             val legendLayout = view.legendLayout
-            // Setup each header day text if we have not done that already.
-            if (legendLayout.tag == null) {
-                legendLayout.tag = month.yearMonth
-                legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
-                    tv.text = daysOfWeek[index].name.first().toString()
-                    tv.setTextColorRes(R.color.example_3_black)
+        }
+        exThreeCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            override fun provide(view: View) = MonthViewContainer(view)
+            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                // Setup each header day text if we have not done that already.
+                if (container.legendLayout.tag == null) {
+                    container.legendLayout.tag = month.yearMonth
+                    container.legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
+                        tv.text = daysOfWeek[index].name.first().toString()
+                        tv.setTextColorRes(R.color.example_3_black)
+                    }
                 }
             }
         }

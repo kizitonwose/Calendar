@@ -21,9 +21,9 @@ class CalendarView : RecyclerView {
 
     var dateClickListener: DateClickListener? = null
 
-    var monthHeaderBinder: MonthHeaderFooterBinder? = null
+    var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
 
-    var monthFooterBinder: MonthHeaderFooterBinder? = null
+    var monthFooterBinder: MonthHeaderFooterBinder<*>? = null
 
     var monthScrollListener: MonthScrollListener? = null
 

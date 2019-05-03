@@ -12,17 +12,15 @@ class WeekHolder(dayConfig: DayConfig) {
     private lateinit var container: LinearLayout
 
     fun inflateWeekView(parent: LinearLayout): View {
-        if (::container.isInitialized.not()) {
-            container = LinearLayout(parent.context).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                orientation = LinearLayout.HORIZONTAL
-                weightSum = dayHolders.count().toFloat()
-                for (holder in dayHolders) {
-                    addView(holder.inflateDayView(this))
-                }
+        container = LinearLayout(parent.context).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            orientation = LinearLayout.HORIZONTAL
+            weightSum = dayHolders.count().toFloat()
+            for (holder in dayHolders) {
+                addView(holder.inflateDayView(this))
             }
         }
         return container

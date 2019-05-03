@@ -14,8 +14,10 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_6_calendar_day.view.*
@@ -76,20 +78,24 @@ class Example6Fragment : BaseFragment(), HasBackButton {
         exSixCalendar.scrollToMonth(currentMonth)
         exSixCalendar.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.HORIZONTAL))
 
-        exSixCalendar.monthHeaderBinder = { view, month ->
-            view.exSixMonthText.text = titleFormatter.format(month.yearMonth)
-
+        class MonthViewContainer(view: View) : ViewContainer(view) {
+            val textView = view.exSixMonthText
             val legendLayout = view.legendLayout
-            // Setup each header day text if we have not done that already.
-            if (legendLayout.tag == null) {
-                legendLayout.tag = month.yearMonth
-                legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
-                    tv.text = daysOfWeek[index].name.first().toString()
-                    tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
-                    tv.setTextColorRes(R.color.example_6_black)
+        }
+        exSixCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            override fun provide(view: View) = MonthViewContainer(view)
+            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                container.textView.text = titleFormatter.format(month.yearMonth)
+                // Setup each header day text if we have not done that already.
+                if (container.legendLayout.tag == null) {
+                    container.legendLayout.tag = month.yearMonth
+                    container.legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
+                        tv.text = daysOfWeek[index].name.first().toString()
+                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14F)
+                        tv.setTextColorRes(R.color.example_6_black)
+                    }
                 }
             }
         }
-
     }
 }

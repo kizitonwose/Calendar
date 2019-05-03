@@ -9,8 +9,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_2_calendar_day.view.*
@@ -95,9 +97,15 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
             }
         }
 
-        exTwoCalendar.monthHeaderBinder = { view, calMonth ->
-            @SuppressLint("SetTextI18n") // Fix concatenation warning for `setText` call.
-            view.exTwoHeaderText.text = "${calMonth.yearMonth.month.name.toLowerCase().capitalize()} ${calMonth.year}"
+        class MonthViewContainer(view: View) : ViewContainer(view) {
+            val textView = view.exTwoHeaderText
+        }
+        exTwoCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            override fun provide(view: View) = MonthViewContainer(view)
+            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                @SuppressLint("SetTextI18n") // Concatenation warning for `setText` call.
+                container.textView.text = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+            }
         }
     }
 

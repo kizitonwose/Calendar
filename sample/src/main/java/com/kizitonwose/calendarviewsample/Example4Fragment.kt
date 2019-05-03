@@ -14,8 +14,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
@@ -183,9 +185,15 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             }
         }
 
-        exFourCalendar.monthHeaderBinder = { view, month ->
-            val monthTitle = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
-            view.exFourHeaderText.text = monthTitle
+        class MonthViewContainer(view: View) : ViewContainer(view) {
+            val textView = view.exFourHeaderText
+        }
+        exFourCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            override fun provide(view: View) = MonthViewContainer(view)
+            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                val monthTitle = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+                container.textView.text = monthTitle
+            }
         }
 
         exFourSaveButton.setOnClickListener click@{
@@ -196,7 +204,8 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 val text = "Selected: ${formatter.format(startDate)} - ${formatter.format(endDate)}"
                 Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
             } else {
-                Snackbar.make(requireView(), "No selection. Searching all Airbnb listings.", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireView(), "No selection. Searching all Airbnb listings.", Snackbar.LENGTH_LONG)
+                    .show()
             }
             fragmentManager?.popBackStack()
         }

@@ -23,10 +23,12 @@ interface DateViewBinder<T : ViewContainer> {
     fun bind(container: T, day: CalendarDay)
 }
 
+interface MonthHeaderFooterBinder<T : ViewContainer> {
+    fun provide(view: View): T
+    fun bind(container: T, month: CalendarMonth)
+}
 
 typealias DateClickListener = (CalendarDay) -> Unit
-
-typealias MonthHeaderFooterBinder = (view: View, calendarMonth: CalendarMonth) -> Unit
 
 typealias MonthScrollListener = (calendarMonth: CalendarMonth) -> Unit
 
@@ -108,18 +110,19 @@ open class CalendarAdapter(
             rootLayout.addView(monthFooterView)
         }
 
-        // We create internal binders instead of directly passing those in the CalendarView
-        // so we can always call the updated properties in the CalenderView if they change.
-        val dateClick: DateClickListener = { rv.dateClickListener?.invoke(it) }
+        // We create an internal click listener instead of directly passing
+        // the one in the CalendarView so we can always call the updated
+        // instance in the CalenderView if it changes.
         val dayConfig = DayConfig(
-            rv.dayWidth, rv.dayHeight, dayViewRes, dateClick,
+            rv.dayWidth, rv.dayHeight, dayViewRes,
+            { rv.dateClickListener?.invoke(it) },
             rv.dateViewBinder as DateViewBinder<ViewContainer>
         )
-
-        val monthHeaderBinder: MonthHeaderFooterBinder = { view, month -> rv.monthHeaderBinder?.invoke(view, month) }
-        val monthFooterBinder: MonthHeaderFooterBinder = { view, month -> rv.monthFooterBinder?.invoke(view, month) }
-
-        return MonthViewHolder(this, rootLayout, dayConfig, monthHeaderBinder, monthFooterBinder)
+        return MonthViewHolder(
+            this, rootLayout, dayConfig,
+            rv.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
+            rv.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
+        )
     }
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int, payloads: List<Any>) {

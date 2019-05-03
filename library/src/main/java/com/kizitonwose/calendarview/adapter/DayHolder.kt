@@ -26,27 +26,25 @@ class DayHolder(private val config: DayConfig) {
     var currentDay: CalendarDay? = null
 
     fun inflateDayView(parent: LinearLayout): View {
-        if (::dateView.isInitialized.not()) {
-            dateView = parent.inflate(config.dayViewRes).apply {
-                // We ensure the layout params of the supplied child view is
-                // MATCH_PARENT so it fills the parent dateViewBinder.
-                layoutParams = layoutParams.apply {
-                    height = ViewGroup.LayoutParams.MATCH_PARENT
-                    width = ViewGroup.LayoutParams.MATCH_PARENT
+        dateView = parent.inflate(config.dayViewRes).apply {
+            // We ensure the layout params of the supplied child view is
+            // MATCH_PARENT so it fills the parent dateViewBinder.
+            layoutParams = layoutParams.apply {
+                height = ViewGroup.LayoutParams.MATCH_PARENT
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+            }
+        }
+        containerView = FrameLayout(parent.context).apply {
+            setOnClickListener {
+                currentDay?.let { day ->
+                    config.dateClickListener(day)
                 }
             }
-            containerView = FrameLayout(parent.context).apply {
-                setOnClickListener {
-                    currentDay?.let { day ->
-                        config.dateClickListener(day)
-                    }
-                }
-                // We return this Layout as DayView which will be place in the WeekLayout(A LinearLayout)
-                // hence we use LinearLayout.LayoutParams and set the weight appropriately.
-                // The parent's wightSum is already set to 7 to accommodate seven week days.
-                layoutParams = LinearLayout.LayoutParams(config.width, config.height, 1F)
-                addView(dateView)
-            }
+            // We return this Layout as DayView which will be place in the WeekLayout(A LinearLayout)
+            // hence we use LinearLayout.LayoutParams and set the weight appropriately.
+            // The parent's wightSum is already set to 7 to accommodate seven week days.
+            layoutParams = LinearLayout.LayoutParams(config.width, config.height, 1F)
+            addView(dateView)
         }
         return containerView
     }
