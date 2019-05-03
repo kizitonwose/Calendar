@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_2_calendar_day.view.*
@@ -46,28 +49,34 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
         exTwoCalendar.setup(YearMonth.now(), YearMonth.now().plusMonths(10), daysOfWeek.first())
 
-        exTwoCalendar.dateViewBinder = { view, day ->
+        class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exTwoDayText
-            textView.text = day.date.dayOfMonth.toString()
+        }
+        exTwoCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+            override fun provide(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                val textView = container.textView
+                textView.text = day.date.dayOfMonth.toString()
 
-            if (day.owner == DayOwner.THIS_MONTH) {
-                textView.makeVisible()
-                when (day.date) {
-                    selectedDate -> {
-                        textView.setTextColorRes(R.color.example_2_white)
-                        textView.setBackgroundResource(R.drawable.example_2_selected_bg)
+                if (day.owner == DayOwner.THIS_MONTH) {
+                    textView.makeVisible()
+                    when (day.date) {
+                        selectedDate -> {
+                            textView.setTextColorRes(R.color.example_2_white)
+                            textView.setBackgroundResource(R.drawable.example_2_selected_bg)
+                        }
+                        today -> {
+                            textView.setTextColorRes(R.color.example_2_red)
+                            textView.background = null
+                        }
+                        else -> {
+                            textView.setTextColorRes(R.color.example_2_black)
+                            textView.background = null
+                        }
                     }
-                    today -> {
-                        textView.setTextColorRes(R.color.example_2_red)
-                        textView.background = null
-                    }
-                    else -> {
-                        textView.setTextColorRes(R.color.example_2_black)
-                        textView.background = null
-                    }
+                } else {
+                    textView.makeInVisible()
                 }
-            } else {
-                textView.makeInVisible()
             }
         }
 

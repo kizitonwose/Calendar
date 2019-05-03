@@ -13,6 +13,9 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
@@ -93,35 +96,43 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         exFiveCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
         exFiveCalendar.scrollToMonth(currentMonth)
 
-        exFiveCalendar.dateViewBinder = { view, day ->
+        class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exFiveDayText
-            val container = view.exFiveDayLayout
-            textView.text = day.date.dayOfMonth.toString()
-
+            val layout = view.exFiveDayLayout
             val flightTopView = view.exFiveDayFlightTop
             val flightBottomView = view.exFiveDayFlightBottom
+        }
+        exFiveCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+            override fun provide(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                val textView = container.textView
+                val layout = container.layout
+                textView.text = day.date.dayOfMonth.toString()
 
-            flightTopView.background = null
-            flightBottomView.background = null
+                val flightTopView = container.flightTopView
+                val flightBottomView = container.flightBottomView
 
-            if (day.owner == DayOwner.THIS_MONTH) {
-                textView.setTextColorRes(R.color.example_5_text_grey)
-                container.setBackgroundResource(if (selectedDate == day.date) R.drawable.example_5_selected_bg else 0)
+                flightTopView.background = null
+                flightBottomView.background = null
 
-                val flights = flights[day.date]
-                if (flights != null) {
-                    if (flights.count() == 1) {
-                        flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
-                    } else {
-                        flightTopView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
-                        flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[1].color))
+                if (day.owner == DayOwner.THIS_MONTH) {
+                    textView.setTextColorRes(R.color.example_5_text_grey)
+                    layout.setBackgroundResource(if (selectedDate == day.date) R.drawable.example_5_selected_bg else 0)
+
+                    val flights = flights[day.date]
+                    if (flights != null) {
+                        if (flights.count() == 1) {
+                            flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
+                        } else {
+                            flightTopView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
+                            flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[1].color))
+                        }
                     }
+                } else {
+                    textView.setTextColorRes(R.color.example_5_text_grey_light)
+                    layout.background = null
                 }
-            } else {
-                textView.setTextColorRes(R.color.example_5_text_grey_light)
-                container.background = null
             }
-
         }
 
         exFiveCalendar.dateClickListener = { day ->

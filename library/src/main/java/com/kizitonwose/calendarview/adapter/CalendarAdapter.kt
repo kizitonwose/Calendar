@@ -16,13 +16,20 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
 
 
-typealias DateClickListener = (CalendarDay) -> Unit
+open class ViewContainer(val view: View)
 
-typealias DateViewBinder = (view: View, currentDay: CalendarDay) -> Unit
+interface DateViewBinder<T : ViewContainer> {
+    fun provide(view: View): T
+    fun bind(container: T, day: CalendarDay)
+}
+
+
+typealias DateClickListener = (CalendarDay) -> Unit
 
 typealias MonthHeaderFooterBinder = (view: View, calendarMonth: CalendarMonth) -> Unit
 
 typealias MonthScrollListener = (calendarMonth: CalendarMonth) -> Unit
+
 
 open class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
@@ -103,9 +110,11 @@ open class CalendarAdapter(
 
         // We create internal binders instead of directly passing those in the CalendarView
         // so we can always call the updated properties in the CalenderView if they change.
-        val dateBinder: DateViewBinder = { view, day -> rv.dateViewBinder?.invoke(view, day) }
         val dateClick: DateClickListener = { rv.dateClickListener?.invoke(it) }
-        val dayConfig = DayConfig(rv.dayWidth, rv.dayHeight, dayViewRes, dateClick, dateBinder)
+        val dayConfig = DayConfig(
+            rv.dayWidth, rv.dayHeight, dayViewRes, dateClick,
+            rv.dateViewBinder as DateViewBinder<ViewContainer>
+        )
 
         val monthHeaderBinder: MonthHeaderFooterBinder = { view, month -> rv.monthHeaderBinder?.invoke(view, month) }
         val monthFooterBinder: MonthHeaderFooterBinder = { view, month -> rv.monthFooterBinder?.invoke(view, month) }
@@ -169,7 +178,7 @@ open class CalendarAdapter(
 
                 // Fixes issue where the calendar does not resize its height when in horizontal, paged mode and
                 // the `outDateStyle` is not `endOfGrid` hence the last row of a 5-row visible month is empty.
-                // We set such week row's container visibility to GONE in the WeekHolder but it seems the
+                // We set such week row's dateViewBinder visibility to GONE in the WeekHolder but it seems the
                 // RecyclerView accounts for the items in the immediate previous and next indices when
                 // calculating height and uses the tallest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next

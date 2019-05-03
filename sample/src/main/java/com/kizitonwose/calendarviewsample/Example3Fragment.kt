@@ -19,6 +19,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
@@ -137,33 +140,41 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             }
         }
 
-        exThreeCalendar.dateViewBinder = { view, day ->
+        class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exThreeDayText
             val dotView = view.exThreeDotView
-            textView.text = day.date.dayOfMonth.toString()
+        }
+        exThreeCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+            override fun provide(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                val textView = container.textView
+                val dotView = container.dotView
 
-            if (day.owner == DayOwner.THIS_MONTH) {
-                textView.makeVisible()
-                when (day.date) {
-                    today -> {
-                        textView.setTextColorRes(R.color.example_3_white)
-                        textView.setBackgroundResource(R.drawable.example_3_today_bg)
-                        dotView.makeInVisible()
+                textView.text = day.date.dayOfMonth.toString()
+
+                if (day.owner == DayOwner.THIS_MONTH) {
+                    textView.makeVisible()
+                    when (day.date) {
+                        today -> {
+                            textView.setTextColorRes(R.color.example_3_white)
+                            textView.setBackgroundResource(R.drawable.example_3_today_bg)
+                            dotView.makeInVisible()
+                        }
+                        selectedDate -> {
+                            textView.setTextColorRes(R.color.example_3_blue)
+                            textView.setBackgroundResource(R.drawable.example_3_selected_bg)
+                            dotView.makeInVisible()
+                        }
+                        else -> {
+                            textView.setTextColorRes(R.color.example_3_black)
+                            textView.background = null
+                            dotView.isVisible = events[day.date].orEmpty().isNotEmpty()
+                        }
                     }
-                    selectedDate -> {
-                        textView.setTextColorRes(R.color.example_3_blue)
-                        textView.setBackgroundResource(R.drawable.example_3_selected_bg)
-                        dotView.makeInVisible()
-                    }
-                    else -> {
-                        textView.setTextColorRes(R.color.example_3_black)
-                        textView.background = null
-                        dotView.isVisible = events[day.date].orEmpty().isNotEmpty()
-                    }
+                } else {
+                    textView.makeInVisible()
+                    dotView.makeInVisible()
                 }
-            } else {
-                textView.makeInVisible()
-                dotView.makeInVisible()
             }
         }
 

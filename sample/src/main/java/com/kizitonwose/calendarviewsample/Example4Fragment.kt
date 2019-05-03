@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
@@ -80,75 +83,83 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         exFourCalendar.setup(currentMonth, currentMonth.plusMonths(12), daysOfWeek.first())
         exFourCalendar.scrollToMonth(currentMonth)
 
-        exFourCalendar.dateViewBinder = { view, day ->
+
+        class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exFourDayText
             val roundBgView = view.exFourRoundBgView
+        }
+        exFourCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+            override fun provide(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                val textView = container.textView
+                val roundBgView = container.roundBgView
 
-            textView.background = null
-            roundBgView.makeInVisible()
+                textView.background = null
+                roundBgView.makeInVisible()
 
-            if (day.owner == DayOwner.THIS_MONTH) {
-                textView.text = day.day.toString()
+                if (day.owner == DayOwner.THIS_MONTH) {
+                    textView.text = day.day.toString()
 
-                if (day.date.isBefore(today)) {
-                    textView.setTextColorRes(R.color.example_4_grey_past)
+                    if (day.date.isBefore(today)) {
+                        textView.setTextColorRes(R.color.example_4_grey_past)
+                    } else {
+                        when {
+                            startDate == day.date && endDate == null -> {
+                                textView.setTextColorRes(R.color.white)
+                                roundBgView.makeVisible()
+                                roundBgView.setBackgroundResource(R.drawable.example_4_single_selected_bg)
+                            }
+                            day.date == startDate -> {
+                                textView.setTextColorRes(R.color.white)
+                                updateDrawableRadius(textView)
+                                textView.background = startBackground
+                            }
+                            startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
+                                textView.setTextColorRes(R.color.white)
+                                textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                            }
+                            day.date == endDate -> {
+                                textView.setTextColorRes(R.color.white)
+                                updateDrawableRadius(textView)
+                                textView.background = endBackground
+                            }
+                            day.date == today -> {
+                                textView.setTextColorRes(R.color.example_4_grey)
+                                roundBgView.makeVisible()
+                                roundBgView.setBackgroundResource(R.drawable.example_4_today_bg)
+                            }
+                            else -> textView.setTextColorRes(R.color.example_4_grey)
+                        }
+                    }
                 } else {
-                    when {
-                        startDate == day.date && endDate == null -> {
-                            textView.setTextColorRes(R.color.white)
-                            roundBgView.makeVisible()
-                            roundBgView.setBackgroundResource(R.drawable.example_4_single_selected_bg)
-                        }
-                        day.date == startDate -> {
-                            textView.setTextColorRes(R.color.white)
-                            updateDrawableRadius(textView)
-                            textView.background = startBackground
-                        }
-                        startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
-                            textView.setTextColorRes(R.color.white)
+                    textView.text = null
+
+                    // <--- This part is to make the coloured selection background continuous across various months ---->
+
+                    val startDate = startDate
+                    val endDate = endDate
+                    if (startDate != null && endDate != null) {
+                        // Mimic selection of inDates that are less than the startDate.
+                        // Example: When 26 Feb 2019 is startDate and 5 Mar 2019 is endDate,
+                        // this makes the inDates in Mar 2019 for 24 & 25 Feb 2019 look selected.
+                        if ((day.owner == DayOwner.PREVIOUS_MONTH
+                                    && startDate.monthValue == day.date.monthValue
+                                    && endDate.monthValue != day.date.monthValue) ||
+                            // Mimic selection of outDates that are greater than the endDate.
+                            // Example: When 25 Apr 2019 is startDate and 2 May 2019 is endDate,
+                            // this makes the outDates in Apr 2019 for 3 & 4 May 2019 look selected.
+                            (day.owner == DayOwner.NEXT_MONTH
+                                    && startDate.monthValue != day.date.monthValue
+                                    && endDate.monthValue == day.date.monthValue) ||
+
+                            // Mimic selection of in and out dates of intermediate
+                            // months if the selection spans across multiple months.
+                            (startDate < day.date && endDate > day.date
+                                    && startDate.monthValue != day.date.monthValue
+                                    && endDate.monthValue != day.date.monthValue)
+                        ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
-                        day.date == endDate -> {
-                            textView.setTextColorRes(R.color.white)
-                            updateDrawableRadius(textView)
-                            textView.background = endBackground
-                        }
-                        day.date == today -> {
-                            textView.setTextColorRes(R.color.example_4_grey)
-                            roundBgView.makeVisible()
-                            roundBgView.setBackgroundResource(R.drawable.example_4_today_bg)
-                        }
-                        else -> textView.setTextColorRes(R.color.example_4_grey)
-                    }
-                }
-            } else {
-                textView.text = null
-
-                // <--- This part is to make the coloured selection background continuous across various months ---->
-
-                val startDate = startDate
-                val endDate = endDate
-                if (startDate != null && endDate != null) {
-                    // Mimic selection of inDates that are less than the startDate.
-                    // Example: When 26 Feb 2019 is startDate and 5 Mar 2019 is endDate,
-                    // this makes the inDates in Mar 2019 for 24 & 25 Feb 2019 look selected.
-                    if ((day.owner == DayOwner.PREVIOUS_MONTH
-                                && startDate.monthValue == day.date.monthValue
-                                && endDate.monthValue != day.date.monthValue) ||
-                        // Mimic selection of outDates that are greater than the endDate.
-                        // Example: When 25 Apr 2019 is startDate and 2 May 2019 is endDate,
-                        // this makes the outDates in Apr 2019 for 3 & 4 May 2019 look selected.
-                        (day.owner == DayOwner.NEXT_MONTH
-                                && startDate.monthValue != day.date.monthValue
-                                && endDate.monthValue == day.date.monthValue) ||
-
-                        // Mimic selection of in and out dates of intermediate
-                        // months if the selection spans across multiple months.
-                        (startDate < day.date && endDate > day.date
-                                && startDate.monthValue != day.date.monthValue
-                                && endDate.monthValue != day.date.monthValue)
-                    ) {
-                        textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                     }
                 }
             }

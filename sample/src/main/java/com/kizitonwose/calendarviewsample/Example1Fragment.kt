@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
+import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
@@ -47,29 +50,35 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         exOneCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
         exOneCalendar.scrollToMonth(currentMonth)
 
-
-        exOneCalendar.dateViewBinder = { view, day ->
+        class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exOneDayText
-            textView.text = day.date.dayOfMonth.toString()
-            if (day.owner == DayOwner.THIS_MONTH) {
-                when {
-                    selectedDates.contains(day.date) -> {
-                        textView.setTextColorRes(R.color.example_1_bg)
-                        textView.setBackgroundResource(R.drawable.example_1_selected_bg)
+        }
+        exOneCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+            override fun provide(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                val textView = container.textView
 
+                textView.text = day.date.dayOfMonth.toString()
+                if (day.owner == DayOwner.THIS_MONTH) {
+                    when {
+                        selectedDates.contains(day.date) -> {
+                            textView.setTextColorRes(R.color.example_1_bg)
+                            textView.setBackgroundResource(R.drawable.example_1_selected_bg)
+
+                        }
+                        today == day.date -> {
+                            textView.setTextColorRes(R.color.example_1_white)
+                            textView.setBackgroundResource(R.drawable.example_1_today_bg)
+                        }
+                        else -> {
+                            textView.setTextColorRes(R.color.example_1_white)
+                            textView.background = null
+                        }
                     }
-                    today == day.date -> {
-                        textView.setTextColorRes(R.color.example_1_white)
-                        textView.setBackgroundResource(R.drawable.example_1_today_bg)
-                    }
-                    else -> {
-                        textView.setTextColorRes(R.color.example_1_white)
-                        textView.background = null
-                    }
+                } else {
+                    textView.setTextColorRes(R.color.example_1_white_light)
+                    textView.background = null
                 }
-            } else {
-                textView.setTextColorRes(R.color.example_1_white_light)
-                textView.background = null
             }
         }
 

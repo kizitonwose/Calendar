@@ -14,12 +14,14 @@ data class DayConfig(
     @Px val height: Int,
     @LayoutRes val dayViewRes: Int,
     val dateClickListener: DateClickListener,
-    val dateViewBinder: DateViewBinder
+    val viewBinder: DateViewBinder<ViewContainer>
 )
 
 class DayHolder(private val config: DayConfig) {
+
     private lateinit var dateView: View
     private lateinit var containerView: FrameLayout
+    private lateinit var viewContainer: ViewContainer
 
     var currentDay: CalendarDay? = null
 
@@ -27,7 +29,7 @@ class DayHolder(private val config: DayConfig) {
         if (::dateView.isInitialized.not()) {
             dateView = parent.inflate(config.dayViewRes).apply {
                 // We ensure the layout params of the supplied child view is
-                // MATCH_PARENT so it fills the parent container.
+                // MATCH_PARENT so it fills the parent dateViewBinder.
                 layoutParams = layoutParams.apply {
                     height = ViewGroup.LayoutParams.MATCH_PARENT
                     width = ViewGroup.LayoutParams.MATCH_PARENT
@@ -51,7 +53,10 @@ class DayHolder(private val config: DayConfig) {
 
     fun bindDayView(currentDay: CalendarDay) {
         this.currentDay = currentDay
-        config.dateViewBinder(dateView, currentDay)
+        if (::viewContainer.isInitialized.not()){
+            viewContainer = config.viewBinder.provide(dateView)
+        }
+        config.viewBinder.bind(viewContainer, currentDay)
     }
 
     fun reloadView() {

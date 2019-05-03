@@ -15,11 +15,11 @@ import org.threeten.bp.YearMonth
 
 class CalendarView : RecyclerView {
 
+    lateinit var dateViewBinder: DateViewBinder<*>
+
     private lateinit var adapter: CalendarAdapter
 
     var dateClickListener: DateClickListener? = null
-
-    var dateViewBinder: DateViewBinder? = null
 
     var monthHeaderBinder: MonthHeaderFooterBinder? = null
 

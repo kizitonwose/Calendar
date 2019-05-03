@@ -13,6 +13,9 @@ import android.widget.TextView
 import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarview.adapter.DateViewBinder
+import com.kizitonwose.calendarview.adapter.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_6_calendar_day.view.*
@@ -50,23 +53,28 @@ class Example6Fragment : BaseFragment(), HasBackButton {
         exSixCalendar.dayHeight = (dayWidth * 1.5).toInt()
 
 
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val textView = view.exSixDayText
+        }
+        exSixCalendar.dateViewBinder = object : DateViewBinder<DayViewContainer> {
+            override fun provide(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                val textView = container.textView
+
+                if (day.owner == DayOwner.THIS_MONTH) {
+                    textView.text = day.date.dayOfMonth.toString()
+                    textView.makeVisible()
+                } else {
+                    textView.makeInVisible()
+                }
+            }
+        }
+
         val daysOfWeek = daysOfWeekFromLocale()
         val currentMonth = YearMonth.now()
         exSixCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
         exSixCalendar.scrollToMonth(currentMonth)
         exSixCalendar.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.HORIZONTAL))
-
-        exSixCalendar.dateViewBinder = { view, day ->
-            val textView = view.exSixDayText
-
-            if (day.owner == DayOwner.THIS_MONTH) {
-                textView.text = day.date.dayOfMonth.toString()
-                textView.makeVisible()
-            } else {
-                textView.makeInVisible()
-            }
-        }
-
 
         exSixCalendar.monthHeaderBinder = { view, month ->
             view.exSixMonthText.text = titleFormatter.format(month.yearMonth)
@@ -82,5 +90,6 @@ class Example6Fragment : BaseFragment(), HasBackButton {
                 }
             }
         }
+
     }
 }
