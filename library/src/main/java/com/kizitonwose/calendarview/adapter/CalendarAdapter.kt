@@ -125,7 +125,7 @@ open class CalendarAdapter(
             DayOwner.PREVIOUS_MONTH -> day.date.yearMonth.next
             DayOwner.NEXT_MONTH -> day.date.yearMonth.previous
         }
-        val position = months.indexOfFirst { it.yearMonth == yearMonth }
+        val position = getAdapterPosition(yearMonth)
         if (position != -1) {
             notifyItemChanged(position, day)
         }
