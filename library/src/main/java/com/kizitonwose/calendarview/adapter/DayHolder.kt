@@ -13,8 +13,8 @@ data class DayConfig(
     @Px val width: Int,
     @Px val height: Int,
     @LayoutRes val dayViewRes: Int,
-    val dateClickListener: DateClickListener?,
-    val dateViewBinder: DateViewBinder?
+    val dateClickListener: DateClickListener,
+    val dateViewBinder: DateViewBinder
 )
 
 class DayHolder(private val config: DayConfig) {
@@ -36,7 +36,7 @@ class DayHolder(private val config: DayConfig) {
             containerView = FrameLayout(parent.context).apply {
                 setOnClickListener {
                     currentDay?.let { day ->
-                        config.dateClickListener?.invoke(day)
+                        config.dateClickListener(day)
                     }
                 }
                 // We return this Layout as DayView which will be place in the WeekLayout(A LinearLayout)
@@ -51,7 +51,7 @@ class DayHolder(private val config: DayConfig) {
 
     fun bindDayView(currentDay: CalendarDay) {
         this.currentDay = currentDay
-        config.dateViewBinder?.invoke(dateView, currentDay)
+        config.dateViewBinder(dateView, currentDay)
     }
 
     fun reloadView() {

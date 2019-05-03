@@ -101,11 +101,19 @@ open class CalendarAdapter(
             rootLayout.addView(monthFooterView)
         }
 
-        val dayConfig = DayConfig(rv.dayWidth, rv.dayHeight, dayViewRes, rv.dateClickListener, rv.dateViewBinder)
-        return MonthViewHolder(this, rootLayout, dayConfig, rv.monthHeaderBinder, rv.monthFooterBinder)
+        // We create internal binders instead of directly passing those in the CalendarView
+        // so we can always call the updated properties in the CalenderView if they change.
+        val dateBinder: DateViewBinder = { view, day -> rv.dateViewBinder?.invoke(view, day) }
+        val dateClick: DateClickListener = { rv.dateClickListener?.invoke(it) }
+        val dayConfig = DayConfig(rv.dayWidth, rv.dayHeight, dayViewRes, dateClick, dateBinder)
+
+        val monthHeaderBinder: MonthHeaderFooterBinder = { view, month -> rv.monthHeaderBinder?.invoke(view, month) }
+        val monthFooterBinder: MonthHeaderFooterBinder = { view, month -> rv.monthFooterBinder?.invoke(view, month) }
+
+        return MonthViewHolder(this, rootLayout, dayConfig, monthHeaderBinder, monthFooterBinder)
     }
 
-    override fun onBindViewHolder(holder: MonthViewHolder, position: Int, payloads: MutableList<Any>) {
+    override fun onBindViewHolder(holder: MonthViewHolder, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
