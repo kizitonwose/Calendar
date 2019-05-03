@@ -105,6 +105,16 @@ open class CalendarAdapter(
         return MonthViewHolder(this, rootLayout, dayConfig, rv.monthHeaderBinder, rv.monthFooterBinder)
     }
 
+    override fun onBindViewHolder(holder: MonthViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            payloads.forEach {
+                holder.reloadDay(it as CalendarDay)
+            }
+        }
+    }
+
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int) {
         holder.bindMonth(getItem(position))
     }
@@ -112,15 +122,7 @@ open class CalendarAdapter(
     fun reloadDay(day: CalendarDay) {
         val adapterPos = months.indexOfFirst { it.weekDays.flatten().contains(day) }
         if (adapterPos != -1) {
-            // Notify the adapter to reload the month if we cannot find the ViewHolder.
-            // `findViewHolderForAdapterPosition` can return null if the month is not
-            // currently visible on the screen.
-            val viewHolder = rv.findViewHolderForAdapterPosition(adapterPos)
-            if (viewHolder != null) {
-                (viewHolder as MonthViewHolder).reloadDay(day)
-            } else {
-                notifyItemChanged(adapterPos)
-            }
+            notifyItemChanged(adapterPos, day)
         }
     }
 
