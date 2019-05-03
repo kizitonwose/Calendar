@@ -59,7 +59,7 @@ class Example6Fragment : BaseFragment(), HasBackButton {
             val textView = view.exSixDayText
         }
         exSixCalendar.dayBinder = object : DayBinder<DayViewContainer> {
-            override fun provide(view: View) = DayViewContainer(view)
+            override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView
 
@@ -83,7 +83,7 @@ class Example6Fragment : BaseFragment(), HasBackButton {
             val legendLayout = view.legendLayout
         }
         exSixCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun provide(view: View) = MonthViewContainer(view)
+            override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 container.textView.text = titleFormatter.format(month.yearMonth)
                 // Setup each header day text if we have not done that already.

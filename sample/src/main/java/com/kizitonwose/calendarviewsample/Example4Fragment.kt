@@ -91,7 +91,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val roundBgView = view.exFourRoundBgView
         }
         exFourCalendar.dayBinder = object : DayBinder<DayViewContainer> {
-            override fun provide(view: View) = DayViewContainer(view)
+            override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView
                 val roundBgView = container.roundBgView
@@ -189,7 +189,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val textView = view.exFourHeaderText
         }
         exFourCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun provide(view: View) = MonthViewContainer(view)
+            override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 val monthTitle = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
                 container.textView.text = monthTitle

@@ -105,7 +105,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             val flightBottomView = view.exFiveDayFlightBottom
         }
         exFiveCalendar.dayBinder = object : DayBinder<DayViewContainer> {
-            override fun provide(view: View) = DayViewContainer(view)
+            override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView
                 val layout = container.layout
@@ -153,7 +153,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             val legendLayout = view.legendLayout
         }
         exFiveCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun provide(view: View) = MonthViewContainer(view)
+            override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 // Setup each header day text if we have not done that already.
                 if (container.legendLayout.tag == null) {

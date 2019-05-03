@@ -54,7 +54,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
             val textView = view.exOneDayText
         }
         exOneCalendar.dayBinder = object : DayBinder<DayViewContainer> {
-            override fun provide(view: View) = DayViewContainer(view)
+            override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView
 

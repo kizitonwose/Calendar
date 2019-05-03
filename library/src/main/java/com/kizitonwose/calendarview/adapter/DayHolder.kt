@@ -52,7 +52,7 @@ class DayHolder(private val config: DayConfig) {
     fun bindDayView(currentDay: CalendarDay) {
         this.currentDay = currentDay
         if (::viewContainer.isInitialized.not()){
-            viewContainer = config.viewBinder.provide(dateView)
+            viewContainer = config.viewBinder.create(dateView)
         }
         config.viewBinder.bind(viewContainer, currentDay)
     }

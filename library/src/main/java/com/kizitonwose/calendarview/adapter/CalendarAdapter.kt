@@ -19,18 +19,18 @@ import org.threeten.bp.YearMonth
 open class ViewContainer(val view: View)
 
 interface DayBinder<T : ViewContainer> {
-    fun provide(view: View): T
+    fun create(view: View): T
     fun bind(container: T, day: CalendarDay)
 }
 
 interface MonthHeaderFooterBinder<T : ViewContainer> {
-    fun provide(view: View): T
+    fun create(view: View): T
     fun bind(container: T, month: CalendarMonth)
 }
 
 typealias DateClickListener = (CalendarDay) -> Unit
 
-typealias MonthScrollListener = (calendarMonth: CalendarMonth) -> Unit
+typealias MonthScrollListener = (CalendarMonth) -> Unit
 
 
 open class CalendarAdapter(
@@ -113,11 +113,13 @@ open class CalendarAdapter(
         // We create an internal click listener instead of directly passing
         // the one in the CalendarView so we can always call the updated
         // instance in the CalenderView if it changes.
+        @Suppress("UNCHECKED_CAST")
         val dayConfig = DayConfig(
             rv.dayWidth, rv.dayHeight, dayViewRes,
             { rv.dateClickListener?.invoke(it) },
             rv.dayBinder as DayBinder<ViewContainer>
         )
+        @Suppress("UNCHECKED_CAST")
         return MonthViewHolder(
             this, rootLayout, dayConfig,
             rv.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,

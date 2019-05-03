@@ -44,13 +44,13 @@ class MonthViewHolder constructor(
         this.month = month
         headerView?.let {
             if (headerContainer == null) {
-                headerContainer = monthHeaderBinder?.provide(it)
+                headerContainer = monthHeaderBinder?.create(it)
             }
             monthHeaderBinder?.bind(headerContainer!!, month)
         }
         footerView?.let {
             if (footerContainer == null) {
-                footerContainer = monthFooterBinder?.provide(it)
+                footerContainer = monthFooterBinder?.create(it)
             }
             monthFooterBinder?.bind(footerContainer!!, month)
         }

@@ -55,7 +55,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val textView = view.exTwoDayText
         }
         exTwoCalendar.dayBinder = object : DayBinder<DayViewContainer> {
-            override fun provide(view: View) = DayViewContainer(view)
+            override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView
                 textView.text = day.date.dayOfMonth.toString()
@@ -101,7 +101,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val textView = view.exTwoHeaderText
         }
         exTwoCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun provide(view: View) = MonthViewContainer(view)
+            override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 @SuppressLint("SetTextI18n") // Concatenation warning for `setText` call.
                 container.textView.text = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"

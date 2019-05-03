@@ -147,7 +147,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             val dotView = view.exThreeDotView
         }
         exThreeCalendar.dayBinder = object : DayBinder<DayViewContainer> {
-            override fun provide(view: View) = DayViewContainer(view)
+            override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView
                 val dotView = container.dotView
@@ -202,7 +202,7 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             val legendLayout = view.legendLayout
         }
         exThreeCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun provide(view: View) = MonthViewContainer(view)
+            override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 // Setup each header day text if we have not done that already.
                 if (container.legendLayout.tag == null) {
