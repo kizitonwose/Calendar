@@ -32,17 +32,16 @@ typealias DateClickListener = (CalendarDay) -> Unit
 
 typealias MonthScrollListener = (CalendarMonth) -> Unit
 
-
 open class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
     @LayoutRes private val monthHeaderRes: Int,
     @LayoutRes private val monthFooterRes: Int,
-    private val config: CalendarConfig
+    private val config: CalendarConfig,
+    startMonth: YearMonth,
+    endMonth: YearMonth,
+    firstDayOfWeek: DayOfWeek,
+    private val rv: CalendarView
 ) : RecyclerView.Adapter<MonthViewHolder>() {
-
-    private lateinit var rv: CalendarView
-
-    private lateinit var firstDayOfWeek: DayOfWeek
 
     private val months = mutableListOf<CalendarMonth>()
 
@@ -54,8 +53,18 @@ open class CalendarAdapter(
     var headerViewId = View.generateViewId()
     var footerViewId = View.generateViewId()
 
+    init {
+        val startCalMonth = CalendarMonth(startMonth, config, firstDayOfWeek)
+        val endCalMonth = CalendarMonth(endMonth, config, firstDayOfWeek)
+        var lastCalMonth = startCalMonth
+        while (lastCalMonth < endCalMonth) {
+            months.add(lastCalMonth)
+            lastCalMonth = lastCalMonth.next
+        }
+        months.add(endCalMonth)
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        rv = recyclerView as CalendarView
         rv.post { findVisibleMonthAndNotify() }
     }
 
@@ -155,20 +164,6 @@ open class CalendarAdapter(
 
     fun reloadMonth(month: YearMonth) {
         notifyItemChanged(getAdapterPosition(month))
-    }
-
-    fun setupDates(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
-        this.firstDayOfWeek = firstDayOfWeek
-        val startCalMonth = CalendarMonth(startMonth, config, firstDayOfWeek)
-        val endCalMonth = CalendarMonth(endMonth, config, firstDayOfWeek)
-        var lastCalMonth = startCalMonth
-        months.clear()
-        while (lastCalMonth < endCalMonth) {
-            months.add(lastCalMonth)
-            lastCalMonth = lastCalMonth.next
-        }
-        months.add(endCalMonth)
-        notifyDataSetChanged()
     }
 
     private var visibleMonth: CalendarMonth? = null

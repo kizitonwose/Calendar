@@ -17,8 +17,6 @@ class CalendarView : RecyclerView {
 
     lateinit var dayBinder: DayBinder<*>
 
-    private lateinit var adapter: CalendarAdapter
-
     var dateClickListener: DateClickListener? = null
 
     var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
@@ -37,37 +35,22 @@ class CalendarView : RecyclerView {
         init(attrs, defStyleAttr, 0)
     }
 
+    private var dayViewRes: Int = 0
+    private var monthHeaderRes: Int = 0
+    private var monthFooterRes: Int = 0
+    private var orientation = RecyclerView.VERTICAL
+    private var scrollMode = ScrollMode.CONTINUOUS
+    private var outDateStyle = OutDateStyle.END_OF_ROW
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
-        val dayViewRes = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, 0)
-        val monthHeaderRes = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, 0)
-        val monthFooterRes = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, 0)
-        val orientation = a.getInt(R.styleable.CalendarView_cv_orientation, RecyclerView.VERTICAL)
-        val scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, 0)]
-        val outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, 0)]
+        dayViewRes = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewRes)
+        monthHeaderRes = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderRes)
+        monthFooterRes = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterRes)
+        orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
+        scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
+        outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
         a.recycle()
-
-        AndroidThreeTen.init(context) // The library checks for multiple calls.
-
-        clipToPadding = false
-        val config = CalendarConfig(outDateStyle, scrollMode, orientation)
-        layoutManager = CalendarLayoutManager(this, config)
-        adapter = CalendarAdapter(dayViewRes, monthHeaderRes, monthFooterRes, config)
-        setAdapter(adapter)
-
-        if (scrollMode == ScrollMode.PAGED) {
-            PagerSnapHelper().attachToRecyclerView(this)
-        }
-
-        addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    adapter.findVisibleMonthAndNotify()
-                }
-            }
-        })
     }
 
     @Px
@@ -115,6 +98,9 @@ class CalendarView : RecyclerView {
     private val calendarLayoutManager: CalendarLayoutManager
         get() = layoutManager as CalendarLayoutManager
 
+    private val calendarAdapter: CalendarAdapter
+        get() = adapter as CalendarAdapter
+
     private fun invalidateViewHolders() {
         // This does not remove visible views.
         // recycledViewPool.clear()
@@ -123,7 +109,7 @@ class CalendarView : RecyclerView {
         // removeAndRecycleViews()
 
         val state = calendarLayoutManager.onSaveInstanceState()
-        setAdapter(adapter)
+        adapter = adapter
         calendarLayoutManager.onRestoreInstanceState(state)
     }
 
@@ -144,7 +130,7 @@ class CalendarView : RecyclerView {
     }
 
     fun reloadDay(day: CalendarDay) {
-        adapter.reloadDay(day)
+        calendarAdapter.reloadDay(day)
     }
 
     fun reloadDate(date: LocalDate) {
@@ -158,18 +144,40 @@ class CalendarView : RecyclerView {
     }
 
     fun reloadMonth(month: YearMonth) {
-        adapter.reloadMonth(month)
+        calendarAdapter.reloadMonth(month)
     }
 
     fun reloadCalendar() {
-        adapter.notifyDataSetChanged()
-    }
-
-    fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
-        adapter.setupDates(startMonth, endMonth, firstDayOfWeek)
+        calendarAdapter.notifyDataSetChanged()
     }
 
     fun getFirstVisibleMonth(): CalendarMonth? {
-        return adapter.getFirstVisibleMonth()
+        return calendarAdapter.getFirstVisibleMonth()
+    }
+
+    fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
+        AndroidThreeTen.init(context) // The library checks for multiple calls.
+
+        val config = CalendarConfig(outDateStyle, scrollMode, orientation)
+        if (layoutManager == null) {
+            clipToPadding = false
+            layoutManager = CalendarLayoutManager(this, config)
+
+            if (scrollMode == ScrollMode.PAGED) {
+                PagerSnapHelper().attachToRecyclerView(this)
+            }
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        calendarAdapter.findVisibleMonthAndNotify()
+                    }
+                }
+            })
+        }
+        adapter = CalendarAdapter(
+            dayViewRes, monthHeaderRes, monthFooterRes, config,
+            startMonth, endMonth, firstDayOfWeek, this
+        )
     }
 }
