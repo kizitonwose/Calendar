@@ -108,9 +108,10 @@ class CalendarView : RecyclerView {
         // This removes all views but is internal.
         // removeAndRecycleViews()
 
-        val state = calendarLayoutManager.onSaveInstanceState()
+        if (adapter == null || layoutManager == null) return
+        val state = layoutManager?.onSaveInstanceState()
         adapter = adapter
-        calendarLayoutManager.onRestoreInstanceState(state)
+        layoutManager?.onRestoreInstanceState(state)
     }
 
     fun scrollToMonth(month: YearMonth) {
