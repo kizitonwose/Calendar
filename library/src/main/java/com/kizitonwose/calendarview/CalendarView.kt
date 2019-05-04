@@ -177,7 +177,7 @@ class CalendarView : RecyclerView {
         }
         adapter = CalendarAdapter(
             dayViewRes, monthHeaderRes, monthFooterRes, config,
-            startMonth, endMonth, firstDayOfWeek, this
+            this, startMonth, endMonth, firstDayOfWeek
         )
     }
 }

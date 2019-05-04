@@ -15,14 +15,14 @@ import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class CalendarLayoutManager(private val recyclerView: CalendarView, private val config: CalendarConfig) :
-    LinearLayoutManager(recyclerView.context, config.orientation, false) {
+class CalendarLayoutManager(private val calView: CalendarView, private val config: CalendarConfig) :
+    LinearLayoutManager(calView.context, config.orientation, false) {
 
     val adapter: CalendarAdapter
-        get() = recyclerView.adapter as CalendarAdapter
+        get() = calView.adapter as CalendarAdapter
 
     val context: Context
-        get() = recyclerView.context
+        get() = calView.context
 
     fun scrollToMonth(month: YearMonth) {
         scrollToPosition(adapter.getAdapterPosition(month))
@@ -45,12 +45,12 @@ class CalendarLayoutManager(private val recyclerView: CalendarView, private val 
     fun scrollToDate(date: LocalDate) {
         scrollToMonth(date.yearMonth)
         if (config.scrollMode == ScrollMode.PAGED) return
-        recyclerView.post {
+        calView.post {
             val day = CalendarDay(date, DayOwner.THIS_MONTH)
             val monthPosition = adapter.getAdapterPosition(date.yearMonth)
             if (monthPosition != -1) {
                 // We already scrolled to this position so findViewHolder should not return null.
-                val viewHolder = recyclerView.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
+                val viewHolder = calView.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
                 val offset = calculateOffset(day, monthPosition, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
             }

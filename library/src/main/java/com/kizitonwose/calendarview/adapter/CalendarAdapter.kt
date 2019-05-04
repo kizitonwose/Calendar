@@ -37,10 +37,10 @@ open class CalendarAdapter(
     @LayoutRes private val monthHeaderRes: Int,
     @LayoutRes private val monthFooterRes: Int,
     private val config: CalendarConfig,
+    private val calView: CalendarView,
     startMonth: YearMonth,
     endMonth: YearMonth,
-    firstDayOfWeek: DayOfWeek,
-    private val rv: CalendarView
+    firstDayOfWeek: DayOfWeek
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
     private val months = mutableListOf<CalendarMonth>()
@@ -65,7 +65,7 @@ open class CalendarAdapter(
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        rv.post { findVisibleMonthAndNotify() }
+        calView.post { findVisibleMonthAndNotify() }
     }
 
     private fun getItem(position: Int): CalendarMonth = months[position]
@@ -81,8 +81,8 @@ open class CalendarAdapter(
             )
             orientation = LinearLayout.VERTICAL
             setPaddingRelative(
-                rv.monthPaddingStart, rv.monthPaddingTop,
-                rv.monthPaddingEnd, rv.monthPaddingBottom
+                calView.monthPaddingStart, calView.monthPaddingTop,
+                calView.monthPaddingEnd, calView.monthPaddingBottom
             )
             id = rootViewId
         }
@@ -124,15 +124,15 @@ open class CalendarAdapter(
         // instance in the CalenderView if it changes.
         @Suppress("UNCHECKED_CAST")
         val dayConfig = DayConfig(
-            rv.dayWidth, rv.dayHeight, dayViewRes,
-            { rv.dateClickListener?.invoke(it) },
-            rv.dayBinder as DayBinder<ViewContainer>
+            calView.dayWidth, calView.dayHeight, dayViewRes,
+            { calView.dateClickListener?.invoke(it) },
+            calView.dayBinder as DayBinder<ViewContainer>
         )
         @Suppress("UNCHECKED_CAST")
         return MonthViewHolder(
             this, rootLayout, dayConfig,
-            rv.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
-            rv.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
+            calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
+            calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
         )
     }
 
@@ -169,12 +169,12 @@ open class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun findVisibleMonthAndNotify() {
-        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        val visibleItemPos = (calView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
             if (visibleMonth != this.visibleMonth) {
                 this.visibleMonth = visibleMonth
-                rv.monthScrollListener?.invoke(visibleMonth)
+                calView.monthScrollListener?.invoke(visibleMonth)
 
                 // Fixes issue where the calendar does not resize its height when in horizontal, paged mode and
                 // the `outDateStyle` is not `endOfGrid` hence the last row of a 5-row visible month is empty.
@@ -186,17 +186,17 @@ open class CalendarAdapter(
                 if (config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
                     if (calWrapsHeight == null) {
                         // We modify the layoutParams so we save the initial value set by the user.
-                        calWrapsHeight = rv.layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT
+                        calWrapsHeight = calView.layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT
                     }
                     if (calWrapsHeight!!.not()) return // Bug only happens when the CalenderView wraps its height.
-                    val visibleVH = rv.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
+                    val visibleVH = calView.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
                     val newHeight = visibleVH.headerView?.height.orZero() +
                             // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
                             // So we calculate it again by checking the number of visible(non-empty) rows.
-                            visibleMonth.weekDays.takeWhile { it.isNotEmpty() }.size * rv.dayHeight +
+                            visibleMonth.weekDays.takeWhile { it.isNotEmpty() }.size * calView.dayHeight +
                             visibleVH.footerView?.height.orZero()
-                    if (rv.layoutParams.height != newHeight)
-                        rv.layoutParams = rv.layoutParams.apply {
+                    if (calView.layoutParams.height != newHeight)
+                        calView.layoutParams = calView.layoutParams.apply {
                             this.height = newHeight
                         }
                 }
@@ -209,7 +209,7 @@ open class CalendarAdapter(
     }
 
     fun getFirstVisibleMonth(): CalendarMonth? {
-        val visibleItemPos = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        val visibleItemPos = (calView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             return months[visibleItemPos]
         }
