@@ -32,7 +32,7 @@ typealias DateClickListener = (CalendarDay) -> Unit
 
 typealias MonthScrollListener = (CalendarMonth) -> Unit
 
-open class CalendarAdapter(
+class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
     @LayoutRes private val monthHeaderRes: Int,
     @LayoutRes private val monthFooterRes: Int,
@@ -54,6 +54,7 @@ open class CalendarAdapter(
     var footerViewId = View.generateViewId()
 
     init {
+        setHasStableIds(true)
         val startCalMonth = CalendarMonth(startMonth, config, firstDayOfWeek)
         val endCalMonth = CalendarMonth(endMonth, config, firstDayOfWeek)
         var lastCalMonth = startCalMonth
@@ -69,6 +70,8 @@ open class CalendarAdapter(
     }
 
     private fun getItem(position: Int): CalendarMonth = months[position]
+
+    override fun getItemId(position: Int): Long = getItem(position).yearMonth.hashCode().toLong()
 
     override fun getItemCount(): Int = months.size
 

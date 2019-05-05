@@ -84,7 +84,9 @@ class CalendarMonth internal constructor(
         get() = CalendarMonth(yearMonth.next, config, firstDayOfWeek)
 
 
-    override fun compareTo(other: CalendarMonth): Int {
-        return yearMonth.compareTo(other.yearMonth)
-    }
+    override fun hashCode(): Int = yearMonth.hashCode()
+
+    override fun equals(other: Any?): Boolean = yearMonth == other
+
+    override fun compareTo(other: CalendarMonth): Int = yearMonth.compareTo(other.yearMonth)
 }
