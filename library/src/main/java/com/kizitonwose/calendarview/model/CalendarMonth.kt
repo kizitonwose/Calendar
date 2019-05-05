@@ -14,8 +14,7 @@ class CalendarMonth internal constructor(
     val yearMonth: YearMonth,
     private val config: CalendarConfig,
     private val firstDayOfWeek: DayOfWeek
-) :
-    Comparable<CalendarMonth>, Serializable {
+) : Comparable<CalendarMonth>, Serializable {
 
     val year: Int = yearMonth.year
     val month: Int = yearMonth.month.value

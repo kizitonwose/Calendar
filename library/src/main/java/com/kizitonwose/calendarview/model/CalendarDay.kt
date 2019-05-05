@@ -13,9 +13,9 @@ data class CalendarDay internal constructor(val date: LocalDate, val owner: DayO
         return "CalendarDay { date =  $date, owner = $owner}"
     }
 
-
     override fun compareTo(other: CalendarDay): Int {
-        return date.compareTo(other.date)
+        throw UnsupportedOperationException("Compare using the `date` parameter instead. " +
+                "Out and In dates can have the same date values as CalendarDay in another month.")
     }
 
     override fun equals(other: Any?): Boolean {
