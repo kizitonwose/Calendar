@@ -137,7 +137,8 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 } else {
 
                     // This part is to make the coloured selection background continuous
-                    // on the blank in and out dates across various months.
+                    // on the blank in and out dates across various months and also on dates(months)
+                    // between the start and end dates if the selection spans across multiple months.
 
                     val startDate = startDate
                     val endDate = endDate
