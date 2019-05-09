@@ -16,6 +16,8 @@
     <color name="example_3_white">#D9FFFFFF</color>
     <color name="example_3_blue">#1973E8</color>
     <color name="example_3_blue_light">#D2E3FC</color>
+    <color name="example_3_toolbar_color">#607D8B</color>
+    <color name="example_3_statusbar_color">#455A64</color>
     <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>
     <color name="example_4_grey_past">#BEBEBE</color>

@@ -13,6 +13,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.children
 import androidx.core.view.isVisible
@@ -252,5 +253,17 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         eventsAdapter.events.addAll(events[date].orEmpty())
         eventsAdapter.notifyDataSetChanged()
         exThreeSelectedDateText.text = selectionFormatter.format(date)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (activity as AppCompatActivity).homeToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.example_3_toolbar_color))
+        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_3_statusbar_color)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        (activity as AppCompatActivity).homeToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.colorPrimary))
+        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
 }
