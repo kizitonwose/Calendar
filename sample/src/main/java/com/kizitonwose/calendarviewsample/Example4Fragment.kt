@@ -96,6 +96,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 val textView = container.textView
                 val roundBgView = container.roundBgView
 
+                textView.text = null
                 textView.background = null
                 roundBgView.makeInVisible()
 
@@ -134,9 +135,9 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                         }
                     }
                 } else {
-                    textView.text = null
 
-                    // <--- This part is to make the coloured selection background continuous across various months ---->
+                    // This part is to make the coloured selection background continuous
+                    // on the blank in and out dates across various months.
 
                     val startDate = startDate
                     val endDate = endDate
