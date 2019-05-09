@@ -2,13 +2,14 @@ package com.kizitonwose.calendarview
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
+import android.view.View.MeasureSpec.UNSPECIFIED
 import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.*
-import com.kizitonwose.calendarview.utils.screenWidth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -35,6 +36,30 @@ class CalendarView : RecyclerView {
         init(attrs, defStyleAttr, 0)
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        if (autoSize) {
+            val widthMode = View.MeasureSpec.getMode(widthMeasureSpec)
+            val widthSize = View.MeasureSpec.getSize(widthMeasureSpec)
+            val heightMode = View.MeasureSpec.getMode(heightMeasureSpec)
+
+            if (widthMode == UNSPECIFIED && heightMode == UNSPECIFIED) {
+                throw UnsupportedOperationException("Cannot calculate the values for day Width/Height with the current configuration.")
+            }
+
+            // +0.5 => round to the nearest pixel
+            val squareSize = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
+            if (dayWidth != squareSize || dayHeight != squareSize) {
+                sizedInternally = true
+                dayWidth = squareSize
+                dayHeight = squareSize
+                sizedInternally = false
+                invalidateViewHolders()
+            }
+        }
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
     private var dayViewRes: Int = 0
     private var monthHeaderRes: Int = 0
     private var monthFooterRes: Int = 0
@@ -51,6 +76,7 @@ class CalendarView : RecyclerView {
         scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
         outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
         a.recycle()
+        if (dayViewRes == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
     }
 
     @Px
@@ -81,18 +107,26 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    private var autoSize = true
+    private var sizedInternally = false
     @Px
-    var dayWidth: Int = context.screenWidth / 7
+    var dayWidth: Int = DAY_SIZE_SQUARE
         set(value) {
             field = value
-            invalidateViewHolders()
+            if (sizedInternally.not()) {
+                autoSize = value == DAY_SIZE_SQUARE
+                invalidateViewHolders()
+            }
         }
 
-    @Px // A square calender is the default(dayHeight == dayWidth)
-    var dayHeight: Int = dayWidth
+    @Px
+    var dayHeight: Int = DAY_SIZE_SQUARE
         set(value) {
             field = value
-            invalidateViewHolders()
+            if (sizedInternally.not()) {
+                autoSize = value == DAY_SIZE_SQUARE
+                invalidateViewHolders()
+            }
         }
 
     private val calendarLayoutManager: CalendarLayoutManager
@@ -180,5 +214,9 @@ class CalendarView : RecyclerView {
             dayViewRes, monthHeaderRes, monthFooterRes, config,
             this, startMonth, endMonth, firstDayOfWeek
         )
+    }
+
+    companion object {
+         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
     }
 }
