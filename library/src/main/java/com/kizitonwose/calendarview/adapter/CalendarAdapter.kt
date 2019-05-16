@@ -32,6 +32,8 @@ typealias DateClickListener = (CalendarDay) -> Unit
 
 typealias MonthScrollListener = (CalendarMonth) -> Unit
 
+internal typealias LP = ViewGroup.LayoutParams
+
 class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
     @LayoutRes private val monthHeaderRes: Int,
@@ -78,10 +80,7 @@ class CalendarAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
         val context = parent.context
         val rootLayout = LinearLayout(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+            layoutParams = ViewGroup.LayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT)
             orientation = LinearLayout.VERTICAL
             setPaddingRelative(
                 calView.monthPaddingStart, calView.monthPaddingTop,
@@ -102,10 +101,7 @@ class CalendarAdapter(
         }
 
         val monthBodyLayout = LinearLayout(context).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+            layoutParams = LinearLayout.LayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT)
             orientation = LinearLayout.VERTICAL
             id = bodyViewId
         }
@@ -185,13 +181,13 @@ class CalendarAdapter(
                 // RecyclerView accounts for the items in the immediate previous and next indices when
                 // calculating height and uses the tallest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next
-                // indices are also missing the last row. There should be a better way to fix this I think.
+                // indices are also missing the last row. I think there should be a better way to fix this.
                 if (config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
-                    if (calWrapsHeight == null) {
+                    val calWrapsHeight = calWrapsHeight ?: (calView.layoutParams.height == LP.WRAP_CONTENT).also {
                         // We modify the layoutParams so we save the initial value set by the user.
-                        calWrapsHeight = calView.layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT
+                        calWrapsHeight = it
                     }
-                    if (calWrapsHeight!!.not()) return // Bug only happens when the CalenderView wraps its height.
+                    if (calWrapsHeight.not()) return // Bug only happens when the CalenderView wraps its height.
                     val visibleVH = calView.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
                     val newHeight = visibleVH.headerView?.height.orZero() +
                             // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
