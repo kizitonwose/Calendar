@@ -13,7 +13,6 @@ data class DayConfig(
     @Px val width: Int,
     @Px val height: Int,
     @LayoutRes val dayViewRes: Int,
-    val dateClickListener: DateClickListener,
     val viewBinder: DayBinder<ViewContainer>
 )
 
@@ -35,11 +34,6 @@ class DayHolder(private val config: DayConfig) {
             }
         }
         containerView = FrameLayout(parent.context).apply {
-            setOnClickListener {
-                currentDay?.let { day ->
-                    config.dateClickListener(day)
-                }
-            }
             // This will be placed in the WeekLayout(A LinearLayout) hence we
             // use LinearLayout.LayoutParams and set the weight appropriately.
             // The parent's wightSum is already set to 7 to accommodate seven week days.

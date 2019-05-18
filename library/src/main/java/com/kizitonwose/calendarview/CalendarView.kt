@@ -16,14 +16,28 @@ import org.threeten.bp.YearMonth
 
 class CalendarView : RecyclerView {
 
+    /**
+     * The [DayBinder] instance used for managing day cell views
+     * creation and reuse.
+     */
     lateinit var dayBinder: DayBinder<*>
 
-    var dateClickListener: DateClickListener? = null
-
+    /**
+     * The [MonthHeaderFooterBinder] instance used for managing header views.
+     * The header view is shown above each month on the Calendar.
+     */
     var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
 
+    /**
+     * The [MonthHeaderFooterBinder] instance used for managing footer views.
+     * The footer view is shown below each month on the Calendar.
+     */
     var monthFooterBinder: MonthHeaderFooterBinder<*>? = null
 
+    /**
+     * Called when the calender scrolls to a new month. Mostly beneficial
+     * if [ScrollMode] is [ScrollMode.PAGED].
+     */
     var monthScrollListener: MonthScrollListener? = null
 
     constructor(context: Context) : super(context)

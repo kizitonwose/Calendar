@@ -28,8 +28,6 @@ interface MonthHeaderFooterBinder<T : ViewContainer> {
     fun bind(container: T, month: CalendarMonth)
 }
 
-typealias DateClickListener = (CalendarDay) -> Unit
-
 typealias MonthScrollListener = (CalendarMonth) -> Unit
 
 internal typealias LP = ViewGroup.LayoutParams
@@ -118,18 +116,13 @@ class CalendarAdapter(
             rootLayout.addView(monthFooterView)
         }
 
-        // We create an internal click listener instead of directly passing
-        // the one in the CalendarView so we can always call the updated
-        // instance in the CalenderView if it changes.
-        @Suppress("UNCHECKED_CAST")
-        val dayConfig = DayConfig(
-            calView.dayWidth, calView.dayHeight, dayViewRes,
-            { calView.dateClickListener?.invoke(it) },
-            calView.dayBinder as DayBinder<ViewContainer>
-        )
         @Suppress("UNCHECKED_CAST")
         return MonthViewHolder(
-            this, rootLayout, dayConfig,
+            this, rootLayout,
+            DayConfig(
+                calView.dayWidth, calView.dayHeight, dayViewRes,
+                calView.dayBinder as DayBinder<ViewContainer>
+            ),
             calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
             calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
         )
