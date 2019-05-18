@@ -144,12 +144,22 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         }
 
         class DayViewContainer(view: View) : ViewContainer(view) {
+            lateinit var day: CalendarDay // Will be set when this container is bound.
             val textView = view.exThreeDayText
             val dotView = view.exThreeDotView
+
+            init {
+                view.setOnClickListener {
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        selectDate(day.date)
+                    }
+                }
+            }
         }
         exThreeCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.day = day
                 val textView = container.textView
                 val dotView = container.dotView
 
@@ -178,12 +188,6 @@ class Example3Fragment : BaseFragment(), HasBackButton {
                     textView.makeInVisible()
                     dotView.makeInVisible()
                 }
-            }
-        }
-
-        exThreeCalendar.dateClickListener = {
-            if (it.owner == DayOwner.THIS_MONTH) {
-                selectDate(it.date)
             }
         }
 

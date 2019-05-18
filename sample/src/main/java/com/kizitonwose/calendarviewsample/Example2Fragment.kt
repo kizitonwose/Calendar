@@ -52,11 +52,32 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
         exTwoCalendar.setup(YearMonth.now(), YearMonth.now().plusMonths(10), daysOfWeek.first())
 
         class DayViewContainer(view: View) : ViewContainer(view) {
-            val textView = view.exTwoDayText
+            // Will be set when this container is bound. See the dayBinder.
+            lateinit var day: CalendarDay
+
+            val textView = with(view) {
+                setOnClickListener {
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (selectedDate == day.date) {
+                            selectedDate = null
+                            exTwoCalendar.reloadDay(day)
+                        } else {
+                            val oldDate = selectedDate
+                            selectedDate = day.date
+                            exTwoCalendar.reloadDate(day.date)
+                            oldDate?.let { exTwoCalendar.reloadDate(oldDate) }
+                        }
+                        menuItem.isVisible = selectedDate != null
+                    }
+                }
+                return@with this as TextView
+            }
+
         }
         exTwoCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.day = day
                 val textView = container.textView
                 textView.text = day.date.dayOfMonth.toString()
 
@@ -79,21 +100,6 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 } else {
                     textView.makeInVisible()
                 }
-            }
-        }
-
-        exTwoCalendar.dateClickListener = dateClick@{
-            if (it.owner == DayOwner.THIS_MONTH) {
-                if (selectedDate == it.date) {
-                    selectedDate = null
-                    exTwoCalendar.reloadDay(it)
-                } else {
-                    val oldDate = selectedDate
-                    selectedDate = it.date
-                    exTwoCalendar.reloadDate(it.date)
-                    oldDate?.let { exTwoCalendar.reloadDate(oldDate) }
-                }
-                menuItem.isVisible = selectedDate != null
             }
         }
 

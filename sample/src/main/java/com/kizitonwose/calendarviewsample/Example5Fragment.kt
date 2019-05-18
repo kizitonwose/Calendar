@@ -99,14 +99,30 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         exFiveCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
+            lateinit var day: CalendarDay // Will be set when this container is bound.
             val textView = view.exFiveDayText
             val layout = view.exFiveDayLayout
             val flightTopView = view.exFiveDayFlightTop
             val flightBottomView = view.exFiveDayFlightBottom
+
+            init {
+                view.setOnClickListener {
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (selectedDate != day.date) {
+                            val oldDate = selectedDate
+                            selectedDate = day.date
+                            exFiveCalendar.reloadDate(day.date)
+                            oldDate?.let { exFiveCalendar.reloadDate(it) }
+                            updateAdapterForDate(day.date)
+                        }
+                    }
+                }
+            }
         }
         exFiveCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.day = day
                 val textView = container.textView
                 val layout = container.layout
                 textView.text = day.date.dayOfMonth.toString()
@@ -133,18 +149,6 @@ class Example5Fragment : BaseFragment(), HasToolbar {
                 } else {
                     textView.setTextColorRes(R.color.example_5_text_grey_light)
                     layout.background = null
-                }
-            }
-        }
-
-        exFiveCalendar.dateClickListener = { day ->
-            if (day.owner == DayOwner.THIS_MONTH) {
-                if (selectedDate != day.date) {
-                    val oldDate = selectedDate
-                    selectedDate = day.date
-                    exFiveCalendar.reloadDate(day.date)
-                    oldDate?.let { exFiveCalendar.reloadDate(it) }
-                    updateAdapterForDate(day.date)
                 }
             }
         }

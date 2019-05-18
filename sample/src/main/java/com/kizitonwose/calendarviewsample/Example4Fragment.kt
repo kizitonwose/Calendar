@@ -88,12 +88,34 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
 
         class DayViewContainer(view: View) : ViewContainer(view) {
+            lateinit var day: CalendarDay // Will be set when this container is bound.
             val textView = view.exFourDayText
             val roundBgView = view.exFourRoundBgView
+
+            init {
+                view.setOnClickListener {
+                    if (day.owner == DayOwner.THIS_MONTH && (day.date == today || day.date.isAfter(today))) {
+                        val date = day.date
+                        if (startDate != null) {
+                            if (date < startDate || endDate != null) {
+                                startDate = date
+                                endDate = null
+                            } else if (date != startDate) {
+                                endDate = date
+                            }
+                        } else {
+                            startDate = date
+                        }
+                        exFourCalendar.reloadCalendar()
+                        bindSummaryViews()
+                    }
+                }
+            }
         }
         exFourCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.day = day
                 val textView = container.textView
                 val roundBgView = container.roundBgView
 
@@ -170,24 +192,6 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             }
         }
 
-        exFourCalendar.dateClickListener = {
-            if (it.owner == DayOwner.THIS_MONTH && (it.date == today || it.date.isAfter(today))) {
-                val date = it.date
-                if (startDate != null) {
-                    if (date < startDate || endDate != null) {
-                        startDate = date
-                        endDate = null
-                    } else if (date != startDate) {
-                        endDate = date
-                    }
-                } else {
-                    startDate = date
-                }
-                exFourCalendar.reloadCalendar()
-                bindViews()
-            }
-        }
-
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exFourHeaderText
         }
@@ -213,10 +217,10 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             fragmentManager?.popBackStack()
         }
 
-        bindViews()
+        bindSummaryViews()
     }
 
-    private fun bindViews() {
+    private fun bindSummaryViews() {
         if (startDate != null) {
             exFourStartDateText.text = headerDateFormatter.format(startDate)
             exFourStartDateText.setTextColorRes(R.color.example_4_grey)
@@ -253,7 +257,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             startDate = null
             endDate = null
             exFourCalendar.reloadCalendar()
-            bindViews()
+            bindSummaryViews()
             return true
         }
         return super.onOptionsItemSelected(item)

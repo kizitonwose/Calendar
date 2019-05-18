@@ -51,13 +51,28 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         exOneCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
+            // Will be set when this container is bound. See the dayBinder.
+            lateinit var day: CalendarDay
             val textView = view.exOneDayText
+
+            init {
+                view.setOnClickListener {
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (selectedDates.contains(day.date)) {
+                            selectedDates.remove(day.date)
+                        } else {
+                            selectedDates.add(day.date)
+                        }
+                        exOneCalendar.reloadDay(day)
+                    }
+                }
+            }
         }
         exOneCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.day = day
                 val textView = container.textView
-
                 textView.text = day.date.dayOfMonth.toString()
                 if (day.owner == DayOwner.THIS_MONTH) {
                     when {
@@ -79,17 +94,6 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                     textView.setTextColorRes(R.color.example_1_white_light)
                     textView.background = null
                 }
-            }
-        }
-
-        exOneCalendar.dateClickListener = {
-            if (it.owner == DayOwner.THIS_MONTH) {
-                if (selectedDates.contains(it.date)) {
-                    selectedDates.remove(it.date)
-                } else {
-                    selectedDates.add(it.date)
-                }
-                exOneCalendar.reloadDay(it)
             }
         }
 
