@@ -37,6 +37,9 @@ import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
+private val Context.inputMethodManager
+    get() = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
 data class Event(val id: String, val text: String, val date: LocalDate)
 
 class Example3EventsAdapter(val onClick: (Event) -> Unit) :
@@ -104,8 +107,12 @@ class Example3Fragment : BaseFragment(), HasBackButton {
             .apply {
                 setOnShowListener {
                     // Show the keyboard
-                    val imm = editText.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+                    editText.requestFocus()
+                    context.inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+                }
+                setOnDismissListener {
+                    // Hide the keyboard
+                    context.inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
                 }
             }
     }
