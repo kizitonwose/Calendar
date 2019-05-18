@@ -236,8 +236,8 @@ class Example3Fragment : BaseFragment(), HasBackButton {
         if (selectedDate != date) {
             val oldDate = selectedDate
             selectedDate = date
-            oldDate?.let { exThreeCalendar.reloadDate(it) }
-            exThreeCalendar.reloadDate(date)
+            oldDate?.let { exThreeCalendar.notifyDateChanged(it) }
+            exThreeCalendar.notifyDateChanged(date)
             updateAdapterForDate(date)
         }
     }

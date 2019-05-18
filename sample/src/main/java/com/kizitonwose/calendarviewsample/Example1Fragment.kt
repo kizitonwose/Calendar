@@ -63,7 +63,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                         } else {
                             selectedDates.add(day.date)
                         }
-                        exOneCalendar.reloadDay(day)
+                        exOneCalendar.notifyDayChanged(day)
                     }
                 }
             }

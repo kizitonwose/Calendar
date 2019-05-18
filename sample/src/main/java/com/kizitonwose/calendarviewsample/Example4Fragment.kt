@@ -106,7 +106,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                         } else {
                             startDate = date
                         }
-                        exFourCalendar.reloadCalendar()
+                        exFourCalendar.notifyCalendarChanged()
                         bindSummaryViews()
                     }
                 }
@@ -256,7 +256,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         if (item.itemId == R.id.menuItemClear) {
             startDate = null
             endDate = null
-            exFourCalendar.reloadCalendar()
+            exFourCalendar.notifyCalendarChanged()
             bindSummaryViews()
             return true
         }

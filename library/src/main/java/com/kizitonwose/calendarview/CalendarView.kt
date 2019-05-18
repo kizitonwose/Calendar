@@ -50,8 +50,27 @@ class CalendarView : RecyclerView {
         init(attrs, defStyleAttr, 0)
     }
 
+    private var dayViewRes: Int = 0
+    private var monthHeaderRes: Int = 0
+    private var monthFooterRes: Int = 0
+    private var orientation = RecyclerView.VERTICAL
+    private var scrollMode = ScrollMode.CONTINUOUS
+    private var outDateStyle = OutDateStyle.END_OF_ROW
+    private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
+        if (isInEditMode) return
+        val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
+        dayViewRes = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewRes)
+        monthHeaderRes = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderRes)
+        monthFooterRes = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterRes)
+        orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
+        scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
+        outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
+        a.recycle()
+        if (dayViewRes == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (autoSize) {
+        if (autoSize && isInEditMode.not()) {
             val widthMode = View.MeasureSpec.getMode(widthMeasureSpec)
             val widthSize = View.MeasureSpec.getSize(widthMeasureSpec)
             val heightMode = View.MeasureSpec.getMode(heightMeasureSpec)
@@ -70,27 +89,7 @@ class CalendarView : RecyclerView {
                 invalidateViewHolders()
             }
         }
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    }
-
-    private var dayViewRes: Int = 0
-    private var monthHeaderRes: Int = 0
-    private var monthFooterRes: Int = 0
-    private var orientation = RecyclerView.VERTICAL
-    private var scrollMode = ScrollMode.CONTINUOUS
-    private var outDateStyle = OutDateStyle.END_OF_ROW
-    private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
-        if (isInEditMode) return
-        val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
-        dayViewRes = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewRes)
-        monthHeaderRes = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderRes)
-        monthFooterRes = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterRes)
-        orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
-        scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
-        outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
-        a.recycle()
-        if (dayViewRes == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
     }
 
     @Px
@@ -178,25 +177,25 @@ class CalendarView : RecyclerView {
         calendarLayoutManager.smoothScrollToDate(date)
     }
 
-    fun reloadDay(day: CalendarDay) {
+    fun notifyDayChanged(day: CalendarDay) {
         calendarAdapter.reloadDay(day)
     }
 
-    fun reloadDate(date: LocalDate) {
-        reloadDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    fun notifyDateChanged(date: LocalDate) {
+        notifyDayChanged(CalendarDay(date, DayOwner.THIS_MONTH))
     }
 
-    fun reloadDates(vararg date: LocalDate) {
+    fun notifyDatesChanged(vararg date: LocalDate) {
         date.forEach {
-            reloadDate(it)
+            notifyDateChanged(it)
         }
     }
 
-    fun reloadMonth(month: YearMonth) {
+    fun notifyMonthChanged(month: YearMonth) {
         calendarAdapter.reloadMonth(month)
     }
 
-    fun reloadCalendar() {
+    fun notifyCalendarChanged() {
         calendarAdapter.notifyDataSetChanged()
     }
 

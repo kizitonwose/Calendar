@@ -15,7 +15,6 @@ import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import kotlinx.android.synthetic.main.calendar_day_legend.*
-import kotlinx.android.synthetic.main.example_2_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
 import org.threeten.bp.LocalDate
@@ -60,12 +59,12 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDate == day.date) {
                             selectedDate = null
-                            exTwoCalendar.reloadDay(day)
+                            exTwoCalendar.notifyDayChanged(day)
                         } else {
                             val oldDate = selectedDate
                             selectedDate = day.date
-                            exTwoCalendar.reloadDate(day.date)
-                            oldDate?.let { exTwoCalendar.reloadDate(oldDate) }
+                            exTwoCalendar.notifyDateChanged(day.date)
+                            oldDate?.let { exTwoCalendar.notifyDateChanged(oldDate) }
                         }
                         menuItem.isVisible = selectedDate != null
                     }

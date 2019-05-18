@@ -111,8 +111,8 @@ class Example5Fragment : BaseFragment(), HasToolbar {
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
                             selectedDate = day.date
-                            exFiveCalendar.reloadDate(day.date)
-                            oldDate?.let { exFiveCalendar.reloadDate(it) }
+                            exFiveCalendar.notifyDateChanged(day.date)
+                            oldDate?.let { exFiveCalendar.notifyDateChanged(it) }
                             updateAdapterForDate(day.date)
                         }
                     }
@@ -178,7 +178,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             selectedDate?.let {
                 // Clear selection if we scroll to a new month.
                 selectedDate = null
-                exFiveCalendar.reloadDate(it)
+                exFiveCalendar.notifyDateChanged(it)
                 updateAdapterForDate(null)
             }
         }
