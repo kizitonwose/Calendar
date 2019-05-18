@@ -49,7 +49,7 @@ internal fun TextView.setTextColorRes(@ColorRes color: Int) = setTextColor(conte
 fun daysOfWeekFromLocale(): Array<DayOfWeek> {
     val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
     var daysOfWeek = DayOfWeek.values()
-    // If `firstDayOfWeek` is not at index zero in the values array.
+    // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
     if (firstDayOfWeek != DayOfWeek.MONDAY) {
         val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
         val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
