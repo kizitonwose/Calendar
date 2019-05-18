@@ -122,6 +122,14 @@ class CalendarView : RecyclerView {
 
     private var autoSize = true
     private var sizedInternally = false
+
+    /**
+     * The width, in pixels for each day cell view.
+     * Set this to [DAY_SIZE_SQUARE] to have a nice
+     * square item view.
+     *
+     * @see [DAY_SIZE_SQUARE]
+     */
     @Px
     var dayWidth: Int = DAY_SIZE_SQUARE
         set(value) {
@@ -132,6 +140,13 @@ class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The height, in pixels for each day cell view.
+     * Set this to [DAY_SIZE_SQUARE] to have a nice
+     * square item view.
+     *
+     * @see [DAY_SIZE_SQUARE]
+     */
     @Px
     var dayHeight: Int = DAY_SIZE_SQUARE
         set(value) {
@@ -161,48 +176,106 @@ class CalendarView : RecyclerView {
         layoutManager?.onRestoreInstanceState(state)
     }
 
+    /**
+     * Scroll to a specific month on the calendar. This only
+     * shows the view for the month without any animations.
+     * For a smooth scrolling effect, use [smoothScrollToMonth]
+     */
     fun scrollToMonth(month: YearMonth) {
         calendarLayoutManager.scrollToMonth(month)
     }
 
+    /**
+     * Scroll to a specific month on the calendar using a smooth scrolling animation.
+     * Just like [scrollToMonth], but with a smooth scrolling animation.
+     */
     fun smoothScrollToMonth(month: YearMonth) {
         calendarLayoutManager.smoothScrollToMonth(month)
     }
 
+    /**
+     * Scroll to a specific date on the calendar. This brings the date
+     * cell view's top to the top of the CalendarVew in vertical mode
+     * or the cell view's left edge to the left edge of the CalendarVew
+     * in horizontal mode. No animation is performed. For a smooth scrolling
+     * effect, use [smoothScrollToDate]
+     */
     fun scrollToDate(date: LocalDate) {
         calendarLayoutManager.scrollToDate(date)
     }
 
+    /**
+     * Scroll to a specific date on the calendar using a smooth scrolling animation.
+     * Just like [scrollToDate], but with a smooth scrolling animation.
+     */
     fun smoothScrollToDate(date: LocalDate) {
         calendarLayoutManager.smoothScrollToDate(date)
     }
 
+    /**
+     * Notify the CalendarView to reload the cell for this [CalendarDay]
+     * This causes [DayBinder.bind] to be called with the [ViewContainer]
+     * at this position. Use this to reload a date cell on the Calendar.
+     */
     fun notifyDayChanged(day: CalendarDay) {
         calendarAdapter.reloadDay(day)
     }
 
+    /**
+     * Shortcut for [notifyDayChanged] with a [CalendarDay] instance
+     * which has a [DayOwner.THIS_MONTH] property.
+     */
     fun notifyDateChanged(date: LocalDate) {
         notifyDayChanged(CalendarDay(date, DayOwner.THIS_MONTH))
     }
 
+    /**
+     * Notify the CalendarView to reload multiple dates.
+     * @see [notifyDateChanged]
+     * @see [notifyDayChanged]
+     */
     fun notifyDatesChanged(vararg date: LocalDate) {
         date.forEach {
             notifyDateChanged(it)
         }
     }
 
+    /**
+     * Notify the CalendarView to reload the view for this [YearMonth]
+     * This causes the following sequence pf events:
+     * [DayBinder.bind] will be called for all dates in this month.
+     * [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
+     * [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
+     */
     fun notifyMonthChanged(month: YearMonth) {
         calendarAdapter.reloadMonth(month)
     }
 
+    /**
+     * Notify the CalendarView to reload all months.
+     * Essentially calls [RecyclerView.Adapter.notifyDataSetChanged] on the adapter.
+     */
     fun notifyCalendarChanged() {
         calendarAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * Find the first visible month on the CalendarView.
+     *
+     * @return The first visible month or null if not found.
+     */
     fun getFirstVisibleMonth(): CalendarMonth? {
         return calendarAdapter.getFirstVisibleMonth()
     }
 
+    /**
+     * Setup the CalendarView. You can call this any time to change the
+     * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
+     *
+     * @param startMonth The first month on the calendar.
+     * @param endMonth The last month on the calendar.
+     * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
+     */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
@@ -230,6 +303,11 @@ class CalendarView : RecyclerView {
     }
 
     companion object {
+        /**
+         * A value for [dayWidth] and [dayHeight] which indicates that the day
+         * cells should have equal width and height. Each view's width and height
+         * will be the width of the calender divided by 7.
+         */
          const val DAY_SIZE_SQUARE = Int.MIN_VALUE
     }
 }
