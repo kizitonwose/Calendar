@@ -50,9 +50,10 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     }
 
     private var radiusUpdated = false
+
     /**
      * We set the radius of the continuous selection background drawable dynamically
-     * since the  view size is `match parent` hence we cannot determine the appropriate
+     * since the view size is `match parent` hence we cannot determine the appropriate
      * radius value which would equal half of the view's size beforehand.
      */
     private fun updateDrawableRadius(textView: TextView) {
