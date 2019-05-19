@@ -45,10 +45,14 @@ class DayHolder(private val config: DayConfig) {
 
     fun bindDayView(currentDay: CalendarDay) {
         this.day = currentDay
-        if (::viewContainer.isInitialized.not()){
+        if (::viewContainer.isInitialized.not()) {
             viewContainer = config.viewBinder.create(dateView)
         }
-        containerView.id = currentDay.hashCode()
+
+        val dayHash = currentDay.hashCode()
+        if (containerView.id != dayHash) {
+            containerView.id = dayHash
+        }
         config.viewBinder.bind(viewContainer, currentDay)
     }
 
