@@ -22,7 +22,7 @@ class DayHolder(private val config: DayConfig) {
     private lateinit var containerView: FrameLayout
     private lateinit var viewContainer: ViewContainer
 
-    var currentDay: CalendarDay? = null
+    var day: CalendarDay? = null
 
     fun inflateDayView(parent: LinearLayout): View {
         dateView = parent.inflate(config.dayViewRes).apply {
@@ -44,7 +44,7 @@ class DayHolder(private val config: DayConfig) {
     }
 
     fun bindDayView(currentDay: CalendarDay) {
-        this.currentDay = currentDay
+        this.day = currentDay
         if (::viewContainer.isInitialized.not()){
             viewContainer = config.viewBinder.create(dateView)
         }
@@ -53,7 +53,7 @@ class DayHolder(private val config: DayConfig) {
     }
 
     fun reloadView() {
-        currentDay?.let { bindDayView(it) }
+        day?.let { bindDayView(it) }
     }
 
 }

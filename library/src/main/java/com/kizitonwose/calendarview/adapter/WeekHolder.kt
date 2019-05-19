@@ -34,6 +34,6 @@ class WeekHolder(dayConfig: DayConfig) {
     }
 
     fun reloadDay(day: CalendarDay) {
-        dayHolders.first { it.currentDay == day }.reloadView()
+        dayHolders.first { it.day == day }.reloadView()
     }
 }
