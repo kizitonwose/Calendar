@@ -26,6 +26,7 @@
     <color name="example_5_toolbar_color">#282828</color>
     <color name="example_5_text_grey">#bdbdbd</color>
     <color name="example_5_text_grey_light">#616161</color>
+    <color name="example_6_month_bg_color">#D2E3FC</color>
     <color name="brown_700">#5D4037</color>
     <color name="blue_grey_700">#455A64</color>
     <color name="orange_800">#EF6C00</color>

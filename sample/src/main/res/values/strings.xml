@@ -11,7 +11,7 @@
     <string name="example_5_title">Example 5</string>
     <string name="example_5_subtitle">Single selection, programmatic calendar scrolling, generates six rows for all months showing \"endOfGrid\" implementation of \"outDateStyle\" option. A flight schedule calender.</string>
     <string name="example_6_title">Example 6</string>
-    <string name="example_6_subtitle">Custom date width and height, item decoration on the CalendarView, continuous horizontal scrolling style, a non-square calender.</string>
+    <string name="example_6_subtitle">Custom date width and height, custom month view, item decoration on the CalendarView, continuous horizontal scrolling style.</string>
     <string name="save">Save</string>
     <string name="close">Close</string>
     <string name="example_3_input_dialog_title">Enter event title</string>
