@@ -131,6 +131,10 @@ class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The padding, in pixels to be applied
+     * to the start of each month view.
+     */
     @Px
     var monthPaddingStart = 0
         set(value) {
@@ -138,6 +142,10 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    /**
+     * The padding, in pixels to be applied
+     * to the end of each month view.
+     */
     @Px
     var monthPaddingEnd = 0
         set(value) {
@@ -145,6 +153,10 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    /**
+     * The padding, in pixels to be applied
+     * to the top of each month view.
+     */
     @Px
     var monthPaddingTop = 0
         set(value) {
@@ -152,6 +164,10 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    /**
+     * The padding, in pixels to be applied
+     * to the bottom of each month view.
+     */
     @Px
     var monthPaddingBottom = 0
         set(value) {
@@ -159,6 +175,10 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    /**
+     * The margin, in pixels to be applied
+     * to the start of each month view.
+     */
     @Px
     var monthMarginStart = 0
         set(value) {
@@ -166,6 +186,10 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    /**
+     * The margin, in pixels to be applied
+     * to the end of each month view.
+     */
     @Px
     var monthMarginEnd = 0
         set(value) {
@@ -173,6 +197,10 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    /**
+     * The margin, in pixels to be applied
+     * to the top of each month view.
+     */
     @Px
     var monthMarginTop = 0
         set(value) {
@@ -180,6 +208,10 @@ class CalendarView : RecyclerView {
             invalidateViewHolders()
         }
 
+    /**
+     * The margin, in pixels to be applied
+     * to the bottom of each month view.
+     */
     @Px
     var monthMarginBottom = 0
         set(value) {
