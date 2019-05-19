@@ -56,6 +56,7 @@ class CalendarView : RecyclerView {
     private var orientation = RecyclerView.VERTICAL
     private var scrollMode = ScrollMode.CONTINUOUS
     private var outDateStyle = OutDateStyle.END_OF_ROW
+    private var monthViewClass: String? = null
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
@@ -65,6 +66,7 @@ class CalendarView : RecyclerView {
         orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
         scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
         outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
+        monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
         a.recycle()
         if (dayViewRes == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
     }
@@ -91,34 +93,6 @@ class CalendarView : RecyclerView {
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
-
-    @Px
-    var monthPaddingStart = 0
-        set(value) {
-            field = value
-            invalidateViewHolders()
-        }
-
-    @Px
-    var monthPaddingEnd = 0
-        set(value) {
-            field = value
-            invalidateViewHolders()
-        }
-
-    @Px
-    var monthPaddingTop = 0
-        set(value) {
-            field = value
-            invalidateViewHolders()
-        }
-
-    @Px
-    var monthPaddingBottom = 0
-        set(value) {
-            field = value
-            invalidateViewHolders()
-        }
 
     private var autoSize = true
     private var sizedInternally = false
@@ -155,6 +129,62 @@ class CalendarView : RecyclerView {
                 autoSize = value == DAY_SIZE_SQUARE
                 invalidateViewHolders()
             }
+        }
+
+    @Px
+    var monthPaddingStart = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px
+    var monthPaddingEnd = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px
+    var monthPaddingTop = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px
+    var monthPaddingBottom = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px
+    var monthMarginStart = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px
+    var monthMarginEnd = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px
+    var monthMarginTop = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    @Px
+    var monthMarginBottom = 0
+        set(value) {
+            field = value
+            invalidateViewHolders()
         }
 
     private val calendarLayoutManager: CalendarLayoutManager
@@ -279,7 +309,7 @@ class CalendarView : RecyclerView {
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
-        val config = CalendarConfig(outDateStyle, scrollMode, orientation)
+        val config = CalendarConfig(outDateStyle, scrollMode, orientation, monthViewClass)
         if (layoutManager == null) {
             clipToPadding = false
             layoutManager = CalendarLayoutManager(this, config)

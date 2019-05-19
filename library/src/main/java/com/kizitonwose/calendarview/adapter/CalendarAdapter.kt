@@ -1,5 +1,6 @@
 package com.kizitonwose.calendarview.adapter
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -78,12 +79,7 @@ class CalendarAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
         val context = parent.context
         val rootLayout = LinearLayout(context).apply {
-            layoutParams = ViewGroup.LayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT)
             orientation = LinearLayout.VERTICAL
-            setPaddingRelative(
-                calView.monthPaddingStart, calView.monthPaddingTop,
-                calView.monthPaddingEnd, calView.monthPaddingBottom
-            )
             id = rootViewId
         }
 
@@ -116,9 +112,31 @@ class CalendarAdapter(
             rootLayout.addView(monthFooterView)
         }
 
+        fun setupRoot(root: ViewGroup) {
+            root.setPaddingRelative(
+                calView.monthPaddingStart, calView.monthPaddingTop,
+                calView.monthPaddingEnd, calView.monthPaddingBottom
+            )
+            root.layoutParams = ViewGroup.MarginLayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT).apply {
+                bottomMargin = calView.monthMarginBottom
+                topMargin = calView.monthMarginTop
+                marginStart = calView.monthMarginStart
+                marginEnd = calView.monthMarginEnd
+            }
+        }
+
+        val userRoot = if (config.monthViewClass != null) {
+            (Class.forName(config.monthViewClass)
+                .getDeclaredConstructor(Context::class.java)
+                .newInstance(context) as ViewGroup).apply {
+                setupRoot(this)
+                addView(rootLayout)
+            }
+        } else rootLayout.apply { setupRoot(this) }
+
         @Suppress("UNCHECKED_CAST")
         return MonthViewHolder(
-            this, rootLayout,
+            this, userRoot,
             DayConfig(
                 calView.dayWidth, calView.dayHeight, dayViewRes,
                 calView.dayBinder as DayBinder<ViewContainer>

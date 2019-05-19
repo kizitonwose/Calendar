@@ -1,6 +1,7 @@
 package com.kizitonwose.calendarview.adapter
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -11,12 +12,13 @@ import com.kizitonwose.calendarview.model.ScrollMode
 data class CalendarConfig(
     val outDateStyle: OutDateStyle,
     val scrollMode: ScrollMode,
-    @RecyclerView.Orientation val orientation: Int
+    @RecyclerView.Orientation val orientation: Int,
+    val monthViewClass: String?
 )
 
 class MonthViewHolder constructor(
     adapter: CalendarAdapter,
-    rootLayout: LinearLayout,
+    rootLayout: ViewGroup,
     dayConfig: DayConfig,
     private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
     private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?

@@ -4,6 +4,7 @@
         <attr name="cv_dayViewResource" format="reference" />
         <attr name="cv_monthHeaderResource" format="reference" />
         <attr name="cv_monthFooterResource" format="reference" />
+        <attr name="cv_monthViewClass" format="string" />
         <attr name="cv_orientation" format="enum">
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
