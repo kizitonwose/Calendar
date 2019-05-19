@@ -60,11 +60,14 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
     private fun calculateOffset(day: CalendarDay, position: Int, itemView: View): Int {
         var offset = 0
 
-        // Add header view height to offset if this is a vertical calendar with a header view.
         if (config.orientation == RecyclerView.VERTICAL) {
+            offset += calView.monthMarginTop + calView.monthPaddingTop
+            // Add header view height to offset if this is a vertical calendar with a header view.
             itemView.findViewById<View?>(adapter.headerViewId)?.let {
                 offset += it.height
             }
+        } else {
+            offset += calView.monthMarginStart + calView.monthPaddingStart
         }
         val bodyLayout = itemView.findViewById<LinearLayout>(adapter.bodyViewId)
         val weekLayout = bodyLayout.getChildAt(0) as LinearLayout
