@@ -59,7 +59,7 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
     }
 
     private fun calculateOffset(day: CalendarDay, itemView: View): Int {
-        val dayView = itemView.findViewById<View?>(day.hashCode()) ?: return 0
+        val dayView = itemView.findViewById<View?>(day.date.hashCode()) ?: return 0
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)

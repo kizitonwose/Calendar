@@ -49,7 +49,7 @@ class DayHolder(private val config: DayConfig) {
             viewContainer = config.viewBinder.create(dateView)
         }
 
-        val dayHash = currentDay.hashCode()
+        val dayHash = currentDay.date.hashCode()
         if (containerView.id != dayHash) {
             containerView.id = dayHash
         }
