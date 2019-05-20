@@ -296,8 +296,8 @@ class CalendarView : RecyclerView {
      * @see [notifyDateChanged]
      * @see [notifyDayChanged]
      */
-    fun notifyDatesChanged(vararg date: LocalDate) {
-        date.forEach {
+    fun notifyDatesChanged(vararg dates: LocalDate) {
+        dates.forEach {
             notifyDateChanged(it)
         }
     }
