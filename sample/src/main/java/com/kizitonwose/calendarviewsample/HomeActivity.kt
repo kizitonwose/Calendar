@@ -38,8 +38,8 @@ class HomeActivity : AppCompatActivity() {
                     R.anim.slide_out_right
                 )
             }
-            .add(R.id.homeContainer, instance, it.javaClass.simpleName)
-            .addToBackStack(it.javaClass.simpleName)
+            .add(R.id.homeContainer, instance, instance.javaClass.simpleName)
+            .addToBackStack(instance.javaClass.simpleName)
             .commit()
     }
 
