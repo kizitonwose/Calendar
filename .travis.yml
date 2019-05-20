@@ -1,0 +1,32 @@
+language: android
+jdk: oraclejdk8
+android:
+  components:
+    - tools
+    - platform-tools
+    - build-tools-28.0.3
+    - $ANDROID_TARGET
+    - extra-android-support
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - sys-img-$ANDROID_ABI-$ANDROID_TARGET
+  licenses:
+    - '.+'
+env:
+  global:
+    - ANDROID_TARGET=android-22  ANDROID_ABI=armeabi-v7a
+before_install:
+- yes | sdkmanager "platforms;android-28"
+before_script:
+  - chmod +x gradlew
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+  # sys-img-x86-android-xx emulators do not work because they require hardware acceleration which
+  # is not currently supported by Travis. Stick with sys-img-armeabi-v7-android-xx for now.
+  # 
+  # Available sys-img-armeabi-v7a-android-xx images on Travis: 21, 22 and 24.
+  # sys-img-armeabi-v7a-android-24 fails with `qemu-system-armel: -audio: invalid option`,
+  # so currently using sys-img-armeabi-v7a-android-22.

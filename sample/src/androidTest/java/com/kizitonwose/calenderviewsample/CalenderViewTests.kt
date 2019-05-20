@@ -66,7 +66,7 @@ class CalenderViewTests {
             calendarView.scrollToMonth(nextFourMonths)
         }
 
-        sleep(500)
+        sleep(2000)
 
         assertTrue(calendarView.getFirstVisibleMonth()?.yearMonth == nextFourMonths)
     }
@@ -88,7 +88,7 @@ class CalenderViewTests {
             calendarView.scrollToDate(targetDate)
         }
 
-        sleep(500)
+        sleep(2000)
 
         val vhForDateMonth = calendarView.findViewHolderForAdapterPosition(4) as MonthViewHolder
         val dayView = vhForDateMonth.bodyLayout.findViewById<View>(targetDate.hashCode())
@@ -118,7 +118,7 @@ class CalenderViewTests {
             calendarView.scrollToDate(targetDate)
         }
 
-        sleep(500)
+        sleep(2000)
 
         val vhForDateMonth = calendarView.findViewHolderForAdapterPosition(13) as MonthViewHolder
         val dayView = vhForDateMonth.bodyLayout.findViewById<View>(targetDate.hashCode())
@@ -147,7 +147,7 @@ class CalenderViewTests {
 
         val calendarView = fragment.exOneCalendar
 
-        val targetMonth = currentMonth.plusMonths(5)
+        val targetMonth = currentMonth.plusMonths(2)
 
         var targetCalMonth: CalendarMonth? = null
         calendarView.monthScrollListener = { month ->
@@ -158,7 +158,7 @@ class CalenderViewTests {
             calendarView.smoothScrollToMonth(targetMonth)
         }
 
-        sleep(1000) // Time for smooth scrolling animation
+        sleep(5000) // Enough time for smooth scrolling animation.
 
         assertTrue(targetCalMonth?.yearMonth == targetMonth)
     }
