@@ -1,5 +1,6 @@
 package com.kizitonwose.calenderviewsample
 
+import android.graphics.Rect
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.kizitonwose.calendarview.CalendarView
+import com.kizitonwose.calendarview.adapter.MonthViewHolder
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarviewsample.*
+import kotlinx.android.synthetic.main.exmaple_1_fragment.*
+import kotlinx.android.synthetic.main.exmaple_2_fragment.*
+import kotlinx.android.synthetic.main.exmaple_6_fragment.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.junit.After
@@ -22,14 +29,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.threeten.bp.YearMonth
 import java.lang.Thread.sleep
-import android.graphics.Rect
-import android.util.Log
-import com.kizitonwose.calendarview.adapter.MonthViewHolder
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarviewsample.*
-import kotlinx.android.synthetic.main.exmaple_2_fragment.*
-import kotlinx.android.synthetic.main.exmaple_6_fragment.*
 
 
 @RunWith(AndroidJUnit4::class)
@@ -55,7 +54,7 @@ class CalenderViewTests {
 
         val currentMonth = YearMonth.now()
 
-        val fragment = getFragment(Example5Fragment::class.java)
+        val fragment = findFragment(Example5Fragment::class.java)
 
         val calendarView = fragment.requireView().findViewById<CalendarView>(R.id.exFiveCalendar)
 
@@ -79,7 +78,7 @@ class CalenderViewTests {
 
         val currentMonth = YearMonth.now()
 
-        val fragment = getFragment(Example2Fragment::class.java)
+        val fragment = findFragment(Example2Fragment::class.java)
 
         val targetDate = currentMonth.plusMonths(4).atDay(20)
 
@@ -109,7 +108,7 @@ class CalenderViewTests {
 
         val currentMonth = YearMonth.now()
 
-        val fragment = getFragment(Example6Fragment::class.java)
+        val fragment = findFragment(Example6Fragment::class.java)
 
         val targetDate = currentMonth.plusMonths(3).atDay(18)
 
@@ -133,9 +132,35 @@ class CalenderViewTests {
         assertTrue(calendarViewRect.left == dayViewRect.left)
     }
 
-    private fun <T : Fragment> getFragment(clazz: Class<T>): T {
+    private fun <T : Fragment> findFragment(clazz: Class<T>): T {
         return homeScreenRule.activity.supportFragmentManager
             .findFragmentByTag(clazz.simpleName) as T
+    }
+
+    @Test
+    fun monthScrollListenerIsCalledWhenScrolled() {
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        val currentMonth = YearMonth.now()
+
+        val fragment = findFragment(Example1Fragment::class.java)
+
+        val calendarView = fragment.exOneCalendar
+
+        val targetMonth = currentMonth.plusMonths(5)
+
+        var targetCalMonth: CalendarMonth? = null
+        calendarView.monthScrollListener = { month ->
+            targetCalMonth = month
+        }
+
+        homeScreenRule.runOnUiThread {
+            calendarView.smoothScrollToMonth(targetMonth)
+        }
+
+        sleep(1000) // Time for smooth scrolling animation
+
+        assertTrue(targetCalMonth?.yearMonth == targetMonth)
     }
 }
 
