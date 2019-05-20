@@ -63,7 +63,7 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)
-        return if (orientation == RecyclerView.VERTICAL) rect.top else rect.left
+        return if (orientation == RecyclerView.VERTICAL) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
     }
 
     private inner class CalendarSmoothScroller(position: Int, val date: LocalDate?) :
