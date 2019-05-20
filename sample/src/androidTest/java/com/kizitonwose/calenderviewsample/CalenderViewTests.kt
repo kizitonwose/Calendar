@@ -1,6 +1,7 @@
 package com.kizitonwose.calenderviewsample
 
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -48,8 +49,7 @@ class CalenderViewTests {
 
         val currentMonth = YearMonth.now()
 
-        val fragment = homeScreenRule.activity.supportFragmentManager
-            .findFragmentByTag(Example5Fragment::class.java.simpleName)!!
+        val fragment = getFragment(Example5Fragment::class.java)
 
         val calendarView = fragment.requireView().findViewById<CalendarView>(R.id.exFiveCalendar)
 
@@ -67,6 +67,10 @@ class CalenderViewTests {
     }
 
 
+    private fun <T : Fragment> getFragment(clazz: Class<T>): T {
+        return homeScreenRule.activity.supportFragmentManager
+            .findFragmentByTag(clazz.simpleName) as T
+    }
 }
 
 
