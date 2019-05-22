@@ -18,7 +18,8 @@ class CalendarView : RecyclerView {
 
     /**
      * The [DayBinder] instance used for managing day cell views
-     * creation and reuse.
+     * creation and reuse. Changing the binder means that the view
+     * creation logic could have changed too. We refresh the Calender.
      */
     var dayBinder: DayBinder<*>? = null
         set(value) {
