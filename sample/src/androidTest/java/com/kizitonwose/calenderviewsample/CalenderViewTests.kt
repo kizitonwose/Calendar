@@ -12,8 +12,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
+import com.kizitonwose.calendarview.adapter.DayBinder
 import com.kizitonwose.calendarview.adapter.MonthViewHolder
+import com.kizitonwose.calendarview.adapter.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarviewsample.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
@@ -50,6 +54,40 @@ class CalenderViewTests {
 
     }
 
+    @Test
+    fun testDayBinderIsCalledOnDayChanged() {
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        class DayViewContainer(view: View) : ViewContainer(view)
+
+        val calendarView = findFragment(Example1Fragment::class.java).exOneCalendar
+
+        var boundDay: CalendarDay? = null
+
+        val changedDate = currentMonth.atDay(4)
+
+        homeScreenRule.runOnUiThread {
+            calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+                override fun create(view: View) = DayViewContainer(view)
+                override fun bind(container: DayViewContainer, day: CalendarDay) {
+                    boundDay = day
+                }
+            }
+        }
+
+        // Allow the calendar to be rebuilt due to dayBinder change.
+        sleep(2000)
+
+        homeScreenRule.runOnUiThread {
+            calendarView.notifyDateChanged(changedDate)
+        }
+
+        // Allow time for date change event to be propagated.
+        sleep(2000)
+
+        assertTrue(boundDay?.date == changedDate)
+        assertTrue(boundDay?.owner == DayOwner.THIS_MONTH)
+    }
 
     @Test
     fun testProgrammaticScrollWorksAsExpected() {
@@ -75,7 +113,7 @@ class CalenderViewTests {
     fun testScrollToDateWorksOnVerticalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
-        val calendarView =  findFragment(Example2Fragment::class.java).exTwoCalendar
+        val calendarView = findFragment(Example2Fragment::class.java).exTwoCalendar
 
         val targetDate = currentMonth.plusMonths(4).atDay(20)
 
