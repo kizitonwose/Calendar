@@ -12,12 +12,12 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.adapter.MonthViewHolder
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarviewsample.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
+import kotlinx.android.synthetic.main.exmaple_5_fragment.*
 import kotlinx.android.synthetic.main.exmaple_6_fragment.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -38,6 +38,8 @@ class CalenderViewTests {
     @get:Rule
     private val homeScreenRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, false)
 
+    private val currentMonth = YearMonth.now()
+
     @Before
     fun setup() {
         homeScreenRule.launchActivity(null)
@@ -48,15 +50,12 @@ class CalenderViewTests {
 
     }
 
+
     @Test
     fun testProgrammaticScrollWorksAsExpected() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
 
-        val currentMonth = YearMonth.now()
-
-        val fragment = findFragment(Example5Fragment::class.java)
-
-        val calendarView = fragment.requireView().findViewById<CalendarView>(R.id.exFiveCalendar)
+        val calendarView = findFragment(Example5Fragment::class.java).exFiveCalendar
 
         assertTrue(calendarView.getFirstVisibleMonth()?.yearMonth == currentMonth)
 
@@ -76,13 +75,9 @@ class CalenderViewTests {
     fun testScrollToDateWorksOnVerticalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
-        val currentMonth = YearMonth.now()
-
-        val fragment = findFragment(Example2Fragment::class.java)
+        val calendarView =  findFragment(Example2Fragment::class.java).exTwoCalendar
 
         val targetDate = currentMonth.plusMonths(4).atDay(20)
-
-        val calendarView = fragment.exTwoCalendar
 
         homeScreenRule.runOnUiThread {
             calendarView.scrollToDate(targetDate)
@@ -106,13 +101,9 @@ class CalenderViewTests {
     fun testScrollToDateWorksOnHorizontalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
 
-        val currentMonth = YearMonth.now()
-
-        val fragment = findFragment(Example6Fragment::class.java)
+        val calendarView = findFragment(Example6Fragment::class.java).exSixCalendar
 
         val targetDate = currentMonth.plusMonths(3).atDay(18)
-
-        val calendarView = fragment.exSixCalendar
 
         homeScreenRule.runOnUiThread {
             calendarView.scrollToDate(targetDate)
@@ -141,11 +132,7 @@ class CalenderViewTests {
     fun monthScrollListenerIsCalledWhenScrolled() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
 
-        val currentMonth = YearMonth.now()
-
-        val fragment = findFragment(Example1Fragment::class.java)
-
-        val calendarView = fragment.exOneCalendar
+        val calendarView = findFragment(Example1Fragment::class.java).exOneCalendar
 
         val targetMonth = currentMonth.plusMonths(2)
 
