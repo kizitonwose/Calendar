@@ -162,6 +162,7 @@ class CalendarAdapter(
 
     fun reloadDay(day: CalendarDay) {
         val yearMonth = when (day.owner) {
+            // Find the actual month that owns this date.
             DayOwner.THIS_MONTH -> day.date.yearMonth
             DayOwner.PREVIOUS_MONTH -> day.date.yearMonth.next
             DayOwner.NEXT_MONTH -> day.date.yearMonth.previous

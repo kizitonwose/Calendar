@@ -20,19 +20,40 @@ class CalendarView : RecyclerView {
      * The [DayBinder] instance used for managing day cell views
      * creation and reuse.
      */
-    lateinit var dayBinder: DayBinder<*>
+    var dayBinder: DayBinder<*>? = null
+        set(value) {
+            val oldValue = field
+            field = value
+            if (oldValue != null) {
+                invalidateViewHolders()
+            }
+        }
 
     /**
      * The [MonthHeaderFooterBinder] instance used for managing header views.
      * The header view is shown above each month on the Calendar.
      */
     var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
+        set(value) {
+            val oldValue = field
+            field = value
+            if (oldValue != null) {
+                invalidateViewHolders()
+            }
+        }
 
     /**
      * The [MonthHeaderFooterBinder] instance used for managing footer views.
      * The footer view is shown below each month on the Calendar.
      */
     var monthFooterBinder: MonthHeaderFooterBinder<*>? = null
+        set(value) {
+            val oldValue = field
+            field = value
+            if (oldValue != null) {
+                invalidateViewHolders()
+            }
+        }
 
     /**
      * Called when the calender scrolls to a new month. Mostly beneficial
@@ -370,6 +391,6 @@ class CalendarView : RecyclerView {
          * cells should have equal width and height. Each view's width and height
          * will be the width of the calender divided by 7.
          */
-         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
+        const val DAY_SIZE_SQUARE = Int.MIN_VALUE
     }
 }
