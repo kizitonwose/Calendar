@@ -211,8 +211,4 @@ class CalendarAdapter(
         }
         return null
     }
-
-    fun getMonthAtPosition(position: Int): CalendarMonth {
-        return months[position]
-    }
 }
