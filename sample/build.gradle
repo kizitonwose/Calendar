@@ -41,10 +41,8 @@ dependencies {
     implementation "androidx.cardview:cardview:$versions.cardview"
     implementation "com.google.android.material:material:$versions.material_library"
 
-    // Unit Tests
     testImplementation "junit:junit:$versions.junit"
 
-    // Instrumentation Tests
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.espresso" // RecyclerView actions.
     androidTestImplementation "androidx.test:runner:$versions.androidx_test_runner"
