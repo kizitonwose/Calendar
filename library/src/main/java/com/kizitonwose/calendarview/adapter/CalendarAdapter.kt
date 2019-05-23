@@ -16,21 +16,6 @@ import com.kizitonwose.calendarview.utils.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
 
-
-open class ViewContainer(val view: View)
-
-interface DayBinder<T : ViewContainer> {
-    fun create(view: View): T
-    fun bind(container: T, day: CalendarDay)
-}
-
-interface MonthHeaderFooterBinder<T : ViewContainer> {
-    fun create(view: View): T
-    fun bind(container: T, month: CalendarMonth)
-}
-
-typealias MonthScrollListener = (CalendarMonth) -> Unit
-
 internal typealias LP = ViewGroup.LayoutParams
 
 class CalendarAdapter(
