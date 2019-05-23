@@ -202,11 +202,6 @@ class CalenderViewTests {
         assertTrue(calendarViewRect.left == dayViewRect.left)
     }
 
-    private fun <T : Fragment> findFragment(clazz: Class<T>): T {
-        return homeScreenRule.activity.supportFragmentManager
-            .findFragmentByTag(clazz.simpleName) as T
-    }
-
     @Test
     fun monthScrollListenerIsCalledWhenScrolled() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
@@ -227,5 +222,10 @@ class CalenderViewTests {
         sleep(5000) // Enough time for smooth scrolling animation.
 
         assertTrue(targetCalMonth?.yearMonth == targetMonth)
+    }
+
+    private fun <T : Fragment> findFragment(clazz: Class<T>): T {
+        return homeScreenRule.activity.supportFragmentManager
+            .findFragmentByTag(clazz.simpleName) as T
     }
 }
