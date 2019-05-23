@@ -14,9 +14,10 @@ import org.threeten.bp.YearMonth
 
 class CalenderViewTests {
 
-    private val april2019 = YearMonth.of(2019, 4)
+    // You can see what May 2019 with Monday as the first
+    // day of week looks like here: https://bit.ly/2HwWZ7o
     private val may2019 = YearMonth.of(2019, 5)
-    private val june2019 = YearMonth.of(2019, 6)
+    private val firstDayOfWeek = DayOfWeek.MONDAY
 
     private val endOfRowConfig =
         CalendarConfig(OutDateStyle.END_OF_ROW, ScrollMode.PAGED, RecyclerView.HORIZONTAL, null)
@@ -27,7 +28,7 @@ class CalenderViewTests {
 
     @Test
     fun `test in date generation works as expected`() {
-        val month = CalendarMonth(may2019, endOfRowConfig, DayOfWeek.MONDAY)
+        val month = CalendarMonth(may2019, endOfRowConfig, firstDayOfWeek)
 
         val validInDateIndices = (0..1)
         val inDatesInMonth = month.weekDays.flatten().filterIndexed { index, _ -> validInDateIndices.contains(index) }
@@ -38,7 +39,7 @@ class CalenderViewTests {
 
     @Test
     fun `test end of row out date generation works as expected`() {
-        val month = CalendarMonth(may2019, endOfRowConfig, DayOfWeek.MONDAY)
+        val month = CalendarMonth(may2019, endOfRowConfig, firstDayOfWeek)
 
         val monthIndices = month.weekDays.flatten().indices
         val validOutDateIndices = monthIndices.toList().takeLast(2)
@@ -50,7 +51,7 @@ class CalenderViewTests {
 
     @Test
     fun `test end of grid out date generation works as expected`() {
-        val month = CalendarMonth(may2019, endOfGridConfig, DayOfWeek.MONDAY)
+        val month = CalendarMonth(may2019, endOfGridConfig, firstDayOfWeek)
 
         val monthIndices = month.weekDays.flatten().indices
         val validOutDateIndices = monthIndices.toList().takeLast(9)
@@ -62,8 +63,16 @@ class CalenderViewTests {
 
     @Test
     fun `test first day of week is in correct position`() {
-        val month = CalendarMonth(may2019, endOfRowConfig, DayOfWeek.MONDAY)
+        val month = CalendarMonth(may2019, endOfRowConfig, firstDayOfWeek)
 
-        assertTrue(month.weekDays.first().first().date.dayOfWeek == DayOfWeek.MONDAY)
+        assertTrue(month.weekDays.first().first().date.dayOfWeek == firstDayOfWeek)
+    }
+
+    @Test
+    fun `test month helper functions work as expected`() {
+        val month = CalendarMonth(may2019, endOfRowConfig, firstDayOfWeek)
+
+        assertTrue(month.previous == CalendarMonth(may2019.minusMonths(1), endOfRowConfig, firstDayOfWeek))
+        assertTrue(month.next == CalendarMonth(may2019.plusMonths(1), endOfRowConfig, firstDayOfWeek))
     }
 }
