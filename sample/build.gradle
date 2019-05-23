@@ -5,13 +5,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion versions.compile_sdk
     defaultConfig {
         applicationId "com.kizitonwose.calendarviewsample"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion versions.min_sdk_sample
+        targetSdkVersion versions.target_sdk
+        versionCode versions.version_code
+        versionName versions.version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,23 +32,22 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':library')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
-    implementation 'androidx.core:core-ktx:1.1.0-alpha05'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.recyclerview:recyclerview:1.1.0-alpha04"
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation "com.google.android.material:material:1.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
+    implementation "androidx.legacy:legacy-support-v4:$versions.androidx_legacy"
+    implementation "androidx.appcompat:appcompat:$versions.androidx_appcompat"
+    implementation "androidx.core:core-ktx:$versions.androidx_core_ktx"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+    implementation "androidx.recyclerview:recyclerview:$versions.recyclerview"
+    implementation "androidx.cardview:cardview:$versions.cardview"
+    implementation "com.google.android.material:material:$versions.material_library"
 
     // Unit Tests
-    testImplementation "junit:junit:4.12"
-    testImplementation "android.arch.core:core-testing:1.1.1"
+    testImplementation "junit:junit:$versions.junit"
 
     // Instrumentation Tests
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.1.1' // RecyclerView actions live here.
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.espresso" // RecyclerView actions.
+    androidTestImplementation "androidx.test:runner:$versions.androidx_test_runner"
+    androidTestImplementation "androidx.test:rules:$versions.androidx_test_rules"
+    androidTestImplementation "androidx.test.ext:junit:$versions.androidx_test_junit"
 }

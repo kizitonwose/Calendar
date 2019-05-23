@@ -3,13 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion versions.compile_sdk
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion versions.min_sdk_library
+        targetSdkVersion versions.target_sdk
+        versionCode versions.version_code
+        versionName versions.version_name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,12 +25,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api "com.jakewharton.threetenabp:threetenabp:1.1.1"
-    implementation "androidx.recyclerview:recyclerview:1.1.0-alpha04"
+    implementation "androidx.appcompat:appcompat:$versions.androidx_appcompat"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
+    api "com.jakewharton.threetenabp:threetenabp:$versions.threetenabp"
+    implementation "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
-    testImplementation "junit:junit:4.12"
+    testImplementation "junit:junit:$versions.junit"
     testImplementation('org.threeten:threetenbp:1.3.2') {
         exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
     }
