@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.View.MeasureSpec.UNSPECIFIED
+import androidx.annotation.LayoutRes
 import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -62,7 +63,9 @@ class CalendarView : RecyclerView {
      */
     var monthScrollListener: MonthScrollListener? = null
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context, @LayoutRes dayViewRes: Int) : super(context) {
+        this.dayViewRes = resNotZero(dayViewRes)
+    }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         init(attrs, 0, 0)
@@ -82,7 +85,7 @@ class CalendarView : RecyclerView {
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
-        dayViewRes = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewRes)
+        dayViewRes = resNotZero(a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewRes))
         monthHeaderRes = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderRes)
         monthFooterRes = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterRes)
         orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
@@ -90,7 +93,6 @@ class CalendarView : RecyclerView {
         outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
         monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
         a.recycle()
-        if (dayViewRes == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -393,5 +395,9 @@ class CalendarView : RecyclerView {
          * will be the width of the calender divided by 7.
          */
         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
+    }
+
+    private fun resNotZero(resource: Int): Int {
+        if (resource == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.") else return resource
     }
 }
