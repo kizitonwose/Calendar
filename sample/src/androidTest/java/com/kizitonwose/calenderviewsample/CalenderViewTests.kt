@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -25,8 +24,6 @@ import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
 import kotlinx.android.synthetic.main.exmaple_5_fragment.*
 import kotlinx.android.synthetic.main.exmaple_6_fragment.*
-import org.hamcrest.Description
-import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -230,21 +227,5 @@ class CalenderViewTests {
         sleep(5000) // Enough time for smooth scrolling animation.
 
         assertTrue(targetCalMonth?.yearMonth == targetMonth)
-    }
-}
-
-
-fun atPosition(position: Int, matcher: Matcher<View>): Matcher<View> {
-    return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
-
-        override fun describeTo(description: Description) {
-            description.appendText("has object at position: $position")
-            matcher.describeTo(description)
-        }
-
-        override fun matchesSafely(item: RecyclerView): Boolean {
-            val holder = item.findViewHolderForAdapterPosition(position) ?: return false
-            return matcher.matches(holder.itemView)
-        }
     }
 }
