@@ -30,5 +30,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api "com.jakewharton.threetenabp:threetenabp:1.1.1"
     implementation "androidx.recyclerview:recyclerview:1.1.0-alpha04"
+
+    testImplementation "junit:junit:4.12"
+    testImplementation('org.threeten:threetenbp:1.3.2') {
+        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+    }
 }
 
