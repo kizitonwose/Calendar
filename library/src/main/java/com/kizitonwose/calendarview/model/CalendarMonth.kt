@@ -85,7 +85,12 @@ class CalendarMonth internal constructor(
 
     override fun hashCode(): Int = yearMonth.hashCode()
 
-    override fun equals(other: Any?): Boolean = yearMonth == other
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        return yearMonth == (other as CalendarMonth).yearMonth
+    }
 
     override fun compareTo(other: CalendarMonth): Int = yearMonth.compareTo(other.yearMonth)
 }
