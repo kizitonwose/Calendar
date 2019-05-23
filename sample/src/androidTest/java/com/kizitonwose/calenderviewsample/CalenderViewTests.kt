@@ -13,11 +13,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.kizitonwose.calendarview.adapter.DayBinder
+import com.kizitonwose.calendarview.adapter.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.adapter.MonthViewHolder
 import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
@@ -87,6 +89,48 @@ class CalenderViewTests {
 
         assertTrue(boundDay?.date == changedDate)
         assertTrue(boundDay?.owner == DayOwner.THIS_MONTH)
+    }
+
+    @Test
+    fun testAllBindersAreCalledOnMonthChanged() {
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+
+        class TestViewContainer(view: View) : ViewContainer(view)
+
+        val calendarView = findFragment(Example2Fragment::class.java).exTwoCalendar
+
+        val boundDays = mutableSetOf<CalendarDay>()
+        var boundHeaderMonth: CalendarMonth? = null
+
+        homeScreenRule.runOnUiThread {
+            calendarView.dayBinder = object : DayBinder<TestViewContainer> {
+                override fun create(view: View) = TestViewContainer(view)
+                override fun bind(container: TestViewContainer, day: CalendarDay) {
+                    boundDays.add(day)
+                }
+            }
+            calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<TestViewContainer> {
+                override fun create(view: View) = TestViewContainer(view)
+                override fun bind(container: TestViewContainer, month: CalendarMonth) {
+                    boundHeaderMonth = month
+                }
+            }
+        }
+
+        // Allow the calendar to be rebuilt due to dayBinder change.
+        sleep(2000)
+
+        homeScreenRule.runOnUiThread {
+            boundDays.clear()
+            boundHeaderMonth = null
+            calendarView.notifyMonthChanged(currentMonth)
+        }
+
+        // Allow time for date change event to be propagated.
+        sleep(2000)
+
+        assertTrue(boundHeaderMonth?.yearMonth == currentMonth)
+        assertTrue(boundDays.count { it.owner == DayOwner.THIS_MONTH && it.date.yearMonth == currentMonth } == currentMonth.lengthOfMonth())
     }
 
     @Test
