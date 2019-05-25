@@ -34,6 +34,7 @@ import org.threeten.bp.YearMonth
 import java.lang.Thread.sleep
 
 
+// Core functionality tests are in the library project.
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class CalenderViewTests {

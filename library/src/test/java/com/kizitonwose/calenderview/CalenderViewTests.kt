@@ -12,6 +12,7 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
 
 
+// UI behaviour tests are in the sample project.
 class CalenderViewTests {
 
     // You can see what May 2019 with Monday as the first
