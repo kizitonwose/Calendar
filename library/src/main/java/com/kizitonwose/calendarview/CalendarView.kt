@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.*
+import com.kizitonwose.calendarview.utils.orZero
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -63,8 +64,18 @@ class CalendarView : RecyclerView {
      */
     var monthScrollListener: MonthScrollListener? = null
 
-    constructor(context: Context, @LayoutRes dayViewRes: Int) : super(context) {
+    constructor(
+        context: Context, @LayoutRes dayViewRes: Int, @LayoutRes monthHeaderRes: Int? = null,
+        @LayoutRes monthFooterRes: Int? = null, @RecyclerView.Orientation orientation: Int,
+        scrollMode: ScrollMode, outDateStyle: OutDateStyle, monthViewClass: String? = null
+    ) : super(context) {
         this.dayViewRes = resNotZero(dayViewRes)
+        this.monthHeaderRes = monthHeaderRes.orZero()
+        this.monthFooterRes = monthFooterRes.orZero()
+        this.orientation = orientation
+        this.scrollMode = scrollMode
+        this.outDateStyle = outDateStyle
+        this.monthViewClass = monthViewClass
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
