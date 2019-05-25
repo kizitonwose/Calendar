@@ -33,8 +33,10 @@ import org.junit.runner.RunWith
 import org.threeten.bp.YearMonth
 import java.lang.Thread.sleep
 
-
-// Core functionality tests are in the library project.
+/**
+ * These are UI behaviour tests.
+ * The core functionality tests are in the library project.
+ */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class CalenderViewTests {
