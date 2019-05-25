@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarview.adapter
+package com.kizitonwose.calendarview.ui
 
 import android.view.View
 import com.kizitonwose.calendarview.model.CalendarDay

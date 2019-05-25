@@ -1,11 +1,11 @@
 package com.kizitonwose.calenderview
 
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.adapter.CalendarConfig
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.OutDateStyle
 import com.kizitonwose.calendarview.model.ScrollMode
+import com.kizitonwose.calendarview.ui.CalendarConfig
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.threeten.bp.DayOfWeek

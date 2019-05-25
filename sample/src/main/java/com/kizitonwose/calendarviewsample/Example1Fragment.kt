@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
-import com.kizitonwose.calendarview.adapter.DayBinder
-import com.kizitonwose.calendarview.adapter.ViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.ViewContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*

@@ -1,6 +1,6 @@
 package com.kizitonwose.calendarview.model
 
-import com.kizitonwose.calendarview.adapter.CalendarConfig
+import com.kizitonwose.calendarview.ui.CalendarConfig
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.previous
 import org.threeten.bp.DayOfWeek

@@ -9,8 +9,8 @@ import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.kizitonwose.calendarview.adapter.*
 import com.kizitonwose.calendarview.model.*
+import com.kizitonwose.calendarview.ui.*
 import com.kizitonwose.calendarview.utils.orZero
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
