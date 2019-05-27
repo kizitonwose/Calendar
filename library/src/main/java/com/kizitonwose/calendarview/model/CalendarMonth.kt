@@ -17,7 +17,7 @@ class CalendarMonth internal constructor(
 ) : Comparable<CalendarMonth>, Serializable {
 
     val year: Int = yearMonth.year
-    val month: Int = yearMonth.month.value
+    val month: Int = yearMonth.monthValue
 
     private val ownedDays: List<CalendarDay> by lazy {
         weekDays.flatten().filter { it.owner == DayOwner.THIS_MONTH }
@@ -56,16 +56,11 @@ class CalendarMonth internal constructor(
         while (weekDaysGroup.size < 6) {
             if (config.outDateStyle == OutDateStyle.END_OF_GRID) {
                 val lastDay = weekDaysGroup.last().last()
-                val newRowDates = if (lastDay.owner == DayOwner.THIS_MONTH) {
-                    (1..7).map {
-                        CalendarDay(LocalDate.of(next.year, next.month, it), DayOwner.NEXT_MONTH)
-                    }
-                } else {
-                    (1..7).map {
-                        CalendarDay(LocalDate.of(next.year, next.month, it + lastDay.day), DayOwner.NEXT_MONTH)
-                    }
+                val nextRowDates = (1..7).map {
+                    val dayValue = if (lastDay.owner == DayOwner.THIS_MONTH) it else it + lastDay.day
+                    CalendarDay(LocalDate.of(next.year, next.month, dayValue), DayOwner.NEXT_MONTH)
                 }
-                weekDaysGroup.add(newRowDates)
+                weekDaysGroup.add(nextRowDates)
             } else {
                 weekDaysGroup.add(emptyList())
             }
