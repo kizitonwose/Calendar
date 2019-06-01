@@ -29,9 +29,9 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 
 It's very important to check out the sample app. Most techniques that you would want to implement are already implemented in the examples.
 
-Get the sample apk [here](https://github.com/kizitonwose/CalendarView/releases/download/0.1.0/sample.apk)
+Get the sample app [here](https://github.com/kizitonwose/CalendarView/releases/download/0.1.0/sample.apk)
 
-View the sample module's source code [here][sample-url]
+View the sample app's source code [here][sample-url]
 
 ## Usage
 
@@ -217,7 +217,6 @@ dependencies {
 }
 ```
 **Note: `<latest-version>` value can be found on the JitPack badge above the preview images.**
-
 
 ## Contributing
 
