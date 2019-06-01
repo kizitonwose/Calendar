@@ -1,6 +1,6 @@
 # CalendarView
 
-A highly customizable library for implementing a calendar view in android apps.
+A highly customizable calendar library for Android, powered by RecyclerView.
 
 [![Build Status](https://travis-ci.org/kizitonwose/CalendarView.svg?branch=master)](https://travis-ci.org/kizitonwose/CalendarView) 
 [![JitPack](https://jitpack.io/v/kizitonwose/CalendarView.svg)](https://jitpack.io/#kizitonwose/CalendarView) 
