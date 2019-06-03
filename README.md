@@ -22,7 +22,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 - [x] Horizontal or vertical scrolling mode.
 - [x] Add headers/footers of any kind on each month.
 - [x] Easily scroll to any date or month view using the date.
-- [x] Use all RecyclerView customisations(decorators etc) since the CalendarView entends from RecyclerView.
+- [x] Use all RecyclerView customisations(decorators etc) since the CalendarView extends from RecyclerView.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/CalendarView/issues/1) The library provides the logic, you provide the views.
 
 ## Sample project
