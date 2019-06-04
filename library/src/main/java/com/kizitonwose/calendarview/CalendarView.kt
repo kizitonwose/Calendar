@@ -361,8 +361,35 @@ class CalendarView : RecyclerView {
      *
      * @return The first visible month or null if not found.
      */
-    fun getFirstVisibleMonth(): CalendarMonth? {
-        return calendarAdapter.getFirstVisibleMonth()
+    fun findFirstVisibleMonth(): CalendarMonth? {
+        return calendarAdapter.findFirstVisibleMonth()
+    }
+
+    /**
+     * Find the last visible month on the CalendarView.
+     *
+     * @return The last visible month or null if not found.
+     */
+    fun findLastVisibleMonth(): CalendarMonth? {
+        return calendarAdapter.findLastVisibleMonth()
+    }
+
+    /**
+     * Find the first completely visible month on the CalendarView.
+     *
+     * @return The first completely visible month or null if not found.
+     */
+    fun findFirstCompletelyVisibleMonth(): CalendarMonth? {
+        return calendarAdapter.findFirstCompletelyVisibleMonth()
+    }
+
+    /**
+     * Find the last completely visible month on the CalendarView.
+     *
+     * @return The last completely visible month or null if not found.
+     */
+    fun findLastCompletelyVisibleMonth(): CalendarMonth? {
+        return calendarAdapter.findLastCompletelyVisibleMonth()
     }
 
     /**

@@ -204,11 +204,19 @@ class CalendarAdapter(
         return months.indexOfFirst { it.yearMonth == month }
     }
 
-    fun getFirstVisibleMonth(): CalendarMonth? {
-        val visibleItemPos = (calView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        if (visibleItemPos != RecyclerView.NO_POSITION) {
-            return months[visibleItemPos]
-        }
-        return null
-    }
+    private val layoutManager: CalendarLayoutManager
+        get() = calView.layoutManager as CalendarLayoutManager
+
+    fun findFirstVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findFirstVisibleItemPosition())
+
+    fun findLastVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findLastVisibleItemPosition())
+
+    fun findFirstCompletelyVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findFirstCompletelyVisibleItemPosition())
+
+    fun findLastCompletelyVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findLastCompletelyVisibleItemPosition())
+
 }
