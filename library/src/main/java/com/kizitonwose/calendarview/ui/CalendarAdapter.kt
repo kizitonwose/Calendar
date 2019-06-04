@@ -1,11 +1,11 @@
 package com.kizitonwose.calendarview.ui
 
 import android.content.Context
+import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
@@ -17,6 +17,9 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
 
 internal typealias LP = ViewGroup.LayoutParams
+
+internal val CalendarLayoutManager.isVertical: Boolean
+    get() = orientation == RecyclerView.VERTICAL
 
 class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
@@ -165,9 +168,33 @@ class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun findVisibleMonthAndNotify() {
-        val visibleItemPos = (calView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        val visibleItemPos = layoutManager.findFirstVisibleItemPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
-            val visibleMonth = months[visibleItemPos]
+            var visibleMonth = months[visibleItemPos]
+
+            // We make sure that the view for the returned position has at least one fully visible date cell.
+            val visibleItemPx = Rect().let { rect ->
+                val visibleItemView = layoutManager.findViewByPosition(visibleItemPos)
+                visibleItemView!!.getGlobalVisibleRect(rect)
+                return@let if (layoutManager.isVertical) {
+                    rect.bottom - rect.top - visibleItemView.paddingBottom
+                } else {
+                    rect.right - rect.left - visibleItemView.paddingRight
+                }
+            }
+
+            val firstVisibleMonthHasNoVisibleDateCell =
+                visibleItemPx < if (layoutManager.isVertical) calView.dayHeight else calView.dayWidth
+
+            if (firstVisibleMonthHasNoVisibleDateCell) {
+                val nextPos = visibleItemPos.inc()
+                if (months.indices.contains(nextPos)) {
+                    visibleMonth = visibleMonth.next
+                } else {
+                    return
+                }
+            }
+
             if (visibleMonth != this.visibleMonth) {
                 this.visibleMonth = visibleMonth
                 calView.monthScrollListener?.invoke(visibleMonth)
@@ -204,11 +231,19 @@ class CalendarAdapter(
         return months.indexOfFirst { it.yearMonth == month }
     }
 
-    fun getFirstVisibleMonth(): CalendarMonth? {
-        val visibleItemPos = (calView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        if (visibleItemPos != RecyclerView.NO_POSITION) {
-            return months[visibleItemPos]
-        }
-        return null
-    }
+    private val layoutManager: CalendarLayoutManager
+        get() = calView.layoutManager as CalendarLayoutManager
+
+    fun findFirstVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findFirstVisibleItemPosition())
+
+    fun findLastVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findLastVisibleItemPosition())
+
+    fun findFirstCompletelyVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findFirstCompletelyVisibleItemPosition())
+
+    fun findLastCompletelyVisibleMonth(): CalendarMonth? =
+        months.getOrNull(layoutManager.findLastCompletelyVisibleItemPosition())
+
 }
