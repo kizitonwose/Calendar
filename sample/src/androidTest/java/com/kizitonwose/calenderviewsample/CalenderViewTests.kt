@@ -139,7 +139,7 @@ class CalenderViewTests {
 
         val calendarView = findFragment(Example5Fragment::class.java).exFiveCalendar
 
-        assertTrue(calendarView.findFirstVisibleMonth()?.yearMonth == currentMonth)
+        assertTrue(calendarView.findViewById<View?>(currentMonth.atDay(1).hashCode()) != null)
 
         val nextFourMonths = currentMonth.plusMonths(4)
 
@@ -149,7 +149,8 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        assertTrue(calendarView.findFirstVisibleMonth()?.yearMonth == nextFourMonths)
+        assertTrue(calendarView.findViewById<View?>(currentMonth.atDay(1).hashCode()) == null)
+        assertTrue(calendarView.findViewById<View?>(nextFourMonths.atDay(1).hashCode()) != null)
     }
 
 
