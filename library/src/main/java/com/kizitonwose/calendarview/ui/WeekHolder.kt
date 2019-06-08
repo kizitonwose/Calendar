@@ -19,6 +19,7 @@ class WeekHolder(dayConfig: DayConfig) {
             )
             orientation = LinearLayout.HORIZONTAL
             weightSum = dayHolders.count().toFloat()
+            clipChildren = false //#ClipChildrenFix
             for (holder in dayHolders) {
                 addView(holder.inflateDayView(this))
             }

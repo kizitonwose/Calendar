@@ -69,6 +69,7 @@ class CalendarAdapter(
         val rootLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             id = rootViewId
+            clipChildren = false //#ClipChildrenFix
         }
 
         if (monthHeaderRes != 0) {
@@ -86,6 +87,7 @@ class CalendarAdapter(
             layoutParams = LinearLayout.LayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT)
             orientation = LinearLayout.VERTICAL
             id = bodyViewId
+            clipChildren = false //#ClipChildrenFix
         }
         rootLayout.addView(monthBodyLayout)
 
@@ -221,6 +223,9 @@ class CalendarAdapter(
                     if (calView.layoutParams.height != newHeight)
                         calView.layoutParams = calView.layoutParams.apply {
                             this.height = newHeight
+                            // If we reset the calendar's height from a short item view's height(month with 5 rows)
+                            // to a longer one(month with 6 rows), the row outside the old height is not drawn.
+                            // This is fixed by setting `clipChildren = false` on all parents. #ClipChildrenFix
                         }
                 }
             }
