@@ -406,6 +406,7 @@ class CalendarView : RecyclerView {
         val config = CalendarConfig(outDateStyle, scrollMode, orientation, monthViewClass)
         if (layoutManager == null) {
             clipToPadding = false
+            clipChildren = false //#ClipChildrenFix
             layoutManager = CalendarLayoutManager(this, config)
 
             if (scrollMode == ScrollMode.PAGED) {
@@ -414,7 +415,7 @@ class CalendarView : RecyclerView {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (newState == SCROLL_STATE_IDLE) {
                         calendarAdapter.findVisibleMonthAndNotify()
                     }
                 }
