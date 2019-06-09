@@ -6,6 +6,9 @@ enum class DayOwner {
 
 enum class OutDateStyle {
     END_OF_ROW, END_OF_GRID
+
+enum class InDateStyle {
+    ALL_MONTHS, NONE
 }
 
 enum class ScrollMode {

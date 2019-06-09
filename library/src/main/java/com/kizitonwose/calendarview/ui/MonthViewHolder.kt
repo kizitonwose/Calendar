@@ -4,13 +4,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.OutDateStyle
-import com.kizitonwose.calendarview.model.ScrollMode
+import com.kizitonwose.calendarview.model.*
 
 data class CalendarConfig(
     val outDateStyle: OutDateStyle,
+    val inDateStyle: InDateStyle,
     val scrollMode: ScrollMode,
     @RecyclerView.Orientation val orientation: Int,
     val monthViewClass: String?,

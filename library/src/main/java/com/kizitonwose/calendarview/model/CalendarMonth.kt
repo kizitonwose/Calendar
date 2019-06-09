@@ -72,8 +72,19 @@ object CalendarMonthGenerator {
         }
 
         // Group days by week of month
-        val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
-        val weekDaysGroup = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+        val weekDaysGroup = if (config.inDateStyle == InDateStyle.NONE) {
+            val copy = thisMonthDays.toMutableList()
+            val groupBySeven = mutableListOf<List<CalendarDay>>()
+            while (copy.isNotEmpty()) {
+                val nextRow = copy.take(7)
+                groupBySeven.add(nextRow)
+                copy.removeAll(nextRow)
+            }
+            groupBySeven
+        } else {
+            val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
+            thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+        }
 
         // Add in-dates if necessary
         val firstWeek = weekDaysGroup.first()
