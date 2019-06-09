@@ -123,16 +123,17 @@ object CalendarMonthGenerator {
             }
         }
 
-        val months = mutableListOf<CalendarMonth>()
+        // Group rows by maxRowCount into CalendarMonth classes.
+        val calendarMonths = mutableListOf<CalendarMonth>()
         val div = weekDaysGroup.count() / config.maxRowCount
         val rem = weekDaysGroup.count() % config.maxRowCount
         val numberOfSameMonth = if (rem == 0) div else div + 1
         while (weekDaysGroup.isNotEmpty()) {
             val monthDays = weekDaysGroup.take(config.maxRowCount)
-            months.add(CalendarMonth(yearMonth, monthDays, months.count(), numberOfSameMonth))
+            calendarMonths.add(CalendarMonth(yearMonth, monthDays, calendarMonths.count(), numberOfSameMonth))
             weekDaysGroup.removeAll(monthDays)
         }
-        return months
+        return calendarMonths
     }
 
 

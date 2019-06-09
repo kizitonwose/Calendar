@@ -2,7 +2,6 @@ package com.kizitonwose.calendarview
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.view.View.MeasureSpec.UNSPECIFIED
 import androidx.annotation.LayoutRes
 import androidx.annotation.Px
@@ -67,7 +66,8 @@ class CalendarView : RecyclerView {
     constructor(
         context: Context, @LayoutRes dayViewRes: Int, @LayoutRes monthHeaderRes: Int? = null,
         @LayoutRes monthFooterRes: Int? = null, @RecyclerView.Orientation orientation: Int,
-        scrollMode: ScrollMode, outDateStyle: OutDateStyle, monthViewClass: String? = null
+        scrollMode: ScrollMode, outDateStyle: OutDateStyle, inDateStyle: InDateStyle,
+        maxRowCount: Int, monthViewClass: String? = null
     ) : super(context) {
         this.dayViewRes = resNotZero(dayViewRes)
         this.monthHeaderRes = monthHeaderRes.orZero()
@@ -75,6 +75,8 @@ class CalendarView : RecyclerView {
         this.orientation = orientation
         this.scrollMode = scrollMode
         this.outDateStyle = outDateStyle
+        this.inDateStyle = inDateStyle
+        this.maxRowCount = maxRowCount
         this.monthViewClass = monthViewClass
     }
 
@@ -104,15 +106,17 @@ class CalendarView : RecyclerView {
         orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
         scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
         outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
+        inDateStyle = InDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_inDateStyle, inDateStyle.ordinal)]
+        maxRowCount = a.getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
         monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
         a.recycle()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (autoSize && isInEditMode.not()) {
-            val widthMode = View.MeasureSpec.getMode(widthMeasureSpec)
-            val widthSize = View.MeasureSpec.getSize(widthMeasureSpec)
-            val heightMode = View.MeasureSpec.getMode(heightMeasureSpec)
+            val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+            val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+            val heightMode = MeasureSpec.getMode(heightMeasureSpec)
 
             if (widthMode == UNSPECIFIED && heightMode == UNSPECIFIED) {
                 throw UnsupportedOperationException("Cannot calculate the values for day Width/Height with the current configuration.")

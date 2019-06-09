@@ -4,6 +4,7 @@
         <attr name="cv_dayViewResource" format="reference" />
         <attr name="cv_monthHeaderResource" format="reference" />
         <attr name="cv_monthFooterResource" format="reference" />
+        <attr name="cv_maxRowCount" format="integer" />
         <attr name="cv_monthViewClass" format="string" />
         <attr name="cv_orientation" format="enum">
             <enum name="horizontal" value="0" />
@@ -12,11 +13,15 @@
         <attr name="cv_outDateStyle" format="enum">
             <enum name="endOfRow" value="0" />
             <enum name="endOfGrid" value="1" />
+            <enum name="none" value="2" />
+        </attr>
+        <attr name="cv_inDateStyle" format="enum">
+            <enum name="allMonths" value="0" />
+            <enum name="none" value="1" />
         </attr>
         <attr name="cv_scrollMode" format="enum">
             <enum name="continuous" value="0" />
             <enum name="paged" value="1" />
         </attr>
-
     </declare-styleable>
 </resources>
