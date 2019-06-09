@@ -97,28 +97,29 @@ object CalendarMonthGenerator {
             weekDaysGroup[0] = inDates + firstWeek
         }
 
-        // Add out-dates if necessary.
-        val nextMonth = yearMonth.plusMonths(1)
-        val lastWeek = weekDaysGroup.last()
-        if (lastWeek.size < 7) {
-            val outDates = (1..7 - lastWeek.size).map {
-                CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, it), DayOwner.NEXT_MONTH)
-            }
-            weekDaysGroup[weekDaysGroup.lastIndex] = lastWeek + outDates
-        }
-
-        // Ensure we have a representation of all 6 week rows
-        if (config.outDateStyle == OutDateStyle.END_OF_GRID) {
-            while (weekDaysGroup.size < 6) {
-                val lastDay = weekDaysGroup.last().last()
-                val nextRowDates = (1..7).map {
-                    val dayValue = if (lastDay.owner == DayOwner.THIS_MONTH) it else it + lastDay.day
-                    CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, dayValue), DayOwner.NEXT_MONTH)
+        if (config.outDateStyle == OutDateStyle.END_OF_ROW || config.outDateStyle == OutDateStyle.END_OF_GRID) {
+            // Add out-dates for the last row.
+            val nextMonth = yearMonth.plusMonths(1)
+            val lastWeek = weekDaysGroup.last()
+            if (lastWeek.size < 7) {
+                val outDates = (1..7 - lastWeek.size).map {
+                    CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, it), DayOwner.NEXT_MONTH)
                 }
-                weekDaysGroup.add(nextRowDates)
+                weekDaysGroup[weekDaysGroup.lastIndex] = lastWeek + outDates
+            }
+
+            // Add more rows to form a 6 x 7 grid
+            if (config.outDateStyle == OutDateStyle.END_OF_GRID) {
+                while (weekDaysGroup.size < 6) {
+                    val lastDay = weekDaysGroup.last().last()
+                    val nextRowDates = (1..7).map {
+                        val dayValue = if (lastDay.owner == DayOwner.THIS_MONTH) it else it + lastDay.day
+                        CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, dayValue), DayOwner.NEXT_MONTH)
+                    }
+                    weekDaysGroup.add(nextRowDates)
+                }
             }
         }
-
 
         val months = mutableListOf<CalendarMonth>()
         val div = weekDaysGroup.count() / config.maxRowCount
