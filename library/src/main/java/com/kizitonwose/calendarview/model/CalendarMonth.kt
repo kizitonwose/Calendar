@@ -84,27 +84,23 @@ object CalendarMonthGenerator {
         }
 
         // Ensure we have a representation of all 6 week rows
-        while (weekDaysGroup.size < 6) {
-            if (config.outDateStyle == OutDateStyle.END_OF_GRID) {
+        if (config.outDateStyle == OutDateStyle.END_OF_GRID) {
+            while (weekDaysGroup.size < 6) {
                 val lastDay = weekDaysGroup.last().last()
                 val nextRowDates = (1..7).map {
                     val dayValue = if (lastDay.owner == DayOwner.THIS_MONTH) it else it + lastDay.day
                     CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, dayValue), DayOwner.NEXT_MONTH)
                 }
                 weekDaysGroup.add(nextRowDates)
-            } else {
-                weekDaysGroup.add(emptyList())
             }
         }
 
 
         val months = mutableListOf<CalendarMonth>()
-        var startIndex = 0
-        val maxRowCount = config.maxRowCount
-        while (startIndex < 6) {
-            val monthDays = weekDaysGroup.subList(startIndex, maxRowCount)
+        while (weekDaysGroup.isNotEmpty()) {
+            val monthDays = weekDaysGroup.take(config.maxRowCount)
             months.add(CalendarMonth(yearMonth, monthDays, months.count()))
-            startIndex += maxRowCount
+            weekDaysGroup.removeAll(monthDays)
         }
         return months
     }

@@ -14,7 +14,7 @@ data class CalendarConfig(
     val scrollMode: ScrollMode,
     @RecyclerView.Orientation val orientation: Int,
     val monthViewClass: String?,
-    val maxRowCount: Int = 6
+    val maxRowCount: Int = 2
 )
 
 class MonthViewHolder constructor(
@@ -58,7 +58,7 @@ class MonthViewHolder constructor(
             monthFooterBinder?.bind(footerContainer, month)
         }
         weekHolders.forEachIndexed { index, week ->
-            week.bindWeekView(month.weekDays[index])
+            week.bindWeekView(month.weekDays.getOrNull(index).orEmpty())
         }
     }
 
