@@ -69,16 +69,15 @@ object CalendarMonthGenerator {
 
         val thisMonthDays = (1..yearMonth.lengthOfMonth()).map {
             CalendarDay(LocalDate.of(year, month, it), DayOwner.THIS_MONTH)
-        }
+        }.toMutableList()
 
         // Group days by week of month
         val weekDaysGroup = if (config.inDateStyle == InDateStyle.NONE) {
-            val copy = thisMonthDays.toMutableList()
             val groupBySeven = mutableListOf<List<CalendarDay>>()
-            while (copy.isNotEmpty()) {
-                val nextRow = copy.take(7)
+            while (thisMonthDays.isNotEmpty()) {
+                val nextRow = thisMonthDays.take(7)
                 groupBySeven.add(nextRow)
-                copy.removeAll(nextRow)
+                thisMonthDays.removeAll(nextRow)
             }
             groupBySeven
         } else {

@@ -11,8 +11,8 @@ data class CalendarConfig(
     val inDateStyle: InDateStyle,
     val scrollMode: ScrollMode,
     @RecyclerView.Orientation val orientation: Int,
-    val monthViewClass: String?,
-    val maxRowCount: Int = 2
+    val maxRowCount: Int,
+    val monthViewClass: String?
 )
 
 class MonthViewHolder constructor(

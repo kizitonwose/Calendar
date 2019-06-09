@@ -89,9 +89,11 @@ class CalendarView : RecyclerView {
     private var dayViewRes: Int = 0
     private var monthHeaderRes: Int = 0
     private var monthFooterRes: Int = 0
-    private var orientation = RecyclerView.VERTICAL
+    private var orientation = VERTICAL
     private var scrollMode = ScrollMode.CONTINUOUS
     private var outDateStyle = OutDateStyle.END_OF_ROW
+    private var inDateStyle = InDateStyle.ALL_MONTHS
+    private var maxRowCount = 6
     private var monthViewClass: String? = null
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
@@ -403,7 +405,7 @@ class CalendarView : RecyclerView {
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
-        val config = CalendarConfig(outDateStyle, scrollMode, orientation, monthViewClass)
+        val config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount, monthViewClass)
         if (layoutManager == null) {
             clipToPadding = false
             clipChildren = false //#ClipChildrenFix
