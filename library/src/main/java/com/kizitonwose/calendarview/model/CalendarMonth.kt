@@ -13,7 +13,26 @@ data class CalendarSubMonth(val yearMonth: YearMonth, val weekDays: List<List<Ca
 
 object CalendarMonthGenerator {
 
-    fun generateMonths(yearMonth: YearMonth, firstDayOfWeek: DayOfWeek, config: CalendarConfig): List<CalendarSubMonth> {
+    fun generateMonths(
+        startMonth: YearMonth,
+        endMonth: YearMonth,
+        firstDayOfWeek: DayOfWeek,
+        config: CalendarConfig
+    ): List<CalendarSubMonth> {
+        val months = mutableListOf<CalendarSubMonth>()
+        var lastMonth = startMonth
+        while (lastMonth <= endMonth) {
+            months.addAll(generateSubMonths(lastMonth, firstDayOfWeek, config))
+            lastMonth = lastMonth.next
+        }
+        return months
+    }
+
+    fun generateSubMonths(
+        yearMonth: YearMonth,
+        firstDayOfWeek: DayOfWeek,
+        config: CalendarConfig
+    ): List<CalendarSubMonth> {
         val year = yearMonth.year
         val month = yearMonth.monthValue
 
