@@ -71,8 +71,8 @@ object CalendarMonthGenerator {
             CalendarDay(LocalDate.of(year, month, it), DayOwner.THIS_MONTH)
         }.toMutableList()
 
-        // Group days by week of month
         val weekDaysGroup = if (config.inDateStyle == InDateStyle.NONE) {
+            // Group days by 7, first day shown on the month will be day 1.
             val groupBySeven = mutableListOf<List<CalendarDay>>()
             while (thisMonthDays.isNotEmpty()) {
                 val nextRow = thisMonthDays.take(7)
@@ -81,20 +81,23 @@ object CalendarMonthGenerator {
             }
             groupBySeven
         } else {
+            // Group days by week of month so we can add the in dates if necessary.
             val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
-            thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+            val groupByWeekOfMonth = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+
+            // Add in-dates if necessary
+            val firstWeek = groupByWeekOfMonth.first()
+            if (firstWeek.size < 7) {
+                val previousMonth = yearMonth.minusMonths(1)
+                val inDates = (1..previousMonth.lengthOfMonth()).toList()
+                    .takeLast(7 - firstWeek.size).map {
+                        CalendarDay(LocalDate.of(previousMonth.year, previousMonth.month, it), DayOwner.PREVIOUS_MONTH)
+                    }
+                groupByWeekOfMonth[0] = inDates + firstWeek
+            }
+            groupByWeekOfMonth
         }
 
-        // Add in-dates if necessary
-        val firstWeek = weekDaysGroup.first()
-        if (firstWeek.size < 7) {
-            val previousMonth = yearMonth.minusMonths(1)
-            val inDates = (1..previousMonth.lengthOfMonth()).toList()
-                .takeLast(7 - firstWeek.size).map {
-                    CalendarDay(LocalDate.of(previousMonth.year, previousMonth.month, it), DayOwner.PREVIOUS_MONTH)
-                }
-            weekDaysGroup[0] = inDates + firstWeek
-        }
 
         if (config.outDateStyle == OutDateStyle.END_OF_ROW || config.outDateStyle == OutDateStyle.END_OF_GRID) {
             // Add out-dates for the last row.
