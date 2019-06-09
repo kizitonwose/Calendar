@@ -24,4 +24,4 @@ val YearMonth.next: YearMonth
 val YearMonth.previous: YearMonth
     get() = this.minusMonths(1)
 
-internal val INVALID_INDEX = -1
+internal val NO_INDEX = -1

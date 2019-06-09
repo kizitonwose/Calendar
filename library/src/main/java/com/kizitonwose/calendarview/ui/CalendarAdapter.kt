@@ -142,7 +142,7 @@ class CalendarAdapter(
 
     fun reloadDay(day: CalendarDay) {
         val position = getAdapterPosition(day)
-        if (position != INVALID_INDEX) {
+        if (position != NO_INDEX) {
             notifyItemChanged(position, day)
         }
     }
@@ -175,7 +175,7 @@ class CalendarAdapter(
             if (firstVisibleMonthHasNoVisibleDateCell) {
                 visibleItemPos++
                 if (months.indices.contains(visibleItemPos)) {
-                     visibleMonth = months[visibleItemPos]
+                    visibleMonth = months[visibleItemPos]
                 } else {
                     return
                 }
@@ -222,10 +222,7 @@ class CalendarAdapter(
 
     internal fun getAdapterPosition(date: LocalDate): Int {
         val firstMonthIndex = getAdapterPosition(date.yearMonth)
-        if (firstMonthIndex == INVALID_INDEX) {
-            return INVALID_INDEX
-        }
-        return getAdapterPosition(CalendarDay(date, DayOwner.THIS_MONTH))
+        return if (firstMonthIndex == NO_INDEX) NO_INDEX else getAdapterPosition(CalendarDay(date, DayOwner.THIS_MONTH))
     }
 
     internal fun getAdapterPosition(day: CalendarDay): Int {
@@ -237,9 +234,7 @@ class CalendarAdapter(
         }
 
         val firstMonthIndex = getAdapterPosition(yearMonth)
-        if (firstMonthIndex == INVALID_INDEX) {
-            return INVALID_INDEX
-        }
+        if (firstMonthIndex == NO_INDEX) return NO_INDEX
 
         val firstCalMonth = months[firstMonthIndex]
         val sameMonths = months.slice(firstMonthIndex until firstMonthIndex + firstCalMonth.numberOfSameMonth)
@@ -247,7 +242,7 @@ class CalendarAdapter(
             month.weekDays.flatten().any { it.date == day.date }
         }
 
-        return if (indexWithDateInSameMonth == INVALID_INDEX) INVALID_INDEX else firstMonthIndex + indexWithDateInSameMonth
+        return if (indexWithDateInSameMonth == NO_INDEX) NO_INDEX else firstMonthIndex + indexWithDateInSameMonth
     }
 
     private val layoutManager: CalendarLayoutManager
