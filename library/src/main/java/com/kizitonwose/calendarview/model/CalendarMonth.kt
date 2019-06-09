@@ -6,25 +6,38 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.temporal.WeekFields
+import java.io.Serializable
 
-data class CalendarMonth(val yearMonth: YearMonth, val weekDays: List<List<CalendarDay>>, val indexInMonth: Int) {
+data class CalendarMonth(
+    val yearMonth: YearMonth,
+    val weekDays: List<List<CalendarDay>>,
+    val indexInSameMonth: Int,
+    val numberOfSameMonth: Int
+) :
+    Comparable<CalendarMonth>, Serializable {
     val year: Int = yearMonth.year
     val month: Int = yearMonth.monthValue
 
     override fun hashCode(): Int {
         var result = yearMonth.hashCode()
-        result = 31 * result + indexInMonth
+        result = 31 * result + indexInSameMonth
         return result
     }
-
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        val lhs = this
-        val rhs = (other as CalendarMonth)
-        return lhs.yearMonth == rhs.yearMonth && lhs.indexInMonth == rhs.indexInMonth
+        (other as CalendarMonth)
+        return yearMonth == other.yearMonth && indexInSameMonth == other.indexInSameMonth
+    }
+
+    override fun compareTo(other: CalendarMonth): Int {
+        val monthResult = yearMonth.compareTo(other.yearMonth)
+        if (monthResult == 0) { // Same yearMonth
+            return indexInSameMonth.compareTo(other.indexInSameMonth)
+        }
+        return monthResult
     }
 
 }
@@ -97,13 +110,18 @@ object CalendarMonthGenerator {
 
 
         val months = mutableListOf<CalendarMonth>()
+        val div = weekDaysGroup.count() / config.maxRowCount
+        val rem = weekDaysGroup.count() % config.maxRowCount
+        val numberOfSameMonth = if (rem == 0) div else div + 1
         while (weekDaysGroup.isNotEmpty()) {
             val monthDays = weekDaysGroup.take(config.maxRowCount)
-            months.add(CalendarMonth(yearMonth, monthDays, months.count()))
+            months.add(CalendarMonth(yearMonth, monthDays, months.count(), numberOfSameMonth))
             weekDaysGroup.removeAll(monthDays)
         }
         return months
     }
+
+
 }
 
 

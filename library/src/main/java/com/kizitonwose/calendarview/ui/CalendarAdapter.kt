@@ -11,6 +11,7 @@ import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.utils.*
 import org.threeten.bp.DayOfWeek
+import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
 internal typealias LP = ViewGroup.LayoutParams
@@ -140,14 +141,8 @@ class CalendarAdapter(
     }
 
     fun reloadDay(day: CalendarDay) {
-        val yearMonth = when (day.owner) {
-            // Find the actual month that owns this date.
-            DayOwner.THIS_MONTH -> day.date.yearMonth
-            DayOwner.PREVIOUS_MONTH -> day.date.yearMonth.next
-            DayOwner.NEXT_MONTH -> day.date.yearMonth.previous
-        }
-        val position = getAdapterPosition(yearMonth)
-        if (position != -1) {
+        val position = getAdapterPosition(day)
+        if (position != INVALID_INDEX) {
             notifyItemChanged(position, day)
         }
     }
@@ -223,6 +218,36 @@ class CalendarAdapter(
 
     internal fun getAdapterPosition(month: YearMonth): Int {
         return months.indexOfFirst { it.yearMonth == month }
+    }
+
+    internal fun getAdapterPosition(date: LocalDate): Int {
+        val firstMonthIndex = getAdapterPosition(date.yearMonth)
+        if (firstMonthIndex == INVALID_INDEX) {
+            return INVALID_INDEX
+        }
+        return getAdapterPosition(CalendarDay(date, DayOwner.THIS_MONTH))
+    }
+
+    internal fun getAdapterPosition(day: CalendarDay): Int {
+        val yearMonth = when (day.owner) {
+            // Find the actual month that owns this date.
+            DayOwner.THIS_MONTH -> day.date.yearMonth
+            DayOwner.PREVIOUS_MONTH -> day.date.yearMonth.next
+            DayOwner.NEXT_MONTH -> day.date.yearMonth.previous
+        }
+
+        val firstMonthIndex = getAdapterPosition(yearMonth)
+        if (firstMonthIndex == INVALID_INDEX) {
+            return INVALID_INDEX
+        }
+
+        val firstCalMonth = months[firstMonthIndex]
+        val sameMonths = months.slice(firstMonthIndex until firstMonthIndex + firstCalMonth.numberOfSameMonth)
+        val indexWithDateInSameMonth = sameMonths.indexOfFirst { month ->
+            month.weekDays.flatten().any { it.date == day.date }
+        }
+
+        return if (indexWithDateInSameMonth == INVALID_INDEX) INVALID_INDEX else firstMonthIndex + indexWithDateInSameMonth
     }
 
     private val layoutManager: CalendarLayoutManager
