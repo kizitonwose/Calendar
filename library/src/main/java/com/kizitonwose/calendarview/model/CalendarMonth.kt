@@ -2,37 +2,55 @@ package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.ui.CalendarConfig
 import com.kizitonwose.calendarview.utils.next
-import com.kizitonwose.calendarview.utils.previous
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.temporal.WeekFields
-import java.io.Serializable
 
-data class CalendarSubMonth(val yearMonth: YearMonth, val weekDays: List<List<CalendarDay>>, val indexInMonth: Int)
+data class CalendarMonth(val yearMonth: YearMonth, val weekDays: List<List<CalendarDay>>, val indexInMonth: Int) {
+    val year: Int = yearMonth.year
+    val month: Int = yearMonth.monthValue
+
+    override fun hashCode(): Int {
+        var result = yearMonth.hashCode()
+        result = 31 * result + indexInMonth
+        return result
+    }
+
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        val lhs = this
+        val rhs = (other as CalendarMonth)
+        return lhs.yearMonth == rhs.yearMonth && lhs.indexInMonth == rhs.indexInMonth
+    }
+
+}
 
 object CalendarMonthGenerator {
 
-    fun generateMonths(
+    fun generate(
         startMonth: YearMonth,
         endMonth: YearMonth,
         firstDayOfWeek: DayOfWeek,
         config: CalendarConfig
-    ): List<CalendarSubMonth> {
-        val months = mutableListOf<CalendarSubMonth>()
+    ): List<CalendarMonth> {
+        val months = mutableListOf<CalendarMonth>()
         var lastMonth = startMonth
         while (lastMonth <= endMonth) {
-            months.addAll(generateSubMonths(lastMonth, firstDayOfWeek, config))
+            months.addAll(generateForMonth(lastMonth, firstDayOfWeek, config))
             lastMonth = lastMonth.next
         }
         return months
     }
 
-    fun generateSubMonths(
+    fun generateForMonth(
         yearMonth: YearMonth,
         firstDayOfWeek: DayOfWeek,
         config: CalendarConfig
-    ): List<CalendarSubMonth> {
+    ): List<CalendarMonth> {
         val year = yearMonth.year
         val month = yearMonth.monthValue
 
@@ -80,12 +98,12 @@ object CalendarMonthGenerator {
         }
 
 
-        val months = mutableListOf<CalendarSubMonth>()
+        val months = mutableListOf<CalendarMonth>()
         var startIndex = 0
         val maxRowCount = config.maxRowCount
         while (startIndex < 6) {
             val monthDays = weekDaysGroup.subList(startIndex, maxRowCount)
-            months.add(CalendarSubMonth(yearMonth, monthDays, months.count()))
+            months.add(CalendarMonth(yearMonth, monthDays, months.count()))
             startIndex += maxRowCount
         }
         return months
@@ -93,6 +111,7 @@ object CalendarMonthGenerator {
 }
 
 
+/*
 class CalendarMonth internal constructor(
     val yearMonth: YearMonth,
     private val config: CalendarConfig,
@@ -172,3 +191,4 @@ class CalendarMonth internal constructor(
 
     override fun compareTo(other: CalendarMonth): Int = yearMonth.compareTo(other.yearMonth)
 }
+*/

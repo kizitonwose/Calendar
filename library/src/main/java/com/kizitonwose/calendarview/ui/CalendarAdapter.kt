@@ -8,10 +8,7 @@ import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.model.ScrollMode
+import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.utils.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
@@ -32,7 +29,7 @@ class CalendarAdapter(
     firstDayOfWeek: DayOfWeek
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
-    private val months = mutableListOf<CalendarMonth>()
+    private val months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
 
     val bodyViewId = View.generateViewId()
     val rootViewId = View.generateViewId()
@@ -44,14 +41,6 @@ class CalendarAdapter(
 
     init {
         setHasStableIds(true)
-        val startCalMonth = CalendarMonth(startMonth, config, firstDayOfWeek)
-        val endCalMonth = CalendarMonth(endMonth, config, firstDayOfWeek)
-        var lastCalMonth = startCalMonth
-        while (lastCalMonth < endCalMonth) {
-            months.add(lastCalMonth)
-            lastCalMonth = lastCalMonth.next
-        }
-        months.add(endCalMonth)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -60,7 +49,7 @@ class CalendarAdapter(
 
     private fun getItem(position: Int): CalendarMonth = months[position]
 
-    override fun getItemId(position: Int): Long = getItem(position).yearMonth.hashCode().toLong()
+    override fun getItemId(position: Int): Long = getItem(position).hashCode().toLong()
 
     override fun getItemCount(): Int = months.size
 
@@ -191,7 +180,7 @@ class CalendarAdapter(
             if (firstVisibleMonthHasNoVisibleDateCell) {
                 val nextPos = visibleItemPos.inc()
                 if (months.indices.contains(nextPos)) {
-                    visibleMonth = visibleMonth.next
+                    // visibleMonth = visibleMonth.next TODO:CalendarMonthFix
                 } else {
                     return
                 }
