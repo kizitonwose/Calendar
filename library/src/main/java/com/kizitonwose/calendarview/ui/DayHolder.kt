@@ -43,21 +43,29 @@ class DayHolder(private val config: DayConfig) {
         return containerView
     }
 
-    fun bindDayView(currentDay: CalendarDay) {
+    fun bindDayView(currentDay: CalendarDay?) {
         this.day = currentDay
         if (::viewContainer.isInitialized.not()) {
             viewContainer = config.viewBinder.create(dateView)
         }
 
-        val dayHash = currentDay.date.hashCode()
+        val dayHash = currentDay?.date.hashCode()
         if (containerView.id != dayHash) {
             containerView.id = dayHash
         }
-        config.viewBinder.bind(viewContainer, currentDay)
+
+        if (currentDay != null) {
+            if (containerView.visibility != View.VISIBLE) {
+                containerView.visibility = View.VISIBLE
+            }
+            config.viewBinder.bind(viewContainer, currentDay)
+        } else if (containerView.visibility != View.INVISIBLE) {
+            containerView.visibility = View.INVISIBLE
+        }
     }
 
     fun reloadView() {
-        day?.let { bindDayView(it) }
+        bindDayView(day)
     }
 
 }

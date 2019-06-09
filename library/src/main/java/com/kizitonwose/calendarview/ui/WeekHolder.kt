@@ -29,8 +29,10 @@ class WeekHolder(dayConfig: DayConfig) {
 
     fun bindWeekView(daysOfWeek: List<CalendarDay>) {
         container.visibility = if (daysOfWeek.isEmpty()) View.GONE else View.VISIBLE
-        for (i in daysOfWeek.indices) {
-            dayHolders[i].bindDayView(daysOfWeek[i])
+        dayHolders.forEachIndexed { index, holder ->
+            // Indices can be null if OutDateStyle is NONE. We set the
+            // visibility for the views at these indices to INVISIBLE.
+            holder.bindDayView(daysOfWeek.getOrNull(index))
         }
     }
 
