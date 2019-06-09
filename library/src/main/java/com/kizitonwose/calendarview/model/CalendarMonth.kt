@@ -9,6 +9,70 @@ import org.threeten.bp.YearMonth
 import org.threeten.bp.temporal.WeekFields
 import java.io.Serializable
 
+data class CalendarSubMonth(val yearMonth: YearMonth, val weekDays: List<List<CalendarDay>>, val indexInMonth: Int)
+
+object CalendarMonthGenerator {
+
+    fun generateMonths(yearMonth: YearMonth, firstDayOfWeek: DayOfWeek, config: CalendarConfig): List<CalendarSubMonth> {
+        val year = yearMonth.year
+        val month = yearMonth.monthValue
+
+        val thisMonthDays = (1..yearMonth.lengthOfMonth()).map {
+            CalendarDay(LocalDate.of(year, month, it), DayOwner.THIS_MONTH)
+        }
+
+        // Group days by week of month
+        val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
+        val weekDaysGroup = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+
+        // Add in-dates if necessary
+        val firstWeek = weekDaysGroup.first()
+        if (firstWeek.size < 7) {
+            val previousMonth = yearMonth.minusMonths(1)
+            val inDates = (1..previousMonth.lengthOfMonth()).toList()
+                .takeLast(7 - firstWeek.size).map {
+                    CalendarDay(LocalDate.of(previousMonth.year, previousMonth.month, it), DayOwner.PREVIOUS_MONTH)
+                }
+            weekDaysGroup[0] = inDates + firstWeek
+        }
+
+        // Add out-dates if necessary.
+        val nextMonth = yearMonth.plusMonths(1)
+        val lastWeek = weekDaysGroup.last()
+        if (lastWeek.size < 7) {
+            val outDates = (1..7 - lastWeek.size).map {
+                CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, it), DayOwner.NEXT_MONTH)
+            }
+            weekDaysGroup[weekDaysGroup.lastIndex] = lastWeek + outDates
+        }
+
+        // Ensure we have a representation of all 6 week rows
+        while (weekDaysGroup.size < 6) {
+            if (config.outDateStyle == OutDateStyle.END_OF_GRID) {
+                val lastDay = weekDaysGroup.last().last()
+                val nextRowDates = (1..7).map {
+                    val dayValue = if (lastDay.owner == DayOwner.THIS_MONTH) it else it + lastDay.day
+                    CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, dayValue), DayOwner.NEXT_MONTH)
+                }
+                weekDaysGroup.add(nextRowDates)
+            } else {
+                weekDaysGroup.add(emptyList())
+            }
+        }
+
+
+        val months = mutableListOf<CalendarSubMonth>()
+        var startIndex = 0
+        val maxRowCount = config.maxRowCount
+        while (startIndex < 6) {
+            val monthDays = weekDaysGroup.subList(startIndex, maxRowCount)
+            months.add(CalendarSubMonth(yearMonth, monthDays, months.count()))
+            startIndex += maxRowCount
+        }
+        return months
+    }
+}
+
 
 class CalendarMonth internal constructor(
     val yearMonth: YearMonth,
