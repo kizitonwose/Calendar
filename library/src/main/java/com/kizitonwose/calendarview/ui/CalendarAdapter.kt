@@ -154,7 +154,7 @@ class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun findVisibleMonthAndNotify() {
-        val visibleItemPos = layoutManager.findFirstVisibleItemPosition()
+        var visibleItemPos = layoutManager.findFirstVisibleItemPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             var visibleMonth = months[visibleItemPos]
 
@@ -173,9 +173,9 @@ class CalendarAdapter(
                 visibleItemPx < if (layoutManager.isVertical) calView.dayHeight else calView.dayWidth
 
             if (firstVisibleMonthHasNoVisibleDateCell) {
-                val nextPos = visibleItemPos.inc()
-                if (months.indices.contains(nextPos)) {
-                    // visibleMonth = visibleMonth.next TODO:CalendarMonthFix
+                visibleItemPos++
+                if (months.indices.contains(visibleItemPos)) {
+                     visibleMonth = months[visibleItemPos]
                 } else {
                     return
                 }
