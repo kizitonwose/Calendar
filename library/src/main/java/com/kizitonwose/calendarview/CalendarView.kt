@@ -296,6 +296,11 @@ class CalendarView : RecyclerView {
         calendarLayoutManager.smoothScrollToMonth(month)
     }
 
+    // TODO: DOCUMENT
+    fun scrollToDay(day: CalendarDay) {
+        calendarLayoutManager.scrollToDay(day)
+    }
+
     /**
      * Scroll to a specific date on the calendar. This brings the date
      * cell view's top to the top of the CalendarVew in vertical mode
@@ -303,26 +308,25 @@ class CalendarView : RecyclerView {
      * in horizontal mode. No animation is performed. For a smooth scrolling
      * effect, use [smoothScrollToDate]
      */
-    fun scrollToDate(date: LocalDate) {
-        calendarLayoutManager.scrollToDate(date)
+    fun scrollToDate(date: LocalDate) = scrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
+
+    // TODO: DOCUMENT
+    fun smoothScrollToDay(day: CalendarDay) {
+        calendarLayoutManager.smoothScrollToDay(day)
     }
 
     /**
      * Scroll to a specific date on the calendar using a smooth scrolling animation.
      * Just like [scrollToDate], but with a smooth scrolling animation.
      */
-    fun smoothScrollToDate(date: LocalDate) {
-        calendarLayoutManager.smoothScrollToDate(date)
-    }
+    fun smoothScrollToDate(date: LocalDate) = smoothScrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
 
     /**
      * Notify the CalendarView to reload the cell for this [CalendarDay]
      * This causes [DayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
-    fun notifyDayChanged(day: CalendarDay) {
-        calendarAdapter.reloadDay(day)
-    }
+    fun notifyDayChanged(day: CalendarDay) = calendarAdapter.reloadDay(day)
 
     /**
      * Shortcut for [notifyDayChanged] with a [CalendarDay] instance
