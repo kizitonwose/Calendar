@@ -95,7 +95,12 @@ class CalendarView : RecyclerView {
     private var scrollMode = ScrollMode.CONTINUOUS
     private var outDateStyle = OutDateStyle.END_OF_ROW
     private var inDateStyle = InDateStyle.ALL_MONTHS
-    private var maxRowCount = 6
+    var maxRowCount = 6
+        set(value) {
+            field = value
+            updateAdapterConfig()
+        }
+
     private var monthViewClass: String? = null
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
@@ -279,6 +284,14 @@ class CalendarView : RecyclerView {
         layoutManager?.onRestoreInstanceState(state)
     }
 
+    private fun updateAdapterConfig() {
+        if (adapter != null) {
+            val config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount, monthViewClass)
+            calendarAdapter.updateConfig(config)
+            calendarAdapter.notifyDataSetChanged()
+        }
+    }
+
     /**
      * Scroll to a specific month on the calendar. This only
      * shows the view for the month without any animations.
@@ -364,6 +377,12 @@ class CalendarView : RecyclerView {
      */
     fun notifyCalendarChanged() {
         calendarAdapter.notifyDataSetChanged()
+    }
+
+
+    fun findFirstVisibleDay(): CalendarDay? {
+        // TODO: Accommodate non paged calendar by using rect
+        return calendarAdapter.findFirstVisibleMonth()?.weekDays?.flatten()?.firstOrNull()
     }
 
     /**

@@ -9,7 +9,9 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.*
-import com.kizitonwose.calendarview.utils.*
+import com.kizitonwose.calendarview.utils.NO_INDEX
+import com.kizitonwose.calendarview.utils.inflate
+import com.kizitonwose.calendarview.utils.orZero
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -23,14 +25,14 @@ class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
     @LayoutRes private val monthHeaderRes: Int,
     @LayoutRes private val monthFooterRes: Int,
-    private val config: CalendarConfig,
+    private var config: CalendarConfig,
     private val calView: CalendarView,
-    startMonth: YearMonth,
-    endMonth: YearMonth,
-    firstDayOfWeek: DayOfWeek
+    private val startMonth: YearMonth,
+    private val endMonth: YearMonth,
+    private val firstDayOfWeek: DayOfWeek
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
-    private val months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
+    private var months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
 
     val bodyViewId = View.generateViewId()
     val rootViewId = View.generateViewId()
@@ -42,6 +44,11 @@ class CalendarAdapter(
 
     init {
         setHasStableIds(true)
+    }
+
+    fun updateConfig(config: CalendarConfig) {
+        this.config = config
+        months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

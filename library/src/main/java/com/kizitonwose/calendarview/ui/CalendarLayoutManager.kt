@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.ScrollMode
-import com.kizitonwose.calendarview.utils.yearMonth
-import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
 
@@ -37,17 +34,17 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
     }
 
     fun smoothScrollToDay(day: CalendarDay) {
-        val position = adapter.getAdapterPosition(day.positionYearMonth)
+        val position = adapter.getAdapterPosition(day)
         if (position != -1) {
             startSmoothScroll(CalendarSmoothScroller(position, day))
         }
     }
 
     fun scrollToDay(day: CalendarDay) {
-        scrollToMonth(day.positionYearMonth)
+        val monthPosition = adapter.getAdapterPosition(day)
+        scrollToPosition(monthPosition)
         if (config.scrollMode == ScrollMode.PAGED) return
         calView.post {
-            val monthPosition = adapter.getAdapterPosition(day.positionYearMonth)
             if (monthPosition != -1) {
                 // We already scrolled to this position so findViewHolder should not return null.
                 val viewHolder = calView.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
@@ -56,7 +53,7 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
             }
         }
     }
-    
+
     private fun calculateOffset(day: CalendarDay, itemView: View): Int {
         val dayView = itemView.findViewById<View?>(day.date.hashCode()) ?: return 0
         val rect = Rect()
