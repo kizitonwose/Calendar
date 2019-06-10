@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
@@ -37,6 +38,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val daysOfWeek = daysOfWeekFromLocale()
         legendLayout.children.forEachIndexed { index, view ->
@@ -101,6 +103,29 @@ class Example1Fragment : BaseFragment(), HasToolbar {
             exOneYearText.text = it.yearMonth.year.toString()
             exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
         }
+
+        maxRowSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (seekBar.progress == 0) {
+                    seekBar.progress = 1 // SeekBar progress starts at 0
+                } else {
+                    exOneCalendar.findFirstVisibleDay()?.let {
+                        // We want the first visible day to remain visible
+                        // when the number of visible rows change.
+                        exOneCalendar.maxRowCount = seekBar.progress
+                        exOneCalendar.scrollToDay(it)
+                    }
+                    maxRowText.text = getString(R.string.max_row_count, seekBar.progress)
+                }
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+        })
+
+        // Update text initially.
+        maxRowText.text = getString(R.string.max_row_count, maxRowSeekBar.progress)
     }
 
     override fun onStart() {

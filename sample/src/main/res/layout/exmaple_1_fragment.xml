@@ -51,13 +51,53 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.kizitonwose.calendarview.CalendarView
-        android:id="@+id/exOneCalendar"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cv_orientation="horizontal"
-        app:cv_scrollMode="paged"
-        app:cv_outDateStyle="endOfRow"
-        app:cv_dayViewResource="@layout/example_1_calendar_day" />
+        android:layout_height="match_parent">
+
+        <com.kizitonwose.calendarview.CalendarView
+            android:id="@+id/exOneCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:cv_dayViewResource="@layout/example_1_calendar_day"
+            app:cv_orientation="horizontal"
+            app:cv_outDateStyle="endOfRow"
+            app:cv_scrollMode="paged"
+            app:layout_constraintBottom_toTopOf="@id/maxRowText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/maxRowText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/max_row_count"
+            android:textAllCaps="true"
+            android:textColor="@color/example_1_white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/maxRowSeekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <SeekBar
+            android:id="@+id/maxRowSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:max="6"
+            android:progress="6"
+            android:progressBackgroundTint="@color/example_1_white"
+            android:progressTint="@color/example_1_white"
+            android:thumbTint="@color/example_1_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </LinearLayout>
