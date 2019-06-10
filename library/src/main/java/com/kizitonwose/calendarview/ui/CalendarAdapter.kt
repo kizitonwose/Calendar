@@ -154,32 +154,9 @@ class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun findVisibleMonthAndNotify() {
-        var visibleItemPos = layoutManager.findFirstVisibleItemPosition()
+        val visibleItemPos = findFirstVisibleMonthPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
-            var visibleMonth = months[visibleItemPos]
-
-            // We make sure that the view for the returned position has at least one fully visible date cell.
-            val visibleItemPx = Rect().let { rect ->
-                val visibleItemView = layoutManager.findViewByPosition(visibleItemPos)
-                visibleItemView!!.getGlobalVisibleRect(rect)
-                return@let if (layoutManager.isVertical) {
-                    rect.bottom - rect.top - visibleItemView.paddingBottom
-                } else {
-                    rect.right - rect.left - visibleItemView.paddingRight
-                }
-            }
-
-            val firstVisibleMonthHasNoVisibleDateCell =
-                visibleItemPx < if (layoutManager.isVertical) calView.dayHeight else calView.dayWidth
-
-            if (firstVisibleMonthHasNoVisibleDateCell) {
-                visibleItemPos++
-                if (months.indices.contains(visibleItemPos)) {
-                    visibleMonth = months[visibleItemPos]
-                } else {
-                    return
-                }
-            }
+            val visibleMonth = months[visibleItemPos]
 
             if (visibleMonth != this.visibleMonth) {
                 this.visibleMonth = visibleMonth
@@ -221,19 +198,11 @@ class CalendarAdapter(
     }
 
     internal fun getAdapterPosition(date: LocalDate): Int {
-        val firstMonthIndex = getAdapterPosition(date.yearMonth)
-        return if (firstMonthIndex == NO_INDEX) NO_INDEX else getAdapterPosition(CalendarDay(date, DayOwner.THIS_MONTH))
+        return getAdapterPosition(CalendarDay(date, DayOwner.THIS_MONTH))
     }
 
     internal fun getAdapterPosition(day: CalendarDay): Int {
-        val yearMonth = when (day.owner) {
-            // Find the actual month that owns this date.
-            DayOwner.THIS_MONTH -> day.date.yearMonth
-            DayOwner.PREVIOUS_MONTH -> day.date.yearMonth.next
-            DayOwner.NEXT_MONTH -> day.date.yearMonth.previous
-        }
-
-        val firstMonthIndex = getAdapterPosition(yearMonth)
+        val firstMonthIndex = getAdapterPosition(day.positionYearMonth)
         if (firstMonthIndex == NO_INDEX) return NO_INDEX
 
         val firstCalMonth = months[firstMonthIndex]
@@ -248,8 +217,38 @@ class CalendarAdapter(
     private val layoutManager: CalendarLayoutManager
         get() = calView.layoutManager as CalendarLayoutManager
 
+    private fun findFirstVisibleMonthPosition(): Int {
+        val visibleItemPos = layoutManager.findFirstVisibleItemPosition()
+        if (visibleItemPos != RecyclerView.NO_POSITION) {
+            // We make sure that the view for the returned position has at least one fully visible date cell.
+            val visibleItemPx = Rect().let { rect ->
+                val visibleItemView = layoutManager.findViewByPosition(visibleItemPos)
+                visibleItemView!!.getGlobalVisibleRect(rect)
+                return@let if (layoutManager.isVertical) {
+                    rect.bottom - rect.top - visibleItemView.paddingBottom
+                } else {
+                    rect.right - rect.left - visibleItemView.paddingRight
+                }
+            }
+
+            val firstVisibleMonthHasNoVisibleDateCell =
+                visibleItemPx < if (layoutManager.isVertical) calView.dayHeight else calView.dayWidth
+
+            if (firstVisibleMonthHasNoVisibleDateCell) {
+                val nextVisibleItemPos = visibleItemPos + 1
+                return if (months.indices.contains(nextVisibleItemPos)) {
+                    nextVisibleItemPos
+                } else {
+                    RecyclerView.NO_POSITION
+                }
+            }
+        }
+
+        return visibleItemPos
+    }
+
     fun findFirstVisibleMonth(): CalendarMonth? =
-        months.getOrNull(layoutManager.findFirstVisibleItemPosition())
+        months.getOrNull(findFirstVisibleMonthPosition())
 
     fun findLastVisibleMonth(): CalendarMonth? =
         months.getOrNull(layoutManager.findLastVisibleItemPosition())
