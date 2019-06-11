@@ -381,8 +381,7 @@ class CalendarView : RecyclerView {
 
 
     fun findFirstVisibleDay(): CalendarDay? {
-        // TODO: Accommodate non paged calendar by using rect
-        return calendarAdapter.findFirstVisibleMonth()?.weekDays?.flatten()?.firstOrNull()
+        return calendarAdapter.findFirstVisibleDay()
     }
 
     /**

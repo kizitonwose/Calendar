@@ -16,10 +16,10 @@ import org.threeten.bp.YearMonth
 class CalendarLayoutManager(private val calView: CalendarView, private val config: CalendarConfig) :
     LinearLayoutManager(calView.context, config.orientation, false) {
 
-    val adapter: CalendarAdapter
+    private val adapter: CalendarAdapter
         get() = calView.adapter as CalendarAdapter
 
-    val context: Context
+    private val context: Context
         get() = calView.context
 
     fun scrollToMonth(month: YearMonth) {
@@ -70,11 +70,11 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
         }
 
         override fun getVerticalSnapPreference(): Int {
-            return LinearSmoothScroller.SNAP_TO_START
+            return SNAP_TO_START
         }
 
         override fun getHorizontalSnapPreference(): Int {
-            return LinearSmoothScroller.SNAP_TO_START
+            return SNAP_TO_START
         }
 
         override fun calculateDyToMakeVisible(view: View, snapPreference: Int): Int {

@@ -2,6 +2,7 @@ package com.kizitonwose.calendarview.ui
 
 import android.content.Context
 import android.graphics.Rect
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -256,6 +257,26 @@ class CalendarAdapter(
 
     fun findFirstVisibleMonth(): CalendarMonth? =
         months.getOrNull(findFirstVisibleMonthPosition())
+
+    fun findFirstVisibleDay(): CalendarDay? {
+        val visibleMonthIndex = findFirstVisibleMonthPosition()
+        if (visibleMonthIndex == NO_INDEX) return null
+
+        val calRect = Rect().apply {
+            calView.getGlobalVisibleRect(this)
+        }
+
+        val visibleItemView = layoutManager.findViewByPosition(visibleMonthIndex) ?: return null
+
+        Log.d("RECT--", "MONTH: ${calRect.toShortString()}")
+        val dayRect = Rect()
+        return months[visibleMonthIndex].weekDays.flatten().firstOrNull {
+            val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
+            dayView.getGlobalVisibleRect(dayRect)
+            Log.d("RECT--", "DAY: $it <==> RECT: ${dayRect.toShortString()}")
+            return@firstOrNull calRect.top == dayRect.top && calRect.left == dayRect.left
+        }
+    }
 
     fun findLastVisibleMonth(): CalendarMonth? =
         months.getOrNull(layoutManager.findLastVisibleItemPosition())
