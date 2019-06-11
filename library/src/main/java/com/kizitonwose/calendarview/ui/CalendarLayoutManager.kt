@@ -23,6 +23,7 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
 
     fun scrollToMonth(month: YearMonth) {
         scrollToPosition(adapter.getAdapterPosition(month))
+        calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
     }
 
     fun smoothScrollToMonth(month: YearMonth) {
@@ -49,6 +50,7 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
                 val viewHolder = calView.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
                 val offset = calculateOffset(day, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
+                calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
             }
         }
     }

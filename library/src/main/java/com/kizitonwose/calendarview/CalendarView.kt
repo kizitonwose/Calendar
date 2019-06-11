@@ -443,7 +443,7 @@ class CalendarView : RecyclerView {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (newState == SCROLL_STATE_IDLE) {
-                        calendarAdapter.findVisibleMonthAndNotify()
+                        calendarAdapter.notifyMonthScrollListenerIfNeeded()
                     }
                 }
             })

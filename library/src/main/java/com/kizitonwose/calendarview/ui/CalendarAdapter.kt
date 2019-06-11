@@ -50,7 +50,7 @@ class CalendarAdapter(
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        calView.post { findVisibleMonthAndNotify() }
+        calView.post { notifyMonthScrollListenerIfNeeded() }
     }
 
     private fun getItem(position: Int): CalendarMonth = months[position]
@@ -158,7 +158,7 @@ class CalendarAdapter(
 
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
-    fun findVisibleMonthAndNotify() {
+    fun notifyMonthScrollListenerIfNeeded() {
         val visibleItemPos = findFirstVisibleMonthPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
