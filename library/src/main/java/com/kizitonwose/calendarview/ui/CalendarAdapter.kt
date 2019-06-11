@@ -2,7 +2,6 @@ package com.kizitonwose.calendarview.ui
 
 import android.content.Context
 import android.graphics.Rect
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -228,24 +227,25 @@ class CalendarAdapter(
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             // We make sure that the view for the returned position has at least one fully visible date cell.
             val visibleItemPx = Rect().let { rect ->
-                val visibleItemView = layoutManager.findViewByPosition(visibleItemPos)
-                visibleItemView!!.getGlobalVisibleRect(rect)
+                val visibleItemView = layoutManager.findViewByPosition(visibleItemPos) ?: return NO_INDEX
+                visibleItemView.getGlobalVisibleRect(rect)
                 return@let if (config.isVerticalCalendar) {
-                    rect.bottom - rect.top - visibleItemView.paddingBottom
+                    rect.bottom - rect.top
                 } else {
-                    rect.right - rect.left - visibleItemView.paddingRight
+                    rect.right - rect.left
                 }
             }
 
-            val firstVisibleMonthHasNoVisibleDateCell =
-                visibleItemPx < if (config.isVerticalCalendar) calView.dayHeight else calView.dayWidth
-
-            if (firstVisibleMonthHasNoVisibleDateCell) {
-                val nextVisibleItemPos = visibleItemPos + 1
-                return if (months.indices.contains(nextVisibleItemPos)) {
-                    nextVisibleItemPos
+            // Fixes an issue where using DAY_SIZE_SQUARE with a paged calendar causes
+            // some dates to stretch slightly outside the intended bounds due to pixel
+            // rounding. Hence finding the first visible index will return the view
+            // with the px outside bounds. 7 is the number of cells in a week.
+            if (visibleItemPx <= 7) {
+                val nextItemPosition = visibleItemPos + 1
+                return if (months.indices.contains(nextItemPosition)) {
+                    nextItemPosition
                 } else {
-                    RecyclerView.NO_POSITION
+                    visibleItemPos
                 }
             }
         }
@@ -260,19 +260,13 @@ class CalendarAdapter(
         val visibleMonthIndex = findFirstVisibleMonthPosition()
         if (visibleMonthIndex == NO_INDEX) return null
 
-        val calRect = Rect().apply {
-            calView.getGlobalVisibleRect(this)
-        }
-
         val visibleItemView = layoutManager.findViewByPosition(visibleMonthIndex) ?: return null
 
-        Log.d("RECT--", "MONTH: ${calRect.toShortString()}")
         val isZeroOrPositive = { value: Int -> value.sign == 0 || value.sign == 1 }
         val dayRect = Rect()
         return months[visibleMonthIndex].weekDays.flatten().firstOrNull {
             val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
             dayView.getGlobalVisibleRect(dayRect)
-            Log.d("RECT--", "DAY: $it <==> RECT: ${dayRect.toShortString()}")
             return@firstOrNull isZeroOrPositive(if (config.isVerticalCalendar) dayRect.top else dayRect.left)
         }
     }
