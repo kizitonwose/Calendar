@@ -3,14 +3,12 @@ package com.kizitonwose.calendarview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View.MeasureSpec.UNSPECIFIED
-import androidx.annotation.LayoutRes
 import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
-import com.kizitonwose.calendarview.utils.orZero
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -63,22 +61,72 @@ class CalendarView : RecyclerView {
      */
     var monthScrollListener: MonthScrollListener? = null
 
-    constructor(
-        context: Context, @LayoutRes dayViewRes: Int, @LayoutRes monthHeaderRes: Int? = null,
-        @LayoutRes monthFooterRes: Int? = null, @RecyclerView.Orientation orientation: Int,
-        scrollMode: ScrollMode, outDateStyle: OutDateStyle, inDateStyle: InDateStyle,
-        maxRowCount: Int, monthViewClass: String? = null
-    ) : super(context) {
-        this.dayViewRes = resNotZero(dayViewRes)
-        this.monthHeaderRes = monthHeaderRes.orZero()
-        this.monthFooterRes = monthFooterRes.orZero()
-        this.orientation = orientation
-        this.scrollMode = scrollMode
-        this.outDateStyle = outDateStyle
-        this.inDateStyle = inDateStyle
-        this.maxRowCount = maxRowCount
-        this.monthViewClass = monthViewClass
-    }
+    var dayViewRes = 0
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    var monthHeaderRes = 0
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    var monthFooterRes = 0
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    @Orientation
+    var orientation = VERTICAL
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    var scrollMode = ScrollMode.CONTINUOUS
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    var inDateStyle = InDateStyle.ALL_MONTHS
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    var outDateStyle = OutDateStyle.END_OF_ROW
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    var maxRowCount = 6
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapter()
+            }
+        }
+
+    constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         init(attrs, 0, 0)
@@ -88,20 +136,11 @@ class CalendarView : RecyclerView {
         init(attrs, defStyleAttr, 0)
     }
 
-    private var dayViewRes: Int = 0
-    private var monthHeaderRes: Int = 0
-    private var monthFooterRes: Int = 0
-    private var orientation = VERTICAL
-    private var scrollMode = ScrollMode.CONTINUOUS
-    private var outDateStyle = OutDateStyle.END_OF_ROW
-    private var inDateStyle = InDateStyle.ALL_MONTHS
-    var maxRowCount = 6
-        set(value) {
-            field = value
-            updateAdapterConfig()
-        }
-
+    private var startMonth: YearMonth? = null
+    private var endMonth: YearMonth? = null
+    private var firstDayOfWeek: DayOfWeek? = null
     private var monthViewClass: String? = null
+
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
@@ -284,11 +323,12 @@ class CalendarView : RecyclerView {
         layoutManager?.onRestoreInstanceState(state)
     }
 
-    private fun updateAdapterConfig() {
+    private fun updateAdapter() {
         if (adapter != null) {
-            val config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount, monthViewClass)
-            calendarAdapter.updateConfig(config)
-            calendarAdapter.notifyDataSetChanged()
+            val startMonth = startMonth ?: return
+            val endMonth = endMonth ?: return
+            val firstDayOfWeek = firstDayOfWeek ?: return
+            setup(startMonth, endMonth, firstDayOfWeek)
         }
     }
 
@@ -419,6 +459,18 @@ class CalendarView : RecyclerView {
         return calendarAdapter.findFirstCompletelyVisibleMonth()
     }
 
+    private val scrollListenerInternal = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            if (newState == SCROLL_STATE_IDLE) {
+                calendarAdapter.notifyMonthScrollListenerIfNeeded()
+            }
+        }
+    }
+
+    private val pagerSnapHelper = PagerSnapHelper()
+
+
     /**
      * Setup the CalendarView. You can call this any time to change the
      * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
@@ -428,29 +480,25 @@ class CalendarView : RecyclerView {
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
+        this.startMonth = startMonth
+        this.endMonth = endMonth
+        this.firstDayOfWeek = firstDayOfWeek
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
-        val config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount, monthViewClass)
-        if (layoutManager == null) {
-            clipToPadding = false
-            clipChildren = false //#ClipChildrenFix
-            layoutManager = CalendarLayoutManager(this, config)
+        val config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount)
 
-            if (scrollMode == ScrollMode.PAGED) {
-                PagerSnapHelper().attachToRecyclerView(this)
-            }
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (newState == SCROLL_STATE_IDLE) {
-                        calendarAdapter.notifyMonthScrollListenerIfNeeded()
-                    }
-                }
-            })
-        }
+        clipToPadding = false
+        clipChildren = false //#ClipChildrenFix
+
+        pagerSnapHelper.attachToRecyclerView(if (scrollMode == ScrollMode.PAGED) this else null)
+
+        removeOnScrollListener(scrollListenerInternal)
+        addOnScrollListener(scrollListenerInternal)
+
+        layoutManager = CalendarLayoutManager(this, config)
         adapter = CalendarAdapter(
-            dayViewRes, monthHeaderRes, monthFooterRes, config,
-            this, startMonth, endMonth, firstDayOfWeek
+            ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass),
+            config, this, startMonth, endMonth, firstDayOfWeek
         )
     }
 

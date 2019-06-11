@@ -19,15 +19,20 @@ import kotlin.math.sign
 
 internal typealias LP = ViewGroup.LayoutParams
 
+data class ViewConfig(
+    @LayoutRes val dayViewRes: Int,
+    @LayoutRes val monthHeaderRes: Int,
+    @LayoutRes val monthFooterRes: Int,
+    val monthViewClass: String?
+)
+
 class CalendarAdapter(
-    @LayoutRes private val dayViewRes: Int,
-    @LayoutRes private val monthHeaderRes: Int,
-    @LayoutRes private val monthFooterRes: Int,
-    private var config: CalendarConfig,
+    private val viewConfig: ViewConfig,
+    private val config: CalendarConfig,
     private val calView: CalendarView,
-    private val startMonth: YearMonth,
-    private val endMonth: YearMonth,
-    private val firstDayOfWeek: DayOfWeek
+    startMonth: YearMonth,
+    endMonth: YearMonth,
+    firstDayOfWeek: DayOfWeek
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
     private var months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
@@ -42,11 +47,6 @@ class CalendarAdapter(
 
     init {
         setHasStableIds(true)
-    }
-
-    fun updateConfig(config: CalendarConfig) {
-        this.config = config
-        months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -67,8 +67,8 @@ class CalendarAdapter(
             clipChildren = false //#ClipChildrenFix
         }
 
-        if (monthHeaderRes != 0) {
-            val monthHeaderView = rootLayout.inflate(monthHeaderRes)
+        if (viewConfig.monthHeaderRes != 0) {
+            val monthHeaderView = rootLayout.inflate(viewConfig.monthHeaderRes)
             // Don't overwrite ID set by the user.
             if (monthHeaderView.id == View.NO_ID) {
                 monthHeaderView.id = headerViewId
@@ -86,8 +86,8 @@ class CalendarAdapter(
         }
         rootLayout.addView(monthBodyLayout)
 
-        if (monthFooterRes != 0) {
-            val monthFooterView = rootLayout.inflate(monthFooterRes)
+        if (viewConfig.monthFooterRes != 0) {
+            val monthFooterView = rootLayout.inflate(viewConfig.monthFooterRes)
             // Don't overwrite ID set by the user.
             if (monthFooterView.id == View.NO_ID) {
                 monthFooterView.id = footerViewId
@@ -110,8 +110,8 @@ class CalendarAdapter(
             }
         }
 
-        val userRoot = if (config.monthViewClass != null) {
-            (Class.forName(config.monthViewClass)
+        val userRoot = if (viewConfig.monthViewClass != null) {
+            (Class.forName(viewConfig.monthViewClass)
                 .getDeclaredConstructor(Context::class.java)
                 .newInstance(context) as ViewGroup).apply {
                 setupRoot(this)
@@ -123,7 +123,7 @@ class CalendarAdapter(
         return MonthViewHolder(
             this, userRoot,
             DayConfig(
-                calView.dayWidth, calView.dayHeight, dayViewRes,
+                calView.dayWidth, calView.dayHeight, viewConfig.dayViewRes,
                 calView.dayBinder as DayBinder<ViewContainer>
             ),
             calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,

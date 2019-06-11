@@ -11,8 +11,7 @@ data class CalendarConfig(
     val inDateStyle: InDateStyle,
     val scrollMode: ScrollMode,
     @RecyclerView.Orientation val orientation: Int,
-    val maxRowCount: Int,
-    val monthViewClass: String?
+    val maxRowCount: Int
 ) {
     val isVerticalCalendar: Boolean
         get() = orientation == RecyclerView.VERTICAL
