@@ -27,12 +27,12 @@ data class ViewConfig(
 )
 
 class CalendarAdapter(
-    private val viewConfig: ViewConfig,
-    private val config: CalendarConfig,
+    internal var viewConfig: ViewConfig,
+    internal var config: CalendarConfig,
     private val calView: CalendarView,
-    startMonth: YearMonth,
-    endMonth: YearMonth,
-    firstDayOfWeek: DayOfWeek
+    private val startMonth: YearMonth,
+    private val endMonth: YearMonth,
+    private val firstDayOfWeek: DayOfWeek
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
     private var months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
@@ -47,6 +47,10 @@ class CalendarAdapter(
 
     init {
         setHasStableIds(true)
+    }
+
+    fun generateMonths() {
+        months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, config)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

@@ -12,14 +12,17 @@ import com.kizitonwose.calendarview.model.ScrollMode
 import org.threeten.bp.YearMonth
 
 
-class CalendarLayoutManager(private val calView: CalendarView, private val config: CalendarConfig) :
-    LinearLayoutManager(calView.context, config.orientation, false) {
+class CalendarLayoutManager(private val calView: CalendarView, orientation: Int) :
+    LinearLayoutManager(calView.context, orientation, false) {
 
     private val adapter: CalendarAdapter
         get() = calView.adapter as CalendarAdapter
 
     private val context: Context
         get() = calView.context
+
+    private val config: CalendarConfig
+        get() = adapter.config
 
     fun scrollToMonth(month: YearMonth) {
         scrollToPosition(adapter.getAdapterPosition(month))

@@ -65,7 +65,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                updateAdapterViewConfig()
             }
         }
 
@@ -73,7 +73,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                updateAdapterViewConfig()
             }
         }
 
@@ -81,7 +81,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                updateAdapterViewConfig()
             }
         }
 
@@ -90,7 +90,10 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                val startMonth = startMonth ?: return
+                val endMonth = endMonth ?: return
+                val firstDayOfWeek = firstDayOfWeek ?: return
+                setup(startMonth, endMonth, firstDayOfWeek)
             }
         }
 
@@ -98,7 +101,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                pagerSnapHelper.attachToRecyclerView(if (value == ScrollMode.PAGED) this else null)
             }
         }
 
@@ -106,7 +109,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                updateAdapterConfig()
             }
         }
 
@@ -114,7 +117,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                updateAdapterConfig()
             }
         }
 
@@ -122,7 +125,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapter()
+                updateAdapterConfig()
             }
         }
 
@@ -323,12 +326,18 @@ class CalendarView : RecyclerView {
         layoutManager?.onRestoreInstanceState(state)
     }
 
-    private fun updateAdapter() {
+    private fun updateAdapterConfig() {
         if (adapter != null) {
-            val startMonth = startMonth ?: return
-            val endMonth = endMonth ?: return
-            val firstDayOfWeek = firstDayOfWeek ?: return
-            setup(startMonth, endMonth, firstDayOfWeek)
+            calendarAdapter.config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount)
+            calendarAdapter.generateMonths()
+            calendarAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun updateAdapterViewConfig() {
+        if (adapter != null) {
+            calendarAdapter.viewConfig = ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass)
+            invalidateViewHolders()
         }
     }
 
@@ -490,12 +499,10 @@ class CalendarView : RecyclerView {
         clipToPadding = false
         clipChildren = false //#ClipChildrenFix
 
-        pagerSnapHelper.attachToRecyclerView(if (scrollMode == ScrollMode.PAGED) this else null)
-
         removeOnScrollListener(scrollListenerInternal)
         addOnScrollListener(scrollListenerInternal)
 
-        layoutManager = CalendarLayoutManager(this, config)
+        layoutManager = CalendarLayoutManager(this, config.orientation)
         adapter = CalendarAdapter(
             ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass),
             config, this, startMonth, endMonth, firstDayOfWeek
