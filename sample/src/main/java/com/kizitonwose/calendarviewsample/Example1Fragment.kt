@@ -110,12 +110,15 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                     seekBar.progress = 1 // SeekBar progress starts at 0
                 } else {
                     exOneCalendar.findFirstVisibleDay()?.let {
-                        // We want the first visible day to remain visible when the
-                        // number of visible rows change. Though it may not remain
-                        // the first visible date if maxRowCount increases.
-                        exOneCalendar.maxRowCount = seekBar.progress
-                        exOneCalendar.scrollToDay(it)
+
                     }
+                    // We want the first visible day to remain visible when the
+                    // number of visible rows change. Though it may not remain
+                    // the first visible date if maxRowCount increases.
+                    val visibleDay = exOneCalendar.findFirstVisibleDay()
+                    exOneCalendar.maxRowCount = seekBar.progress
+                    visibleDay?.let { exOneCalendar.scrollToDay(it) }
+
                     maxRowText.text = getString(R.string.max_row_count, seekBar.progress)
                 }
 

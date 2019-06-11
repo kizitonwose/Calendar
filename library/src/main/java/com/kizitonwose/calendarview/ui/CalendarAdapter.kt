@@ -271,13 +271,8 @@ class CalendarAdapter(
         }
     }
 
-    fun findLastVisibleMonth(): CalendarMonth? =
-        months.getOrNull(layoutManager.findLastVisibleItemPosition())
-
     fun findFirstCompletelyVisibleMonth(): CalendarMonth? =
         months.getOrNull(layoutManager.findFirstCompletelyVisibleItemPosition())
 
-    fun findLastCompletelyVisibleMonth(): CalendarMonth? =
-        months.getOrNull(layoutManager.findLastCompletelyVisibleItemPosition())
 
 }

@@ -309,37 +309,49 @@ class CalendarView : RecyclerView {
         calendarLayoutManager.smoothScrollToMonth(month)
     }
 
-    // TODO: DOCUMENT
+    /**
+     * Scroll to a specific [CalendarDay]. This brings the date cell
+     * view's top to the top of the CalendarVew in vertical mode or
+     * the cell view's left edge to the left edge of the CalendarVew
+     * in horizontal mode. No animation is performed.
+     * For a smooth scrolling effect, use [smoothScrollToDay].
+     */
     fun scrollToDay(day: CalendarDay) {
         calendarLayoutManager.scrollToDay(day)
     }
 
     /**
-     * Scroll to a specific date on the calendar. This brings the date
-     * cell view's top to the top of the CalendarVew in vertical mode
-     * or the cell view's left edge to the left edge of the CalendarVew
-     * in horizontal mode. No animation is performed. For a smooth scrolling
-     * effect, use [smoothScrollToDate]
+     * Shortcut for [scrollToDay] with a [CalendarDay] instance
+     * which has a [DayOwner.THIS_MONTH] property.
      */
-    fun scrollToDate(date: LocalDate) = scrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    fun scrollToDate(date: LocalDate) {
+        scrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    }
 
-    // TODO: DOCUMENT
+    /**
+     * Scroll to a specific [CalendarDay] using a smooth scrolling animation.
+     * Just like [scrollToDay], but with a smooth scrolling animation.
+     */
     fun smoothScrollToDay(day: CalendarDay) {
         calendarLayoutManager.smoothScrollToDay(day)
     }
 
     /**
-     * Scroll to a specific date on the calendar using a smooth scrolling animation.
-     * Just like [scrollToDate], but with a smooth scrolling animation.
+     * Shortcut for [smoothScrollToDay] with a [CalendarDay]
+     * instance which has a [DayOwner.THIS_MONTH] property.
      */
-    fun smoothScrollToDate(date: LocalDate) = smoothScrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    fun smoothScrollToDate(date: LocalDate) {
+        smoothScrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    }
 
     /**
      * Notify the CalendarView to reload the cell for this [CalendarDay]
      * This causes [DayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
-    fun notifyDayChanged(day: CalendarDay) = calendarAdapter.reloadDay(day)
+    fun notifyDayChanged(day: CalendarDay) {
+        calendarAdapter.reloadDay(day)
+    }
 
     /**
      * Shortcut for [notifyDayChanged] with a [CalendarDay] instance
@@ -379,7 +391,12 @@ class CalendarView : RecyclerView {
         calendarAdapter.notifyDataSetChanged()
     }
 
-
+    /**
+     * Find the first visible day on the CalendarView.
+     * This is the day at the top-left of the calendar.
+     *
+     * @return The first visible month or null if not found.
+     */
     fun findFirstVisibleDay(): CalendarDay? {
         return calendarAdapter.findFirstVisibleDay()
     }
@@ -394,30 +411,12 @@ class CalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible month on the CalendarView.
-     *
-     * @return The last visible month or null if not found.
-     */
-    fun findLastVisibleMonth(): CalendarMonth? {
-        return calendarAdapter.findLastVisibleMonth()
-    }
-
-    /**
      * Find the first completely visible month on the CalendarView.
      *
      * @return The first completely visible month or null if not found.
      */
     fun findFirstCompletelyVisibleMonth(): CalendarMonth? {
         return calendarAdapter.findFirstCompletelyVisibleMonth()
-    }
-
-    /**
-     * Find the last completely visible month on the CalendarView.
-     *
-     * @return The last completely visible month or null if not found.
-     */
-    fun findLastCompletelyVisibleMonth(): CalendarMonth? {
-        return calendarAdapter.findLastCompletelyVisibleMonth()
     }
 
     /**
