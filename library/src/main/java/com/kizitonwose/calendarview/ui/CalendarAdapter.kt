@@ -16,11 +16,9 @@ import com.kizitonwose.calendarview.utils.orZero
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
+import kotlin.math.sign
 
 internal typealias LP = ViewGroup.LayoutParams
-
-internal val CalendarLayoutManager.isVertical: Boolean
-    get() = orientation == RecyclerView.VERTICAL
 
 class CalendarAdapter(
     @LayoutRes private val dayViewRes: Int,
@@ -177,7 +175,7 @@ class CalendarAdapter(
                 // calculating height and uses the tallest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next
                 // indices are also missing the last row. I think there should be a better way to fix this.
-                if (config.orientation == RecyclerView.HORIZONTAL && config.scrollMode == ScrollMode.PAGED) {
+                if (config.isHorizontalCalendar && config.scrollMode == ScrollMode.PAGED) {
                     val calWrapsHeight = calWrapsHeight ?: (calView.layoutParams.height == LP.WRAP_CONTENT).also {
                         // We modify the layoutParams so we save the initial value set by the user.
                         calWrapsHeight = it
@@ -232,7 +230,7 @@ class CalendarAdapter(
             val visibleItemPx = Rect().let { rect ->
                 val visibleItemView = layoutManager.findViewByPosition(visibleItemPos)
                 visibleItemView!!.getGlobalVisibleRect(rect)
-                return@let if (layoutManager.isVertical) {
+                return@let if (config.isVerticalCalendar) {
                     rect.bottom - rect.top - visibleItemView.paddingBottom
                 } else {
                     rect.right - rect.left - visibleItemView.paddingRight
@@ -240,7 +238,7 @@ class CalendarAdapter(
             }
 
             val firstVisibleMonthHasNoVisibleDateCell =
-                visibleItemPx < if (layoutManager.isVertical) calView.dayHeight else calView.dayWidth
+                visibleItemPx < if (config.isVerticalCalendar) calView.dayHeight else calView.dayWidth
 
             if (firstVisibleMonthHasNoVisibleDateCell) {
                 val nextVisibleItemPos = visibleItemPos + 1
@@ -269,12 +267,13 @@ class CalendarAdapter(
         val visibleItemView = layoutManager.findViewByPosition(visibleMonthIndex) ?: return null
 
         Log.d("RECT--", "MONTH: ${calRect.toShortString()}")
+        val isZeroOrPositive = { value: Int -> value.sign == 0 || value.sign == 1 }
         val dayRect = Rect()
         return months[visibleMonthIndex].weekDays.flatten().firstOrNull {
             val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
             dayView.getGlobalVisibleRect(dayRect)
             Log.d("RECT--", "DAY: $it <==> RECT: ${dayRect.toShortString()}")
-            return@firstOrNull calRect.top == dayRect.top && calRect.left == dayRect.left
+            return@firstOrNull isZeroOrPositive(if (config.isVerticalCalendar) dayRect.top else dayRect.left)
         }
     }
 

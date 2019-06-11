@@ -13,7 +13,13 @@ data class CalendarConfig(
     @RecyclerView.Orientation val orientation: Int,
     val maxRowCount: Int,
     val monthViewClass: String?
-)
+) {
+    val isVerticalCalendar: Boolean
+        get() = orientation == RecyclerView.VERTICAL
+
+    val isHorizontalCalendar: Boolean
+        get() = !isVerticalCalendar
+}
 
 class MonthViewHolder constructor(
     adapter: CalendarAdapter,

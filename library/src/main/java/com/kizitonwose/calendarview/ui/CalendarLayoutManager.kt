@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.ScrollMode
@@ -59,7 +58,7 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)
-        return if (orientation == RecyclerView.VERTICAL) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
+        return if (config.isVerticalCalendar) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
     }
 
     private inner class CalendarSmoothScroller(position: Int, val day: CalendarDay?) :
