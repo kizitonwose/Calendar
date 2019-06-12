@@ -12,7 +12,6 @@ import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.utils.NO_INDEX
 import com.kizitonwose.calendarview.utils.inflate
 import com.kizitonwose.calendarview.utils.orZero
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import kotlin.math.sign
@@ -27,15 +26,13 @@ data class ViewConfig(
 )
 
 class CalendarAdapter(
-    internal var viewConfig: ViewConfig,
-    internal var monthConfig: MonthConfig,
     private val calView: CalendarView,
-    private val startMonth: YearMonth,
-    private val endMonth: YearMonth,
-    private val firstDayOfWeek: DayOfWeek
+    internal var viewConfig: ViewConfig,
+    internal var monthConfig: MonthConfig
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
-    private var months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, monthConfig)
+    private val months: List<CalendarMonth>
+        get() = monthConfig.months
 
     val bodyViewId = View.generateViewId()
     val rootViewId = View.generateViewId()
@@ -47,10 +44,6 @@ class CalendarAdapter(
 
     init {
         setHasStableIds(true)
-    }
-
-    fun generateMonths() {
-        months = CalendarMonthGenerator.generate(startMonth, endMonth, firstDayOfWeek, monthConfig)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

@@ -6,14 +6,6 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.InDateStyle
-import com.kizitonwose.calendarview.model.OutDateStyle
-
-data class MonthConfig(
-    val outDateStyle: OutDateStyle,
-    val inDateStyle: InDateStyle,
-    val maxRowCount: Int
-)
 
 class MonthViewHolder constructor(
     adapter: CalendarAdapter,

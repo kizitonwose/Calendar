@@ -90,10 +90,7 @@ class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                val startMonth = startMonth ?: return
-                val endMonth = endMonth ?: return
-                val firstDayOfWeek = firstDayOfWeek ?: return
-                setup(startMonth, endMonth, firstDayOfWeek)
+                setup(startMonth ?: return, endMonth ?: return, firstDayOfWeek ?: return)
             }
         }
 
@@ -336,8 +333,11 @@ class CalendarView : RecyclerView {
 
     private fun updateAdapterConfig() {
         if (adapter != null) {
-            calendarAdapter.monthConfig = MonthConfig(outDateStyle, inDateStyle, maxRowCount)
-            calendarAdapter.generateMonths()
+            calendarAdapter.monthConfig =
+                MonthConfig(
+                    outDateStyle, inDateStyle, maxRowCount,
+                    startMonth ?: return, endMonth ?: return, firstDayOfWeek ?: return
+                )
             calendarAdapter.notifyDataSetChanged()
         }
     }
@@ -510,9 +510,16 @@ class CalendarView : RecyclerView {
 
         layoutManager = CalendarLayoutManager(this, orientation)
         adapter = CalendarAdapter(
+            this,
             ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass),
-            MonthConfig(outDateStyle, inDateStyle, maxRowCount),
-            this, startMonth, endMonth, firstDayOfWeek
+            MonthConfig(
+                outDateStyle,
+                inDateStyle,
+                maxRowCount,
+                startMonth,
+                endMonth,
+                firstDayOfWeek
+            )
         )
     }
 
