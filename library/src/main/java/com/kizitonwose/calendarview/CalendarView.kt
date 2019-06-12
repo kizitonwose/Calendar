@@ -140,8 +140,9 @@ class CalendarView : RecyclerView {
 
     /**
      * Determines how inDates are generated for each month on the calendar.
-     * If set to [InDateStyle.ALL_MONTHS], the calendar will generate inDates for all months,
-     * If set to [InDateStyle.NONE], inDates will not be generated.
+     * If set to [InDateStyle.ALL_MONTHS], the calendar will generate inDates for all months.
+     * If set to [InDateStyle.NONE], inDates will not be generated, meaning that there will
+     * be no offset on any month.
      */
     var inDateStyle = InDateStyle.ALL_MONTHS
         set(value) {
@@ -169,11 +170,10 @@ class CalendarView : RecyclerView {
         }
 
     /**
-     * The maximum number of rows to show on each month. If a month has a total of 6 rows and
-     * [maxRowCount] is set to 4, there will be two appearances of that month on the calendar,
-     * the first one will show 4 rows and the second one will show the remaining 2 rows.
+     * The maximum number of rows(1 to 6) to show on each month. If a month has a total of 6
+     * rows and [maxRowCount] is set to 4, there will be two appearances of that month on the,
+     * calendar the first one will show 4 rows and the second one will show the remaining 2 rows.
      * To show a week mode calendar, set this value to 1.
-     * This value must be between 1 to 6.
      */
     var maxRowCount = 6
         set(value) {

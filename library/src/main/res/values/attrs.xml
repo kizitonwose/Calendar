@@ -11,11 +11,10 @@
         <!-- The xml resource that is inflated and used as a footer for every month. -->
         <attr name="cv_monthFooterResource" format="reference" />
 
-        <!-- The maximum number of rows to show on each month. If a month has a total of 6 rows and
-        [maxRowCount] is set to 4, there will be two appearances of that month on the calendar,
-        the first one will show 4 rows and the second one will show the remaining 2 rows.
-        To show a week mode calendar, set this value to 1.
-        This value must be between 1 to 6. -->
+        <!-- The maximum number of rows(1 to 6) to show on each month. If a month has a total of
+        6 rows and maxRowCount is set to 4, there will be two appearances of that month on the
+        calendar, the first one will show 4 rows and the second one will show the remaining 2 rows.
+        To show a week mode calendar, set this value to 1. -->
         <attr name="cv_maxRowCount" format="integer" />
 
         <!-- A ViewGroup which is instantiated and used as the background for each month.
@@ -43,8 +42,9 @@
         </attr>
 
         <!-- Determines how inDates are generated for each month on the calendar.
-         If set to `allMonths`, the calendar will generate inDates for all months,
-         If set to `none`, inDates will not be generated. -->
+         If set to `allMonths`, the calendar will generate inDates for all months.
+         If set to `none`, inDates will not be generated, meaning that there will be
+         no offset on any month. -->
         <attr name="cv_inDateStyle" format="enum">
             <enum name="allMonths" value="0" />
             <enum name="none" value="1" />
