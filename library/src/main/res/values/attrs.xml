@@ -1,24 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CalendarView">
+
+        <!-- The xml resource that is inflated and used as the day cell view, must be provided. -->
         <attr name="cv_dayViewResource" format="reference" />
+
+        <!-- The xml resource that is inflated and used as a header for every month. -->
         <attr name="cv_monthHeaderResource" format="reference" />
+
+        <!-- The xml resource that is inflated and used as a footer for every month. -->
         <attr name="cv_monthFooterResource" format="reference" />
+
+        <!-- The maximum number of rows to show on each month. If a month has a total of 6 rows and
+        [maxRowCount] is set to 4, there will be two appearances of that month on the calendar,
+        the first one will show 4 rows and the second one will show the remaining 2 rows.
+        To show a week mode calendar, set this value to 1.
+        This value must be between 1 to 6. -->
         <attr name="cv_maxRowCount" format="integer" />
+
+        <!-- A ViewGroup which is instantiated and used as the background for each month.
+         This class must have a constructor which takes only a Context. You should
+         exclude the name and constructor of this class from code obfuscation if enabled.-->
         <attr name="cv_monthViewClass" format="string" />
+
+        <!--This determines the scroll direction of the the calendar. -->
         <attr name="cv_orientation" format="enum">
             <enum name="horizontal" value="0" />
             <enum name="vertical" value="1" />
         </attr>
+
+        <!-- Determines how outDates are generated for each month on the calendar.
+        If set to `endOfRow`, the calendar will generate outDates until
+        it reaches the first end of a row. This means that if a month has 6 rows,
+        it will display 6 rows and if a month has 5 rows, it will display 5 rows.
+        If set to `endOfGrid`, the calendar will generate outDates until
+        it reaches the end of a 6 x 7 grid. This means that all months will have 6 rows.
+        If set to `none`, no outDates will be generated. -->
         <attr name="cv_outDateStyle" format="enum">
             <enum name="endOfRow" value="0" />
             <enum name="endOfGrid" value="1" />
             <enum name="none" value="2" />
         </attr>
+
+        <!-- Determines how inDates are generated for each month on the calendar.
+         If set to `allMonths`, the calendar will generate inDates for all months,
+         If set to `none`, inDates will not be generated. -->
         <attr name="cv_inDateStyle" format="enum">
             <enum name="allMonths" value="0" />
             <enum name="none" value="1" />
         </attr>
+
+        <!-- The scrolling behavior of the calendar. If `paged`, the calendar
+        will snap to the nearest month after a scroll or swipe action.
+        If `continuous`, the calendar scrolls normally. -->
         <attr name="cv_scrollMode" format="enum">
             <enum name="continuous" value="0" />
             <enum name="paged" value="1" />

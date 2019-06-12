@@ -3,6 +3,7 @@ package com.kizitonwose.calendarview
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View.MeasureSpec.UNSPECIFIED
+import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -61,7 +62,24 @@ class CalendarView : RecyclerView {
      */
     var monthScrollListener: MonthScrollListener? = null
 
-    var dayViewRes = 0
+    /**
+     * The xml resource that is inflated and used as the day cell view.
+     * This must be provided.
+     */
+    var dayViewResource = 0
+        set(value) {
+            if (field != value) {
+                if (value == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
+                field = value
+                updateAdapterViewConfig()
+            }
+        }
+
+    /**
+     * The xml resource that is inflated and used as a header for every month.
+     * Set zero to disable.
+     */
+    var monthHeaderResource = 0
         set(value) {
             if (field != value) {
                 field = value
@@ -69,7 +87,11 @@ class CalendarView : RecyclerView {
             }
         }
 
-    var monthHeaderRes = 0
+    /**
+     * The xml resource that is inflated and used as a footer for every month.
+     * Set zero to disable.
+     */
+    var monthFooterResource = 0
         set(value) {
             if (field != value) {
                 field = value
@@ -77,7 +99,12 @@ class CalendarView : RecyclerView {
             }
         }
 
-    var monthFooterRes = 0
+    /**
+     * A [ViewGroup] which is instantiated and used as the background for each month.
+     * This class must have a constructor which takes only a [Context]. You should
+     * exclude the name and constructor of this class from code obfuscation if enabled.
+     */
+    var monthViewClass: String? = null
         set(value) {
             if (field != value) {
                 field = value
@@ -85,6 +112,10 @@ class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The [RecyclerView.Orientation] used for the layout manager.
+     * This determines the scroll direction of the the calendar.
+     */
     @Orientation
     var orientation = VERTICAL
         set(value) {
@@ -94,6 +125,11 @@ class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The scrolling behavior of the calendar. If [ScrollMode.PAGED],
+     * the calendar will snap to the nearest month after a scroll or swipe action.
+     * If [ScrollMode.CONTINUOUS], the calendar scrolls normally.
+     */
     var scrollMode = ScrollMode.CONTINUOUS
         set(value) {
             if (field != value) {
@@ -102,35 +138,55 @@ class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * Determines how inDates are generated for each month on the calendar.
+     * If set to [InDateStyle.ALL_MONTHS], the calendar will generate inDates for all months,
+     * If set to [InDateStyle.NONE], inDates will not be generated.
+     */
     var inDateStyle = InDateStyle.ALL_MONTHS
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapterConfig()
+                updateAdapterMonthConfig()
             }
         }
 
+    /**
+     * Determines how outDates are generated for each month on the calendar.
+     * If set to [OutDateStyle.END_OF_ROW], the calendar will generate outDates until
+     * it reaches the first end of a row. This means that if a month has 6 rows,
+     * it will display 6 rows and if a month has 5 rows, it will display 5 rows.
+     * If set to [OutDateStyle.END_OF_GRID], the calendar will generate outDates until
+     * it reaches the end of a 6 x 7 grid. This means that all months will have 6 rows.
+     * If set to [OutDateStyle.NONE], no outDates will be generated.
+     */
     var outDateStyle = OutDateStyle.END_OF_ROW
         set(value) {
             if (field != value) {
                 field = value
-                updateAdapterConfig()
+                updateAdapterMonthConfig()
             }
         }
 
+    /**
+     * The maximum number of rows to show on each month. If a month has a total of 6 rows and
+     * [maxRowCount] is set to 4, there will be two appearances of that month on the calendar,
+     * the first one will show 4 rows and the second one will show the remaining 2 rows.
+     * To show a week mode calendar, set this value to 1.
+     * This value must be between 1 to 6.
+     */
     var maxRowCount = 6
         set(value) {
+            if (!(1..6).contains(value)) throw IllegalArgumentException("'maxRowCount' should be between 1 to 6")
             if (field != value) {
                 field = value
-                updateAdapterConfig()
+                updateAdapterMonthConfig()
             }
         }
-
 
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
     private var firstDayOfWeek: DayOfWeek? = null
-    private var monthViewClass: String? = null
 
     private var autoSize = true
     private var sizedInternally = false
@@ -154,9 +210,9 @@ class CalendarView : RecyclerView {
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
-        dayViewRes = resNotZero(a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewRes))
-        monthHeaderRes = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderRes)
-        monthFooterRes = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterRes)
+        dayViewResource = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
+        monthHeaderResource = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
+        monthFooterResource = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
         orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
         scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
         outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
@@ -331,7 +387,7 @@ class CalendarView : RecyclerView {
         layoutManager?.onRestoreInstanceState(state)
     }
 
-    private fun updateAdapterConfig() {
+    private fun updateAdapterMonthConfig() {
         if (adapter != null) {
             calendarAdapter.monthConfig =
                 MonthConfig(
@@ -344,7 +400,8 @@ class CalendarView : RecyclerView {
 
     private fun updateAdapterViewConfig() {
         if (adapter != null) {
-            calendarAdapter.viewConfig = ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass)
+            calendarAdapter.viewConfig =
+                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
             invalidateViewHolders()
         }
     }
@@ -511,15 +568,8 @@ class CalendarView : RecyclerView {
         layoutManager = CalendarLayoutManager(this, orientation)
         adapter = CalendarAdapter(
             this,
-            ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass),
-            MonthConfig(
-                outDateStyle,
-                inDateStyle,
-                maxRowCount,
-                startMonth,
-                endMonth,
-                firstDayOfWeek
-            )
+            ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
+            MonthConfig(outDateStyle, inDateStyle, maxRowCount, startMonth, endMonth, firstDayOfWeek)
         )
     }
 
@@ -530,9 +580,5 @@ class CalendarView : RecyclerView {
          * will be the width of the calender divided by 7.
          */
         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
-    }
-
-    private fun resNotZero(resource: Int): Int {
-        if (resource == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.") else return resource
     }
 }
