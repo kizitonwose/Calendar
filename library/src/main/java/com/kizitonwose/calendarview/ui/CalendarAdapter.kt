@@ -178,7 +178,7 @@ class CalendarAdapter(
                 // calculating height and uses the tallest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next
                 // indices are also missing the last row. I think there should be a better way to fix this.
-                if (config.isHorizontalCalendar && config.scrollMode == ScrollMode.PAGED) {
+                if (calView.isHorizontal && calView.scrollMode == ScrollMode.PAGED) {
                     val calWrapsHeight = calWrapsHeight ?: (calView.layoutParams.height == LP.WRAP_CONTENT).also {
                         // We modify the layoutParams so we save the initial value set by the user.
                         calWrapsHeight = it
@@ -233,7 +233,7 @@ class CalendarAdapter(
             val visibleItemPx = Rect().let { rect ->
                 val visibleItemView = layoutManager.findViewByPosition(visibleItemPos) ?: return NO_INDEX
                 visibleItemView.getGlobalVisibleRect(rect)
-                return@let if (config.isVerticalCalendar) {
+                return@let if (calView.isVertical) {
                     rect.bottom - rect.top
                 } else {
                     rect.right - rect.left
@@ -271,7 +271,7 @@ class CalendarAdapter(
         return months[visibleMonthIndex].weekDays.flatten().firstOrNull {
             val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
             dayView.getGlobalVisibleRect(dayRect)
-            return@firstOrNull isZeroOrPositive(if (config.isVerticalCalendar) dayRect.top else dayRect.left)
+            return@firstOrNull isZeroOrPositive(if (calView.isVertical) dayRect.top else dayRect.left)
         }
     }
 

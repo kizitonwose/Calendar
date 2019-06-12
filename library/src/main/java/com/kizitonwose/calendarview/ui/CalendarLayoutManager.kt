@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.ScrollMode
 import org.threeten.bp.YearMonth
 
 
-class CalendarLayoutManager(private val calView: CalendarView, orientation: Int) :
+class CalendarLayoutManager(private val calView: CalendarView, @RecyclerView.Orientation orientation: Int) :
     LinearLayoutManager(calView.context, orientation, false) {
 
     private val adapter: CalendarAdapter
@@ -20,9 +21,6 @@ class CalendarLayoutManager(private val calView: CalendarView, orientation: Int)
 
     private val context: Context
         get() = calView.context
-
-    private val config: CalendarConfig
-        get() = adapter.config
 
     fun scrollToMonth(month: YearMonth) {
         scrollToPosition(adapter.getAdapterPosition(month))
@@ -46,7 +44,7 @@ class CalendarLayoutManager(private val calView: CalendarView, orientation: Int)
     fun scrollToDay(day: CalendarDay) {
         val monthPosition = adapter.getAdapterPosition(day)
         scrollToPosition(monthPosition)
-        if (config.scrollMode == ScrollMode.PAGED) return
+        if (calView.scrollMode == ScrollMode.PAGED) return
         calView.post {
             if (monthPosition != -1) {
                 // We already scrolled to this position so findViewHolder should not return null.
@@ -63,7 +61,7 @@ class CalendarLayoutManager(private val calView: CalendarView, orientation: Int)
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)
-        return if (config.isVerticalCalendar) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
+        return if (calView.isVertical) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
     }
 
     private inner class CalendarSmoothScroller(position: Int, val day: CalendarDay?) :

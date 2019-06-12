@@ -4,21 +4,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.model.*
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.InDateStyle
+import com.kizitonwose.calendarview.model.OutDateStyle
 
 data class CalendarConfig(
     val outDateStyle: OutDateStyle,
     val inDateStyle: InDateStyle,
-    val scrollMode: ScrollMode,
-    @RecyclerView.Orientation val orientation: Int,
     val maxRowCount: Int
-) {
-    val isVerticalCalendar: Boolean
-        get() = orientation == RecyclerView.VERTICAL
-
-    val isHorizontalCalendar: Boolean
-        get() = !isVerticalCalendar
-}
+)
 
 class MonthViewHolder constructor(
     adapter: CalendarAdapter,

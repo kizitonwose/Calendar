@@ -129,6 +129,21 @@ class CalendarView : RecyclerView {
             }
         }
 
+
+    private var startMonth: YearMonth? = null
+    private var endMonth: YearMonth? = null
+    private var firstDayOfWeek: DayOfWeek? = null
+    private var monthViewClass: String? = null
+
+    private var autoSize = true
+    private var sizedInternally = false
+
+    internal val isVertical: Boolean
+        get() = orientation == VERTICAL
+
+    internal val isHorizontal: Boolean
+        get() = !isVertical
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -138,11 +153,6 @@ class CalendarView : RecyclerView {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         init(attrs, defStyleAttr, 0)
     }
-
-    private var startMonth: YearMonth? = null
-    private var endMonth: YearMonth? = null
-    private var firstDayOfWeek: DayOfWeek? = null
-    private var monthViewClass: String? = null
 
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
@@ -182,8 +192,6 @@ class CalendarView : RecyclerView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-    private var autoSize = true
-    private var sizedInternally = false
 
     /**
      * The width, in pixels for each day cell view.
@@ -328,7 +336,7 @@ class CalendarView : RecyclerView {
 
     private fun updateAdapterConfig() {
         if (adapter != null) {
-            calendarAdapter.config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount)
+            calendarAdapter.config = CalendarConfig(outDateStyle, inDateStyle, maxRowCount)
             calendarAdapter.generateMonths()
             calendarAdapter.notifyDataSetChanged()
         }
@@ -494,18 +502,17 @@ class CalendarView : RecyclerView {
         this.firstDayOfWeek = firstDayOfWeek
         AndroidThreeTen.init(context) // The library checks for multiple calls.
 
-        val config = CalendarConfig(outDateStyle, inDateStyle, scrollMode, orientation, maxRowCount)
-
         clipToPadding = false
         clipChildren = false //#ClipChildrenFix
 
         removeOnScrollListener(scrollListenerInternal)
         addOnScrollListener(scrollListenerInternal)
 
-        layoutManager = CalendarLayoutManager(this, config.orientation)
+        layoutManager = CalendarLayoutManager(this, orientation)
         adapter = CalendarAdapter(
             ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass),
-            config, this, startMonth, endMonth, firstDayOfWeek
+            CalendarConfig(outDateStyle, inDateStyle, maxRowCount),
+            this, startMonth, endMonth, firstDayOfWeek
         )
     }
 
