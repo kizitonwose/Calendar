@@ -9,7 +9,7 @@ import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.InDateStyle
 import com.kizitonwose.calendarview.model.OutDateStyle
 
-data class CalendarConfig(
+data class MonthConfig(
     val outDateStyle: OutDateStyle,
     val inDateStyle: InDateStyle,
     val maxRowCount: Int

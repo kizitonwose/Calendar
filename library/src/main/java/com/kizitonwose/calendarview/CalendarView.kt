@@ -336,7 +336,7 @@ class CalendarView : RecyclerView {
 
     private fun updateAdapterConfig() {
         if (adapter != null) {
-            calendarAdapter.config = CalendarConfig(outDateStyle, inDateStyle, maxRowCount)
+            calendarAdapter.monthConfig = MonthConfig(outDateStyle, inDateStyle, maxRowCount)
             calendarAdapter.generateMonths()
             calendarAdapter.notifyDataSetChanged()
         }
@@ -511,7 +511,7 @@ class CalendarView : RecyclerView {
         layoutManager = CalendarLayoutManager(this, orientation)
         adapter = CalendarAdapter(
             ViewConfig(dayViewRes, monthHeaderRes, monthFooterRes, monthViewClass),
-            CalendarConfig(outDateStyle, inDateStyle, maxRowCount),
+            MonthConfig(outDateStyle, inDateStyle, maxRowCount),
             this, startMonth, endMonth, firstDayOfWeek
         )
     }

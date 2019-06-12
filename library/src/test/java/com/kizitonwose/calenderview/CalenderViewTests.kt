@@ -5,7 +5,7 @@ import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.OutDateStyle
 import com.kizitonwose.calendarview.model.ScrollMode
-import com.kizitonwose.calendarview.ui.CalendarConfig
+import com.kizitonwose.calendarview.ui.MonthConfig
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.threeten.bp.DayOfWeek
@@ -24,10 +24,10 @@ class CalenderViewTests {
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     private val endOfRowConfig =
-        CalendarConfig(OutDateStyle.END_OF_ROW, ScrollMode.PAGED, RecyclerView.HORIZONTAL, null)
+        MonthConfig(OutDateStyle.END_OF_ROW, ScrollMode.PAGED, RecyclerView.HORIZONTAL, null)
 
     private val endOfGridConfig =
-        CalendarConfig(OutDateStyle.END_OF_GRID, ScrollMode.PAGED, RecyclerView.HORIZONTAL, null)
+        MonthConfig(OutDateStyle.END_OF_GRID, ScrollMode.PAGED, RecyclerView.HORIZONTAL, null)
 
 
     @Test

@@ -1,6 +1,6 @@
 package com.kizitonwose.calendarview.model
 
-import com.kizitonwose.calendarview.ui.CalendarConfig
+import com.kizitonwose.calendarview.ui.MonthConfig
 import com.kizitonwose.calendarview.utils.next
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
@@ -48,7 +48,7 @@ object CalendarMonthGenerator {
         startMonth: YearMonth,
         endMonth: YearMonth,
         firstDayOfWeek: DayOfWeek,
-        config: CalendarConfig
+        config: MonthConfig
     ): List<CalendarMonth> {
         val months = mutableListOf<CalendarMonth>()
         var lastMonth = startMonth
@@ -62,7 +62,7 @@ object CalendarMonthGenerator {
     fun generateForMonth(
         yearMonth: YearMonth,
         firstDayOfWeek: DayOfWeek,
-        config: CalendarConfig
+        config: MonthConfig
     ): List<CalendarMonth> {
         val year = yearMonth.year
         val month = yearMonth.monthValue
