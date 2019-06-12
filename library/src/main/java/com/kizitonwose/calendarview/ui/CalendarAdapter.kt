@@ -181,7 +181,7 @@ class CalendarAdapter(
                     val newHeight = visibleVH.headerView?.height.orZero() +
                             // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
                             // So we calculate it again by checking the number of visible(non-empty) rows.
-                            visibleMonth.weekDays.takeWhile { it.isNotEmpty() }.size * calView.dayHeight +
+                            visibleMonth.weekDays.size * calView.dayHeight +
                             visibleVH.footerView?.height.orZero()
                     if (calView.layoutParams.height != newHeight)
                         calView.layoutParams = calView.layoutParams.apply {

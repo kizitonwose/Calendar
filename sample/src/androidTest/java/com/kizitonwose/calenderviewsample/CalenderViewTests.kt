@@ -20,10 +20,10 @@ import com.kizitonwose.calendarview.ui.MonthViewHolder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.*
+import kotlinx.android.synthetic.main.example_6_fragment.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
 import kotlinx.android.synthetic.main.exmaple_5_fragment.*
-import kotlinx.android.synthetic.main.exmaple_6_fragment.*
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
