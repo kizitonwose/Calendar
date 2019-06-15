@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import kotlinx.android.synthetic.main.example_7_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_7_fragment.*
 import org.threeten.bp.DayOfWeek
+import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -25,6 +27,8 @@ class Example7Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     override val toolbar: Toolbar?
         get() = exSevenToolbar
+
+    private var selectedDate: LocalDate? = null
 
     private val dateFormatter = DateTimeFormatter.ofPattern("dd")
     private val dayFormatter = DateTimeFormatter.ofPattern("EEE")
@@ -49,11 +53,29 @@ class Example7Fragment : BaseFragment(), HasToolbar, HasBackButton {
             val dayText = view.exSevenDayText
             val dateText = view.exSevenDateText
             val monthText = view.exSevenMonthText
+            val selectedView = view.exSevenSelectedView
+
+            lateinit var day: CalendarDay
+
+            init {
+                view.setOnClickListener {
+                    if (selectedDate != day.date) {
+                        val oldDate = selectedDate
+                        selectedDate = day.date
+                        exSevenCalendar.notifyDateChanged(day.date)
+                        oldDate?.let { exSevenCalendar.notifyDateChanged(it) }
+                    }
+                }
+            }
 
             fun bind(day: CalendarDay) {
+                this.day = day
                 dateText.text = dateFormatter.format(day.date)
                 dayText.text = dayFormatter.format(day.date)
                 monthText.text = monthFormatter.format(day.date)
+
+                dateText.setTextColor(view.context.getColorCompat(if (day.date == selectedDate) R.color.example_7_yellow else R.color.example_7_white))
+                selectedView.isVisible = day.date == selectedDate
             }
         }
 
@@ -64,7 +86,7 @@ class Example7Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
         val currentMonth = YearMonth.now()
         // Value for firstDayOfWeek does not matter since "hasBoundaries" is false.
-        exSevenCalendar.setup(currentMonth, currentMonth.plusMonths(10), DayOfWeek.FRIDAY)
+        exSevenCalendar.setup(currentMonth, currentMonth.plusMonths(1), DayOfWeek.FRIDAY)
         exSevenCalendar.scrollToDate(currentMonth.atDay(1))
     }
 }

@@ -59,8 +59,8 @@ class DayHolder(private val config: DayConfig) {
                 containerView.visibility = View.VISIBLE
             }
             config.viewBinder.bind(viewContainer, currentDay)
-        } else if (containerView.visibility != View.INVISIBLE) {
-            containerView.visibility = View.INVISIBLE
+        } else if (containerView.visibility != View.GONE) {
+            containerView.visibility = View.GONE
         }
     }
 

@@ -14,9 +14,7 @@ data class CalendarMonth(
     val month: Int = yearMonth.monthValue
 
     override fun hashCode(): Int {
-        var result = yearMonth.hashCode()
-        result = 31 * result + indexInSameMonth
-        return result
+        return 31 * yearMonth.hashCode() + weekDays.first().first().hashCode()
     }
 
     override fun equals(other: Any?): Boolean {
@@ -24,7 +22,7 @@ data class CalendarMonth(
         if (javaClass != other?.javaClass) return false
 
         (other as CalendarMonth)
-        return yearMonth == other.yearMonth && indexInSameMonth == other.indexInSameMonth
+        return yearMonth == other.yearMonth && weekDays.first().first() == other.weekDays.first().first()
     }
 
     override fun compareTo(other: CalendarMonth): Int {

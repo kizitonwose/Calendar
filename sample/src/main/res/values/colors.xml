@@ -38,4 +38,5 @@
     <color name="cyan_700">#0097A7</color>
     <color name="example_6_black">#BF000000</color>
     <color name="example_7_white">#D9FFFFFF</color>
+    <color name="example_7_yellow">#FFEB3B</color>
 </resources>
