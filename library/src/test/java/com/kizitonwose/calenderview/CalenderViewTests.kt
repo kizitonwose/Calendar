@@ -6,8 +6,8 @@ package com.kizitonwose.calenderview
  * The UI behaviour tests are in the sample project.
  */
 
-/* TODO FIX
 class CalenderViewTests {
+/* TODO FIX
 
     // You can see what May 2019 with Monday as the first
     // day of week looks like here: https://bit.ly/2HwWZ7o
@@ -80,5 +80,5 @@ class CalenderViewTests {
         assertTrue(month.previous == CalendarMonth(may2019.minusMonths(1), endOfRowConfig, firstDayOfWeek))
         assertTrue(month.next == CalendarMonth(may2019.plusMonths(1), endOfRowConfig, firstDayOfWeek))
     }
-}
 */
+}

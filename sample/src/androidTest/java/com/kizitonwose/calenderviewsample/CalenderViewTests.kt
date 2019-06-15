@@ -1,15 +1,19 @@
 package com.kizitonwose.calenderviewsample
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
+import org.junit.runner.RunWith
+
 /**
  * These are UI behaviour tests.
  * The core functionality tests are in the library project.
  */
 
-/* TODO FIX
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class CalenderViewTests {
 
+/* TODO FIX
     @get:Rule
     private val homeScreenRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, false)
 
@@ -201,5 +205,5 @@ class CalenderViewTests {
         return homeScreenRule.activity.supportFragmentManager
             .findFragmentByTag(clazz.simpleName) as T
     }
-}
 */
+}
