@@ -1,6 +1,8 @@
 package com.kizitonwose.calendarview.model
 
+import com.kizitonwose.calendarview.utils.NO_INDEX
 import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -12,20 +14,39 @@ data class MonthConfig(
     val maxRowCount: Int,
     val startMonth: YearMonth,
     val endMonth: YearMonth,
-    val firstDayOfWeek: DayOfWeek
+    val firstDayOfWeek: DayOfWeek,
+    val hasBoundaries: Boolean
 ) {
 
     val months: List<CalendarMonth> by lazy lazy@{
-        val months = mutableListOf<CalendarMonth>()
-        var nextMonth = startMonth
-        while (nextMonth <= endMonth) {
-            months.addAll(generateForMonth(nextMonth, firstDayOfWeek, outDateStyle, inDateStyle, maxRowCount))
-            nextMonth = nextMonth.next
+        return@lazy if (hasBoundaries) {
+            generateBoundedMonths(
+                startMonth, endMonth, firstDayOfWeek,
+                maxRowCount, inDateStyle, outDateStyle
+            )
+        } else {
+            generateUnboundedMonths(startMonth, endMonth, maxRowCount)
         }
-        return@lazy months
     }
 
     companion object {
+
+        fun generateBoundedMonths(
+            startMonth: YearMonth,
+            endMonth: YearMonth,
+            firstDayOfWeek: DayOfWeek,
+            maxRowCount: Int,
+            inDateStyle: InDateStyle,
+            outDateStyle: OutDateStyle
+        ): List<CalendarMonth> {
+            val months = mutableListOf<CalendarMonth>()
+            var nextMonth = startMonth
+            while (nextMonth <= endMonth) {
+                months.addAll(generateBoundedMonth(nextMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle))
+                nextMonth = nextMonth.next
+            }
+            return months
+        }
 
         /**
          * This generates the necessary number of [CalendarMonth] instances for a [YearMonth].
@@ -33,9 +54,12 @@ data class MonthConfig(
          * less than 6. Each [CalendarMonth] will hold just enough [CalendarDay] instances(weekDays)
          * to fit in the [maxRowCount].
          */
-        fun generateForMonth(
-            yearMonth: YearMonth, firstDayOfWeek: DayOfWeek,
-            outDateStyle: OutDateStyle, inDateStyle: InDateStyle, maxRowCount: Int
+        fun generateBoundedMonth(
+            yearMonth: YearMonth,
+            firstDayOfWeek: DayOfWeek,
+            maxRowCount: Int,
+            inDateStyle: InDateStyle,
+            outDateStyle: OutDateStyle
         ): List<CalendarMonth> {
             val year = yearMonth.year
             val month = yearMonth.monthValue
@@ -108,6 +132,38 @@ data class MonthConfig(
                 val monthDays = weekDaysGroup.take(maxRowCount)
                 calendarMonths.add(CalendarMonth(yearMonth, monthDays, calendarMonths.count(), numberOfSameMonth))
                 weekDaysGroup.removeAll(monthDays)
+            }
+            return calendarMonths
+        }
+
+        fun generateUnboundedMonths(
+            startMonth: YearMonth,
+            endMonth: YearMonth,
+            maxRowCount: Int
+        ): List<CalendarMonth> {
+            val days = mutableListOf<CalendarDay>()
+            var nextMonth = startMonth
+            while (nextMonth <= endMonth) {
+                days.addAll(
+                    (1..nextMonth.lengthOfMonth()).map {
+                        CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, it), DayOwner.THIS_MONTH)
+                    }
+                )
+                nextMonth = nextMonth.next
+            }
+
+            val daysGroup = mutableListOf<List<CalendarDay>>()
+            while (days.isNotEmpty()) {
+                val sevenDays = days.take(7)
+                daysGroup.add(sevenDays)
+                days.removeAll(sevenDays)
+            }
+
+            val calendarMonths = mutableListOf<CalendarMonth>()
+            while (daysGroup.isNotEmpty()) {
+                val monthDays = daysGroup.take(maxRowCount)
+                calendarMonths.add(CalendarMonth(monthDays.first().first().date.yearMonth, monthDays, NO_INDEX, NO_INDEX))
+                daysGroup.removeAll(monthDays)
             }
             return calendarMonths
         }

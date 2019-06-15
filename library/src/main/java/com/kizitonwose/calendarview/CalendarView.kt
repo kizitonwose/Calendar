@@ -184,6 +184,14 @@ class CalendarView : RecyclerView {
             }
         }
 
+    var hasBoundaries = true
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapterMonthConfig()
+            }
+        }
+
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
     private var firstDayOfWeek: DayOfWeek? = null
@@ -219,6 +227,7 @@ class CalendarView : RecyclerView {
         inDateStyle = InDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_inDateStyle, inDateStyle.ordinal)]
         maxRowCount = a.getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
         monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
+        hasBoundaries = a.getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
         a.recycle()
     }
 
@@ -392,7 +401,8 @@ class CalendarView : RecyclerView {
             calendarAdapter.monthConfig =
                 MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount,
-                    startMonth ?: return, endMonth ?: return, firstDayOfWeek ?: return
+                    startMonth ?: return, endMonth ?: return, firstDayOfWeek ?: return,
+                    hasBoundaries
                 )
             calendarAdapter.notifyDataSetChanged()
         }
@@ -569,7 +579,10 @@ class CalendarView : RecyclerView {
         adapter = CalendarAdapter(
             this,
             ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
-            MonthConfig(outDateStyle, inDateStyle, maxRowCount, startMonth, endMonth, firstDayOfWeek)
+            MonthConfig(
+                outDateStyle, inDateStyle, maxRowCount, startMonth,
+                endMonth, firstDayOfWeek, hasBoundaries
+            )
         )
     }
 
