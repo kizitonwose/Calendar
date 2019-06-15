@@ -19,6 +19,7 @@ class HomeActivity : AppCompatActivity() {
             R.string.example_4_title -> Example4Fragment()
             R.string.example_5_title -> Example5Fragment()
             R.string.example_6_title -> Example6Fragment()
+            R.string.example_7_title -> Example7Fragment()
             else -> throw IllegalArgumentException()
         }
         supportFragmentManager.beginTransaction()
