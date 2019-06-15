@@ -86,7 +86,7 @@ class Example7Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
         val currentMonth = YearMonth.now()
         // Value for firstDayOfWeek does not matter since "hasBoundaries" is false.
-        exSevenCalendar.setup(currentMonth, currentMonth.plusMonths(1), DayOfWeek.FRIDAY)
-        exSevenCalendar.scrollToDate(currentMonth.atDay(1))
+        exSevenCalendar.setup(currentMonth, currentMonth.plusMonths(3), DayOfWeek.FRIDAY)
+        exSevenCalendar.scrollToDate(LocalDate.now())
     }
 }

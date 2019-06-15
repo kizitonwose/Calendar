@@ -1,8 +1,6 @@
 package com.kizitonwose.calendarview.model
 
-import com.kizitonwose.calendarview.utils.NO_INDEX
 import com.kizitonwose.calendarview.utils.next
-import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -125,12 +123,13 @@ data class MonthConfig(
 
             // Group rows by maxRowCount into CalendarMonth classes.
             val calendarMonths = mutableListOf<CalendarMonth>()
-            val div = weekDaysGroup.count() / maxRowCount
-            val rem = weekDaysGroup.count() % maxRowCount
+            val div = weekDaysGroup.size / maxRowCount
+            val rem = weekDaysGroup.size % maxRowCount
+            // Add the last month dropped from div if rem is not zero
             val numberOfSameMonth = if (rem == 0) div else div + 1
             while (weekDaysGroup.isNotEmpty()) {
                 val monthDays = weekDaysGroup.take(maxRowCount)
-                calendarMonths.add(CalendarMonth(yearMonth, monthDays, calendarMonths.count(), numberOfSameMonth))
+                calendarMonths.add(CalendarMonth(yearMonth, monthDays, calendarMonths.size, numberOfSameMonth))
                 weekDaysGroup.removeAll(monthDays)
             }
             return calendarMonths
@@ -160,11 +159,20 @@ data class MonthConfig(
             }
 
             val calendarMonths = mutableListOf<CalendarMonth>()
+            val div = daysGroup.size / maxRowCount
+            val rem = daysGroup.size % maxRowCount
+            // Add the last month dropped from div if rem is not zero
+            val num = if (rem == 0) div else div + 1
             while (daysGroup.isNotEmpty()) {
                 val monthDays = daysGroup.take(maxRowCount)
-                calendarMonths.add(CalendarMonth(monthDays.first().first().date.yearMonth, monthDays, NO_INDEX, NO_INDEX))
+                calendarMonths.add(
+                    // numberOfSameMonth is the total number of all months and
+                    // indexInSameMonth is basically this item's index in the entire month list.
+                    CalendarMonth(startMonth, monthDays, calendarMonths.size, num)
+                )
                 daysGroup.removeAll(monthDays)
             }
+
             return calendarMonths
         }
     }

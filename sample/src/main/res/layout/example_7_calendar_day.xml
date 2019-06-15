@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/selectableItemBackground"
     tools:background="@color/colorPrimary">
 
     <LinearLayout
@@ -46,10 +47,10 @@
 
     <View
         android:id="@+id/exSevenSelectedView"
-        android:layout_gravity="bottom"
-        android:background="@color/example_7_yellow"
         android:layout_width="match_parent"
-        android:layout_height="6dp"/>
+        android:layout_height="6dp"
+        android:layout_gravity="bottom"
+        android:background="@color/example_7_yellow" />
 
 </FrameLayout>
 

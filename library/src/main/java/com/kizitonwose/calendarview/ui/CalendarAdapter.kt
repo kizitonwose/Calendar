@@ -64,7 +64,7 @@ class CalendarAdapter(
             clipChildren = false //#ClipChildrenFix
         }
 
-        if (viewConfig.monthHeaderRes != 0) {
+        if (viewConfig.monthHeaderRes != 0 && monthConfig.hasBoundaries) {
             val monthHeaderView = rootLayout.inflate(viewConfig.monthHeaderRes)
             // Don't overwrite ID set by the user.
             if (monthHeaderView.id == View.NO_ID) {
@@ -83,7 +83,7 @@ class CalendarAdapter(
         }
         rootLayout.addView(monthBodyLayout)
 
-        if (viewConfig.monthFooterRes != 0) {
+        if (viewConfig.monthFooterRes != 0 && monthConfig.hasBoundaries) {
             val monthFooterView = rootLayout.inflate(viewConfig.monthFooterRes)
             // Don't overwrite ID set by the user.
             if (monthFooterView.id == View.NO_ID) {
@@ -156,6 +156,7 @@ class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun notifyMonthScrollListenerIfNeeded() {
+        if (monthConfig.hasBoundaries.not()) return
         val visibleItemPos = findFirstVisibleMonthPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
@@ -204,16 +205,22 @@ class CalendarAdapter(
     }
 
     internal fun getAdapterPosition(day: CalendarDay): Int {
-        val firstMonthIndex = getAdapterPosition(day.positionYearMonth)
-        if (firstMonthIndex == NO_INDEX) return NO_INDEX
+        return if (monthConfig.hasBoundaries) {
+            val firstMonthIndex = getAdapterPosition(day.positionYearMonth)
+            if (firstMonthIndex == NO_INDEX) return NO_INDEX
 
-        val firstCalMonth = months[firstMonthIndex]
-        val sameMonths = months.slice(firstMonthIndex until firstMonthIndex + firstCalMonth.numberOfSameMonth)
-        val indexWithDateInSameMonth = sameMonths.indexOfFirst { month ->
-            month.weekDays.flatten().any { it.date == day.date }
+            val firstCalMonth = months[firstMonthIndex]
+            val sameMonths = months.slice(firstMonthIndex until firstMonthIndex + firstCalMonth.numberOfSameMonth)
+            val indexWithDateInSameMonth = sameMonths.indexOfFirst { months ->
+                months.weekDays.any { weeks -> weeks.any { it == day } }
+            }
+
+            if (indexWithDateInSameMonth == NO_INDEX) NO_INDEX else firstMonthIndex + indexWithDateInSameMonth
+        } else {
+            months.indexOfFirst { months ->
+                months.weekDays.any { weeks -> weeks.any { it == day } }
+            }
         }
-
-        return if (indexWithDateInSameMonth == NO_INDEX) NO_INDEX else firstMonthIndex + indexWithDateInSameMonth
     }
 
     private val layoutManager: CalendarLayoutManager
