@@ -59,6 +59,24 @@ class Example7Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
             init {
                 view.setOnClickListener {
+                    val firstDay = exSevenCalendar.findFirstVisibleDay()
+                    val lastDay = exSevenCalendar.findLastVisibleDay()
+                    if (firstDay == day) {
+                        // If the first date on screen was clicked, we scroll to the date to ensure
+                        // it is fully visible if it was partially off the screen when clicked.
+                        exSevenCalendar.smoothScrollToDate(day.date)
+                    } else if (lastDay == day) {
+                        // If the last date was clicked, we scroll to 4 days ago, this forces the
+                        // clicked date to be fully visible if it was partially off the screen.
+                        // We scroll to 4 days ago because we show max of five days on the screen
+                        // so scrolling to 4 days ago brings the clicked date into full visibility
+                        // at the end of the calendar view.
+                        exSevenCalendar.smoothScrollToDate(day.date.minusDays(4))
+                    }
+
+                    // Example: If you want the clicked date to always be centered on the screen,
+                    // you would use: exSevenCalendar.smoothScrollToDate(day.date.minusDays(2))
+
                     if (selectedDate != day.date) {
                         val oldDate = selectedDate
                         selectedDate = day.date
