@@ -519,10 +519,20 @@ class CalendarView : RecyclerView {
      * Find the first visible day on the CalendarView.
      * This is the day at the top-left of the calendar.
      *
-     * @return The first visible month or null if not found.
+     * @return The first visible day or null if not found.
      */
     fun findFirstVisibleDay(): CalendarDay? {
         return calendarAdapter.findFirstVisibleDay()
+    }
+
+    /**
+     * Find the last visible day on the CalendarView.
+     * This is the day at the bottom-right of the calendar.
+     *
+     * @return The last visible day or null if not found.
+     */
+    fun findLastVisibleDay(): CalendarDay? {
+        return calendarAdapter.findLastVisibleDay()
     }
 
     /**

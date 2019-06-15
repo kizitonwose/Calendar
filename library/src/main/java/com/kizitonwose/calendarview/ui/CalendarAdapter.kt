@@ -14,7 +14,6 @@ import com.kizitonwose.calendarview.utils.inflate
 import com.kizitonwose.calendarview.utils.orZero
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
-import kotlin.math.sign
 
 internal typealias LP = ViewGroup.LayoutParams
 
@@ -261,18 +260,28 @@ class CalendarAdapter(
         months.getOrNull(findFirstVisibleMonthPosition())
 
     fun findFirstVisibleDay(): CalendarDay? {
-        val visibleMonthIndex = findFirstVisibleMonthPosition()
-        if (visibleMonthIndex == NO_INDEX) return null
+        return findIntersection(findFirstVisibleMonthPosition(), true)
+    }
 
-        val visibleItemView = layoutManager.findViewByPosition(visibleMonthIndex) ?: return null
+    fun findLastVisibleDay(): CalendarDay? {
+        return findIntersection(layoutManager.findLastVisibleItemPosition(), false)
+    }
 
-        val isZeroOrPositive = { value: Int -> value.sign == 0 || value.sign == 1 }
+    private fun findIntersection(index: Int, isFirst: Boolean): CalendarDay? {
+        if (index == NO_INDEX) return null
+
+        val visibleItemView = layoutManager.findViewByPosition(index) ?: return null
+        val monthRect = Rect()
+        visibleItemView.getGlobalVisibleRect(monthRect)
+
         val dayRect = Rect()
-        return months[visibleMonthIndex].weekDays.flatten().firstOrNull {
-            val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
-            dayView.getGlobalVisibleRect(dayRect)
-            return@firstOrNull isZeroOrPositive(if (calView.isVertical) dayRect.top else dayRect.left)
-        }
+        return months[index].weekDays.flatten()
+            .run { if (isFirst) this else reversed() }
+            .firstOrNull {
+                val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
+                dayView.getGlobalVisibleRect(dayRect)
+                dayRect.intersect(monthRect)
+            }
     }
 
     fun findFirstCompletelyVisibleMonth(): CalendarMonth? =
