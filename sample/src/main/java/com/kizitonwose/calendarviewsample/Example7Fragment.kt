@@ -4,34 +4,31 @@ package com.kizitonwose.calendarviewsample
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.view.children
+import androidx.appcompat.widget.Toolbar
 import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_7_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_7_fragment.*
 import org.threeten.bp.DayOfWeek
-
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
 
-class Example7Fragment : BaseFragment(), HasBackButton {
+class Example7Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     override val titleRes: Int = R.string.example_7_title
 
-    private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
+    override val toolbar: Toolbar?
+        get() = exSevenToolbar
+
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd")
+    private val dayFormatter = DateTimeFormatter.ofPattern("EEE")
+    private val monthFormatter = DateTimeFormatter.ofPattern("MMM")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.example_7_fragment, container, false)
@@ -46,23 +43,23 @@ class Example7Fragment : BaseFragment(), HasBackButton {
 
         exSevenCalendar.dayWidth = dm.widthPixels / 5
 
-        exSevenCalendar.dayHeight = (exSevenCalendar.dayWidth * 2)
+        exSevenCalendar.dayHeight = (exSevenCalendar.dayWidth * 1.25).toInt()
 
         class DayViewContainer(view: View) : ViewContainer(view) {
-            val textView = view.exSevenDayText
+            val dayText = view.exSevenDayText
+            val dateText = view.exSevenDateText
+            val monthText = view.exSevenMonthText
+
+            fun bind(day: CalendarDay) {
+                dateText.text = dateFormatter.format(day.date)
+                dayText.text = dayFormatter.format(day.date)
+                monthText.text = monthFormatter.format(day.date)
+            }
         }
+
         exSevenCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, day: CalendarDay) {
-                val textView = container.textView
-
-                if (day.owner == DayOwner.THIS_MONTH) {
-                    textView.text = day.date.dayOfMonth.toString()
-                    textView.makeVisible()
-                } else {
-                    textView.makeInVisible()
-                }
-            }
+            override fun bind(container: DayViewContainer, day: CalendarDay) = container.bind(day)
         }
 
         val currentMonth = YearMonth.now()
