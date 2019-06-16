@@ -516,26 +516,6 @@ class CalendarView : RecyclerView {
     }
 
     /**
-     * Find the first visible day on the CalendarView.
-     * This is the day at the top-left of the calendar.
-     *
-     * @return The first visible day or null if not found.
-     */
-    fun findFirstVisibleDay(): CalendarDay? {
-        return calendarAdapter.findFirstVisibleDay()
-    }
-
-    /**
-     * Find the last visible day on the CalendarView.
-     * This is the day at the bottom-right of the calendar.
-     *
-     * @return The last visible day or null if not found.
-     */
-    fun findLastVisibleDay(): CalendarDay? {
-        return calendarAdapter.findLastVisibleDay()
-    }
-
-    /**
      * Find the first visible month on the CalendarView.
      *
      * @return The first visible month or null if not found.
@@ -545,12 +525,32 @@ class CalendarView : RecyclerView {
     }
 
     /**
-     * Find the first completely visible month on the CalendarView.
+     * Find the last visible month on the CalendarView.
      *
-     * @return The first completely visible month or null if not found.
+     * @return The last visible month or null if not found.
      */
-    fun findFirstCompletelyVisibleMonth(): CalendarMonth? {
-        return calendarAdapter.findFirstCompletelyVisibleMonth()
+    fun findLastVisibleMonth(): CalendarMonth? {
+        return calendarAdapter.findLastVisibleMonth()
+    }
+
+    /**
+     * Find the first visible day on the CalendarView.
+     * This is the day at the top-left corner of the calendar.
+     *
+     * @return The first visible day or null if not found.
+     */
+    fun findFirstVisibleDay(): CalendarDay? {
+        return calendarAdapter.findFirstVisibleDay()
+    }
+
+    /**
+     * Find the last visible day on the CalendarView.
+     * This is the day at the bottom-right corner of the calendar.
+     *
+     * @return The last visible day or null if not found.
+     */
+    fun findLastVisibleDay(): CalendarDay? {
+        return calendarAdapter.findLastVisibleDay()
     }
 
     private val scrollListenerInternal = object : RecyclerView.OnScrollListener() {
@@ -563,7 +563,6 @@ class CalendarView : RecyclerView {
     }
 
     private val pagerSnapHelper = PagerSnapHelper()
-
 
     /**
      * Setup the CalendarView. You can call this any time to change the

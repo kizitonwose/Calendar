@@ -225,10 +225,25 @@ class CalendarAdapter(
     private val layoutManager: CalendarLayoutManager
         get() = calView.layoutManager as CalendarLayoutManager
 
-    private fun findFirstVisibleMonthPosition(): Int {
-        val visibleItemPos = layoutManager.findFirstVisibleItemPosition()
+    fun findFirstVisibleMonth(): CalendarMonth? = months.getOrNull(findFirstVisibleMonthPosition())
+
+    fun findLastVisibleMonth(): CalendarMonth? = months.getOrNull(findLastVisibleMonthPosition())
+
+    fun findFirstVisibleDay(): CalendarDay? = findVisibleDay(true)
+
+    fun findLastVisibleDay(): CalendarDay? = findVisibleDay(false)
+
+    private fun findFirstVisibleMonthPosition(): Int = findVisibleMonthPosition(true)
+
+    private fun findLastVisibleMonthPosition(): Int = findVisibleMonthPosition(false)
+
+    private fun findVisibleMonthPosition(isFirst: Boolean): Int {
+        val visibleItemPos =
+            if (isFirst) layoutManager.findFirstVisibleItemPosition() else layoutManager.findLastVisibleItemPosition()
+
         if (visibleItemPos != RecyclerView.NO_POSITION) {
-            // We make sure that the view for the returned position has at least one fully visible date cell.
+
+            // We make sure that the view for the returned position is visible to a reasonable degree.
             val visibleItemPx = Rect().let { rect ->
                 val visibleItemView = layoutManager.findViewByPosition(visibleItemPos) ?: return NO_INDEX
                 visibleItemView.getGlobalVisibleRect(rect)
@@ -244,38 +259,29 @@ class CalendarAdapter(
             // rounding. Hence finding the first visible index will return the view
             // with the px outside bounds. 7 is the number of cells in a week.
             if (visibleItemPx <= 7) {
-                val nextItemPosition = visibleItemPos + 1
+                val nextItemPosition = if (isFirst) visibleItemPos + 1 else visibleItemPos - 1
                 return if (months.indices.contains(nextItemPosition)) {
                     nextItemPosition
                 } else {
                     visibleItemPos
                 }
             }
+
         }
 
         return visibleItemPos
     }
 
-    fun findFirstVisibleMonth(): CalendarMonth? =
-        months.getOrNull(findFirstVisibleMonthPosition())
+    private fun findVisibleDay(isFirst: Boolean): CalendarDay? {
+        val visibleIndex = if (isFirst) findFirstVisibleMonthPosition() else findLastVisibleMonthPosition()
+        if (visibleIndex == NO_INDEX) return null
 
-    fun findFirstVisibleDay(): CalendarDay? {
-        return findIntersection(findFirstVisibleMonthPosition(), true)
-    }
-
-    fun findLastVisibleDay(): CalendarDay? {
-        return findIntersection(layoutManager.findLastVisibleItemPosition(), false)
-    }
-
-    private fun findIntersection(index: Int, isFirst: Boolean): CalendarDay? {
-        if (index == NO_INDEX) return null
-
-        val visibleItemView = layoutManager.findViewByPosition(index) ?: return null
+        val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null
         val monthRect = Rect()
         visibleItemView.getGlobalVisibleRect(monthRect)
 
         val dayRect = Rect()
-        return months[index].weekDays.flatten()
+        return months[visibleIndex].weekDays.flatten()
             .run { if (isFirst) this else reversed() }
             .firstOrNull {
                 val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
@@ -283,9 +289,4 @@ class CalendarAdapter(
                 dayRect.intersect(monthRect)
             }
     }
-
-    fun findFirstCompletelyVisibleMonth(): CalendarMonth? =
-        months.getOrNull(layoutManager.findFirstCompletelyVisibleItemPosition())
-
-
 }
