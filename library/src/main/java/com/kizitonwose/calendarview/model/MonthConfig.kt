@@ -40,7 +40,14 @@ data class MonthConfig(
             val months = mutableListOf<CalendarMonth>()
             var nextMonth = startMonth
             while (nextMonth <= endMonth) {
-                months.addAll(generateBoundedMonth(nextMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle))
+                val generateInDates = when (inDateStyle) {
+                    InDateStyle.ALL_MONTHS -> true
+                    InDateStyle.FIRST_MONTH -> nextMonth == startMonth
+                    InDateStyle.NONE -> false
+                }
+                months.addAll(
+                    generateBoundedMonth(nextMonth, firstDayOfWeek, maxRowCount, generateInDates, outDateStyle)
+                )
                 nextMonth = nextMonth.next
             }
             return months
@@ -56,7 +63,7 @@ data class MonthConfig(
             yearMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
             maxRowCount: Int,
-            inDateStyle: InDateStyle,
+            generateInDates: Boolean,
             outDateStyle: OutDateStyle
         ): List<CalendarMonth> {
             val year = yearMonth.year
@@ -66,16 +73,7 @@ data class MonthConfig(
                 CalendarDay(LocalDate.of(year, month, it), DayOwner.THIS_MONTH)
             }.toMutableList()
 
-            val weekDaysGroup = if (inDateStyle == InDateStyle.NONE) {
-                // Group days by 7, first day shown on the month will be day 1.
-                val groupBySeven = mutableListOf<List<CalendarDay>>()
-                while (thisMonthDays.isNotEmpty()) {
-                    val nextRow = thisMonthDays.take(7)
-                    groupBySeven.add(nextRow)
-                    thisMonthDays.removeAll(nextRow)
-                }
-                groupBySeven
-            } else {
+            val weekDaysGroup = if (generateInDates) {
                 // Group days by week of month so we can add the in dates if necessary.
                 val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
                 val groupByWeekOfMonth = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
@@ -94,6 +92,15 @@ data class MonthConfig(
                     groupByWeekOfMonth[0] = inDates + firstWeek
                 }
                 groupByWeekOfMonth
+            } else {
+                // Group days by 7, first day shown on the month will be day 1.
+                val groupBySeven = mutableListOf<List<CalendarDay>>()
+                while (thisMonthDays.isNotEmpty()) {
+                    val nextRow = thisMonthDays.take(7)
+                    groupBySeven.add(nextRow)
+                    thisMonthDays.removeAll(nextRow)
+                }
+                groupBySeven
             }
 
 

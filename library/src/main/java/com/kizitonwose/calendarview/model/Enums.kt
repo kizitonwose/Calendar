@@ -36,12 +36,17 @@ enum class OutDateStyle {
  */
 enum class InDateStyle {
     /**
-     * The calendar will generate inDates for all months.
+     * inDates will be generated for all months.
      */
     ALL_MONTHS,
 
     /**
-     * inDates will not be generated, meaning that there
+     * inDates will be generated for the first month only.
+     */
+    FIRST_MONTH,
+
+    /**
+     * inDates will not be generated, this means there
      * will be no offset on any month.
      */
     NONE

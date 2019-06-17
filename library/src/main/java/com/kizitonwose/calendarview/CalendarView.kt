@@ -139,8 +139,9 @@ open class CalendarView : RecyclerView {
 
     /**
      * Determines how inDates are generated for each month on the calendar.
-     * If set to [InDateStyle.ALL_MONTHS], the calendar will generate inDates for all months.
-     * If set to [InDateStyle.NONE], inDates will not be generated, meaning that there will
+     * If set to [InDateStyle.ALL_MONTHS], inDates will be generated for all months.
+     * If set to [InDateStyle.FIRST_MONTH], inDates will be generated for the first month only.
+     * If set to [InDateStyle.NONE], inDates will not be generated, this means there will
      * be no offset on any month.
      */
     var inDateStyle = InDateStyle.ALL_MONTHS
