@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class CalendarView : RecyclerView {
+open class CalendarView : RecyclerView {
 
     /**
      * The [DayBinder] instance used for managing day cell views
@@ -576,11 +575,12 @@ class CalendarView : RecyclerView {
         this.startMonth = startMonth
         this.endMonth = endMonth
         this.firstDayOfWeek = firstDayOfWeek
-        AndroidThreeTen.init(context) // The library checks for multiple calls.
 
         clipToPadding = false
         clipChildren = false //#ClipChildrenFix
 
+        // Remove the listener before adding again to prevent
+        // multiple additions if we already added it before.
         removeOnScrollListener(scrollListenerInternal)
         addOnScrollListener(scrollListenerInternal)
 
