@@ -6,7 +6,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.temporal.WeekFields
 
-data class MonthConfig(
+internal data class MonthConfig(
     val outDateStyle: OutDateStyle,
     val inDateStyle: InDateStyle,
     val maxRowCount: Int,
@@ -16,7 +16,7 @@ data class MonthConfig(
     val hasBoundaries: Boolean
 ) {
 
-    val months: List<CalendarMonth> by lazy lazy@{
+    internal val months: List<CalendarMonth> by lazy lazy@{
         return@lazy if (hasBoundaries) {
             generateBoundedMonths(
                 startMonth, endMonth, firstDayOfWeek,
@@ -27,9 +27,9 @@ data class MonthConfig(
         }
     }
 
-    companion object {
+    internal companion object {
 
-        fun generateBoundedMonths(
+        internal fun generateBoundedMonths(
             startMonth: YearMonth,
             endMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
@@ -59,7 +59,7 @@ data class MonthConfig(
          * less than 6. Each [CalendarMonth] will hold just enough [CalendarDay] instances(weekDays)
          * to fit in the [maxRowCount].
          */
-        fun generateBoundedMonth(
+        internal fun generateBoundedMonth(
             yearMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
             maxRowCount: Int,
@@ -142,7 +142,7 @@ data class MonthConfig(
             return calendarMonths
         }
 
-        fun generateUnboundedMonths(
+        internal fun generateUnboundedMonths(
             startMonth: YearMonth,
             endMonth: YearMonth,
             maxRowCount: Int

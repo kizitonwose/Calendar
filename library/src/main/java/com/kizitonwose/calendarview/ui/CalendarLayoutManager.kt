@@ -13,7 +13,7 @@ import com.kizitonwose.calendarview.model.ScrollMode
 import org.threeten.bp.YearMonth
 
 
-class CalendarLayoutManager(private val calView: CalendarView, @RecyclerView.Orientation orientation: Int) :
+internal class CalendarLayoutManager(private val calView: CalendarView, @RecyclerView.Orientation orientation: Int) :
     LinearLayoutManager(calView.context, orientation, false) {
 
     private val adapter: CalendarAdapter

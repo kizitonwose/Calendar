@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 
-class MonthViewHolder constructor(
+internal class MonthViewHolder constructor(
     adapter: CalendarAdapter,
     rootLayout: ViewGroup,
     dayConfig: DayConfig,

@@ -17,14 +17,14 @@ import org.threeten.bp.YearMonth
 
 internal typealias LP = ViewGroup.LayoutParams
 
-data class ViewConfig(
+internal data class ViewConfig(
     @LayoutRes val dayViewRes: Int,
     @LayoutRes val monthHeaderRes: Int,
     @LayoutRes val monthFooterRes: Int,
     val monthViewClass: String?
 )
 
-class CalendarAdapter(
+internal class CalendarAdapter(
     private val calView: CalendarView,
     internal var viewConfig: ViewConfig,
     internal var monthConfig: MonthConfig

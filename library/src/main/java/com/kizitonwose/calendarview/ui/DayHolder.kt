@@ -9,14 +9,14 @@ import androidx.annotation.Px
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.utils.inflate
 
-data class DayConfig(
+internal data class DayConfig(
     @Px val width: Int,
     @Px val height: Int,
     @LayoutRes val dayViewRes: Int,
     val viewBinder: DayBinder<ViewContainer>
 )
 
-class DayHolder(private val config: DayConfig) {
+internal class DayHolder(private val config: DayConfig) {
 
     private lateinit var dateView: View
     private lateinit var containerView: FrameLayout

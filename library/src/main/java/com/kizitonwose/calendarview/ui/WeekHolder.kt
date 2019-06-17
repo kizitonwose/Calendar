@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.kizitonwose.calendarview.model.CalendarDay
 
-class WeekHolder(dayConfig: DayConfig) {
+internal class WeekHolder(dayConfig: DayConfig) {
 
     val dayHolders = (1..7).map { DayHolder(dayConfig) }
 
