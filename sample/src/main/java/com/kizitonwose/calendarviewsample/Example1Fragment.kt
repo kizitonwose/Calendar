@@ -1,18 +1,23 @@
 package com.kizitonwose.calendarviewsample
 
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.view.children
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.model.InDateStyle
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.yearMonth
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
@@ -59,6 +64,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
             init {
                 view.setOnClickListener {
+                    Toast.makeText(it.context, day.date.toString(), Toast.LENGTH_LONG).show()
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDates.contains(day.date)) {
                             selectedDates.remove(day.date)
@@ -70,6 +76,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                 }
             }
         }
+
         exOneCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
@@ -104,29 +111,50 @@ class Example1Fragment : BaseFragment(), HasToolbar {
             exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
         }
 
-        maxRowSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (seekBar.progress == 0) {
-                    seekBar.progress = 1 // SeekBar progress starts at 0
-                } else {
-                    // We want the first visible day to remain visible when the
-                    // number of visible rows change. Though it may not remain
-                    // the first visible date if maxRowCount increases.
-                    val visibleDay = exOneCalendar.findFirstVisibleDay()
-                    exOneCalendar.maxRowCount = seekBar.progress
-                    visibleDay?.let { exOneCalendar.scrollToDay(it) }
+        weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->
+            // We want the first visible day to remain visible when we change to week mode.
+            val visibleDay = exOneCalendar.findFirstVisibleDay()
 
-                    maxRowText.text = getString(R.string.max_row_count, seekBar.progress)
+            val oneWeekHeight = exOneCalendar.dayHeight
+            val oneMonthHeight = oneWeekHeight * 6
+
+            val oldHeight = if (monthToWeek) oneMonthHeight else oneWeekHeight
+            val newHeight = if (monthToWeek) oneWeekHeight else oneMonthHeight
+
+            // Animate calendar height changes.
+            val animator = ValueAnimator.ofInt(oldHeight, newHeight)
+            animator.addUpdateListener { animator ->
+                exOneCalendar.layoutParams = exOneCalendar.layoutParams.apply {
+                    height = animator.animatedValue as Int
+                }
+            }
+            animator.doOnStart {
+                if (!monthToWeek) {
+                    exOneCalendar.inDateStyle = InDateStyle.ALL_MONTHS
+                    exOneCalendar.maxRowCount = 6
+                    exOneCalendar.hasBoundaries = true
+                }
+            }
+            animator.doOnEnd {
+                if (monthToWeek) {
+                    exOneCalendar.inDateStyle = InDateStyle.FIRST_MONTH
+                    exOneCalendar.maxRowCount = 1
+                    exOneCalendar.hasBoundaries = false
                 }
 
+                visibleDay?.let {
+                    val actualDate = if (it.owner == DayOwner.PREVIOUS_MONTH) {
+                        it.date.yearMonth.plusMonths(1).atDay(1)
+                    } else {
+                        it.date
+                    }
+                    exOneCalendar.scrollToDate(actualDate)
+                }
             }
+            animator.duration = 250
+            animator.start()
+        }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
-        })
-
-        // Update text initially.
-        maxRowText.text = getString(R.string.max_row_count, maxRowSeekBar.progress)
     }
 
     override fun onStart() {

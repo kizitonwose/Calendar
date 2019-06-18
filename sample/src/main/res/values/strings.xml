@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CalendarView Sample</string>
     <string name="example_1_title">Example 1</string>
-    <string name="example_1_subtitle">Multiple selection, horizontal scrolling, visible in and out dates, shows \"endOfRow\" implementation of \"outDateStyle\" option and usage of `maxRowCount` property.</string>
+    <string name="example_1_subtitle">Multiple selection, horizontal scrolling, shows usage of \"maxRowCount\" property to switch between week and month modes, outDates are not generated with OutDateStyle option \"none\".</string>
     <string name="example_2_title">Example 2</string>
     <string name="example_2_subtitle">Month header view, single selection, vertical scrolling, hides in and out dates.</string>
     <string name="example_3_title">Example 3</string>
@@ -23,6 +23,6 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="clear">Clear</string>
-    <string name="max_row_count">Max row count: %d</string>
+    <string name="week_mode">Week mode</string>
 
 </resources>
