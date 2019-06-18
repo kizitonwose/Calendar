@@ -23,12 +23,20 @@ internal data class MonthConfig(
                 maxRowCount, inDateStyle, outDateStyle
             )
         } else {
-            generateUnboundedMonths(startMonth, endMonth, maxRowCount)
+            generateUnboundedMonths(
+                startMonth, endMonth, firstDayOfWeek,
+                maxRowCount, inDateStyle, outDateStyle
+            )
         }
     }
 
     internal companion object {
 
+        /**
+         * A [YearMonth] will have multiple [CalendarMonth] instances if the [maxRowCount] is
+         * less than 6. Each [CalendarMonth] will hold just enough [CalendarDay] instances(weekDays)
+         * to fit in the [maxRowCount].
+         */
         internal fun generateBoundedMonths(
             startMonth: YearMonth,
             endMonth: YearMonth,
@@ -45,27 +53,86 @@ internal data class MonthConfig(
                     InDateStyle.FIRST_MONTH -> nextMonth == startMonth
                     InDateStyle.NONE -> false
                 }
-                months.addAll(
-                    generateBoundedMonth(nextMonth, firstDayOfWeek, maxRowCount, generateInDates, outDateStyle)
-                )
+                val weekDaysGroup =
+                    generateWeekDays(nextMonth, firstDayOfWeek, generateInDates, outDateStyle).toMutableList()
+
+                // Group rows by maxRowCount into CalendarMonth classes.
+                val calendarMonths = mutableListOf<CalendarMonth>()
+                val div = weekDaysGroup.size / maxRowCount
+                val rem = weekDaysGroup.size % maxRowCount
+                // Add the last month dropped from div if rem is not zero
+                val numberOfSameMonth = if (rem == 0) div else div + 1
+                while (weekDaysGroup.isNotEmpty()) {
+                    val monthDays = weekDaysGroup.take(maxRowCount)
+                    calendarMonths.add(CalendarMonth(nextMonth, monthDays, calendarMonths.size, numberOfSameMonth))
+                    weekDaysGroup.removeAll(monthDays)
+                }
+
+                months.addAll(calendarMonths)
+
                 nextMonth = nextMonth.next
             }
+
             return months
         }
 
-        /**
-         * This generates the necessary number of [CalendarMonth] instances for a [YearMonth].
-         * A [YearMonth] will have multiple [CalendarMonth] instances if the [maxRowCount] is
-         * less than 6. Each [CalendarMonth] will hold just enough [CalendarDay] instances(weekDays)
-         * to fit in the [maxRowCount].
-         */
-        internal fun generateBoundedMonth(
-            yearMonth: YearMonth,
+        internal fun generateUnboundedMonths(
+            startMonth: YearMonth,
+            endMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
             maxRowCount: Int,
-            generateInDates: Boolean,
+            inDateStyle: InDateStyle,
             outDateStyle: OutDateStyle
         ): List<CalendarMonth> {
+
+            // Generate a flat list of all days in the given month range
+            val allDays = mutableListOf<CalendarDay>()
+            var nextMonth = startMonth
+            while (nextMonth <= endMonth) {
+                val generateInDates = when (inDateStyle) {
+                    InDateStyle.ALL_MONTHS -> true
+                    InDateStyle.FIRST_MONTH -> nextMonth == startMonth
+                    InDateStyle.NONE -> false
+                }
+                allDays.addAll(generateWeekDays(nextMonth, firstDayOfWeek, generateInDates, outDateStyle).flatten())
+                nextMonth = nextMonth.next
+            }
+
+            // Regroup data into 7 days.
+            val daysGroup = mutableListOf<List<CalendarDay>>()
+            while (allDays.isNotEmpty()) {
+                val sevenDays = allDays.take(7)
+                daysGroup.add(sevenDays)
+                allDays.removeAll(sevenDays)
+            }
+
+            val calendarMonths = mutableListOf<CalendarMonth>()
+            val div = daysGroup.size / maxRowCount
+            val rem = daysGroup.size % maxRowCount
+            // Add the last month dropped from div if rem is not zero
+            val num = if (rem == 0) div else div + 1
+            while (daysGroup.isNotEmpty()) {
+                val monthDays = daysGroup.take(maxRowCount)
+                calendarMonths.add(
+                    // numberOfSameMonth is the total number of all months and
+                    // indexInSameMonth is basically this item's index in the entire month list.
+                    CalendarMonth(startMonth, monthDays, calendarMonths.size, num)
+                )
+                daysGroup.removeAll(monthDays)
+            }
+
+            return calendarMonths
+        }
+
+        /**
+         * Generates the necessary number of weeks for a [YearMonth].
+         */
+        internal fun generateWeekDays(
+            yearMonth: YearMonth,
+            firstDayOfWeek: DayOfWeek,
+            generateInDates: Boolean,
+            outDateStyle: OutDateStyle
+        ): List<List<CalendarDay>> {
             val year = yearMonth.year
             val month = yearMonth.monthValue
 
@@ -128,59 +195,7 @@ internal data class MonthConfig(
                 }
             }
 
-            // Group rows by maxRowCount into CalendarMonth classes.
-            val calendarMonths = mutableListOf<CalendarMonth>()
-            val div = weekDaysGroup.size / maxRowCount
-            val rem = weekDaysGroup.size % maxRowCount
-            // Add the last month dropped from div if rem is not zero
-            val numberOfSameMonth = if (rem == 0) div else div + 1
-            while (weekDaysGroup.isNotEmpty()) {
-                val monthDays = weekDaysGroup.take(maxRowCount)
-                calendarMonths.add(CalendarMonth(yearMonth, monthDays, calendarMonths.size, numberOfSameMonth))
-                weekDaysGroup.removeAll(monthDays)
-            }
-            return calendarMonths
-        }
-
-        internal fun generateUnboundedMonths(
-            startMonth: YearMonth,
-            endMonth: YearMonth,
-            maxRowCount: Int
-        ): List<CalendarMonth> {
-            val days = mutableListOf<CalendarDay>()
-            var nextMonth = startMonth
-            while (nextMonth <= endMonth) {
-                days.addAll(
-                    (1..nextMonth.lengthOfMonth()).map {
-                        CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, it), DayOwner.THIS_MONTH)
-                    }
-                )
-                nextMonth = nextMonth.next
-            }
-
-            val daysGroup = mutableListOf<List<CalendarDay>>()
-            while (days.isNotEmpty()) {
-                val sevenDays = days.take(7)
-                daysGroup.add(sevenDays)
-                days.removeAll(sevenDays)
-            }
-
-            val calendarMonths = mutableListOf<CalendarMonth>()
-            val div = daysGroup.size / maxRowCount
-            val rem = daysGroup.size % maxRowCount
-            // Add the last month dropped from div if rem is not zero
-            val num = if (rem == 0) div else div + 1
-            while (daysGroup.isNotEmpty()) {
-                val monthDays = daysGroup.take(maxRowCount)
-                calendarMonths.add(
-                    // numberOfSameMonth is the total number of all months and
-                    // indexInSameMonth is basically this item's index in the entire month list.
-                    CalendarMonth(startMonth, monthDays, calendarMonths.size, num)
-                )
-                daysGroup.removeAll(monthDays)
-            }
-
-            return calendarMonths
+            return weekDaysGroup
         }
     }
 }
