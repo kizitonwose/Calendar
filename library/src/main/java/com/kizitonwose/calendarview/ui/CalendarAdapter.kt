@@ -155,6 +155,14 @@ internal class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun notifyMonthScrollListenerIfNeeded() {
+       if (calView.isAnimating) {
+           // Fixes and issue where findFirstVisibleMonthPosition() returns
+           // zero if called when the RecyclerView is animating. This can be
+           // replicated in Example 1 where we animate the CalendarView's height
+           // changes. The listener will be called again by the ViewTreeObserver
+           // attached to the CalendarView when animation finishes #ScrollListenerFix
+           return
+       }
         val visibleItemPos = findFirstVisibleMonthPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
@@ -178,10 +186,10 @@ internal class CalendarAdapter(
                     if (calWrapsHeight.not()) return // Bug only happens when the CalenderView wraps its height.
                     val visibleVH = calView.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
                     val newHeight = visibleVH.headerView?.height.orZero() +
-                            // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
-                            // So we calculate it again by checking the number of visible(non-empty) rows.
-                            visibleMonth.weekDays.size * calView.dayHeight +
-                            visibleVH.footerView?.height.orZero()
+                        // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
+                        // So we calculate it again by checking the number of visible(non-empty) rows.
+                        visibleMonth.weekDays.size * calView.dayHeight +
+                        visibleVH.footerView?.height.orZero()
                     if (calView.layoutParams.height != newHeight)
                         calView.layoutParams = calView.layoutParams.apply {
                             this.height = newHeight

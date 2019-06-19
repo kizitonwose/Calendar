@@ -25,7 +25,7 @@ val YearMonth.next: YearMonth
 val YearMonth.previous: YearMonth
     get() = this.minusMonths(1)
 
-internal val NO_INDEX = -1
+internal const val NO_INDEX = -1
 
 internal val Rect.namedString: String
     get() = "[L: $left, T: $top][R: $right, B: $bottom]"

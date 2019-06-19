@@ -13,6 +13,7 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
+
 open class CalendarView : RecyclerView {
 
     /**
@@ -229,6 +230,10 @@ open class CalendarView : RecyclerView {
         monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
         hasBoundaries = a.getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
         a.recycle()
+        viewTreeObserver.addOnGlobalLayoutListener {
+            // See #ScrollListenerFix
+            calendarAdapter.notifyMonthScrollListenerIfNeeded()
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
