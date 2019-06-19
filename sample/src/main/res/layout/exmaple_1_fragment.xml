@@ -61,7 +61,7 @@
             android:layout_height="0dp"
             app:cv_dayViewResource="@layout/example_1_calendar_day"
             app:cv_orientation="horizontal"
-            app:cv_outDateStyle="none"
+            app:cv_outDateStyle="endOfRow"
             app:cv_scrollMode="paged"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

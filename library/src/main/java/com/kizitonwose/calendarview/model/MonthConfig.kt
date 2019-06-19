@@ -80,7 +80,7 @@ internal data class MonthConfig(
                 }
 
                 months.addAll(calendarMonths)
-                currentMonth = currentMonth.next
+                if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
 
             return months
@@ -113,7 +113,7 @@ internal data class MonthConfig(
                     // on the last month only.
                     generateWeekDays(currentMonth, firstDayOfWeek, generateInDates, OutDateStyle.NONE).flatten()
                 )
-                currentMonth = currentMonth.next
+                if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
 
             // Regroup data into 7 days.

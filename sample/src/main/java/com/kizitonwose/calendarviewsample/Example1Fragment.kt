@@ -107,8 +107,30 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         }
 
         exOneCalendar.monthScrollListener = {
-            exOneYearText.text = it.yearMonth.year.toString()
-            exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
+            if (exOneCalendar.maxRowCount == 6) {
+                exOneYearText.text = it.yearMonth.year.toString()
+                exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
+            } else {
+                // In week mode, we show the header a bit differently.
+                // We show indices with dates from different months since
+                // dates overflow and cells in one index can belong to different
+                // months/years.
+                val firstDate = it.weekDays.first().first().date
+                val lastDate = it.weekDays.last().last().date
+                if (firstDate.yearMonth == lastDate.yearMonth) {
+                    exOneYearText.text = firstDate.yearMonth.year.toString()
+                    exOneMonthText.text = monthTitleFormatter.format(firstDate)
+                } else {
+                    exOneMonthText.text =
+                        "${monthTitleFormatter.format(firstDate)} - ${monthTitleFormatter.format(lastDate)}"
+                    if (firstDate.year == lastDate.year) {
+                        exOneYearText.text = firstDate.yearMonth.year.toString()
+                    } else {
+                        exOneYearText.text = "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
+                    }
+                }
+            }
+
         }
 
         weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->

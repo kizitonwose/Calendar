@@ -169,6 +169,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
                         tv.setTextColorRes(R.color.example_5_text_grey)
                         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                     }
+                    month.yearMonth
                 }
             }
         }
