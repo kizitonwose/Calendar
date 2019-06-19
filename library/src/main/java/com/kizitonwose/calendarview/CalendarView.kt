@@ -394,6 +394,7 @@ open class CalendarView : RecyclerView {
         val state = layoutManager?.onSaveInstanceState()
         adapter = adapter
         layoutManager?.onRestoreInstanceState(state)
+        post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
     }
 
     private fun updateAdapterMonthConfig() {
@@ -405,6 +406,7 @@ open class CalendarView : RecyclerView {
                     hasBoundaries
                 )
             calendarAdapter.notifyDataSetChanged()
+            post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
         }
     }
 

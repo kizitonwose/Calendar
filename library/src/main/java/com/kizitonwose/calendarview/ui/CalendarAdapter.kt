@@ -155,7 +155,6 @@ internal class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun notifyMonthScrollListenerIfNeeded() {
-        if (monthConfig.hasBoundaries.not()) return
         val visibleItemPos = findFirstVisibleMonthPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
