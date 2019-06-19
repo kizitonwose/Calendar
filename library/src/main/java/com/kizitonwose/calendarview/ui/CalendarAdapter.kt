@@ -155,14 +155,17 @@ internal class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun notifyMonthScrollListenerIfNeeded() {
-       if (calView.isAnimating) {
-           // Fixes and issue where findFirstVisibleMonthPosition() returns
-           // zero if called when the RecyclerView is animating. This can be
-           // replicated in Example 1 where we animate the CalendarView's height
-           // changes. The listener will be called again by the ViewTreeObserver
-           // attached to the CalendarView when animation finishes #ScrollListenerFix
-           return
-       }
+        if (calView.isAnimating) {
+            // Fixes an issue where findFirstVisibleMonthPosition() returns
+            // zero if called when the RecyclerView is animating. This can be
+            // replicated in Example 1 when switching from week to month mode.
+            // The property changes when switching modes in Example 1 cause
+            // notifyDataSetChanged() to be called, hence the animation.
+            calView.itemAnimator?.isRunning {
+                notifyMonthScrollListenerIfNeeded()
+            }
+            return
+        }
         val visibleItemPos = findFirstVisibleMonthPosition()
         if (visibleItemPos != RecyclerView.NO_POSITION) {
             val visibleMonth = months[visibleItemPos]
