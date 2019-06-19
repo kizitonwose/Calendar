@@ -1,10 +1,23 @@
 package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.temporal.WeekFields
+
+
+/**
+ * We want the remainder to be added as the division result.
+ * E.g: 5/2 should be 3.
+ */
+private infix fun Int.roundDiv(other: Int): Int {
+    val div = this / other
+    val rem = this % other
+    // Add the last value dropped from div if rem is not zero
+    return if (rem == 0) div else div + 1
+}
 
 internal data class MonthConfig(
     val outDateStyle: OutDateStyle,
@@ -46,31 +59,28 @@ internal data class MonthConfig(
             outDateStyle: OutDateStyle
         ): List<CalendarMonth> {
             val months = mutableListOf<CalendarMonth>()
-            var nextMonth = startMonth
-            while (nextMonth <= endMonth) {
+            var currentMonth = startMonth
+            while (currentMonth <= endMonth) {
                 val generateInDates = when (inDateStyle) {
                     InDateStyle.ALL_MONTHS -> true
-                    InDateStyle.FIRST_MONTH -> nextMonth == startMonth
+                    InDateStyle.FIRST_MONTH -> currentMonth == startMonth
                     InDateStyle.NONE -> false
                 }
+
                 val weekDaysGroup =
-                    generateWeekDays(nextMonth, firstDayOfWeek, generateInDates, outDateStyle).toMutableList()
+                    generateWeekDays(currentMonth, firstDayOfWeek, generateInDates, outDateStyle).toMutableList()
 
                 // Group rows by maxRowCount into CalendarMonth classes.
                 val calendarMonths = mutableListOf<CalendarMonth>()
-                val div = weekDaysGroup.size / maxRowCount
-                val rem = weekDaysGroup.size % maxRowCount
-                // Add the last month dropped from div if rem is not zero
-                val numberOfSameMonth = if (rem == 0) div else div + 1
+                val numberOfSameMonth = weekDaysGroup.size roundDiv maxRowCount
                 while (weekDaysGroup.isNotEmpty()) {
                     val monthDays = weekDaysGroup.take(maxRowCount)
-                    calendarMonths.add(CalendarMonth(nextMonth, monthDays, calendarMonths.size, numberOfSameMonth))
+                    calendarMonths.add(CalendarMonth(currentMonth, monthDays, calendarMonths.size, numberOfSameMonth))
                     weekDaysGroup.removeAll(monthDays)
                 }
 
                 months.addAll(calendarMonths)
-
-                nextMonth = nextMonth.next
+                currentMonth = currentMonth.next
             }
 
             return months
@@ -87,38 +97,110 @@ internal data class MonthConfig(
 
             // Generate a flat list of all days in the given month range
             val allDays = mutableListOf<CalendarDay>()
-            var nextMonth = startMonth
-            while (nextMonth <= endMonth) {
+            var currentMonth = startMonth
+            while (currentMonth <= endMonth) {
+
+                // If inDates are enabled with boundaries disabled,
+                // we show them on the first month only.
                 val generateInDates = when (inDateStyle) {
-                    InDateStyle.ALL_MONTHS -> true
-                    InDateStyle.FIRST_MONTH -> nextMonth == startMonth
+                    InDateStyle.FIRST_MONTH, InDateStyle.ALL_MONTHS -> currentMonth == startMonth
                     InDateStyle.NONE -> false
                 }
-                allDays.addAll(generateWeekDays(nextMonth, firstDayOfWeek, generateInDates, outDateStyle).flatten())
-                nextMonth = nextMonth.next
+
+                allDays.addAll(
+                    // We don't generate outDates for any month, they are added manually down below.
+                    // This is because if outDates are enabled with boundaries disabled, we show them
+                    // on the last month only.
+                    generateWeekDays(currentMonth, firstDayOfWeek, generateInDates, OutDateStyle.NONE).flatten()
+                )
+                currentMonth = currentMonth.next
             }
 
             // Regroup data into 7 days.
-            val daysGroup = mutableListOf<List<CalendarDay>>()
+            val allDaysGroup = mutableListOf<List<CalendarDay>>()
             while (allDays.isNotEmpty()) {
                 val sevenDays = allDays.take(7)
-                daysGroup.add(sevenDays)
+                allDaysGroup.add(sevenDays)
                 allDays.removeAll(sevenDays)
             }
 
             val calendarMonths = mutableListOf<CalendarMonth>()
-            val div = daysGroup.size / maxRowCount
-            val rem = daysGroup.size % maxRowCount
-            // Add the last month dropped from div if rem is not zero
-            val num = if (rem == 0) div else div + 1
-            while (daysGroup.isNotEmpty()) {
-                val monthDays = daysGroup.take(maxRowCount)
+            val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
+            while (allDaysGroup.isNotEmpty()) {
+                val monthWeeks = allDaysGroup.take(maxRowCount).toMutableList()
+
+                // Keep a copy so after adding outDates to the last month, we can still remove
+                // it from allDaysGroup and allDaysGroup.isNotEmpty() will be true.
+                val monthWeeksCopy = allDaysGroup.take(maxRowCount).toMutableList()
+
+                // Add the outDates for the last row if needed.
+                if (monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
+                    val lastWeek = monthWeeks.last().toMutableList()
+                    val outMonth = currentMonth.plusMonths(1)
+                    val outDates = (1..7 - lastWeek.size).map {
+                        CalendarDay(LocalDate.of(outMonth.year, outMonth.month, it), DayOwner.NEXT_MONTH)
+                    }
+                    monthWeeks[monthWeeks.lastIndex] = lastWeek + outDates
+                }
+
+                // Add the outDates needed to make the number of rows in this index match the desired maxRowCount.
+                while (monthWeeks.size < maxRowCount && outDateStyle == OutDateStyle.END_OF_GRID ||
+                    // This will be true when we add the first inDates and the last week row in the CalendarMonth is not filled up.
+                    monthWeeks.size == maxRowCount && monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_GRID
+                ) {
+                    // Since boundaries are disabled hence months will overflow, if we have maxRowCount
+                    // set to 6 and the last index has only one row left with some missing dates in it,
+                    // e.g the last row has only one day in it, if we attempt to fill the grid(up to maxRowCount)
+                    // with outDates and the next month does not provide enough dates to fill the grid,
+                    // we get more outDates from the following month.
+
+                    /*  MON   TUE   WED   THU   FRI   SAT   SUN
+
+                        30    31    01     02   03    04    05  => First outDates start here (month + 1)
+
+                        06    07    08     09   10    11    12
+
+                        13    14    15     16   17    18    19
+
+                        20    21    22     23   24    25    26
+
+                        27    28    29     30   01    02    03  => Second outDates start here (month + 2)
+
+                        04    05    06     07   08    09    10  */
+
+                    val lastDay = monthWeeks.last().last()
+
+                    val lastDayIsEndOfFirstOutDates =
+                        lastDay.owner == DayOwner.NEXT_MONTH && lastDay.date == lastDay.date.yearMonth.atEndOfMonth()
+
+                    // Move to the second outDates if we have reached the end of
+                    // the first outDates, use the first outDates otherwise.
+                    val outMonth = lastDay
+                        .date.yearMonth.plusMonths(if (lastDay.owner == DayOwner.THIS_MONTH || lastDayIsEndOfFirstOutDates) 1 else 0)
+
+                    val nextRowDates = (1..7).map {
+                        val dayValue =
+                            if (lastDay.owner == DayOwner.THIS_MONTH || lastDayIsEndOfFirstOutDates) it else it + lastDay.day
+
+                        CalendarDay(LocalDate.of(outMonth.year, outMonth.month, dayValue), DayOwner.NEXT_MONTH)
+                    }
+
+                    if (monthWeeks.last().size < 7) {
+                        // Update the last week to 7 days instead of adding a new row.
+                        // Handles the case when we've added all the first inDates and the
+                        // last week row in the CalendarMonth is not filled up to 7 days.
+                        monthWeeks[monthWeeks.lastIndex] = (monthWeeks.last() + nextRowDates).take(7)
+                    } else {
+                        monthWeeks.add(nextRowDates)
+                    }
+                }
+
                 calendarMonths.add(
                     // numberOfSameMonth is the total number of all months and
                     // indexInSameMonth is basically this item's index in the entire month list.
-                    CalendarMonth(startMonth, monthDays, calendarMonths.size, num)
+                    CalendarMonth(startMonth, monthWeeks, calendarMonths.size, calMonthsCount)
                 )
-                daysGroup.removeAll(monthDays)
+                allDaysGroup.removeAll(monthWeeksCopy)
             }
 
             return calendarMonths

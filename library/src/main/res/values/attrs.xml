@@ -46,7 +46,7 @@
         <!-- Determines how inDates are generated for each month on the calendar.
          If set to `allMonths`, the calendar will generate inDates for all months.
          If set to `firstMonth`, inDates will be generated for the first month only.
-         If set to `none`, inDates will not be generated, meaning that there will be
+         If set to `none`, inDates will not be generated, this means that there will be
          no offset on any month. -->
         <attr name="cv_inDateStyle" format="enum">
             <enum name="allMonths" value="0" />

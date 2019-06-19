@@ -46,7 +46,7 @@ enum class InDateStyle {
     FIRST_MONTH,
 
     /**
-     * inDates will not be generated, this means there
+     * inDates will not be generated, this means that there
      * will be no offset on any month.
      */
     NONE

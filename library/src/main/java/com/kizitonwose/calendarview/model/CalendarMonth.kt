@@ -5,7 +5,7 @@ import java.io.Serializable
 
 data class CalendarMonth(
     val yearMonth: YearMonth,
-    internal val weekDays: List<List<CalendarDay>>,
+    val weekDays: List<List<CalendarDay>>,
     internal val indexInSameMonth: Int,
     internal val numberOfSameMonth: Int
 ) : Comparable<CalendarMonth>, Serializable {

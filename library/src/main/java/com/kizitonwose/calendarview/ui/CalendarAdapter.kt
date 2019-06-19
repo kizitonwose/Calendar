@@ -63,7 +63,7 @@ internal class CalendarAdapter(
             clipChildren = false //#ClipChildrenFix
         }
 
-        if (viewConfig.monthHeaderRes != 0 && monthConfig.hasBoundaries) {
+        if (viewConfig.monthHeaderRes != 0) {
             val monthHeaderView = rootLayout.inflate(viewConfig.monthHeaderRes)
             // Don't overwrite ID set by the user.
             if (monthHeaderView.id == View.NO_ID) {
@@ -82,7 +82,7 @@ internal class CalendarAdapter(
         }
         rootLayout.addView(monthBodyLayout)
 
-        if (viewConfig.monthFooterRes != 0 && monthConfig.hasBoundaries) {
+        if (viewConfig.monthFooterRes != 0) {
             val monthFooterView = rootLayout.inflate(viewConfig.monthFooterRes)
             // Don't overwrite ID set by the user.
             if (monthFooterView.id == View.NO_ID) {
