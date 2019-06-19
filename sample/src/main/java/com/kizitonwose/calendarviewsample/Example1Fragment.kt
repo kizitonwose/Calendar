@@ -17,6 +17,7 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.InDateStyle
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.yearMonth
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
@@ -54,7 +55,9 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         }
 
         val currentMonth = YearMonth.now()
-        exOneCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
+        val startMonth = currentMonth.minusMonths(10)
+        val endMonth = currentMonth.plusMonths(10)
+        exOneCalendar.setup(startMonth, endMonth, daysOfWeek.first())
         exOneCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
@@ -134,8 +137,8 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         }
 
         weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->
-            // We want the first visible day to remain visible when we change to week mode.
-            val visibleDay = exOneCalendar.findFirstVisibleDay()
+            val firstDate = exOneCalendar.findFirstVisibleDay()?.date ?: return@setOnCheckedChangeListener
+            val lastDate = exOneCalendar.findLastVisibleDay()?.date ?: return@setOnCheckedChangeListener
 
             val oneWeekHeight = exOneCalendar.dayHeight
             val oneMonthHeight = oneWeekHeight * 6
@@ -150,6 +153,13 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                     height = animator.animatedValue as Int
                 }
             }
+
+            // When changing from month to week mode, we change the calendar's
+            // config at the end of the animation(doOnEnd) but when changing
+            // from week to month mode, we change the calendar's config at
+            // the start of the animation(doOnStart). This is so that the change
+            // in height is visible. You can do this whichever way you prefer.
+
             animator.doOnStart {
                 if (!monthToWeek) {
                     exOneCalendar.inDateStyle = InDateStyle.ALL_MONTHS
@@ -164,13 +174,20 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                     exOneCalendar.hasBoundaries = false
                 }
 
-                visibleDay?.let {
-                    val actualDate = if (it.owner == DayOwner.PREVIOUS_MONTH) {
-                        it.date.yearMonth.plusMonths(1).atDay(1)
+                if (monthToWeek) {
+                    // We want the first visible day to remain
+                    // visible when we change to week mode.
+                    exOneCalendar.scrollToDate(firstDate)
+                } else {
+                    // When changing to month mode, we choose current
+                    // month if it is the only one in the current frame.
+                    // if we have multiple months in one frame, we prefer
+                    // the second one unless it's an outDate in the last index.
+                    if (firstDate.yearMonth == lastDate.yearMonth) {
+                        exOneCalendar.scrollToMonth(firstDate.yearMonth)
                     } else {
-                        it.date
+                        exOneCalendar.scrollToMonth(minOf(firstDate.yearMonth.next, endMonth))
                     }
-                    exOneCalendar.scrollToDate(actualDate)
                 }
             }
             animator.duration = 250
