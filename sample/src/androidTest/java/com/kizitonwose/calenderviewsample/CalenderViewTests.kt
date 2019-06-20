@@ -36,7 +36,6 @@ import java.lang.Thread.sleep
  * These are UI behaviour tests.
  * The core functionality tests are in the library project.
  */
-
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class CalenderViewTests {
