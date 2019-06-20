@@ -1,8 +1,36 @@
 package com.kizitonwose.calenderviewsample
 
+import android.graphics.Rect
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.rule.ActivityTestRule
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.yearMonth
+import com.kizitonwose.calendarviewsample.*
+import kotlinx.android.synthetic.main.example_6_fragment.*
+import kotlinx.android.synthetic.main.exmaple_1_fragment.*
+import kotlinx.android.synthetic.main.exmaple_2_fragment.*
+import kotlinx.android.synthetic.main.exmaple_5_fragment.*
+import org.junit.After
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
+import org.threeten.bp.YearMonth
+import java.lang.Thread.sleep
 
 /**
  * These are UI behaviour tests.
@@ -13,7 +41,6 @@ import org.junit.runner.RunWith
 @LargeTest
 class CalenderViewTests {
 
-/* TODO FIX
     @get:Rule
     private val homeScreenRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, false)
 
@@ -141,8 +168,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val vhForDateMonth = calendarView.findViewHolderForAdapterPosition(4) as MonthViewHolder
-        val dayView = vhForDateMonth.bodyLayout.findViewById<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewById<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -167,8 +193,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val vhForDateMonth = calendarView.findViewHolderForAdapterPosition(13) as MonthViewHolder
-        val dayView = vhForDateMonth.bodyLayout.findViewById<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewById<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -205,5 +230,4 @@ class CalenderViewTests {
         return homeScreenRule.activity.supportFragmentManager
             .findFragmentByTag(clazz.simpleName) as T
     }
-*/
 }
