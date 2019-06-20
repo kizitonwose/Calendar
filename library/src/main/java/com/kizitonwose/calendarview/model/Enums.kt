@@ -1,8 +1,26 @@
 package com.kizitonwose.calendarview.model
 
-
+/**
+ * Describes the month to which a [CalendarDay] belongs.
+ */
 enum class DayOwner {
-    PREVIOUS_MONTH, THIS_MONTH, NEXT_MONTH
+    /**
+     * Belongs to the previous month on the calendar.
+     * Such days are referred to as outDates.
+     */
+    PREVIOUS_MONTH,
+
+    /**
+     * Belongs to the current month on the calendar.
+     * Such days are referred to as monthDates.
+     */
+    THIS_MONTH,
+
+    /**
+     * Belongs to the next month on the calendar.
+     * Such days are referred to as outDates.
+     */
+    NEXT_MONTH
 }
 
 /**

@@ -185,6 +185,19 @@ open class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * Determines if dates of a month should stay in its section or can flow into another month's section.
+     * If true, a section can only contain dates belonging to that month, its inDates and outDates.
+     * if false, the dates are added continuously, irrespective of month sections.
+     *
+     * When this property is false, a few things behave slightly differently:
+     * - If [InDateStyle] is either [InDateStyle.ALL_MONTHS] or [InDateStyle.FIRST_MONTH], only the first index
+     *   will contain inDates.
+     * - If [OutDateStyle] is either [OutDateStyle.END_OF_ROW] or [OutDateStyle.END_OF_GRID],
+     *   only the last index will contain outDates.
+     * - If [OutDateStyle] is [OutDateStyle.END_OF_GRID], outDates are generated for the last index until it
+     *   satisfies the [maxRowCount] requirement.
+     */
     var hasBoundaries = true
         set(value) {
             if (field != value) {

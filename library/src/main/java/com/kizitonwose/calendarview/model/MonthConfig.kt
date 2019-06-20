@@ -7,18 +7,6 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.temporal.WeekFields
 
-
-/**
- * We want the remainder to be added as the division result.
- * E.g: 5/2 should be 3.
- */
-private infix fun Int.roundDiv(other: Int): Int {
-    val div = this / other
-    val rem = this % other
-    // Add the last value dropped from div if rem is not zero
-    return if (rem == 0) div else div + 1
-}
-
 internal data class MonthConfig(
     val outDateStyle: OutDateStyle,
     val inDateStyle: InDateStyle,
@@ -156,17 +144,17 @@ internal data class MonthConfig(
 
                     /*  MON   TUE   WED   THU   FRI   SAT   SUN
 
-                        30    31    01     02   03    04    05  => First outDates start here (month + 1)
+                        30    31    01    02    03    04    05  => First outDates start here (month + 1)
 
-                        06    07    08     09   10    11    12
+                        06    07    08    09    10    11    12
 
-                        13    14    15     16   17    18    19
+                        13    14    15    16    17    18    19
 
-                        20    21    22     23   24    25    26
+                        20    21    22    23    24    25    26
 
-                        27    28    29     30   01    02    03  => Second outDates start here (month + 2)
+                        27    28    29    30    01    02    03  => Second outDates start here (month + 2)
 
-                        04    05    06     07   08    09    10  */
+                        04    05    06    07    08    09    10  */
 
                     val lastDay = monthWeeks.last().last()
 
@@ -280,4 +268,15 @@ internal data class MonthConfig(
             return weekDaysGroup
         }
     }
+}
+
+/**
+ * We want the remainder to be added as the division result.
+ * E.g: 5/2 should be 3.
+ */
+private infix fun Int.roundDiv(other: Int): Int {
+    val div = this / other
+    val rem = this % other
+    // Add the last value dropped from div if rem is not zero
+    return if (rem == 0) div else div + 1
 }

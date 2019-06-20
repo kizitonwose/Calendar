@@ -19,9 +19,18 @@
 
         <!-- A ViewGroup which is instantiated and used as the background for each month.
          This class must have a constructor which takes only a Context. You should
-         exclude the name and constructor of this class from code obfuscation if enabled.-->
+         exclude the name and constructor of this class from code obfuscation if enabled. -->
         <attr name="cv_monthViewClass" format="string" />
 
+        <!-- Determines if dates of a month should stay in its section or can flow into another month's section.
+         If true, a section can only contain dates belonging to that month, its inDates and outDates.
+         if false, the dates are added continuously, irrespective of month sections.
+
+         When this property is false, a few things behave slightly differently:
+         - If inDateStyle is either `allMonths` or `firstMonth`, only the first index will contain inDates.
+         - If outDateStyle is either `endOfRow` or `endOfGrid`, only the last index will contain outDates.
+         - If outDateStyle is `endOfGrid`, outDates are generated for the last index until it
+           satisfies the `maxRowCount` requirement. -->
         <attr name="cv_hasBoundaries" format="boolean" />
 
         <!--This determines the scroll direction of the the calendar. -->
