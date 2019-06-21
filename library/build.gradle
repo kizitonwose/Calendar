@@ -27,7 +27,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.appcompat:appcompat:$versions.androidx_appcompat"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
     api "com.jakewharton.threetenabp:threetenabp:$versions.threetenabp"
     implementation "androidx.recyclerview:recyclerview:$versions.recyclerview"
