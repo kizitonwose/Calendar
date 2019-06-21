@@ -32,7 +32,7 @@ It's very important to check out the sample app. Most techniques that you would 
 
 Get the sample app [here](https://github.com/kizitonwose/CalendarView/releases/download/0.2.0/sample.apk)
 
-View the sample app's source code [here][sample-url]
+View the sample app's source code [here](https://github.com/kizitonwose/CalendarView/tree/master/sample)
 
 ## Usage
 
@@ -233,7 +233,7 @@ With the configuration above, you get the result below:
 
 If you wish to animate height changes on the CalendarView when switching between week and month modes, please see Example 1 in the sample app where we use a `ValueAnimator`, of course you can use whichever animation logic you prefer.
 
-You can also set `hasBoundaries` to `true` for a week mode calendar. This helps the library make very few optimizations however, you should also change `scrollMode` to `ScrollMode.CONTINUOUS` as pagination behavior may not be as expected due to boundary limitations. See Example 7 in the sample app for a week mode calendar with this configuration, a screenshot is shown below: 
+You can also set `hasBoundaries` to `true` for a week mode calendar. This helps the library make very few optimizations, however, you should also change `scrollMode` to `ScrollMode.CONTINUOUS` as pagination behavior may not be as expected due to boundary limitations. See Example 7 in the sample app for a week mode calendar with this configuration, a screenshot is shown below: 
 
 <img src="https://user-images.githubusercontent.com/15170090/59904118-9f959c00-93fa-11e9-836d-2248f77130ac.png" alt="Week mode" width="260">
 
@@ -276,5 +276,4 @@ You'll find some similar terms like `InDateStyle`, `OutDateStyle`, `DayOwner` et
 ## License
 CalendarView is distributed under the MIT license. See [LICENSE](https://github.com/kizitonwose/CalendarView/blob/master/LICENSE.md) for details.
 
-[sample-url]: https://github.com/kizitonwose/CalendarView/tree/master/sample
 [jt-cal-url]: https://github.com/patchthecode/JTAppleCalendar 
