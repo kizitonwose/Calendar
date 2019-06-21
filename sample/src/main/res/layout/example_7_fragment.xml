@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    tools:context=".Example7Fragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/exSevenToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <com.kizitonwose.calendarview.CalendarView
+            android:id="@+id/exSevenCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cv_dayViewResource="@layout/example_7_calendar_day"
+            app:cv_hasBoundaries="false"
+            app:cv_inDateStyle="none"
+            app:cv_outDateStyle="none"
+            app:cv_maxRowCount="1"
+            app:cv_orientation="horizontal"
+            app:cv_scrollMode="continuous" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</LinearLayout>

@@ -16,14 +16,13 @@ import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview.ui.MonthViewHolder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.*
+import kotlinx.android.synthetic.main.example_6_fragment.*
 import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import kotlinx.android.synthetic.main.exmaple_2_fragment.*
 import kotlinx.android.synthetic.main.exmaple_5_fragment.*
-import kotlinx.android.synthetic.main.exmaple_6_fragment.*
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -168,8 +167,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val vhForDateMonth = calendarView.findViewHolderForAdapterPosition(4) as MonthViewHolder
-        val dayView = vhForDateMonth.bodyLayout.findViewById<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewById<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -194,8 +192,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val vhForDateMonth = calendarView.findViewHolderForAdapterPosition(13) as MonthViewHolder
-        val dayView = vhForDateMonth.bodyLayout.findViewById<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewById<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)

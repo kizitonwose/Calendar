@@ -9,24 +9,22 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.ScrollMode
-import com.kizitonwose.calendarview.utils.yearMonth
-import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
 
-class CalendarLayoutManager(private val calView: CalendarView, private val config: CalendarConfig) :
-    LinearLayoutManager(calView.context, config.orientation, false) {
+internal class CalendarLayoutManager(private val calView: CalendarView, @RecyclerView.Orientation orientation: Int) :
+    LinearLayoutManager(calView.context, orientation, false) {
 
-    val adapter: CalendarAdapter
+    private val adapter: CalendarAdapter
         get() = calView.adapter as CalendarAdapter
 
-    val context: Context
+    private val context: Context
         get() = calView.context
 
     fun scrollToMonth(month: YearMonth) {
         scrollToPosition(adapter.getAdapterPosition(month))
+        calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
     }
 
     fun smoothScrollToMonth(month: YearMonth) {
@@ -36,24 +34,24 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
         }
     }
 
-    fun smoothScrollToDate(date: LocalDate) {
-        val position = adapter.getAdapterPosition(date.yearMonth)
+    fun smoothScrollToDay(day: CalendarDay) {
+        val position = adapter.getAdapterPosition(day)
         if (position != -1) {
-            startSmoothScroll(CalendarSmoothScroller(position, date))
+            startSmoothScroll(CalendarSmoothScroller(position, day))
         }
     }
 
-    fun scrollToDate(date: LocalDate) {
-        scrollToMonth(date.yearMonth)
-        if (config.scrollMode == ScrollMode.PAGED) return
+    fun scrollToDay(day: CalendarDay) {
+        val monthPosition = adapter.getAdapterPosition(day)
+        scrollToPosition(monthPosition)
+        if (calView.scrollMode == ScrollMode.PAGED) return
         calView.post {
-            val day = CalendarDay(date, DayOwner.THIS_MONTH)
-            val monthPosition = adapter.getAdapterPosition(date.yearMonth)
             if (monthPosition != -1) {
                 // We already scrolled to this position so findViewHolder should not return null.
                 val viewHolder = calView.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
                 val offset = calculateOffset(day, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
+                calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
             }
         }
     }
@@ -63,10 +61,10 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)
-        return if (orientation == RecyclerView.VERTICAL) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
+        return if (calView.isVertical) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
     }
 
-    private inner class CalendarSmoothScroller(position: Int, val date: LocalDate?) :
+    private inner class CalendarSmoothScroller(position: Int, val day: CalendarDay?) :
         LinearSmoothScroller(context) {
 
         init {
@@ -74,28 +72,28 @@ class CalendarLayoutManager(private val calView: CalendarView, private val confi
         }
 
         override fun getVerticalSnapPreference(): Int {
-            return LinearSmoothScroller.SNAP_TO_START
+            return SNAP_TO_START
         }
 
         override fun getHorizontalSnapPreference(): Int {
-            return LinearSmoothScroller.SNAP_TO_START
+            return SNAP_TO_START
         }
 
         override fun calculateDyToMakeVisible(view: View, snapPreference: Int): Int {
             val dy = super.calculateDyToMakeVisible(view, snapPreference)
-            if (date == null) {
+            if (day == null) {
                 return dy
             }
-            val offset = calculateOffset(CalendarDay(date, DayOwner.THIS_MONTH), view)
+            val offset = calculateOffset(day, view)
             return dy - offset
         }
 
         override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
             val dx = super.calculateDxToMakeVisible(view, snapPreference)
-            if (date == null) {
+            if (day == null) {
                 return dx
             }
-            val offset = calculateOffset(CalendarDay(date, DayOwner.THIS_MONTH), view)
+            val offset = calculateOffset(day, view)
             return dx - offset
         }
     }

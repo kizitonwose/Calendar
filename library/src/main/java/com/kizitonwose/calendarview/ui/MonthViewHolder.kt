@@ -6,17 +6,8 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.OutDateStyle
-import com.kizitonwose.calendarview.model.ScrollMode
 
-data class CalendarConfig(
-    val outDateStyle: OutDateStyle,
-    val scrollMode: ScrollMode,
-    @RecyclerView.Orientation val orientation: Int,
-    val monthViewClass: String?
-)
-
-class MonthViewHolder constructor(
+internal class MonthViewHolder constructor(
     adapter: CalendarAdapter,
     rootLayout: ViewGroup,
     dayConfig: DayConfig,
@@ -57,7 +48,7 @@ class MonthViewHolder constructor(
             monthFooterBinder?.bind(footerContainer, month)
         }
         weekHolders.forEachIndexed { index, week ->
-            week.bindWeekView(month.weekDays[index])
+            week.bindWeekView(month.weekDays.getOrNull(index).orEmpty())
         }
     }
 

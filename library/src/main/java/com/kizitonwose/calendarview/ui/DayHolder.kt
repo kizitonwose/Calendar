@@ -9,14 +9,14 @@ import androidx.annotation.Px
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.utils.inflate
 
-data class DayConfig(
+internal data class DayConfig(
     @Px val width: Int,
     @Px val height: Int,
     @LayoutRes val dayViewRes: Int,
     val viewBinder: DayBinder<ViewContainer>
 )
 
-class DayHolder(private val config: DayConfig) {
+internal class DayHolder(private val config: DayConfig) {
 
     private lateinit var dateView: View
     private lateinit var containerView: FrameLayout
@@ -43,21 +43,29 @@ class DayHolder(private val config: DayConfig) {
         return containerView
     }
 
-    fun bindDayView(currentDay: CalendarDay) {
+    fun bindDayView(currentDay: CalendarDay?) {
         this.day = currentDay
         if (::viewContainer.isInitialized.not()) {
             viewContainer = config.viewBinder.create(dateView)
         }
 
-        val dayHash = currentDay.date.hashCode()
+        val dayHash = currentDay?.date.hashCode()
         if (containerView.id != dayHash) {
             containerView.id = dayHash
         }
-        config.viewBinder.bind(viewContainer, currentDay)
+
+        if (currentDay != null) {
+            if (containerView.visibility != View.VISIBLE) {
+                containerView.visibility = View.VISIBLE
+            }
+            config.viewBinder.bind(viewContainer, currentDay)
+        } else if (containerView.visibility != View.GONE) {
+            containerView.visibility = View.GONE
+        }
     }
 
     fun reloadView() {
-        day?.let { bindDayView(it) }
+        bindDayView(day)
     }
 
 }

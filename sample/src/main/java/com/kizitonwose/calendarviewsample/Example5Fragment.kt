@@ -19,6 +19,8 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.previous
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_5_calendar_day.view.*
@@ -167,6 +169,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
                         tv.setTextColorRes(R.color.example_5_text_grey)
                         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                     }
+                    month.yearMonth
                 }
             }
         }
@@ -184,14 +187,14 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         }
 
         exFiveNextMonthImage.setOnClickListener {
-            (exFiveCalendar.findFirstCompletelyVisibleMonth() ?: exFiveCalendar.findFirstVisibleMonth())?.let {
-                exFiveCalendar.smoothScrollToMonth(it.next.yearMonth)
+            exFiveCalendar.findFirstVisibleMonth()?.let {
+                exFiveCalendar.smoothScrollToMonth(it.yearMonth.next)
             }
         }
 
         exFivePreviousMonthImage.setOnClickListener {
-            (exFiveCalendar.findFirstCompletelyVisibleMonth() ?: exFiveCalendar.findFirstVisibleMonth())?.let {
-                exFiveCalendar.smoothScrollToMonth(it.previous.yearMonth)
+            exFiveCalendar.findFirstVisibleMonth()?.let {
+                exFiveCalendar.smoothScrollToMonth(it.yearMonth.previous)
             }
         }
     }

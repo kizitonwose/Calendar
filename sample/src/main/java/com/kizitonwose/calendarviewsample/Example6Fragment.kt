@@ -21,11 +21,12 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_6_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_6_calendar_header.view.*
-import kotlinx.android.synthetic.main.exmaple_6_fragment.*
+import kotlinx.android.synthetic.main.example_6_fragment.*
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
-// We assign this class to `monthViewClass` attribute in XML
+// We assign this class to the `monthViewClass` attribute in XML.
+// See usage in example_6_fragment.xml
 class Example6MonthView(context: Context) : CardView(context) {
 
     init {
@@ -43,7 +44,7 @@ class Example6Fragment : BaseFragment(), HasBackButton {
     private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.exmaple_6_fragment, container, false)
+        return inflater.inflate(R.layout.example_6_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,8 +55,8 @@ class Example6Fragment : BaseFragment(), HasBackButton {
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getMetrics(dm)
 
-        // We want the immediately following/previous month
-        // to be partially visible so we multiply by 0.73
+        // We want the immediately following/previous month to be
+        // partially visible so we multiply the total width by 0.73
         val monthWidth = (dm.widthPixels * 0.73).toInt()
         val dayWidth = monthWidth / 7
         exSixCalendar.dayWidth = dayWidth
@@ -63,13 +64,13 @@ class Example6Fragment : BaseFragment(), HasBackButton {
         // We don't want a square calendar.
         exSixCalendar.dayHeight = (dayWidth * 1.73).toInt()
 
-        // Add margins around pur card view.
-        val eightDpToPx = dpToPx(8, requireContext())
-        val tenDpToPx = dpToPx(14, requireContext())
-        exSixCalendar.monthMarginStart = eightDpToPx
-        exSixCalendar.monthMarginEnd = eightDpToPx
-        exSixCalendar.monthMarginTop = tenDpToPx
-        exSixCalendar.monthMarginBottom = tenDpToPx
+        // Add margins around our card view.
+        val horizontalMargin = dpToPx(8, requireContext())
+        val verticalMargin = dpToPx(14, requireContext())
+        exSixCalendar.monthMarginStart = horizontalMargin
+        exSixCalendar.monthMarginEnd = horizontalMargin
+        exSixCalendar.monthMarginTop = verticalMargin
+        exSixCalendar.monthMarginBottom = verticalMargin
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exSixDayText
@@ -92,7 +93,6 @@ class Example6Fragment : BaseFragment(), HasBackButton {
         val currentMonth = YearMonth.now()
         exSixCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
         exSixCalendar.scrollToMonth(currentMonth)
-//        exSixCalendar.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.HORIZONTAL))
 
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = view.exSixMonthText

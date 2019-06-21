@@ -1,5 +1,6 @@
 package com.kizitonwose.calendarview.utils
 
+import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,3 +24,8 @@ val YearMonth.next: YearMonth
 
 val YearMonth.previous: YearMonth
     get() = this.minusMonths(1)
+
+internal const val NO_INDEX = -1
+
+internal val Rect.namedString: String
+    get() = "[L: $left, T: $top][R: $right, B: $bottom]"
