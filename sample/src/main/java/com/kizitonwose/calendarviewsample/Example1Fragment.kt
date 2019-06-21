@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
@@ -67,7 +66,6 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
             init {
                 view.setOnClickListener {
-                    Toast.makeText(it.context, day.date.toString(), Toast.LENGTH_LONG).show()
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDates.contains(day.date)) {
                             selectedDates.remove(day.date)
