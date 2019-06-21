@@ -23,11 +23,8 @@ open class CalendarView : RecyclerView {
      */
     var dayBinder: DayBinder<*>? = null
         set(value) {
-            val oldValue = field
             field = value
-            if (oldValue != null) {
-                invalidateViewHolders()
-            }
+            invalidateViewHolders()
         }
 
     /**
@@ -36,11 +33,8 @@ open class CalendarView : RecyclerView {
      */
     var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
-            val oldValue = field
             field = value
-            if (oldValue != null) {
-                invalidateViewHolders()
-            }
+            invalidateViewHolders()
         }
 
     /**
@@ -49,11 +43,8 @@ open class CalendarView : RecyclerView {
      */
     var monthFooterBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
-            val oldValue = field
             field = value
-            if (oldValue != null) {
-                invalidateViewHolders()
-            }
+            invalidateViewHolders()
         }
 
     /**
