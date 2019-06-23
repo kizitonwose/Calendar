@@ -237,6 +237,8 @@ You can also set `hasBoundaries` to `true` for a week mode calendar. This helps 
 
 <img src="https://user-images.githubusercontent.com/15170090/59904118-9f959c00-93fa-11e9-836d-2248f77130ac.png" alt="Week mode" width="260">
 
+Remember that all the screenshots above are just examples of what you can achieve with this library and you can absolutely build your calendar to look however you want.
+
 **Made a cool calendar with this library? Share an image [here](https://github.com/kizitonwose/CalendarView/issues/1).**
 
 ## Setup
