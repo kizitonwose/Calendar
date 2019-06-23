@@ -28,8 +28,21 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
+
+    // Expose ThreeTenABP so library users can use it directly.
     api "com.jakewharton.threetenabp:threetenabp:$versions.threetenabp"
-    implementation "androidx.recyclerview:recyclerview:$versions.recyclerview"
+
+    // Expose RecyclerView which is CalendarView's superclass to
+    // prevent a compile error when using the library in a project:
+    // Error: Supertypes of the following classes cannot be resolved.
+    // Please make sure you have the required dependencies in the classpath:
+    // class com.kizitonwose.calendarview.CalendarView,
+    // unresolved supertypes: androidx.recyclerview.widget.RecyclerView
+
+    // Not exposing RecyclerView also means that calling findViewById<CalendarView>
+    // results in an error: Type argument is not within its bounds, Expected: View.
+    // This is because CalendarView's superclass type cannot be determined.
+    api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
     testImplementation "junit:junit:$versions.junit"
     testImplementation('org.threeten:threetenbp:1.3.2') {
