@@ -45,6 +45,9 @@ internal class CalendarAdapter(
         setHasStableIds(true)
     }
 
+    private val isAttached: Boolean
+        get() = calView.adapter === this
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         calView.post { notifyMonthScrollListenerIfNeeded() }
     }
@@ -155,6 +158,9 @@ internal class CalendarAdapter(
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     fun notifyMonthScrollListenerIfNeeded() {
+        // Guard for cv.post() calls and other callbacks which use this method.
+        if (!isAttached) return
+
         if (calView.isAnimating) {
             // Fixes an issue where findFirstVisibleMonthPosition() returns
             // zero if called when the RecyclerView is animating. This can be
