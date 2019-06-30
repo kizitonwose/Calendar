@@ -88,4 +88,38 @@ class CalenderViewTests {
         assertTrue(weekDays.first().first().date.dayOfWeek == firstDayOfWeek)
     }
 
+    @Test
+    fun `test max row count works with boundaries`() {
+        val maxRowCount = 3
+        val months = MonthConfig.generateBoundedMonths(
+            may2019, may2019.plusMonths(20),
+            firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_ROW
+        )
+
+        assertTrue(months.all { it.weekDays.count() <= maxRowCount })
+
+        // With a bounded config, OutDateStyle of endOfRow and maxRowCount of 3,
+        // there should be two CalendarMonth instances for may2019, the first
+        // should have 3 weeks and the second should have 2 weeks.
+        val mayCalendarMonths = months.filter { it.yearMonth == may2019 }
+        assertTrue(mayCalendarMonths.count() == 2)
+        assertTrue(mayCalendarMonths.first().weekDays.count() == 3)
+        assertTrue(mayCalendarMonths.last().weekDays.count() == 2)
+    }
+
+    @Test
+    fun `test max row count works without boundaries`() {
+        val maxRowCount = 3
+        val months = MonthConfig.generateUnboundedMonths(
+            may2019.minusMonths(40), may2019.plusMonths(50),
+            firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
+        )
+
+        // The number of weeks in all CalendarMonth instances except the last one must match
+        // maxRowCount if the calendar has no boundaries. The number of weeks in the last
+        // month must also match maxRowCount if OutDateStyle is endOfGrid, otherwise, it will
+        // be the length(1 - maxRowCount) of whatever number of weeks remaining after grouping
+        // all weeks by maxRowCount value.
+        assertTrue(months.all { it.weekDays.count() == maxRowCount })
+    }
 }

@@ -29,6 +29,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import java.lang.Thread.sleep
 
@@ -56,7 +57,7 @@ class CalenderViewTests {
     }
 
     @Test
-    fun testDayBinderIsCalledOnDayChanged() {
+    fun dayBinderIsCalledOnDayChanged() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
 
         class DayViewContainer(view: View) : ViewContainer(view)
@@ -91,7 +92,7 @@ class CalenderViewTests {
     }
 
     @Test
-    fun testAllBindersAreCalledOnMonthChanged() {
+    fun allBindersAreCalledOnMonthChanged() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
         class TestViewContainer(view: View) : ViewContainer(view)
@@ -133,7 +134,7 @@ class CalenderViewTests {
     }
 
     @Test
-    fun testProgrammaticScrollWorksAsExpected() {
+    fun programmaticScrollWorksAsExpected() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
 
         val calendarView = findFragment(Example5Fragment::class.java).exFiveCalendar
@@ -154,7 +155,7 @@ class CalenderViewTests {
 
 
     @Test
-    fun testScrollToDateWorksOnVerticalOrientation() {
+    fun scrollToDateWorksOnVerticalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
         val calendarView = findFragment(Example2Fragment::class.java).exTwoCalendar
@@ -179,7 +180,7 @@ class CalenderViewTests {
     }
 
     @Test
-    fun testScrollToDateWorksOnHorizontalOrientation() {
+    fun scrollToDateWorksOnHorizontalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
 
         val calendarView = findFragment(Example6Fragment::class.java).exSixCalendar
@@ -223,6 +224,60 @@ class CalenderViewTests {
         sleep(5000) // Enough time for smooth scrolling animation.
 
         assertTrue(targetCalMonth?.yearMonth == targetMonth)
+    }
+
+    @Test
+    fun findVisibleDaysAndMonthsWorksOnVerticalOrientation() {
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+
+        val calendarView = findFragment(Example2Fragment::class.java).exTwoCalendar
+
+        homeScreenRule.runOnUiThread {
+            // Scroll to a random date
+            calendarView.scrollToDate(LocalDate.now().plusDays(120))
+        }
+
+        sleep(2000)
+
+        // First visible day is the first day in the week row it belongs.
+        val firstVisibleMonth = calendarView.findFirstVisibleMonth()!!
+        val firstVisibleDay = calendarView.findFirstVisibleDay()!!
+        val weekOfFirstDay = firstVisibleMonth.weekDays.first { it.any { it == firstVisibleDay } }
+        assertTrue(weekOfFirstDay.first() == firstVisibleDay)
+
+        // Last visible day is the last day in the week row it belongs.
+        val lastVisibleMonth = calendarView.findLastVisibleMonth()!!
+        val lastVisibleDay = calendarView.findLastVisibleDay()!!
+        val weekOfLastDate = lastVisibleMonth.weekDays.first { it.any { it == lastVisibleDay } }
+        assertTrue(weekOfLastDate.last() == lastVisibleDay)
+    }
+
+    @Test
+    fun findVisibleDaysAndMonthsWorksOnHorizontalOrientation() {
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
+
+        val calendarView = findFragment(Example6Fragment::class.java).exSixCalendar
+
+        homeScreenRule.runOnUiThread {
+            // Scroll to a random date
+            calendarView.scrollToDate( LocalDate.now().plusDays(120))
+        }
+
+        sleep(2000)
+
+        // First visible day is the first day in the month column(day of week) where it belongs.
+        val firstVisibleMonth = calendarView.findFirstVisibleMonth()!!
+        val firstVisibleDay = calendarView.findFirstVisibleDay()!!
+        val daysWIthSameDayOfWeekAsFirstDay = firstVisibleMonth.weekDays.flatten()
+            .filter { it.date.dayOfWeek == firstVisibleDay.date.dayOfWeek }
+        assertTrue(daysWIthSameDayOfWeekAsFirstDay.first() == firstVisibleDay)
+
+        // Last visible day is the last day in the month column(day of week) where it belongs.
+        val lastVisibleMonth = calendarView.findLastVisibleMonth()!!
+        val lastVisibleDay = calendarView.findLastVisibleDay()!!
+        val daysWIthSameDayOfWeekAsLastDay = lastVisibleMonth.weekDays.flatten()
+            .filter { it.date.dayOfWeek == lastVisibleDay.date.dayOfWeek }
+        assertTrue(daysWIthSameDayOfWeekAsLastDay.last() == lastVisibleDay)
     }
 
     private fun <T : Fragment> findFragment(clazz: Class<T>): T {
