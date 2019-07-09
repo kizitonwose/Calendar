@@ -485,22 +485,11 @@ open class CalendarView : RecyclerView {
     }
 
     /**
-     * Shortcut for [notifyDayChanged] with a [CalendarDay] instance
-     * which has a [DayOwner.THIS_MONTH] property.
+     * Shortcut for [notifyDayChanged] with a [LocalDate] instance.
      */
-    fun notifyDateChanged(date: LocalDate) {
-        notifyDayChanged(CalendarDay(date, DayOwner.THIS_MONTH))
-    }
-
-    /**
-     * Notify the CalendarView to reload multiple dates.
-     * @see [notifyDateChanged]
-     * @see [notifyDayChanged]
-     */
-    fun notifyDatesChanged(vararg dates: LocalDate) {
-        dates.forEach {
-            notifyDateChanged(it)
-        }
+    @JvmOverloads
+    fun notifyDateChanged(date: LocalDate, owner: DayOwner = DayOwner.THIS_MONTH) {
+        notifyDayChanged(CalendarDay(date, owner))
     }
 
     /**
