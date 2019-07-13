@@ -19,18 +19,18 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 - [x] Boundary dates - limit the calendar date range.
 - [x] Custom date view - make your day cells look however you want, with any functionality you want.
 - [x] Custom calendar view - make your calendar look however you want, with whatever functionality you want.
-- [x] Pick any day to be the first day of the week.
+- [x] Use any day as the first day of the week.
 - [x] Horizontal or vertical scrolling mode.
 - [x] Add headers/footers of any kind on each month.
 - [x] Easily scroll to any date or month view using the date.
-- [x] Use all RecyclerView customisations(decorators etc) since the CalendarView extends from RecyclerView.
+- [x] Use all RecyclerView customisations(decorators etc) since CalendarView extends from RecyclerView.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/CalendarView/issues/1) The library provides the logic, you provide the views.
 
 ## Sample project
 
 It's very important to check out the sample app. Most techniques that you would want to implement are already implemented in the examples.
 
-Get the sample app [here](https://github.com/kizitonwose/CalendarView/releases/download/0.2.0/sample.apk)
+Download the sample app [here](https://github.com/kizitonwose/CalendarView/releases/download/0.2.0/sample.apk)
 
 View the sample app's source code [here](https://github.com/kizitonwose/CalendarView/tree/master/sample)
 
@@ -192,9 +192,9 @@ Note that setting either `dayWidth` or `dayHeight` to `CalendarView.DAY_SIZE_SQU
 
 #### Methods
 
-- **scrollToDate(date: LocalDate)**: Scroll to a specific date on the calendar.
+- **scrollToDate(date: LocalDate)**: Scroll to a specific date on the calendar. Use `smoothScrollToDate()` to get a smooth scrolling animation. 
 
-- **scrollToMonth(month: YearMonth)**: Scroll to a month on the calendar.
+- **scrollToMonth(month: YearMonth)**: Scroll to a month on the calendar. Use `smoothScrollToMonth()` to get a smooth scrolling animation.
 
 - **notifyDateChanged(date: LocalDate)**: Reload the view for the specified date.
 
