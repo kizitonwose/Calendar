@@ -46,6 +46,8 @@ dependencies {
 
     testImplementation "junit:junit:$versions.junit"
     testImplementation('org.threeten:threetenbp:1.3.2') {
+        // Use threetenBP library for tests as context will
+        // not be available to initialise threetenABP
         exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
     }
 }
