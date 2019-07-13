@@ -452,11 +452,11 @@ open class CalendarView : RecyclerView {
     }
 
     /**
-     * Shortcut for [scrollToDay] with a [CalendarDay] instance
-     * which has a [DayOwner.THIS_MONTH] property.
+     * Shortcut for [scrollToDay] with a [LocalDate] instance.
      */
-    fun scrollToDate(date: LocalDate) {
-        scrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    @JvmOverloads
+    fun scrollToDate(date: LocalDate, owner: DayOwner = DayOwner.THIS_MONTH) {
+        scrollToDay(CalendarDay(date, owner))
     }
 
     /**
@@ -468,11 +468,11 @@ open class CalendarView : RecyclerView {
     }
 
     /**
-     * Shortcut for [smoothScrollToDay] with a [CalendarDay]
-     * instance which has a [DayOwner.THIS_MONTH] property.
+     * Shortcut for [smoothScrollToDay] with a [LocalDate] instance.
      */
-    fun smoothScrollToDate(date: LocalDate) {
-        smoothScrollToDay(CalendarDay(date, DayOwner.THIS_MONTH))
+    @JvmOverloads
+    fun smoothScrollToDate(date: LocalDate, owner: DayOwner = DayOwner.THIS_MONTH) {
+        smoothScrollToDay(CalendarDay(date, owner))
     }
 
     /**
