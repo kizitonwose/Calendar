@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.ScrollMode
+import com.kizitonwose.calendarview.utils.NO_INDEX
 import org.threeten.bp.YearMonth
 
 
@@ -46,9 +47,9 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
         scrollToPosition(monthPosition)
         if (calView.scrollMode == ScrollMode.PAGED) return
         calView.post {
-            if (monthPosition != -1) {
-                // We already scrolled to this position so findViewHolder should not return null.
-                val viewHolder = calView.findViewHolderForAdapterPosition(monthPosition) as MonthViewHolder
+            if (monthPosition != NO_INDEX) {
+                val viewHolder =
+                    calView.findViewHolderForAdapterPosition(monthPosition) as? MonthViewHolder ?: return@post
                 val offset = calculateOffset(day, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
                 calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
