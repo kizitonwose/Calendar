@@ -5,7 +5,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 [![Build Status](https://travis-ci.org/kizitonwose/CalendarView.svg?branch=master)](https://travis-ci.org/kizitonwose/CalendarView) 
 [![JitPack](https://jitpack.io/v/kizitonwose/CalendarView.svg)](https://jitpack.io/#kizitonwose/CalendarView) 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kizitonwose/CalendarView/blob/master/LICENSE.md) 
-[![Contact](https://img.shields.io/badge/Contact-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
+[![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
 
 
 **With this library, your calendar will look however you want it to.**
