@@ -50,14 +50,14 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
             if (monthPosition != NO_INDEX) {
                 val viewHolder =
                     calView.findViewHolderForAdapterPosition(monthPosition) as? MonthViewHolder ?: return@post
-                val offset = calculateOffset(day, viewHolder.itemView)
+                val offset = calculateDayViewOffsetInParent(day, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
                 calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
             }
         }
     }
 
-    private fun calculateOffset(day: CalendarDay, itemView: View): Int {
+    private fun calculateDayViewOffsetInParent(day: CalendarDay, itemView: View): Int {
         val dayView = itemView.findViewById<View?>(day.date.hashCode()) ?: return 0
         val rect = Rect()
         dayView.getDrawingRect(rect)
@@ -85,7 +85,7 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
             if (day == null) {
                 return dy
             }
-            val offset = calculateOffset(day, view)
+            val offset = calculateDayViewOffsetInParent(day, view)
             return dy - offset
         }
 
@@ -94,7 +94,7 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
             if (day == null) {
                 return dx
             }
-            val offset = calculateOffset(day, view)
+            val offset = calculateDayViewOffsetInParent(day, view)
             return dx - offset
         }
     }

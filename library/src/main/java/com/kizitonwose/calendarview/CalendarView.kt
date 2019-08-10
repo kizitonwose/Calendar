@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
+import com.kizitonwose.calendarview.utils.NO_INDEX
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -402,8 +403,14 @@ open class CalendarView : RecyclerView {
         post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
     }
 
-    private fun updateAdapterMonthConfig() {
+    private fun updateAdapterMonthConfig(saveScroll: Boolean = false) {
         if (adapter != null) {
+            val visiblePosition = calendarLayoutManager.findFirstVisibleItemPosition()
+            val visibleView = calendarLayoutManager.findViewByPosition(visiblePosition)
+
+            val viewOffset = (if (isVertical) visibleView?.top else visibleView?.left) ?: 0
+            val visibleMonth = calendarAdapter.monthConfig.months[visiblePosition]
+
             calendarAdapter.monthConfig =
                 MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount,
@@ -411,7 +418,17 @@ open class CalendarView : RecyclerView {
                     hasBoundaries
                 )
             calendarAdapter.notifyDataSetChanged()
-            post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
+
+            post {
+                if (saveScroll) { // Scroll to the previously visible month with offset.
+                    val visibleMonthNewPos = calendarAdapter.monthConfig.months.indexOf(visibleMonth)
+                    if (visibleMonthNewPos != NO_INDEX) {
+                        calendarLayoutManager.scrollToPositionWithOffset(visibleMonthNewPos, viewOffset)
+                    }
+                }
+                calendarAdapter.notifyMonthScrollListenerIfNeeded()
+            }
+
         }
     }
 
@@ -569,6 +586,14 @@ open class CalendarView : RecyclerView {
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
+        if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
+            this.startMonth = startMonth
+            this.endMonth = endMonth
+            this.firstDayOfWeek = firstDayOfWeek
+            updateAdapterMonthConfig(saveScroll = true)
+            return // Only update the months on the calendar, no need for a full setup.
+        }
+
         this.startMonth = startMonth
         this.endMonth = endMonth
         this.firstDayOfWeek = firstDayOfWeek
