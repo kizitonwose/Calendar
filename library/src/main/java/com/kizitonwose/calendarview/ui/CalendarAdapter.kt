@@ -193,7 +193,8 @@ internal class CalendarAdapter(
                         calWrapsHeight = it
                     }
                     if (calWrapsHeight.not()) return // Bug only happens when the CalenderView wraps its height.
-                    val visibleVH = calView.findViewHolderForAdapterPosition(visibleItemPos) as MonthViewHolder
+                    val visibleVH =
+                        calView.findViewHolderForAdapterPosition(visibleItemPos) as? MonthViewHolder ?: return
                     val newHeight = visibleVH.headerView?.height.orZero() +
                         // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
                         // So we calculate it again by checking the number of visible(non-empty) rows.
