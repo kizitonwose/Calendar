@@ -586,17 +586,18 @@ open class CalendarView : RecyclerView {
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
-        if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
-            this.startMonth = startMonth
-            this.endMonth = endMonth
-            this.firstDayOfWeek = firstDayOfWeek
-            updateAdapterMonthConfig(saveScroll = true)
-            return // Only update the months on the calendar, no need for a full setup.
-        }
+        val oldStartMonth = this.startMonth
+        val oldEndMonth = this.endMonth
+        val oldFirstDayOfWeek = this.firstDayOfWeek
 
         this.startMonth = startMonth
         this.endMonth = endMonth
         this.firstDayOfWeek = firstDayOfWeek
+
+        if (oldStartMonth != null && oldEndMonth != null && oldFirstDayOfWeek != null) {
+            updateAdapterMonthConfig(saveScroll = true)
+            return // Only update the months on the calendar, no need for a full setup.
+        }
 
         clipToPadding = false
         clipChildren = false //#ClipChildrenFix
