@@ -405,11 +405,12 @@ open class CalendarView : RecyclerView {
 
     private fun updateAdapterMonthConfig(saveScroll: Boolean = false) {
         if (adapter != null) {
+            // Get visible month and offset to be used to restore scroll position if needed.
             val visiblePosition = calendarLayoutManager.findFirstVisibleItemPosition()
             val visibleView = calendarLayoutManager.findViewByPosition(visiblePosition)
 
-            val viewOffset = (if (isVertical) visibleView?.top else visibleView?.left) ?: 0
-            val visibleMonth = calendarAdapter.monthConfig.months[visiblePosition]
+            val visibleViewOffset = (if (isVertical) visibleView?.top else visibleView?.left) ?: 0
+            val visibleMonth = calendarAdapter.monthConfig.months.getOrNull(visiblePosition)
 
             calendarAdapter.monthConfig =
                 MonthConfig(
@@ -423,7 +424,7 @@ open class CalendarView : RecyclerView {
                 if (saveScroll) { // Scroll to the previously visible month with offset.
                     val visibleMonthNewPos = calendarAdapter.monthConfig.months.indexOf(visibleMonth)
                     if (visibleMonthNewPos != NO_INDEX) {
-                        calendarLayoutManager.scrollToPositionWithOffset(visibleMonthNewPos, viewOffset)
+                        calendarLayoutManager.scrollToPositionWithOffset(visibleMonthNewPos, visibleViewOffset)
                     }
                 }
                 calendarAdapter.notifyMonthScrollListenerIfNeeded()
