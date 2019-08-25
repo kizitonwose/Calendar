@@ -260,7 +260,7 @@ class CalenderViewTests {
 
         homeScreenRule.runOnUiThread {
             // Scroll to a random date
-            calendarView.scrollToDate( LocalDate.now().plusDays(120))
+            calendarView.scrollToDate(LocalDate.now().plusDays(120))
         }
 
         sleep(2000)
@@ -278,6 +278,38 @@ class CalenderViewTests {
         val daysWIthSameDayOfWeekAsLastDay = lastVisibleMonth.weekDays.flatten()
             .filter { it.date.dayOfWeek == lastVisibleDay.date.dayOfWeek }
         assertTrue(daysWIthSameDayOfWeekAsLastDay.last() == lastVisibleDay)
+    }
+
+    @Test
+    fun multipleSetupCallsRetainPositionIfCalendarHasBoundaries() {
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        val calendarView = findFragment(Example1Fragment::class.java).exOneCalendar
+
+        val targetVisibleMonth = currentMonth.plusMonths(2)
+
+        var targetVisibleCalMonth: CalendarMonth? = null
+        calendarView.monthScrollListener = { month ->
+            targetVisibleCalMonth = month
+        }
+
+        homeScreenRule.runOnUiThread {
+            calendarView.smoothScrollToMonth(targetVisibleMonth)
+        }
+
+        sleep(5000) // Enough time for smooth scrolling animation.
+
+        homeScreenRule.runOnUiThread {
+            calendarView.setup(
+                targetVisibleMonth.minusMonths(10),
+                targetVisibleMonth.plusMonths(10),
+                daysOfWeekFromLocale().first()
+            )
+        }
+
+        sleep(5000) // Enough time for setup to finish.
+
+        assertTrue(calendarView.findFirstVisibleMonth() == targetVisibleCalMonth)
     }
 
     private fun <T : Fragment> findFragment(clazz: Class<T>): T {
