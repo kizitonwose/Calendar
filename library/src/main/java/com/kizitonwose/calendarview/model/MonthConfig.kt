@@ -106,11 +106,7 @@ internal data class MonthConfig(
 
             // Regroup data into 7 days.
             val allDaysGroup = mutableListOf<List<CalendarDay>>()
-            while (allDays.isNotEmpty()) {
-                val sevenDays = allDays.take(7)
-                allDaysGroup.add(sevenDays)
-                allDays.removeAll(sevenDays)
-            }
+            allDaysGroup.addAll(allDays.chunked(7))
 
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
