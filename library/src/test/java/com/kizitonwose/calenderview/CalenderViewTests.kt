@@ -103,8 +103,15 @@ class CalenderViewTests {
         // should have 3 weeks and the second should have 2 weeks.
         val mayCalendarMonths = months.filter { it.yearMonth == may2019 }
         assertTrue(mayCalendarMonths.count() == 2)
+
         assertTrue(mayCalendarMonths.first().weekDays.count() == 3)
         assertTrue(mayCalendarMonths.last().weekDays.count() == 2)
+
+        assertTrue(mayCalendarMonths.first().indexInSameMonth == 0)
+        assertTrue(mayCalendarMonths.last().indexInSameMonth == 1)
+
+        assertTrue(mayCalendarMonths.first().numberOfSameMonth == 2)
+        assertTrue(mayCalendarMonths.last().numberOfSameMonth == 2)
     }
 
     @Test
