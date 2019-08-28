@@ -104,7 +104,7 @@ internal data class MonthConfig(
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
 
-            // Regroup data into 7 days.
+            // Regroup data into 7 days. Use toMutableList() to create a copy of the ephemeral list.
             val allDaysGroup = allDays.chunked(7).toMutableList()
 
             val calendarMonths = mutableListOf<CalendarMonth>()
@@ -226,6 +226,7 @@ internal data class MonthConfig(
                 groupByWeekOfMonth
             } else {
                 // Group days by 7, first day shown on the month will be day 1.
+                // Use toMutableList() to create a copy of the ephemeral list.
                 thisMonthDays.chunked(7).toMutableList()
             }
 
