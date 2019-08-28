@@ -105,8 +105,7 @@ internal data class MonthConfig(
             }
 
             // Regroup data into 7 days.
-            val allDaysGroup = mutableListOf<List<CalendarDay>>()
-            allDaysGroup.addAll(allDays.chunked(7))
+            val allDaysGroup = allDays.chunked(7).toMutableList()
 
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
@@ -227,8 +226,7 @@ internal data class MonthConfig(
                 groupByWeekOfMonth
             } else {
                 // Group days by 7, first day shown on the month will be day 1.
-                val groupBySeven = thisMonthDays.chunked(7).toMutableList()
-                groupBySeven
+                thisMonthDays.chunked(7).toMutableList()
             }
 
 
