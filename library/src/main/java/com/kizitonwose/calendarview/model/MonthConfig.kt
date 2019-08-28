@@ -204,7 +204,7 @@ internal data class MonthConfig(
 
             val thisMonthDays = (1..yearMonth.lengthOfMonth()).map {
                 CalendarDay(LocalDate.of(year, month, it), DayOwner.THIS_MONTH)
-            }.toMutableList()
+            }
 
             val weekDaysGroup = if (generateInDates) {
                 // Group days by week of month so we can add the in dates if necessary.
@@ -227,12 +227,7 @@ internal data class MonthConfig(
                 groupByWeekOfMonth
             } else {
                 // Group days by 7, first day shown on the month will be day 1.
-                val groupBySeven = mutableListOf<List<CalendarDay>>()
-                while (thisMonthDays.isNotEmpty()) {
-                    val nextRow = thisMonthDays.take(7)
-                    groupBySeven.add(nextRow)
-                    thisMonthDays.removeAll(nextRow)
-                }
+                val groupBySeven = thisMonthDays.chunked(7).toMutableList()
                 groupBySeven
             }
 
