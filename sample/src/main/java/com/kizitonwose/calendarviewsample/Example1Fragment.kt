@@ -24,6 +24,8 @@ import kotlinx.android.synthetic.main.exmaple_1_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.TextStyle
+import java.util.*
 
 
 class Example1Fragment : BaseFragment(), HasToolbar {
@@ -48,7 +50,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         val daysOfWeek = daysOfWeekFromLocale()
         legendLayout.children.forEachIndexed { index, view ->
             (view as TextView).apply {
-                text = daysOfWeek[index].name.take(3).toUpperCase()
+                text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(Locale.ENGLISH)
                 setTextColorRes(R.color.example_1_white_light)
             }
         }
