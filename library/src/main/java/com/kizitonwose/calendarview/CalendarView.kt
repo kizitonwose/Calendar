@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.ViewGroup
 import androidx.annotation.Px
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
@@ -12,6 +13,7 @@ import com.kizitonwose.calendarview.ui.*
 import com.kizitonwose.calendarview.utils.NO_INDEX
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
+import org.threeten.bp.Period
 import org.threeten.bp.YearMonth
 
 
@@ -581,6 +583,7 @@ open class CalendarView : RecyclerView {
     /**
      * Setup the CalendarView. You can call this any time to change the
      * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
+     * Use the [updateRange] method when changing only the [startMonth] and [endMonth].
      *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
@@ -617,6 +620,49 @@ open class CalendarView : RecyclerView {
                 endMonth, firstDayOfWeek, hasBoundaries
             )
         )
+    }
+
+    /**
+     * Update the CalendarView's month range. This method does the minimal updates to the
+     * underlying RecyclerView resulting in a stable view when the changes don't affect the visible
+     * month(s).
+     */
+    fun updateRange(startMonth: YearMonth, endMonth: YearMonth) {
+        val oldStartMonth = this.startMonth!!
+        val oldEndMonth = this.endMonth!!
+        this.startMonth = startMonth
+        this.endMonth = endMonth
+
+        calendarAdapter.monthConfig =
+            MonthConfig(
+                outDateStyle, inDateStyle, maxRowCount,
+                startMonth, endMonth, firstDayOfWeek ?: return,
+                hasBoundaries
+            )
+        DiffUtil.calculateDiff(
+            MonthRangeDiffCallback(oldStartMonth, oldEndMonth, startMonth, endMonth), false)
+            .dispatchUpdatesTo(calendarAdapter)
+    }
+
+    private class MonthRangeDiffCallback(
+        private val oldStartMonth: YearMonth,
+        private val oldEndMonth: YearMonth,
+        private val newStartMonth: YearMonth,
+        private val newEndMonth: YearMonth
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize() = monthCount(oldStartMonth, oldEndMonth)
+
+        override fun getNewListSize() =  monthCount(newStartMonth, newEndMonth)
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
+                = oldStartMonth.plusMonths(oldItemPosition.toLong()) == newStartMonth.plusMonths(newItemPosition.toLong())
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
+                = areItemsTheSame(oldItemPosition, newItemPosition)
+
+        private fun monthCount(a: YearMonth, b: YearMonth) =
+            1 + Period.between(a.atDay(1), b.atDay(1)).months
     }
 
     companion object {
