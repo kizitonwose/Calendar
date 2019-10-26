@@ -13,7 +13,6 @@ import com.kizitonwose.calendarview.ui.*
 import com.kizitonwose.calendarview.utils.NO_INDEX
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
-import org.threeten.bp.Period
 import org.threeten.bp.YearMonth
 
 
@@ -628,41 +627,36 @@ open class CalendarView : RecyclerView {
      * month(s).
      */
     fun updateRange(startMonth: YearMonth, endMonth: YearMonth) {
-        val oldStartMonth = this.startMonth!!
-        val oldEndMonth = this.endMonth!!
         this.startMonth = startMonth
         this.endMonth = endMonth
 
-        calendarAdapter.monthConfig =
-            MonthConfig(
-                outDateStyle, inDateStyle, maxRowCount,
-                startMonth, endMonth, firstDayOfWeek ?: return,
-                hasBoundaries
-            )
-        DiffUtil.calculateDiff(
-            MonthRangeDiffCallback(oldStartMonth, oldEndMonth, startMonth, endMonth), false)
+        val oldConfig = calendarAdapter.monthConfig
+        val newConfig = MonthConfig(
+            outDateStyle, inDateStyle, maxRowCount,
+            startMonth, endMonth, firstDayOfWeek ?: return,
+            hasBoundaries
+        )
+        calendarAdapter.monthConfig = newConfig
+
+        DiffUtil
+            .calculateDiff(MonthRangeDiffCallback(oldConfig.months, newConfig.months), false)
             .dispatchUpdatesTo(calendarAdapter)
     }
 
     private class MonthRangeDiffCallback(
-        private val oldStartMonth: YearMonth,
-        private val oldEndMonth: YearMonth,
-        private val newStartMonth: YearMonth,
-        private val newEndMonth: YearMonth
+        private val oldItems: List<CalendarMonth>,
+        private val newItems: List<CalendarMonth>
     ) : DiffUtil.Callback() {
 
-        override fun getOldListSize() = monthCount(oldStartMonth, oldEndMonth)
+        override fun getOldListSize() = oldItems.size
 
-        override fun getNewListSize() =  monthCount(newStartMonth, newEndMonth)
+        override fun getNewListSize() =  newItems.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
-                = oldStartMonth.plusMonths(oldItemPosition.toLong()) == newStartMonth.plusMonths(newItemPosition.toLong())
+                = oldItems[oldItemPosition] == newItems[newItemPosition]
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
                 = areItemsTheSame(oldItemPosition, newItemPosition)
-
-        private fun monthCount(a: YearMonth, b: YearMonth) =
-            1 + Period.between(a.atDay(1), b.atDay(1)).months
     }
 
     companion object {
