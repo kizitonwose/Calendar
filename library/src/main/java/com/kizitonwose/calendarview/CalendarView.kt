@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.ViewGroup
 import androidx.annotation.Px
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
@@ -581,6 +582,7 @@ open class CalendarView : RecyclerView {
     /**
      * Setup the CalendarView. You can call this any time to change the
      * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
+     * Use the [updateRange] method when changing only the [startMonth] and [endMonth].
      *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
@@ -617,6 +619,44 @@ open class CalendarView : RecyclerView {
                 endMonth, firstDayOfWeek, hasBoundaries
             )
         )
+    }
+
+    /**
+     * Update the CalendarView's month range. This method does the minimal updates to the
+     * underlying RecyclerView resulting in a stable view when the changes don't affect the visible
+     * month(s).
+     */
+    fun updateRange(startMonth: YearMonth, endMonth: YearMonth) {
+        this.startMonth = startMonth
+        this.endMonth = endMonth
+
+        val oldConfig = calendarAdapter.monthConfig
+        val newConfig = MonthConfig(
+            outDateStyle, inDateStyle, maxRowCount,
+            startMonth, endMonth, firstDayOfWeek ?: return,
+            hasBoundaries
+        )
+        calendarAdapter.monthConfig = newConfig
+
+        DiffUtil
+            .calculateDiff(MonthRangeDiffCallback(oldConfig.months, newConfig.months), false)
+            .dispatchUpdatesTo(calendarAdapter)
+    }
+
+    private class MonthRangeDiffCallback(
+        private val oldItems: List<CalendarMonth>,
+        private val newItems: List<CalendarMonth>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize() = oldItems.size
+
+        override fun getNewListSize() =  newItems.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
+                = oldItems[oldItemPosition] == newItems[newItemPosition]
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
+                = areItemsTheSame(oldItemPosition, newItemPosition)
     }
 
     companion object {
