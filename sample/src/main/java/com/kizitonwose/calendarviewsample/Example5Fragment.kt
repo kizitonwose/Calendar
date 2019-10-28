@@ -30,6 +30,8 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.TextStyle
+import java.util.*
 
 
 data class Flight(val time: LocalDateTime, val departure: Airport, val destination: Airport, @ColorRes val color: Int) {
@@ -165,7 +167,8 @@ class Example5Fragment : BaseFragment(), HasToolbar {
                 if (container.legendLayout.tag == null) {
                     container.legendLayout.tag = month.yearMonth
                     container.legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
-                        tv.text = daysOfWeek[index].name.take(3)
+                        tv.text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                            .toUpperCase(Locale.ENGLISH)
                         tv.setTextColorRes(R.color.example_5_text_grey)
                         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                     }
