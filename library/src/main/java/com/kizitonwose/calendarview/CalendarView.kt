@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
-import com.kizitonwose.calendarview.utils.NO_INDEX
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -404,33 +403,20 @@ open class CalendarView : RecyclerView {
         post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
     }
 
-    private fun updateAdapterMonthConfig(saveScroll: Boolean = false) {
+    private fun updateAdapterMonthConfig() {
         if (adapter != null) {
-            // Get visible month and offset to be used to restore scroll position if needed.
-            val visiblePosition = calendarLayoutManager.findFirstVisibleItemPosition()
-            val visibleView = calendarLayoutManager.findViewByPosition(visiblePosition)
-
-            val visibleViewOffset = (if (isVertical) visibleView?.top else visibleView?.left) ?: 0
-            val visibleMonth = calendarAdapter.monthConfig.months.getOrNull(visiblePosition)
-
             calendarAdapter.monthConfig =
                 MonthConfig(
-                    outDateStyle, inDateStyle, maxRowCount,
-                    startMonth ?: return, endMonth ?: return, firstDayOfWeek ?: return,
+                    outDateStyle,
+                    inDateStyle,
+                    maxRowCount,
+                    startMonth ?: return,
+                    endMonth ?: return,
+                    firstDayOfWeek ?: return,
                     hasBoundaries
                 )
             calendarAdapter.notifyDataSetChanged()
-
-            post {
-                if (saveScroll) { // Scroll to the previously visible month with offset.
-                    val visibleMonthNewPos = calendarAdapter.monthConfig.months.indexOf(visibleMonth)
-                    if (visibleMonthNewPos != NO_INDEX) {
-                        calendarLayoutManager.scrollToPositionWithOffset(visibleMonthNewPos, visibleViewOffset)
-                    }
-                }
-                calendarAdapter.notifyMonthScrollListenerIfNeeded()
-            }
-
+            post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
         }
     }
 
@@ -582,64 +568,82 @@ open class CalendarView : RecyclerView {
     /**
      * Setup the CalendarView. You can call this any time to change the
      * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
-     * Use the [updateRange] method when changing only the [startMonth] and [endMonth].
+     * See [updateStartMonth], [updateEndMonth] and [updateMonthRange] for more refined updates.
      *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
-        val oldStartMonth = this.startMonth
-        val oldEndMonth = this.endMonth
-        val oldFirstDayOfWeek = this.firstDayOfWeek
+        if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
+            this.firstDayOfWeek = firstDayOfWeek
+            updateMonthRange(startMonth, endMonth)
+        } else {
+            this.startMonth = startMonth
+            this.endMonth = endMonth
+            this.firstDayOfWeek = firstDayOfWeek
 
-        this.startMonth = startMonth
-        this.endMonth = endMonth
-        this.firstDayOfWeek = firstDayOfWeek
+            clipToPadding = false
+            clipChildren = false //#ClipChildrenFix
 
-        if (oldStartMonth != null && oldEndMonth != null && oldFirstDayOfWeek != null) {
-            updateAdapterMonthConfig(saveScroll = true)
-            return // Only update the months on the calendar, no need for a full setup.
-        }
+            // Remove the listener before adding again to prevent
+            // multiple additions if we already added it before.
+            removeOnScrollListener(scrollListenerInternal)
+            addOnScrollListener(scrollListenerInternal)
 
-        clipToPadding = false
-        clipChildren = false //#ClipChildrenFix
-
-        // Remove the listener before adding again to prevent
-        // multiple additions if we already added it before.
-        removeOnScrollListener(scrollListenerInternal)
-        addOnScrollListener(scrollListenerInternal)
-
-        layoutManager = CalendarLayoutManager(this, orientation)
-        adapter = CalendarAdapter(
-            this,
-            ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
-            MonthConfig(
-                outDateStyle, inDateStyle, maxRowCount, startMonth,
-                endMonth, firstDayOfWeek, hasBoundaries
+            layoutManager = CalendarLayoutManager(this, orientation)
+            adapter = CalendarAdapter(
+                this,
+                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
+                MonthConfig(
+                    outDateStyle, inDateStyle, maxRowCount, startMonth,
+                    endMonth, firstDayOfWeek, hasBoundaries
+                )
             )
-        )
+        }
     }
 
     /**
-     * Update the CalendarView's month range. This method does the minimal updates to the
-     * underlying RecyclerView resulting in a stable view when the changes don't affect the visible
-     * month(s).
+     * Update the CalendarView's start month.
+     * This can be called only if you have called [setup] in the past.
+     * See [updateEndMonth] and [updateMonthRange].
      */
-    fun updateRange(startMonth: YearMonth, endMonth: YearMonth) {
+    fun updateStartMonth(startMonth: YearMonth) = updateMonthRange(
+        startMonth,
+        endMonth ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
+    )
+
+    /**
+     * Update the CalendarView's end month.
+     * This can be called only if you have called [setup] in the past.
+     * See [updateStartMonth] and [updateMonthRange].
+     */
+    fun updateEndMonth(endMonth: YearMonth) = updateMonthRange(
+        startMonth ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?"),
+        endMonth
+    )
+
+    /**
+     * Update the CalendarView's start and end months.
+     * This can be called only if you have called [setup] in the past.
+     * See [updateStartMonth] and [updateEndMonth].
+     */
+    fun updateMonthRange(startMonth: YearMonth, endMonth: YearMonth) {
         this.startMonth = startMonth
         this.endMonth = endMonth
 
         val oldConfig = calendarAdapter.monthConfig
         val newConfig = MonthConfig(
-            outDateStyle, inDateStyle, maxRowCount,
-            startMonth, endMonth, firstDayOfWeek ?: return,
+            outDateStyle,
+            inDateStyle,
+            maxRowCount,
+            startMonth,
+            endMonth,
+            firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?"),
             hasBoundaries
         )
         calendarAdapter.monthConfig = newConfig
-
-        DiffUtil
-            .calculateDiff(MonthRangeDiffCallback(oldConfig.months, newConfig.months), false)
+        DiffUtil.calculateDiff(MonthRangeDiffCallback(oldConfig.months, newConfig.months), false)
             .dispatchUpdatesTo(calendarAdapter)
     }
 
@@ -650,13 +654,13 @@ open class CalendarView : RecyclerView {
 
         override fun getOldListSize() = oldItems.size
 
-        override fun getNewListSize() =  newItems.size
+        override fun getNewListSize() = newItems.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
-                = oldItems[oldItemPosition] == newItems[newItemPosition]
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldItems[oldItemPosition] == newItems[newItemPosition]
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
-                = areItemsTheSame(oldItemPosition, newItemPosition)
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            areItemsTheSame(oldItemPosition, newItemPosition)
     }
 
     companion object {
