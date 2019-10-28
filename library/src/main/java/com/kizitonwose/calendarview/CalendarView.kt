@@ -238,6 +238,8 @@ open class CalendarView : RecyclerView {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
         if (autoSize && isInEditMode.not()) {
             val widthMode = MeasureSpec.getMode(widthMeasureSpec)
             val widthSize = MeasureSpec.getSize(widthMeasureSpec)
@@ -257,7 +259,6 @@ open class CalendarView : RecyclerView {
                 invalidateViewHolders()
             }
         }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
 
