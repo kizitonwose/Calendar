@@ -44,26 +44,11 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     private val headerDateFormatter = DateTimeFormatter.ofPattern("EEE'\n'd MMM")
 
     private val startBackground: GradientDrawable by lazy {
-        return@lazy requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start)!! as GradientDrawable
+        requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start) as GradientDrawable
     }
 
     private val endBackground: GradientDrawable by lazy {
-        return@lazy requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end)!! as GradientDrawable
-    }
-
-    private var radiusUpdated = false
-
-    /**
-     * We set the radius of the continuous selection background drawable dynamically
-     * since the view size is `match parent` hence we cannot determine the appropriate
-     * radius value which would equal half of the view's size beforehand.
-     */
-    private fun updateDrawableRadius(textView: TextView) {
-        if (radiusUpdated) return
-        radiusUpdated = true
-        val radius = (textView.height / 2).toFloat()
-        startBackground.setCornerRadius(topLeft = radius, bottomLeft = radius)
-        endBackground.setCornerRadius(topRight = radius, bottomRight = radius)
+        requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end) as GradientDrawable
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,6 +58,15 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // We set the radius of the continuous selection background drawable dynamically
+        // since the view size is `match parent` hence we cannot determine the appropriate
+        // radius value which would equal half of the view's size beforehand.
+        exFourCalendar.post {
+            val radius = ((exFourCalendar.width / 7) / 2).toFloat()
+            startBackground.setCornerRadius(topLeft = radius, bottomLeft = radius)
+            endBackground.setCornerRadius(topRight = radius, bottomRight = radius)
+        }
 
         // Set the First day of week depending on Locale
         val daysOfWeek = daysOfWeekFromLocale()
@@ -87,7 +81,6 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         val currentMonth = YearMonth.now()
         exFourCalendar.setup(currentMonth, currentMonth.plusMonths(12), daysOfWeek.first())
         exFourCalendar.scrollToMonth(currentMonth)
-
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
@@ -139,7 +132,6 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                             }
                             day.date == startDate -> {
                                 textView.setTextColorRes(R.color.white)
-                                updateDrawableRadius(textView)
                                 textView.background = startBackground
                             }
                             startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
@@ -148,7 +140,6 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                             }
                             day.date == endDate -> {
                                 textView.setTextColorRes(R.color.white)
-                                updateDrawableRadius(textView)
                                 textView.background = endBackground
                             }
                             day.date == today -> {
@@ -172,20 +163,20 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                         // Example: When 26 Feb 2019 is startDate and 5 Mar 2019 is endDate,
                         // this makes the inDates in Mar 2019 for 24 & 25 Feb 2019 look selected.
                         if ((day.owner == DayOwner.PREVIOUS_MONTH
-                                    && startDate.monthValue == day.date.monthValue
-                                    && endDate.monthValue != day.date.monthValue) ||
+                                && startDate.monthValue == day.date.monthValue
+                                && endDate.monthValue != day.date.monthValue) ||
                             // Mimic selection of outDates that are greater than the endDate.
                             // Example: When 25 Apr 2019 is startDate and 2 May 2019 is endDate,
                             // this makes the outDates in Apr 2019 for 3 & 4 May 2019 look selected.
                             (day.owner == DayOwner.NEXT_MONTH
-                                    && startDate.monthValue != day.date.monthValue
-                                    && endDate.monthValue == day.date.monthValue) ||
+                                && startDate.monthValue != day.date.monthValue
+                                && endDate.monthValue == day.date.monthValue) ||
 
                             // Mimic selection of in and out dates of intermediate
                             // months if the selection spans across multiple months.
                             (startDate < day.date && endDate > day.date
-                                    && startDate.monthValue != day.date.monthValue
-                                    && endDate.monthValue != day.date.monthValue)
+                                && startDate.monthValue != day.date.monthValue
+                                && endDate.monthValue != day.date.monthValue)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
