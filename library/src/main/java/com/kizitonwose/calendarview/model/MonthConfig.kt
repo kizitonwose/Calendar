@@ -165,7 +165,7 @@ internal data class MonthConfig(
                         val dayValue =
                             if (lastDay.owner == DayOwner.THIS_MONTH || lastDayIsEndOfFirstOutDates) it else it + lastDay.day
 
-                        CalendarDay(LocalDate.of(outMonth.year, outMonth.month, dayValue), DayOwner.NEXT_MONTH)
+                        CalendarDay(LocalDate.of(outMonth.year, outMonth.month, 1).plusDays((dayValue - 1).toLong()), DayOwner.NEXT_MONTH)
                     }
 
                     if (monthWeeks.last().size < 7) {
