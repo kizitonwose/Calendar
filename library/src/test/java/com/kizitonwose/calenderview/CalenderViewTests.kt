@@ -131,11 +131,13 @@ class CalenderViewTests {
     }
 
     @Test
-    fun `unbounded month calculation should not exceed month day limits`() {
+    fun `test unbounded month calculation does not exceed days of month`() {
         val maxRowCount = 6
-        val months = MonthConfig.generateUnboundedMonths(
+        MonthConfig.generateUnboundedMonths(
             YearMonth.of(2019, 12), YearMonth.of(2020, 2),
             DayOfWeek.SUNDAY, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
         )
+        // No assertion neccessary, as this particular range would throw an exception previously
+        // when trying to build a day that is out of bounds (eg: December 32).
     }
 }
