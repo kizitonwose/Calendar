@@ -1,6 +1,6 @@
 buildscript {
     ext.versions = [
-            'min_sdk_library'     : 17,
+            'min_sdk_library'     : 15,
             'min_sdk_sample'      : 21,
             'target_sdk'          : 28,
             'compile_sdk'         : 28,
