@@ -129,4 +129,15 @@ class CalenderViewTests {
         // all weeks by maxRowCount value.
         assertTrue(months.all { it.weekDays.count() == maxRowCount })
     }
+
+    @Test
+    fun `test unbounded month generation does not exceed number of days in each month`() {
+        val maxRowCount = 6
+        MonthConfig.generateUnboundedMonths(
+            YearMonth.of(2019, 2), YearMonth.of(2021, 2),
+            DayOfWeek.SUNDAY, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
+        )
+        // No assertion necessary, as this particular range would throw an exception previously
+        // when trying to build a day that is out of bounds (eg: December 32).
+    }
 }

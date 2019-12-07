@@ -1,7 +1,6 @@
 package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.utils.next
-import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
@@ -118,10 +117,10 @@ internal data class MonthConfig(
 
                 // Add the outDates for the last row if needed.
                 if (monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
-                    val lastWeek = monthWeeks.last().toMutableList()
-                    val outMonth = currentMonth.plusMonths(1)
+                    val lastWeek = monthWeeks.last()
+                    val lastDay = lastWeek.last()
                     val outDates = (1..7 - lastWeek.size).map {
-                        CalendarDay(LocalDate.of(outMonth.year, outMonth.month, it), DayOwner.NEXT_MONTH)
+                        CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
                     }
                     monthWeeks[monthWeeks.lastIndex] = lastWeek + outDates
                 }
@@ -153,19 +152,8 @@ internal data class MonthConfig(
 
                     val lastDay = monthWeeks.last().last()
 
-                    val lastDayIsEndOfFirstOutDates =
-                        lastDay.owner == DayOwner.NEXT_MONTH && lastDay.date == lastDay.date.yearMonth.atEndOfMonth()
-
-                    // Move to the second outDates if we have reached the end of
-                    // the first outDates, use the first outDates otherwise.
-                    val outMonth = lastDay
-                        .date.yearMonth.plusMonths(if (lastDay.owner == DayOwner.THIS_MONTH || lastDayIsEndOfFirstOutDates) 1 else 0)
-
                     val nextRowDates = (1..7).map {
-                        val dayValue =
-                            if (lastDay.owner == DayOwner.THIS_MONTH || lastDayIsEndOfFirstOutDates) it else it + lastDay.day
-
-                        CalendarDay(LocalDate.of(outMonth.year, outMonth.month, dayValue), DayOwner.NEXT_MONTH)
+                        CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
                     }
 
                     if (monthWeeks.last().size < 7) {
@@ -233,11 +221,11 @@ internal data class MonthConfig(
 
             if (outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
                 // Add out-dates for the last row.
-                val nextMonth = yearMonth.plusMonths(1)
-                val lastWeek = weekDaysGroup.last()
-                if (lastWeek.size < 7) {
+                if (weekDaysGroup.last().size < 7) {
+                    val lastWeek = weekDaysGroup.last()
+                    val lastDay = lastWeek.last()
                     val outDates = (1..7 - lastWeek.size).map {
-                        CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, it), DayOwner.NEXT_MONTH)
+                        CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
                     }
                     weekDaysGroup[weekDaysGroup.lastIndex] = lastWeek + outDates
                 }
@@ -247,8 +235,7 @@ internal data class MonthConfig(
                     while (weekDaysGroup.size < 6) {
                         val lastDay = weekDaysGroup.last().last()
                         val nextRowDates = (1..7).map {
-                            val dayValue = if (lastDay.owner == DayOwner.THIS_MONTH) it else it + lastDay.day
-                            CalendarDay(LocalDate.of(nextMonth.year, nextMonth.month, dayValue), DayOwner.NEXT_MONTH)
+                            CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
                         }
                         weekDaysGroup.add(nextRowDates)
                     }
