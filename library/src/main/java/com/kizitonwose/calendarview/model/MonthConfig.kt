@@ -153,19 +153,8 @@ internal data class MonthConfig(
 
                     val lastDay = monthWeeks.last().last()
 
-                    val lastDayIsEndOfFirstOutDates =
-                        lastDay.owner == DayOwner.NEXT_MONTH && lastDay.date == lastDay.date.yearMonth.atEndOfMonth()
-
-                    // Move to the second outDates if we have reached the end of
-                    // the first outDates, use the first outDates otherwise.
-                    val outMonth = lastDay
-                        .date.yearMonth.plusMonths(if (lastDay.owner == DayOwner.THIS_MONTH || lastDayIsEndOfFirstOutDates) 1 else 0)
-
                     val nextRowDates = (1..7).map {
-                        val dayValue =
-                            if (lastDay.owner == DayOwner.THIS_MONTH || lastDayIsEndOfFirstOutDates) it else it + lastDay.day
-
-                        CalendarDay(LocalDate.of(outMonth.year, outMonth.month, dayValue), DayOwner.NEXT_MONTH)
+                        CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
                     }
 
                     if (monthWeeks.last().size < 7) {
