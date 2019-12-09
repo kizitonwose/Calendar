@@ -2,10 +2,12 @@ package com.kizitonwose.calendarview.ui
 
 import android.content.Context
 import android.graphics.Rect
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.*
@@ -33,13 +35,13 @@ internal class CalendarAdapter(
     private val months: List<CalendarMonth>
         get() = monthConfig.months
 
-    val bodyViewId = View.generateViewId()
-    val rootViewId = View.generateViewId()
+    val bodyViewId = ViewCompat.generateViewId()
+    val rootViewId = ViewCompat.generateViewId()
 
     // Values of headerViewId & footerViewId will be
     // replaced with IDs set in the XML if present.
-    var headerViewId = View.generateViewId()
-    var footerViewId = View.generateViewId()
+    var headerViewId = ViewCompat.generateViewId()
+    var footerViewId = ViewCompat.generateViewId()
 
     init {
         setHasStableIds(true)
@@ -97,15 +99,21 @@ internal class CalendarAdapter(
         }
 
         fun setupRoot(root: ViewGroup) {
-            root.setPaddingRelative(
+            ViewCompat.setPaddingRelative(root,
                 calView.monthPaddingStart, calView.monthPaddingTop,
                 calView.monthPaddingEnd, calView.monthPaddingBottom
             )
             root.layoutParams = ViewGroup.MarginLayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT).apply {
                 bottomMargin = calView.monthMarginBottom
                 topMargin = calView.monthMarginTop
-                marginStart = calView.monthMarginStart
-                marginEnd = calView.monthMarginEnd
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    marginStart = calView.monthMarginStart
+                    marginEnd = calView.monthMarginEnd
+                } else {
+                    leftMargin = calView.monthMarginStart
+                    rightMargin = calView.monthMarginEnd
+                }
             }
         }
 
