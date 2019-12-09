@@ -103,13 +103,13 @@ internal data class MonthConfig(
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
 
-            // Regroup data into 7 days. Use toMutableList() to create a copy of the ephemeral list.
-            val allDaysGroup = allDays.chunked(7).toMutableList()
+            // Regroup data into 7 days. Use toList() to create a copy of the ephemeral list.
+            val allDaysGroup = allDays.chunked(7).toList()
 
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
-            allDaysGroup.chunked(maxRowCount) { curMonthWeeks ->
-                val monthWeeks = ArrayList(curMonthWeeks)
+            allDaysGroup.chunked(maxRowCount) { ephemeralMonthWeeks ->
+               val monthWeeks = ephemeralMonthWeeks.toMutableList()
 
                 // Add the outDates for the last row if needed.
                 if (monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
