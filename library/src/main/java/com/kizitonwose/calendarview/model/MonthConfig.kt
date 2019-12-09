@@ -108,12 +108,8 @@ internal data class MonthConfig(
 
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
-            while (allDaysGroup.isNotEmpty()) {
-                val monthWeeks = allDaysGroup.take(maxRowCount).toMutableList()
-
-                // Keep a copy so after adding outDates to the last month, we can still remove
-                // it from allDaysGroup and allDaysGroup.isNotEmpty() will be true.
-                val monthWeeksCopy = allDaysGroup.take(maxRowCount).toMutableList()
+            allDaysGroup.chunked(maxRowCount) { curMonthWeeks ->
+                val monthWeeks = ArrayList(curMonthWeeks)
 
                 // Add the outDates for the last row if needed.
                 if (monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
@@ -171,7 +167,6 @@ internal data class MonthConfig(
                     // indexInSameMonth is basically this item's index in the entire month list.
                     CalendarMonth(startMonth, monthWeeks, calendarMonths.size, calMonthsCount)
                 )
-                allDaysGroup.removeAll(monthWeeksCopy)
             }
 
             return calendarMonths
