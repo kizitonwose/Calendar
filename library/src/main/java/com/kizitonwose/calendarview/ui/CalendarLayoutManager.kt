@@ -38,13 +38,16 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
     fun smoothScrollToDay(day: CalendarDay) {
         val position = adapter.getAdapterPosition(day)
         if (position != -1) {
-            startSmoothScroll(CalendarSmoothScroller(position, day))
+            // Can't target a specific day in a paged calendar.
+            val isPaged = calView.scrollMode == ScrollMode.PAGED
+            startSmoothScroll(CalendarSmoothScroller(position, if (isPaged) null else day))
         }
     }
 
     fun scrollToDay(day: CalendarDay) {
         val monthPosition = adapter.getAdapterPosition(day)
         scrollToPosition(monthPosition)
+        // Can't target a specific day in a paged calendar.
         if (calView.scrollMode == ScrollMode.PAGED) return
         calView.post {
             if (monthPosition != NO_INDEX) {
