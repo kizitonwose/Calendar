@@ -16,7 +16,7 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
-import kotlinx.android.synthetic.main.exmaple_2_fragment.*
+import kotlinx.android.synthetic.main.example_2_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
@@ -31,7 +31,7 @@ class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.exmaple_2_fragment, container, false)
+        return inflater.inflate(R.layout.example_2_fragment, container, false)
     }
 
     private var selectedDate: LocalDate? = null
