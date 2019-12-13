@@ -20,7 +20,7 @@ import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.yearMonth
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
-import kotlinx.android.synthetic.main.exmaple_1_fragment.*
+import kotlinx.android.synthetic.main.example_1_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
@@ -36,7 +36,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
     override val titleRes: Int = R.string.example_1_title
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.exmaple_1_fragment, container, false)
+        return inflater.inflate(R.layout.example_1_fragment, container, false)
     }
 
     private val selectedDates = mutableSetOf<LocalDate>()
