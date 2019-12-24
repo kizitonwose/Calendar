@@ -198,6 +198,20 @@ open class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * Determines if this calendar should display Jalali(Shamsi) Calendar or Gregorian
+     * If true, Calendar will be Jalali(Shamsi)
+     * if false(default), Calendar will be Gregorian
+     *
+     */
+    var isJalali = false
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapterMonthConfig()
+            }
+        }
+
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
     private var firstDayOfWeek: DayOfWeek? = null
@@ -234,6 +248,7 @@ open class CalendarView : RecyclerView {
         maxRowCount = a.getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
         monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
         hasBoundaries = a.getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
+        isJalali = a.getBoolean(R.styleable.CalendarView_cv_isJalali, isJalali)
         a.recycle()
     }
 
@@ -406,15 +421,15 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterMonthConfig() {
         if (adapter != null) {
             calendarAdapter.monthConfig =
-                MonthConfig(
-                    outDateStyle,
-                    inDateStyle,
-                    maxRowCount,
-                    startMonth ?: return,
-                    endMonth ?: return,
-                    firstDayOfWeek ?: return,
-                    hasBoundaries
-                )
+                    MonthConfig(
+                            outDateStyle,
+                            inDateStyle,
+                            maxRowCount,
+                            startMonth ?: return,
+                            endMonth ?: return,
+                            firstDayOfWeek ?: return,
+                            hasBoundaries, isJalali
+                    )
             calendarAdapter.notifyDataSetChanged()
             post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
         }
@@ -423,7 +438,7 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterViewConfig() {
         if (adapter != null) {
             calendarAdapter.viewConfig =
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
+                    ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass, isJalali)
             invalidateViewHolders()
         }
     }
@@ -593,12 +608,12 @@ open class CalendarView : RecyclerView {
 
             layoutManager = CalendarLayoutManager(this, orientation)
             adapter = CalendarAdapter(
-                this,
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
-                MonthConfig(
-                    outDateStyle, inDateStyle, maxRowCount, startMonth,
-                    endMonth, firstDayOfWeek, hasBoundaries
-                )
+                    this,
+                    ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass,isJalali),
+                    MonthConfig(
+                            outDateStyle, inDateStyle, maxRowCount, startMonth,
+                            endMonth, firstDayOfWeek, hasBoundaries, isJalali
+                    )
             )
         }
     }
@@ -609,8 +624,9 @@ open class CalendarView : RecyclerView {
      * See [updateEndMonth] and [updateMonthRange].
      */
     fun updateStartMonth(startMonth: YearMonth) = updateMonthRange(
-        startMonth,
-        endMonth ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
+            startMonth,
+            endMonth
+                    ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
     )
 
     /**
@@ -619,8 +635,9 @@ open class CalendarView : RecyclerView {
      * See [updateStartMonth] and [updateMonthRange].
      */
     fun updateEndMonth(endMonth: YearMonth) = updateMonthRange(
-        startMonth ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?"),
-        endMonth
+            startMonth
+                    ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?"),
+            endMonth
     )
 
     /**
@@ -634,22 +651,24 @@ open class CalendarView : RecyclerView {
 
         val oldConfig = calendarAdapter.monthConfig
         val newConfig = MonthConfig(
-            outDateStyle,
-            inDateStyle,
-            maxRowCount,
-            startMonth,
-            endMonth,
-            firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?"),
-            hasBoundaries
+                outDateStyle,
+                inDateStyle,
+                maxRowCount,
+                startMonth,
+                endMonth,
+                firstDayOfWeek
+                        ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?"),
+                hasBoundaries,
+                isJalali
         )
         calendarAdapter.monthConfig = newConfig
         DiffUtil.calculateDiff(MonthRangeDiffCallback(oldConfig.months, newConfig.months), false)
-            .dispatchUpdatesTo(calendarAdapter)
+                .dispatchUpdatesTo(calendarAdapter)
     }
 
     private class MonthRangeDiffCallback(
-        private val oldItems: List<CalendarMonth>,
-        private val newItems: List<CalendarMonth>
+            private val oldItems: List<CalendarMonth>,
+            private val newItems: List<CalendarMonth>
     ) : DiffUtil.Callback() {
 
         override fun getOldListSize() = oldItems.size
@@ -657,10 +676,10 @@ open class CalendarView : RecyclerView {
         override fun getNewListSize() = newItems.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldItems[oldItemPosition] == newItems[newItemPosition]
+                oldItems[oldItemPosition] == newItems[newItemPosition]
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            areItemsTheSame(oldItemPosition, newItemPosition)
+                areItemsTheSame(oldItemPosition, newItemPosition)
     }
 
     companion object {

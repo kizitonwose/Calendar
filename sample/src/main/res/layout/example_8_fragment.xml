@@ -96,6 +96,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingBottom="100dp"
+            app:cv_isJalali="true"
             app:cv_dayViewResource="@layout/example_4_calendar_day"
             app:cv_monthHeaderResource="@layout/example_4_calendar_header" />
 

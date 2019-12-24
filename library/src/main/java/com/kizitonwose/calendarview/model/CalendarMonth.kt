@@ -1,5 +1,6 @@
 package com.kizitonwose.calendarview.model
 
+import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import org.threeten.bp.YearMonth
 import java.io.Serializable
 
@@ -12,6 +13,7 @@ data class CalendarMonth(
 
     val year: Int = yearMonth.year
     val month: Int = yearMonth.monthValue
+    val persianCalendar=yearMonth.atDay(1).toPersianCalendar()
 
     override fun hashCode(): Int {
         return 31 * yearMonth.hashCode() +

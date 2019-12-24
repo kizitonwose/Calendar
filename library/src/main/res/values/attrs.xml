@@ -33,6 +33,11 @@
            satisfies the `maxRowCount` requirement. -->
         <attr name="cv_hasBoundaries" format="boolean" />
 
+        <!-- Determines if this calendar should display Jalali(Shamsi) Calendar or Gregorian
+             If true, Calendar will be Jalali(Shamsi)
+             if false(default), Calendar will be Gregorian        -->
+        <attr name="cv_isJalali" format="boolean" />
+
         <!--This determines the scroll direction of the the calendar. -->
         <attr name="cv_orientation" format="enum">
             <enum name="horizontal" value="0" />

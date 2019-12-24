@@ -1,6 +1,9 @@
 package com.kizitonwose.calendarview.utils.persian
 
 import org.threeten.bp.DayOfWeek
+import org.threeten.bp.LocalDate
+import org.threeten.bp.YearMonth
+import org.threeten.bp.ZoneOffset
 import java.util.*
 
 fun String.getPersianNumbers(): String {
@@ -47,19 +50,3 @@ fun getLatinNumbers(string: String): String {
     return string
 }
 
-fun DayOfWeek.getPersianDisplayName(): String {
-    return when (this.ordinal) {
-        DayOfWeek.MONDAY.ordinal -> PersianCalendarConstants.persianWeekDays[2]
-        DayOfWeek.TUESDAY.ordinal -> PersianCalendarConstants.persianWeekDays[3]
-        DayOfWeek.WEDNESDAY.ordinal -> PersianCalendarConstants.persianWeekDays[4]
-        DayOfWeek.THURSDAY.ordinal -> PersianCalendarConstants.persianWeekDays[5]
-        DayOfWeek.FRIDAY.ordinal -> PersianCalendarConstants.persianWeekDays[6]
-        DayOfWeek.SATURDAY.ordinal -> PersianCalendarConstants.persianWeekDays[0]
-        DayOfWeek.SUNDAY.ordinal -> PersianCalendarConstants.persianWeekDays[1]
-        else -> PersianCalendarConstants.persianWeekDays[0]
-    }
-}
-
-fun DayOfWeek.getPersianDisplayFirstCharString(): String {
-    return this.getPersianDisplayName()[0].toString()
-}

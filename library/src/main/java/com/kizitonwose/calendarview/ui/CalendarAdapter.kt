@@ -23,7 +23,8 @@ internal data class ViewConfig(
     @LayoutRes val dayViewRes: Int,
     @LayoutRes val monthHeaderRes: Int,
     @LayoutRes val monthFooterRes: Int,
-    val monthViewClass: String?
+    val monthViewClass: String?,
+    val isJalali:Boolean
 )
 
 internal class CalendarAdapter(

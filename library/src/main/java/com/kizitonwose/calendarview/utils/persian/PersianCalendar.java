@@ -284,7 +284,7 @@ public class PersianCalendar extends GregorianCalendar {
 	}
 
 	/**
-	 * add specific amout of fields to the current date for now doesnt handle
+	 * add specific amount of fields to the current date for now doesn't handle
 	 * before 1 farvardin hejri (before epoch)
 	 * 
 	 * @param field

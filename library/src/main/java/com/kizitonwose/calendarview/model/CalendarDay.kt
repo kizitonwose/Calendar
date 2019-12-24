@@ -2,18 +2,21 @@ package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import com.kizitonwose.calendarview.utils.previous
 import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
+import org.threeten.bp.ZoneOffset
 import java.io.Serializable
 
 
 data class CalendarDay internal constructor(val date: LocalDate, val owner: DayOwner) :
-    Comparable<CalendarDay>, Serializable {
+        Comparable<CalendarDay>, Serializable {
 
     val day = date.dayOfMonth
-    val persianCalendar=PersianCalendar(date.toEpochDay())
+    val persianCalendar: PersianCalendar
+        get() = date.toPersianCalendar()
 
     // Find the actual month on the calendar that owns this date.
     internal val positionYearMonth: YearMonth
@@ -29,8 +32,8 @@ data class CalendarDay internal constructor(val date: LocalDate, val owner: DayO
 
     override fun compareTo(other: CalendarDay): Int {
         throw UnsupportedOperationException(
-            "Compare using the `date` parameter instead. " +
-                    "Out and In dates can have the same date values as CalendarDay in another month."
+                "Compare using the `date` parameter instead. " +
+                        "Out and In dates can have the same date values as CalendarDay in another month."
         )
     }
 

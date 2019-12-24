@@ -113,7 +113,7 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
         exEightCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
-                PersianCalendar(day.date.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli())
+
                 container.day = day
                 val textView = container.textView
                 val roundBgView = container.roundBgView

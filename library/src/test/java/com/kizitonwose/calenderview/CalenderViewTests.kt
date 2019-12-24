@@ -23,7 +23,7 @@ class CalenderViewTests {
 
     @Test
     fun `test all month in date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW, isJalali)
 
         val validInDateIndices = (0..1)
         val inDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validInDateIndices.contains(index) }
@@ -34,14 +34,14 @@ class CalenderViewTests {
 
     @Test
     fun `test no in date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, false, OutDateStyle.END_OF_ROW)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, false, OutDateStyle.END_OF_ROW, isJalali)
         assertTrue(weekDays.flatten().none { it.owner == DayOwner.PREVIOUS_MONTH })
     }
 
     @Test
     fun `test first month in date generation works as expected`() {
         val months = MonthConfig.generateBoundedMonths(
-            may2019, nov2019, firstDayOfWeek, 6, InDateStyle.FIRST_MONTH, OutDateStyle.NONE
+                may2019, nov2019, firstDayOfWeek, 6, InDateStyle.FIRST_MONTH, OutDateStyle.NONE, isJalali
         )
 
         // inDates are in the first month.
@@ -55,7 +55,7 @@ class CalenderViewTests {
 
     @Test
     fun `test end of row out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW, isJalali)
 
         val validOutDateIndices = weekDays.flatten().indices.toList().takeLast(2)
         val outDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
@@ -66,7 +66,7 @@ class CalenderViewTests {
 
     @Test
     fun `test end of grid out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID, isJalali)
 
         val validOutDateIndices = weekDays.flatten().indices.toList().takeLast(9)
         val outDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
@@ -77,13 +77,13 @@ class CalenderViewTests {
 
     @Test
     fun `test no out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.NONE)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.NONE, isJalali)
         assertTrue(weekDays.flatten().none { it.owner == DayOwner.NEXT_MONTH })
     }
 
     @Test
     fun `test first day of week is in correct position`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID, isJalali)
 
         assertTrue(weekDays.first().first().date.dayOfWeek == firstDayOfWeek)
     }
@@ -92,8 +92,8 @@ class CalenderViewTests {
     fun `test max row count works with boundaries`() {
         val maxRowCount = 3
         val months = MonthConfig.generateBoundedMonths(
-            may2019, may2019.plusMonths(20),
-            firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_ROW
+                may2019, may2019.plusMonths(20),
+                firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_ROW, isJalali
         )
 
         assertTrue(months.all { it.weekDays.count() <= maxRowCount })
@@ -118,8 +118,8 @@ class CalenderViewTests {
     fun `test max row count works without boundaries`() {
         val maxRowCount = 3
         val months = MonthConfig.generateUnboundedMonths(
-            may2019.minusMonths(40), may2019.plusMonths(50),
-            firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
+                may2019.minusMonths(40), may2019.plusMonths(50),
+                firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID, isJalali
         )
 
         // The number of weeks in all CalendarMonth instances except the last one must match
@@ -134,8 +134,8 @@ class CalenderViewTests {
     fun `test unbounded month generation does not exceed number of days in each month`() {
         val maxRowCount = 6
         MonthConfig.generateUnboundedMonths(
-            YearMonth.of(2019, 2), YearMonth.of(2021, 2),
-            DayOfWeek.SUNDAY, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
+                YearMonth.of(2019, 2), YearMonth.of(2021, 2),
+                DayOfWeek.SUNDAY, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID, isJalali
         )
         // No assertion necessary, as this particular range would throw an exception previously
         // when trying to build a day that is out of bounds (eg: December 32).
