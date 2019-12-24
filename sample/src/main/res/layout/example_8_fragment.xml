@@ -1,0 +1,126 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    tools:context=".Example8Fragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/exEightAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/exEightToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/Example4ToolbarTheme"
+            app:titleTextColor="@color/example_4_grey" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="14dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/exEightStartDateText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:gravity="start|center_vertical"
+                android:minLines="2"
+                android:textColor="@color/example_4_grey"
+                android:textSize="26sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/exEightHeaderDivider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Mon\n22 Apr" />
+
+            <View
+                android:id="@+id/exEightHeaderDivider"
+                android:layout_width="1.5dp"
+                android:layout_height="0dp"
+                android:background="#EAEAEA"
+                android:rotation="45"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/exEightEndDateText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:gravity="end|center_vertical"
+                android:minLines="2"
+                android:textColor="@color/example_4_grey"
+                android:textSize="26sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/exEightHeaderDivider"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Thu\n9 May" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            layout="@layout/calendar_day_legend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.kizitonwose.calendarview.CalendarView
+            android:id="@+id/exEightCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp"
+            app:cv_dayViewResource="@layout/example_4_calendar_day"
+            app:cv_monthHeaderResource="@layout/example_4_calendar_header" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:elevation="10dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/exEightSaveButton"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/save"
+                app:backgroundTint="@color/example_4_green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

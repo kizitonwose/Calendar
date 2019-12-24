@@ -18,6 +18,11 @@
  */
 package com.kizitonwose.calendarview.utils.persian
 
+import android.annotation.TargetApi
+import android.os.Build
+import java.time.DayOfWeek
+import java.util.*
+
 /**
  *
  * @author Morteza contact: [Mortezaadi@gmail.com](mailto:Mortezaadi@gmail.com)
@@ -35,7 +40,7 @@ object PersianCalendarConstants {
      */
     const val PERSIAN_EPOCH: Long = 1948321
     @JvmField
-	val persianMonthNames = arrayOf(
+    val persianMonthNames = arrayOf(
         "\u0641\u0631\u0648\u0631\u062f\u06cc\u0646",  // Farvardin
         "\u0627\u0631\u062f\u06cc\u0628\u0647\u0634\u062a",  // Ordibehesht
         "\u062e\u0631\u062f\u0627\u062f",  // Khordad
@@ -50,7 +55,7 @@ object PersianCalendarConstants {
         "\u0627\u0633\u0641\u0646\u062f" // Esfand
     )
     @JvmField
-	val persianWeekDays = arrayOf(
+    val persianWeekDays = arrayOf(
         "\u0634\u0646\u0628\u0647",  // Shanbeh
         "\u06cc\u06a9\u200c\u0634\u0646\u0628\u0647",  // Yekshanbeh
         "\u062f\u0648\u0634\u0646\u0628\u0647",  // Doshanbeh
@@ -59,4 +64,7 @@ object PersianCalendarConstants {
         "\u067e\u0646\u062c\u200c\u0634\u0646\u0628\u0647",  // Panjshanbeh
         "\u062c\u0645\u0639\u0647" // jome
     )
+    fun getFaLocale(): Locale = Locale("fa", "IR")
 }
+
+

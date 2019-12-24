@@ -1,6 +1,7 @@
 package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.kizitonwose.calendarview.utils.previous
 import com.kizitonwose.calendarview.utils.yearMonth
 import org.threeten.bp.LocalDate
@@ -12,6 +13,7 @@ data class CalendarDay internal constructor(val date: LocalDate, val owner: DayO
     Comparable<CalendarDay>, Serializable {
 
     val day = date.dayOfMonth
+    val persianCalendar=PersianCalendar(date.toEpochDay())
 
     // Find the actual month on the calendar that owns this date.
     internal val positionYearMonth: YearMonth

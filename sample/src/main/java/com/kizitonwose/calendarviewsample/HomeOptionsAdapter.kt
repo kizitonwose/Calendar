@@ -21,12 +21,17 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
         ExampleItem(R.string.example_4_title, R.string.example_4_subtitle),
         ExampleItem(R.string.example_5_title, R.string.example_5_subtitle),
         ExampleItem(R.string.example_6_title, R.string.example_6_subtitle),
-        ExampleItem(R.string.example_7_title, R.string.example_7_subtitle)
+        ExampleItem(R.string.example_7_title, R.string.example_7_subtitle),
+        ExampleItem(R.string.example_8_title, R.string.example_8_subtitle)
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {
         return HomeOptionsViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.home_options_item_view, parent, false)
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.home_options_item_view,
+                parent,
+                false
+            )
         )
     }
 
@@ -48,10 +53,12 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
         fun bind(item: ExampleItem) {
             val context = itemView.context
 
-            itemOptionTitle.text = if (item.titleRes != 0) context.getString(item.titleRes) else null
+            itemOptionTitle.text =
+                if (item.titleRes != 0) context.getString(item.titleRes) else null
             itemOptionTitle.isVisible = itemOptionTitle.text.isNotBlank()
 
-            itemOptionSubtitle.text = if (item.subtitleRes != 0) context.getString(item.subtitleRes) else null
+            itemOptionSubtitle.text =
+                if (item.subtitleRes != 0) context.getString(item.subtitleRes) else null
             itemOptionSubtitle.isVisible = itemOptionSubtitle.text.isNotBlank()
         }
     }
