@@ -19,10 +19,7 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.persian.PersianCalendar
-import com.kizitonwose.calendarview.utils.persian.PersianCalendarConstants
-import com.kizitonwose.calendarview.utils.persian.getPersianDisplayFirstCharString
-import com.kizitonwose.calendarview.utils.persian.persianlCalendar
+import com.kizitonwose.calendarview.utils.persian.*
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
@@ -161,27 +158,27 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                     // on the blank in and out dates across various months and also on dates(months)
                     // between the start and end dates if the selection spans across multiple months.
 
-                    val startDate = startDate
-                    val endDate = endDate
+                    val startDate = startDate?.toPersianCalendar()
+                    val endDate = endDate?.toPersianCalendar()
                     if (startDate != null && endDate != null) {
                         // Mimic selection of inDates that are less than the startDate.
                         // Example: When 26 Feb 2019 is startDate and 5 Mar 2019 is endDate,
                         // this makes the inDates in Mar 2019 for 24 & 25 Feb 2019 look selected.
                         if ((day.owner == DayOwner.PREVIOUS_MONTH
-                                && startDate.monthValue == day.date.monthValue
-                                && endDate.monthValue != day.date.monthValue) ||
+                                && startDate.persianMonth == day.persianCalendar.persianMonth
+                                && endDate.persianMonth != day.persianCalendar.persianMonth) ||
                             // Mimic selection of outDates that are greater than the endDate.
                             // Example: When 25 Apr 2019 is startDate and 2 May 2019 is endDate,
                             // this makes the outDates in Apr 2019 for 3 & 4 May 2019 look selected.
                             (day.owner == DayOwner.NEXT_MONTH
-                                && startDate.monthValue != day.date.monthValue
-                                && endDate.monthValue == day.date.monthValue) ||
+                                && startDate.persianMonth != day.persianCalendar.persianMonth
+                                && endDate.persianMonth == day.persianCalendar.persianMonth) ||
 
                             // Mimic selection of in and out dates of intermediate
                             // months if the selection spans across multiple months.
-                            (startDate < day.date && endDate > day.date
-                                && startDate.monthValue != day.date.monthValue
-                                && endDate.monthValue != day.date.monthValue)
+                            (startDate < day.persianCalendar && endDate > day.persianCalendar
+                                && startDate.persianMonth != day.persianCalendar.persianMonth
+                                && endDate.persianMonth != day.persianCalendar.persianMonth)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
