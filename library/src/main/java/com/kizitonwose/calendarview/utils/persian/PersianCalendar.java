@@ -311,10 +311,10 @@ public class PersianCalendar extends GregorianCalendar {
 		}
 
 		if (field == YEAR) {
-			setPersianDate(this.persianYear + amount, getPersianMonth()+1, this.persianDay);
+			setPersianDate(this.persianYear + amount, getPersianMonth(), this.persianDay);
 			return;
 		} else if (field == MONTH) {
-			setPersianDate(this.persianYear + ((getPersianMonth()+1 + amount) / 12), (getPersianMonth()+1 + amount) % 12, this.persianDay);
+			setPersianDate(this.persianYear + ((getPersianMonth() + amount) / 12), (getPersianMonth() + amount) % 12, this.persianDay);
 			return;
 		}
 		add(field, amount);

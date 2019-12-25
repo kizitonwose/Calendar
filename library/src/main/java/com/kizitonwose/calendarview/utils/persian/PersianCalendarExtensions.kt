@@ -29,6 +29,8 @@ fun LocalDate.toPersianCalendar(): PersianCalendar {
 
 fun YearMonth.persianlMonthLength(): Int = this.atDay(1).toPersianCalendar().monthLength
 
+fun YearMonth.persianlCalendar() = this.atDay(1).toPersianCalendar()
+
 
 val PersianCalendar.monthLength: Int
     get() {
@@ -40,7 +42,7 @@ val PersianCalendar.monthLength: Int
     }
 
 fun PersianCalendar.toLocalDate(): LocalDate {
-    return LocalDate.of(get(Calendar.YEAR), get(Calendar.MONTH)+1, get(Calendar.DAY_OF_MONTH))
+    return LocalDate.of(get(Calendar.YEAR), get(Calendar.MONTH) + 1, get(Calendar.DAY_OF_MONTH))
 }
 
 fun PersianCalendar.addDays(days: Int): PersianCalendar {
@@ -57,7 +59,7 @@ fun PersianCalendar.addMonths(months: Int): PersianCalendar {
 
 fun PersianCalendar.addYears(years: Int): PersianCalendar {
     val persianCalendar = PersianCalendar(timeInMillis)
-    persianCalendar.add(Calendar.DAY_OF_MONTH, years)
+    persianCalendar.addPersianDate(Calendar.YEAR, years)
     return persianCalendar
 }
 
@@ -75,3 +77,8 @@ fun PersianCalendar.withYear(year: Int): PersianCalendar {
     val diffYears = year - persianYear
     return PersianCalendar(timeInMillis).addYears(diffYears)
 }
+
+val PersianCalendar.weekInMonth: Int
+    get() {
+        return (persianDay + PersianCalendar(timeInMillis).withDay(1).get(Calendar.DAY_OF_WEEK) - 1) / 7
+    }

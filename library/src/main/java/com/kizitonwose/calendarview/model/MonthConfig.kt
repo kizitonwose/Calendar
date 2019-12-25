@@ -203,7 +203,13 @@ internal data class MonthConfig(
             val weekDaysGroup = if (generateInDates) {
                 // Group days by week of month so we can add the in dates if necessary.
                 val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
-                val groupByWeekOfMonth = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+                val groupByWeekOfMonth =
+                        if (isJalali) {
+                            thisMonthDays.groupBy { it.persianCalendar.weekInMonth }.values.toMutableList()
+                        }
+                        else {
+                            thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+                        }
 
                 // Add in-dates if necessary
                 val firstWeek = groupByWeekOfMonth.first()

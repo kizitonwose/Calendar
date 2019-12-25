@@ -22,6 +22,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.kizitonwose.calendarview.utils.persian.PersianCalendarConstants
 import com.kizitonwose.calendarview.utils.persian.getPersianDisplayFirstCharString
+import com.kizitonwose.calendarview.utils.persian.persianlCalendar
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
@@ -123,7 +124,7 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 roundBgView.makeInVisible()
 
                 if (day.owner == DayOwner.THIS_MONTH) {
-                    textView.text = day.day.toString()
+                    textView.text = day.persianCalendar.persianDay.toString()
 
                     if (day.date.isBefore(today)) {
                         textView.setTextColorRes(R.color.example_4_grey_past)
@@ -195,7 +196,8 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
         exEightCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                val monthTitle = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+                val persianlCalendar = month.yearMonth.persianlCalendar()
+                val monthTitle = "${persianlCalendar.persianMonthName} ${persianlCalendar.persianYear}"
                 container.textView.text = monthTitle
             }
         }
