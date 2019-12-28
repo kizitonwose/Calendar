@@ -21,7 +21,6 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.persian.*
 import kotlinx.android.synthetic.main.calendar_day_legend.*
-import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
 import kotlinx.android.synthetic.main.example_8_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_8_fragment.*
@@ -41,7 +40,6 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
     private var startDate: LocalDate? = null
     private var endDate: LocalDate? = null
 
-    private val headerDateFormatter = DateTimeFormatter.ofPattern("EEE'\n'd MMM")
 
     private val startBackground: GradientDrawable by lazy {
         requireContext().getDrawableCompat(R.drawable.example_8_continuous_selected_bg_start) as GradientDrawable
@@ -51,7 +49,11 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
         requireContext().getDrawableCompat(R.drawable.example_8_continuous_selected_bg_end) as GradientDrawable
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.example_8_fragment, container, false)
     }
@@ -74,7 +76,8 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
         legendLayout.children.forEachIndexed { index, view ->
             (view as TextView).apply {
-                text = daysOfWeek[index].getPersianDisplayFirstCharString()// getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                text =
+                    daysOfWeek[index].getPersianDisplayFirstCharString()// getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
                 setTextColorRes(R.color.example_4_grey)
             }
@@ -91,7 +94,10 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
             init {
                 view.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH && (day.date == today || day.date.isAfter(today))) {
+                    if (day.owner == DayOwner.THIS_MONTH && (day.date == today || day.date.isAfter(
+                            today
+                        ))
+                    ) {
                         val date = day.date
                         if (startDate != null) {
                             if (date < startDate || endDate != null) {
@@ -125,32 +131,32 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                     textView.text = day.persianCalendar.persianDay.toString().persianNumbers()
 
                     if (day.date.isBefore(today)) {
-                        textView.setTextColorRes(R.color.example_4_grey_past)
+                        textView.setTextColorRes(R.color.example_8_grey_past)
                     } else {
                         when {
                             startDate == day.date && endDate == null -> {
-                                textView.setTextColorRes(R.color.white)
+                                textView.setTextColorRes(R.color.example_8_day_selected_text)
                                 roundBgView.makeVisible()
                                 roundBgView.setBackgroundResource(R.drawable.example_8_single_selected_bg)
                             }
                             day.date == startDate -> {
-                                textView.setTextColorRes(R.color.white)
+                                textView.setTextColorRes(R.color.example_8_day_selected_text)
                                 textView.background = startBackground
                             }
                             startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
-                                textView.setTextColorRes(R.color.white)
+                                textView.setTextColorRes(R.color.example_8_day_selected_text)
                                 textView.setBackgroundResource(R.drawable.example_8_continuous_selected_bg_middle)
                             }
                             day.date == endDate -> {
-                                textView.setTextColorRes(R.color.white)
+                                textView.setTextColorRes(R.color.example_8_day_selected_text)
                                 textView.background = endBackground
                             }
                             day.date == today -> {
-                                textView.setTextColorRes(R.color.example_4_grey)
+                                textView.setTextColorRes(R.color.example_8_grey)
                                 roundBgView.makeVisible()
-                                roundBgView.setBackgroundResource(R.drawable.example_4_today_bg)
+                                roundBgView.setBackgroundResource(R.drawable.example_8_today_bg)
                             }
-                            else -> textView.setTextColorRes(R.color.example_4_grey)
+                            else -> textView.setTextColorRes(R.color.example_8_grey)
                         }
                     }
                 } else {
@@ -166,20 +172,20 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                         // Example: When 26 Feb 2019 is startDate and 5 Mar 2019 is endDate,
                         // this makes the inDates in Mar 2019 for 24 & 25 Feb 2019 look selected.
                         if ((day.owner == DayOwner.PREVIOUS_MONTH
-                                && startDate.persianMonth == day.persianCalendar.persianMonth
-                                && endDate.persianMonth != day.persianCalendar.persianMonth) ||
+                                    && startDate.persianMonth == day.persianCalendar.persianMonth
+                                    && endDate.persianMonth != day.persianCalendar.persianMonth) ||
                             // Mimic selection of outDates that are greater than the endDate.
                             // Example: When 25 Apr 2019 is startDate and 2 May 2019 is endDate,
                             // this makes the outDates in Apr 2019 for 3 & 4 May 2019 look selected.
                             (day.owner == DayOwner.NEXT_MONTH
-                                && startDate.persianMonth != day.persianCalendar.persianMonth
-                                && endDate.persianMonth == day.persianCalendar.persianMonth) ||
+                                    && startDate.persianMonth != day.persianCalendar.persianMonth
+                                    && endDate.persianMonth == day.persianCalendar.persianMonth) ||
 
                             // Mimic selection of in and out dates of intermediate
                             // months if the selection spans across multiple months.
                             (startDate < day.persianCalendar && endDate > day.persianCalendar
-                                && startDate.persianMonth != day.persianCalendar.persianMonth
-                                && endDate.persianMonth != day.persianCalendar.persianMonth)
+                                    && startDate.persianMonth != day.persianCalendar.persianMonth
+                                    && endDate.persianMonth != day.persianCalendar.persianMonth)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_8_continuous_selected_bg_middle)
                         }
@@ -195,7 +201,8 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
             override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 val persianlCalendar = month.yearMonth.persianlCalendar()
-                val monthTitle = "${persianlCalendar.persianMonthName} ${persianlCalendar.persianYear.toString().persianNumbers()}"
+                val monthTitle =
+                    "${persianlCalendar.persianMonthName} ${persianlCalendar.persianYear.toString().persianNumbers()}"
                 container.textView.text = monthTitle
             }
         }
@@ -208,7 +215,11 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 val text = "Selected: ${formatter.format(startDate)} - ${formatter.format(endDate)}"
                 Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
             } else {
-                Snackbar.make(requireView(), "No selection. Searching all Airbnb listings.", Snackbar.LENGTH_LONG)
+                Snackbar.make(
+                    requireView(),
+                    "No selection. Searching all Airbnb listings.",
+                    Snackbar.LENGTH_LONG
+                )
                     .show()
             }
             fragmentManager?.popBackStack()
@@ -219,22 +230,34 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
     private fun bindSummaryViews() {
         if (startDate != null) {
-            exEightStartDateText.text = headerDateFormatter.format(startDate)
-            exEightStartDateText.setTextColorRes(R.color.example_4_grey)
+            startDate?.toPersianCalendar()?.apply {
+                exEightStartDateText.text = getHeaderFormattedDate(this)
+            }
+            exEightStartDateText.setTextColorRes(R.color.example_8_grey)
         } else {
-            exEightStartDateText.text = getString(R.string.start_date)
+            exEightStartDateText.text = getString(R.string.fa_start_date)
             exEightStartDateText.setTextColor(Color.GRAY)
         }
         if (endDate != null) {
-            exEightEndDateText.text = headerDateFormatter.format(endDate)
-            exEightEndDateText.setTextColorRes(R.color.example_4_grey)
+            endDate?.toPersianCalendar()?.apply {
+                exEightEndDateText.text = getHeaderFormattedDate(this)
+            }
+            exEightEndDateText.setTextColorRes(R.color.example_8_grey)
         } else {
-            exEightEndDateText.text = getString(R.string.end_date)
+            exEightEndDateText.text = getString(R.string.fa_end_date)
             exEightEndDateText.setTextColor(Color.GRAY)
         }
 
         // Enable save button if a range is selected or no date is selected at all, Airbnb style.
         exEightSaveButton.isEnabled = endDate != null || (startDate == null && endDate == null)
+    }
+
+    private fun getHeaderFormattedDate(persianCalendar: PersianCalendar): String {
+        return getString(R.string.header_date_format).format(
+            persianCalendar.persianWeekDayName,
+            persianCalendar.persianDay,
+            persianCalendar.persianMonthName
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -263,7 +286,10 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
     override fun onStart() {
         super.onStart()
         val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
-            setColorFilter(requireContext().getColorCompat(R.color.example_4_grey), PorterDuff.Mode.SRC_ATOP)
+            setColorFilter(
+                requireContext().getColorCompat(R.color.example_4_grey),
+                PorterDuff.Mode.SRC_ATOP
+            )
         }
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
         requireActivity().window.apply {

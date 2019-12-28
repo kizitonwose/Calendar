@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fa_start_date">تاریخ شروع</string>
+    <string name="fa_end_date">تاریخ پایان</string>
+    <string name="header_date_format">%s\n%d %s</string>
+</resources>

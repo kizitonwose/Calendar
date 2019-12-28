@@ -33,7 +33,7 @@
             android:paddingBottom="10dp">
 
             <TextView
-                android:id="@+id/exEightStartDateText"
+                android:id="@+id/exEightEndDateText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
@@ -60,7 +60,7 @@
 
 
             <TextView
-                android:id="@+id/exEightEndDateText"
+                android:id="@+id/exEightStartDateText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
@@ -115,7 +115,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/save"
-                app:backgroundTint="@color/example_4_green"
+                app:backgroundTint="@color/example_8_pink"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

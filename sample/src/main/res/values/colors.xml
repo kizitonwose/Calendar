@@ -43,5 +43,9 @@
     <color name="example_8_divider">#E3E0DB</color>
     <color name="example_8_background">#fdf9f4</color>
     <color name="example_8_day_text">#191818</color>
+    <color name="example_8_day_selected_text">#fb4570</color>
     <color name="example_8_pink">#fb6b90</color>
+    <color name="example_8_light_pink">#fdd2dd</color>
+    <color name="example_8_grey_past">#b1aeaa</color>
+    <color name="example_8_today_border">#22cae0</color>
 </resources>
