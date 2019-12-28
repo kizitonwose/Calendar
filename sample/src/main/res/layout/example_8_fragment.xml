@@ -97,8 +97,9 @@
             android:clipToPadding="false"
             android:paddingBottom="100dp"
             app:cv_isJalali="true"
-            app:cv_dayViewResource="@layout/example_4_calendar_day"
-            app:cv_monthHeaderResource="@layout/example_4_calendar_header" />
+            android:background="@color/example_8_background"
+            app:cv_dayViewResource="@layout/example_8_calendar_day"
+            app:cv_monthHeaderResource="@layout/example_8_calendar_header" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

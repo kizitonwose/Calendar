@@ -23,10 +23,10 @@ import com.kizitonwose.calendarview.utils.persian.*
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
+import kotlinx.android.synthetic.main.example_8_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_8_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
-import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
 
 class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
@@ -85,8 +85,8 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
-            val textView = view.exFourDayText
-            val roundBgView = view.exFourRoundBgView
+            val textView = view.exEightDayText
+            val roundBgView = view.exEightRoundBgView
 
             init {
                 view.setOnClickListener {
@@ -121,7 +121,7 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                 roundBgView.makeInVisible()
 
                 if (day.owner == DayOwner.THIS_MONTH) {
-                    textView.text = day.persianCalendar.persianDay.toString()
+                    textView.text = day.persianCalendar.persianDay.toString().persianNumbers()
 
                     if (day.date.isBefore(today)) {
                         textView.setTextColorRes(R.color.example_4_grey_past)
@@ -194,7 +194,7 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
             override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 val persianlCalendar = month.yearMonth.persianlCalendar()
-                val monthTitle = "${persianlCalendar.persianMonthName} ${persianlCalendar.persianYear}"
+                val monthTitle = "${persianlCalendar.persianMonthName} ${persianlCalendar.persianYear.toString().persianNumbers()}"
                 container.textView.text = monthTitle
             }
         }

@@ -39,4 +39,8 @@
     <color name="example_6_black">#BF000000</color>
     <color name="example_7_white">#D9FFFFFF</color>
     <color name="example_7_yellow">#FFEB3B</color>
+    <color name="example_8_grey">#323130</color>
+    <color name="example_8_divider">#E3E0DB</color>
+    <color name="example_8_background">#fdf9f4</color>
+    <color name="example_8_day_text">#191818</color>
 </resources>

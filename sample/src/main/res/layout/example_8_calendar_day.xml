@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--We have top and bottom margins on the TextView so there's more space between
+     continuous selected rows. This means that setting an oval background on it when
+     a single date is selected will result in a the background not being a perfect circle
+     since the view is not square in shape.
+     So we set the background on this view which has a margin on all sides instead-->
+    <View
+        android:id="@+id/exEightRoundBgView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp" />
+
+    <TextView
+        android:id="@+id/exEightDayText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/example_8_day_text"
+        tools:text="22" />
+</FrameLayout>
+

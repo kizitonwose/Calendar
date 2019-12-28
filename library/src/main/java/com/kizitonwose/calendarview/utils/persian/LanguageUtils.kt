@@ -1,12 +1,8 @@
 package com.kizitonwose.calendarview.utils.persian
 
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
-import org.threeten.bp.ZoneOffset
 import java.util.*
 
-fun String.getPersianNumbers(): String {
+fun String.persianNumbers(): String {
     var string = this
     string = string.replace("0", "۰")
     string = string.replace("1", "١")
@@ -21,22 +17,22 @@ fun String.getPersianNumbers(): String {
     return string
 }
 
-fun getPersianNumbers(strings: Array<String>): Array<String> {
+fun Array<String>.persianNumbers(): Array<String> {
+    for (i in indices) {
+        this[i] = this[i].persianNumbers()
+    }
+    return this
+}
+
+fun persianNumbers(strings: ArrayList<String>): ArrayList<String> {
     for (i in strings.indices) {
-        strings[i] = strings[i].getPersianNumbers()
+        strings[i] = strings[i].persianNumbers()
     }
     return strings
 }
 
-fun getPersianNumbers(strings: ArrayList<String>): ArrayList<String> {
-    for (i in strings.indices) {
-        strings[i] = strings[i].getPersianNumbers()
-    }
-    return strings
-}
-
-fun getLatinNumbers(string: String): String {
-    var string = string
+fun String.latinNumbers(): String {
+    var string = this
     string = string.replace("۰", "0")
     string = string.replace("١", "1")
     string = string.replace("۲", "2")
