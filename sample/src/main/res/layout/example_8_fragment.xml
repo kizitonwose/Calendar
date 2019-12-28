@@ -37,15 +37,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
-                android:gravity="start|center_vertical"
+                android:gravity="end|center_vertical"
                 android:minLines="2"
-                android:textColor="@color/example_4_grey"
+                android:textColor="@color/example_8_grey"
                 android:textSize="26sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/exEightHeaderDivider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Mon\n22 Apr" />
+                tools:text="دوشنبه\n22 بهمن" />
 
             <View
                 android:id="@+id/exEightHeaderDivider"
@@ -64,15 +64,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:gravity="end|center_vertical"
+                android:gravity="start|center_vertical"
                 android:minLines="2"
-                android:textColor="@color/example_4_grey"
+                android:textColor="@color/example_8_grey"
                 android:textSize="26sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/exEightHeaderDivider"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Thu\n9 May" />
+                tools:text="پنجشنبه\n9 آبان" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

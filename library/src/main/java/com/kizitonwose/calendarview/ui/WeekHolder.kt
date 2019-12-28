@@ -1,11 +1,16 @@
 package com.kizitonwose.calendarview.ui
 
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.kizitonwose.calendarview.model.CalendarDay
+import java.lang.RuntimeException
 
-internal class WeekHolder(dayConfig: DayConfig) {
+internal class WeekHolder(
+    dayConfig: DayConfig,
+    private val rightToLeft: Boolean = false
+) {
 
     val dayHolders = (1..7).map { DayHolder(dayConfig) }
 
@@ -22,6 +27,14 @@ internal class WeekHolder(dayConfig: DayConfig) {
             clipChildren = false //#ClipChildrenFix
             for (holder in dayHolders) {
                 addView(holder.inflateDayView(this))
+            }
+
+            if(rightToLeft) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    layoutDirection = View.LAYOUT_DIRECTION_RTL
+                }else{
+                    throw RuntimeException("Right to left layout is only supported in sdk >= 17")
+                }
             }
         }
         return container

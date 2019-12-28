@@ -11,11 +11,12 @@ internal class MonthViewHolder constructor(
     adapter: CalendarAdapter,
     rootLayout: ViewGroup,
     dayConfig: DayConfig,
+    isRightToLeftWeekDays: Boolean,
     private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
     private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?
 ) : RecyclerView.ViewHolder(rootLayout) {
 
-    private val weekHolders = (1..6).map { WeekHolder(dayConfig) }
+    private val weekHolders = (1..6).map { WeekHolder(dayConfig, isRightToLeftWeekDays) }
 
     val headerView: View? = rootLayout.findViewById(adapter.headerViewId)
     val footerView: View? = rootLayout.findViewById(adapter.footerViewId)

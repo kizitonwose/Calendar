@@ -208,6 +208,18 @@ open class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
+                // default direction in Jalali calendar is right to left
+                isRightToLeftWeekDays = value
+                updateAdapterMonthConfig()
+            }
+        }
+    /**
+     * Determines if this calendar should display week days from right to left
+     */
+    var isRightToLeftWeekDays = false
+        set(value) {
+            if (field != value) {
+                field = value
                 updateAdapterMonthConfig()
             }
         }
@@ -231,24 +243,47 @@ open class CalendarView : RecyclerView {
         init(attrs, 0, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(attrs, defStyleAttr, 0)
     }
 
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
-        val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
-        dayViewResource = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
-        monthHeaderResource = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
-        monthFooterResource = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
+        val a = context.obtainStyledAttributes(
+            attributeSet,
+            R.styleable.CalendarView,
+            defStyleAttr,
+            defStyleRes
+        )
+        dayViewResource =
+            a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
+        monthHeaderResource =
+            a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
+        monthFooterResource =
+            a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
         orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
-        scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
-        outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
-        inDateStyle = InDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_inDateStyle, inDateStyle.ordinal)]
+        scrollMode = ScrollMode.values()[a.getInt(
+            R.styleable.CalendarView_cv_scrollMode,
+            scrollMode.ordinal
+        )]
+        outDateStyle = OutDateStyle.values()[a.getInt(
+            R.styleable.CalendarView_cv_outDateStyle,
+            outDateStyle.ordinal
+        )]
+        inDateStyle = InDateStyle.values()[a.getInt(
+            R.styleable.CalendarView_cv_inDateStyle,
+            inDateStyle.ordinal
+        )]
         maxRowCount = a.getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
         monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
         hasBoundaries = a.getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
         isJalali = a.getBoolean(R.styleable.CalendarView_cv_isJalali, isJalali)
+        isRightToLeftWeekDays =
+            a.getBoolean(R.styleable.CalendarView_cv_isRightToLeftWeekDays, isRightToLeftWeekDays)
         a.recycle()
     }
 
@@ -263,7 +298,8 @@ open class CalendarView : RecyclerView {
             }
 
             // +0.5 => round to the nearest pixel
-            val squareSize = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
+            val squareSize =
+                (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
             if (dayWidth != squareSize || dayHeight != squareSize) {
                 sizedInternally = true
                 dayWidth = squareSize
@@ -421,15 +457,15 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterMonthConfig() {
         if (adapter != null) {
             calendarAdapter.monthConfig =
-                    MonthConfig(
-                            outDateStyle,
-                            inDateStyle,
-                            maxRowCount,
-                            startMonth ?: return,
-                            endMonth ?: return,
-                            firstDayOfWeek ?: return,
-                            hasBoundaries, isJalali
-                    )
+                MonthConfig(
+                    outDateStyle,
+                    inDateStyle,
+                    maxRowCount,
+                    startMonth ?: return,
+                    endMonth ?: return,
+                    firstDayOfWeek ?: return,
+                    hasBoundaries, isJalali
+                )
             calendarAdapter.notifyDataSetChanged()
             post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
         }
@@ -438,7 +474,14 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterViewConfig() {
         if (adapter != null) {
             calendarAdapter.viewConfig =
-                    ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass, isJalali)
+                ViewConfig(
+                    dayViewResource,
+                    monthHeaderResource,
+                    monthFooterResource,
+                    monthViewClass,
+                    isJalali,
+                    isRightToLeftWeekDays
+                )
             invalidateViewHolders()
         }
     }
@@ -608,12 +651,19 @@ open class CalendarView : RecyclerView {
 
             layoutManager = CalendarLayoutManager(this, orientation)
             adapter = CalendarAdapter(
-                    this,
-                    ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass,isJalali),
-                    MonthConfig(
-                            outDateStyle, inDateStyle, maxRowCount, startMonth,
-                            endMonth, firstDayOfWeek, hasBoundaries, isJalali
-                    )
+                this,
+                ViewConfig(
+                    dayViewResource,
+                    monthHeaderResource,
+                    monthFooterResource,
+                    monthViewClass,
+                    isJalali,
+                    isRightToLeftWeekDays
+                ),
+                MonthConfig(
+                    outDateStyle, inDateStyle, maxRowCount, startMonth,
+                    endMonth, firstDayOfWeek, hasBoundaries, isJalali
+                )
             )
         }
     }
@@ -624,9 +674,9 @@ open class CalendarView : RecyclerView {
      * See [updateEndMonth] and [updateMonthRange].
      */
     fun updateStartMonth(startMonth: YearMonth) = updateMonthRange(
-            startMonth,
-            endMonth
-                    ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
+        startMonth,
+        endMonth
+            ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
     )
 
     /**
@@ -635,9 +685,9 @@ open class CalendarView : RecyclerView {
      * See [updateStartMonth] and [updateMonthRange].
      */
     fun updateEndMonth(endMonth: YearMonth) = updateMonthRange(
-            startMonth
-                    ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?"),
-            endMonth
+        startMonth
+            ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?"),
+        endMonth
     )
 
     /**
@@ -651,24 +701,24 @@ open class CalendarView : RecyclerView {
 
         val oldConfig = calendarAdapter.monthConfig
         val newConfig = MonthConfig(
-                outDateStyle,
-                inDateStyle,
-                maxRowCount,
-                startMonth,
-                endMonth,
-                firstDayOfWeek
-                        ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?"),
-                hasBoundaries,
-                isJalali
+            outDateStyle,
+            inDateStyle,
+            maxRowCount,
+            startMonth,
+            endMonth,
+            firstDayOfWeek
+                ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?"),
+            hasBoundaries,
+            isJalali
         )
         calendarAdapter.monthConfig = newConfig
         DiffUtil.calculateDiff(MonthRangeDiffCallback(oldConfig.months, newConfig.months), false)
-                .dispatchUpdatesTo(calendarAdapter)
+            .dispatchUpdatesTo(calendarAdapter)
     }
 
     private class MonthRangeDiffCallback(
-            private val oldItems: List<CalendarMonth>,
-            private val newItems: List<CalendarMonth>
+        private val oldItems: List<CalendarMonth>,
+        private val newItems: List<CalendarMonth>
     ) : DiffUtil.Callback() {
 
         override fun getOldListSize() = oldItems.size
@@ -676,10 +726,10 @@ open class CalendarView : RecyclerView {
         override fun getNewListSize() = newItems.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                oldItems[oldItemPosition] == newItems[newItemPosition]
+            oldItems[oldItemPosition] == newItems[newItemPosition]
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                areItemsTheSame(oldItemPosition, newItemPosition)
+            areItemsTheSame(oldItemPosition, newItemPosition)
     }
 
     companion object {

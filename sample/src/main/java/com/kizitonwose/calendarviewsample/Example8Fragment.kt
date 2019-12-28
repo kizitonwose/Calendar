@@ -44,11 +44,11 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
     private val headerDateFormatter = DateTimeFormatter.ofPattern("EEE'\n'd MMM")
 
     private val startBackground: GradientDrawable by lazy {
-        requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start) as GradientDrawable
+        requireContext().getDrawableCompat(R.drawable.example_8_continuous_selected_bg_start) as GradientDrawable
     }
 
     private val endBackground: GradientDrawable by lazy {
-        requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end) as GradientDrawable
+        requireContext().getDrawableCompat(R.drawable.example_8_continuous_selected_bg_end) as GradientDrawable
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,12 +64,13 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
         // radius value which would equal half of the view's size beforehand.
         exEightCalendar.post {
             val radius = ((exEightCalendar.width / 7) / 2).toFloat()
-            startBackground.setCornerRadius(topLeft = radius, bottomLeft = radius)
-            endBackground.setCornerRadius(topRight = radius, bottomRight = radius)
+            endBackground.setCornerRadius(topLeft = radius, bottomLeft = radius)
+            startBackground.setCornerRadius(topRight = radius, bottomRight = radius)
         }
 
         // Set the First day of week of Persian Locale
         val daysOfWeek = daysOfWeekFromLocale(PersianCalendarConstants.getFaLocale())
+        daysOfWeek.reverse()
 
         legendLayout.children.forEachIndexed { index, view ->
             (view as TextView).apply {
@@ -130,7 +131,7 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                             startDate == day.date && endDate == null -> {
                                 textView.setTextColorRes(R.color.white)
                                 roundBgView.makeVisible()
-                                roundBgView.setBackgroundResource(R.drawable.example_4_single_selected_bg)
+                                roundBgView.setBackgroundResource(R.drawable.example_8_single_selected_bg)
                             }
                             day.date == startDate -> {
                                 textView.setTextColorRes(R.color.white)
@@ -138,7 +139,7 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                             }
                             startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
                                 textView.setTextColorRes(R.color.white)
-                                textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                                textView.setBackgroundResource(R.drawable.example_8_continuous_selected_bg_middle)
                             }
                             day.date == endDate -> {
                                 textView.setTextColorRes(R.color.white)
@@ -180,7 +181,7 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
                                 && startDate.persianMonth != day.persianCalendar.persianMonth
                                 && endDate.persianMonth != day.persianCalendar.persianMonth)
                         ) {
-                            textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                            textView.setBackgroundResource(R.drawable.example_8_continuous_selected_bg_middle)
                         }
                     }
                 }

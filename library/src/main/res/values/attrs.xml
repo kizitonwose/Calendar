@@ -38,6 +38,9 @@
              if false(default), Calendar will be Gregorian        -->
         <attr name="cv_isJalali" format="boolean" />
 
+        <!-- Determines if this calendar should display week days from right to left-->
+        <attr name="cv_isRightToLeftWeekDays" format="boolean" />
+
         <!--This determines the scroll direction of the the calendar. -->
         <attr name="cv_orientation" format="enum">
             <enum name="horizontal" value="0" />

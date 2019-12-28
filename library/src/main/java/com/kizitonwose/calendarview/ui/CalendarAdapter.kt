@@ -24,7 +24,8 @@ internal data class ViewConfig(
     @LayoutRes val monthHeaderRes: Int,
     @LayoutRes val monthFooterRes: Int,
     val monthViewClass: String?,
-    val isJalali:Boolean
+    val isJalali: Boolean,
+    val isRightToLeftWeekDays: Boolean
 )
 
 internal class CalendarAdapter(
@@ -100,22 +101,24 @@ internal class CalendarAdapter(
         }
 
         fun setupRoot(root: ViewGroup) {
-            ViewCompat.setPaddingRelative(root,
+            ViewCompat.setPaddingRelative(
+                root,
                 calView.monthPaddingStart, calView.monthPaddingTop,
                 calView.monthPaddingEnd, calView.monthPaddingBottom
             )
-            root.layoutParams = ViewGroup.MarginLayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT).apply {
-                bottomMargin = calView.monthMarginBottom
-                topMargin = calView.monthMarginTop
+            root.layoutParams =
+                ViewGroup.MarginLayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT).apply {
+                    bottomMargin = calView.monthMarginBottom
+                    topMargin = calView.monthMarginTop
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    marginStart = calView.monthMarginStart
-                    marginEnd = calView.monthMarginEnd
-                } else {
-                    leftMargin = calView.monthMarginStart
-                    rightMargin = calView.monthMarginEnd
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        marginStart = calView.monthMarginStart
+                        marginEnd = calView.monthMarginEnd
+                    } else {
+                        leftMargin = calView.monthMarginStart
+                        rightMargin = calView.monthMarginEnd
+                    }
                 }
-            }
         }
 
         val userRoot = if (viewConfig.monthViewClass != null) {
@@ -134,6 +137,7 @@ internal class CalendarAdapter(
                 calView.dayWidth, calView.dayHeight, viewConfig.dayViewRes,
                 calView.dayBinder as DayBinder<ViewContainer>
             ),
+            viewConfig.isRightToLeftWeekDays,
             calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
             calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
         )
@@ -197,18 +201,20 @@ internal class CalendarAdapter(
                 // view will end up having a blank space at the bottom unless the immediate previous and next
                 // indices are also missing the last row. I think there should be a better way to fix this.
                 if (calView.isHorizontal && calView.scrollMode == ScrollMode.PAGED) {
-                    val calWrapsHeight = calWrapsHeight ?: (calView.layoutParams.height == LP.WRAP_CONTENT).also {
-                        // We modify the layoutParams so we save the initial value set by the user.
-                        calWrapsHeight = it
-                    }
+                    val calWrapsHeight =
+                        calWrapsHeight ?: (calView.layoutParams.height == LP.WRAP_CONTENT).also {
+                            // We modify the layoutParams so we save the initial value set by the user.
+                            calWrapsHeight = it
+                        }
                     if (calWrapsHeight.not()) return // Bug only happens when the CalenderView wraps its height.
                     val visibleVH =
-                        calView.findViewHolderForAdapterPosition(visibleItemPos) as? MonthViewHolder ?: return
+                        calView.findViewHolderForAdapterPosition(visibleItemPos) as? MonthViewHolder
+                            ?: return
                     val newHeight = visibleVH.headerView?.height.orZero() +
-                        // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
-                        // So we calculate it again by checking the number of visible(non-empty) rows.
-                        visibleMonth.weekDays.size * calView.dayHeight +
-                        visibleVH.footerView?.height.orZero()
+                            // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
+                            // So we calculate it again by checking the number of visible(non-empty) rows.
+                            visibleMonth.weekDays.size * calView.dayHeight +
+                            visibleVH.footerView?.height.orZero()
                     if (calView.layoutParams.height != newHeight)
                         calView.layoutParams = calView.layoutParams.apply {
                             this.height = newHeight
@@ -235,7 +241,8 @@ internal class CalendarAdapter(
             if (firstMonthIndex == NO_INDEX) return NO_INDEX
 
             val firstCalMonth = months[firstMonthIndex]
-            val sameMonths = months.slice(firstMonthIndex until firstMonthIndex + firstCalMonth.numberOfSameMonth)
+            val sameMonths =
+                months.slice(firstMonthIndex until firstMonthIndex + firstCalMonth.numberOfSameMonth)
             val indexWithDateInSameMonth = sameMonths.indexOfFirst { months ->
                 months.weekDays.any { weeks -> weeks.any { it == day } }
             }
@@ -271,7 +278,8 @@ internal class CalendarAdapter(
 
             // We make sure that the view for the returned position is visible to a reasonable degree.
             val visibleItemPx = Rect().let { rect ->
-                val visibleItemView = layoutManager.findViewByPosition(visibleItemPos) ?: return NO_INDEX
+                val visibleItemView =
+                    layoutManager.findViewByPosition(visibleItemPos) ?: return NO_INDEX
                 visibleItemView.getGlobalVisibleRect(rect)
                 return@let if (calView.isVertical) {
                     rect.bottom - rect.top
@@ -299,7 +307,8 @@ internal class CalendarAdapter(
     }
 
     private fun findVisibleDay(isFirst: Boolean): CalendarDay? {
-        val visibleIndex = if (isFirst) findFirstVisibleMonthPosition() else findLastVisibleMonthPosition()
+        val visibleIndex =
+            if (isFirst) findFirstVisibleMonthPosition() else findLastVisibleMonthPosition()
         if (visibleIndex == NO_INDEX) return null
 
         val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null
@@ -310,7 +319,8 @@ internal class CalendarAdapter(
         return months[visibleIndex].weekDays.flatten()
             .run { if (isFirst) this else reversed() }
             .firstOrNull {
-                val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
+                val dayView = visibleItemView.findViewById<View?>(it.date.hashCode())
+                    ?: return@firstOrNull false
                 dayView.getGlobalVisibleRect(dayRect)
                 dayRect.intersect(monthRect)
             }
