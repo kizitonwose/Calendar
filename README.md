@@ -25,6 +25,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 - [x] Easily scroll to any date or month view using the date.
 - [x] Use all RecyclerView customisations(decorators etc) since CalendarView extends from RecyclerView.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/CalendarView/issues/1) The library provides the logic, you provide the views.
+- [x] Supports [Jalali(Shamsi) Calendar](https://en.wikipedia.org/wiki/Jalali_calendar) 
 
 ## Sample project
 
@@ -147,6 +148,17 @@ If `true`, a section can only contain dates belonging to that month, its inDates
 - **inDateStyle**: This Determines how inDates are generated for each month on the calendar. If set to `allMonths`, the calendar will generate inDates for all months, if set to `firstMonth` inDates will be generated for the first month only and if set to `none`, inDates will not be generated, this means that there will be no offset on any month.
 
 - **outDateStyle**: This determines how outDates are generated for each month on the calendar. If `endOfRow `, the calendar will generate outDates until it reaches the first end of a row. This means that if a month has 6 rows, it will display 6 rows and if a month has 5 rows, it will display 5 rows. However, if this value is set to `endOfGrid`, the calendar will generate outDates until it reaches the end of a 6 x 7 grid. This means that all months will have 6 rows.
+
+- **isJalali**: Determines if this calendar should display Jalali(Shamsi) Calendar or Gregorian.
+If `true`, Calendar will be Jalali(Shamsi)
+if `false`(default), Calendar will be Gregorian
+[Read more about Jalali Calendar](https://en.wikipedia.org/wiki/Jalali_calendar)
+
+- **isRightToLeftWeekDays**: Determines if this calendar should display week days from right to left.
+_Jalali(Shamsi) calendars display days from right to left usally._
+**Requires API level 17 or higher**
+
+
 
 If you are wondering what `outDates` and `inDates` mean, let's use the screenshot below as an example.
 
