@@ -77,9 +77,9 @@ class Example8Fragment : BaseFragment(), HasToolbar, HasBackButton {
         legendLayout.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text =
-                    daysOfWeek[index].getPersianDisplayFirstCharString()// getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                    daysOfWeek[index].getPersianDisplayFirstCharString()
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
-                setTextColorRes(R.color.example_4_grey)
+                setTextColorRes(R.color.example_8_grey)
             }
         }
 

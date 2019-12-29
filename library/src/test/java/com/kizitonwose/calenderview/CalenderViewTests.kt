@@ -20,6 +20,10 @@ class CalenderViewTests(private val isJalali: Boolean, private val firstDayOfWee
 
     // You can see what May and November 2019 with Monday as the first day of
     // week look like in the included May2019.png and November2019.png files.
+    //
+    // Also, you can see what May and November 2019 (Ordibehesht and Aban 1398) with Saturday
+    // as the first day of week look like in the included May2019Jalali(Ordibehesht1398).png and
+    // Nov2019Jalali(Aban1398).png files.
     private val may2019 = YearMonth.of(2019, 5)
     private val nov2019 = may2019.plusMonths(6)
 
