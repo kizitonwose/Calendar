@@ -25,7 +25,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 - [x] Easily scroll to any date or month view using the date.
 - [x] Use all RecyclerView customisations(decorators etc) since CalendarView extends from RecyclerView.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/CalendarView/issues/1) The library provides the logic, you provide the views.
-- [x] Supports [Jalali(Shamsi) Calendar](https://en.wikipedia.org/wiki/Jalali_calendar) 
+- [x] Supports [Jalali(Shamsi/Hijri) Calendar](https://en.wikipedia.org/wiki/Solar_Hijri_calendar) 
 
 ## Sample project
 
@@ -152,7 +152,7 @@ If `true`, a section can only contain dates belonging to that month, its inDates
 - **isJalali**: Determines if this calendar should display Jalali(Shamsi) Calendar or Gregorian.
 If `true`, Calendar will be Jalali(Shamsi)
 if `false`(default), Calendar will be Gregorian
-[Read more about Jalali Calendar](https://en.wikipedia.org/wiki/Jalali_calendar)
+[Read more about Jalali/Hijri Calendar](https://en.wikipedia.org/wiki/Solar_Hijri_calendar)
 
 - **isRightToLeftWeekDays**: Determines if this calendar should display week days from right to left.
 _Jalali(Shamsi) calendars display days from right to left usally._
