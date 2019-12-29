@@ -6,6 +6,8 @@ import com.kizitonwose.calendarview.model.MonthConfig
 import com.kizitonwose.calendarview.model.OutDateStyle
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.YearMonth
 
@@ -13,19 +15,42 @@ import org.threeten.bp.YearMonth
  * These are core functionality tests.
  * The UI behaviour tests are in the sample project.
  */
-class CalenderViewTests {
+@RunWith(Parameterized::class)
+class CalenderViewTests(private val isJalali: Boolean, private val firstDayOfWeek: DayOfWeek) {
 
     // You can see what May and November 2019 with Monday as the first day of
     // week look like in the included May2019.png and November2019.png files.
     private val may2019 = YearMonth.of(2019, 5)
     private val nov2019 = may2019.plusMonths(6)
-    private val firstDayOfWeek = DayOfWeek.MONDAY
+
+
+    companion object {
+        @JvmStatic
+        @Parameterized.Parameters(name = "isJalali = {0}, firstDayOfWeek = {1}")
+        fun isJalaliParameters() = listOf(
+                arrayOf(false, DayOfWeek.MONDAY),
+                arrayOf(true, DayOfWeek.SATURDAY)
+        )
+
+
+    }
 
     @Test
     fun `test all month in date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW, isJalali)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW, false)
 
         val validInDateIndices = (0..1)
+        val inDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validInDateIndices.contains(index) }
+
+        // inDates are in appropriate indices and have accurate count.
+        assertTrue(inDatesInMonth.all { it.owner == DayOwner.PREVIOUS_MONTH })
+    }
+
+    @Test
+    fun `test all month in date generation works as expected when is Jalali calendar`() {
+        val weekDays = MonthConfig.generateWeekDays(nov2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW, true)
+
+        val validInDateIndices = (0..3)
         val inDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validInDateIndices.contains(index) }
 
         // inDates are in appropriate indices and have accurate count.
@@ -41,7 +66,7 @@ class CalenderViewTests {
     @Test
     fun `test first month in date generation works as expected`() {
         val months = MonthConfig.generateBoundedMonths(
-                may2019, nov2019, firstDayOfWeek, 6, InDateStyle.FIRST_MONTH, OutDateStyle.NONE, isJalali
+                may2019, nov2019, firstDayOfWeek, 6, InDateStyle.FIRST_MONTH, OutDateStyle.NONE
         )
 
         // inDates are in the first month.
@@ -93,7 +118,7 @@ class CalenderViewTests {
         val maxRowCount = 3
         val months = MonthConfig.generateBoundedMonths(
                 may2019, may2019.plusMonths(20),
-                firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_ROW, isJalali
+                firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_ROW
         )
 
         assertTrue(months.all { it.weekDays.count() <= maxRowCount })
@@ -119,7 +144,8 @@ class CalenderViewTests {
         val maxRowCount = 3
         val months = MonthConfig.generateUnboundedMonths(
                 may2019.minusMonths(40), may2019.plusMonths(50),
-                firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID, isJalali
+                firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID,
+                isJalali
         )
 
         // The number of weeks in all CalendarMonth instances except the last one must match
@@ -135,7 +161,8 @@ class CalenderViewTests {
         val maxRowCount = 6
         MonthConfig.generateUnboundedMonths(
                 YearMonth.of(2019, 2), YearMonth.of(2021, 2),
-                DayOfWeek.SUNDAY, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID, isJalali
+                DayOfWeek.SUNDAY, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID,
+                isJalali
         )
         // No assertion necessary, as this particular range would throw an exception previously
         // when trying to build a day that is out of bounds (eg: December 32).

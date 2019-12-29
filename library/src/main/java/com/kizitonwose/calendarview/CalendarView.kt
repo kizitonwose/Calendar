@@ -203,6 +203,8 @@ open class CalendarView : RecyclerView {
      * If true, Calendar will be Jalali(Shamsi)
      * if false(default), Calendar will be Gregorian
      *
+     * @see <a href="https://en.wikipedia.org/wiki/Jalali_calendar">Read more about Jalali Calendar</a>
+     *
      */
     var isJalali = false
         set(value) {
@@ -464,7 +466,8 @@ open class CalendarView : RecyclerView {
                     startMonth ?: return,
                     endMonth ?: return,
                     firstDayOfWeek ?: return,
-                    hasBoundaries, isJalali
+                    hasBoundaries,
+                        isJalali
                 )
             calendarAdapter.notifyDataSetChanged()
             post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }

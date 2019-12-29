@@ -47,7 +47,7 @@ internal data class MonthConfig(
                 maxRowCount: Int,
                 inDateStyle: InDateStyle,
                 outDateStyle: OutDateStyle,
-                isJalali: Boolean
+                isJalali: Boolean = false
         ): List<CalendarMonth> {
             val months = mutableListOf<CalendarMonth>()
             var currentMonth = startMonth
