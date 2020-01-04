@@ -42,7 +42,7 @@ import java.lang.Thread.sleep
 class CalenderViewTests {
 
     @get:Rule
-    private val homeScreenRule = ActivityTestRule<HomeActivity>(HomeActivity::class.java, true, false)
+    private val homeScreenRule = ActivityTestRule(HomeActivity::class.java, true, false)
 
     private val currentMonth = YearMonth.now()
 
