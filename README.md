@@ -10,7 +10,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 
 **With this library, your calendar will look however you want it to.**
 
-![Preview](https://raw.githubusercontent.com/kizitonwose/CalendarView/master/images/image-all.png)
+![Preview](https://raw.githubusercontent.com/sma6871/CalendarView/master/images/image-all.png)
 
 ## Features
 
@@ -25,7 +25,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 - [x] Easily scroll to any date or month view using the date.
 - [x] Use all RecyclerView customisations(decorators etc) since CalendarView extends from RecyclerView.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/CalendarView/issues/1) The library provides the logic, you provide the views.
-- [x] Supports [Jalali(Shamsi/Hijri) Calendar](https://en.wikipedia.org/wiki/Solar_Hijri_calendar) 
+- [x] **Supports [Jalali(Shamsi/Hijri) Calendar](https://en.wikipedia.org/wiki/Solar_Hijri_calendar)**
 
 ## Sample project
 
