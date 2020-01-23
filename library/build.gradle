@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.kizitonwose'
+def artifact = 'CalendarView'
 
 android {
     compileSdkVersion versions.compile_sdk
@@ -25,6 +26,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += ['-module-name', "$group.$artifact"]
     }
 }
 
