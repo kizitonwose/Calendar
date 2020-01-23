@@ -19,10 +19,10 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.*
-import kotlinx.android.synthetic.main.example_6_fragment.*
 import kotlinx.android.synthetic.main.example_1_fragment.*
 import kotlinx.android.synthetic.main.example_2_fragment.*
 import kotlinx.android.synthetic.main.example_5_fragment.*
+import kotlinx.android.synthetic.main.example_6_fragment.*
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -42,7 +42,7 @@ import java.lang.Thread.sleep
 class CalenderViewTests {
 
     @get:Rule
-    private val homeScreenRule = ActivityTestRule(HomeActivity::class.java, true, false)
+    val homeScreenRule = ActivityTestRule(HomeActivity::class.java, true, false)
 
     private val currentMonth = YearMonth.now()
 
