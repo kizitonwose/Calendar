@@ -25,7 +25,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_5_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_5_event_item_view.*
-import kotlinx.android.synthetic.main.exmaple_5_fragment.*
+import kotlinx.android.synthetic.main.example_5_fragment.*
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
@@ -79,7 +79,7 @@ class Example5Fragment : BaseFragment(), HasToolbar {
     override val titleRes: Int = R.string.example_5_title
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.exmaple_5_fragment, container, false)
+        return inflater.inflate(R.layout.example_5_fragment, container, false)
     }
 
     private var selectedDate: LocalDate? = null
