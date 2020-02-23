@@ -186,6 +186,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                     if (firstDate.yearMonth == lastDate.yearMonth) {
                         exOneCalendar.scrollToMonth(firstDate.yearMonth)
                     } else {
+                        // We compare the next with the last month on the calendar so we don't go over.
                         exOneCalendar.scrollToMonth(minOf(firstDate.yearMonth.next, endMonth))
                     }
                 }
