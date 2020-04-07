@@ -3,9 +3,9 @@ package com.kizitonwose.calendarview.model
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.previous
 import com.kizitonwose.calendarview.utils.yearMonth
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
 import java.io.Serializable
+import java.time.LocalDate
+import java.time.YearMonth
 
 
 data class CalendarDay internal constructor(val date: LocalDate, val owner: DayOwner) :

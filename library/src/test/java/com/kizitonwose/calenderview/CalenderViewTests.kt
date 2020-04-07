@@ -6,8 +6,9 @@ import com.kizitonwose.calendarview.model.MonthConfig
 import com.kizitonwose.calendarview.model.OutDateStyle
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.YearMonth
+import java.time.DayOfWeek
+import java.time.YearMonth
+
 
 /**
  * These are core functionality tests.
