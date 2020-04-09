@@ -12,19 +12,10 @@ import kotlinx.android.synthetic.main.home_activity.*
 class HomeActivity : AppCompatActivity() {
 
     private val examplesAdapter = HomeOptionsAdapter {
-        val instance = when (it.titleRes) {
-            R.string.example_1_title -> Example1Fragment()
-            R.string.example_2_title -> Example2Fragment()
-            R.string.example_3_title -> Example3Fragment()
-            R.string.example_4_title -> Example4Fragment()
-            R.string.example_5_title -> Example5Fragment()
-            R.string.example_6_title -> Example6Fragment()
-            R.string.example_7_title -> Example7Fragment()
-            else -> throw IllegalArgumentException()
-        }
+        val fragment = it.createView()
         supportFragmentManager.beginTransaction()
             .run {
-                if (instance is Example1Fragment || instance is Example4Fragment || instance is Example5Fragment) {
+                if (fragment is Example1Fragment || fragment is Example4Fragment || fragment is Example5Fragment) {
                     return@run setCustomAnimations(
                         R.anim.slide_in_up,
                         R.anim.fade_out,
@@ -39,8 +30,8 @@ class HomeActivity : AppCompatActivity() {
                     R.anim.slide_out_right
                 )
             }
-            .add(R.id.homeContainer, instance, instance.javaClass.simpleName)
-            .addToBackStack(instance.javaClass.simpleName)
+            .add(R.id.homeContainer, fragment, fragment.javaClass.simpleName)
+            .addToBackStack(fragment.javaClass.simpleName)
             .commit()
     }
 

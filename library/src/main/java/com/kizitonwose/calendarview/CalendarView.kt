@@ -583,9 +583,6 @@ open class CalendarView : RecyclerView {
             this.endMonth = endMonth
             this.firstDayOfWeek = firstDayOfWeek
 
-            clipToPadding = false
-            clipChildren = false //#ClipChildrenFix
-
             // Remove the listener before adding again to prevent
             // multiple additions if we already added it before.
             removeOnScrollListener(scrollListenerInternal)

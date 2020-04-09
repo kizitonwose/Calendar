@@ -65,7 +65,6 @@ internal class CalendarAdapter(
         val rootLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             id = rootViewId
-            clipChildren = false //#ClipChildrenFix
         }
 
         if (viewConfig.monthHeaderRes != 0) {
@@ -83,7 +82,6 @@ internal class CalendarAdapter(
             layoutParams = LinearLayout.LayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT)
             orientation = LinearLayout.VERTICAL
             id = bodyViewId
-            clipChildren = false //#ClipChildrenFix
         }
         rootLayout.addView(monthBodyLayout)
 
@@ -99,7 +97,8 @@ internal class CalendarAdapter(
         }
 
         fun setupRoot(root: ViewGroup) {
-            ViewCompat.setPaddingRelative(root,
+            ViewCompat.setPaddingRelative(
+                root,
                 calView.monthPaddingStart, calView.monthPaddingTop,
                 calView.monthPaddingEnd, calView.monthPaddingBottom
             )
@@ -204,17 +203,19 @@ internal class CalendarAdapter(
                     val visibleVH =
                         calView.findViewHolderForAdapterPosition(visibleItemPos) as? MonthViewHolder ?: return
                     val newHeight = visibleVH.headerView?.height.orZero() +
-                        // For some reason `visibleVH.bodyLayout.height` does not give us the updated height.
-                        // So we calculate it again by checking the number of visible(non-empty) rows.
+                        // visibleVH.bodyLayout.height` won't not give us the right height as it differs
+                        // depending on row count in the month. So we calculate the appropriate height
+                        // by checking the number of visible(non-empty) rows.
                         visibleMonth.weekDays.size * calView.dayHeight +
                         visibleVH.footerView?.height.orZero()
-                    if (calView.layoutParams.height != newHeight)
+                    if (calView.layoutParams.height != newHeight) {
                         calView.layoutParams = calView.layoutParams.apply {
                             this.height = newHeight
-                            // If we reset the calendar's height from a short item view's height(month with 5 rows)
-                            // to a longer one(month with 6 rows), the row outside the old height is not drawn.
-                            // This is fixed by setting `clipChildren = false` on all parents. #ClipChildrenFix
                         }
+                        visibleVH.itemView.layoutParams = visibleVH.itemView.layoutParams.apply {
+                            this.height = newHeight
+                        }
+                    }
                 }
             }
         }
