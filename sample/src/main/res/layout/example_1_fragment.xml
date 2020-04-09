@@ -51,38 +51,33 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.kizitonwose.calendarview.CalendarView
             android:id="@+id/exOneCalendar"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             app:cv_dayViewResource="@layout/example_1_calendar_day"
             app:cv_orientation="horizontal"
             app:cv_outDateStyle="endOfRow"
             app:cv_inDateStyle="allMonths"
-            app:cv_scrollMode="paged"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:cv_scrollMode="paged" />
 
         <CheckBox
             android:id="@+id/weekModeCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="20dp"
             android:buttonTint="@color/example_1_white"
             android:padding="2dp"
             android:text="@string/week_mode"
             android:textColor="@color/example_1_white"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_gravity="bottom|center_horizontal" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 
 </LinearLayout>
