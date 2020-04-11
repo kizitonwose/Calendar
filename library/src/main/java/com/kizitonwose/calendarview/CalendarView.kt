@@ -6,7 +6,6 @@ import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
@@ -198,6 +197,15 @@ open class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The duration in milliseconds of the animation used to adjust the CalendarView's
+     * height when [scrollMode] is [ScrollMode.PAGED] and the CalendarView's height is
+     * set to `wrap_content`. The height change happens when the CalendarView scrolls to
+     * a month which has less or more rows than the previous one. Default value is 200.
+     * To disable the animation, set this value to zero.
+     */
+    var wrappedPageHeightAnimationDuration = 200
+
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
     private var firstDayOfWeek: DayOfWeek? = null
@@ -234,6 +242,10 @@ open class CalendarView : RecyclerView {
         maxRowCount = a.getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
         monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
         hasBoundaries = a.getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
+        wrappedPageHeightAnimationDuration = a.getInt(
+            R.styleable.CalendarView_cv_wrappedPageHeightAnimationDuration,
+            wrappedPageHeightAnimationDuration
+        )
         a.recycle()
     }
 
@@ -563,7 +575,7 @@ open class CalendarView : RecyclerView {
         }
     }
 
-    private val pagerSnapHelper = PagerSnapHelper()
+    private val pagerSnapHelper = CalenderPageSnapHelper()
 
     /**
      * Setup the CalendarView. You can call this any time to change the

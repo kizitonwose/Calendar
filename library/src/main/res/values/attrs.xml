@@ -70,5 +70,11 @@
             <enum name="continuous" value="0" />
             <enum name="paged" value="1" />
         </attr>
+
+        <!-- The duration in milliseconds of the animation used to adjust the CalendarView's
+        height when `scrollMode` is `paged` and the CalendarView height is set to `wrap_content`.
+        The height change happens when the CalendarView scrolls to a month which has less or more
+        rows than the previous one. Default value is 200. To disable the animation, set this value to zero. -->
+        <attr name="cv_wrappedPageHeightAnimationDuration" format="integer" />
     </declare-styleable>
 </resources>
