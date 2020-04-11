@@ -1,5 +1,6 @@
 package com.kizitonwose.calendarview.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Rect
 import android.os.Build
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.core.view.ViewCompat
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.*
@@ -164,6 +166,7 @@ internal class CalendarAdapter(
 
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
+    private var initialLayout = true
     fun notifyMonthScrollListenerIfNeeded() {
         // Guard for cv.post() calls and other callbacks which use this method.
         if (!isAttached) return
@@ -194,12 +197,14 @@ internal class CalendarAdapter(
                 // calculating height and uses the tallest one of the three meaning that the current index's
                 // view will end up having a blank space at the bottom unless the immediate previous and next
                 // indices are also missing the last row. I think there should be a better way to fix this.
-                if (calView.isHorizontal && calView.scrollMode == ScrollMode.PAGED) {
+                // New: Also fixes issue where the calendar does not wrap each month's height when in vertical,
+                // paged mode and just matches parent's height instead.
+                if (calView.scrollMode == ScrollMode.PAGED) {
                     val calWrapsHeight = calWrapsHeight ?: (calView.layoutParams.height == LP.WRAP_CONTENT).also {
                         // We modify the layoutParams so we save the initial value set by the user.
                         calWrapsHeight = it
                     }
-                    if (calWrapsHeight.not()) return // Bug only happens when the CalenderView wraps its height.
+                    if (!calWrapsHeight) return // Bug only happens when the CalenderView wraps its height.
                     val visibleVH =
                         calView.findViewHolderForAdapterPosition(visibleItemPos) as? MonthViewHolder ?: return
                     val newHeight = visibleVH.headerView?.height.orZero() +
@@ -208,13 +213,16 @@ internal class CalendarAdapter(
                         // by checking the number of visible(non-empty) rows.
                         visibleMonth.weekDays.size * calView.dayHeight +
                         visibleVH.footerView?.height.orZero()
-                    if (calView.layoutParams.height != newHeight) {
-                        calView.layoutParams = calView.layoutParams.apply {
-                            this.height = newHeight
+                    if (calView.height != newHeight) {
+                        ValueAnimator.ofInt(calView.height, newHeight).apply {
+                            duration = if (initialLayout) 0 else calView.wrappedPageHeightAnimationDuration.toLong()
+                            addUpdateListener {
+                                calView.updateLayoutParams { height = it.animatedValue as Int }
+                                visibleVH.itemView.requestLayout()
+                            }
+                            start()
                         }
-                        visibleVH.itemView.layoutParams = visibleVH.itemView.layoutParams.apply {
-                            this.height = newHeight
-                        }
+                        if (initialLayout) initialLayout = false
                     }
                 }
             }
