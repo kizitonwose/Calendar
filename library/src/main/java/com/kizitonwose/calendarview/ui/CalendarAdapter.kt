@@ -215,6 +215,7 @@ internal class CalendarAdapter(
                         visibleVH.footerView?.height.orZero()
                     if (calView.height != newHeight) {
                         ValueAnimator.ofInt(calView.height, newHeight).apply {
+                            // Don't animate when the view is shown initially.
                             duration = if (initialLayout) 0 else calView.wrappedPageHeightAnimationDuration.toLong()
                             addUpdateListener {
                                 calView.updateLayoutParams { height = it.animatedValue as Int }
@@ -222,8 +223,8 @@ internal class CalendarAdapter(
                             }
                             start()
                         }
-                        if (initialLayout) initialLayout = false
                     }
+                    if (initialLayout) initialLayout = false
                 }
             }
         }

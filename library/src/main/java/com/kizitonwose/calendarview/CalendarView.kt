@@ -206,6 +206,8 @@ open class CalendarView : RecyclerView {
      */
     var wrappedPageHeightAnimationDuration = 200
 
+    private val pagerSnapHelper = CalenderPageSnapHelper()
+
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
     private var firstDayOfWeek: DayOfWeek? = null
@@ -226,7 +228,7 @@ open class CalendarView : RecyclerView {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(attrs, defStyleAttr, 0)
+        init(attrs, defStyleAttr, defStyleAttr)
     }
 
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
@@ -574,8 +576,6 @@ open class CalendarView : RecyclerView {
             }
         }
     }
-
-    private val pagerSnapHelper = CalenderPageSnapHelper()
 
     /**
      * Setup the CalendarView. You can call this any time to change the

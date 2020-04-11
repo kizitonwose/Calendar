@@ -75,13 +75,9 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
             targetPosition = position
         }
 
-        override fun getVerticalSnapPreference(): Int {
-            return SNAP_TO_START
-        }
+        override fun getVerticalSnapPreference(): Int = SNAP_TO_START
 
-        override fun getHorizontalSnapPreference(): Int {
-            return SNAP_TO_START
-        }
+        override fun getHorizontalSnapPreference(): Int = SNAP_TO_START
 
         override fun calculateDyToMakeVisible(view: View, snapPreference: Int): Int {
             val dy = super.calculateDyToMakeVisible(view, snapPreference)
