@@ -6,7 +6,6 @@ import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
@@ -563,7 +562,7 @@ open class CalendarView : RecyclerView {
         }
     }
 
-    private val pagerSnapHelper = PagerSnapHelper()
+    private val pagerSnapHelper = CalenderPageSnapHelper()
 
     /**
      * Setup the CalendarView. You can call this any time to change the
