@@ -266,6 +266,16 @@ dependencies {
 ```
 **Note: `<latest-version>` value can be found on the JitPack badge above the preview images.**
 
+## FAQ
+
+**Q**: How do I use this library in a Java project?
+
+**A**: It works out of the box, however, the `MonthScrollListener` is not an interface but a Kotlin function. To set the `MonthScrollListener` in a Java project see [this](https://github.com/kizitonwose/CalendarView/issues/74).
+
+**Q**: Why am I getting the same `YearMonth` value in the `CalendarMonth` passed into the `MonthScrollListener`?
+
+**A**: This is because you have set `app:cv_hasBoundaries` to `false` in XML or have called `calendarView.hasBoundaries = false` in code. When this is set, the underlying `YearMonth` is undefined on all indices as each index could have multiple months depending on your `maxRowCount` value. If you need the month value with the `hasBoundaries = false` setting, you can get it from any of the `CalendarDay` values in the `CalendarMonth` class. You can always check if the first and last dates are from different months and act accordingly.
+
 ## Contributing
 
 Found a bug? feel free to fix it and send a pull request or [open an issue](https://github.com/kizitonwose/CalendarView/issues).
