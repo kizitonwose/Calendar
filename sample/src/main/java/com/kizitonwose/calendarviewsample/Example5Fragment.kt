@@ -26,13 +26,12 @@ import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_5_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_5_event_item_view.*
 import kotlinx.android.synthetic.main.example_5_fragment.*
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.TextStyle
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
-
 
 data class Flight(val time: LocalDateTime, val departure: Airport, val destination: Airport, @ColorRes val color: Int) {
     data class Airport(val city: String, val code: String)

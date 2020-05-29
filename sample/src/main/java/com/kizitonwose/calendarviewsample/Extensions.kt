@@ -11,10 +11,9 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.temporal.WeekFields
+import java.time.DayOfWeek
+import java.time.temporal.WeekFields
 import java.util.*
-
 
 fun View.makeVisible() {
     visibility = View.VISIBLE

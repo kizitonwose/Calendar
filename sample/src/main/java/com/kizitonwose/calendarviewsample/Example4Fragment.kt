@@ -23,10 +23,10 @@ import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
 import kotlinx.android.synthetic.main.example_4_fragment.*
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.TextStyle
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 
 class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {

@@ -1,6 +1,6 @@
 package com.kizitonwose.calendarviewsample
 
-import org.threeten.bp.YearMonth
+import java.time.YearMonth
 
 private typealias Airport = Flight.Airport
 

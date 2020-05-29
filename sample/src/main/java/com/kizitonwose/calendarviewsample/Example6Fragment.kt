@@ -22,8 +22,8 @@ import kotlinx.android.synthetic.main.calendar_day_legend.view.*
 import kotlinx.android.synthetic.main.example_6_calendar_day.view.*
 import kotlinx.android.synthetic.main.example_6_calendar_header.view.*
 import kotlinx.android.synthetic.main.example_6_fragment.*
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 // We assign this class to the `monthViewClass` attribute in XML.
 // See usage in example_6_fragment.xml

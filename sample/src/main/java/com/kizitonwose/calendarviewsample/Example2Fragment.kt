@@ -17,10 +17,9 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import kotlinx.android.synthetic.main.calendar_day_legend.*
 import kotlinx.android.synthetic.main.example_2_calendar_header.view.*
 import kotlinx.android.synthetic.main.example_2_fragment.*
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
-
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 class Example2Fragment : BaseFragment(), HasToolbar, HasBackButton {
 
