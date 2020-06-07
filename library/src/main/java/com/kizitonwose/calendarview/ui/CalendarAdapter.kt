@@ -301,9 +301,7 @@ internal class CalendarAdapter(
                     visibleItemPos
                 }
             }
-
         }
-
         return visibleItemPos
     }
 

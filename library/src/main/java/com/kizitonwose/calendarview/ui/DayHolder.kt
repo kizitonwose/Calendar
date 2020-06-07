@@ -67,5 +67,4 @@ internal class DayHolder(private val config: DayConfig) {
     fun reloadView() {
         bindDayView(day)
     }
-
 }

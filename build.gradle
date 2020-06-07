@@ -24,12 +24,13 @@ buildscript {
     repositories {
         google()
         jcenter()
-
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin_lang"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'org.jlleitschuh.gradle:ktlint-gradle:9.2.1'
     }
 }
 
@@ -37,6 +38,13 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
+
+    apply plugin: 'org.jlleitschuh.gradle.ktlint'
+
+    ktlint {
+        version = "0.36.0"
+        disabledRules = ["no-wildcard-imports"]
     }
 }
 

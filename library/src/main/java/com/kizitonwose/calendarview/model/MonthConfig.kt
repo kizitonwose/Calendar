@@ -109,7 +109,7 @@ internal data class MonthConfig(
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
             allDaysGroup.chunked(maxRowCount) { ephemeralMonthWeeks ->
-               val monthWeeks = ephemeralMonthWeeks.toMutableList()
+                val monthWeeks = ephemeralMonthWeeks.toMutableList()
 
                 // Add the outDates for the last row if needed.
                 if (monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
@@ -212,7 +212,6 @@ internal data class MonthConfig(
                 // Use toMutableList() to create a copy of the ephemeral list.
                 thisMonthDays.chunked(7).toMutableList()
             }
-
 
             if (outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
                 // Add out-dates for the last row.
