@@ -44,7 +44,7 @@ allprojects {
 
     ktlint {
         version = "0.36.0"
-        disabledRules = ["no-wildcard-imports"]
+        disabledRules = ["no-wildcard-imports", "import-ordering"]
     }
 }
 
