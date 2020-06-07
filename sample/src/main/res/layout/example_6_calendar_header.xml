@@ -8,22 +8,24 @@
 
     <TextView
         android:id="@+id/exSixMonthText"
-        android:textSize="20sp"
-        android:fontFamily="sans-serif-medium"
-        android:textColor="@color/example_6_black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:textColor="@color/example_6_black"
+        android:textSize="20sp"
         tools:text="June 2019" />
 
-    <include layout="@layout/calendar_day_legend" />
+    <include
+        android:id="@+id/legendLayout"
+        layout="@layout/calendar_day_legend" />
 
     <View
-        android:layout_marginTop="10dp"
-        android:background="#eeeeee"
         android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#eeeeee" />
 
 </LinearLayout>
 

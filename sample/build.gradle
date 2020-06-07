@@ -1,8 +1,5 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion versions.compile_sdk
@@ -13,6 +10,9 @@ android {
         versionCode versions.version_code
         versionName versions.version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        viewBinding = true
     }
     buildTypes {
         release {
@@ -26,9 +26,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    androidExtensions {
-        experimental true
     }
 }
 

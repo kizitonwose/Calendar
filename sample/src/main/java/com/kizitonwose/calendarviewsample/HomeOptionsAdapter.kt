@@ -1,16 +1,16 @@
 package com.kizitonwose.calendarviewsample
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.home_options_item_view.*
+import com.kizitonwose.calendarviewsample.databinding.HomeOptionsItemViewBinding
 
-data class ExampleItem(@StringRes val titleRes: Int, @StringRes val subtitleRes: Int, val createView: () -> BaseFragment)
+data class ExampleItem(
+    @StringRes val titleRes: Int,
+    @StringRes val subtitleRes: Int,
+    val createView: () -> BaseFragment
+)
 
 class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
     RecyclerView.Adapter<HomeOptionsAdapter.HomeOptionsViewHolder>() {
@@ -27,7 +27,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {
         return HomeOptionsViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.home_options_item_view, parent, false)
+            HomeOptionsItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
         )
     }
 
@@ -37,8 +37,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
     override fun getItemCount(): Int = examples.size
 
-    inner class HomeOptionsViewHolder(override val containerView: View) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class HomeOptionsViewHolder(private val binding: HomeOptionsItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             itemView.setOnClickListener {
@@ -48,13 +47,15 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
         fun bind(item: ExampleItem) {
             val context = itemView.context
+            binding.itemOptionTitle.apply {
+                text = if (item.titleRes != 0) context.getString(item.titleRes) else null
+                isVisible = text.isNotBlank()
+            }
 
-            itemOptionTitle.text = if (item.titleRes != 0) context.getString(item.titleRes) else null
-            itemOptionTitle.isVisible = itemOptionTitle.text.isNotBlank()
-
-            itemOptionSubtitle.text = if (item.subtitleRes != 0) context.getString(item.subtitleRes) else null
-            itemOptionSubtitle.isVisible = itemOptionSubtitle.text.isNotBlank()
+            binding.itemOptionSubtitle.apply {
+                text = if (item.subtitleRes != 0) context.getString(item.subtitleRes) else null
+                isVisible = text.isNotBlank()
+            }
         }
     }
-
 }
