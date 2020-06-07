@@ -39,9 +39,11 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_activity)
         setSupportActionBar(homeToolbar)
-        examplesRv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        examplesRv.adapter = examplesAdapter
-        examplesRv.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
+        examplesRv.apply {
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = examplesAdapter
+            addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

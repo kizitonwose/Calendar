@@ -5,9 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -18,10 +16,9 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import kotlinx.android.synthetic.main.calendar_day_legend.view.*
-import kotlinx.android.synthetic.main.example_6_calendar_day.view.*
-import kotlinx.android.synthetic.main.example_6_calendar_header.view.*
-import kotlinx.android.synthetic.main.example_6_fragment.*
+import com.kizitonwose.calendarviewsample.databinding.Example6CalendarDayBinding
+import com.kizitonwose.calendarviewsample.databinding.Example6CalendarHeaderBinding
+import com.kizitonwose.calendarviewsample.databinding.Example6FragmentBinding
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -37,45 +34,44 @@ class Example6MonthView(context: Context) : CardView(context) {
 }
 
 
-class Example6Fragment : BaseFragment(), HasBackButton {
+class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButton {
 
     override val titleRes: Int = R.string.example_6_title
 
     private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.example_6_fragment, container, false)
-    }
+    private lateinit var binding: Example6FragmentBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding = Example6FragmentBinding.bind(view)
         // Setup custom day size to fit two months on the screen.
         val dm = DisplayMetrics()
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getMetrics(dm)
 
-        // We want the immediately following/previous month to be
-        // partially visible so we multiply the total width by 0.73
-        val monthWidth = (dm.widthPixels * 0.73).toInt()
-        val dayWidth = monthWidth / 7
-        exSixCalendar.dayWidth = dayWidth
+        binding.exSixCalendar.apply {
+            // We want the immediately following/previous month to be
+            // partially visible so we multiply the total width by 0.73
+            val monthWidth = (dm.widthPixels * 0.73).toInt()
+            dayWidth = monthWidth / 7
+            dayHeight = (dayWidth * 1.73).toInt()  // We don't want a square calendar.
 
-        // We don't want a square calendar.
-        exSixCalendar.dayHeight = (dayWidth * 1.73).toInt()
+            // Add margins around our card view.
+            val horizontalMargin = dpToPx(8, requireContext())
+            val verticalMargin = dpToPx(14, requireContext())
+            monthMarginStart = horizontalMargin
+            monthMarginEnd = horizontalMargin
+            monthMarginTop = verticalMargin
+            monthMarginBottom = verticalMargin
+        }
 
-        // Add margins around our card view.
-        val horizontalMargin = dpToPx(8, requireContext())
-        val verticalMargin = dpToPx(14, requireContext())
-        exSixCalendar.monthMarginStart = horizontalMargin
-        exSixCalendar.monthMarginEnd = horizontalMargin
-        exSixCalendar.monthMarginTop = verticalMargin
-        exSixCalendar.monthMarginBottom = verticalMargin
+
 
         class DayViewContainer(view: View) : ViewContainer(view) {
-            val textView = view.exSixDayText
+            val textView = Example6CalendarDayBinding.bind(view).exSixDayText
         }
-        exSixCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exSixCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 val textView = container.textView
@@ -91,14 +87,15 @@ class Example6Fragment : BaseFragment(), HasBackButton {
 
         val daysOfWeek = daysOfWeekFromLocale()
         val currentMonth = YearMonth.now()
-        exSixCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
-        exSixCalendar.scrollToMonth(currentMonth)
+        binding.exSixCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
+        binding.exSixCalendar.scrollToMonth(currentMonth)
 
         class MonthViewContainer(view: View) : ViewContainer(view) {
-            val textView = view.exSixMonthText
-            val legendLayout = view.legendLayout
+            val binding = Example6CalendarHeaderBinding.bind(view)
+            val textView = binding.exSixMonthText
+            val legendLayout = binding.legendLayout.root
         }
-        exSixCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+        binding.exSixCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 container.textView.text = titleFormatter.format(month.yearMonth)

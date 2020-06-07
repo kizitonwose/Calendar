@@ -5,7 +5,9 @@
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
-    <include layout="@layout/calendar_day_legend" />
+    <include
+        android:id="@+id/legendLayout"
+        layout="@layout/calendar_day_legend" />
 
 </FrameLayout>
 

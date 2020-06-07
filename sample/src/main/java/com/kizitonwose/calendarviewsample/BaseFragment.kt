@@ -1,6 +1,7 @@
 package com.kizitonwose.calendarviewsample
 
 
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -12,7 +13,9 @@ interface HasToolbar {
 
 interface HasBackButton
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
+
+    val homeActivityToolbar: Toolbar by lazy { (requireActivity() as HomeActivity).findViewById<Toolbar>(R.id.homeToolbar) }
 
     override fun onStart() {
         super.onStart()

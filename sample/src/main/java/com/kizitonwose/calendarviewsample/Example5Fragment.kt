@@ -3,7 +3,6 @@ package com.kizitonwose.calendarviewsample
 
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -21,11 +20,10 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.previous
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.calendar_day_legend.view.*
-import kotlinx.android.synthetic.main.example_5_calendar_day.view.*
-import kotlinx.android.synthetic.main.example_5_event_item_view.*
-import kotlinx.android.synthetic.main.example_5_fragment.*
+import com.kizitonwose.calendarviewsample.databinding.Example5CalendarDayBinding
+import com.kizitonwose.calendarviewsample.databinding.Example5CalendarHeaderBinding
+import com.kizitonwose.calendarviewsample.databinding.Example5EventItemViewBinding
+import com.kizitonwose.calendarviewsample.databinding.Example5FragmentBinding
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.YearMonth
@@ -45,7 +43,9 @@ class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Examp
     private val formatter = DateTimeFormatter.ofPattern("EEE'\n'dd MMM'\n'HH:mm")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example5FlightsViewHolder {
-        return Example5FlightsViewHolder(parent.inflate(R.layout.example_5_event_item_view))
+        return Example5FlightsViewHolder(
+            Example5EventItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
+        )
     }
 
     override fun onBindViewHolder(viewHolder: Example5FlightsViewHolder, position: Int) {
@@ -54,33 +54,31 @@ class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Examp
 
     override fun getItemCount(): Int = flights.size
 
-    inner class Example5FlightsViewHolder(override val containerView: View) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class Example5FlightsViewHolder(val binding: Example5EventItemViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(flight: Flight) {
-            itemFlightDateText.text = formatter.format(flight.time)
-            itemFlightDateText.setBackgroundColor(itemView.context.getColorCompat(flight.color))
+            binding.itemFlightDateText.apply {
+                text = formatter.format(flight.time)
+                setBackgroundColor(itemView.context.getColorCompat(flight.color))
+            }
 
-            itemDepartureAirportCodeText.text = flight.departure.code
-            itemDepartureAirportCityText.text = flight.departure.city
+            binding.itemDepartureAirportCodeText.text = flight.departure.code
+            binding.itemDepartureAirportCityText.text = flight.departure.city
 
-            itemDestinationAirportCodeText.text = flight.destination.code
-            itemDestinationAirportCityText.text = flight.destination.city
+            binding.itemDestinationAirportCodeText.text = flight.destination.code
+            binding.itemDestinationAirportCityText.text = flight.destination.city
         }
     }
 }
 
 
-class Example5Fragment : BaseFragment(), HasToolbar {
+class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
 
     override val toolbar: Toolbar?
         get() = null
 
     override val titleRes: Int = R.string.example_5_title
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.example_5_fragment, container, false)
-    }
 
     private var selectedDate: LocalDate? = null
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
@@ -88,52 +86,53 @@ class Example5Fragment : BaseFragment(), HasToolbar {
     private val flightsAdapter = Example5FlightsAdapter()
     private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 
+    private lateinit var binding: Example5FragmentBinding
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = Example5FragmentBinding.bind(view)
 
-        exFiveRv.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        exFiveRv.adapter = flightsAdapter
-        exFiveRv.addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+        binding.exFiveRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            adapter = flightsAdapter
+            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+        }
         flightsAdapter.notifyDataSetChanged()
 
         val daysOfWeek = daysOfWeekFromLocale()
 
         val currentMonth = YearMonth.now()
-        exFiveCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
-        exFiveCalendar.scrollToMonth(currentMonth)
+        binding.exFiveCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
+        binding.exFiveCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
-            val textView = view.exFiveDayText
-            val layout = view.exFiveDayLayout
-            val flightTopView = view.exFiveDayFlightTop
-            val flightBottomView = view.exFiveDayFlightBottom
-
+            val binding = Example5CalendarDayBinding.bind(view)
             init {
                 view.setOnClickListener {
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
                             selectedDate = day.date
-                            exFiveCalendar.notifyDateChanged(day.date)
-                            oldDate?.let { exFiveCalendar.notifyDateChanged(it) }
+                            val binding = this@Example5Fragment.binding
+                            binding.exFiveCalendar.notifyDateChanged(day.date)
+                            oldDate?.let { binding.exFiveCalendar.notifyDateChanged(it) }
                             updateAdapterForDate(day.date)
                         }
                     }
                 }
             }
         }
-        exFiveCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exFiveCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
-                val textView = container.textView
-                val layout = container.layout
+                val textView = container.binding.exFiveDayText
+                val layout = container.binding.exFiveDayLayout
                 textView.text = day.date.dayOfMonth.toString()
 
-                val flightTopView = container.flightTopView
-                val flightBottomView = container.flightBottomView
-
+                val flightTopView = container.binding.exFiveDayFlightTop
+                val flightBottomView = container.binding.exFiveDayFlightBottom
                 flightTopView.background = null
                 flightBottomView.background = null
 
@@ -158,9 +157,9 @@ class Example5Fragment : BaseFragment(), HasToolbar {
         }
 
         class MonthViewContainer(view: View) : ViewContainer(view) {
-            val legendLayout = view.legendLayout
+            val legendLayout = Example5CalendarHeaderBinding.bind(view).legendLayout.root
         }
-        exFiveCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+        binding.exFiveCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 // Setup each header day text if we have not done that already.
@@ -177,27 +176,27 @@ class Example5Fragment : BaseFragment(), HasToolbar {
             }
         }
 
-        exFiveCalendar.monthScrollListener = { month ->
+        binding.exFiveCalendar.monthScrollListener = { month ->
             val title = "${monthTitleFormatter.format(month.yearMonth)} ${month.yearMonth.year}"
-            exFiveMonthYearText.text = title
+            binding.exFiveMonthYearText.text = title
 
             selectedDate?.let {
                 // Clear selection if we scroll to a new month.
                 selectedDate = null
-                exFiveCalendar.notifyDateChanged(it)
+                binding.exFiveCalendar.notifyDateChanged(it)
                 updateAdapterForDate(null)
             }
         }
 
-        exFiveNextMonthImage.setOnClickListener {
-            exFiveCalendar.findFirstVisibleMonth()?.let {
-                exFiveCalendar.smoothScrollToMonth(it.yearMonth.next)
+        binding.exFiveNextMonthImage.setOnClickListener {
+            binding.exFiveCalendar.findFirstVisibleMonth()?.let {
+                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.next)
             }
         }
 
-        exFivePreviousMonthImage.setOnClickListener {
-            exFiveCalendar.findFirstVisibleMonth()?.let {
-                exFiveCalendar.smoothScrollToMonth(it.yearMonth.previous)
+        binding.exFivePreviousMonthImage.setOnClickListener {
+            binding.exFiveCalendar.findFirstVisibleMonth()?.let {
+                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.previous)
             }
         }
     }
