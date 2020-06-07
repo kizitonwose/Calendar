@@ -1,13 +1,14 @@
 package com.kizitonwose.calendarviewsample
 
-
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -19,20 +20,19 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import kotlinx.android.synthetic.main.calendar_day_legend.*
-import kotlinx.android.synthetic.main.example_4_calendar_day.view.*
-import kotlinx.android.synthetic.main.example_4_calendar_header.view.*
-import kotlinx.android.synthetic.main.example_4_fragment.*
+import com.kizitonwose.calendarviewsample.databinding.Example4CalendarDayBinding
+import com.kizitonwose.calendarviewsample.databinding.Example4CalendarHeaderBinding
+import com.kizitonwose.calendarviewsample.databinding.Example4FragmentBinding
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.TextStyle
 import java.util.*
 
-class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
+class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, HasBackButton {
 
     override val toolbar: Toolbar?
-        get() = exFourToolbar
+        get() = binding.exFourToolbar
 
     override val titleRes: Int? = null
 
@@ -51,26 +51,24 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end) as GradientDrawable
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.example_4_fragment, container, false)
-    }
+    private lateinit var binding: Example4FragmentBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setHasOptionsMenu(true)
+        binding = Example4FragmentBinding.bind(view)
         // We set the radius of the continuous selection background drawable dynamically
         // since the view size is `match parent` hence we cannot determine the appropriate
         // radius value which would equal half of the view's size beforehand.
-        exFourCalendar.post {
-            val radius = ((exFourCalendar.width / 7) / 2).toFloat()
+        binding.exFourCalendar.post {
+            val radius = ((binding.exFourCalendar.width / 7) / 2).toFloat()
             startBackground.setCornerRadius(topLeft = radius, bottomLeft = radius)
             endBackground.setCornerRadius(topRight = radius, bottomRight = radius)
         }
 
         // Set the First day of week depending on Locale
         val daysOfWeek = daysOfWeekFromLocale()
-        legendLayout.children.forEachIndexed { index, view ->
+        binding.legendLayout.root.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
@@ -79,13 +77,12 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         }
 
         val currentMonth = YearMonth.now()
-        exFourCalendar.setup(currentMonth, currentMonth.plusMonths(12), daysOfWeek.first())
-        exFourCalendar.scrollToMonth(currentMonth)
+        binding.exFourCalendar.setup(currentMonth, currentMonth.plusMonths(12), daysOfWeek.first())
+        binding.exFourCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
-            val textView = view.exFourDayText
-            val roundBgView = view.exFourRoundBgView
+            val binding = Example4CalendarDayBinding.bind(view)
 
             init {
                 view.setOnClickListener {
@@ -101,18 +98,19 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                         } else {
                             startDate = date
                         }
-                        exFourCalendar.notifyCalendarChanged()
+                        this@Example4Fragment.binding.exFourCalendar.notifyCalendarChanged()
                         bindSummaryViews()
                     }
                 }
             }
         }
-        exFourCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+
+        binding.exFourCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
-                val textView = container.textView
-                val roundBgView = container.roundBgView
+                val textView = container.binding.exFourDayText
+                val roundBgView = container.binding.exFourRoundBgView
 
                 textView.text = null
                 textView.background = null
@@ -162,21 +160,21 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
                         // Mimic selection of inDates that are less than the startDate.
                         // Example: When 26 Feb 2019 is startDate and 5 Mar 2019 is endDate,
                         // this makes the inDates in Mar 2019 for 24 & 25 Feb 2019 look selected.
-                        if ((day.owner == DayOwner.PREVIOUS_MONTH
-                                && startDate.monthValue == day.date.monthValue
-                                && endDate.monthValue != day.date.monthValue) ||
+                        if ((day.owner == DayOwner.PREVIOUS_MONTH &&
+                                startDate.monthValue == day.date.monthValue &&
+                                endDate.monthValue != day.date.monthValue) ||
                             // Mimic selection of outDates that are greater than the endDate.
                             // Example: When 25 Apr 2019 is startDate and 2 May 2019 is endDate,
                             // this makes the outDates in Apr 2019 for 3 & 4 May 2019 look selected.
-                            (day.owner == DayOwner.NEXT_MONTH
-                                && startDate.monthValue != day.date.monthValue
-                                && endDate.monthValue == day.date.monthValue) ||
+                            (day.owner == DayOwner.NEXT_MONTH &&
+                                startDate.monthValue != day.date.monthValue &&
+                                endDate.monthValue == day.date.monthValue) ||
 
                             // Mimic selection of in and out dates of intermediate
                             // months if the selection spans across multiple months.
-                            (startDate < day.date && endDate > day.date
-                                && startDate.monthValue != day.date.monthValue
-                                && endDate.monthValue != day.date.monthValue)
+                            (startDate < day.date && endDate > day.date &&
+                                startDate.monthValue != day.date.monthValue &&
+                                endDate.monthValue != day.date.monthValue)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
@@ -186,9 +184,9 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
         }
 
         class MonthViewContainer(view: View) : ViewContainer(view) {
-            val textView = view.exFourHeaderText
+            val textView = Example4CalendarHeaderBinding.bind(view).exFourHeaderText
         }
-        exFourCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+        binding.exFourCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 val monthTitle = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
@@ -196,7 +194,7 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
             }
         }
 
-        exFourSaveButton.setOnClickListener click@{
+        binding.exFourSaveButton.setOnClickListener click@{
             val startDate = startDate
             val endDate = endDate
             if (startDate != null && endDate != null) {
@@ -214,46 +212,47 @@ class Example4Fragment : BaseFragment(), HasToolbar, HasBackButton {
     }
 
     private fun bindSummaryViews() {
-        if (startDate != null) {
-            exFourStartDateText.text = headerDateFormatter.format(startDate)
-            exFourStartDateText.setTextColorRes(R.color.example_4_grey)
-        } else {
-            exFourStartDateText.text = getString(R.string.start_date)
-            exFourStartDateText.setTextColor(Color.GRAY)
+        binding.exFourStartDateText.apply {
+            if (startDate != null) {
+                text = headerDateFormatter.format(startDate)
+                setTextColorRes(R.color.example_4_grey)
+            } else {
+                text = getString(R.string.start_date)
+                setTextColor(Color.GRAY)
+            }
         }
-        if (endDate != null) {
-            exFourEndDateText.text = headerDateFormatter.format(endDate)
-            exFourEndDateText.setTextColorRes(R.color.example_4_grey)
-        } else {
-            exFourEndDateText.text = getString(R.string.end_date)
-            exFourEndDateText.setTextColor(Color.GRAY)
+
+        binding.exFourEndDateText.apply {
+            if (endDate != null) {
+                text = headerDateFormatter.format(endDate)
+                setTextColorRes(R.color.example_4_grey)
+            } else {
+                text = getString(R.string.end_date)
+                setTextColor(Color.GRAY)
+            }
         }
 
         // Enable save button if a range is selected or no date is selected at all, Airbnb style.
-        exFourSaveButton.isEnabled = endDate != null || (startDate == null && endDate == null)
+        binding.exFourSaveButton.isEnabled = endDate != null || (startDate == null && endDate == null)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.example_4_menu, menu)
-        exFourToolbar.post {
+        binding.exFourToolbar.post {
             // Configure menu text to match what is in the Airbnb app.
-            exFourToolbar.findViewById<TextView>(R.id.menuItemClear).apply {
+            binding.exFourToolbar.findViewById<TextView>(R.id.menuItemClear).apply {
                 setTextColor(requireContext().getColorCompat(R.color.example_4_grey))
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 isAllCaps = false
             }
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuItemClear) {
+        menu.findItem(R.id.menuItemClear).setOnMenuItemClickListener {
             startDate = null
             endDate = null
-            exFourCalendar.notifyCalendarChanged()
+            binding.exFourCalendar.notifyCalendarChanged()
             bindSummaryViews()
-            return true
+            true
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {

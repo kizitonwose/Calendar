@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -14,7 +15,6 @@ import androidx.core.content.ContextCompat
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.temporal.WeekFields
 import java.util.*
-
 
 fun View.makeVisible() {
     visibility = View.VISIBLE
@@ -35,8 +35,14 @@ fun dpToPx(dp: Int, context: Context): Int =
     ).toInt()
 
 internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+    return context.layoutInflater.inflate(layoutRes, this, attachToRoot)
 }
+
+internal val Context.layoutInflater: LayoutInflater
+    get() = LayoutInflater.from(this)
+
+internal val Context.inputMethodManager
+    get() = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
 internal inline fun Boolean?.orFalse(): Boolean = this ?: false
 
@@ -50,6 +56,7 @@ fun daysOfWeekFromLocale(): Array<DayOfWeek> {
     val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
     var daysOfWeek = DayOfWeek.values()
     // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
+    // Only necessary if firstDayOfWeek != DayOfWeek.MONDAY which has ordinal 0.
     if (firstDayOfWeek != DayOfWeek.MONDAY) {
         val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
         val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
