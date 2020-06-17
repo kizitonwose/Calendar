@@ -78,6 +78,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
+            android:id="@+id/legendLayout"
             layout="@layout/calendar_day_legend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

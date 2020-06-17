@@ -6,7 +6,6 @@ import com.kizitonwose.calendarview.utils.yearMonth
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.YearMonth
-
 data class CalendarDay internal constructor(val date: LocalDate, val owner: DayOwner) :
     Comparable<CalendarDay>, Serializable {
 
@@ -27,7 +26,7 @@ data class CalendarDay internal constructor(val date: LocalDate, val owner: DayO
     override fun compareTo(other: CalendarDay): Int {
         throw UnsupportedOperationException(
             "Compare using the `date` parameter instead. " +
-                    "Out and In dates can have the same date values as CalendarDay in another month."
+                "Out and In dates can have the same date values as CalendarDay in another month."
         )
     }
 

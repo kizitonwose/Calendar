@@ -55,5 +55,4 @@ internal class MonthViewHolder constructor(
     fun reloadDay(day: CalendarDay) {
         weekHolders.map { it.dayHolders }.flatten().firstOrNull { it.day == day }?.reloadView()
     }
-
 }

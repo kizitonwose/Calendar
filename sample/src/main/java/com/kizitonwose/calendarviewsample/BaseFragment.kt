@@ -1,10 +1,9 @@
 package com.kizitonwose.calendarviewsample
 
-
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.home_activity.*
 
 interface HasToolbar {
     val toolbar: Toolbar? // Return null to hide the toolbar
@@ -12,12 +11,15 @@ interface HasToolbar {
 
 interface HasBackButton
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
+
+    val homeActivityToolbar: Toolbar
+        get() = (requireActivity() as HomeActivity).binding.homeToolbar
 
     override fun onStart() {
         super.onStart()
         if (this is HasToolbar) {
-            requireActivity().homeToolbar.makeGone()
+            homeActivityToolbar.makeGone()
             (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         }
 
@@ -31,8 +33,8 @@ abstract class BaseFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         if (this is HasToolbar) {
-            requireActivity().homeToolbar.makeVisible()
-            (requireActivity() as AppCompatActivity).setSupportActionBar(requireActivity().homeToolbar)
+            homeActivityToolbar.makeVisible()
+            (requireActivity() as AppCompatActivity).setSupportActionBar(homeActivityToolbar)
         }
 
         if (this is HasBackButton) {

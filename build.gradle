@@ -12,24 +12,25 @@ buildscript {
             'androidx_appcompat'  : '1.2.0-rc01',
             'androidx_legacy'     : '1.0.0',
             'androidx_core_ktx'   : '1.3.0',
-            'constraint_layout'   : '2.0.0-beta5',
+            'constraint_layout'   : '2.0.0-beta6',
             'cardview'            : '1.0.0',
             'recyclerview'        : '1.2.0-alpha03',
             'junit'               : '4.12',
-            'espresso'            : '3.1.1',
-            'androidx_test_runner': '1.1.1',
-            'androidx_test_rules' : '1.1.1',
-            'androidx_test_junit' : '1.1.0'
+            'espresso'            : '3.2.0',
+            'androidx_test_runner': '1.2.0',
+            'androidx_test_rules' : '1.2.0',
+            'androidx_test_junit' : '1.1.1'
     ]
     repositories {
         google()
         jcenter()
-
+        gradlePluginPortal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin_lang"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'org.jlleitschuh.gradle:ktlint-gradle:9.2.1'
     }
 }
 
@@ -37,6 +38,13 @@ allprojects {
     repositories {
         google()
         jcenter()
+    }
+
+    apply plugin: 'org.jlleitschuh.gradle.ktlint'
+
+    ktlint {
+        version = "0.36.0"
+        disabledRules = ["no-wildcard-imports", "import-ordering"]
     }
 }
 

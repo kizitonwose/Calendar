@@ -232,6 +232,7 @@ open class CalendarView : RecyclerView {
 
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
+        setHasFixedSize(true)
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
         dayViewResource = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
         monthHeaderResource = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
@@ -251,7 +252,7 @@ open class CalendarView : RecyclerView {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if (autoSize && isInEditMode.not()) {
+        if (autoSize && !isInEditMode) {
             val widthMode = MeasureSpec.getMode(widthMeasureSpec)
             val widthSize = MeasureSpec.getSize(widthMeasureSpec)
             val heightMode = MeasureSpec.getMode(heightMeasureSpec)
@@ -273,7 +274,6 @@ open class CalendarView : RecyclerView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-
     /**
      * The width, in pixels for each day cell view.
      * Set this to [DAY_SIZE_SQUARE] to have a nice
@@ -285,7 +285,7 @@ open class CalendarView : RecyclerView {
     var dayWidth: Int = DAY_SIZE_SQUARE
         set(value) {
             field = value
-            if (sizedInternally.not()) {
+            if (!sizedInternally) {
                 autoSize = value == DAY_SIZE_SQUARE
                 invalidateViewHolders()
             }
@@ -302,7 +302,7 @@ open class CalendarView : RecyclerView {
     var dayHeight: Int = DAY_SIZE_SQUARE
         set(value) {
             field = value
-            if (sizedInternally.not()) {
+            if (!sizedInternally) {
                 autoSize = value == DAY_SIZE_SQUARE
                 invalidateViewHolders()
             }

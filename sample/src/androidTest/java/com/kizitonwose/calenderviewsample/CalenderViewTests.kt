@@ -2,6 +2,7 @@ package com.kizitonwose.calenderviewsample
 
 import android.graphics.Rect
 import android.view.View
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
@@ -11,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
+import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -19,10 +21,6 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.*
-import kotlinx.android.synthetic.main.example_1_fragment.*
-import kotlinx.android.synthetic.main.example_2_fragment.*
-import kotlinx.android.synthetic.main.example_5_fragment.*
-import kotlinx.android.synthetic.main.example_6_fragment.*
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -53,7 +51,6 @@ class CalenderViewTests {
 
     @After
     fun teardown() {
-
     }
 
     @Test
@@ -62,7 +59,7 @@ class CalenderViewTests {
 
         class DayViewContainer(view: View) : ViewContainer(view)
 
-        val calendarView = findFragment(Example1Fragment::class.java).exOneCalendar
+        val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
         var boundDay: CalendarDay? = null
 
@@ -97,7 +94,7 @@ class CalenderViewTests {
 
         class TestViewContainer(view: View) : ViewContainer(view)
 
-        val calendarView = findFragment(Example2Fragment::class.java).exTwoCalendar
+        val calendarView = findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
 
         val boundDays = mutableSetOf<CalendarDay>()
         var boundHeaderMonth: CalendarMonth? = null
@@ -137,7 +134,7 @@ class CalenderViewTests {
     fun programmaticScrollWorksAsExpected() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
 
-        val calendarView = findFragment(Example5Fragment::class.java).exFiveCalendar
+        val calendarView = findFragment<Example5Fragment>().findViewById<CalendarView>(R.id.exFiveCalendar)
 
         assertTrue(calendarView.findViewById<View?>(currentMonth.atDay(1).hashCode()) != null)
 
@@ -153,12 +150,11 @@ class CalenderViewTests {
         assertTrue(calendarView.findViewById<View?>(nextFourMonths.atDay(1).hashCode()) != null)
     }
 
-
     @Test
     fun scrollToDateWorksOnVerticalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
-        val calendarView = findFragment(Example2Fragment::class.java).exTwoCalendar
+        val calendarView = findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
 
         val targetDate = currentMonth.plusMonths(4).atDay(20)
 
@@ -183,7 +179,7 @@ class CalenderViewTests {
     fun scrollToDateWorksOnHorizontalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
 
-        val calendarView = findFragment(Example6Fragment::class.java).exSixCalendar
+        val calendarView = findFragment<Example6Fragment>().findViewById<CalendarView>(R.id.exSixCalendar)
 
         val targetDate = currentMonth.plusMonths(3).atDay(18)
 
@@ -208,7 +204,7 @@ class CalenderViewTests {
     fun monthScrollListenerIsCalledWhenScrolled() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
 
-        val calendarView = findFragment(Example1Fragment::class.java).exOneCalendar
+        val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
         val targetMonth = currentMonth.plusMonths(2)
 
@@ -230,7 +226,7 @@ class CalenderViewTests {
     fun findVisibleDaysAndMonthsWorksOnVerticalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
-        val calendarView = findFragment(Example2Fragment::class.java).exTwoCalendar
+        val calendarView = findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
 
         homeScreenRule.runOnUiThread {
             // Scroll to a random date
@@ -256,7 +252,7 @@ class CalenderViewTests {
     fun findVisibleDaysAndMonthsWorksOnHorizontalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
 
-        val calendarView = findFragment(Example6Fragment::class.java).exSixCalendar
+        val calendarView = findFragment<Example6Fragment>().findViewById<CalendarView>(R.id.exSixCalendar)
 
         homeScreenRule.runOnUiThread {
             // Scroll to a random date
@@ -284,7 +280,7 @@ class CalenderViewTests {
     fun multipleSetupCallsRetainPositionIfCalendarHasBoundaries() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
 
-        val calendarView = findFragment(Example1Fragment::class.java).exOneCalendar
+        val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
         val targetVisibleMonth = currentMonth.plusMonths(2)
 
@@ -312,8 +308,10 @@ class CalenderViewTests {
         assertTrue(calendarView.findFirstVisibleMonth() == targetVisibleCalMonth)
     }
 
-    private fun <T : Fragment> findFragment(clazz: Class<T>): T {
+    private inline fun <reified T : Fragment> findFragment(): T {
         return homeScreenRule.activity.supportFragmentManager
-            .findFragmentByTag(clazz.simpleName) as T
+            .findFragmentByTag(T::class.java.simpleName) as T
     }
+
+    private fun <T : View> Fragment.findViewById(@IdRes id: Int): T = requireView().findViewById(id)
 }

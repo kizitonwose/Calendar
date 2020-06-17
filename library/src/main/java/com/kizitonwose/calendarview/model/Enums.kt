@@ -70,7 +70,6 @@ enum class InDateStyle {
     NONE
 }
 
-
 /**
  * The scrolling behavior of the calendar.
  */

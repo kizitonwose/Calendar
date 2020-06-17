@@ -34,8 +34,4 @@ internal class WeekHolder(dayConfig: DayConfig) {
             holder.bindDayView(daysOfWeek.getOrNull(index))
         }
     }
-
-    fun reloadDay(day: CalendarDay) {
-        dayHolders.first { it.day == day }.reloadView()
-    }
 }

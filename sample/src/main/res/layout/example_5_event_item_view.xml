@@ -54,7 +54,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical|end"
-            android:tint="@color/example_5_text_grey"
+            app:tint="@color/example_5_text_grey"
             app:srcCompat="@drawable/ic_airplane_takeoff" />
     </FrameLayout>
 
@@ -103,7 +103,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical|end"
-            android:tint="@color/example_5_text_grey"
+            app:tint="@color/example_5_text_grey"
             app:srcCompat="@drawable/ic_airplane_landing" />
     </FrameLayout>
 

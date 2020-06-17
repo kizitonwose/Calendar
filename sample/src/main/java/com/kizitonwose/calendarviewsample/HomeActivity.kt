@@ -6,10 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.home_activity.*
-
+import com.kizitonwose.calendarviewsample.databinding.HomeActivityBinding
 
 class HomeActivity : AppCompatActivity() {
+
+    internal lateinit var binding: HomeActivityBinding
 
     private val examplesAdapter = HomeOptionsAdapter {
         val fragment = it.createView()
@@ -37,11 +38,14 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home_activity)
-        setSupportActionBar(homeToolbar)
-        examplesRv.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        examplesRv.adapter = examplesAdapter
-        examplesRv.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
+        binding = HomeActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.homeToolbar)
+        binding.examplesRv.apply {
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = examplesAdapter
+            addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

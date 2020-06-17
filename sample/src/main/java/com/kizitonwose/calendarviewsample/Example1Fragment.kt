@@ -1,16 +1,14 @@
 package com.kizitonwose.calendarviewsample
 
-
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.children
+import androidx.core.view.updateLayoutParams
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.InDateStyle
@@ -18,26 +16,22 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.yearMonth
-import kotlinx.android.synthetic.main.calendar_day_legend.*
-import kotlinx.android.synthetic.main.example_1_calendar_day.view.*
-import kotlinx.android.synthetic.main.example_1_fragment.*
+import com.kizitonwose.calendarviewsample.databinding.Example1CalendarDayBinding
+import com.kizitonwose.calendarviewsample.databinding.Example1FragmentBinding
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
-
-class Example1Fragment : BaseFragment(), HasToolbar {
+class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     override val toolbar: Toolbar?
         get() = null
 
     override val titleRes: Int = R.string.example_1_title
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.example_1_fragment, container, false)
-    }
+    private lateinit var binding: Example1FragmentBinding
 
     private val selectedDates = mutableSetOf<LocalDate>()
     private val today = LocalDate.now()
@@ -45,10 +39,9 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
+        binding = Example1FragmentBinding.bind(view)
         val daysOfWeek = daysOfWeekFromLocale()
-        legendLayout.children.forEachIndexed { index, view ->
+        binding.legendLayout.root.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(Locale.ENGLISH)
                 setTextColorRes(R.color.example_1_white_light)
@@ -58,13 +51,13 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(10)
         val endMonth = currentMonth.plusMonths(10)
-        exOneCalendar.setup(startMonth, endMonth, daysOfWeek.first())
-        exOneCalendar.scrollToMonth(currentMonth)
+        binding.exOneCalendar.setup(startMonth, endMonth, daysOfWeek.first())
+        binding.exOneCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
             lateinit var day: CalendarDay
-            val textView = view.exOneDayText
+            val textView = Example1CalendarDayBinding.bind(view).exOneDayText
 
             init {
                 view.setOnClickListener {
@@ -74,13 +67,13 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                         } else {
                             selectedDates.add(day.date)
                         }
-                        exOneCalendar.notifyDayChanged(day)
+                        binding.exOneCalendar.notifyDayChanged(day)
                     }
                 }
             }
         }
 
-        exOneCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exOneCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
@@ -91,7 +84,6 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                         selectedDates.contains(day.date) -> {
                             textView.setTextColorRes(R.color.example_1_bg)
                             textView.setBackgroundResource(R.drawable.example_1_selected_bg)
-
                         }
                         today == day.date -> {
                             textView.setTextColorRes(R.color.example_1_white)
@@ -109,10 +101,10 @@ class Example1Fragment : BaseFragment(), HasToolbar {
             }
         }
 
-        exOneCalendar.monthScrollListener = {
-            if (exOneCalendar.maxRowCount == 6) {
-                exOneYearText.text = it.yearMonth.year.toString()
-                exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
+        binding.exOneCalendar.monthScrollListener = {
+            if (binding.exOneCalendar.maxRowCount == 6) {
+                binding.exOneYearText.text = it.yearMonth.year.toString()
+                binding.exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
             } else {
                 // In week mode, we show the header a bit differently.
                 // We show indices with dates from different months since
@@ -121,26 +113,25 @@ class Example1Fragment : BaseFragment(), HasToolbar {
                 val firstDate = it.weekDays.first().first().date
                 val lastDate = it.weekDays.last().last().date
                 if (firstDate.yearMonth == lastDate.yearMonth) {
-                    exOneYearText.text = firstDate.yearMonth.year.toString()
-                    exOneMonthText.text = monthTitleFormatter.format(firstDate)
+                    binding.exOneYearText.text = firstDate.yearMonth.year.toString()
+                    binding.exOneMonthText.text = monthTitleFormatter.format(firstDate)
                 } else {
-                    exOneMonthText.text =
+                    binding.exOneMonthText.text =
                         "${monthTitleFormatter.format(firstDate)} - ${monthTitleFormatter.format(lastDate)}"
                     if (firstDate.year == lastDate.year) {
-                        exOneYearText.text = firstDate.yearMonth.year.toString()
+                        binding.exOneYearText.text = firstDate.yearMonth.year.toString()
                     } else {
-                        exOneYearText.text = "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
+                        binding.exOneYearText.text = "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
                     }
                 }
             }
-
         }
 
-        weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->
-            val firstDate = exOneCalendar.findFirstVisibleDay()?.date ?: return@setOnCheckedChangeListener
-            val lastDate = exOneCalendar.findLastVisibleDay()?.date ?: return@setOnCheckedChangeListener
+        binding.weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->
+            val firstDate = binding.exOneCalendar.findFirstVisibleDay()?.date ?: return@setOnCheckedChangeListener
+            val lastDate = binding.exOneCalendar.findLastVisibleDay()?.date ?: return@setOnCheckedChangeListener
 
-            val oneWeekHeight = exOneCalendar.dayHeight
+            val oneWeekHeight = binding.exOneCalendar.dayHeight
             val oneMonthHeight = oneWeekHeight * 6
 
             val oldHeight = if (monthToWeek) oneMonthHeight else oneWeekHeight
@@ -149,7 +140,7 @@ class Example1Fragment : BaseFragment(), HasToolbar {
             // Animate calendar height changes.
             val animator = ValueAnimator.ofInt(oldHeight, newHeight)
             animator.addUpdateListener { animator ->
-                exOneCalendar.layoutParams = exOneCalendar.layoutParams.apply {
+                binding.exOneCalendar.updateLayoutParams {
                     height = animator.animatedValue as Int
                 }
             }
@@ -162,39 +153,42 @@ class Example1Fragment : BaseFragment(), HasToolbar {
 
             animator.doOnStart {
                 if (!monthToWeek) {
-                    exOneCalendar.inDateStyle = InDateStyle.ALL_MONTHS
-                    exOneCalendar.maxRowCount = 6
-                    exOneCalendar.hasBoundaries = true
+                    binding.exOneCalendar.apply {
+                        inDateStyle = InDateStyle.ALL_MONTHS
+                        maxRowCount = 6
+                        hasBoundaries = true
+                    }
                 }
             }
             animator.doOnEnd {
                 if (monthToWeek) {
-                    exOneCalendar.inDateStyle = InDateStyle.FIRST_MONTH
-                    exOneCalendar.maxRowCount = 1
-                    exOneCalendar.hasBoundaries = false
+                    binding.exOneCalendar.apply {
+                        inDateStyle = InDateStyle.FIRST_MONTH
+                        maxRowCount = 1
+                        hasBoundaries = false
+                    }
                 }
 
                 if (monthToWeek) {
                     // We want the first visible day to remain
                     // visible when we change to week mode.
-                    exOneCalendar.scrollToDate(firstDate)
+                    binding.exOneCalendar.scrollToDate(firstDate)
                 } else {
                     // When changing to month mode, we choose current
                     // month if it is the only one in the current frame.
                     // if we have multiple months in one frame, we prefer
                     // the second one unless it's an outDate in the last index.
                     if (firstDate.yearMonth == lastDate.yearMonth) {
-                        exOneCalendar.scrollToMonth(firstDate.yearMonth)
+                        binding.exOneCalendar.scrollToMonth(firstDate.yearMonth)
                     } else {
                         // We compare the next with the last month on the calendar so we don't go over.
-                        exOneCalendar.scrollToMonth(minOf(firstDate.yearMonth.next, endMonth))
+                        binding.exOneCalendar.scrollToMonth(minOf(firstDate.yearMonth.next, endMonth))
                     }
                 }
             }
             animator.duration = 250
             animator.start()
         }
-
     }
 
     override fun onStart() {
@@ -206,5 +200,4 @@ class Example1Fragment : BaseFragment(), HasToolbar {
         super.onStop()
         requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
-
 }
