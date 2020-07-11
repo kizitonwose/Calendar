@@ -34,20 +34,66 @@ Download the sample app [here](https://github.com/kizitonwose/CalendarView/relea
 
 View the sample app's source code [here](https://github.com/kizitonwose/CalendarView/tree/master/sample)
 
-## Usage
+## Setup
 
 #### Step 1
 
-The library uses `java.time` classes via [ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP) for backward compatibility since these classes were added in Java 8. Therefore, you need to initialize ThreeTenABP in your application class.
+The library uses `java.time` classes via [API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for backward compatibility since these classes were added in Java 8. 
 
-```kotlin
-class SampleApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        AndroidThreeTen.init(this)
-    }
+To setup your project for desugaring, you need to first ensure that you are using [Android Gradle plugin](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) 4.0.0 or higher.
+
+Then include the following in your app's build.gradle file:
+
+```groovy
+android {
+  defaultConfig {
+    // Required ONLY when setting minSdkVersion to 20 or lower
+    multiDexEnabled true
+  }
+
+  compileOptions {
+    // Flag to enable support for the new language APIs
+    coreLibraryDesugaringEnabled true
+    // Sets Java compatibility to Java 8
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:<latest-version>'
 }
 ```
+
+You can find the latest version of `desugar_jdk_libs` [here](https://mvnrepository.com/artifact/com.android.tools/desugar_jdk_libs).
+
+#### Step 2
+
+Add the JitPack repository to your project level `build.gradle`:
+
+```groovy
+allprojects {
+ repositories {
+    google()
+    jcenter()
+    maven { url "https://jitpack.io" }
+ }
+}
+```
+
+Add CalendarView to your app `build.gradle`:
+
+```groovy
+dependencies {
+	implementation 'com.github.kizitonwose:CalendarView:<latest-version>'
+}
+```
+
+**You can find the latest version of `CalendarView` on the JitPack badge above the preview images.**
+
+## Usage
+
+#### Step 1
 
 Add CalendarView to your XML like any other view.
 
@@ -59,8 +105,6 @@ Add CalendarView to your XML like any other view.
     app:cv_dayViewResource="@layout/calendar_day_layout" />
 ```
 See all available [attributes](#attributes).
-
-#### Step 2
 
 Create your day view resource in `res/layout/calendar_day_layout.xml`.
 
@@ -78,11 +122,11 @@ Create your view container which acts as a view holder for each date cell.
 The view passed in here is the inflated day view resource which you provided.
 
 ```kotlin
-class DayViewContainer(view: View) : ViewContainer(view) {
-    val textView = view.calendarDayText
-    
-    // Without the kotlin android extensions plugin
-    // val textView = view.findViewById<TextView>(R.id.calendarDayText)
+class DayViewContainer(view: View) : ViewContainer(view) {    
+    val textView = view.findViewById<TextView>(R.id.calendarDayText)
+
+    // With ViewBinding
+    // val textView = CalendarDayLayoutBinding.bind(view).calendarDayText
 }
 ```
 
@@ -100,7 +144,7 @@ calendarView.dayBinder = object : DayBinder<DayViewContainer> {
 }
 ```
 
-#### Step 3
+#### Step 2
 
 Setup the desired dates in your Fragment or Activity:
 
@@ -241,36 +285,15 @@ Remember that all the screenshots above are just examples of what you can achiev
 
 **Made a cool calendar with this library? Share an image [here](https://github.com/kizitonwose/CalendarView/issues/1).**
 
-## Setup
-
-### Gradle
-
-Add the JitPack repository to your project level `build.gradle`:
-
-```groovy
-allprojects {
- repositories {
-    google()
-    jcenter()
-    maven { url "https://jitpack.io" }
- }
-}
-```
-
-Add this to your app `build.gradle`:
-
-```groovy
-dependencies {
-	implementation 'com.github.kizitonwose:CalendarView:<latest-version>'
-}
-```
-**Note: `<latest-version>` value can be found on the JitPack badge above the preview images.**
-
 ## FAQ
 
 **Q**: How do I use this library in a Java project?
 
 **A**: It works out of the box, however, the `MonthScrollListener` is not an interface but a Kotlin function. To set the `MonthScrollListener` in a Java project see [this](https://github.com/kizitonwose/CalendarView/issues/74).
+
+**Q**: How do I disable user scrolling on the calendar so I can only scroll programmatically?
+
+**A**: See [this](https://github.com/kizitonwose/CalendarView/issues/38#issuecomment-525786644).
 
 **Q**: Why am I getting the same `YearMonth` value in the `CalendarMonth` passed into the `MonthScrollListener`?
 
@@ -282,10 +305,8 @@ Found a bug? feel free to fix it and send a pull request or [open an issue](http
 
 ## Inspiration
 
-CalendarView was inspired by the iOS library [JTAppleCalendar][jt-cal-url]. I used JTAppleCalendar in an iOS project but couldn't find anything as customizable on Android so I built this. 
+CalendarView was inspired by the iOS library [JTAppleCalendar][https://github.com/patchthecode/JTAppleCalendar]. I used JTAppleCalendar in an iOS project but couldn't find anything as customizable on Android so I built this. 
 You'll find some similar terms like `InDateStyle`, `OutDateStyle`, `DayOwner` etc.
 
 ## License
 CalendarView is distributed under the MIT license. See [LICENSE](https://github.com/kizitonwose/CalendarView/blob/master/LICENSE.md) for details.
-
-[jt-cal-url]: https://github.com/patchthecode/JTAppleCalendar 
