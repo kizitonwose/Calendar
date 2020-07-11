@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
+apply from: rootProject.file("dependencies.gradle")
 
 group='com.github.kizitonwose'
 def artifact = 'CalendarView'
@@ -12,7 +13,8 @@ android {
         targetSdkVersion versions.target_sdk
         versionCode versions.version_code
         versionName versions.version_name
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true // Because library's minSdk < 21
     }
     buildTypes {
         release {
@@ -32,10 +34,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar_jdk_libs"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
-    implementation "androidx.core:core-ktx:$versions.androidx_core_ktx"
+    coreLibraryDesugaring deps.desugaring
+    implementation deps.kotlin_stdlib8
+    implementation deps.androidx.core_ktx
 
     // Expose RecyclerView which is CalendarView's superclass to
     // prevent a compile error when using the library in a project:
@@ -47,8 +48,8 @@ dependencies {
     // Not exposing RecyclerView also means that calling findViewById<CalendarView>
     // results in an error: Type argument is not within its bounds, Expected: View.
     // This is because CalendarView's superclass type cannot be determined.
-    api "androidx.recyclerview:recyclerview:$versions.recyclerview"
+    api deps.androidx.recyclerview
 
-    testImplementation "junit:junit:$versions.junit"
+    testImplementation deps.test.junit
 }
 
