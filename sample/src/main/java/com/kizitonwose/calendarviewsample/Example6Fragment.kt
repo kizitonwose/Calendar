@@ -18,8 +18,8 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarviewsample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example6FragmentBinding
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 // We assign this class to the `monthViewClass` attribute in XML.
 // See usage in example_6_fragment.xml

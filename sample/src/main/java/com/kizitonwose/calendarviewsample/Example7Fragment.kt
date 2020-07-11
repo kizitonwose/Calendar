@@ -12,10 +12,10 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarviewsample.databinding.Example7CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example7FragmentBinding
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, HasBackButton {
 

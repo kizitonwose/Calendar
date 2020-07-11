@@ -21,6 +21,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
@@ -32,11 +33,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar_jdk_libs"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
     implementation "androidx.core:core-ktx:$versions.androidx_core_ktx"
-
-    // Expose ThreeTenABP so library users can use it directly.
-    api "com.jakewharton.threetenabp:threetenabp:$versions.threetenabp"
 
     // Expose RecyclerView which is CalendarView's superclass to
     // prevent a compile error when using the library in a project:
@@ -51,10 +50,5 @@ dependencies {
     api "androidx.recyclerview:recyclerview:$versions.recyclerview"
 
     testImplementation "junit:junit:$versions.junit"
-    testImplementation('org.threeten:threetenbp:1.4.4') {
-        // Use threetenBP library for tests as context will
-        // not be available to initialise threetenABP
-        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
-    }
 }
 

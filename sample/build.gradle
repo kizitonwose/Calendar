@@ -21,6 +21,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
@@ -32,6 +33,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':library')
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar_jdk_libs"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
     implementation "androidx.legacy:legacy-support-v4:$versions.androidx_legacy"
     implementation "androidx.appcompat:appcompat:$versions.androidx_appcompat"
