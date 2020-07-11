@@ -23,11 +23,11 @@ import com.kizitonwose.calendarviewsample.databinding.Example5CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example5CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example5EventItemViewBinding
 import com.kizitonwose.calendarviewsample.databinding.Example5FragmentBinding
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.TextStyle
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 
 data class Flight(val time: LocalDateTime, val departure: Airport, val destination: Airport, @ColorRes val color: Int) {

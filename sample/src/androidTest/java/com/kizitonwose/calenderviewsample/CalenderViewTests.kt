@@ -27,9 +27,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
 import java.lang.Thread.sleep
+import java.time.LocalDate
+import java.time.YearMonth
 
 /**
  * These are UI behaviour tests.

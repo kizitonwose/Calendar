@@ -1,0 +1,45 @@
+ext.versions = [
+    min_sdk_library: 15,
+    min_sdk_sample: 21,
+    target_sdk: 29,
+    compile_sdk: 29,
+    version_code: 1,
+    version_name: "0.4.0"
+]
+
+def espresso_version = "3.2.0"
+
+ext.deps = [
+    gradle_plugins: [
+        android: "com.android.tools.build:gradle:4.0.0",
+        kotlin: "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72",
+        maven_release: "com.github.dcendents:android-maven-gradle-plugin:2.1",
+        ktlint: "org.jlleitschuh.gradle:ktlint-gradle:9.2.1"
+    ],
+
+    androidx: [
+        legacy: "androidx.legacy:legacy-support-v4:1.0.0",
+        appcompat: "androidx.appcompat:appcompat:1.2.0-rc01",
+        core_ktx: "androidx.core:core-ktx:1.3.0",
+        constraint_layout: "androidx.constraintlayout:constraintlayout:2.0.0-beta8",
+        cardview: "androidx.cardview:cardview:1.0.0",
+        recyclerview: "androidx.recyclerview:recyclerview:1.2.0-alpha04"
+    ],
+
+    material_library: "com.google.android.material:material:1.2.0-beta01",
+
+    desugaring: "com.android.tools:desugar_jdk_libs:1.0.5",
+
+    kotlin_stdlib8: "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
+
+    test: [
+        junit: "junit:junit:4.12",
+        android: [
+            espresso_core: "androidx.test.espresso:espresso-core:$espresso_version",
+            espresso_contrib: "androidx.test.espresso:espresso-contrib:$espresso_version",
+            runner: "androidx.test:runner:1.2.0",
+            rules: "androidx.test:rules:1.2.0",
+            ext_junit: "androidx.test.ext:junit:1.1.1",
+        ]
+    ]
+]

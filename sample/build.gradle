@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply from: rootProject.file("dependencies.gradle")
 
 android {
     compileSdkVersion versions.compile_sdk
@@ -21,6 +22,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
@@ -30,21 +32,21 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':library')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin_lang"
-    implementation "androidx.legacy:legacy-support-v4:$versions.androidx_legacy"
-    implementation "androidx.appcompat:appcompat:$versions.androidx_appcompat"
-    implementation "androidx.core:core-ktx:$versions.androidx_core_ktx"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-    implementation "androidx.cardview:cardview:$versions.cardview"
-    implementation "com.google.android.material:material:$versions.material_library"
+    coreLibraryDesugaring deps.desugaring
+    implementation deps.kotlin_stdlib8
+    implementation deps.androidx.legacy
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.core_ktx
+    implementation deps.androidx.constraint_layout
+    implementation deps.androidx.cardview
+    implementation deps.material_library
 
-    testImplementation "junit:junit:$versions.junit"
+    testImplementation deps.test.junit
 
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.espresso"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:$versions.espresso" // RecyclerView actions.
-    androidTestImplementation "androidx.test:runner:$versions.androidx_test_runner"
-    androidTestImplementation "androidx.test:rules:$versions.androidx_test_rules"
-    androidTestImplementation "androidx.test.ext:junit:$versions.androidx_test_junit"
+    androidTestImplementation deps.test.android.espresso_core
+    androidTestImplementation deps.test.android.espresso_contrib // RecyclerView actions.
+    androidTestImplementation deps.test.android.runner
+    androidTestImplementation deps.test.android.rules
+    androidTestImplementation deps.test.android.ext_junit
 }

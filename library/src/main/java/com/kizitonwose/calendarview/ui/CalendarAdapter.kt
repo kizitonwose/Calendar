@@ -16,8 +16,8 @@ import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.utils.NO_INDEX
 import com.kizitonwose.calendarview.utils.inflate
 import com.kizitonwose.calendarview.utils.orZero
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
+import java.time.LocalDate
+import java.time.YearMonth
 
 internal typealias LP = ViewGroup.LayoutParams
 
@@ -118,14 +118,15 @@ internal class CalendarAdapter(
             }
         }
 
-        val userRoot = if (viewConfig.monthViewClass != null) {
-            (Class.forName(viewConfig.monthViewClass)
+        val userRoot = viewConfig.monthViewClass?.let {
+            val customLayout = (Class.forName(it)
                 .getDeclaredConstructor(Context::class.java)
-                .newInstance(context) as ViewGroup).apply {
+                .newInstance(context) as ViewGroup)
+            customLayout.apply {
                 setupRoot(this)
                 addView(rootLayout)
             }
-        } else rootLayout.apply { setupRoot(this) }
+        } ?: rootLayout.apply { setupRoot(this) }
 
         @Suppress("UNCHECKED_CAST")
         return MonthViewHolder(

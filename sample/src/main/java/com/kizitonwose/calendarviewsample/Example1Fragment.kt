@@ -18,10 +18,10 @@ import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.databinding.Example1CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example1FragmentBinding
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.TextStyle
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 
 class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {

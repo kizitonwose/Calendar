@@ -19,9 +19,9 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarviewsample.databinding.Example2CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example2CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example2FragmentBinding
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, HasBackButton {
 

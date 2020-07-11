@@ -26,9 +26,9 @@ import com.kizitonwose.calendarviewsample.databinding.Example3CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example3CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example3EventItemViewBinding
 import com.kizitonwose.calendarviewsample.databinding.Example3FragmentBinding
-import org.threeten.bp.LocalDate
-import org.threeten.bp.YearMonth
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 data class Event(val id: String, val text: String, val date: LocalDate)
