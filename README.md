@@ -91,6 +91,8 @@ dependencies {
 
 You can find the latest version of `CalendarView` on the JitPack badge above the preview images.
 
+**Note: If you're upgrading from version 0.3.x to 0.4.x, see the [migration guide](https://github.com/kizitonwose/CalendarView#migration).**
+
 ## Usage
 
 #### Step 1
@@ -299,13 +301,19 @@ Remember that all the screenshots above are just examples of what you can achiev
 
 **A**: This is because you have set `app:cv_hasBoundaries` to `false` in XML or have called `calendarView.hasBoundaries = false` in code. When this is set, the underlying `YearMonth` is undefined on all indices as each index could have multiple months depending on your `maxRowCount` value. If you need the month value with the `hasBoundaries = false` setting, you can get it from any of the `CalendarDay` values in the `CalendarMonth` class. You can always check if the first and last dates are from different months and act accordingly.
 
+## Migration
+
+If you're upgrading from version `0.3.x` to `0.4.x`, the main change is that CalendarView moved from using [ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP) to [Java 8 API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for dates. After following the new [setup](https://github.com/kizitonwose/CalendarView#setup) instructions, the next thing you need to do is change your imports for date/time related classes from `org.threeten.bp.*` to `java.time.*`. 
+
+You also need to remove the line `AndroidThreeTen.init(this)` from the `onCreate()` method of your application class as it's no longer needed.
+
 ## Contributing
 
 Found a bug? feel free to fix it and send a pull request or [open an issue](https://github.com/kizitonwose/CalendarView/issues).
 
 ## Inspiration
 
-CalendarView was inspired by the iOS library [JTAppleCalendar][https://github.com/patchthecode/JTAppleCalendar]. I used JTAppleCalendar in an iOS project but couldn't find anything as customizable on Android so I built this. 
+CalendarView was inspired by the iOS library [JTAppleCalendar](https://github.com/patchthecode/JTAppleCalendar). I used JTAppleCalendar in an iOS project but couldn't find anything as customizable on Android so I built this. 
 You'll find some similar terms like `InDateStyle`, `OutDateStyle`, `DayOwner` etc.
 
 ## License
