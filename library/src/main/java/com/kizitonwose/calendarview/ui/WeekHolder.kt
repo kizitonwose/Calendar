@@ -3,11 +3,10 @@ package com.kizitonwose.calendarview.ui
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.isGone
 import com.kizitonwose.calendarview.model.CalendarDay
 
-internal class WeekHolder(dayConfig: DayConfig) {
-
-    val dayHolders = (1..7).map { DayHolder(dayConfig) }
+internal class WeekHolder(val dayHolders: List<DayHolder>) {
 
     private lateinit var container: LinearLayout
 
@@ -27,7 +26,7 @@ internal class WeekHolder(dayConfig: DayConfig) {
     }
 
     fun bindWeekView(daysOfWeek: List<CalendarDay>) {
-        container.visibility = if (daysOfWeek.isEmpty()) View.GONE else View.VISIBLE
+        container.isGone = daysOfWeek.isEmpty()
         dayHolders.forEachIndexed { index, holder ->
             // Indices can be null if OutDateStyle is NONE. We set the
             // visibility for the views at these indices to INVISIBLE.

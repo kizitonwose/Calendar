@@ -6,6 +6,8 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.Px
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.utils.inflate
 
@@ -55,12 +57,12 @@ internal class DayHolder(private val config: DayConfig) {
         }
 
         if (currentDay != null) {
-            if (containerView.visibility != View.VISIBLE) {
-                containerView.visibility = View.VISIBLE
+            if (!containerView.isVisible) {
+                containerView.isVisible = true
             }
             config.viewBinder.bind(viewContainer, currentDay)
-        } else if (containerView.visibility != View.GONE) {
-            containerView.visibility = View.GONE
+        } else if (!containerView.isGone) {
+            containerView.isGone = true
         }
     }
 
