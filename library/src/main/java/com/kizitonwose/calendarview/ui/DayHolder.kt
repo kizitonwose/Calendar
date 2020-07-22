@@ -1,13 +1,12 @@
 package com.kizitonwose.calendarview.ui
 
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.Px
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
+import androidx.core.view.*
+import androidx.core.view.MarginLayoutParamsCompat.getMarginEnd
+import androidx.core.view.MarginLayoutParamsCompat.getMarginStart
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.utils.inflate
 
@@ -21,28 +20,22 @@ internal data class DayConfig(
 internal class DayHolder(private val config: DayConfig) {
 
     private lateinit var dateView: View
-    private lateinit var containerView: FrameLayout
     private lateinit var viewContainer: ViewContainer
 
     var day: CalendarDay? = null
 
     fun inflateDayView(parent: LinearLayout): View {
         dateView = parent.inflate(config.dayViewRes).apply {
-            // We ensure the layout params of the supplied child view is
-            // MATCH_PARENT so it fills the parent container.
-            layoutParams = layoutParams.apply {
-                height = ViewGroup.LayoutParams.MATCH_PARENT
-                width = ViewGroup.LayoutParams.MATCH_PARENT
-            }
-        }
-        containerView = FrameLayout(parent.context).apply {
             // This will be placed in the WeekLayout(A LinearLayout) hence we
             // use LinearLayout.LayoutParams and set the weight appropriately.
             // The parent's wightSum is already set to 7 to accommodate seven week days.
-            layoutParams = LinearLayout.LayoutParams(config.width, config.height, 1F)
-            addView(dateView)
+            updateLayoutParams<LinearLayout.LayoutParams> {
+                width = config.width - getMarginStart(this) - getMarginEnd(this)
+                height = config.height - marginTop - marginBottom
+                weight = 1f
+            }
         }
-        return containerView
+        return dateView
     }
 
     fun bindDayView(currentDay: CalendarDay?) {
@@ -52,17 +45,17 @@ internal class DayHolder(private val config: DayConfig) {
         }
 
         val dayHash = currentDay?.date.hashCode()
-        if (containerView.id != dayHash) {
-            containerView.id = dayHash
+        if (viewContainer.view.tag != dayHash) {
+            viewContainer.view.tag = dayHash
         }
 
         if (currentDay != null) {
-            if (!containerView.isVisible) {
-                containerView.isVisible = true
+            if (!viewContainer.view.isVisible) {
+                viewContainer.view.isVisible = true
             }
             config.viewBinder.bind(viewContainer, currentDay)
-        } else if (!containerView.isGone) {
-            containerView.isGone = true
+        } else if (!viewContainer.view.isGone) {
+            viewContainer.view.isGone = true
         }
     }
 
