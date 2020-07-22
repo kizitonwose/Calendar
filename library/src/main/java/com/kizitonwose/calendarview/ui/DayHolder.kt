@@ -21,8 +21,7 @@ internal class DayHolder(private val config: DayConfig) {
 
     private lateinit var dateView: View
     private lateinit var viewContainer: ViewContainer
-
-    var day: CalendarDay? = null
+    private var day: CalendarDay? = null
 
     fun inflateDayView(parent: LinearLayout): View {
         dateView = parent.inflate(config.dayViewRes).apply {
@@ -59,7 +58,12 @@ internal class DayHolder(private val config: DayConfig) {
         }
     }
 
-    fun reloadView() {
-        bindDayView(day)
+    fun reloadViewIfNecessary(day: CalendarDay): Boolean {
+        return if (day == this.day) {
+            bindDayView(this.day)
+            true
+        } else {
+            false
+        }
     }
 }

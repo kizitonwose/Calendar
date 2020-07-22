@@ -6,7 +6,7 @@ import android.widget.LinearLayout
 import androidx.core.view.isGone
 import com.kizitonwose.calendarview.model.CalendarDay
 
-internal class WeekHolder(val dayHolders: List<DayHolder>) {
+internal class WeekHolder(private val dayHolders: List<DayHolder>) {
 
     private lateinit var container: LinearLayout
 
@@ -33,4 +33,6 @@ internal class WeekHolder(val dayHolders: List<DayHolder>) {
             holder.bindDayView(daysOfWeek.getOrNull(index))
         }
     }
+
+    fun reloadDay(day: CalendarDay): Boolean = dayHolders.any { it.reloadViewIfNecessary(day) }
 }
