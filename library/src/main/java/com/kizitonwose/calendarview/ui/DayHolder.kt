@@ -4,9 +4,13 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.Px
-import androidx.core.view.*
 import androidx.core.view.MarginLayoutParamsCompat.getMarginEnd
 import androidx.core.view.MarginLayoutParamsCompat.getMarginStart
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
+import androidx.core.view.updateLayoutParams
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.utils.inflate
 
