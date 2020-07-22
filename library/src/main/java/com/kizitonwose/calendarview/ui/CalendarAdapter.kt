@@ -316,7 +316,7 @@ internal class CalendarAdapter(
         return months[visibleIndex].weekDays.flatten()
             .run { if (isFirst) this else reversed() }
             .firstOrNull {
-                val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
+                val dayView = visibleItemView.findViewWithTag<View>(it.date.hashCode()) ?: return@firstOrNull false
                 dayView.getGlobalVisibleRect(dayRect)
                 dayRect.intersect(monthRect)
             }
