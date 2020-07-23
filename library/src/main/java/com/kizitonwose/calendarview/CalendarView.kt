@@ -5,13 +5,16 @@ import android.util.AttributeSet
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.ViewGroup
 import androidx.annotation.Px
+import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
+import kotlinx.coroutines.*
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import kotlin.coroutines.CoroutineContext
 
 open class CalendarView : RecyclerView {
 
@@ -233,22 +236,22 @@ open class CalendarView : RecyclerView {
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         setHasFixedSize(true)
-        val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
-        dayViewResource = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
-        monthHeaderResource = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
-        monthFooterResource = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
-        orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
-        scrollMode = ScrollMode.values()[a.getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
-        outDateStyle = OutDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
-        inDateStyle = InDateStyle.values()[a.getInt(R.styleable.CalendarView_cv_inDateStyle, inDateStyle.ordinal)]
-        maxRowCount = a.getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
-        monthViewClass = a.getString(R.styleable.CalendarView_cv_monthViewClass)
-        hasBoundaries = a.getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
-        wrappedPageHeightAnimationDuration = a.getInt(
-            R.styleable.CalendarView_cv_wrappedPageHeightAnimationDuration,
-            wrappedPageHeightAnimationDuration
-        )
-        a.recycle()
+        context.withStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes) {
+            dayViewResource = getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
+            monthHeaderResource = getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
+            monthFooterResource = getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
+            orientation = getInt(R.styleable.CalendarView_cv_orientation, orientation)
+            scrollMode = ScrollMode.values()[getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
+            outDateStyle = OutDateStyle.values()[getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
+            inDateStyle = InDateStyle.values()[getInt(R.styleable.CalendarView_cv_inDateStyle, inDateStyle.ordinal)]
+            maxRowCount = getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
+            monthViewClass = getString(R.styleable.CalendarView_cv_monthViewClass)
+            hasBoundaries = getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
+            wrappedPageHeightAnimationDuration = getInt(
+                R.styleable.CalendarView_cv_wrappedPageHeightAnimationDuration,
+                wrappedPageHeightAnimationDuration
+            )
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -621,6 +624,7 @@ open class CalendarView : RecyclerView {
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
+        asyncJob?.cancel()
         if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
             this.firstDayOfWeek = firstDayOfWeek
             updateMonthRange(startMonth, endMonth)
@@ -628,22 +632,55 @@ open class CalendarView : RecyclerView {
             this.startMonth = startMonth
             this.endMonth = endMonth
             this.firstDayOfWeek = firstDayOfWeek
-
-            // Remove the listener before adding again to prevent
-            // multiple additions if we already added it before.
-            removeOnScrollListener(scrollListenerInternal)
-            addOnScrollListener(scrollListenerInternal)
-
-            layoutManager = CalendarLayoutManager(this, orientation)
-            adapter = CalendarAdapter(
-                this,
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
+            finishSetup(
                 MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount, startMonth,
                     endMonth, firstDayOfWeek, hasBoundaries
                 )
             )
         }
+    }
+
+    private var asyncJob: Job? = null
+
+    @JvmOverloads
+    fun setupAsync(
+        startMonth: YearMonth,
+        endMonth: YearMonth,
+        firstDayOfWeek: DayOfWeek,
+        completion: (() -> Unit)? = null
+    ) {
+        asyncJob?.cancel()
+        if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
+            this.firstDayOfWeek = firstDayOfWeek
+            updateMonthRangeAsync(startMonth, endMonth, completion)
+        } else {
+            this.startMonth = startMonth
+            this.endMonth = endMonth
+            this.firstDayOfWeek = firstDayOfWeek
+            asyncJob = GlobalScope.launch {
+                val monthConfig = MonthConfig(
+                    outDateStyle, inDateStyle, maxRowCount, startMonth,
+                    endMonth, firstDayOfWeek, hasBoundaries
+                )
+                withContext(Dispatchers.Main) {
+                    finishSetup(monthConfig)
+                    completion?.invoke()
+                }
+            }
+        }
+    }
+
+    private fun finishSetup(monthConfig: MonthConfig) {
+        removeOnScrollListener(scrollListenerInternal)
+        addOnScrollListener(scrollListenerInternal)
+
+        layoutManager = CalendarLayoutManager(this, orientation)
+        adapter = CalendarAdapter(
+            this,
+            ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
+            monthConfig
+        )
     }
 
     /**
@@ -656,6 +693,13 @@ open class CalendarView : RecyclerView {
         endMonth ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
     )
 
+    @JvmOverloads
+    fun updateStartMonthAsync(startMonth: YearMonth, completion: (() -> Unit)? = null) = updateMonthRangeAsync(
+        startMonth,
+        endMonth ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?"),
+        completion
+    )
+
     /**
      * Update the CalendarView's end month.
      * This can be called only if you have called [setup] in the past.
@@ -666,28 +710,68 @@ open class CalendarView : RecyclerView {
         endMonth
     )
 
+    @JvmOverloads
+    fun updateEndMonthAsync(endMonth: YearMonth, completion: (() -> Unit)? = null) = updateMonthRangeAsync(
+        startMonth ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?"),
+        endMonth,
+        completion
+    )
+
     /**
      * Update the CalendarView's start and end months.
      * This can be called only if you have called [setup] in the past.
      * See [updateStartMonth] and [updateEndMonth].
      */
     fun updateMonthRange(startMonth: YearMonth, endMonth: YearMonth) {
+        asyncJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
+        val firstDayOfWeek =
+            firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
+        val (config, diff) = getMonthUpdateData(startMonth, endMonth, firstDayOfWeek)
+        finishUpdateMonthRange(config, diff)
+    }
 
-        val oldConfig = calendarAdapter.monthConfig
-        val newConfig = MonthConfig(
-            outDateStyle,
-            inDateStyle,
-            maxRowCount,
-            startMonth,
-            endMonth,
-            firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?"),
-            hasBoundaries
+    @JvmOverloads
+    fun updateMonthRangeAsync(startMonth: YearMonth, endMonth: YearMonth, completion: (() -> Unit)? = null) {
+        asyncJob?.cancel()
+        this.startMonth = startMonth
+        this.endMonth = endMonth
+        val firstDayOfWeek =
+            firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
+        asyncJob = GlobalScope.launch {
+            val (config, diff) = getMonthUpdateData(startMonth, endMonth, firstDayOfWeek)
+            withContext(Dispatchers.Main) {
+                finishUpdateMonthRange(config, diff)
+                completion?.invoke()
+            }
+        }
+    }
+
+    private fun getMonthUpdateData(
+        startMonth: YearMonth,
+        endMonth: YearMonth,
+        firstDayOfWeek: DayOfWeek
+    ): Pair<MonthConfig, DiffUtil.DiffResult> {
+        val monthConfig = MonthConfig(
+            outDateStyle, inDateStyle, maxRowCount, startMonth,
+            endMonth, firstDayOfWeek, hasBoundaries
         )
+        val diffResult = DiffUtil.calculateDiff(
+            MonthRangeDiffCallback(calendarAdapter.monthConfig.months, monthConfig.months),
+            false
+        )
+        return Pair(monthConfig, diffResult)
+    }
+
+    private fun finishUpdateMonthRange(newConfig: MonthConfig, diffResult: DiffUtil.DiffResult) {
         calendarAdapter.monthConfig = newConfig
-        DiffUtil.calculateDiff(MonthRangeDiffCallback(oldConfig.months, newConfig.months), false)
-            .dispatchUpdatesTo(calendarAdapter)
+        diffResult.dispatchUpdatesTo(calendarAdapter)
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        asyncJob?.cancel()
     }
 
     private class MonthRangeDiffCallback(

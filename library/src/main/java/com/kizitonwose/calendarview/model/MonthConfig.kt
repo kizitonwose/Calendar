@@ -7,17 +7,17 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 
 internal data class MonthConfig(
-    val outDateStyle: OutDateStyle,
-    val inDateStyle: InDateStyle,
-    val maxRowCount: Int,
-    val startMonth: YearMonth,
-    val endMonth: YearMonth,
-    val firstDayOfWeek: DayOfWeek,
-    val hasBoundaries: Boolean
+    internal val outDateStyle: OutDateStyle,
+    internal val inDateStyle: InDateStyle,
+    internal val maxRowCount: Int,
+    internal val startMonth: YearMonth,
+    internal val endMonth: YearMonth,
+    internal val firstDayOfWeek: DayOfWeek,
+    internal val hasBoundaries: Boolean
 ) {
 
-    internal val months: List<CalendarMonth> by lazy lazy@{
-        return@lazy if (hasBoundaries) {
+    internal val months: List<CalendarMonth> = run {
+        return@run if (hasBoundaries) {
             generateBoundedMonths(
                 startMonth, endMonth, firstDayOfWeek,
                 maxRowCount, inDateStyle, outDateStyle
