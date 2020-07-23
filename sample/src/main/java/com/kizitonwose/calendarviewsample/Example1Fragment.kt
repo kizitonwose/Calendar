@@ -153,7 +153,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
             animator.doOnStart {
                 if (!monthToWeek) {
-                    binding.exOneCalendar.apply {
+                    binding.exOneCalendar.configure {
                         inDateStyle = InDateStyle.ALL_MONTHS
                         maxRowCount = 6
                         hasBoundaries = true
@@ -162,7 +162,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             }
             animator.doOnEnd {
                 if (monthToWeek) {
-                    binding.exOneCalendar.apply {
+                    binding.exOneCalendar.configure {
                         inDateStyle = InDateStyle.FIRST_MONTH
                         maxRowCount = 1
                         hasBoundaries = false

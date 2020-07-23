@@ -409,6 +409,11 @@ open class CalendarView : RecyclerView {
         // This removes all views but is internal.
         // removeAndRecycleViews()
 
+        if (isUpdating) {
+            pendingViewHolderInvalidation = true
+            return
+        }
+
         if (adapter == null || layoutManager == null) return
         val state = layoutManager?.onSaveInstanceState()
         adapter = adapter
@@ -417,6 +422,10 @@ open class CalendarView : RecyclerView {
     }
 
     private fun updateAdapterMonthConfig() {
+        if (isUpdating) {
+            pendingAdapterMonthConfigUpdate = true
+            return
+        }
         if (adapter != null) {
             calendarAdapter.monthConfig =
                 MonthConfig(
@@ -434,11 +443,37 @@ open class CalendarView : RecyclerView {
     }
 
     private fun updateAdapterViewConfig() {
+        if (isUpdating) {
+            pendingAdapterViewConfigUpdate = true
+            return
+        }
         if (adapter != null) {
             calendarAdapter.viewConfig =
                 ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
             invalidateViewHolders()
         }
+    }
+
+    private var isUpdating = false
+    private var pendingAdapterMonthConfigUpdate = false
+    private var pendingAdapterViewConfigUpdate = false
+    private var pendingViewHolderInvalidation = false
+
+    /**
+     * Update multiple properties of [CalendarView] without triggering multiple calls to
+     * [updateAdapterViewConfig], [updateAdapterMonthConfig] or [invalidateViewHolders].
+     * Beneficial if you want to change multiple properties at once.
+     */
+    fun configure(block: CalendarView.() -> Unit) {
+        isUpdating = true
+        this.block()
+        isUpdating = false
+        if (pendingAdapterMonthConfigUpdate) updateAdapterMonthConfig()
+        if (pendingAdapterViewConfigUpdate) updateAdapterViewConfig()
+        if (pendingViewHolderInvalidation && !pendingAdapterViewConfigUpdate) invalidateViewHolders()
+        pendingAdapterMonthConfigUpdate = false
+        pendingAdapterViewConfigUpdate = false
+        pendingViewHolderInvalidation = false
     }
 
     /**
