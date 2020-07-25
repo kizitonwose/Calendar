@@ -244,7 +244,7 @@ open class CalendarView : RecyclerView {
         get() = !isVertical
 
     private var configJob: Job? = null
-    private var updatingMonthConfig = false
+    private var internalConfigUpdate = false
 
     constructor(context: Context) : super(context)
 
@@ -446,12 +446,21 @@ open class CalendarView : RecyclerView {
     private val calendarAdapter: CalendarAdapter
         get() = adapter as CalendarAdapter
 
+    private fun updateAdapterViewConfig() {
+        if (adapter != null) {
+            calendarAdapter.viewConfig =
+                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
+            invalidateViewHolders()
+        }
+    }
+
     private fun invalidateViewHolders() {
         // This does not remove visible views.
         // recycledViewPool.clear()
 
         // This removes all views but is internal.
         // removeAndRecycleViews()
+        if (internalConfigUpdate) return
 
         if (adapter == null || layoutManager == null) return
         val state = layoutManager?.onSaveInstanceState()
@@ -461,7 +470,7 @@ open class CalendarView : RecyclerView {
     }
 
     private fun updateAdapterMonthConfig(config: MonthConfig? = null) {
-        if (updatingMonthConfig) return
+        if (internalConfigUpdate) return
         if (adapter != null) {
             calendarAdapter.monthConfig = config ?: MonthConfig(
                 outDateStyle,
@@ -489,12 +498,12 @@ open class CalendarView : RecyclerView {
         hasBoundaries: Boolean = this.hasBoundaries
     ) {
         configJob?.cancel()
-        updatingMonthConfig = true
+        internalConfigUpdate = true
         this.inDateStyle = inDateStyle
         this.outDateStyle = outDateStyle
         this.maxRowCount = maxRowCount
         this.hasBoundaries = hasBoundaries
-        updatingMonthConfig = false
+        internalConfigUpdate = false
         updateAdapterMonthConfig()
     }
 
@@ -512,12 +521,12 @@ open class CalendarView : RecyclerView {
         completion: Completion? = null
     ) {
         configJob?.cancel()
-        updatingMonthConfig = true
+        internalConfigUpdate = true
         this.inDateStyle = inDateStyle
         this.outDateStyle = outDateStyle
         this.maxRowCount = maxRowCount
         this.hasBoundaries = hasBoundaries
-        updatingMonthConfig = false
+        internalConfigUpdate = false
         configJob = GlobalScope.launch {
             val monthConfig = generateMonthConfig(job)
             withContext(Main) {
@@ -527,12 +536,44 @@ open class CalendarView : RecyclerView {
         }
     }
 
-    private fun updateAdapterViewConfig() {
-        if (adapter != null) {
-            calendarAdapter.viewConfig =
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
-            invalidateViewHolders()
-        }
+    /**
+     * Set the [monthPaddingStart], [monthPaddingTop], [monthPaddingEnd] and [monthPaddingBottom]
+     * values without invalidating the view holders multiple times which would happen if these
+     * values were set individually.
+     */
+    fun setMonthPadding(
+        @Px start: Int = monthPaddingStart,
+        @Px top: Int = monthPaddingTop,
+        @Px end: Int = monthPaddingEnd,
+        @Px bottom: Int = monthPaddingBottom
+    ) {
+        internalConfigUpdate = true
+        monthPaddingStart = start
+        monthPaddingTop = top
+        monthPaddingEnd = end
+        monthPaddingBottom = bottom
+        internalConfigUpdate = false
+        invalidateViewHolders()
+    }
+
+    /**
+     * Set the [monthMarginStart], [monthMarginTop], [monthMarginEnd] and [monthMarginBottom]
+     * values without invalidating the view holders multiple times which would happen if these
+     * values were set individually.
+     */
+    fun setMonthMargins(
+        @Px start: Int = monthMarginStart,
+        @Px top: Int = monthMarginTop,
+        @Px end: Int = monthMarginEnd,
+        @Px bottom: Int = monthMarginBottom
+    ) {
+        internalConfigUpdate = true
+        monthMarginStart = start
+        monthMarginTop = top
+        monthMarginEnd = end
+        monthMarginBottom = bottom
+        internalConfigUpdate = false
+        invalidateViewHolders()
     }
 
     /**
