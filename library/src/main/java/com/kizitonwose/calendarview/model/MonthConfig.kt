@@ -1,6 +1,7 @@
 package com.kizitonwose.calendarview.model
 
 import com.kizitonwose.calendarview.utils.next
+import kotlinx.coroutines.Job
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -13,41 +14,39 @@ internal data class MonthConfig(
     internal val startMonth: YearMonth,
     internal val endMonth: YearMonth,
     internal val firstDayOfWeek: DayOfWeek,
-    internal val hasBoundaries: Boolean
+    internal val hasBoundaries: Boolean,
+    internal val job: Job
 ) {
 
     internal val months: List<CalendarMonth> = run {
         return@run if (hasBoundaries) {
-            generateBoundedMonths(
-                startMonth, endMonth, firstDayOfWeek,
-                maxRowCount, inDateStyle, outDateStyle
-            )
+            generateBoundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle, job)
         } else {
-            generateUnboundedMonths(
-                startMonth, endMonth, firstDayOfWeek,
-                maxRowCount, inDateStyle, outDateStyle
-            )
+            generateUnboundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle, job)
         }
     }
 
     internal companion object {
+
+        private val uninterruptedJob = Job()
 
         /**
          * A [YearMonth] will have multiple [CalendarMonth] instances if the [maxRowCount] is
          * less than 6. Each [CalendarMonth] will hold just enough [CalendarDay] instances(weekDays)
          * to fit in the [maxRowCount].
          */
-        internal fun generateBoundedMonths(
+        fun generateBoundedMonths(
             startMonth: YearMonth,
             endMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
             maxRowCount: Int,
             inDateStyle: InDateStyle,
-            outDateStyle: OutDateStyle
+            outDateStyle: OutDateStyle,
+            job: Job = uninterruptedJob
         ): List<CalendarMonth> {
             val months = mutableListOf<CalendarMonth>()
             var currentMonth = startMonth
-            while (currentMonth <= endMonth) {
+            while (currentMonth <= endMonth && job.isActive) {
                 val generateInDates = when (inDateStyle) {
                     InDateStyle.ALL_MONTHS -> true
                     InDateStyle.FIRST_MONTH -> currentMonth == startMonth
@@ -79,13 +78,14 @@ internal data class MonthConfig(
             firstDayOfWeek: DayOfWeek,
             maxRowCount: Int,
             inDateStyle: InDateStyle,
-            outDateStyle: OutDateStyle
+            outDateStyle: OutDateStyle,
+            job: Job = uninterruptedJob
         ): List<CalendarMonth> {
 
             // Generate a flat list of all days in the given month range
             val allDays = mutableListOf<CalendarDay>()
             var currentMonth = startMonth
-            while (currentMonth <= endMonth) {
+            while (currentMonth <= endMonth && job.isActive) {
 
                 // If inDates are enabled with boundaries disabled,
                 // we show them on the first month only.

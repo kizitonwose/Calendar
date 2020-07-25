@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import kotlin.coroutines.CoroutineContext
 
 open class CalendarView : RecyclerView {
 
@@ -438,7 +441,7 @@ open class CalendarView : RecyclerView {
                     startMonth ?: return,
                     endMonth ?: return,
                     firstDayOfWeek ?: return,
-                    hasBoundaries
+                    hasBoundaries, Job()
                 )
             calendarAdapter.notifyDataSetChanged()
             post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
@@ -624,7 +627,7 @@ open class CalendarView : RecyclerView {
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
-        asyncJob?.cancel()
+        setupJob?.cancel()
         if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
             this.firstDayOfWeek = firstDayOfWeek
             updateMonthRange(startMonth, endMonth)
@@ -635,13 +638,13 @@ open class CalendarView : RecyclerView {
             finishSetup(
                 MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount, startMonth,
-                    endMonth, firstDayOfWeek, hasBoundaries
+                    endMonth, firstDayOfWeek, hasBoundaries, Job()
                 )
             )
         }
     }
 
-    private var asyncJob: Job? = null
+    private var setupJob: Job? = null
 
     @JvmOverloads
     fun setupAsync(
@@ -650,7 +653,7 @@ open class CalendarView : RecyclerView {
         firstDayOfWeek: DayOfWeek,
         completion: (() -> Unit)? = null
     ) {
-        asyncJob?.cancel()
+        setupJob?.cancel()
         if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
             this.firstDayOfWeek = firstDayOfWeek
             updateMonthRangeAsync(startMonth, endMonth, completion)
@@ -658,12 +661,12 @@ open class CalendarView : RecyclerView {
             this.startMonth = startMonth
             this.endMonth = endMonth
             this.firstDayOfWeek = firstDayOfWeek
-            asyncJob = GlobalScope.launch {
+            setupJob = GlobalScope.launch {
                 val monthConfig = MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount, startMonth,
-                    endMonth, firstDayOfWeek, hasBoundaries
+                    endMonth, firstDayOfWeek, hasBoundaries, setupJob ?: Job()
                 )
-                withContext(Dispatchers.Main) {
+                withContext(Main) {
                     finishSetup(monthConfig)
                     completion?.invoke()
                 }
@@ -723,25 +726,25 @@ open class CalendarView : RecyclerView {
      * See [updateStartMonth] and [updateEndMonth].
      */
     fun updateMonthRange(startMonth: YearMonth, endMonth: YearMonth) {
-        asyncJob?.cancel()
+        setupJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
         val firstDayOfWeek =
             firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
-        val (config, diff) = getMonthUpdateData(startMonth, endMonth, firstDayOfWeek)
+        val (config, diff) = getMonthUpdateData(startMonth, endMonth, firstDayOfWeek, Job())
         finishUpdateMonthRange(config, diff)
     }
 
     @JvmOverloads
     fun updateMonthRangeAsync(startMonth: YearMonth, endMonth: YearMonth, completion: (() -> Unit)? = null) {
-        asyncJob?.cancel()
+        setupJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
         val firstDayOfWeek =
             firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
-        asyncJob = GlobalScope.launch {
-            val (config, diff) = getMonthUpdateData(startMonth, endMonth, firstDayOfWeek)
-            withContext(Dispatchers.Main) {
+        setupJob = GlobalScope.launch {
+            val (config, diff) = getMonthUpdateData(startMonth, endMonth, firstDayOfWeek, setupJob ?: Job())
+            withContext(Main) {
                 finishUpdateMonthRange(config, diff)
                 completion?.invoke()
             }
@@ -751,11 +754,12 @@ open class CalendarView : RecyclerView {
     private fun getMonthUpdateData(
         startMonth: YearMonth,
         endMonth: YearMonth,
-        firstDayOfWeek: DayOfWeek
+        firstDayOfWeek: DayOfWeek,
+        job: Job
     ): Pair<MonthConfig, DiffUtil.DiffResult> {
         val monthConfig = MonthConfig(
             outDateStyle, inDateStyle, maxRowCount, startMonth,
-            endMonth, firstDayOfWeek, hasBoundaries
+            endMonth, firstDayOfWeek, hasBoundaries, job
         )
         val diffResult = DiffUtil.calculateDiff(
             MonthRangeDiffCallback(calendarAdapter.monthConfig.months, monthConfig.months),
@@ -771,7 +775,7 @@ open class CalendarView : RecyclerView {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        asyncJob?.cancel()
+        setupJob?.cancel()
     }
 
     private class MonthRangeDiffCallback(
