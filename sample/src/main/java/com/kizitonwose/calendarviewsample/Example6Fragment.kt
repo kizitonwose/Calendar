@@ -15,6 +15,7 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.Size
 import com.kizitonwose.calendarviewsample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example6FragmentBinding
@@ -52,8 +53,9 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
             // We want the immediately following/previous month to be
             // partially visible so we multiply the total width by 0.73
             val monthWidth = (dm.widthPixels * 0.73).toInt()
-            dayWidth = monthWidth / 7
-            dayHeight = (dayWidth * 1.73).toInt() // We don't want a square calendar.
+            val dayWidth = monthWidth / 7
+            val dayHeight = (dayWidth * 1.73).toInt() // We don't want a square calendar.
+            daySize = Size(dayWidth, dayHeight)
 
             // Add margins around our card view.
             val horizontalMargin = dpToPx(8, requireContext())

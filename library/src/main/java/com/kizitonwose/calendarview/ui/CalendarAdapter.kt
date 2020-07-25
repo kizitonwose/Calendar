@@ -77,7 +77,7 @@ internal class CalendarAdapter(
         }
 
         @Suppress("UNCHECKED_CAST") val dayConfig = DayConfig(
-            calView.dayWidth, calView.dayHeight, viewConfig.dayViewRes,
+            calView.daySize, viewConfig.dayViewRes,
             calView.dayBinder as DayBinder<ViewContainer>
         )
 
@@ -210,7 +210,7 @@ internal class CalendarAdapter(
                         // visibleVH.bodyLayout.height` won't not give us the right height as it differs
                         // depending on row count in the month. So we calculate the appropriate height
                         // by checking the number of visible(non-empty) rows.
-                        visibleMonth.weekDays.size * calView.dayHeight +
+                        visibleMonth.weekDays.size * calView.daySize.height +
                         visibleVH.footerView?.height.orZero()
                     if (calView.height != newHeight) {
                         ValueAnimator.ofInt(calView.height, newHeight).apply {

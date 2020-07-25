@@ -2,25 +2,27 @@ package com.kizitonwose.calendarview
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Size
 import android.view.View.MeasureSpec.UNSPECIFIED
 import android.view.ViewGroup
 import androidx.annotation.Px
 import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarview.CalendarView.Companion.DAY_SIZE_SQUARE
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
-import kotlinx.coroutines.*
+import com.kizitonwose.calendarview.utils.Size
+import com.kizitonwose.calendarview.utils.job
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
 typealias Completion = () -> Unit
-
-val CoroutineScope.job: Job
-    get() = requireNotNull(coroutineContext[Job])
 
 open class CalendarView : RecyclerView {
 
@@ -241,7 +243,7 @@ open class CalendarView : RecyclerView {
     internal val isHorizontal: Boolean
         get() = !isVertical
 
-    private var setupJob: Job? = null
+    private var configJob: Job? = null
     private var updatingMonthConfig = false
 
     constructor(context: Context) : super(context)
@@ -286,11 +288,11 @@ open class CalendarView : RecyclerView {
             }
 
             // +0.5 => round to the nearest pixel
-            val squareSize = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
-            if (dayWidth != squareSize || dayHeight != squareSize) {
+            val size = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
+            val squareSize = daySize.copy(width = size, height = size)
+            if (daySize != squareSize) {
                 sizedInternally = true
-                dayWidth = squareSize
-                dayHeight = squareSize
+                daySize = squareSize
                 sizedInternally = false
                 invalidateViewHolders()
             }
@@ -306,13 +308,14 @@ open class CalendarView : RecyclerView {
      * @see [DAY_SIZE_SQUARE]
      */
     @Px
+    @Deprecated(
+        "Will be removed to clean up the library's API.",
+        replaceWith = ReplaceWith("daySize")
+    )
     var dayWidth: Int = DAY_SIZE_SQUARE
         set(value) {
             field = value
-            if (!sizedInternally) {
-                autoSize = value == DAY_SIZE_SQUARE
-                invalidateViewHolders()
-            }
+            daySize = Size(field, dayHeight)
         }
 
     /**
@@ -323,11 +326,28 @@ open class CalendarView : RecyclerView {
      * @see [DAY_SIZE_SQUARE]
      */
     @Px
+    @Deprecated(
+        "Will be removed to clean up the library's API.",
+        replaceWith = ReplaceWith("daySize")
+    )
     var dayHeight: Int = DAY_SIZE_SQUARE
         set(value) {
             field = value
+            daySize = Size(dayWidth, field)
+        }
+
+    /**
+     * The size in pixels for each day cell view.
+     * Set this to [SIZE_SQUARE] to have a nice
+     * square item view.
+     *
+     * @see [SIZE_SQUARE]
+     */
+    var daySize: Size = SIZE_SQUARE
+        set(value) {
+            field = value
             if (!sizedInternally) {
-                autoSize = value == DAY_SIZE_SQUARE
+                autoSize = value == SIZE_SQUARE
                 invalidateViewHolders()
             }
         }
@@ -468,6 +488,7 @@ open class CalendarView : RecyclerView {
         maxRowCount: Int = this.maxRowCount,
         hasBoundaries: Boolean = this.hasBoundaries
     ) {
+        configJob?.cancel()
         updatingMonthConfig = true
         this.inDateStyle = inDateStyle
         this.outDateStyle = outDateStyle
@@ -490,13 +511,14 @@ open class CalendarView : RecyclerView {
         hasBoundaries: Boolean = this.hasBoundaries,
         completion: Completion? = null
     ) {
+        configJob?.cancel()
         updatingMonthConfig = true
         this.inDateStyle = inDateStyle
         this.outDateStyle = outDateStyle
         this.maxRowCount = maxRowCount
         this.hasBoundaries = hasBoundaries
         updatingMonthConfig = false
-        setupJob = GlobalScope.launch {
+        configJob = GlobalScope.launch {
             val monthConfig = generateMonthConfig(job)
             withContext(Main) {
                 updateAdapterMonthConfig(monthConfig)
@@ -658,7 +680,7 @@ open class CalendarView : RecyclerView {
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
-        setupJob?.cancel()
+        configJob?.cancel()
         if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
             this.firstDayOfWeek = firstDayOfWeek
             updateMonthRange(startMonth, endMonth)
@@ -692,7 +714,7 @@ open class CalendarView : RecyclerView {
         firstDayOfWeek: DayOfWeek,
         completion: Completion? = null
     ) {
-        setupJob?.cancel()
+        configJob?.cancel()
         if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
             this.firstDayOfWeek = firstDayOfWeek
             updateMonthRangeAsync(startMonth, endMonth, completion)
@@ -700,7 +722,7 @@ open class CalendarView : RecyclerView {
             this.startMonth = startMonth
             this.endMonth = endMonth
             this.firstDayOfWeek = firstDayOfWeek
-            setupJob = GlobalScope.launch {
+            configJob = GlobalScope.launch {
                 val monthConfig = MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount, startMonth,
                     endMonth, firstDayOfWeek, hasBoundaries, job
@@ -731,7 +753,7 @@ open class CalendarView : RecyclerView {
      * See [updateEndMonth] and [updateMonthRange].
      */
     @Deprecated(
-        "This will be removed in the future to clean up the library's API.",
+        "Will be removed to clean up the library's API.",
         ReplaceWith("updateMonthRange()"),
         DeprecationLevel.ERROR
     )
@@ -756,7 +778,7 @@ open class CalendarView : RecyclerView {
      */
     @JvmOverloads
     fun updateMonthRange(startMonth: YearMonth = requireStartMonth(), endMonth: YearMonth = requireEndMonth()) {
-        setupJob?.cancel()
+        configJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
         val (config, diff) = getMonthUpdateData(Job())
@@ -775,10 +797,10 @@ open class CalendarView : RecyclerView {
         endMonth: YearMonth = requireEndMonth(),
         completion: Completion? = null
     ) {
-        setupJob?.cancel()
+        configJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
-        setupJob = GlobalScope.launch {
+        configJob = GlobalScope.launch {
             val (config, diff) = getMonthUpdateData(job)
             withContext(Main) {
                 finishUpdateMonthRange(config, diff)
@@ -803,7 +825,7 @@ open class CalendarView : RecyclerView {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        setupJob?.cancel()
+        configJob?.cancel()
     }
 
     private class MonthRangeDiffCallback(
@@ -847,13 +869,23 @@ open class CalendarView : RecyclerView {
         return firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
     }
 
-
     companion object {
         /**
          * A value for [dayWidth] and [dayHeight] which indicates that the day
          * cells should have equal width and height. Each view's width and height
          * will be the width of the calender divided by 7.
          */
+        @Deprecated(
+            "Will be removed to clean up the library's API.",
+            replaceWith = ReplaceWith("CalendarView.SIZE_SQUARE")
+        )
         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
+
+        /**
+         * A value for [daySize]  which indicates that the day cells should
+         * have equal width and height. Each view's width and height will
+         * be the width of the calender divided by 7.
+         */
+        val SIZE_SQUARE = Size(DAY_SIZE_SQUARE, DAY_SIZE_SQUARE)
     }
 }
