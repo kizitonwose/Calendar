@@ -146,7 +146,7 @@ open class CalendarView : RecyclerView {
      * If set to [InDateStyle.NONE], inDates will not be generated, this means there will
      * be no offset on any month.
      *
-     * Note: This causes month data to be regenerated, consider using [updateMonthConfiguration]
+     * Note: This causes calendar data to be regenerated, consider using [updateMonthConfiguration]
      * if updating this property alongside [outDateStyle], [maxRowCount] or [hasBoundaries].
      */
     var inDateStyle = InDateStyle.ALL_MONTHS
@@ -166,7 +166,7 @@ open class CalendarView : RecyclerView {
      * it reaches the end of a 6 x 7 grid. This means that all months will have 6 rows.
      * If set to [OutDateStyle.NONE], no outDates will be generated.
      *
-     * Note: This causes month data to be regenerated, consider using [updateMonthConfiguration]
+     * Note: This causes calendar data to be regenerated, consider using [updateMonthConfiguration]
      * if updating this value property [inDateStyle], [maxRowCount] or [hasBoundaries].
      */
     var outDateStyle = OutDateStyle.END_OF_ROW
@@ -183,7 +183,7 @@ open class CalendarView : RecyclerView {
      * calendar the first one will show 4 rows and the second one will show the remaining 2 rows.
      * To show a week mode calendar, set this value to 1.
      *
-     * Note: This causes month data to be regenerated, consider using [updateMonthConfiguration]
+     * Note: This causes calendar data to be regenerated, consider using [updateMonthConfiguration]
      * if updating this property alongside [inDateStyle], [outDateStyle] or [hasBoundaries].
      */
     var maxRowCount = 6
@@ -208,7 +208,7 @@ open class CalendarView : RecyclerView {
      * - If [OutDateStyle] is [OutDateStyle.END_OF_GRID], outDates are generated for the last index until it
      *   satisfies the [maxRowCount] requirement.
      *
-     * Note: This causes month data to be regenerated, consider using [updateMonthConfiguration]
+     * Note: This causes calendar data to be regenerated, consider using [updateMonthConfiguration]
      * if updating this property alongside [inDateStyle], [outDateStyle] or [maxRowCount].
      */
     var hasBoundaries = true
@@ -520,7 +520,7 @@ open class CalendarView : RecyclerView {
 
     /**
      * Update [inDateStyle], [outDateStyle], [maxRowCount] and [hasBoundaries]
-     * without generating the underlying month data multiple times.
+     * without generating the underlying calendar data multiple times.
      * See [updateMonthConfigurationAsync] if you wish to do this asynchronously.
      */
     fun updateMonthConfiguration(
@@ -541,7 +541,7 @@ open class CalendarView : RecyclerView {
 
     /**
      * Update [inDateStyle], [outDateStyle], [maxRowCount] and [hasBoundaries]
-     * asynchronously without generating the underlying month data multiple times.
+     * asynchronously without generating the underlying calendar data multiple times.
      * Useful if your [startMonth] and [endMonth] values are many years apart.
      * See [updateMonthConfiguration] if you wish to do this synchronously.
      */

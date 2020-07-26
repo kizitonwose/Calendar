@@ -222,6 +222,8 @@ calendarView.dayBinder = object : DayBinder<DayViewContainer> {
 
 #### Properties
 
+All XML attributes are also available as properties of the CalendarView class via code. So in addition to those, we have:
+
 - **monthScrollListener**: Called when the calendar scrolls to a new month. Mostly beneficial if `scrollMode` is `paged`.
 
 - **dayBinder**: An instance of `DayBinder` for managing day cell views.
@@ -230,11 +232,9 @@ calendarView.dayBinder = object : DayBinder<DayViewContainer> {
 
 - **monthFooterBinder**: An instance of `MonthHeaderFooterBinder` for managing footer views.
 
-- **dayWidth**: The width, in pixels for each day cell view.
+- **daySize**: The size, in pixels for each day cell view.
 
-- **dayHeight**: The height, in pixels for each day cell view.
-
-Note that setting either `dayWidth` or `dayHeight` to `CalendarView.DAY_SIZE_SQUARE` makes the day cells have equal width and height which is basically the width of the calendar divided by 7. `DAY_SIZE_SQUARE` is the default day width and height value.
+Note that setting the `daySize` property to `CalendarView.SIZE_SQUARE` makes the day cells have equal width and height which is basically the width of the calendar divided by 7. `SIZE_SQUARE` is the default size value.
 
 #### Methods
 
@@ -248,28 +248,47 @@ Note that setting either `dayWidth` or `dayHeight` to `CalendarView.DAY_SIZE_SQU
 
 - **notifyCalendarChanged()**: Reload the entire calendar.
 
-There's no need listing all available methods or repeating the documentation here. Please see the [CalendarView](https://github.com/kizitonwose/CalendarView/blob/master/library/src/main/java/com/kizitonwose/calendarview/CalendarView.kt) class for all properties and methods available with proper documentation.
+- **findFirstVisibleMonth()** and **findLastVisibleMonth()**: Find the first and last visible months on the CalendarView respectively.
+
+- **findFirstVisibleDay()** and **findLastVisibleDay()**: Find the first and last visible days on the CalendarView respectively.
+
+- **setupAsync()**: Setup the CalendarView, *asynchronously*, useful if your `startMonth` and `endMonth` values are *many* years apart.
+
+- **updateMonthRange()**: Update the CalendarView's `startMonth` and/or `endMonth` values after the initial setup. The currently visible month is preserved. Use `updateMonthRangeAsync()` to do this asynchronously.
+
+- **updateMonthConfiguration()**: Update `inDateStyle`, `outDateStyle`, `maxRowCount` and `hasBoundaries` properties without generating the underlying calendar data repeatedly. Prefer this if setting more than one of these properties at the same time. Use `updateMonthConfigurationAsync()` to do this asynchronously.
+
+
+There's no need to list all available methods or repeating the documentation here. Please see the [CalendarView](https://github.com/kizitonwose/CalendarView/blob/master/library/src/main/java/com/kizitonwose/calendarview/CalendarView.kt) class for all properties and methods available with proper documentation.
 
 ## Week view and Month view
 
 This library has no concept of week/month view. You'll need to configure the calendar to mimic this behavior by changing its state between a 6 or 1 row calendar, depending on your needs. This feature can be seen in Example 1 in the sample app. In summary, here's what you need:
 
-```kotlin
-// Common configurations for both modes.
-calendarView.inDateStyle = InDateStyle.ALL_MONTHS
-calendarView.outDateStyle = OutDateStyle.END_OF_ROW
-calendarView.scrollMode = ScrollMode.PAGED
-calendarView.orientation = RecyclerView.HORIZONTAL
+```xml
+<!-- Common configurations for both modes. -->
+app:cv_orientation="horizontal"
+app:cv_outDateStyle="endOfRow"
+app:cv_inDateStyle="allMonths"
+app:cv_scrollMode="paged"
+```
 
+```kotlin
 val monthToWeek = monthViewCheckBox.isChecked
 if (monthToWeek) { 
     // One row calendar for week mode
-    calendarView.maxRowCount = 1
-    calendarView.hasBoundaries = false
+    calendarView.updateMonthConfiguration(
+        inDateStyle = InDateStyle.ALL_MONTHS,
+        maxRowCount = 1,
+        hasBoundaries = false
+    )
 } else {
     // Six row calendar for month mode
-    calendarView.maxRowCount = 6
-    calendarView.hasBoundaries = true
+    calendarView.updateMonthConfiguration(
+        inDateStyle = InDateStyle.FIRST_MONTH,
+        maxRowCount = 6,
+        hasBoundaries = true
+    )
 }
 ```
 
