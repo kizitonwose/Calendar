@@ -60,10 +60,7 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
             // Add margins around our card view.
             val horizontalMargin = dpToPx(8, requireContext())
             val verticalMargin = dpToPx(14, requireContext())
-            monthMarginStart = horizontalMargin
-            monthMarginEnd = horizontalMargin
-            monthMarginTop = verticalMargin
-            monthMarginBottom = verticalMargin
+            setMonthMargins(start = horizontalMargin, end = horizontalMargin, top = verticalMargin, bottom = verticalMargin)
         }
 
         class DayViewContainer(view: View) : ViewContainer(view) {

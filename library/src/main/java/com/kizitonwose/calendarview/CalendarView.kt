@@ -309,7 +309,7 @@ open class CalendarView : RecyclerView {
      */
     @Px
     @Deprecated(
-        "Will be removed to clean up the library's API.",
+        "The new `daySize` property clarifies how cell sizing should be done.",
         replaceWith = ReplaceWith("daySize")
     )
     var dayWidth: Int = DAY_SIZE_SQUARE
@@ -327,7 +327,7 @@ open class CalendarView : RecyclerView {
      */
     @Px
     @Deprecated(
-        "Will be removed to clean up the library's API.",
+        "The new `daySize` property clarifies how cell sizing should be done.",
         replaceWith = ReplaceWith("daySize")
     )
     var dayHeight: Int = DAY_SIZE_SQUARE
@@ -358,6 +358,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthPaddingStart = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthPadding")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -369,6 +373,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthPaddingEnd = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthPadding")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -380,6 +388,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthPaddingTop = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthPadding")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -391,6 +403,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthPaddingBottom = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthPadding")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -402,6 +418,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthMarginStart = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthMargins")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -413,6 +433,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthMarginEnd = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthMargins")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -424,6 +448,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthMarginTop = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthMargins")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -435,6 +463,10 @@ open class CalendarView : RecyclerView {
      */
     @Px
     var monthMarginBottom = 0
+        @Deprecated(
+            "Directly setting this along with related properties causes repeated invalidation of view holders.",
+            replaceWith = ReplaceWith("setMonthMargins")
+        )
         set(value) {
             field = value
             invalidateViewHolders()
@@ -794,9 +826,8 @@ open class CalendarView : RecyclerView {
      * See [updateEndMonth] and [updateMonthRange].
      */
     @Deprecated(
-        "Will be removed to clean up the library's API.",
-        ReplaceWith("updateMonthRange()"),
-        DeprecationLevel.ERROR
+        "This helper method will be removed to clean up the library's API.",
+        ReplaceWith("updateMonthRange()")
     )
     fun updateStartMonth(startMonth: YearMonth) = updateMonthRange(startMonth, requireEndMonth())
 
@@ -806,9 +837,8 @@ open class CalendarView : RecyclerView {
      * See [updateStartMonth] and [updateMonthRange].
      */
     @Deprecated(
-        "This will be removed in the future to clean up the library's API.",
-        ReplaceWith("updateMonthRange()"),
-        DeprecationLevel.ERROR
+        "This helper method will be removed to clean up the library's API.",
+        ReplaceWith("updateMonthRange()")
     )
     fun updateEndMonth(endMonth: YearMonth) = updateMonthRange(requireStartMonth(), endMonth)
 
@@ -898,15 +928,15 @@ open class CalendarView : RecyclerView {
         )
     }
 
-    fun requireStartMonth(): YearMonth {
+    private fun requireStartMonth(): YearMonth {
         return startMonth ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?")
     }
 
-    fun requireEndMonth(): YearMonth {
+    private fun requireEndMonth(): YearMonth {
         return endMonth ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
     }
 
-    fun requireFirstDayOfWeek(): DayOfWeek {
+    private fun requireFirstDayOfWeek(): DayOfWeek {
         return firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
     }
 
@@ -916,10 +946,6 @@ open class CalendarView : RecyclerView {
          * cells should have equal width and height. Each view's width and height
          * will be the width of the calender divided by 7.
          */
-        @Deprecated(
-            "Will be removed to clean up the library's API.",
-            replaceWith = ReplaceWith("CalendarView.SIZE_SQUARE")
-        )
         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
 
         /**
