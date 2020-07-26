@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -29,3 +31,6 @@ internal const val NO_INDEX = -1
 
 internal val Rect.namedString: String
     get() = "[L: $left, T: $top][R: $right, B: $bottom]"
+
+internal val CoroutineScope.job: Job
+    get() = requireNotNull(coroutineContext[Job])

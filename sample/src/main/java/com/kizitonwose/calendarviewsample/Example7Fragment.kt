@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.Size
 import com.kizitonwose.calendarviewsample.databinding.Example7CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example7FragmentBinding
 import java.time.DayOfWeek
@@ -40,8 +41,9 @@ class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, 
         val wm = requireContext().getSystemService(Context.WINDOW_SERVICE) as WindowManager
         wm.defaultDisplay.getMetrics(dm)
         binding.exSevenCalendar.apply {
-            dayWidth = dm.widthPixels / 5
-            dayHeight = (dayWidth * 1.25).toInt()
+            val dayWidth = dm.widthPixels / 5
+            val dayHeight = (dayWidth * 1.25).toInt()
+            daySize = Size(dayWidth, dayHeight)
         }
 
         class DayViewContainer(view: View) : ViewContainer(view) {

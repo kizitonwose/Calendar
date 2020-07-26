@@ -35,8 +35,11 @@ android {
 
 dependencies {
     coreLibraryDesugaring deps.desugaring
-    implementation deps.kotlin_stdlib8
+    implementation deps.kotlin.stdlib8
     implementation deps.androidx.core_ktx
+    implementation deps.kotlin.coroutines_core
+    implementation deps.kotlin.coroutines_android
+
 
     // Expose RecyclerView which is CalendarView's superclass to
     // prevent a compile error when using the library in a project:

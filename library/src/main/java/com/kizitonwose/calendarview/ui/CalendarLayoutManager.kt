@@ -60,7 +60,7 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
     }
 
     private fun calculateDayViewOffsetInParent(day: CalendarDay, itemView: View): Int {
-        val dayView = itemView.findViewById<View?>(day.date.hashCode()) ?: return 0
+        val dayView = itemView.findViewWithTag<View>(day.date.hashCode()) ?: return 0
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)

@@ -22,12 +22,13 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.*
 import org.junit.After
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.Thread.sleep
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -136,7 +137,7 @@ class CalenderViewTests {
 
         val calendarView = findFragment<Example5Fragment>().findViewById<CalendarView>(R.id.exFiveCalendar)
 
-        assertTrue(calendarView.findViewById<View?>(currentMonth.atDay(1).hashCode()) != null)
+        assertTrue(calendarView.findViewWithTag<View>(currentMonth.atDay(1).hashCode()) != null)
 
         val nextFourMonths = currentMonth.plusMonths(4)
 
@@ -146,8 +147,8 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        assertTrue(calendarView.findViewById<View?>(currentMonth.atDay(1).hashCode()) == null)
-        assertTrue(calendarView.findViewById<View?>(nextFourMonths.atDay(1).hashCode()) != null)
+        assertTrue(calendarView.findViewWithTag<View>(currentMonth.atDay(1).hashCode()) == null)
+        assertTrue(calendarView.findViewWithTag<View>(nextFourMonths.atDay(1).hashCode()) != null)
     }
 
     @Test
@@ -164,7 +165,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val dayView = calendarView.findViewById<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewWithTag<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -172,7 +173,7 @@ class CalenderViewTests {
         val dayViewRect = Rect()
         dayView.getGlobalVisibleRect(dayViewRect)
 
-        assertTrue(calendarViewRect.top == dayViewRect.top)
+        assertEquals(calendarViewRect.top, dayViewRect.top)
     }
 
     @Test
@@ -189,7 +190,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val dayView = calendarView.findViewById<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewWithTag<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -197,7 +198,7 @@ class CalenderViewTests {
         val dayViewRect = Rect()
         dayView.getGlobalVisibleRect(dayViewRect)
 
-        assertTrue(calendarViewRect.left == dayViewRect.left)
+        assertEquals(calendarViewRect.left, dayViewRect.left)
     }
 
     @Test
@@ -219,7 +220,7 @@ class CalenderViewTests {
 
         sleep(5000) // Enough time for smooth scrolling animation.
 
-        assertTrue(targetCalMonth?.yearMonth == targetMonth)
+        assertEquals(targetCalMonth?.yearMonth, targetMonth)
     }
 
     @Test
@@ -306,6 +307,24 @@ class CalenderViewTests {
         sleep(5000) // Enough time for setup to finish.
 
         assertTrue(calendarView.findFirstVisibleMonth() == targetVisibleCalMonth)
+    }
+
+    @Test
+    fun completionBlocksAreCalledOnTheMainThread() {
+        val calendarView = CalendarView(homeScreenRule.activity)
+        homeScreenRule.runOnUiThread {
+            val threadName = Thread.currentThread().name
+            calendarView.setupAsync(YearMonth.now(), YearMonth.now().plusMonths(10), DayOfWeek.SUNDAY) {
+                assertTrue(threadName == Thread.currentThread().name)
+                calendarView.updateMonthConfigurationAsync {
+                    assertTrue(threadName == Thread.currentThread().name)
+                    calendarView.updateMonthRangeAsync {
+                        assertTrue(threadName == Thread.currentThread().name)
+                    }
+                }
+            }
+        }
+        sleep(3000)
     }
 
     private inline fun <reified T : Fragment> findFragment(): T {

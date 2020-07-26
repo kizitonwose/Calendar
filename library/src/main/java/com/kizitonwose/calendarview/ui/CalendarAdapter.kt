@@ -37,9 +37,6 @@ internal class CalendarAdapter(
     private val months: List<CalendarMonth>
         get() = monthConfig.months
 
-    val bodyViewId = ViewCompat.generateViewId()
-    val rootViewId = ViewCompat.generateViewId()
-
     // Values of headerViewId & footerViewId will be
     // replaced with IDs set in the XML if present.
     var headerViewId = ViewCompat.generateViewId()
@@ -66,7 +63,6 @@ internal class CalendarAdapter(
         val context = parent.context
         val rootLayout = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            id = rootViewId
         }
 
         if (viewConfig.monthHeaderRes != 0) {
@@ -80,12 +76,14 @@ internal class CalendarAdapter(
             rootLayout.addView(monthHeaderView)
         }
 
-        val monthBodyLayout = LinearLayout(context).apply {
-            layoutParams = LinearLayout.LayoutParams(LP.WRAP_CONTENT, LP.WRAP_CONTENT)
-            orientation = LinearLayout.VERTICAL
-            id = bodyViewId
-        }
-        rootLayout.addView(monthBodyLayout)
+        @Suppress("UNCHECKED_CAST") val dayConfig = DayConfig(
+            calView.daySize, viewConfig.dayViewRes,
+            calView.dayBinder as DayBinder<ViewContainer>
+        )
+
+        val weekHolders = (1..6)
+            .map { WeekHolder(createDayHolders(dayConfig)) }
+            .onEach { weekHolder -> rootLayout.addView(weekHolder.inflateWeekView(rootLayout)) }
 
         if (viewConfig.monthFooterRes != 0) {
             val monthFooterView = rootLayout.inflate(viewConfig.monthFooterRes)
@@ -130,15 +128,15 @@ internal class CalendarAdapter(
 
         @Suppress("UNCHECKED_CAST")
         return MonthViewHolder(
-            this, userRoot,
-            DayConfig(
-                calView.dayWidth, calView.dayHeight, viewConfig.dayViewRes,
-                calView.dayBinder as DayBinder<ViewContainer>
-            ),
+            this,
+            userRoot,
+            weekHolders,
             calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
             calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
         )
     }
+
+    private fun createDayHolders(dayConfig: DayConfig) = (1..7).map { DayHolder(dayConfig) }
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
@@ -212,7 +210,7 @@ internal class CalendarAdapter(
                         // visibleVH.bodyLayout.height` won't not give us the right height as it differs
                         // depending on row count in the month. So we calculate the appropriate height
                         // by checking the number of visible(non-empty) rows.
-                        visibleMonth.weekDays.size * calView.dayHeight +
+                        visibleMonth.weekDays.size * calView.daySize.height +
                         visibleVH.footerView?.height.orZero()
                     if (calView.height != newHeight) {
                         ValueAnimator.ofInt(calView.height, newHeight).apply {
@@ -318,7 +316,7 @@ internal class CalendarAdapter(
         return months[visibleIndex].weekDays.flatten()
             .run { if (isFirst) this else reversed() }
             .firstOrNull {
-                val dayView = visibleItemView.findViewById<View?>(it.date.hashCode()) ?: return@firstOrNull false
+                val dayView = visibleItemView.findViewWithTag<View>(it.date.hashCode()) ?: return@firstOrNull false
                 dayView.getGlobalVisibleRect(dayRect)
                 dayRect.intersect(monthRect)
             }

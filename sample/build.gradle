@@ -34,7 +34,7 @@ android {
 dependencies {
     implementation project(':library')
     coreLibraryDesugaring deps.desugaring
-    implementation deps.kotlin_stdlib8
+    implementation deps.kotlin.stdlib8
     implementation deps.androidx.legacy
     implementation deps.androidx.appcompat
     implementation deps.androidx.core_ktx
