@@ -313,6 +313,7 @@ open class CalendarView : RecyclerView {
         replaceWith = ReplaceWith("daySize")
     )
     var dayWidth: Int = DAY_SIZE_SQUARE
+        get() = daySize.width
         set(value) {
             field = value
             daySize = Size(field, dayHeight)
@@ -331,6 +332,7 @@ open class CalendarView : RecyclerView {
         replaceWith = ReplaceWith("daySize")
     )
     var dayHeight: Int = DAY_SIZE_SQUARE
+        get() = daySize.height
         set(value) {
             field = value
             daySize = Size(dayWidth, field)
