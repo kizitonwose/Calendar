@@ -24,5 +24,6 @@
     <string name="end_date">End date</string>
     <string name="clear">Clear</string>
     <string name="week_mode">Week mode</string>
+    <string name="today">Today</string>
 
 </resources>
