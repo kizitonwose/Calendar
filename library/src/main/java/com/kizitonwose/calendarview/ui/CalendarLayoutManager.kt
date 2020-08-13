@@ -46,6 +46,7 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
     fun scrollToDay(day: CalendarDay) {
         val monthPosition = adapter.getAdapterPosition(day)
         scrollToPositionWithOffset(monthPosition, 0)
+        calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
         // Can't target a specific day in a paged calendar.
         if (calView.scrollMode == ScrollMode.PAGED) return
         calView.post {
@@ -54,7 +55,6 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
                     calView.findViewHolderForAdapterPosition(monthPosition) as? MonthViewHolder ?: return@post
                 val offset = calculateDayViewOffsetInParent(day, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
-                calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
             }
         }
     }
