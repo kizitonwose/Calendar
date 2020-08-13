@@ -78,6 +78,16 @@
             android:textSize="18sp"
             android:layout_gravity="bottom|center_horizontal" />
 
+        <Button
+            android:id="@+id/todayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/today"
+            android:textSize="18sp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="86dp"
+            style="@style/Widget.AppCompat.Button.Borderless"/>
+
     </FrameLayout>
 
 

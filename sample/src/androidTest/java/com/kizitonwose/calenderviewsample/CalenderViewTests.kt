@@ -45,6 +45,7 @@ class CalenderViewTests {
     val homeScreenRule = ActivityTestRule(HomeActivity::class.java, true, false)
 
     private val currentMonth = YearMonth.now()
+    private val today = LocalDate.now()
 
     @Before
     fun setup() {
@@ -222,6 +223,28 @@ class CalenderViewTests {
         sleep(5000) // Enough time for smooth scrolling animation.
 
         assertEquals(targetCalMonth?.yearMonth, targetMonth)
+    }
+
+    @Test
+    fun monthScrollListenerIsCalledWhenScrolledToDate() {
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
+
+        val targetDay = today.plusDays(60)
+
+        var targetCalMonth: CalendarMonth? = null
+        calendarView.monthScrollListener = { month ->
+            targetCalMonth = month
+        }
+
+        homeScreenRule.runOnUiThread {
+            calendarView.scrollToDate(targetDay)
+        }
+
+        sleep(5000) // Enough time for smooth scrolling animation.
+
+        assertEquals(targetDay.yearMonth, targetCalMonth?.yearMonth)
     }
 
     @Test
