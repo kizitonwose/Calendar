@@ -208,20 +208,38 @@ class CalenderViewTests {
 
         val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
-        val targetMonth = currentMonth.plusMonths(2)
-
         var targetCalMonth: CalendarMonth? = null
         calendarView.monthScrollListener = { month ->
             targetCalMonth = month
         }
 
+        val twoMonthsAhead = currentMonth.plusMonths(2)
         homeScreenRule.runOnUiThread {
-            calendarView.smoothScrollToMonth(targetMonth)
+            calendarView.smoothScrollToMonth(twoMonthsAhead)
         }
+        sleep(3000) // Enough time for smooth scrolling animation.
+        assertEquals(targetCalMonth?.yearMonth, twoMonthsAhead)
 
-        sleep(5000) // Enough time for smooth scrolling animation.
+        val fourMonthsAhead = currentMonth.plusMonths(4)
+        homeScreenRule.runOnUiThread {
+            calendarView.scrollToMonth(fourMonthsAhead)
+        }
+        sleep(3000)
+        assertEquals(targetCalMonth?.yearMonth, fourMonthsAhead)
 
-        assertEquals(targetCalMonth?.yearMonth, targetMonth)
+        val sixMonthsAhead = currentMonth.plusMonths(6)
+        homeScreenRule.runOnUiThread {
+            calendarView.smoothScrollToDate(sixMonthsAhead.atDay(1))
+        }
+        sleep(3000)
+        assertEquals(targetCalMonth?.yearMonth, sixMonthsAhead)
+
+        val eightMonthsAhead = currentMonth.plusMonths(8)
+        homeScreenRule.runOnUiThread {
+            calendarView.scrollToDate(eightMonthsAhead.atDay(1))
+        }
+        sleep(3000)
+        assertEquals(targetCalMonth?.yearMonth, eightMonthsAhead)
     }
 
     @Test

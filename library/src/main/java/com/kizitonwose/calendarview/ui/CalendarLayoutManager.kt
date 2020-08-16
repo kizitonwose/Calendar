@@ -23,38 +23,39 @@ internal class CalendarLayoutManager(private val calView: CalendarView, @Recycle
         get() = calView.context
 
     fun scrollToMonth(month: YearMonth) {
-        scrollToPositionWithOffset(adapter.getAdapterPosition(month), 0)
+        val position = adapter.getAdapterPosition(month)
+        if (position == NO_INDEX) return
+        scrollToPositionWithOffset(position, 0)
         calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
     }
 
     fun smoothScrollToMonth(month: YearMonth) {
         val position = adapter.getAdapterPosition(month)
-        if (position != -1) {
-            startSmoothScroll(CalendarSmoothScroller(position, null))
-        }
+        if (position == NO_INDEX) return
+        startSmoothScroll(CalendarSmoothScroller(position, null))
     }
 
     fun smoothScrollToDay(day: CalendarDay) {
-        val position = adapter.getAdapterPosition(day)
-        if (position != -1) {
-            // Can't target a specific day in a paged calendar.
-            val isPaged = calView.scrollMode == ScrollMode.PAGED
-            startSmoothScroll(CalendarSmoothScroller(position, if (isPaged) null else day))
-        }
+        val monthPosition = adapter.getAdapterPosition(day)
+        if (monthPosition == NO_INDEX) return
+        // Can't target a specific day in a paged calendar.
+        val isPaged = calView.scrollMode == ScrollMode.PAGED
+        startSmoothScroll(CalendarSmoothScroller(monthPosition, if (isPaged) null else day))
     }
 
     fun scrollToDay(day: CalendarDay) {
         val monthPosition = adapter.getAdapterPosition(day)
+        if (monthPosition == NO_INDEX) return
         scrollToPositionWithOffset(monthPosition, 0)
-        calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
         // Can't target a specific day in a paged calendar.
-        if (calView.scrollMode == ScrollMode.PAGED) return
-        calView.post {
-            if (monthPosition != NO_INDEX) {
-                val viewHolder =
-                    calView.findViewHolderForAdapterPosition(monthPosition) as? MonthViewHolder ?: return@post
+        if (calView.scrollMode == ScrollMode.PAGED) {
+            calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
+        } else {
+            calView.post {
+                val viewHolder = calView.findViewHolderForAdapterPosition(monthPosition) as? MonthViewHolder ?: return@post
                 val offset = calculateDayViewOffsetInParent(day, viewHolder.itemView)
                 scrollToPositionWithOffset(monthPosition, -offset)
+                calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
             }
         }
     }
