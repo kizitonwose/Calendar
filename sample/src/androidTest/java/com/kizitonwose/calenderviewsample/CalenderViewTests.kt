@@ -208,20 +208,38 @@ class CalenderViewTests {
 
         val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
-        val targetMonth = currentMonth.plusMonths(2)
-
         var targetCalMonth: CalendarMonth? = null
         calendarView.monthScrollListener = { month ->
             targetCalMonth = month
         }
 
+        val twoMonthsAhead = currentMonth.plusMonths(2)
         homeScreenRule.runOnUiThread {
-            calendarView.smoothScrollToMonth(targetMonth)
+            calendarView.smoothScrollToMonth(twoMonthsAhead)
         }
+        sleep(3000) // Enough time for smooth scrolling animation.
+        assertEquals(targetCalMonth?.yearMonth, twoMonthsAhead)
 
-        sleep(5000) // Enough time for smooth scrolling animation.
+        val fourMonthsAhead = currentMonth.plusMonths(4)
+        homeScreenRule.runOnUiThread {
+            calendarView.scrollToMonth(fourMonthsAhead)
+        }
+        sleep(3000)
+        assertEquals(targetCalMonth?.yearMonth, fourMonthsAhead)
 
-        assertEquals(targetCalMonth?.yearMonth, targetMonth)
+        val sixMonthsAhead = currentMonth.plusMonths(6)
+        homeScreenRule.runOnUiThread {
+            calendarView.smoothScrollToDate(sixMonthsAhead.atDay(1))
+        }
+        sleep(3000)
+        assertEquals(targetCalMonth?.yearMonth, sixMonthsAhead)
+
+        val eightMonthsAhead = currentMonth.plusMonths(8)
+        homeScreenRule.runOnUiThread {
+            calendarView.scrollToDate(eightMonthsAhead.atDay(1))
+        }
+        sleep(3000)
+        assertEquals(targetCalMonth?.yearMonth, eightMonthsAhead)
     }
 
     @Test
@@ -237,13 +255,13 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        // First visible day is the first day in the week row it belongs.
+        // First visible day is the first day in the week row it belongs. (top-left)
         val firstVisibleMonth = calendarView.findFirstVisibleMonth()!!
         val firstVisibleDay = calendarView.findFirstVisibleDay()!!
         val weekOfFirstDay = firstVisibleMonth.weekDays.first { it.any { it == firstVisibleDay } }
         assertTrue(weekOfFirstDay.first() == firstVisibleDay)
 
-        // Last visible day is the last day in the week row it belongs.
+        // Last visible day is the last day in the week row it belongs. (bottom-right)
         val lastVisibleMonth = calendarView.findLastVisibleMonth()!!
         val lastVisibleDay = calendarView.findLastVisibleDay()!!
         val weekOfLastDate = lastVisibleMonth.weekDays.first { it.any { it == lastVisibleDay } }
@@ -263,14 +281,14 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        // First visible day is the first day in the month column(day of week) where it belongs.
+        // First visible day is the first day in the month column(day of week) where it belongs. (top-left)
         val firstVisibleMonth = calendarView.findFirstVisibleMonth()!!
         val firstVisibleDay = calendarView.findFirstVisibleDay()!!
         val daysWIthSameDayOfWeekAsFirstDay = firstVisibleMonth.weekDays.flatten()
             .filter { it.date.dayOfWeek == firstVisibleDay.date.dayOfWeek }
         assertTrue(daysWIthSameDayOfWeekAsFirstDay.first() == firstVisibleDay)
 
-        // Last visible day is the last day in the month column(day of week) where it belongs.
+        // Last visible day is the last day in the month column(day of week) where it belongs. (bottom-right)
         val lastVisibleMonth = calendarView.findLastVisibleMonth()!!
         val lastVisibleDay = calendarView.findLastVisibleDay()!!
         val daysWIthSameDayOfWeekAsLastDay = lastVisibleMonth.weekDays.flatten()
