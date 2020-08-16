@@ -189,10 +189,6 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             animator.duration = 250
             animator.start()
         }
-
-        binding.todayButton.setOnClickListener {
-            binding.exOneCalendar.scrollToDate(LocalDate.now())
-        }
     }
 
     override fun onStart() {
