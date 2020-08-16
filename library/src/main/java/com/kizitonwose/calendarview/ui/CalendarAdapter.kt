@@ -44,6 +44,11 @@ internal class CalendarAdapter(
 
     init {
         setHasStableIds(true)
+        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                initialLayout = true
+            }
+        })
     }
 
     private val isAttached: Boolean
@@ -223,7 +228,11 @@ internal class CalendarAdapter(
                             start()
                         }
                     }
-                    if (initialLayout) initialLayout = false
+                    if (initialLayout) {
+                        initialLayout = false
+                        // Request layout in case dataset was changed. See issue #199
+                        visibleVH.itemView.requestLayout()
+                    }
                 }
             }
         }
