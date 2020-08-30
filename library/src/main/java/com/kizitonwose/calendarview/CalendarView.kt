@@ -962,5 +962,11 @@ open class CalendarView : RecyclerView {
          * be the width of the calender divided by 7.
          */
         val SIZE_SQUARE = Size(DAY_SIZE_SQUARE, DAY_SIZE_SQUARE)
+
+        /**
+         * A value for [daySize] which indicates that the day cells should
+         * have width of the calender divided by 7 and provided height.
+         */
+        fun sizeAutoWidth(@Px height: Int) = Size(DAY_SIZE_SQUARE, height)
     }
 }
