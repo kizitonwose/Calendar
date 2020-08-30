@@ -289,10 +289,16 @@ open class CalendarView : RecyclerView {
 
             // +0.5 => round to the nearest pixel
             val size = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
-            val squareSize = daySize.copy(width = size, height = size)
-            if (daySize != squareSize) {
+
+            val computedSize = when {
+                daySize == SIZE_SQUARE -> daySize.copy(width = size, height = size)
+                daySize.width == DAY_SIZE_SQUARE -> daySize.copy(width = size)
+                else -> throw IllegalStateException("Autosize is true but daySize is neither SIZE_SQUARE nor is daySize.width DAY_SIZE_SQUARE")
+            }
+
+            if (daySize != computedSize) {
                 sizedInternally = true
-                daySize = squareSize
+                daySize = computedSize
                 sizedInternally = false
                 invalidateViewHolders()
             }
@@ -349,7 +355,7 @@ open class CalendarView : RecyclerView {
         set(value) {
             field = value
             if (!sizedInternally) {
-                autoSize = value == SIZE_SQUARE
+                autoSize = value == SIZE_SQUARE || value.width == DAY_SIZE_SQUARE
                 invalidateViewHolders()
             }
         }
