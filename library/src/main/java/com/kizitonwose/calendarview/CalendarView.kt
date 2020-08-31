@@ -293,7 +293,7 @@ open class CalendarView : RecyclerView {
             val computedSize = when {
                 daySize == SIZE_SQUARE -> daySize.copy(width = size, height = size)
                 daySize.width == DAY_SIZE_SQUARE -> daySize.copy(width = size)
-                else -> throw IllegalStateException("Autosize is true but daySize is neither SIZE_SQUARE nor is daySize.width DAY_SIZE_SQUARE")
+                else -> daySize
             }
 
             if (daySize != computedSize) {
