@@ -26,6 +26,9 @@ typealias Completion = () -> Unit
 
 open class CalendarView : RecyclerView {
 
+    //def day height
+    var dayHeightCustom: Int = 0;
+
     /**
      * The [DayBinder] instance used for managing day cell views
      * creation and reuse. Changing the binder means that the view
@@ -274,6 +277,8 @@ open class CalendarView : RecyclerView {
                 R.styleable.CalendarView_cv_wrappedPageHeightAnimationDuration,
                 wrappedPageHeightAnimationDuration
             )
+
+            dayHeightCustom = getInt(R.styleable.CalendarView_dayHeightCustom, 0);
         }
     }
 
@@ -289,7 +294,14 @@ open class CalendarView : RecyclerView {
 
             // +0.5 => round to the nearest pixel
             val size = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
-            val squareSize = daySize.copy(width = size, height = size)
+
+            ////ADDED: 03-09-2020 02:56 AM pratik katariya (comet) to set custom height but width remain auto-calculated
+            val squareSize = if (dayHeightCustom == 0) {
+                daySize.copy(width = size, height = size)
+            } else {
+                daySize.copy(width = size, height = dayHeightCustom)
+            }
+
             if (daySize != squareSize) {
                 sizedInternally = true
                 daySize = squareSize
@@ -483,7 +495,12 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterViewConfig() {
         if (adapter != null) {
             calendarAdapter.viewConfig =
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
+                ViewConfig(
+                    dayViewResource,
+                    monthHeaderResource,
+                    monthFooterResource,
+                    monthViewClass
+                )
             invalidateViewHolders()
         }
     }
@@ -850,7 +867,10 @@ open class CalendarView : RecyclerView {
      * See [updateMonthRangeAsync] if you wish to do this asynchronously.
      */
     @JvmOverloads
-    fun updateMonthRange(startMonth: YearMonth = requireStartMonth(), endMonth: YearMonth = requireEndMonth()) {
+    fun updateMonthRange(
+        startMonth: YearMonth = requireStartMonth(),
+        endMonth: YearMonth = requireEndMonth()
+    ) {
         configJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
@@ -931,15 +951,18 @@ open class CalendarView : RecyclerView {
     }
 
     private fun requireStartMonth(): YearMonth {
-        return startMonth ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?")
+        return startMonth
+            ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?")
     }
 
     private fun requireEndMonth(): YearMonth {
-        return endMonth ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
+        return endMonth
+            ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
     }
 
     private fun requireFirstDayOfWeek(): DayOfWeek {
-        return firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
+        return firstDayOfWeek
+            ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
     }
 
     companion object {
