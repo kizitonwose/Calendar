@@ -41,7 +41,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
         init {
             itemView.setOnClickListener {
-                onClick(examples[adapterPosition])
+                onClick(examples[bindingAdapterPosition])
             }
         }
 
