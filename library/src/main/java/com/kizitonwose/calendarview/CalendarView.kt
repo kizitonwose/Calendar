@@ -954,6 +954,10 @@ open class CalendarView : RecyclerView {
          * cells should have equal width and height. Each view's width and height
          * will be the width of the calender divided by 7.
          */
+        @Deprecated(
+            "The new `daySize` property clarifies how cell sizing should be done.",
+            replaceWith = ReplaceWith("CalendarView.SIZE_SQUARE")
+        )
         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
 
         /**
