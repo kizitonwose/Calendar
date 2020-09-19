@@ -289,10 +289,16 @@ open class CalendarView : RecyclerView {
 
             // +0.5 => round to the nearest pixel
             val size = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
-            val squareSize = daySize.copy(width = size, height = size)
-            if (daySize != squareSize) {
+
+            val computedSize = when {
+                daySize == SIZE_SQUARE -> daySize.copy(width = size, height = size)
+                daySize.width == DAY_SIZE_SQUARE -> daySize.copy(width = size)
+                else -> daySize
+            }
+
+            if (daySize != computedSize) {
                 sizedInternally = true
-                daySize = squareSize
+                daySize = computedSize
                 sizedInternally = false
                 invalidateViewHolders()
             }
@@ -349,7 +355,7 @@ open class CalendarView : RecyclerView {
         set(value) {
             field = value
             if (!sizedInternally) {
-                autoSize = value == SIZE_SQUARE
+                autoSize = value == SIZE_SQUARE || value.width == DAY_SIZE_SQUARE
                 invalidateViewHolders()
             }
         }
@@ -948,6 +954,10 @@ open class CalendarView : RecyclerView {
          * cells should have equal width and height. Each view's width and height
          * will be the width of the calender divided by 7.
          */
+        @Deprecated(
+            "The new `daySize` property clarifies how cell sizing should be done.",
+            replaceWith = ReplaceWith("CalendarView.SIZE_SQUARE")
+        )
         const val DAY_SIZE_SQUARE = Int.MIN_VALUE
 
         /**
@@ -956,5 +966,11 @@ open class CalendarView : RecyclerView {
          * be the width of the calender divided by 7.
          */
         val SIZE_SQUARE = Size(DAY_SIZE_SQUARE, DAY_SIZE_SQUARE)
+
+        /**
+         * A value for [daySize] which indicates that the day cells should
+         * have width of the calender divided by 7 and provided height.
+         */
+        fun sizeAutoWidth(@Px height: Int) = Size(DAY_SIZE_SQUARE, height)
     }
 }

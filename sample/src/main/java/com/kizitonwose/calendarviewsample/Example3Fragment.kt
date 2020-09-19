@@ -55,7 +55,7 @@ class Example3EventsAdapter(val onClick: (Event) -> Unit) :
 
         init {
             itemView.setOnClickListener {
-                onClick(events[adapterPosition])
+                onClick(events[bindingAdapterPosition])
             }
         }
 
