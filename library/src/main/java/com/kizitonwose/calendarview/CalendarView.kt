@@ -782,6 +782,9 @@ open class CalendarView : RecyclerView {
      * Useful if your [startMonth] and [endMonth] values are many years apart.
      * See [updateMonthRange] and [updateMonthRangeAsync] for more refined updates.
      *
+     * Note: the setup MUST finish before any other methods can are called. To be
+     * notified when the setup is finished, provide a [completion] parameter.
+     *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
