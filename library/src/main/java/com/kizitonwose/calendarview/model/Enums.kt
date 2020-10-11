@@ -6,7 +6,7 @@ package com.kizitonwose.calendarview.model
 enum class DayOwner {
     /**
      * Belongs to the previous month on the calendar.
-     * Such days are referred to as outDates.
+     * Such days are referred to as inDates.
      */
     PREVIOUS_MONTH,
 

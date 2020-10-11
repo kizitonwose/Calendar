@@ -235,6 +235,7 @@ open class CalendarView : RecyclerView {
     private var firstDayOfWeek: DayOfWeek? = null
 
     private var autoSize = true
+    private var autoSizeHeight = DAY_SIZE_SQUARE
     private var sizedInternally = false
 
     internal val isVertical: Boolean
@@ -290,12 +291,8 @@ open class CalendarView : RecyclerView {
             // +0.5 => round to the nearest pixel
             val size = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
 
-            val computedSize = when {
-                daySize == SIZE_SQUARE -> daySize.copy(width = size, height = size)
-                daySize.width == DAY_SIZE_SQUARE -> daySize.copy(width = size)
-                else -> daySize
-            }
-
+            val height = if (autoSizeHeight == DAY_SIZE_SQUARE) size else autoSizeHeight
+            val computedSize = daySize.copy(width = size, height = height)
             if (daySize != computedSize) {
                 sizedInternally = true
                 daySize = computedSize
@@ -356,6 +353,7 @@ open class CalendarView : RecyclerView {
             field = value
             if (!sizedInternally) {
                 autoSize = value == SIZE_SQUARE || value.width == DAY_SIZE_SQUARE
+                autoSizeHeight = value.height
                 invalidateViewHolders()
             }
         }
@@ -783,6 +781,9 @@ open class CalendarView : RecyclerView {
      * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
      * Useful if your [startMonth] and [endMonth] values are many years apart.
      * See [updateMonthRange] and [updateMonthRangeAsync] for more refined updates.
+     *
+     * Note: the setup MUST finish before any other methods can are called. To be
+     * notified when the setup is finished, provide a [completion] parameter.
      *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
