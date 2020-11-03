@@ -240,8 +240,6 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             }
         }
 
-
-
         binding.exOneCalendar.weekdays =
             daysOfWeek.filterIndexed { i, _ -> selectedWeekdays[i] }.toSet()
     }
