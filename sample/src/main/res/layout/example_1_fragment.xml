@@ -70,13 +70,27 @@
             android:id="@+id/weekModeCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
             android:layout_marginBottom="20dp"
             android:buttonTint="@color/example_1_white"
             android:padding="2dp"
             android:text="@string/week_mode"
             android:textColor="@color/example_1_white"
             android:textSize="18sp"
-            android:layout_gravity="bottom|center_horizontal" />
+            android:layout_marginStart="8dp" />
+
+        <Button
+            android:id="@+id/weekdayFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#FCCA3E"
+            android:padding="2dp"
+            android:text="@string/weekday_filter"
+            android:textColor="@color/example_1_white"
+            android:textSize="18sp"
+            android:layout_marginEnd="8dp" />
 
     </FrameLayout>
 

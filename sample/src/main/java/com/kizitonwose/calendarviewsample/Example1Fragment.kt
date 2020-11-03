@@ -1,9 +1,11 @@
 package com.kizitonwose.calendarviewsample
 
 import android.animation.ValueAnimator
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
@@ -24,6 +26,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
+
 class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     override val toolbar: Toolbar?
@@ -36,17 +39,14 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
     private val selectedDates = mutableSetOf<LocalDate>()
     private val today = LocalDate.now()
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
+    val daysOfWeek = daysOfWeekFromLocale()
+    private var selectedWeekdays = booleanArrayOf(true, true, true, true, true, true, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example1FragmentBinding.bind(view)
-        val daysOfWeek = daysOfWeekFromLocale()
-        binding.legendLayout.root.children.forEachIndexed { index, view ->
-            (view as TextView).apply {
-                text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(Locale.ENGLISH)
-                setTextColorRes(R.color.example_1_white_light)
-            }
-        }
+
+        updateWeekdays()
 
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(10)
@@ -117,19 +117,49 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
                     binding.exOneMonthText.text = monthTitleFormatter.format(firstDate)
                 } else {
                     binding.exOneMonthText.text =
-                        "${monthTitleFormatter.format(firstDate)} - ${monthTitleFormatter.format(lastDate)}"
+                        "${monthTitleFormatter.format(firstDate)} - ${
+                            monthTitleFormatter.format(
+                                lastDate
+                            )
+                        }"
                     if (firstDate.year == lastDate.year) {
                         binding.exOneYearText.text = firstDate.yearMonth.year.toString()
                     } else {
-                        binding.exOneYearText.text = "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
+                        binding.exOneYearText.text =
+                            "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
                     }
                 }
             }
         }
 
+        binding.weekdayFilter.setOnClickListener {
+            val tempSelectedWeekdays = selectedWeekdays
+
+            val daysOfWeekStrings = daysOfWeekFromLocale().map {
+                it.getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+            }.toTypedArray()
+
+            val adb: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            adb.setMultiChoiceItems(
+                daysOfWeekStrings,
+                tempSelectedWeekdays
+            ) { _, which, checked ->
+                tempSelectedWeekdays[which] = checked
+            }
+            adb.setPositiveButton(android.R.string.ok) { _, _ ->
+                selectedWeekdays = tempSelectedWeekdays
+                updateWeekdays()
+            }
+            adb.setNegativeButton(android.R.string.cancel, null)
+            adb.setTitle("Select Weekdays")
+            adb.show()
+        }
+
         binding.weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->
-            val firstDate = binding.exOneCalendar.findFirstVisibleDay()?.date ?: return@setOnCheckedChangeListener
-            val lastDate = binding.exOneCalendar.findLastVisibleDay()?.date ?: return@setOnCheckedChangeListener
+            val firstDate = binding.exOneCalendar.findFirstVisibleDay()?.date
+                ?: return@setOnCheckedChangeListener
+            val lastDate = binding.exOneCalendar.findLastVisibleDay()?.date
+                ?: return@setOnCheckedChangeListener
 
             val oneWeekHeight = binding.exOneCalendar.daySize.height
             val oneMonthHeight = oneWeekHeight * 6
@@ -182,7 +212,12 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
                         binding.exOneCalendar.scrollToMonth(firstDate.yearMonth)
                     } else {
                         // We compare the next with the last month on the calendar so we don't go over.
-                        binding.exOneCalendar.scrollToMonth(minOf(firstDate.yearMonth.next, endMonth))
+                        binding.exOneCalendar.scrollToMonth(
+                            minOf(
+                                firstDate.yearMonth.next,
+                                endMonth
+                            )
+                        )
                     }
                 }
             }
@@ -193,11 +228,36 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     override fun onStart() {
         super.onStart()
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_1_bg_light)
+        requireActivity().window.statusBarColor =
+            requireContext().getColorCompat(R.color.example_1_bg_light)
     }
 
     override fun onStop() {
         super.onStop()
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
+        requireActivity().window.statusBarColor =
+            requireContext().getColorCompat(R.color.colorPrimaryDark)
+    }
+
+    fun updateWeekdays() {
+        binding.legendLayout.root.children.forEachIndexed { index, view ->
+            (view as TextView).apply {
+                text =
+                    daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(
+                        Locale.ENGLISH
+                    )
+                setTextColorRes(R.color.example_1_white_light)
+
+                if (selectedWeekdays[index]) {
+                    view.makeVisible()
+                } else {
+                    view.makeGone()
+                }
+            }
+        }
+
+
+
+        binding.exOneCalendar.weekdays =
+            daysOfWeek.filterIndexed { i, _ -> selectedWeekdays[i] }.toTypedArray()
     }
 }

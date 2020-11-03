@@ -113,10 +113,11 @@ open class CalendarView : RecyclerView {
             }
         }
 
-    var weekdays: Array<DayOfWeek> = arrayOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
+    var weekdays: Array<DayOfWeek> = DayOfWeek.values()
         set(value) {
             field = value
-            invalidateViewHolders()
+            updateAdapterViewConfig()
+            updateAdapterMonthConfig()
         }
 
     /**

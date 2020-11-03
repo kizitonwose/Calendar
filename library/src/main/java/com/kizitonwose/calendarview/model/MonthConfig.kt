@@ -141,8 +141,8 @@ internal data class MonthConfig(
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
 
-            // Regroup data into 7 days. Use toList() to create a copy of the ephemeral list.
-            val allDaysGroup = allDays.chunked(7).toList()
+            // Regroup data into number of weekdays. Use toList() to create a copy of the ephemeral list.
+            val allDaysGroup = allDays.chunked(weekdays.size).toList()
 
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
@@ -150,19 +150,22 @@ internal data class MonthConfig(
                 val monthWeeks = ephemeralMonthWeeks.toMutableList()
 
                 // Add the outDates for the last row if needed.
-                if (monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
+                if (monthWeeks.last().size < weekdays.size && outDateStyle == OutDateStyle.END_OF_ROW || outDateStyle == OutDateStyle.END_OF_GRID) {
                     val lastWeek = monthWeeks.last()
                     val lastDay = lastWeek.last()
-                    val outDates = (1..7 - lastWeek.size).map {
-                        CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
-                    }
+                    val outDates = (1..7 - lastWeek.size)
+                        .map {
+                            CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
+                        }
+                        .filter { weekdays.contains(it.date.dayOfWeek) }
+                        .take(weekdays.size - lastWeek.size)
                     monthWeeks[monthWeeks.lastIndex] = lastWeek + outDates
                 }
 
                 // Add the outDates needed to make the number of rows in this index match the desired maxRowCount.
                 while (monthWeeks.size < maxRowCount && outDateStyle == OutDateStyle.END_OF_GRID ||
                     // This will be true when we add the first inDates and the last week row in the CalendarMonth is not filled up.
-                    monthWeeks.size == maxRowCount && monthWeeks.last().size < 7 && outDateStyle == OutDateStyle.END_OF_GRID
+                    monthWeeks.size == maxRowCount && monthWeeks.last().size < weekdays.size && outDateStyle == OutDateStyle.END_OF_GRID
                 ) {
                     // Since boundaries are disabled hence months will overflow, if we have maxRowCount
                     // set to 6 and the last index has only one row left with some missing dates in it,
@@ -188,14 +191,14 @@ internal data class MonthConfig(
 
                     val nextRowDates = (1..7).map {
                         CalendarDay(lastDay.date.plusDays(it.toLong()), DayOwner.NEXT_MONTH)
-                    }
+                    }.filter { weekdays.contains(it.date.dayOfWeek) }
 
-                    if (monthWeeks.last().size < 7) {
+                    if (monthWeeks.last().size < weekdays.size) {
                         // Update the last week to 7 days instead of adding a new row.
                         // Handles the case when we've added all the first inDates and the
                         // last week row in the CalendarMonth is not filled up to 7 days.
                         monthWeeks[monthWeeks.lastIndex] =
-                            (monthWeeks.last() + nextRowDates).take(7)
+                            (monthWeeks.last() + nextRowDates).take(weekdays.size)
                     } else {
                         monthWeeks.add(nextRowDates)
                     }
