@@ -25,7 +25,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
 
-
 class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     override val toolbar: Toolbar?
@@ -39,7 +38,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
     private val today = LocalDate.now()
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
     val daysOfWeek = daysOfWeekFromLocale()
-    private var selectedWeekdays = booleanArrayOf(true, true, true, true, true, true, false)
+    private var selectedWeekdays = booleanArrayOf(true, true, true, true, true, true, true)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,16 +115,11 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
                     binding.exOneMonthText.text = monthTitleFormatter.format(firstDate)
                 } else {
                     binding.exOneMonthText.text =
-                        "${monthTitleFormatter.format(firstDate)} - ${
-                            monthTitleFormatter.format(
-                                lastDate
-                            )
-                        }"
+                        "${monthTitleFormatter.format(firstDate)} - ${monthTitleFormatter.format(lastDate)}"
                     if (firstDate.year == lastDate.year) {
                         binding.exOneYearText.text = firstDate.yearMonth.year.toString()
                     } else {
-                        binding.exOneYearText.text =
-                            "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
+                        binding.exOneYearText.text = "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
                     }
                 }
             }
@@ -155,10 +149,8 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
         }
 
         binding.weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->
-            val firstDate = binding.exOneCalendar.findFirstVisibleDay()?.date
-                ?: return@setOnCheckedChangeListener
-            val lastDate = binding.exOneCalendar.findLastVisibleDay()?.date
-                ?: return@setOnCheckedChangeListener
+            val firstDate = binding.exOneCalendar.findFirstVisibleDay()?.date ?: return@setOnCheckedChangeListener
+            val lastDate = binding.exOneCalendar.findLastVisibleDay()?.date ?: return@setOnCheckedChangeListener
 
             val oneWeekHeight = binding.exOneCalendar.daySize.height
             val oneMonthHeight = oneWeekHeight * 6
@@ -211,12 +203,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
                         binding.exOneCalendar.scrollToMonth(firstDate.yearMonth)
                     } else {
                         // We compare the next with the last month on the calendar so we don't go over.
-                        binding.exOneCalendar.scrollToMonth(
-                            minOf(
-                                firstDate.yearMonth.next,
-                                endMonth
-                            )
-                        )
+                        binding.exOneCalendar.scrollToMonth(minOf(firstDate.yearMonth.next, endMonth))
                     }
                 }
             }
@@ -227,8 +214,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     override fun onStart() {
         super.onStart()
-        requireActivity().window.statusBarColor =
-            requireContext().getColorCompat(R.color.example_1_bg_light)
+        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_1_bg_light)
     }
 
     override fun onStop() {
@@ -257,6 +243,6 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
 
         binding.exOneCalendar.weekdays =
-            daysOfWeek.filterIndexed { i, _ -> selectedWeekdays[i] }.toTypedArray()
+            daysOfWeek.filterIndexed { i, _ -> selectedWeekdays[i] }.toSet()
     }
 }

@@ -14,34 +14,16 @@ internal data class MonthConfig(
     internal val startMonth: YearMonth,
     internal val endMonth: YearMonth,
     internal val firstDayOfWeek: DayOfWeek,
-    internal val weekdays: Array<DayOfWeek>,
+    internal val weekdays: Set<DayOfWeek>,
     internal val hasBoundaries: Boolean,
     internal val job: Job
 ) {
 
     internal val months: List<CalendarMonth> = run {
         return@run if (hasBoundaries) {
-            generateBoundedMonths(
-                startMonth,
-                endMonth,
-                firstDayOfWeek,
-                weekdays,
-                maxRowCount,
-                inDateStyle,
-                outDateStyle,
-                job
-            )
+            generateBoundedMonths(startMonth, endMonth, firstDayOfWeek, weekdays, maxRowCount, inDateStyle, outDateStyle, job)
         } else {
-            generateUnboundedMonths(
-                startMonth,
-                endMonth,
-                firstDayOfWeek,
-                weekdays,
-                maxRowCount,
-                inDateStyle,
-                outDateStyle,
-                job
-            )
+            generateUnboundedMonths(startMonth, endMonth, firstDayOfWeek, weekdays, maxRowCount, inDateStyle, outDateStyle, job)
         }
     }
 
@@ -58,7 +40,7 @@ internal data class MonthConfig(
             startMonth: YearMonth,
             endMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
-            weekdays: Array<DayOfWeek>,
+            weekdays: Set<DayOfWeek>,
             maxRowCount: Int,
             inDateStyle: InDateStyle,
             outDateStyle: OutDateStyle,
@@ -74,13 +56,7 @@ internal data class MonthConfig(
                 }
 
                 val weekDaysGroup =
-                    generateWeekDays(
-                        currentMonth,
-                        firstDayOfWeek,
-                        weekdays,
-                        generateInDates,
-                        outDateStyle
-                    )
+                    generateWeekDays(currentMonth, firstDayOfWeek, weekdays, generateInDates, outDateStyle)
 
                 // Group rows by maxRowCount into CalendarMonth classes.
                 val calendarMonths = mutableListOf<CalendarMonth>()
@@ -88,12 +64,7 @@ internal data class MonthConfig(
                 var indexInSameMonth = 0
                 calendarMonths.addAll(weekDaysGroup.chunked(maxRowCount) { monthDays ->
                     // Use monthDays.toList() to create a copy of the ephemeral list.
-                    CalendarMonth(
-                        currentMonth,
-                        monthDays.toList(),
-                        indexInSameMonth++,
-                        numberOfSameMonth
-                    )
+                    CalendarMonth(currentMonth, monthDays.toList(), indexInSameMonth++, numberOfSameMonth)
                 })
 
                 months.addAll(calendarMonths)
@@ -107,7 +78,7 @@ internal data class MonthConfig(
             startMonth: YearMonth,
             endMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
-            weekdays: Array<DayOfWeek>,
+            weekdays: Set<DayOfWeek>,
             maxRowCount: Int,
             inDateStyle: InDateStyle,
             outDateStyle: OutDateStyle,
@@ -130,13 +101,7 @@ internal data class MonthConfig(
                     // We don't generate outDates for any month, they are added manually down below.
                     // This is because if outDates are enabled with boundaries disabled, we show them
                     // on the last month only.
-                    generateWeekDays(
-                        currentMonth,
-                        firstDayOfWeek,
-                        weekdays,
-                        generateInDates,
-                        OutDateStyle.NONE
-                    ).flatten()
+                    generateWeekDays(currentMonth, firstDayOfWeek, weekdays, generateInDates, OutDateStyle.NONE).flatten()
                 )
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
@@ -220,7 +185,7 @@ internal data class MonthConfig(
         internal fun generateWeekDays(
             yearMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
-            weekdays: Array<DayOfWeek>,
+            weekdays: Set<DayOfWeek>,
             generateInDates: Boolean,
             outDateStyle: OutDateStyle
         ): List<List<CalendarDay>> {
@@ -254,7 +219,7 @@ internal data class MonthConfig(
                 }
                 groupByWeekOfMonth
             } else {
-                // Group days by 7, first day shown on the month will be day 1.
+                // Group days by number of weekdays, first day shown on the month will be day 1.
                 // Use toMutableList() to create a copy of the ephemeral list.
                 thisMonthDays.chunked(weekdays.size).toMutableList()
             }
@@ -289,40 +254,6 @@ internal data class MonthConfig(
 
             return weekDaysGroup
         }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as MonthConfig
-
-        if (outDateStyle != other.outDateStyle) return false
-        if (inDateStyle != other.inDateStyle) return false
-        if (maxRowCount != other.maxRowCount) return false
-        if (startMonth != other.startMonth) return false
-        if (endMonth != other.endMonth) return false
-        if (firstDayOfWeek != other.firstDayOfWeek) return false
-        if (!weekdays.contentEquals(other.weekdays)) return false
-        if (hasBoundaries != other.hasBoundaries) return false
-        if (job != other.job) return false
-        if (months != other.months) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = outDateStyle.hashCode()
-        result = 31 * result + inDateStyle.hashCode()
-        result = 31 * result + maxRowCount
-        result = 31 * result + startMonth.hashCode()
-        result = 31 * result + endMonth.hashCode()
-        result = 31 * result + firstDayOfWeek.hashCode()
-        result = 31 * result + weekdays.contentHashCode()
-        result = 31 * result + hasBoundaries.hashCode()
-        result = 31 * result + job.hashCode()
-        result = 31 * result + months.hashCode()
-        return result
     }
 }
 
