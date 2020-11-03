@@ -34,14 +34,14 @@ class CalenderViewTests {
 
     @Test
     fun `test no in date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(),false, OutDateStyle.END_OF_ROW)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(), false, OutDateStyle.END_OF_ROW)
         assertTrue(weekDays.flatten().none { it.owner == DayOwner.PREVIOUS_MONTH })
     }
 
     @Test
     fun `test first month in date generation works as expected`() {
         val months = MonthConfig.generateBoundedMonths(
-            may2019, nov2019, firstDayOfWeek, DayOfWeek.values().toSet(),6, InDateStyle.FIRST_MONTH, OutDateStyle.NONE
+            may2019, nov2019, firstDayOfWeek, DayOfWeek.values().toSet(), 6, InDateStyle.FIRST_MONTH, OutDateStyle.NONE
         )
 
         // inDates are in the first month.
@@ -55,7 +55,7 @@ class CalenderViewTests {
 
     @Test
     fun `test end of row out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(),true, OutDateStyle.END_OF_ROW)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(), true, OutDateStyle.END_OF_ROW)
 
         val validOutDateIndices = weekDays.flatten().indices.toList().takeLast(2)
         val outDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
@@ -66,7 +66,7 @@ class CalenderViewTests {
 
     @Test
     fun `test end of grid out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(),true, OutDateStyle.END_OF_GRID)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(), true, OutDateStyle.END_OF_GRID)
 
         val validOutDateIndices = weekDays.flatten().indices.toList().takeLast(9)
         val outDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
@@ -77,13 +77,13 @@ class CalenderViewTests {
 
     @Test
     fun `test no out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(),true, OutDateStyle.NONE)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(), true, OutDateStyle.NONE)
         assertTrue(weekDays.flatten().none { it.owner == DayOwner.NEXT_MONTH })
     }
 
     @Test
     fun `test first day of week is in correct position`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(),true, OutDateStyle.END_OF_GRID)
+        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, DayOfWeek.values().toSet(), true, OutDateStyle.END_OF_GRID)
 
         assertTrue(weekDays.first().first().date.dayOfWeek == firstDayOfWeek)
     }
