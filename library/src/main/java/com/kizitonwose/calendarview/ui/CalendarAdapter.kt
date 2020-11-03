@@ -16,6 +16,7 @@ import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.utils.NO_INDEX
 import com.kizitonwose.calendarview.utils.inflate
 import com.kizitonwose.calendarview.utils.orZero
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -25,7 +26,7 @@ internal data class ViewConfig(
     @LayoutRes val dayViewRes: Int,
     @LayoutRes val monthHeaderRes: Int,
     @LayoutRes val monthFooterRes: Int,
-    val monthViewClass: String?
+    val monthViewClass: String?,
 )
 
 internal class CalendarAdapter(
@@ -136,12 +137,13 @@ internal class CalendarAdapter(
             this,
             userRoot,
             weekHolders,
+            monthConfig.weekdays,
             calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
             calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
         )
     }
 
-    private fun createDayHolders(dayConfig: DayConfig) = (1..7).map { DayHolder(dayConfig) }
+    private fun createDayHolders(dayConfig: DayConfig) = (1..monthConfig.weekdays.size).map { DayHolder(dayConfig) }
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {

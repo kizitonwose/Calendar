@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import java.time.DayOfWeek
 
 internal class MonthViewHolder constructor(
     adapter: CalendarAdapter,
     rootLayout: ViewGroup,
     private val weekHolders: List<WeekHolder>,
+    private val weekdays: Array<DayOfWeek>,
     private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
     private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?
 ) : RecyclerView.ViewHolder(rootLayout) {

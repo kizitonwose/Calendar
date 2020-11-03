@@ -113,6 +113,12 @@ open class CalendarView : RecyclerView {
             }
         }
 
+    var weekdays: Array<DayOfWeek> = arrayOf(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
     /**
      * The [RecyclerView.Orientation] used for the layout manager.
      * This determines the scroll direction of the the calendar.
@@ -253,21 +259,42 @@ open class CalendarView : RecyclerView {
         init(attrs, 0, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init(attrs, defStyleAttr, defStyleAttr)
     }
 
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
         setHasFixedSize(true)
-        context.withStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes) {
-            dayViewResource = getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
-            monthHeaderResource = getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
-            monthFooterResource = getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
+        context.withStyledAttributes(
+            attributeSet,
+            R.styleable.CalendarView,
+            defStyleAttr,
+            defStyleRes
+        ) {
+            dayViewResource =
+                getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
+            monthHeaderResource =
+                getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
+            monthFooterResource =
+                getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
             orientation = getInt(R.styleable.CalendarView_cv_orientation, orientation)
-            scrollMode = ScrollMode.values()[getInt(R.styleable.CalendarView_cv_scrollMode, scrollMode.ordinal)]
-            outDateStyle = OutDateStyle.values()[getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)]
-            inDateStyle = InDateStyle.values()[getInt(R.styleable.CalendarView_cv_inDateStyle, inDateStyle.ordinal)]
+            scrollMode = ScrollMode.values()[getInt(
+                R.styleable.CalendarView_cv_scrollMode,
+                scrollMode.ordinal
+            )]
+            outDateStyle = OutDateStyle.values()[getInt(
+                R.styleable.CalendarView_cv_outDateStyle,
+                outDateStyle.ordinal
+            )]
+            inDateStyle = InDateStyle.values()[getInt(
+                R.styleable.CalendarView_cv_inDateStyle,
+                inDateStyle.ordinal
+            )]
             maxRowCount = getInt(R.styleable.CalendarView_cv_maxRowCount, maxRowCount)
             monthViewClass = getString(R.styleable.CalendarView_cv_monthViewClass)
             hasBoundaries = getBoolean(R.styleable.CalendarView_cv_hasBoundaries, hasBoundaries)
@@ -289,7 +316,7 @@ open class CalendarView : RecyclerView {
             }
 
             // +0.5 => round to the nearest pixel
-            val size = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
+            val size = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / weekdays.size.toFloat()) + 0.5).toInt()
 
             val height = if (autoSizeHeight == DAY_SIZE_SQUARE) size else autoSizeHeight
             val computedSize = daySize.copy(width = size, height = height)
@@ -487,7 +514,12 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterViewConfig() {
         if (adapter != null) {
             calendarAdapter.viewConfig =
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
+                ViewConfig(
+                    dayViewResource,
+                    monthHeaderResource,
+                    monthFooterResource,
+                    monthViewClass
+                )
             invalidateViewHolders()
         }
     }
@@ -517,6 +549,7 @@ open class CalendarView : RecyclerView {
                 startMonth ?: return,
                 endMonth ?: return,
                 firstDayOfWeek ?: return,
+                weekdays,
                 hasBoundaries, Job()
             )
             calendarAdapter.notifyDataSetChanged()
@@ -770,7 +803,7 @@ open class CalendarView : RecyclerView {
             finishSetup(
                 MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount, startMonth,
-                    endMonth, firstDayOfWeek, hasBoundaries, Job()
+                    endMonth, firstDayOfWeek, weekdays, hasBoundaries, Job()
                 )
             )
         }
@@ -807,7 +840,7 @@ open class CalendarView : RecyclerView {
             configJob = GlobalScope.launch {
                 val monthConfig = MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount, startMonth,
-                    endMonth, firstDayOfWeek, hasBoundaries, job
+                    endMonth, firstDayOfWeek, weekdays, hasBoundaries, job
                 )
                 withContext(Main) {
                     finishSetup(monthConfig)
@@ -932,21 +965,25 @@ open class CalendarView : RecyclerView {
             requireStartMonth(),
             requireEndMonth(),
             requireFirstDayOfWeek(),
+            weekdays,
             hasBoundaries,
             job
         )
     }
 
     private fun requireStartMonth(): YearMonth {
-        return startMonth ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?")
+        return startMonth
+            ?: throw IllegalStateException("`startMonth` is not set. Have you called `setup()`?")
     }
 
     private fun requireEndMonth(): YearMonth {
-        return endMonth ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
+        return endMonth
+            ?: throw IllegalStateException("`endMonth` is not set. Have you called `setup()`?")
     }
 
     private fun requireFirstDayOfWeek(): DayOfWeek {
-        return firstDayOfWeek ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
+        return firstDayOfWeek
+            ?: throw IllegalStateException("`firstDayOfWeek` is not set. Have you called `setup()`?")
     }
 
     companion object {
