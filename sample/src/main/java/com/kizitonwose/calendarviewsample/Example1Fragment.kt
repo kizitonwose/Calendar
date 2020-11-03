@@ -1,7 +1,6 @@
 package com.kizitonwose.calendarviewsample
 
 import android.animation.ValueAnimator
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
