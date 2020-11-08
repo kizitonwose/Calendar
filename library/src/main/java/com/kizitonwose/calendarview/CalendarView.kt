@@ -652,9 +652,9 @@ open class CalendarView : RecyclerView {
     }
 
     /**
-     * Setup the CalendarView. You can call this any time to change the
-     * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
-     * See [updateMonthRange] and [updateMonthRangeAsync] for more refined updates.
+     * Setup the CalendarView.
+     * See [updateMonthRange] and [updateMonthRangeAsync] to change
+     * the [startMonth] and [endMonth] values.
      *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
@@ -662,27 +662,22 @@ open class CalendarView : RecyclerView {
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
         configJob?.cancel()
-        if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
-            this.firstDayOfWeek = firstDayOfWeek
-            updateMonthRange(startMonth, endMonth)
-        } else {
-            this.startMonth = startMonth
-            this.endMonth = endMonth
-            this.firstDayOfWeek = firstDayOfWeek
-            finishSetup(
-                MonthConfig(
-                    outDateStyle, inDateStyle, maxRowCount, startMonth,
-                    endMonth, firstDayOfWeek, hasBoundaries, Job()
-                )
+        this.startMonth = startMonth
+        this.endMonth = endMonth
+        this.firstDayOfWeek = firstDayOfWeek
+        finishSetup(
+            MonthConfig(
+                outDateStyle, inDateStyle, maxRowCount, startMonth,
+                endMonth, firstDayOfWeek, hasBoundaries, Job()
             )
-        }
+        )
     }
 
     /**
-     * Setup the CalendarView, asynchronously. You can call this any time to change the
-     * the desired [startMonth], [endMonth] or [firstDayOfWeek] on the Calendar.
+     * Setup the CalendarView, asynchronously.
      * Useful if your [startMonth] and [endMonth] values are many years apart.
-     * See [updateMonthRange] and [updateMonthRangeAsync] for more refined updates.
+     * See [updateMonthRange] and [updateMonthRangeAsync] to change the
+     * [startMonth] and [endMonth] values.
      *
      * Note: the setup MUST finish before any other methods can are called. To be
      * notified when the setup is finished, provide a [completion] parameter.
@@ -699,22 +694,17 @@ open class CalendarView : RecyclerView {
         completion: Completion? = null
     ) {
         configJob?.cancel()
-        if (this.startMonth != null && this.endMonth != null && this.firstDayOfWeek != null) {
-            this.firstDayOfWeek = firstDayOfWeek
-            updateMonthRangeAsync(startMonth, endMonth, completion)
-        } else {
-            this.startMonth = startMonth
-            this.endMonth = endMonth
-            this.firstDayOfWeek = firstDayOfWeek
-            configJob = GlobalScope.launch {
-                val monthConfig = MonthConfig(
-                    outDateStyle, inDateStyle, maxRowCount, startMonth,
-                    endMonth, firstDayOfWeek, hasBoundaries, job
-                )
-                withContext(Main) {
-                    finishSetup(monthConfig)
-                    completion?.invoke()
-                }
+        this.startMonth = startMonth
+        this.endMonth = endMonth
+        this.firstDayOfWeek = firstDayOfWeek
+        configJob = GlobalScope.launch {
+            val monthConfig = MonthConfig(
+                outDateStyle, inDateStyle, maxRowCount, startMonth,
+                endMonth, firstDayOfWeek, hasBoundaries, job
+            )
+            withContext(Main) {
+                finishSetup(monthConfig)
+                completion?.invoke()
             }
         }
     }
