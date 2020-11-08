@@ -302,7 +302,6 @@ open class CalendarView : RecyclerView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-
     /**
      * The size in pixels for each day cell view.
      * Set this to [SIZE_SQUARE] to have a nice
