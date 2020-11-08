@@ -19,11 +19,11 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.Size
 import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.*
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -344,19 +344,6 @@ class CalenderViewTests {
             }
         }
         sleep(3000)
-    }
-
-    @Test
-    fun deprecatedWidthAndHeightPropertiesWorkAsExpected() {
-        val calendarView = CalendarView(homeScreenRule.activity)
-        calendarView.dayWidth = 7
-        calendarView.dayHeight = 8
-        assertEquals(calendarView.daySize, Size(7, 8))
-
-        val calendarView2 = CalendarView(homeScreenRule.activity)
-        calendarView2.daySize = Size(10, 20)
-        assertEquals(calendarView2.dayWidth, calendarView2.daySize.width)
-        assertEquals(calendarView2.dayHeight, calendarView2.daySize.height)
     }
 
     private inline fun <reified T : Fragment> findFragment(): T {
