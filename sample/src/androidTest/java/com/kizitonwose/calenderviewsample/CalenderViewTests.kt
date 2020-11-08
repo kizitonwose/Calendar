@@ -346,19 +346,6 @@ class CalenderViewTests {
         sleep(3000)
     }
 
-    @Test
-    fun deprecatedWidthAndHeightPropertiesWorkAsExpected() {
-        val calendarView = CalendarView(homeScreenRule.activity)
-        calendarView.dayWidth = 7
-        calendarView.dayHeight = 8
-        assertEquals(calendarView.daySize, Size(7, 8))
-
-        val calendarView2 = CalendarView(homeScreenRule.activity)
-        calendarView2.daySize = Size(10, 20)
-        assertEquals(calendarView2.dayWidth, calendarView2.daySize.width)
-        assertEquals(calendarView2.dayHeight, calendarView2.daySize.height)
-    }
-
     private inline fun <reified T : Fragment> findFragment(): T {
         return homeScreenRule.activity.supportFragmentManager
             .findFragmentByTag(T::class.java.simpleName) as T
