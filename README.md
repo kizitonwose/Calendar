@@ -30,7 +30,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 
 It's very important to check out the sample app. Most techniques that you would want to implement are already implemented in the examples.
 
-Download the sample app [here](https://github.com/kizitonwose/CalendarView/releases/download/0.2.0/sample.apk)
+Download the sample app [here](https://github.com/kizitonwose/CalendarView/releases/download/1.0.0/sample.apk)
 
 View the sample app's source code [here](https://github.com/kizitonwose/CalendarView/tree/master/sample)
 
@@ -91,7 +91,7 @@ dependencies {
 
 You can find the latest version of `CalendarView` on the JitPack badge above the preview images.
 
-**Note: If you're upgrading from version 0.3.x to 0.4.x, see the [migration guide](https://github.com/kizitonwose/CalendarView#migration).**
+**Note: If you're upgrading from version 0.3.x to 0.4.x or 1.x.x, see the [migration guide](https://github.com/kizitonwose/CalendarView#migration).**
 
 ## Usage
 
@@ -322,7 +322,7 @@ Remember that all the screenshots above are just examples of what you can achiev
 
 ## Migration
 
-If you're upgrading from version `0.3.x` to `0.4.x`, the main change is that CalendarView moved from using [ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP) to [Java 8 API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for dates. After following the new [setup](https://github.com/kizitonwose/CalendarView#setup) instructions, the next thing you need to do is change your imports for date/time related classes from `org.threeten.bp.*` to `java.time.*`. 
+If you're upgrading from version `0.3.x` to `0.4.x` or 1.x.x, the main change is that CalendarView moved from using [ThreeTenABP](https://github.com/JakeWharton/ThreeTenABP) to [Java 8 API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for dates. After following the new [setup](https://github.com/kizitonwose/CalendarView#setup) instructions, the next thing you need to do is change your imports for date/time related classes from `org.threeten.bp.*` to `java.time.*`.
 
 You also need to remove the line `AndroidThreeTen.init(this)` from the `onCreate()` method of your application class as it's no longer needed.
 
