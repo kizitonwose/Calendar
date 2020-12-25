@@ -169,6 +169,10 @@ internal class CalendarAdapter(
         notifyItemChanged(getAdapterPosition(month))
     }
 
+    fun reloadCalendar() {
+        notifyItemRangeChanged(0, itemCount)
+    }
+
     private var visibleMonth: CalendarMonth? = null
     private var calWrapsHeight: Boolean? = null
     private var initialLayout = true
