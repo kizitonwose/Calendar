@@ -275,6 +275,7 @@ open class CalendarView : RecyclerView {
                 wrappedPageHeightAnimationDuration
             )
         }
+        check(dayViewResource != 0) { "No value set for `cv_dayViewResource` attribute." }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
