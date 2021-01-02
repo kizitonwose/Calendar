@@ -20,6 +20,7 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.yearMonth
 import com.kizitonwose.calendarviewsample.databinding.Example4CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example4CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example4FragmentBinding
@@ -116,69 +117,51 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                 textView.background = null
                 roundBgView.makeInVisible()
 
-                if (day.owner == DayOwner.THIS_MONTH) {
-                    textView.text = day.day.toString()
+                val startDate = startDate
+                val endDate = endDate
 
-                    if (day.date.isBefore(today)) {
-                        textView.setTextColorRes(R.color.example_4_grey_past)
-                    } else {
-                        when {
-                            startDate == day.date && endDate == null -> {
-                                textView.setTextColorRes(R.color.white)
-                                roundBgView.makeVisible()
-                                roundBgView.setBackgroundResource(R.drawable.example_4_single_selected_bg)
+                when (day.owner) {
+                    DayOwner.THIS_MONTH -> {
+                        textView.text = day.day.toString()
+                        if (day.date.isBefore(today)) {
+                            textView.setTextColorRes(R.color.example_4_grey_past)
+                        } else {
+                            when {
+                                startDate == day.date && endDate == null -> {
+                                    textView.setTextColorRes(R.color.white)
+                                    roundBgView.makeVisible()
+                                    roundBgView.setBackgroundResource(R.drawable.example_4_single_selected_bg)
+                                }
+                                day.date == startDate -> {
+                                    textView.setTextColorRes(R.color.white)
+                                    textView.background = startBackground
+                                }
+                                startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
+                                    textView.setTextColorRes(R.color.white)
+                                    textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                                }
+                                day.date == endDate -> {
+                                    textView.setTextColorRes(R.color.white)
+                                    textView.background = endBackground
+                                }
+                                day.date == today -> {
+                                    textView.setTextColorRes(R.color.example_4_grey)
+                                    roundBgView.makeVisible()
+                                    roundBgView.setBackgroundResource(R.drawable.example_4_today_bg)
+                                }
+                                else -> textView.setTextColorRes(R.color.example_4_grey)
                             }
-                            day.date == startDate -> {
-                                textView.setTextColorRes(R.color.white)
-                                textView.background = startBackground
-                            }
-                            startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
-                                textView.setTextColorRes(R.color.white)
-                                textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
-                            }
-                            day.date == endDate -> {
-                                textView.setTextColorRes(R.color.white)
-                                textView.background = endBackground
-                            }
-                            day.date == today -> {
-                                textView.setTextColorRes(R.color.example_4_grey)
-                                roundBgView.makeVisible()
-                                roundBgView.setBackgroundResource(R.drawable.example_4_today_bg)
-                            }
-                            else -> textView.setTextColorRes(R.color.example_4_grey)
                         }
                     }
-                } else {
-
-                    // This part is to make the coloured selection background continuous
-                    // on the blank in and out dates across various months and also on dates(months)
-                    // between the start and end dates if the selection spans across multiple months.
-
-                    val startDate = startDate
-                    val endDate = endDate
-                    if (startDate != null && endDate != null) {
-                        // Mimic selection of inDates that are less than the startDate.
-                        // Example: When 26 Feb 2019 is startDate and 5 Mar 2019 is endDate,
-                        // this makes the inDates in Mar 2019 for 24 & 25 Feb 2019 look selected.
-                        if ((day.owner == DayOwner.PREVIOUS_MONTH &&
-                                startDate.monthValue == day.date.monthValue &&
-                                endDate.monthValue != day.date.monthValue) ||
-                            // Mimic selection of outDates that are greater than the endDate.
-                            // Example: When 25 Apr 2019 is startDate and 2 May 2019 is endDate,
-                            // this makes the outDates in Apr 2019 for 3 & 4 May 2019 look selected.
-                            (day.owner == DayOwner.NEXT_MONTH &&
-                                startDate.monthValue != day.date.monthValue &&
-                                endDate.monthValue == day.date.monthValue) ||
-
-                            // Mimic selection of in and out dates of intermediate
-                            // months if the selection spans across multiple months.
-                            (startDate < day.date && endDate > day.date &&
-                                startDate.monthValue != day.date.monthValue &&
-                                endDate.monthValue != day.date.monthValue)
-                        ) {
+                    // Make the coloured selection background continuous on the invisible in and out dates across various months.
+                    DayOwner.PREVIOUS_MONTH ->
+                        if (startDate != null && endDate != null && isInDateBetween(day.date, startDate, endDate)) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
-                    }
+                    DayOwner.NEXT_MONTH ->
+                        if (startDate != null && endDate != null && isOutDateBetween(day.date, startDate, endDate)) {
+                            textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                        }
                 }
             }
         }
@@ -209,6 +192,20 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         }
 
         bindSummaryViews()
+    }
+
+    private fun isInDateBetween(inDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
+        if (startDate.yearMonth == endDate.yearMonth) return false
+        if (inDate.yearMonth == startDate.yearMonth) return true
+        if (inDate.yearMonth.plusMonths(1) == endDate.yearMonth) return true
+        return inDate > startDate && inDate < endDate
+    }
+
+    private fun isOutDateBetween(outDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
+        if (startDate.yearMonth == endDate.yearMonth) return false
+        if (outDate.yearMonth == endDate.yearMonth) return true
+        if (outDate.yearMonth.minusMonths(1) == startDate.yearMonth) return true
+        return outDate > startDate && outDate < endDate
     }
 
     private fun bindSummaryViews() {

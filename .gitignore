@@ -11,4 +11,5 @@
 /build
 /captures
 .externalNativeBuild
-.idea
+.idea/markdown-navigator-enh.xml
+.idea/markdown-navigator.xml
