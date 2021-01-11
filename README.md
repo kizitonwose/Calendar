@@ -14,14 +14,15 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 
 ## Features
 
-- [x] Single or range selection - The library provides the calendar logic which enables you to implement the view whichever way you like.
+- [x] [Single or range selection](#date-selection) - The library provides the calendar logic which enables you to implement the view whichever way you like.
 - [x] [Week or month mode](#week-view-and-month-view) - show 1 row of weekdays, or any number of rows from 1 to 6.
+- [x] [Disable desired dates](#disabling-dates) - Prevent selection of some dates by disabling them.
 - [x] Boundary dates - limit the calendar date range.
 - [x] Custom date view - make your day cells look however you want, with any functionality you want.
 - [x] Custom calendar view - make your calendar look however you want, with whatever functionality you want.
 - [x] Use any day as the first day of the week.
 - [x] Horizontal or vertical scrolling mode.
-- [x] Add headers/footers of any kind on each month.
+- [x] [Month headers and footers](#adding-month-headers-and-footers) - Add headers/footers of any kind on each month.
 - [x] Easily scroll to any date or month view using the date.
 - [x] Use all RecyclerView customisations(decorators etc) since CalendarView extends from RecyclerView.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/CalendarView/issues/1) The library provides the logic, you provide the views.
@@ -261,7 +262,212 @@ Note that setting the `daySize` property to `CalendarView.SIZE_SQUARE` makes the
 
 There's no need to list all available methods or repeating the documentation here. Please see the [CalendarView](https://github.com/kizitonwose/CalendarView/blob/master/library/src/main/java/com/kizitonwose/calendarview/CalendarView.kt) class for all properties and methods available with proper documentation.
 
-## Week view and Month view
+### Date clicks
+
+You should set a click listener on the view which is provided to the view container. 
+
+XML file for the date cell `calendar_day_layout.xml`:
+
+```xml
+<!--We'll use this TextView to show the dates-->
+<TextView
+    android:id="@+id/calendarDayText"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:textSize="16sp"
+    tools:text="22" />
+```
+
+Of course, you need to set the file as `cv_dayViewResource` on the CalendarView:
+
+```xml
+<com.kizitonwose.calendarview.CalendarView
+    android:id="@+id/calendarView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cv_dayViewResource="@layout/calendar_day_layout" />
+```
+
+Click listener implementation in your Fragment or Activity:
+
+```kotlin
+class DayViewContainer(view: View) : ViewContainer(view) {
+    val textView = view.findViewById<TextView>(R.id.calendarDayText)
+    // Will be set when this container is bound
+    lateinit var day: CalendarDay
+    
+    init {
+        view.setOnClickListener {
+            // Use the CalendarDay associated with this container.
+        }
+    }
+}
+
+calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+    override fun create(view: View) = DayViewContainer(view)
+    override fun bind(container: DayViewContainer, day: CalendarDay) {
+        // Set the calendar day for this container.
+        container.day = day
+        // Set the date text
+        container.textView.text = day.date.dayOfMonth.toString()
+        // Other binding logic
+    }
+}
+```
+
+### Date Selection
+
+The library has no inbuilt concept of selected/unselected dates, this gives you the freedom to choose how best you would like to implement this use case.
+
+Implementing date selection is as simple as showing a background on a specific date in the date binder, remember that since CalendarView is a RecyclerView, you need to undo any special effects on dates where it is not needed. 
+
+For this example, I want only the last clicked date to be selected on the calendar.
+
+Firstly, let's keep a reference to the selected date:
+
+```kotlin
+private var selectedDate: LocalDate? = null
+```
+
+Next, using the click logic already shown in the date click section above, we update this field whenever a date is clicked and show the selection background on the clicked date. 
+
+```kotlin
+view.setOnClickListener {
+    // Check the day owner as we do not want to select in or out dates.
+    if (day.owner == DayOwner.THIS_MONTH) {
+        // Keep a reference to any previous selection
+        // in case we overwrite it and need to reload it.
+        val currentSelection = selectedDate
+        if (currentSelection == day.date) {
+            // If the user clicks the same date, clear selection.
+            selectedDate = null
+            // Reload this date so the dayBinder is called
+            // and we can REMOVE the selection background.
+            calendarView.notifyDateChanged(currentSelection)
+        } else {
+            selectedDate = day.date
+            // Reload the newly selected date so the dayBinder is
+            // called and we can ADD the selection background.
+            calendarView.notifyDateChanged(day.date)
+            if currentSelection != null {
+                // We need to also reload the previously selected 
+                // date so we can REMOVE the selection background.
+                calendarView.notifyDateChanged(currentSelection)
+            }
+        }
+    }
+}
+```
+
+Lastly, we implement the `dayBinder` to reflect the selection accordingly:
+
+```kotlin
+calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+    override fun create(view: View) = DayViewContainer(view)
+    override fun bind(container: DayViewContainer, day: CalendarDay) {
+        container.day = day
+        val textView = container.textView
+        textView.text = day.date.dayOfMonth.toString()
+        if (day.owner == DayOwner.THIS_MONTH) {
+            // Show the month dates. Remember that views are recycled!
+            textView.visibility = View.VISIBLE
+            if (day.date == selectedDate) {
+                // If this is the selected date, show a round background and change the text color.
+                textView.setTextColor(Color.WHITE)
+                textView.setBackgroundResource(R.drawable.selection_background)
+            } else {
+                // If this is NOT the selected date, remove the background and reset the text color.
+                textView.setTextColor(Color.BLACK)
+                textView.background = null
+            }
+        } else {
+            // Hide in and out dates
+            textView.visibility = View.INVISIBLE
+        }
+    }
+}
+```
+
+For more complex selection logic like range selection, please see the sample project. It's quite simple, the magic is all in your binding logic!
+
+### Disabling dates
+
+As expected, the library does not provide this logic internally so you have complete flexibility.
+
+To disable dates, you can simply set the texts on those dates to look "disabled" and ignore clicks on those dates. For example, if we want to show in and out dates but "disable" them so that they cannot be selected, we can just set the alpha property for those dates in the `dayBinder` to give the effect of being disabled.
+
+Continuing with the example in the date selection section, we already ignore clicks for in and out dates using this logic:
+
+```kotlin
+view.setOnClickListener {
+    // Check the day owner as we do not want to select in or out dates.
+    if (day.owner == DayOwner.THIS_MONTH) {
+        // Only use month dates
+    }
+}
+```
+
+Then in the `dayBinder`, we check the day owner again and bind accordingly:
+
+```kotlin
+calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+    override fun create(view: View) = DayViewContainer(view)
+    override fun bind(container: DayViewContainer, day: CalendarDay) {
+        container.day = day
+        val textView = container.textView
+        textView.text = day.date.dayOfMonth.toString()
+        textView.alpha = if (day.owner == DayOwner.THIS_MONTH) 1f else 0.3f
+}
+```
+
+And that's all you need to do. Of course you can go wild and do a whole lot more, see the sample project for some complex implementations.
+
+### Adding month headers and footers
+
+This is quite simple, just provide the needed values for `cv_monthHeaderResource` or `cv_monthFooterResource` in XML or programmatically. In the example shown below, we add a header which simply shows the month name above each month:
+
+Create the header view in `res/layout/calendar_month_header_layout.xml`:
+
+```xml
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/headerTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:textSize="26sp"
+    tools:text="October 2019" />
+```
+
+Set the view as the month header resource:
+
+```xml
+<com.kizitonwose.calendarview.CalendarView
+    android:id="@+id/calendarView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cv_dayViewResource="@layout/calendar_day_layout"
+    app:cv_monthHeaderResource="@layout/calendar_month_header_layout" />
+```
+
+Finally, provide a month header binder in code:
+
+```kotlin
+class MonthViewContainer(view: View) : ViewContainer(view) {
+    val textView = view.findViewById<TextView>(R.id.headerTextView)
+}
+calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+    override fun create(view: View) = MonthViewContainer(view)
+    override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+        container.textView.text = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+    }
+}
+```
+
+The same logic applies if you need to add a footer.
+
+### Week view and Month view
 
 This library has no concept of week/month view. You'll need to configure the calendar to mimic this behavior by changing its state between a 6 or 1 row calendar, depending on your needs. This feature can be seen in Example 1 in the sample app. In summary, here's what you need:
 
