@@ -20,7 +20,7 @@ A highly customizable calendar library for Android, powered by RecyclerView.
 - [x] Boundary dates - limit the calendar date range.
 - [x] Custom date view - make your day cells look however you want, with any functionality you want.
 - [x] Custom calendar view - make your calendar look however you want, with whatever functionality you want.
-- [x] Use any day as the first day of the week.
+- [x] [Custom first day of the week](#first-day-of-the-week) - Use any day as the first day of the week.
 - [x] Horizontal or vertical scrolling mode.
 - [x] [Month headers and footers](#adding-month-headers-and-footers) - Add headers/footers of any kind on each month.
 - [x] Easily scroll to any date or month view using the date.
@@ -466,6 +466,58 @@ calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewConta
 ```
 
 The same logic applies if you need to add a footer.
+
+### First day of the week
+
+Here's a method which generates the weekdays from the user's current Locale. 
+
+```kotlin
+fun daysOfWeekFromLocale(): Array<DayOfWeek> {
+    val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+    val daysOfWeek = DayOfWeek.values()
+    // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
+    // Only necessary if firstDayOfWeek is not DayOfWeek.MONDAY which has ordinal 0.
+    if (firstDayOfWeek != DayOfWeek.MONDAY) {
+        val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
+        val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
+        return = rhs + lhs
+    }
+    return daysOfWeek
+}
+```
+
+With the method above, you can set up the calendar so the first day of the week is what the user would expect. This could be Sunday, Monday or whatever the Locale returns:
+
+```kotlin
+val daysOfWeek = daysOfWeekFromLocale()
+calendarView.setup(startMonth, endMonth, daysOfWeek.first())
+```
+
+Of course, this could be simplified as:
+
+```kotlin
+val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+calendarView.setup(startMonth, endMonth, firstDayOfWeek)
+```
+
+However, you would typically use the `daysOfWeek` array values to set up the weekday texts in your month header view, this way it matches what is shown on the calendarView.
+
+To use Sunday as the first day of the week, regardless of the user's Locale, use the below logic instead: 
+
+```kotlin
+val daysOfWeek = arrayOf(
+    DayOfWeek.SUNDAY,
+    DayOfWeek.MONDAY,
+    DayOfWeek.TUESDAY,
+    DayOfWeek.WEDNESDAY,
+    DayOfWeek.THURSDAY,
+    DayOfWeek.FRIDAY,
+    DayOfWeek.SATURDAY
+)
+calendarView.setup(startMonth, endMonth, daysOfWeek.first())
+// Use the daysOfWeek to set up your month header texts:
+// Sun | Mon | Tue | Wed | Thu | Fri | Sat
+```
 
 ### Week view and Month view
 
