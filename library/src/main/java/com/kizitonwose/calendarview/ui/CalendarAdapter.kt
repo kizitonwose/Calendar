@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.utils.NO_INDEX
+import com.kizitonwose.calendarview.utils.getVerticalMargins
 import com.kizitonwose.calendarview.utils.inflate
 import com.kizitonwose.calendarview.utils.orZero
 import java.time.LocalDate
@@ -217,11 +218,13 @@ internal class CalendarAdapter(
                     val visibleVH =
                         calView.findViewHolderForAdapterPosition(visibleItemPos) as? MonthViewHolder ?: return
                     val newHeight = visibleVH.headerView?.height.orZero() +
+                            visibleVH.headerView?.getVerticalMargins().orZero() +
                             // visibleVH.bodyLayout.height` won't not give us the right height as it differs
                             // depending on row count in the month. So we calculate the appropriate height
                             // by checking the number of visible(non-empty) rows.
                             visibleMonth.weekDays.size * calView.daySize.height +
-                            visibleVH.footerView?.height.orZero()
+                            visibleVH.footerView?.height.orZero() +
+                            visibleVH.footerView?.getVerticalMargins().orZero()
                     if (calView.height != newHeight) {
                         ValueAnimator.ofInt(calView.height, newHeight).apply {
                             // Don't animate when the view is shown initially.
