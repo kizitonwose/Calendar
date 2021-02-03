@@ -71,6 +71,9 @@
             <enum name="paged" value="1" />
         </attr>
 
+        <!--Fixed the grid count to show only exact 7 days. Act as flag to resize in onMeasure-->
+        <attr name="cv_fixedGridCount" format="boolean" />
+
         <!-- The duration in milliseconds of the animation used to adjust the CalendarView's
         height when `scrollMode` is `paged` and the CalendarView height is set to `wrap_content`.
         The height change happens when the CalendarView scrolls to a month which has less or more

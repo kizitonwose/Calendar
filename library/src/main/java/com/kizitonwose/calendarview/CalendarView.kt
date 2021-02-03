@@ -218,6 +218,14 @@ open class CalendarView : RecyclerView {
             }
         }
 
+    var fixedGridCount = false
+        set(value) {
+            if(field != value) {
+                field = value
+                invalidateViewHolders()
+            }
+        }
+
     /**
      * The duration in milliseconds of the animation used to adjust the CalendarView's
      * height when [scrollMode] is [ScrollMode.PAGED] and the CalendarView's height is
@@ -274,6 +282,9 @@ open class CalendarView : RecyclerView {
                 R.styleable.CalendarView_cv_wrappedPageHeightAnimationDuration,
                 wrappedPageHeightAnimationDuration
             )
+
+            fixedGridCount = getBoolean(R.styleable.CalendarView_cv_fixedGridCount, false)
+
         }
         check(dayViewResource != 0) { "No value set for `cv_dayViewResource` attribute." }
     }
@@ -300,7 +311,13 @@ open class CalendarView : RecyclerView {
                 invalidateViewHolders()
             }
         }
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        val computed = daySize.width * 7 // 7 because 7 of days per week
+        val widthSpec = if(fixedGridCount) {
+            MeasureSpec.makeMeasureSpec(computed, MeasureSpec.AT_MOST);
+        } else {
+            widthMeasureSpec
+        }
+        super.onMeasure(widthSpec, heightMeasureSpec)
     }
 
     /**
