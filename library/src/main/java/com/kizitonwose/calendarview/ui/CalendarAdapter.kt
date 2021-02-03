@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
+import androidx.core.view.MarginLayoutParamsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
@@ -217,11 +218,13 @@ internal class CalendarAdapter(
                     val visibleVH =
                         calView.findViewHolderForAdapterPosition(visibleItemPos) as? MonthViewHolder ?: return
                     val newHeight = visibleVH.headerView?.height.orZero() +
+                            visibleVH.headerView?.getMarginHeight().orZero() +
                             // visibleVH.bodyLayout.height` won't not give us the right height as it differs
                             // depending on row count in the month. So we calculate the appropriate height
                             // by checking the number of visible(non-empty) rows.
                             visibleMonth.weekDays.size * calView.daySize.height +
-                            visibleVH.footerView?.height.orZero()
+                            visibleVH.footerView?.height.orZero() +
+                            visibleVH.footerView?.getMarginHeight().orZero()
                     if (calView.height != newHeight) {
                         ValueAnimator.ofInt(calView.height, newHeight).apply {
                             // Don't animate when the view is shown initially.
@@ -280,6 +283,11 @@ internal class CalendarAdapter(
     fun findFirstVisibleDay(): CalendarDay? = findVisibleDay(true)
 
     fun findLastVisibleDay(): CalendarDay? = findVisibleDay(false)
+
+    private fun View.getMarginHeight(): Int {
+        val marginParams = layoutParams as? ViewGroup.MarginLayoutParams
+        return marginParams?.topMargin.orZero() + marginParams?.bottomMargin.orZero()
+    }
 
     private fun findFirstVisibleMonthPosition(): Int = findVisibleMonthPosition(true)
 
