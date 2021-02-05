@@ -2,6 +2,8 @@
 <resources>
     <declare-styleable name="CalendarView">
 
+        <attr name="cv_cellViewResource" format="reference" />
+
         <!-- The xml resource that is inflated and used as the day cell view, must be provided. -->
         <attr name="cv_dayViewResource" format="reference" />
 

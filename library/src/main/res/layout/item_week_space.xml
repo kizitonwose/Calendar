@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<View xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/space"
+    android:layout_width="46dp"
+    android:layout_height="15dp"
+    android:tag="tag_space" />

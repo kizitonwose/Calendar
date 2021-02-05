@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.model.Event
 import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.EventCellBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.next
@@ -153,6 +156,45 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
             }
         }
 
+        class EventViewContainer(view: View) : ViewContainer(view) {
+            val container: ViewGroup = view.findViewById(R.id.container)
+            val txtTitle: TextView = view.findViewById(R.id.txt_title)
+        }
+
+        binding.exFiveCalendar.eventCellBinder = object : EventCellBinder<EventViewContainer> {
+            override fun create(view: View): EventViewContainer {
+                return EventViewContainer(view)
+            }
+
+            override fun bind(
+                container: EventViewContainer,
+                event: Event,
+                leftBoundaryStart: Boolean,
+                rightBoundaryEnd: Boolean
+            ) {
+                var text = ""
+
+                if (leftBoundaryStart) {
+                    text = "L/"
+                }
+                if (rightBoundaryEnd) {
+                    text += "R/"
+                }
+
+                text += event.name
+
+                container.txtTitle.text = text
+
+                container.container.setOnClickListener {
+                    Toast.makeText(requireContext(), "$event", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun recycle(container: EventViewContainer) {
+                container.container.setOnClickListener(null)
+            }
+        }
+
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val legendLayout = Example5CalendarHeaderBinding.bind(view).legendLayout.root
         }
@@ -184,6 +226,48 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                 updateAdapterForDate(null)
             }
         }
+
+        binding.exFiveCalendar.events = listOf(
+            Event.AllDay(
+                "1",
+                "All day event",
+                true,
+                start = LocalDate.now(),
+                end = LocalDate.now().plusDays(1)
+            ),
+            Event.AllDay(
+                "2",
+                "All day event 2",
+                true,
+                start = LocalDate.now().minusDays(10),
+                end = LocalDate.now().plusDays(2)
+            ),
+            Event.AllDay(
+                "3",
+                "All day event 3",
+                true,
+                start = LocalDate.now().plusDays(18),
+                end = LocalDate.now().plusDays(35)
+            ),
+            Event.Single(
+                "4",
+                "Single day event",
+                true,
+                start = LocalDate.now().plusDays(1)
+            ),
+            Event.Single(
+                "5",
+                "Single day event 2",
+                true,
+                start = LocalDate.now().plusDays(2)
+            ),
+            Event.Single(
+                "6",
+                "Single day event 3",
+                true,
+                start = LocalDate.now().minusDays(3)
+            )
+        )
 
         binding.exFiveNextMonthImage.setOnClickListener {
             binding.exFiveCalendar.findFirstVisibleMonth()?.let {

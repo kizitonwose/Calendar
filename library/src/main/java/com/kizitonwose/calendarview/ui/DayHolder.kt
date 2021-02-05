@@ -65,4 +65,10 @@ internal class DayHolder(private val config: DayConfig) {
             false
         }
     }
+
+    fun recycle() {
+        if (::viewContainer.isInitialized) {
+            config.viewBinder.recycle(viewContainer)
+        }
+    }
 }

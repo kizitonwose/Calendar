@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.InternalEvent
 
 internal class MonthViewHolder constructor(
     adapter: CalendarAdapter,
@@ -20,10 +21,7 @@ internal class MonthViewHolder constructor(
     private var headerContainer: ViewContainer? = null
     private var footerContainer: ViewContainer? = null
 
-    lateinit var month: CalendarMonth
-
-    fun bindMonth(month: CalendarMonth) {
-        this.month = month
+    fun bindMonth(month: CalendarMonth, events: List<InternalEvent>) {
         headerView?.let { view ->
             val headerContainer = headerContainer ?: monthHeaderBinder!!.create(view).also {
                 headerContainer = it
@@ -37,11 +35,30 @@ internal class MonthViewHolder constructor(
             monthFooterBinder?.bind(footerContainer, month)
         }
         weekHolders.forEachIndexed { index, week ->
-            week.bindWeekView(month.weekDays.getOrNull(index).orEmpty())
+            val weekDays: List<CalendarDay> = month.weekDays.getOrNull(index).orEmpty()
+            val weekEvents: List<InternalEvent> =
+                if (weekDays.isNotEmpty()) {
+                    events.filter { event ->
+                        when (event) {
+                            is InternalEvent.Single -> weekDays.any { it.date.isEqual(event.start) }
+                            is InternalEvent.AllDay.Original -> weekDays.any { it.date.isEqual(event.start) }
+                            is InternalEvent.AllDay.Partial -> weekDays.any { it.date.isEqual(event.start) }
+                        }
+                    }
+                } else {
+                    emptyList()
+                }
+            week.bindWeekView(weekDays, weekEvents)
         }
     }
 
     fun reloadDay(day: CalendarDay) {
         weekHolders.find { it.reloadDay(day) }
+    }
+
+    fun recycle() {
+        weekHolders.forEach { it.recycle() }
+        headerContainer?.let { monthHeaderBinder?.recycle(it) }
+        footerContainer?.let { monthFooterBinder?.recycle(it) }
     }
 }

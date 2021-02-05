@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
 import com.kizitonwose.calendarview.utils.Size
+import com.kizitonwose.calendarview.utils.flatMapToInternalEvents
 import com.kizitonwose.calendarview.utils.job
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
@@ -24,6 +25,18 @@ import java.time.YearMonth
 typealias Completion = () -> Unit
 
 open class CalendarView : RecyclerView {
+
+    var events: List<Event>? = null
+        set(value) {
+            field = value
+            updateAdapterEventConfig()
+        }
+
+    var eventCellBinder: EventCellBinder<*>? = null
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
 
     /**
      * The [DayBinder] instance used for managing day cell views
@@ -61,6 +74,19 @@ open class CalendarView : RecyclerView {
      * if [ScrollMode] is [ScrollMode.PAGED].
      */
     var monthScrollListener: MonthScrollListener? = null
+
+    /**
+     * The xml resource that is inflated and used as the day cell view.
+     * This must be provided.
+     */
+    var eventCellViewResource = 0
+        set(value) {
+            if (field != value) {
+                if (value == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
+                field = value
+                updateAdapterViewConfig()
+            }
+        }
 
     /**
      * The xml resource that is inflated and used as the day cell view.
@@ -260,6 +286,7 @@ open class CalendarView : RecyclerView {
         if (isInEditMode) return
         setHasFixedSize(true)
         context.withStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes) {
+            eventCellViewResource = getResourceId(R.styleable.CalendarView_cv_cellViewResource, eventCellViewResource)
             dayViewResource = getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
             monthHeaderResource = getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
             monthFooterResource = getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
@@ -393,7 +420,13 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterViewConfig() {
         if (adapter != null) {
             calendarAdapter.viewConfig =
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
+                ViewConfig(
+                    dayViewRes = dayViewResource,
+                    monthHeaderRes = monthHeaderResource,
+                    monthFooterRes = monthFooterResource,
+                    eventCellRes = eventCellViewResource,
+                    monthViewClass = monthViewClass
+                )
             invalidateViewHolders()
         }
     }
@@ -425,6 +458,15 @@ open class CalendarView : RecyclerView {
                 firstDayOfWeek ?: return,
                 hasBoundaries, Job()
             )
+            calendarAdapter.notifyDataSetChanged()
+            post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
+        }
+    }
+
+    private fun updateAdapterEventConfig() {
+        if (internalConfigUpdate) return
+        if (adapter != null) {
+            calendarAdapter.eventConfig = EventConfig(events?.flatMapToInternalEvents() ?: emptyList())
             calendarAdapter.notifyDataSetChanged()
             post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
         }
@@ -715,9 +757,16 @@ open class CalendarView : RecyclerView {
 
         layoutManager = CalendarLayoutManager(this, orientation)
         adapter = CalendarAdapter(
-            this,
-            ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
-            monthConfig
+            calView = this,
+            viewConfig = ViewConfig(
+                dayViewRes = dayViewResource,
+                monthHeaderRes = monthHeaderResource,
+                monthFooterRes = monthFooterResource,
+                eventCellRes = eventCellViewResource,
+                monthViewClass = monthViewClass
+            ),
+            monthConfig = monthConfig,
+            eventConfig = EventConfig(events?.flatMapToInternalEvents() ?: emptyList())
         )
     }
 

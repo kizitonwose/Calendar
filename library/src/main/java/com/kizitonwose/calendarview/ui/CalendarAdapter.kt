@@ -3,7 +3,6 @@ package com.kizitonwose.calendarview.ui
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -13,9 +12,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.*
-import com.kizitonwose.calendarview.utils.NO_INDEX
-import com.kizitonwose.calendarview.utils.inflate
-import com.kizitonwose.calendarview.utils.orZero
+import com.kizitonwose.calendarview.utils.*
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -25,17 +22,26 @@ internal data class ViewConfig(
     @LayoutRes val dayViewRes: Int,
     @LayoutRes val monthHeaderRes: Int,
     @LayoutRes val monthFooterRes: Int,
+    @LayoutRes val eventCellRes: Int,
     val monthViewClass: String?
+)
+
+internal data class EventConfig(
+    val events: List<InternalEvent>
 )
 
 internal class CalendarAdapter(
     private val calView: CalendarView,
     internal var viewConfig: ViewConfig,
-    internal var monthConfig: MonthConfig
+    internal var monthConfig: MonthConfig,
+    internal var eventConfig: EventConfig
 ) : RecyclerView.Adapter<MonthViewHolder>() {
 
     private val months: List<CalendarMonth>
         get() = monthConfig.months
+
+    private val events: List<InternalEvent>
+        get() = eventConfig.events
 
     // Values of headerViewId & footerViewId will be
     // replaced with IDs set in the XML if present.
@@ -83,12 +89,22 @@ internal class CalendarAdapter(
 
         @Suppress("UNCHECKED_CAST")
         val dayConfig = DayConfig(
-            calView.daySize, viewConfig.dayViewRes,
-            calView.dayBinder as DayBinder<ViewContainer>
+            size = calView.daySize,
+            dayViewRes = viewConfig.dayViewRes,
+            viewBinder = calView.dayBinder as DayBinder<ViewContainer>
         )
 
-        val weekHolders = (1..6)
-            .map { WeekHolder(createDayHolders(dayConfig)) }
+        @Suppress("UNCHECKED_CAST") val eventListConfig = EventListConfig(
+            eventListBinder = EventListBinder(
+                eventCellConfig = EventCellConfig(
+                    layoutRes = viewConfig.eventCellRes,
+                    eventCellBinder = calView.eventCellBinder as EventCellBinder<ViewContainer>?
+                )
+            )
+        )
+
+        val weekHolders = (1..5)
+            .map { WeekHolder(createDayHolders(dayConfig), createEventListHolder(eventListConfig)) }
             .onEach { weekHolder -> rootLayout.addView(weekHolder.inflateWeekView(rootLayout)) }
 
         if (viewConfig.monthFooterRes != 0) {
@@ -112,13 +128,8 @@ internal class CalendarAdapter(
                 bottomMargin = calView.monthMarginBottom
                 topMargin = calView.monthMarginTop
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    marginStart = calView.monthMarginStart
-                    marginEnd = calView.monthMarginEnd
-                } else {
-                    leftMargin = calView.monthMarginStart
-                    rightMargin = calView.monthMarginEnd
-                }
+                marginStart = calView.monthMarginStart
+                marginEnd = calView.monthMarginEnd
             }
         }
 
@@ -144,6 +155,8 @@ internal class CalendarAdapter(
 
     private fun createDayHolders(dayConfig: DayConfig) = (1..7).map { DayHolder(dayConfig) }
 
+    private fun createEventListHolder(eventListConfig: EventListConfig) = EventListHolder(eventListConfig)
+
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
@@ -155,7 +168,21 @@ internal class CalendarAdapter(
     }
 
     override fun onBindViewHolder(holder: MonthViewHolder, position: Int) {
-        holder.bindMonth(getItem(position))
+        val month: CalendarMonth = getItem(position)
+        val previousMonth: YearMonth = month.yearMonth.minusMonths(1)
+        val nextMonth: YearMonth = month.yearMonth.plusMonths(1)
+        val events: List<InternalEvent> = events.filter {
+            it.start.isSameYearMonth(month.yearMonth) ||
+                    it.start.isSameYearMonth(previousMonth) ||
+                    it.start.isSameYearMonth(nextMonth)
+        }
+
+        holder.bindMonth(month, events)
+    }
+
+    override fun onViewRecycled(holder: MonthViewHolder) {
+        holder.recycle()
+        super.onViewRecycled(holder)
     }
 
     fun reloadDay(day: CalendarDay) {
