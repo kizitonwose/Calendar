@@ -30,16 +30,16 @@ internal class EventListBinder(
     }
 
     override fun create(view: View): EventListViewContainer {
-        return EventListViewContainer(view)
+        return EventListViewContainer(view).apply {
+            val space: View = gridLayout.findViewWithTag(TAG_SPACE)
+            columnWidth = space.measuredWidth
+        }
     }
 
     override fun bind(container: EventListViewContainer, events: List<EventModel>, calendarMonth: CalendarMonth) {
         container.gridLayout.children
             .filter { it.tag == TAG_EVENT }
             .forEach { container.gridLayout.removeView(it) }
-
-        val space: View = container.gridLayout.findViewWithTag(TAG_SPACE)
-        columnWidth = space.measuredWidth
 
         for (event in events) {
             addEvent(
@@ -113,6 +113,12 @@ internal class EventListBinder(
                 space.layoutParams = (space.layoutParams as GridLayout.LayoutParams).apply {
                     this.rowSpec = GridLayout.spec(row, 1)
                     this.columnSpec = GridLayout.spec(column, 1, 1f);
+                }
+
+                if (row == 3) {
+                    space.setBackgroundResource(R.drawable.week_space_background_bottom)
+                } else {
+                    space.setBackgroundResource(R.drawable.week_space_background)
                 }
                 grid.addView(space)
             }

@@ -1,5 +1,7 @@
 package com.kizitonwose.calendarviewsample
 
+import android.annotation.SuppressLint
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -227,6 +229,62 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                 updateAdapterForDate(null)
             }
         }
+
+//        val task = @SuppressLint("StaticFieldLeak")
+//        object: AsyncTask<String, String, String>() {
+//            override fun doInBackground(vararg params: String?): String {
+//                Thread.sleep(1000)
+//                return ""
+//            }
+//
+//            override fun onPostExecute(result: String?) {
+//                super.onPostExecute(result)
+//
+//                binding.exFiveCalendar.events = listOf(
+//                    Event.AllDay(
+//                        "1",
+//                        "All day event",
+//                        true,
+//                        start = LocalDate.now(),
+//                        end = LocalDate.now().plusDays(1)
+//                    ),
+//                    Event.AllDay(
+//                        "2",
+//                        "All day event 2",
+//                        true,
+//                        start = LocalDate.now().minusDays(10),
+//                        end = LocalDate.now().plusDays(2)
+//                    ),
+//                    Event.AllDay(
+//                        "3",
+//                        "All day event 3",
+//                        true,
+//                        start = LocalDate.now().plusDays(18),
+//                        end = LocalDate.now().plusDays(35)
+//                    ),
+//                    Event.Single(
+//                        "4",
+//                        "Single day event",
+//                        true,
+//                        start = LocalDate.now().plusDays(1)
+//                    ),
+//                    Event.Single(
+//                        "5",
+//                        "Single day event 2",
+//                        true,
+//                        start = LocalDate.now().plusDays(2)
+//                    ),
+//                    Event.Single(
+//                        "6",
+//                        "Single day event 3",
+//                        true,
+//                        start = LocalDate.now().minusDays(3)
+//                    )
+//                )
+//            }
+//        }
+//
+//        task.execute()
 
         binding.exFiveCalendar.events = listOf(
             Event.AllDay(

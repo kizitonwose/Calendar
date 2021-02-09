@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:layout_width="wrap_content"
     android:layout_height="15dp"
-    android:background="@android:color/white"
+    android:background="@android:color/holo_red_dark"
     android:orientation="vertical">
 
     <TextView

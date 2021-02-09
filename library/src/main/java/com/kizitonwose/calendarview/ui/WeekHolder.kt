@@ -95,7 +95,7 @@ internal class WeekHolder(
                                 val original = wrapper.getOriginalEvent()
 
                                 val leftBoundaryStart: Boolean = startWeekEvent == original
-                                val rightBoundaryEnd: Boolean = wrapper.getEndingEventThisWeek().end.isEqual(original.end)
+                                val rightBoundaryEnd: Boolean = wrapper.getEndingEventThisWeek().start.isEqual(original.end)
 
                                 EventModel.AllDay(
                                     name = original.name,
@@ -114,7 +114,6 @@ internal class WeekHolder(
                 }
                 .flatten()
                 .toList()
-
 
         dayHolders.forEachIndexed { index, holder ->
             // Indices can be null if OutDateStyle is NONE. We set the
@@ -195,5 +194,5 @@ private inline fun InternalEventWrapper.Multiple.getStartingEventThisWeek(): Int
 @Suppress("NOTHING_TO_INLINE")
 private inline fun InternalEventWrapper.Multiple.getEndingEventThisWeek(): InternalEvent.AllDay {
     return this.events.firstOrNull { it is InternalEvent.AllDay.Original }
-        ?: this.events.maxOfWith(compareBy { it.end }, { it })
+        ?: this.events.maxOfWith(compareBy { it.start }, { it })
 }
