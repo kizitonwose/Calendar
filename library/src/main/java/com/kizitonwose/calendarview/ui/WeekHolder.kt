@@ -195,5 +195,5 @@ private inline fun InternalEventWrapper.Multiple.getStartingEventThisWeek(): Int
 @Suppress("NOTHING_TO_INLINE")
 private inline fun InternalEventWrapper.Multiple.getEndingEventThisWeek(): InternalEvent.AllDay {
     return this.events.firstOrNull { it is InternalEvent.AllDay.Original }
-        ?: this.events.maxOfWith(compareBy { it.start }, { it })
+        ?: this.events.maxOfWith(compareBy { it.end }, { it })
 }
