@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.kizitonwose.calendarview.R
+import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.Event
 import com.kizitonwose.calendarview.model.EventModel
 import com.kizitonwose.calendarview.utils.inflate
@@ -32,7 +33,7 @@ internal class EventListBinder(
         return EventListViewContainer(view)
     }
 
-    override fun bind(container: EventListViewContainer, events: List<EventModel>) {
+    override fun bind(container: EventListViewContainer, events: List<EventModel>, calendarMonth: CalendarMonth) {
         container.gridLayout.children
             .filter { it.tag == TAG_EVENT }
             .forEach { container.gridLayout.removeView(it) }
@@ -42,6 +43,7 @@ internal class EventListBinder(
 
         for (event in events) {
             addEvent(
+                calendarMonth = calendarMonth,
                 grid = container.gridLayout,
                 event = event.apiModel,
                 rowIndex = event.rowIndex,
@@ -65,6 +67,7 @@ internal class EventListBinder(
     }
 
     private fun addEvent(
+        calendarMonth: CalendarMonth,
         grid: GridLayout,
         event: Event,
         rowIndex: Int,
@@ -79,6 +82,7 @@ internal class EventListBinder(
             val eventCellHolder = it.create(eventCellView)
             it.bind(
                 container = eventCellHolder,
+                yearMonth = calendarMonth.yearMonth,
                 event = event,
                 leftBoundaryStart = leftBoundaryStart,
                 rightBoundaryEnd = rightBoundaryEnd

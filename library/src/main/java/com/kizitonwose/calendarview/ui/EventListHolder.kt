@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.kizitonwose.calendarview.R
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.EventModel
 import com.kizitonwose.calendarview.utils.inflate
 
@@ -16,15 +17,17 @@ internal class EventListHolder(private val config: EventListConfig) {
     private lateinit var viewContainer: EventListViewContainer
     private var days: List<CalendarDay>? = null
     private var events: List<EventModel>? = null
+    private var calendarMonth: CalendarMonth? = null
 
     fun inflateEventListView(parent: LinearLayout): View {
         eventListView = parent.inflate(config.eventListViewRes).apply { config.eventListBinder.postInflate(this) }
         return eventListView
     }
 
-    fun bindEventList(days: List<CalendarDay>, events: List<EventModel>) {
-        this.days = days.toList()
-        this.events = events.toList()
+    fun bindEventList(days: List<CalendarDay>?, events: List<EventModel>?, calendarMonth: CalendarMonth?) {
+        this.days = days?.toList() ?: emptyList()
+        this.events = events?.toList() ?: emptyList()
+        this.calendarMonth = calendarMonth
 
         if (!::viewContainer.isInitialized) {
             viewContainer = config.eventListBinder.create(eventListView)
@@ -35,21 +38,18 @@ internal class EventListHolder(private val config: EventListConfig) {
             viewContainer.view.tag = dayHash
         }
 
-        if (this.events != null) {
+        if (events != null && calendarMonth != null) {
             if (!viewContainer.view.isVisible) {
                 viewContainer.view.isVisible = true
             }
-            config.eventListBinder.bind(viewContainer, events)
+            config.eventListBinder.bind(viewContainer, events, calendarMonth)
         } else if (!viewContainer.view.isGone) {
             viewContainer.view.isGone = true
         }
     }
 
     fun reloadViewIfNecessary(): Boolean {
-        val days = this.days ?: emptyList()
-        val events = this.events ?: emptyList()
-
-        bindEventList(days, events)
+        bindEventList(days, events, calendarMonth)
 
         return true
     }
@@ -64,7 +64,7 @@ internal class EventListHolder(private val config: EventListConfig) {
 internal interface InternalEventListBinder<T : ViewContainer> {
     fun postInflate(view: View)
     fun create(view: View): T
-    fun bind(container: T, events: List<EventModel>)
+    fun bind(container: T, events: List<EventModel>, calendarMonth: CalendarMonth)
     fun recycle(container: T)
 }
 

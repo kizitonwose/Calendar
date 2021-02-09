@@ -48,7 +48,7 @@ internal class MonthViewHolder constructor(
                 } else {
                     emptyList()
                 }
-            week.bindWeekView(weekDays, weekEvents)
+            week.bindWeekView(weekDays, weekEvents, month)
         }
     }
 

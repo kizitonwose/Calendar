@@ -169,6 +169,7 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
             override fun bind(
                 container: EventViewContainer,
                 event: Event,
+                yearMonth: YearMonth,
                 leftBoundaryStart: Boolean,
                 rightBoundaryEnd: Boolean
             ) {

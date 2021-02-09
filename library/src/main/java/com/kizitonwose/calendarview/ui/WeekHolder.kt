@@ -4,7 +4,7 @@ import android.util.Range
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
-import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.model.EventModel
 import com.kizitonwose.calendarview.model.InternalEvent
 import com.kizitonwose.calendarview.model.InternalEventWrapper
@@ -37,7 +37,7 @@ internal class WeekHolder(
         return container
     }
 
-    fun bindWeekView(daysOfWeek: List<CalendarDay>, events: List<InternalEvent>) {
+    fun bindWeekView(daysOfWeek: List<CalendarDay>, events: List<InternalEvent>, calendarMonth: CalendarMonth) {
 
         val wrappers: List<InternalEventWrapper> = events
             .groupBy {
@@ -123,7 +123,7 @@ internal class WeekHolder(
             holder.bindDayView(day)
         }
 
-        eventListHolder.bindEventList(daysOfWeek, filtered)
+        eventListHolder.bindEventList(daysOfWeek, filtered, calendarMonth)
     }
 
     fun reloadDay(day: CalendarDay): Boolean {
