@@ -101,11 +101,11 @@ internal class EventListBinder(
         for (row in 0..3) {
             for (column in 0..6) {
                 val space = grid.inflate(R.layout.item_week_space).apply { tag = TAG_SPACE }
-                if ((column + row) % 2 == 0) {
-                    space.setBackgroundColor(ContextCompat.getColor(grid.context, android.R.color.holo_green_dark))
-                } else {
-                    space.setBackgroundColor(ContextCompat.getColor(grid.context, android.R.color.holo_red_dark))
-                }
+//                if ((column + row) % 2 == 0) {
+//                    space.setBackgroundColor(ContextCompat.getColor(grid.context, android.R.color.holo_green_dark))
+//                } else {
+//                    space.setBackgroundColor(ContextCompat.getColor(grid.context, android.R.color.holo_red_dark))
+//                }
                 space.layoutParams = (space.layoutParams as GridLayout.LayoutParams).apply {
                     this.rowSpec = GridLayout.spec(row, 1)
                     this.columnSpec = GridLayout.spec(column, 1, 1f);

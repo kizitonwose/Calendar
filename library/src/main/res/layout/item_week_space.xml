@@ -3,4 +3,5 @@
     android:id="@+id/space"
     android:layout_width="46dp"
     android:layout_height="15dp"
+    android:background="@drawable/week_space_background"
     android:tag="tag_space" />
