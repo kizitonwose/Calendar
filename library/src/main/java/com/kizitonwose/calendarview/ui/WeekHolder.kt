@@ -17,7 +17,7 @@ internal class WeekHolder(
 
     private lateinit var container: LinearLayout
 
-    fun inflateWeekView(parent: LinearLayout): View {
+    fun inflateWeekView(parent: LinearLayout, isLastWeek: Boolean): View {
         container = LinearLayout(parent.context).apply {
             layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             orientation = LinearLayout.VERTICAL
@@ -32,7 +32,7 @@ internal class WeekHolder(
                     }
                 }
             )
-            addView(eventListHolder.inflateEventListView(this))
+            addView(eventListHolder.inflateEventListView(this, isLastWeek))
         }
         return container
     }

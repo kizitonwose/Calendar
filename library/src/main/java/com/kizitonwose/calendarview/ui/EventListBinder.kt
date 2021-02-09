@@ -25,8 +25,8 @@ internal class EventListBinder(
 
     private val eventCellHolders = mutableListOf<ViewContainer>()
 
-    override fun postInflate(view: View) {
-        populateDummyEvents(view as GridLayout)
+    override fun postInflate(view: View, isLastWeek: Boolean) {
+        populateDummyEvents(view as GridLayout, isLastWeek)
     }
 
     override fun create(view: View): EventListViewContainer {
@@ -101,25 +101,21 @@ internal class EventListBinder(
         }
     }
 
-    private fun populateDummyEvents(grid: GridLayout) {
+    private fun populateDummyEvents(grid: GridLayout, isLastWeek: Boolean) {
         for (row in 0..3) {
             for (column in 0..6) {
                 val space = grid.inflate(R.layout.item_week_space).apply { tag = TAG_SPACE }
-//                if ((column + row) % 2 == 0) {
-//                    space.setBackgroundColor(ContextCompat.getColor(grid.context, android.R.color.holo_green_dark))
-//                } else {
-//                    space.setBackgroundColor(ContextCompat.getColor(grid.context, android.R.color.holo_red_dark))
-//                }
                 space.layoutParams = (space.layoutParams as GridLayout.LayoutParams).apply {
                     this.rowSpec = GridLayout.spec(row, 1)
                     this.columnSpec = GridLayout.spec(column, 1, 1f);
                 }
 
-                if (row == 3) {
+                if (row == 3 && isLastWeek) {
                     space.setBackgroundResource(R.drawable.week_space_background_bottom)
                 } else {
                     space.setBackgroundResource(R.drawable.week_space_background)
                 }
+
                 grid.addView(space)
             }
         }

@@ -19,8 +19,10 @@ internal class EventListHolder(private val config: EventListConfig) {
     private var events: List<EventModel>? = null
     private var calendarMonth: CalendarMonth? = null
 
-    fun inflateEventListView(parent: LinearLayout): View {
-        eventListView = parent.inflate(config.eventListViewRes).apply { config.eventListBinder.postInflate(this) }
+    fun inflateEventListView(parent: LinearLayout, isLastWeek: Boolean): View {
+        eventListView = parent.inflate(config.eventListViewRes).apply {
+            config.eventListBinder.postInflate(this, isLastWeek)
+        }
         return eventListView
     }
 
@@ -62,7 +64,7 @@ internal class EventListHolder(private val config: EventListConfig) {
 }
 
 internal interface InternalEventListBinder<T : ViewContainer> {
-    fun postInflate(view: View)
+    fun postInflate(view: View, isLastWeek: Boolean)
     fun create(view: View): T
     fun bind(container: T, events: List<EventModel>, calendarMonth: CalendarMonth)
     fun recycle(container: T)

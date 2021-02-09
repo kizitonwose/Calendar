@@ -105,7 +105,9 @@ internal class CalendarAdapter(
 
         val weekHolders = (1..5)
             .map { WeekHolder(createDayHolders(dayConfig), createEventListHolder(eventListConfig)) }
-            .onEach { weekHolder -> rootLayout.addView(weekHolder.inflateWeekView(rootLayout)) }
+            .onEachIndexed { index, weekHolder ->
+                rootLayout.addView(weekHolder.inflateWeekView(rootLayout, index == 4))
+            }
 
         if (viewConfig.monthFooterRes != 0) {
             val monthFooterView = rootLayout.inflate(viewConfig.monthFooterRes)
