@@ -222,22 +222,21 @@ internal class CalendarAdapter(
                             // by checking the number of visible(non-empty) rows.
                             visibleMonth.weekDays.size * calView.daySize.height +
                             visibleVH.footerView?.height.orZero()
-                    if (calView.height != newHeight) {
+                    if (calView.height != newHeight && !initialLayout) {
                         ValueAnimator.ofInt(calView.height, newHeight).apply {
                             // Don't animate when the view is shown initially.
-                            duration = if (initialLayout) 0 else calView.wrappedPageHeightAnimationDuration.toLong()
+                            duration = calView.wrappedPageHeightAnimationDuration.toLong()
                             addUpdateListener {
                                 calView.updateLayoutParams { height = it.animatedValue as Int }
                                 visibleVH.itemView.requestLayout()
                             }
                             start()
                         }
-                    }
-                    if (initialLayout) {
-                        initialLayout = false
-                        // Request layout in case dataset was changed. See issue #199
+                    } else {
+                        // Fixes #199, #266
                         visibleVH.itemView.requestLayout()
                     }
+                    if (initialLayout) initialLayout = false
                 }
             }
         }

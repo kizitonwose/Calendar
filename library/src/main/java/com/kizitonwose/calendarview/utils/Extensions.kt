@@ -34,3 +34,8 @@ internal val Rect.namedString: String
 
 internal val CoroutineScope.job: Job
     get() = requireNotNull(coroutineContext[Job])
+
+internal fun View.getVerticalMargins(): Int {
+    val marginParams = layoutParams as? ViewGroup.MarginLayoutParams
+    return marginParams?.topMargin.orZero() + marginParams?.bottomMargin.orZero()
+}
