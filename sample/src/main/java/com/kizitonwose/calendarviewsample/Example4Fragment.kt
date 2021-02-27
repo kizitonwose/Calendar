@@ -197,15 +197,15 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
     private fun isInDateBetween(inDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (inDate.yearMonth == startDate.yearMonth) return true
-        if (inDate.yearMonth.plusMonths(1) == endDate.yearMonth) return true
-        return inDate > startDate && inDate < endDate
+        val firstDateInThisMonth = inDate.plusMonths(1).yearMonth.atDay(1)
+        return firstDateInThisMonth >= startDate && firstDateInThisMonth <= endDate && startDate != firstDateInThisMonth
     }
 
     private fun isOutDateBetween(outDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (outDate.yearMonth == endDate.yearMonth) return true
-        if (outDate.yearMonth.minusMonths(1) == startDate.yearMonth) return true
-        return outDate > startDate && outDate < endDate
+        val lastDateInThisMonth = outDate.minusMonths(1).yearMonth.atEndOfMonth()
+        return lastDateInThisMonth >= startDate && lastDateInThisMonth <= endDate && endDate != lastDateInThisMonth
     }
 
     private fun bindSummaryViews() {
