@@ -225,10 +225,10 @@ internal class CalendarAdapter(
                             visibleMonth.weekDays.size * calView.daySize.height +
                             visibleVH.footerView?.height.orZero() +
                             visibleVH.footerView?.getVerticalMargins().orZero()
-                    if (calView.height != newHeight && !initialLayout) {
+                    if (calView.height != newHeight) {
                         ValueAnimator.ofInt(calView.height, newHeight).apply {
                             // Don't animate when the view is shown initially.
-                            duration = calView.wrappedPageHeightAnimationDuration.toLong()
+                            duration = if (initialLayout) 0 else calView.wrappedPageHeightAnimationDuration.toLong()
                             addUpdateListener {
                                 calView.updateLayoutParams { height = it.animatedValue as Int }
                                 visibleVH.itemView.requestLayout()
