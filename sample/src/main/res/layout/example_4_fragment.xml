@@ -100,7 +100,7 @@
             app:cv_dayViewResource="@layout/example_4_calendar_day"
             app:cv_monthHeaderResource="@layout/example_4_calendar_header" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="76dp"
             android:layout_gravity="bottom"
@@ -109,18 +109,15 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exFourSaveButton"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/save"
-                app:backgroundTint="@color/example_4_green"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:backgroundTint="@color/example_4_green" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
     </FrameLayout>
 
