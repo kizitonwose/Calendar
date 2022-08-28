@@ -121,7 +121,7 @@ open class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                setup(startMonth ?: return, endMonth ?: return, firstDayOfWeek ?: return)
+                (layoutManager as? CalendarLayoutManager)?.orientation = value
             }
         }
 
