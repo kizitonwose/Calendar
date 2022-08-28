@@ -22,6 +22,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 typealias Completion = () -> Unit
+typealias Cancellation = () -> Unit
 
 open class CalendarView : RecyclerView {
 
@@ -685,6 +686,8 @@ open class CalendarView : RecyclerView {
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
      * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
+     *
+     * @return A [Cancellation] function that can be used to stop the async work if needed.
      */
     @JvmOverloads
     fun setupAsync(
@@ -692,12 +695,12 @@ open class CalendarView : RecyclerView {
         endMonth: YearMonth,
         firstDayOfWeek: DayOfWeek,
         completion: Completion? = null
-    ) {
+    ): Cancellation {
         configJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
         this.firstDayOfWeek = firstDayOfWeek
-        configJob = GlobalScope.launch {
+        val configJob = GlobalScope.launch {
             val monthConfig = MonthConfig(
                 outDateStyle, inDateStyle, maxRowCount, startMonth,
                 endMonth, firstDayOfWeek, hasBoundaries, job
@@ -707,6 +710,8 @@ open class CalendarView : RecyclerView {
                 completion?.invoke()
             }
         }
+        this.configJob = configJob
+        return { configJob.cancel() }
     }
 
     private fun finishSetup(monthConfig: MonthConfig) {
@@ -740,23 +745,27 @@ open class CalendarView : RecyclerView {
      * This can be called only if you have called [setup] or [setupAsync] in the past.
      * Useful if your [startMonth] and [endMonth] values are many years apart.
      * See [updateMonthRange] if you wish to do this synchronously.
+     *
+     * @return A [Cancellation] function that can be used to stop the async work if needed.
      */
     @JvmOverloads
     fun updateMonthRangeAsync(
         startMonth: YearMonth = requireStartMonth(),
         endMonth: YearMonth = requireEndMonth(),
         completion: Completion? = null
-    ) {
+    ): Cancellation {
         configJob?.cancel()
         this.startMonth = startMonth
         this.endMonth = endMonth
-        configJob = GlobalScope.launch {
+        val configJob = GlobalScope.launch {
             val (config, diff) = getMonthUpdateData(job)
             withContext(Main) {
                 finishUpdateMonthRange(config, diff)
                 completion?.invoke()
             }
         }
+        this.configJob = configJob
+        return { configJob.cancel() }
     }
 
     private fun getMonthUpdateData(job: Job): Pair<MonthConfig, DiffUtil.DiffResult> {
