@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 apply from: rootProject.file("dependencies.gradle")
 
 group='com.github.kizitonwose'
@@ -56,3 +56,15 @@ dependencies {
     testImplementation deps.test.junit
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.kizitonwose'
+                artifactId = 'CalendarView'
+                version = '1.1.0'
+            }
+        }
+    }
+}
