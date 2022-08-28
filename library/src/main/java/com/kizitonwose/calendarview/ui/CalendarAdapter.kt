@@ -124,9 +124,11 @@ internal class CalendarAdapter(
         }
 
         val userRoot = viewConfig.monthViewClass?.let {
-            val customLayout = (Class.forName(it)
-                .getDeclaredConstructor(Context::class.java)
-                .newInstance(context) as ViewGroup)
+            val customLayout = (
+                    Class.forName(it)
+                        .getDeclaredConstructor(Context::class.java)
+                        .newInstance(context) as ViewGroup
+                    )
             customLayout.apply {
                 setupRoot(this)
                 addView(rootLayout)
