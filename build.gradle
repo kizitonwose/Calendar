@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath deps.gradle_plugins.android
         classpath deps.gradle_plugins.kotlin
-        classpath deps.gradle_plugins.maven_release
         classpath deps.gradle_plugins.ktlint
     }
 }
@@ -22,8 +21,8 @@ allprojects {
     apply plugin: 'org.jlleitschuh.gradle.ktlint'
 
     ktlint {
-        version = "0.36.0"
-        disabledRules = ["no-wildcard-imports", "import-ordering"]
+        version = "0.45.2"
+        disabledRules = ["no-wildcard-imports", "import-ordering", "indent"]
     }
 }
 

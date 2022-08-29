@@ -60,10 +60,12 @@ internal data class MonthConfig(
                 val calendarMonths = mutableListOf<CalendarMonth>()
                 val numberOfSameMonth = weekDaysGroup.size roundDiv maxRowCount
                 var indexInSameMonth = 0
-                calendarMonths.addAll(weekDaysGroup.chunked(maxRowCount) { monthDays ->
-                    // Use monthDays.toList() to create a copy of the ephemeral list.
-                    CalendarMonth(currentMonth, monthDays.toList(), indexInSameMonth++, numberOfSameMonth)
-                })
+                calendarMonths.addAll(
+                    weekDaysGroup.chunked(maxRowCount) { monthDays ->
+                        // Use monthDays.toList() to create a copy of the ephemeral list.
+                        CalendarMonth(currentMonth, monthDays.toList(), indexInSameMonth++, numberOfSameMonth)
+                    }
+                )
 
                 months.addAll(calendarMonths)
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break

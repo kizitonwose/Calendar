@@ -48,9 +48,11 @@ class CalenderViewTests {
         assertTrue(months.first().weekDays.flatten().any { it.owner == DayOwner.PREVIOUS_MONTH })
 
         // No inDates in other months.
-        assertTrue(months.takeLast(months.size - 1).all {
-            it.weekDays.flatten().none { it.owner == DayOwner.PREVIOUS_MONTH }
-        })
+        assertTrue(
+            months.takeLast(months.size - 1).all {
+                it.weekDays.flatten().none { it.owner == DayOwner.PREVIOUS_MONTH }
+            }
+        )
     }
 
     @Test
