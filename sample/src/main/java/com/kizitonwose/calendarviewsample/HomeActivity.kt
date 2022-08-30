@@ -14,23 +14,9 @@ class HomeActivity : AppCompatActivity() {
 
     private val examplesAdapter = HomeOptionsAdapter {
         val fragment = it.createView()
+        val anim = it.animation
         supportFragmentManager.beginTransaction()
-            .run {
-                if (fragment is Example1Fragment || fragment is Example4Fragment || fragment is Example5Fragment) {
-                    return@run setCustomAnimations(
-                        R.anim.slide_in_up,
-                        R.anim.fade_out,
-                        R.anim.fade_in,
-                        R.anim.slide_out_down
-                    )
-                }
-                return@run setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-            }
+            .setCustomAnimations(anim.enter, anim.exit, anim.popEnter, anim.popExit)
             .add(R.id.homeContainer, fragment, fragment.javaClass.simpleName)
             .addToBackStack(fragment.javaClass.simpleName)
             .commit()
