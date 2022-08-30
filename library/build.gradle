@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply from: rootProject.file("dependencies.gradle")
 
-group='com.github.kizitonwose'
+group = 'com.github.kizitonwose'
 def artifact = 'CalendarView'
 
 android {
@@ -30,6 +30,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += ['-module-name', "$group.$artifact"]
+    }
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
     }
 }
 
