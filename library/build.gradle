@@ -8,11 +8,10 @@ def artifact = 'CalendarView'
 
 android {
     compileSdkVersion versions.compile_sdk
+    namespace 'com.kizitonwose.calendarview'
     defaultConfig {
         minSdkVersion versions.min_sdk_library
         targetSdkVersion versions.target_sdk
-        versionCode versions.version_code
-        versionName versions.version_name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true // Because library's minSdk < 21
     }
