@@ -14,13 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarcore.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.yearMonth
+import com.kizitonwose.calendarcore.yearMonth
 import com.kizitonwose.calendarviewsample.databinding.Example4CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example4CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example4FragmentBinding

@@ -1,18 +1,16 @@
-package com.kizitonwose.calendarview.model
+package com.kizitonwose.calendarcore
 
-import com.kizitonwose.calendarview.utils.next
-import com.kizitonwose.calendarview.utils.previous
-import com.kizitonwose.calendarview.utils.yearMonth
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.YearMonth
-data class CalendarDay internal constructor(val date: LocalDate, val owner: DayOwner) :
+
+data class CalendarDay(val date: LocalDate, val owner: DayOwner) :
     Comparable<CalendarDay>, Serializable {
 
     val day = date.dayOfMonth
 
     // Find the actual month on the calendar that owns this date.
-    internal val positionYearMonth: YearMonth
+    val positionYearMonth: YearMonth
         get() = when (owner) {
             DayOwner.THIS_MONTH -> date.yearMonth
             DayOwner.PREVIOUS_MONTH -> date.yearMonth.next

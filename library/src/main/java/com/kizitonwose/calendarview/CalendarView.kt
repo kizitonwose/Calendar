@@ -8,7 +8,7 @@ import androidx.annotation.Px
 import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.model.*
+import com.kizitonwose.calendarcore.*
 import com.kizitonwose.calendarview.ui.*
 import com.kizitonwose.calendarview.utils.Size
 import com.kizitonwose.calendarview.utils.job
@@ -610,7 +610,7 @@ open class CalendarView : RecyclerView {
         return calendarAdapter.findLastVisibleDay()
     }
 
-    private val scrollListenerInternal = object : RecyclerView.OnScrollListener() {
+    private val scrollListenerInternal = object : OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             if (newState == SCROLL_STATE_IDLE) {

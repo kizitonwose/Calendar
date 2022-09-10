@@ -1,8 +1,8 @@
 package com.kizitonwose.calendarview.ui
 
 import android.view.View
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
 
 open class ViewContainer(val view: View)
 

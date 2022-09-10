@@ -1,24 +1,23 @@
-package com.kizitonwose.calendarview.model
+package com.kizitonwose.calendarcore
 
-import com.kizitonwose.calendarview.utils.next
 import kotlinx.coroutines.Job
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 
-internal data class MonthConfig(
-    internal val outDateStyle: OutDateStyle,
-    internal val inDateStyle: InDateStyle,
-    internal val maxRowCount: Int,
-    internal val startMonth: YearMonth,
-    internal val endMonth: YearMonth,
-    internal val firstDayOfWeek: DayOfWeek,
-    internal val hasBoundaries: Boolean,
-    internal val job: Job
+data class MonthConfig(
+    val outDateStyle: OutDateStyle,
+    val inDateStyle: InDateStyle,
+    val maxRowCount: Int,
+    val startMonth: YearMonth,
+    val endMonth: YearMonth,
+    val firstDayOfWeek: DayOfWeek,
+    val hasBoundaries: Boolean,
+    val job: Job
 ) {
 
-    internal val months: List<CalendarMonth> = run {
+    val months: List<CalendarMonth> = run {
         return@run if (hasBoundaries) {
             generateBoundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle, job)
         } else {

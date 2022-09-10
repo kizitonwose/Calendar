@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarview.model
+package com.kizitonwose.calendarcore
 
 /**
  * Describes the month to which a [CalendarDay] belongs.

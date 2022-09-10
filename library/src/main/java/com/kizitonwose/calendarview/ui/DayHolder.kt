@@ -6,7 +6,7 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.*
 import androidx.core.view.MarginLayoutParamsCompat.getMarginEnd
 import androidx.core.view.MarginLayoutParamsCompat.getMarginStart
-import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarview.utils.Size
 import com.kizitonwose.calendarview.utils.inflate
 

@@ -14,23 +14,11 @@ internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean 
     return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 }
 
-internal inline fun Boolean?.orFalse(): Boolean = this ?: false
+internal fun Boolean?.orFalse(): Boolean = this ?: false
 
-internal inline fun Int?.orZero(): Int = this ?: 0
-
-val LocalDate.yearMonth: YearMonth
-    get() = YearMonth.of(year, month)
-
-val YearMonth.next: YearMonth
-    get() = this.plusMonths(1)
-
-val YearMonth.previous: YearMonth
-    get() = this.minusMonths(1)
+internal fun Int?.orZero(): Int = this ?: 0
 
 internal const val NO_INDEX = -1
-
-internal val Rect.namedString: String
-    get() = "[L: $left, T: $top][R: $right, B: $bottom]"
 
 internal val CoroutineScope.job: Job
     get() = requireNotNull(coroutineContext[Job])

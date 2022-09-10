@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.CalendarView
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.ScrollMode
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.ScrollMode
 import com.kizitonwose.calendarview.utils.NO_INDEX
 import java.time.YearMonth
 

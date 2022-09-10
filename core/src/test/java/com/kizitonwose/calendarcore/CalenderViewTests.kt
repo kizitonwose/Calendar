@@ -1,9 +1,5 @@
-package com.kizitonwose.calenderview
+package com.kizitonwose.calendarcore
 
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.model.InDateStyle
-import com.kizitonwose.calendarview.model.MonthConfig
-import com.kizitonwose.calendarview.model.OutDateStyle
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.DayOfWeek
