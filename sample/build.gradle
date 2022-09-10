@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    api project(':library')
+    api project(':view')
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8
     implementation deps.androidx.legacy
