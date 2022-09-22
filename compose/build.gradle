@@ -4,11 +4,11 @@ apply plugin: 'maven-publish'
 apply from: rootProject.file("dependencies.gradle")
 
 group = 'com.github.kizitonwose'
-def artifact = 'CalendarView'
+def artifact = 'CalendarCompose'
 
 android {
     compileSdkVersion versions.compile_sdk
-    namespace 'com.kizitonwose.calendarview'
+    namespace 'com.kizitonwose.calendarcompose'
     defaultConfig {
         minSdkVersion versions.min_sdk_library
         targetSdkVersion versions.target_sdk
@@ -35,6 +35,13 @@ android {
             withSourcesJar()
         }
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        // See compose/kotlin version mapping https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+        kotlinCompilerExtensionVersion '1.3.0'
+    }
 }
 
 dependencies {
@@ -45,18 +52,10 @@ dependencies {
     implementation deps.kotlin.coroutines_core
     implementation deps.kotlin.coroutines_android
 
-
-    // Expose RecyclerView which is CalendarView's superclass to
-    // prevent a compile error when using the library in a project:
-    // Error: Supertypes of the following classes cannot be resolved.
-    // Please make sure you have the required dependencies in the classpath:
-    // class com.kizitonwose.calendarview.CalendarView,
-    // unresolved supertypes: androidx.recyclerview.widget.RecyclerView
-
-    // Not exposing RecyclerView also means that calling findViewById<CalendarView>
-    // results in an error: Type argument is not within its bounds, Expected: View.
-    // This is because CalendarView's superclass type cannot be determined.
-    api deps.androidx.recyclerview
+    implementation 'androidx.compose.animation:animation:1.2.1'
+    implementation 'androidx.compose.ui:ui-tooling:1.2.1'
+    implementation 'androidx.compose.ui:ui:1.2.1'
+    implementation "androidx.compose.foundation:foundation:1.2.1"
 }
 
 afterEvaluate {
@@ -65,7 +64,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.github.kizitonwose'
-                artifactId = 'CalendarView'
+                artifactId = 'CalendarCompose'
                 version = '1.1.0' // TODO: Unify versions
             }
         }

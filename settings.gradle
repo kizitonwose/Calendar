@@ -1,1 +1,1 @@
-include ':core', ':view', ':sample'
+include ':core', ':view', ':compose', ':sample'
