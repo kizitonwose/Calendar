@@ -4,11 +4,11 @@ apply plugin: 'maven-publish'
 apply from: rootProject.file("dependencies.gradle")
 
 group = 'com.github.kizitonwose'
-def artifact = 'CalendarCompose'
+def artifact = 'CalendarComposeInterop'
 
 android {
     compileSdkVersion versions.compile_sdk
-    namespace 'com.kizitonwose.calendarcompose'
+    namespace 'com.kizitonwose.calendarcomposeinterop'
     defaultConfig {
         minSdkVersion versions.min_sdk_library_compose
         targetSdkVersion versions.target_sdk
@@ -64,7 +64,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId = 'com.github.kizitonwose'
-                artifactId = 'CalendarCompose'
+                artifactId = 'CalendarComposeInterop'
                 version = '1.1.0' // TODO: Unify versions
             }
         }

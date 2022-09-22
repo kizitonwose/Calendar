@@ -7,15 +7,9 @@ import java.time.DayOfWeek
 import java.time.YearMonth
 
 @Composable
-fun Calendar(
-    modifier: Modifier,
-    startMonth: YearMonth,
-    endMonth: YearMonth,
-    firstDayOfWeek: DayOfWeek
-) {
+fun Calendar(modifier: Modifier) {
     LazyRow {
 
     }
 }
 
-class CalendarState

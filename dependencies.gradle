@@ -1,5 +1,6 @@
 ext.versions = [
     min_sdk_library: 15,
+    min_sdk_library_compose: 21,
     min_sdk_sample: 21,
     target_sdk: 31,
     compile_sdk: 31,
