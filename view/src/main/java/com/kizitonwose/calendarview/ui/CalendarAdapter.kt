@@ -11,8 +11,8 @@ import androidx.annotation.LayoutRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarcore.*
 import com.kizitonwose.calendarview.CalendarView
+import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.utils.NO_INDEX
 import com.kizitonwose.calendarview.utils.getVerticalMargins
 import com.kizitonwose.calendarview.utils.inflate

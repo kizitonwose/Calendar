@@ -472,24 +472,18 @@ The same logic applies if you need to add a footer.
 Here's a method which generates the weekdays from the user's current Locale. 
 
 ```kotlin
-fun daysOfWeekFromLocale(): Array<DayOfWeek> {
-    val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-    val daysOfWeek = DayOfWeek.values()
-    // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
-    // Only necessary if firstDayOfWeek is not DayOfWeek.MONDAY which has ordinal 0.
-    if (firstDayOfWeek != DayOfWeek.MONDAY) {
-        val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
-        val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
-        return = rhs + lhs
-    }
-    return daysOfWeek
+fun daysOfWeek(firstDayOfWeek: DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek): List<DayOfWeek> {
+  val pivot = 7 - firstDayOfWeek.ordinal
+  val daysOfWeek = DayOfWeek.values()
+  // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
+  return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
 }
 ```
 
 With the method above, you can set up the calendar so the first day of the week is what the user would expect. This could be Sunday, Monday or whatever the Locale returns:
 
 ```kotlin
-val daysOfWeek = daysOfWeekFromLocale()
+val daysOfWeek = daysOfWeek()
 calendarView.setup(startMonth, endMonth, daysOfWeek.first())
 ```
 
@@ -505,14 +499,16 @@ However, you would typically use the `daysOfWeek` array values to set up the wee
 To use Sunday as the first day of the week, regardless of the user's Locale, use the below logic instead: 
 
 ```kotlin
-val daysOfWeek = arrayOf(
-    DayOfWeek.SUNDAY,
-    DayOfWeek.MONDAY,
-    DayOfWeek.TUESDAY,
-    DayOfWeek.WEDNESDAY,
-    DayOfWeek.THURSDAY,
-    DayOfWeek.FRIDAY,
-    DayOfWeek.SATURDAY
+val daysOfWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY)
+// Alternative way
+val daysOfWeek = listOf(
+  DayOfWeek.SUNDAY,
+  DayOfWeek.MONDAY,
+  DayOfWeek.TUESDAY,
+  DayOfWeek.WEDNESDAY,
+  DayOfWeek.THURSDAY,
+  DayOfWeek.FRIDAY,
+  DayOfWeek.SATURDAY
 )
 calendarView.setup(startMonth, endMonth, daysOfWeek.first())
 // Use the daysOfWeek to set up your month header texts:

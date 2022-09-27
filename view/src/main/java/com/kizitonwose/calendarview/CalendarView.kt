@@ -8,7 +8,7 @@ import androidx.annotation.Px
 import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarcore.*
+import com.kizitonwose.calendarview.model.*
 import com.kizitonwose.calendarview.ui.*
 import com.kizitonwose.calendarview.utils.Size
 import com.kizitonwose.calendarview.utils.job

@@ -57,6 +57,8 @@ dependencies {
     // results in an error: Type argument is not within its bounds, Expected: View.
     // This is because CalendarView's superclass type cannot be determined.
     api deps.androidx.recyclerview
+
+    testImplementation deps.test.junit
 }
 
 afterEvaluate {

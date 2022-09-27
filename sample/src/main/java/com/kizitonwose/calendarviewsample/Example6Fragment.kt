@@ -9,9 +9,9 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarcore.CalendarMonth
-import com.kizitonwose.calendarcore.DayOwner
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
@@ -80,7 +80,7 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
             }
         }
 
-        val daysOfWeek = daysOfWeekFromLocale()
+        val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
         binding.exSixCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
         binding.exSixCalendar.scrollToMonth(currentMonth)

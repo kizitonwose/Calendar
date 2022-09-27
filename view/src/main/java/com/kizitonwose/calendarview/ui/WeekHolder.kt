@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.isGone
-import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarDay
 
 internal class WeekHolder(private val dayHolders: List<DayHolder>) {
 

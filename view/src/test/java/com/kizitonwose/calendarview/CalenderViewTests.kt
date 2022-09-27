@@ -1,5 +1,9 @@
-package com.kizitonwose.calendarcore
+package com.kizitonwose.calendarview
 
+import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.model.InDateStyle
+import com.kizitonwose.calendarview.model.MonthConfig
+import com.kizitonwose.calendarview.model.OutDateStyle
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.DayOfWeek
@@ -19,10 +23,12 @@ class CalenderViewTests {
 
     @Test
     fun `test all month in date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW)
+        val weekDays =
+            MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW)
 
         val validInDateIndices = (0..1)
-        val inDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validInDateIndices.contains(index) }
+        val inDatesInMonth =
+            weekDays.flatten().filterIndexed { index, _ -> validInDateIndices.contains(index) }
 
         // inDates are in appropriate indices and have accurate count.
         assertTrue(inDatesInMonth.all { it.owner == DayOwner.PREVIOUS_MONTH })
@@ -30,7 +36,8 @@ class CalenderViewTests {
 
     @Test
     fun `test no in date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, false, OutDateStyle.END_OF_ROW)
+        val weekDays =
+            MonthConfig.generateWeekDays(may2019, firstDayOfWeek, false, OutDateStyle.END_OF_ROW)
         assertTrue(weekDays.flatten().none { it.owner == DayOwner.PREVIOUS_MONTH })
     }
 
@@ -53,10 +60,12 @@ class CalenderViewTests {
 
     @Test
     fun `test end of row out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW)
+        val weekDays =
+            MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_ROW)
 
         val validOutDateIndices = weekDays.flatten().indices.toList().takeLast(2)
-        val outDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
+        val outDatesInMonth =
+            weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
 
         // outDates are in appropriate indices and have accurate count.
         assertTrue(outDatesInMonth.all { it.owner == DayOwner.NEXT_MONTH })
@@ -64,10 +73,12 @@ class CalenderViewTests {
 
     @Test
     fun `test end of grid out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID)
+        val weekDays =
+            MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID)
 
         val validOutDateIndices = weekDays.flatten().indices.toList().takeLast(9)
-        val outDatesInMonth = weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
+        val outDatesInMonth =
+            weekDays.flatten().filterIndexed { index, _ -> validOutDateIndices.contains(index) }
 
         // outDates are in appropriate indices and have accurate count.
         assertTrue(outDatesInMonth.all { it.owner == DayOwner.NEXT_MONTH })
@@ -75,13 +86,15 @@ class CalenderViewTests {
 
     @Test
     fun `test no out date generation works as expected`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.NONE)
+        val weekDays =
+            MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.NONE)
         assertTrue(weekDays.flatten().none { it.owner == DayOwner.NEXT_MONTH })
     }
 
     @Test
     fun `test first day of week is in correct position`() {
-        val weekDays = MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID)
+        val weekDays =
+            MonthConfig.generateWeekDays(may2019, firstDayOfWeek, true, OutDateStyle.END_OF_GRID)
 
         assertTrue(weekDays.first().first().date.dayOfWeek == firstDayOfWeek)
     }

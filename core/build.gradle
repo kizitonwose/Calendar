@@ -31,8 +31,5 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring deps.desugaring
-    implementation deps.kotlin.stdlib8
-    implementation deps.kotlin.coroutines_core
-    testImplementation deps.test.junit
+
 }

@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarcore
+package com.kizitonwose.calendarview.model
 
 import java.io.Serializable
 import java.time.YearMonth

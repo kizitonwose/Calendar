@@ -16,9 +16,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarcore.CalendarMonth
-import com.kizitonwose.calendarcore.DayOwner
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
@@ -130,7 +130,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
             addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         }
 
-        val daysOfWeek = daysOfWeekFromLocale()
+        val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
         binding.exThreeCalendar.apply {
             setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())

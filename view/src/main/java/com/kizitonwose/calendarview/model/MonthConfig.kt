@@ -1,5 +1,6 @@
-package com.kizitonwose.calendarcore
+package com.kizitonwose.calendarview.model
 
+import com.kizitonwose.calendarcore.next
 import kotlinx.coroutines.Job
 import java.time.DayOfWeek
 import java.time.LocalDate

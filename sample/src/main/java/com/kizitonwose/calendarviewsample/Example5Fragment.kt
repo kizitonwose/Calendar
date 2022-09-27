@@ -11,14 +11,14 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarcore.CalendarMonth
-import com.kizitonwose.calendarcore.DayOwner
+import com.kizitonwose.calendarcore.next
+import com.kizitonwose.calendarcore.previous
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarcore.next
-import com.kizitonwose.calendarcore.previous
 import com.kizitonwose.calendarviewsample.databinding.Example5CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example5CalendarHeaderBinding
 import com.kizitonwose.calendarviewsample.databinding.Example5EventItemViewBinding
@@ -96,7 +96,7 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         }
         flightsAdapter.notifyDataSetChanged()
 
-        val daysOfWeek = daysOfWeekFromLocale()
+        val daysOfWeek = daysOfWeek()
 
         val currentMonth = YearMonth.now()
         binding.exFiveCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())

@@ -10,9 +10,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarcore.CalendarMonth
-import com.kizitonwose.calendarcore.DayOwner
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
@@ -39,7 +39,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         binding = Example2FragmentBinding.bind(view)
-        val daysOfWeek = daysOfWeekFromLocale()
+        val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text = daysOfWeek[index].name.first().toString()

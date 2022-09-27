@@ -1,20 +1,15 @@
 package com.kizitonwose.calendarview.utils
 
-import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import java.time.LocalDate
-import java.time.YearMonth
 
 internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 }
-
-internal fun Boolean?.orFalse(): Boolean = this ?: false
 
 internal fun Int?.orZero(): Int = this ?: 0
 

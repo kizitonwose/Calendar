@@ -9,13 +9,13 @@ import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarcore.DayOwner
-import com.kizitonwose.calendarcore.InDateStyle
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarcore.next
 import com.kizitonwose.calendarcore.yearMonth
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.model.InDateStyle
+import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarviewsample.databinding.Example1CalendarDayBinding
 import com.kizitonwose.calendarviewsample.databinding.Example1FragmentBinding
 import java.time.LocalDate
@@ -40,7 +40,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example1FragmentBinding.bind(view)
-        val daysOfWeek = daysOfWeekFromLocale()
+        val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children.forEachIndexed { index, view ->
             (view as TextView).apply {
                 text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(Locale.ENGLISH)

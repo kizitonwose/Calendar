@@ -7,7 +7,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
-import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.Size
