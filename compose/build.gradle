@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'maven-publish'
 apply from: rootProject.file("dependencies.gradle")
 
@@ -57,6 +58,8 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling:1.2.1'
     implementation 'androidx.compose.ui:ui:1.2.1'
     implementation "androidx.compose.foundation:foundation:1.2.1"
+    implementation 'androidx.compose.material:material:1.2.1'
+    implementation "dev.chrisbanes.snapper:snapper:0.3.0"
 }
 
 afterEvaluate {
