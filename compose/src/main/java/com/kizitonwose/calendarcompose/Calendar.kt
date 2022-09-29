@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendarcompose.boxcalendar.WeekHeaderPosition
-import com.kizitonwose.calendarcompose.internal.MonthData
+import com.kizitonwose.calendarcompose.internal.MonthDataStore
 import com.kizitonwose.calendarcompose.internal.getCalendarMonthData
 import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
 import java.time.DayOfWeek
@@ -95,11 +95,9 @@ private fun Calendar(
         getMonthIndicesCount(startMonth, endMonth)
     }
     val dataStore = remember(startMonth, firstDayOfWeek, outDateStyle) {
-        mutableMapOf<Int, MonthData>()
-    }
-
-    fun getMonthData(offset: Int) = dataStore.getOrPut(offset) {
-        getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle)
+        MonthDataStore { offset ->
+            getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle)
+        }
     }
 
     if (isVertical) {
@@ -112,7 +110,7 @@ private fun Calendar(
         ) {
             CalendarItems(
                 itemsCount = itemsCount,
-                monthData = { offset -> getMonthData(offset) },
+                monthData = { offset -> dataStore[offset] },
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthContent = monthContent,
@@ -130,7 +128,7 @@ private fun Calendar(
         ) {
             CalendarItems(
                 itemsCount = itemsCount,
-                monthData = { offset -> getMonthData(offset) },
+                monthData = { offset -> dataStore[offset] },
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthContent = monthContent,

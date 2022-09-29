@@ -32,13 +32,13 @@ internal data class MonthData(val month: YearMonth, val inDays: Int, val outDays
     private fun getDay(columnOffset: Int): CalendarDay {
         return cache.getOrPut(columnOffset) {
             val date = firstDay.plusDays(columnOffset.toLong())
-            val owner = when (date.yearMonth) {
+            val position = when (date.yearMonth) {
                 month -> DayPosition.MonthDate
                 month.minusMonths(1) -> DayPosition.InDate
                 month.plusMonths(1) -> DayPosition.OutDate
                 else -> throw IllegalArgumentException("Invalid date: $date in month: $month")
             }
-            return@getOrPut CalendarDay(date, owner)
+            return@getOrPut CalendarDay(date, position)
         }
     }
 }

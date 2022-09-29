@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcompose.CalendarDay
 import com.kizitonwose.calendarcompose.CalendarMonth
 import com.kizitonwose.calendarcompose.CalendarState
-import com.kizitonwose.calendarcompose.internal.MonthData
+import com.kizitonwose.calendarcompose.internal.MonthDataStore
 import com.kizitonwose.calendarcompose.internal.getBoxCalendarMonthData
 import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
 import com.kizitonwose.calendarcompose.rememberCalendarState
@@ -33,13 +33,10 @@ internal fun BoxCalendar(
         getMonthIndicesCount(startMonth, endMonth)
     }
     val dataStore = remember(startMonth, endMonth, firstDayOfWeek) {
-        mutableMapOf<Int, MonthData>()
+        MonthDataStore { offset ->
+            getBoxCalendarMonthData(startMonth, offset, firstDayOfWeek)
+        }
     }
-
-    fun getMonthData(offset: Int) = dataStore.getOrPut(offset) {
-        getBoxCalendarMonthData(startMonth, offset, firstDayOfWeek)
-    }
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom
@@ -58,8 +55,8 @@ internal fun BoxCalendar(
         ) {
             items(
                 count = itemsCount,
-                key = { offset -> getMonthData(offset).month }) { offset ->
-                val data = getMonthData(offset)
+                key = { offset -> dataStore[offset].month }) { offset ->
+                val data = dataStore[offset]
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     monthHeader(data.calendarMonth)
                     Row {
