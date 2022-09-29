@@ -16,7 +16,7 @@ data class CalendarDay(val date: LocalDate, val position: DayPosition)
 
 data class CalendarMonth internal constructor(
     val yearMonth: YearMonth,
-    val weekDays: List<List<CalendarDay>>
+    val weekDays: List<List<CalendarDay>>,
 ) {
     val year: Int = yearMonth.year
     val month: Month = yearMonth.month
@@ -43,8 +43,9 @@ data class CalendarMonth internal constructor(
     }
 
     override fun toString(): String {
-        return "CalendarMonth { first = ${weekDays.first().first()}, last = ${
-            weekDays.last().last()
-        } } "
+        return "CalendarMonth { " +
+                "first = ${weekDays.first().first()}, " +
+                "last = ${weekDays.last().last()} " +
+                "} "
     }
 }

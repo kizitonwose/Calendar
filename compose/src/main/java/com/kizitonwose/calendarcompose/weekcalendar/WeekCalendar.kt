@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.CalendarDefaults
-import com.kizitonwose.calendarcompose.boxcalendar.VisibleItemState
+import com.kizitonwose.calendarcompose.VisibleItemState
 import com.kizitonwose.calendarcompose.internal.daysUntil
 import com.kizitonwose.calendarcore.atStartOfMonth
 import kotlinx.coroutines.launch

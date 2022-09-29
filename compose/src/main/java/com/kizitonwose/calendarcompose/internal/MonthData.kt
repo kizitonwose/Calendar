@@ -1,6 +1,5 @@
 package com.kizitonwose.calendarcompose.internal
 
-import android.os.Parcelable
 import com.kizitonwose.calendarcompose.CalendarDay
 import com.kizitonwose.calendarcompose.CalendarMonth
 import com.kizitonwose.calendarcompose.DayPosition
@@ -8,14 +7,11 @@ import com.kizitonwose.calendarcompose.OutDateStyle
 import com.kizitonwose.calendarcore.atStartOfMonth
 import com.kizitonwose.calendarcore.yearMonth
 import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 
-@Parcelize // Parcelize because it is used as LazyRow key.
-internal data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) :
-    Parcelable {
+internal data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) {
 
     @IgnoredOnParcel
     private val totalDays = inDays + month.lengthOfMonth() + outDays

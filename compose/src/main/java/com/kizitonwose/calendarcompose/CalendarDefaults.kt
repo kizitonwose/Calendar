@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import dev.chrisbanes.snapper.*
 
-object CalendarDefaults {
+internal object CalendarDefaults {
     /**
      * The implementation for the `snapIndex` parameter of
      * [pagedFlingBehavior] which limits the fling distance to a single page.
@@ -28,7 +28,7 @@ object CalendarDefaults {
             snapOffsetForItem = SnapOffsets.Start,
             springAnimationSpec = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
             decayAnimationSpec = rememberSplineBasedDecay(),
-            snapIndex = singlePageSnapIndex
+            snapIndex = singlePageSnapIndex,
         )
 
     @Composable

@@ -1,5 +1,6 @@
 package com.kizitonwose.calendarcompose
 
+import android.os.Parcelable
 import android.util.Log
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
@@ -11,11 +12,17 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.kizitonwose.calendarcompose.boxcalendar.VisibleItemState
 import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
+import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
+
+@Parcelize
+internal class VisibleItemState(
+    val firstVisibleItemIndex: Int = 0,
+    val firstVisibleItemScrollOffset: Int = 0,
+) : Parcelable
 
 @Stable
 class CalendarState internal constructor(
@@ -23,7 +30,7 @@ class CalendarState internal constructor(
     endMonth: YearMonth,
     firstDayOfWeek: DayOfWeek,
     firstVisibleMonth: YearMonth,
-    visibleItemState: VisibleItemState?
+    visibleItemState: VisibleItemState?,
 ) : ScrollableState {
 
     internal var startMonth by mutableStateOf(startMonth)
@@ -86,7 +93,7 @@ class CalendarState internal constructor(
                     it.endMonth,
                     it.firstVisibleMonth,
                     it.firstDayOfWeek,
-                    visibleItemState
+                    visibleItemState,
                 )
             },
             restore = {
@@ -95,7 +102,7 @@ class CalendarState internal constructor(
                     endMonth = it[1] as YearMonth,
                     firstVisibleMonth = it[2] as YearMonth,
                     firstDayOfWeek = it[3] as DayOfWeek,
-                    visibleItemState = it[4] as VisibleItemState
+                    visibleItemState = it[4] as VisibleItemState,
                 )
             }
         )
@@ -118,7 +125,7 @@ fun rememberCalendarState(
     startMonth: YearMonth = YearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
-    firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()
+    firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): CalendarState {
     return rememberSaveable(saver = CalendarState.Saver) {
         CalendarState(

@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
+import com.kizitonwose.calendarcompose.boxcalendar.WeekHeaderPosition
 import com.kizitonwose.calendarcompose.internal.MonthData
 import com.kizitonwose.calendarcompose.internal.getCalendarMonthData
 import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
+import java.time.DayOfWeek
 
 @Composable
 fun HorizontalCalendar(
@@ -102,8 +104,8 @@ private fun Calendar(
 
     if (isVertical) {
         LazyColumn(
-            state = state.listState,
             modifier = modifier.fillMaxHeight(),
+            state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
             reverseLayout = reverseLayout,
@@ -120,8 +122,8 @@ private fun Calendar(
         }
     } else {
         LazyRow(
-            state = state.listState,
             modifier = modifier.wrapContentHeight(),
+            state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
             reverseLayout = reverseLayout,
@@ -138,3 +140,22 @@ private fun Calendar(
         }
     }
 }
+
+@Composable
+fun BoxCalendar(
+    modifier: Modifier = Modifier,
+    state: CalendarState = rememberCalendarState(),
+    weekHeaderPosition: WeekHeaderPosition = WeekHeaderPosition.Start,
+    userScrollEnabled: Boolean,
+    dayContent: @Composable ColumnScope.(CalendarDay) -> Unit = { },
+    weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
+    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
+) = com.kizitonwose.calendarcompose.boxcalendar.BoxCalendar(
+    modifier = modifier,
+    state = state,
+    weekHeaderPosition = weekHeaderPosition,
+    userScrollEnabled = userScrollEnabled,
+    dayContent = dayContent,
+    weekHeader = weekHeader,
+    monthHeader = monthHeader,
+)
