@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarcompose.internal
+package com.kizitonwose.calendarcompose.shared
 
 import com.kizitonwose.calendarcompose.CalendarDay
 import com.kizitonwose.calendarcompose.CalendarMonth

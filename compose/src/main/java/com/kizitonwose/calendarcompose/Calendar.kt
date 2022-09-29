@@ -1,9 +1,6 @@
 package com.kizitonwose.calendarcompose
 
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,11 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
+import com.kizitonwose.calendarcompose.boxcalendar.BoxCalendarInternal
 import com.kizitonwose.calendarcompose.boxcalendar.WeekHeaderPosition
-import com.kizitonwose.calendarcompose.internal.MonthDataStore
-import com.kizitonwose.calendarcompose.internal.getCalendarMonthData
-import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
+import com.kizitonwose.calendarcompose.shared.CalendarDataStore
+import com.kizitonwose.calendarcompose.shared.getCalendarMonthData
+import com.kizitonwose.calendarcompose.shared.getMonthIndicesCount
+import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarInternal
+import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarState
+import com.kizitonwose.calendarcompose.weekcalendar.rememberWeekCalendarState
 import java.time.DayOfWeek
+import java.time.LocalDate
 
 @Composable
 fun HorizontalCalendar(
@@ -95,7 +97,7 @@ private fun Calendar(
         getMonthIndicesCount(startMonth, endMonth)
     }
     val dataStore = remember(startMonth, firstDayOfWeek, outDateStyle) {
-        MonthDataStore { offset ->
+        CalendarDataStore { offset ->
             getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle)
         }
     }
@@ -140,15 +142,36 @@ private fun Calendar(
 }
 
 @Composable
+fun WeekCalendar(
+    modifier: Modifier = Modifier,
+    state: WeekCalendarState = rememberWeekCalendarState(),
+    calendarScrollPaged: Boolean = false,
+    userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
+    dayContent: @Composable RowScope.(LocalDate) -> Unit = { },
+    weekHeader: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
+    weekFooter: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
+) = WeekCalendarInternal(
+    modifier = modifier,
+    state = state,
+    calendarScrollPaged = calendarScrollPaged,
+    userScrollEnabled = userScrollEnabled,
+    reverseLayout = reverseLayout,
+    dayContent = dayContent,
+    weekHeader = weekHeader,
+    weekFooter = weekFooter,
+)
+
+@Composable
 fun BoxCalendar(
     modifier: Modifier = Modifier,
     state: CalendarState = rememberCalendarState(),
     weekHeaderPosition: WeekHeaderPosition = WeekHeaderPosition.Start,
-    userScrollEnabled: Boolean,
+    userScrollEnabled: Boolean = true,
     dayContent: @Composable ColumnScope.(CalendarDay) -> Unit = { },
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
-) = com.kizitonwose.calendarcompose.boxcalendar.BoxCalendar(
+) = BoxCalendarInternal(
     modifier = modifier,
     state = state,
     weekHeaderPosition = weekHeaderPosition,

@@ -1,7 +1,7 @@
 package com.kizitonwose.calendarcompose
 
-import com.kizitonwose.calendarcompose.internal.daysUntil
-import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
+import com.kizitonwose.calendarcompose.shared.daysUntil
+import com.kizitonwose.calendarcompose.shared.getMonthIndicesCount
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.DayOfWeek

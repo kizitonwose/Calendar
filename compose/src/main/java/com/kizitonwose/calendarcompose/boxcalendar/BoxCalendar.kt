@@ -9,22 +9,21 @@ import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcompose.CalendarDay
 import com.kizitonwose.calendarcompose.CalendarMonth
 import com.kizitonwose.calendarcompose.CalendarState
-import com.kizitonwose.calendarcompose.internal.MonthDataStore
-import com.kizitonwose.calendarcompose.internal.getBoxCalendarMonthData
-import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
-import com.kizitonwose.calendarcompose.rememberCalendarState
+import com.kizitonwose.calendarcompose.shared.CalendarDataStore
+import com.kizitonwose.calendarcompose.shared.getBoxCalendarMonthData
+import com.kizitonwose.calendarcompose.shared.getMonthIndicesCount
 import com.kizitonwose.calendarcore.daysOfWeek
 import java.time.DayOfWeek
 
 @Composable
-internal fun BoxCalendar(
-    modifier: Modifier = Modifier,
-    state: CalendarState = rememberCalendarState(),
+internal fun BoxCalendarInternal(
+    modifier: Modifier,
+    state: CalendarState,
     userScrollEnabled: Boolean,
-    weekHeaderPosition: WeekHeaderPosition = WeekHeaderPosition.Start,
-    dayContent: @Composable ColumnScope.(CalendarDay) -> Unit = { },
-    weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
-    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
+    weekHeaderPosition: WeekHeaderPosition,
+    dayContent: @Composable ColumnScope.(CalendarDay) -> Unit,
+    weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit,
+    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
 ) {
     val startMonth = state.startMonth
     val endMonth = state.endMonth
@@ -33,7 +32,7 @@ internal fun BoxCalendar(
         getMonthIndicesCount(startMonth, endMonth)
     }
     val dataStore = remember(startMonth, endMonth, firstDayOfWeek) {
-        MonthDataStore { offset ->
+        CalendarDataStore { offset ->
             getBoxCalendarMonthData(startMonth, offset, firstDayOfWeek)
         }
     }

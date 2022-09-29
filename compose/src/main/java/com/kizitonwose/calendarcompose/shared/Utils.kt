@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarcompose.internal
+package com.kizitonwose.calendarcompose.shared
 
 import java.time.DayOfWeek
 import java.time.YearMonth
