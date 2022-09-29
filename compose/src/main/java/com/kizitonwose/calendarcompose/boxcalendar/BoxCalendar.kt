@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarcompose
+package com.kizitonwose.calendarcompose.boxcalendar
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
@@ -29,14 +29,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kizitonwose.calendarcore.atStartOfMonth
+import com.kizitonwose.calendarcompose.CalendarDay
+import com.kizitonwose.calendarcompose.CalendarMonth
+import com.kizitonwose.calendarcompose.internal.MonthData
+import com.kizitonwose.calendarcompose.internal.getBoxCalendarMonthData
+import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
 import com.kizitonwose.calendarcore.daysOfWeek
-import com.kizitonwose.calendarcore.yearMonth
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
@@ -236,14 +237,6 @@ enum class WeekHeaderPosition {
     Start, End
 }
 
-// TODO: Equals and HashCode as in CalendarView
-data class CalendarMonth internal constructor(
-    val yearMonth: YearMonth,
-    val weekDays: List<List<CalendarDay>>
-)
-
-data class CalendarDay(val date: LocalDate, val owner: DayOwner)
-
 @Composable
 fun BoxCalendar(
     modifier: Modifier = Modifier,
@@ -252,23 +245,21 @@ fun BoxCalendar(
     dayContent: @Composable ColumnScope.(CalendarDay) -> Unit = { day -> Day(day) },
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { dayOfWeek -> WeekHeader(dayOfWeek) },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { month ->
-        MonthHeader(
-            month,
-            state
-        )
+        MonthHeader(month, state)
     },
 ) {
     val startMonth = state.startMonth
     val endMonth = state.endMonth
     val firstDayOfWeek = state.firstDayOfWeek
     val itemsCount = getMonthIndicesCount(startMonth, endMonth)
-    val cache = mutableMapOf<Int, MonthData>()
+    val dataStore = remember { mutableMapOf<Int, MonthData>() }
     DisposableEffect(startMonth, endMonth, firstDayOfWeek) {
-        cache.clear() // Key changed.
-        onDispose { cache.clear() } // Composition disposed.
+        dataStore.clear() // Key changed.
+        onDispose { dataStore.clear() } // Composition disposed.
     }
-    fun getData(offset: Int) =
-        cache.getOrPut(offset) { getMonthData(startMonth, offset, firstDayOfWeek) }
+    fun getMonthData(offset: Int) = dataStore.getOrPut(offset) {
+        getBoxCalendarMonthData(startMonth, offset, firstDayOfWeek)
+    }
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom
@@ -294,8 +285,8 @@ fun BoxCalendar(
         ) {
             items(
                 count = itemsCount,
-                key = { offset -> getData(offset) }) { offset ->
-                val data = getData(offset)
+                key = { offset -> getMonthData(offset) }) { offset ->
+                val data = getMonthData(offset)
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     monthHeader(data.calendarMonth)
                     Row {
@@ -316,62 +307,13 @@ fun BoxCalendar(
     }
 }
 
-private fun DayOfWeek.daysUntil(other: DayOfWeek) = (7 + (other.value - value)) % 7
-
-private fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
-    // Add one to include the start month itself!
-    return ChronoUnit.MONTHS.between(startMonth, endMonth).toInt() + 1
-}
-
-private fun getMonthData(startMonth: YearMonth, offset: Int, firstDayOfWeek: DayOfWeek): MonthData {
-    val month = startMonth.plusMonths(offset.toLong())
-    val firstDay = month.atStartOfMonth()
-    val inDays = if (offset == 0) {
-        firstDayOfWeek.daysUntil(firstDay.dayOfWeek)
-    } else {
-        -firstDay.dayOfWeek.daysUntil(firstDayOfWeek)
+@Composable
+fun RunOnce(action: () -> Unit) {
+    var actionDone by rememberSaveable { mutableStateOf(false) }
+    if (!actionDone) {
+        action()
+        actionDone = true
     }
-    val outDays = (inDays + month.lengthOfMonth()).let { totalDays ->
-        if (totalDays % 7 != 0) 7 - (totalDays % 7) else 0
-    }
-    return MonthData(month, inDays, outDays)
-}
-
-@Parcelize // Parcelize because it is used as LazyRow key.
-private data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) : Parcelable {
-
-    @IgnoredOnParcel
-    private val totalDays = inDays + month.lengthOfMonth() + outDays
-
-    @IgnoredOnParcel
-    private val firstDay = month.atStartOfMonth().minusDays(inDays.toLong())
-
-    @IgnoredOnParcel
-    private val rows = (0 until totalDays).chunked(7)
-
-    @IgnoredOnParcel
-    private val cache = mutableMapOf<Int, CalendarDay>()
-
-    @IgnoredOnParcel
-    val calendarMonth =
-        CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
-
-    private fun getDay(columnOffset: Int): CalendarDay {
-        return cache.getOrPut(columnOffset) {
-            val date = firstDay.plusDays(columnOffset.toLong())
-            val owner = when (date.yearMonth) {
-                month -> DayOwner.ThisMonth
-                month.minusMonths(1) -> DayOwner.PreviousMonth
-                month.plusMonths(1) -> DayOwner.NextMonth
-                else -> throw IllegalArgumentException("Invalid date: $date in month: $month")
-            }
-            return@getOrPut CalendarDay(date, owner)
-        }
-    }
-}
-
-enum class DayOwner {
-    PreviousMonth, ThisMonth, NextMonth
 }
 
 // TODO: Mode this function to utils in sample project.
@@ -391,12 +333,12 @@ fun InitialCalendarScroll(action: suspend () -> Unit) {
 fun BoxCalendarPreview() {
     val state = rememberBoxCalendarState(
         startMonth = YearMonth.now(),
-        endMonth = YearMonth.now().plusMonths(1),
+        endMonth = YearMonth.now().plusMonths(10),
         firstDayOfWeek = DayOfWeek.MONDAY
     )
 
     InitialCalendarScroll {
-//        state.scrollToMonth(YearMonth.now().plusMonths(2))
+        state.scrollToMonth(YearMonth.now().plusMonths(2))
     }
 
     val coroutineScope = rememberCoroutineScope()

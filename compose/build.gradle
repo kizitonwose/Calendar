@@ -58,8 +58,10 @@ dependencies {
     implementation 'androidx.compose.ui:ui-tooling:1.2.1'
     implementation 'androidx.compose.ui:ui:1.2.1'
     implementation "androidx.compose.foundation:foundation:1.2.1"
-    implementation 'androidx.compose.material:material:1.2.1'
+    implementation 'androidx.compose.material:material:1.2.1' // TODO move to sample app
     implementation "dev.chrisbanes.snapper:snapper:0.3.0"
+
+    testImplementation deps.test.junit
 }
 
 afterEvaluate {

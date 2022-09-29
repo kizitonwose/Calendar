@@ -1,13 +1,11 @@
-package com.kizitonwose.calendarcompose
+package com.kizitonwose.calendarcompose.weekcalendar
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
 import android.util.Log
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.ScrollScope
-import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListItemInfo
@@ -30,8 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kizitonwose.calendarcompose.CalendarDefaults
+import com.kizitonwose.calendarcompose.boxcalendar.VisibleItemState
+import com.kizitonwose.calendarcompose.internal.daysUntil
 import com.kizitonwose.calendarcore.atStartOfMonth
-import dev.chrisbanes.snapper.*
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -60,7 +60,7 @@ class WeekCalendarState internal constructor(
     startDate: LocalDate,
     endDate: LocalDate,
     firstDayOfWeek: DayOfWeek,
-    visibleItemState: VisibleItemState // TODO: Replace with the VisibleItemStateVisibleItemState
+    visibleItemState: VisibleItemState
 ) : ScrollableState {
     internal val listState = LazyListState(
         firstVisibleItemIndex = visibleItemState.firstVisibleItemIndex,
@@ -87,10 +87,7 @@ class WeekCalendarState internal constructor(
         )
 
     val layoutInfo: WeekCalendarLayoutInfo
-        get() = WeekCalendarLayoutInfo(
-            listState.layoutInfo,
-            startDateAdjusted
-        )
+        get() = WeekCalendarLayoutInfo(listState.layoutInfo, startDateAdjusted)
 
     suspend fun scrollToDate(date: LocalDate) {
         listState.scrollToItem(getScrollIndex(date) ?: return)
@@ -107,8 +104,7 @@ class WeekCalendarState internal constructor(
     override suspend fun scroll(
         scrollPriority: MutatePriority,
         block: suspend ScrollScope.() -> Unit
-    ) =
-        listState.scroll(scrollPriority, block)
+    ) = listState.scroll(scrollPriority, block)
 
     @SuppressLint("LogNotTimber")
     private fun getScrollIndex(date: LocalDate): Int? {
@@ -219,16 +215,11 @@ private fun WeekHeader(days: List<LocalDate>) {
     }
 }
 
-enum class ScrollMode {
-    Continuous, Paged
-}
-
-@OptIn(ExperimentalSnapperApi::class)
 @Composable
 fun WeekCalendar(
     modifier: Modifier = Modifier,
     state: WeekCalendarState = rememberWeekCalendarState(),
-    scrollMode: ScrollMode = ScrollMode.Continuous,
+    calendarScrollPaged: Boolean = false,
     dayContent: @Composable RowScope.(LocalDate) -> Unit = { },
     weekHeader: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
     weekFooter: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
@@ -244,16 +235,8 @@ fun WeekCalendar(
     fun getData(offset: Int) =
         cache.getOrPut(offset) { getWeekData(calendarData.startDateAdjusted, offset) }
 
-    val flingBehavior = when (scrollMode) {
-        ScrollMode.Continuous -> ScrollableDefaults.flingBehavior()
-        ScrollMode.Paged -> rememberSnapperFlingBehavior(
-            lazyListState = state.listState,
-            snapOffsetForItem = SnapOffsets.Start,
-            snapIndex = singlePageSnapIndex,
-            springAnimationSpec = SnapperFlingBehaviorDefaults.SpringAnimationSpec,
-            decayAnimationSpec = rememberSplineBasedDecay()
-        )
-    }
+    val flingBehavior = CalendarDefaults.flingBehavior(calendarScrollPaged, state.listState)
+
     LazyRow(
         modifier = modifier,
         state = state.listState,
@@ -262,10 +245,9 @@ fun WeekCalendar(
         items(
             count = calendarData.weekCount,
             key = { offset -> getData(offset) }) { offset ->
-            val columnModifier = when (scrollMode) {
-                ScrollMode.Continuous -> Modifier.width(IntrinsicSize.Max)
-                ScrollMode.Paged -> Modifier.fillParentMaxWidth()
-            }
+            val columnModifier = if (calendarScrollPaged) {
+                Modifier.fillParentMaxWidth()
+            } else Modifier.width(IntrinsicSize.Max)
             val data = getData(offset)
             Column(modifier = columnModifier) {
                 weekHeader(data.days)
@@ -279,16 +261,6 @@ fun WeekCalendar(
         }
     }
 }
-
-@OptIn(ExperimentalSnapperApi::class)
-private val singlePageSnapIndex: (SnapperLayoutInfo, startIndex: Int, targetIndex: Int) -> Int =
-    { layoutInfo, startIndex, targetIndex ->
-        targetIndex
-            .coerceIn(startIndex - 1, startIndex + 1)
-            .coerceIn(0, layoutInfo.totalItemsCount - 1)
-    }
-
-private fun DayOfWeek.daysUntil(other: DayOfWeek) = (7 + (other.value - value)) % 7
 
 private data class WeekIndexData(
     val startDateAdjusted: LocalDate,

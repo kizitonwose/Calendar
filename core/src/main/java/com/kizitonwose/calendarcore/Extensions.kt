@@ -24,4 +24,4 @@ fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<Day
     return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
 }
 
-private fun firstDayOfWeekFromLocale() = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+fun firstDayOfWeekFromLocale(): DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek

@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath deps.gradle_plugins.android
+        classpath 'com.android.tools.build:gradle:7.3.0'
         classpath deps.gradle_plugins.kotlin
         classpath deps.gradle_plugins.ktlint
     }
