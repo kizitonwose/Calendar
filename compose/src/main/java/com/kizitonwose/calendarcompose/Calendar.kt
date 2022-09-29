@@ -1,6 +1,5 @@
 package com.kizitonwose.calendarcompose
 
-import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendarcompose.internal.MonthData
 import com.kizitonwose.calendarcompose.internal.getCalendarMonthData
 import com.kizitonwose.calendarcompose.internal.getMonthIndicesCount
@@ -22,6 +22,7 @@ fun HorizontalCalendar(
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
     monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
@@ -31,14 +32,15 @@ fun HorizontalCalendar(
     modifier = modifier,
     state = state,
     outDateStyle = outDateStyle,
+    calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
     isVertical = false,
+    reverseLayout = reverseLayout,
     dayContent = dayContent,
     monthHeader = monthHeader,
     monthContent = monthContent,
     monthFooter = monthFooter,
     monthContainer = monthContainer,
-    flingBehavior = CalendarDefaults.flingBehavior(calendarScrollPaged, state.listState)
 )
 
 @Composable
@@ -48,6 +50,7 @@ fun VerticalCalendar(
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
     monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
@@ -57,14 +60,15 @@ fun VerticalCalendar(
     modifier = modifier,
     state = state,
     outDateStyle = outDateStyle,
+    calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
     isVertical = true,
+    reverseLayout = reverseLayout,
     dayContent = dayContent,
     monthHeader = monthHeader,
     monthContent = monthContent,
     monthFooter = monthFooter,
     monthContainer = monthContainer,
-    flingBehavior = CalendarDefaults.flingBehavior(calendarScrollPaged, state.listState)
 )
 
 @Composable
@@ -72,14 +76,15 @@ private fun Calendar(
     modifier: Modifier,
     state: CalendarState,
     outDateStyle: OutDateStyle,
+    calendarScrollPaged: Boolean,
     userScrollEnabled: Boolean,
     isVertical: Boolean,
+    reverseLayout: Boolean,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
     monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit,
-    flingBehavior: FlingBehavior
 ) {
     val startMonth = state.startMonth
     val endMonth = state.endMonth
@@ -99,8 +104,9 @@ private fun Calendar(
         LazyColumn(
             state = state.listState,
             modifier = modifier.fillMaxHeight(),
-            flingBehavior = flingBehavior,
-            userScrollEnabled = userScrollEnabled
+            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
+            userScrollEnabled = userScrollEnabled,
+            reverseLayout = reverseLayout,
         ) {
             CalendarItems(
                 itemsCount = itemsCount,
@@ -116,8 +122,9 @@ private fun Calendar(
         LazyRow(
             state = state.listState,
             modifier = modifier.wrapContentHeight(),
-            flingBehavior = flingBehavior,
-            userScrollEnabled = userScrollEnabled
+            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
+            userScrollEnabled = userScrollEnabled,
+            reverseLayout = reverseLayout,
         ) {
             CalendarItems(
                 itemsCount = itemsCount,

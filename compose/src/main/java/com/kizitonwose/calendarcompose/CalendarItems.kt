@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.internal.MonthData
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.time.temporal.ChronoUnit
@@ -60,15 +59,6 @@ internal fun LazyListScope.CalendarItems(
         }
     }
 }
-
-// TODO: Equals and HashCode as in CalendarView
-data class CalendarMonth internal constructor(
-    val yearMonth: YearMonth,
-    val weekDays: List<List<CalendarDay>>
-)
-
-data class CalendarDay(val date: LocalDate, val position: DayPosition)
-
 
 @Composable
 private fun Day(day: CalendarDay) {
@@ -135,19 +125,19 @@ fun CalendarPreview() {
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = {
-//                state.startMonth = state.startMonth.plusMonths(1)
+                state.startMonth = state.startMonth.plusMonths(1)
             }) {
                 Text("Remove Start")
             }
             OutlinedButton(onClick = {
-//                state.endMonth = state.endMonth.minusMonths(1)
+                state.endMonth = state.endMonth.minusMonths(1)
             }) {
                 Text("Remove End")
             }
         }
         Row {
             OutlinedButton(onClick = {
-//                state.firstDayOfWeek = state.firstDayOfWeek.plus(1)
+                state.firstDayOfWeek = state.firstDayOfWeek.plus(1)
             }) {
                 Text("Move First Day Of Week")
             }
