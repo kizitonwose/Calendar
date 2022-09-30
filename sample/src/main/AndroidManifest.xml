@@ -24,6 +24,10 @@
             android:name=".view.CalendarViewActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".compose.CalendarComposeActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

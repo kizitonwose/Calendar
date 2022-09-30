@@ -53,6 +53,7 @@ dependencies {
     implementation deps.compose.foundation
     implementation deps.compose.material
     implementation deps.compose.activity
+    implementation deps.compose.navigation
 
     testImplementation deps.test.junit
 
