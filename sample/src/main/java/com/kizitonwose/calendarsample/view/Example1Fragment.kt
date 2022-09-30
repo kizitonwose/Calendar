@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.animation.ValueAnimator
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
+import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example1CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example1FragmentBinding
 import com.kizitonwose.calendarview.model.CalendarDay

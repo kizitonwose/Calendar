@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarsample.databinding.HomeActivityBinding
+import com.kizitonwose.calendarsample.R
+import com.kizitonwose.calendarsample.databinding.CalendarViewActivityBinding
 
-class HomeActivity : AppCompatActivity() {
+class CalendarViewActivity : AppCompatActivity() {
 
-    internal lateinit var binding: HomeActivityBinding
+    internal lateinit var binding: CalendarViewActivityBinding
 
     private val examplesAdapter = HomeOptionsAdapter {
         val fragment = it.createView()
@@ -24,9 +25,9 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = HomeActivityBinding.inflate(layoutInflater)
+        binding = CalendarViewActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.homeToolbar)
+        setSupportActionBar(binding.activityToolbar)
         binding.examplesRv.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = examplesAdapter

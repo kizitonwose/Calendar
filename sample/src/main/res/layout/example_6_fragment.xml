@@ -12,5 +12,5 @@
     app:cv_monthHeaderResource="@layout/example_6_calendar_header"
     app:cv_orientation="horizontal"
     app:cv_scrollMode="continuous"
-    app:cv_monthViewClass="com.kizitonwose.calendarviewsample.Example6MonthView"
-    tools:context=".Example6Fragment" />
+    app:cv_monthViewClass="com.kizitonwose.calendarsample.view.Example6MonthView"
+    tools:context=".view.Example6Fragment" />

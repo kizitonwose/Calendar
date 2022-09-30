@@ -1,20 +1,22 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarsample.Flight
+import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example5CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example5CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example5EventItemViewBinding
 import com.kizitonwose.calendarsample.databinding.Example5FragmentBinding
+import com.kizitonwose.calendarsample.generateFlights
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -24,15 +26,10 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.previous
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.*
-
-data class Flight(val time: LocalDateTime, val departure: Airport, val destination: Airport, @ColorRes val color: Int) {
-    data class Airport(val city: String, val code: String)
-}
 
 class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Example5FlightsViewHolder>() {
 
@@ -97,7 +94,6 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         flightsAdapter.notifyDataSetChanged()
 
         val daysOfWeek = daysOfWeek()
-
         val currentMonth = YearMonth.now()
         binding.exFiveCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
         binding.exFiveCalendar.scrollToMonth(currentMonth)

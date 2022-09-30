@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
+import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example6FragmentBinding

@@ -1,10 +1,11 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.view.ViewGroup
 import androidx.annotation.AnimRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarsample.databinding.HomeOptionsItemViewBinding
+import com.kizitonwose.calendarsample.R
+import com.kizitonwose.calendarsample.databinding.CalendarViewOptionsItemViewBinding
 
 data class ExampleItem(
     @StringRes val titleRes: Int,
@@ -77,7 +78,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {
         return HomeOptionsViewHolder(
-            HomeOptionsItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
+            CalendarViewOptionsItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
         )
     }
 
@@ -87,7 +88,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
     override fun getItemCount(): Int = examples.size
 
-    inner class HomeOptionsViewHolder(private val binding: HomeOptionsItemViewBinding) :
+    inner class HomeOptionsViewHolder(private val binding: CalendarViewOptionsItemViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {

@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    tools:context=".Example4Fragment">
+    tools:context=".view.Example4Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exFourAppBarLayout"

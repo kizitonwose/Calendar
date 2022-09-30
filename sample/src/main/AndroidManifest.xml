@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".HomeActivity"
+            android:name=".view.CalendarViewActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

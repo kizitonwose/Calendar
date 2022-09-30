@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.os.Bundle
 import android.view.View
@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example3CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example3CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example3EventItemViewBinding
@@ -192,7 +193,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         }
 
         binding.exThreeCalendar.monthScrollListener = {
-            homeActivityToolbar.title = if (it.year == today.year) {
+            activityToolbar.title = if (it.year == today.year) {
                 titleSameYearFormatter.format(it.yearMonth)
             } else {
                 titleFormatter.format(it.yearMonth)
@@ -263,13 +264,13 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
     override fun onStart() {
         super.onStart()
-        homeActivityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.example_3_toolbar_color))
+        activityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.example_3_toolbar_color))
         requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_3_statusbar_color)
     }
 
     override fun onStop() {
         super.onStop()
-        homeActivityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.colorPrimary))
+        activityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.colorPrimary))
         requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
 }

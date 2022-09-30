@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true"
-    tools:context=".Example3Fragment">
+    tools:context=".view.Example3Fragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

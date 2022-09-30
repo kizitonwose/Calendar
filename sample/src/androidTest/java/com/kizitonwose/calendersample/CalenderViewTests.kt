@@ -12,7 +12,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-import com.kizitonwose.calendarsample.*
+import com.kizitonwose.calendarsample.R
+import com.kizitonwose.calendarsample.view.*
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -42,7 +43,7 @@ import java.time.YearMonth
 class CalenderViewTests {
 
     @get:Rule
-    val homeScreenRule = ActivityTestRule(HomeActivity::class.java, true, false)
+    val homeScreenRule = ActivityTestRule(CalendarViewActivity::class.java, true, false)
 
     private val currentMonth = YearMonth.now()
 

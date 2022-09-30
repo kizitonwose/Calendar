@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    tools:context=".Example1Fragment">
+    tools:context=".view.Example1Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exOneAppBarLayout"

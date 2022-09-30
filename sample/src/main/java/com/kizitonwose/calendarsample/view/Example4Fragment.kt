@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example4CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example4CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example4FragmentBinding

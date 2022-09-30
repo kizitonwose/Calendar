@@ -1,16 +1,33 @@
 package com.kizitonwose.calendarsample
 
+import androidx.annotation.ColorRes
+import java.time.LocalDateTime
 import java.time.YearMonth
 
 private typealias Airport = Flight.Airport
+
+data class Flight(
+    val time: LocalDateTime,
+    val departure: Airport,
+    val destination: Airport,
+    @ColorRes val color: Int,
+) {
+    data class Airport(val city: String, val code: String)
+}
 
 fun generateFlights(): List<Flight> {
     val list = mutableListOf<Flight>()
     val currentMonth = YearMonth.now()
 
     val currentMonth17 = currentMonth.atDay(17)
-    list.add(Flight(currentMonth17.atTime(14, 0), Airport("Lagos", "LOS"), Airport("Abuja", "ABV"), R.color.brown_700))
-    list.add(Flight(currentMonth17.atTime(21, 30), Airport("Enugu", "ENU"), Airport("Owerri", "QOW"), R.color.blue_grey_700))
+    list.add(Flight(currentMonth17.atTime(14, 0),
+        Airport("Lagos", "LOS"),
+        Airport("Abuja", "ABV"),
+        R.color.brown_700))
+    list.add(Flight(currentMonth17.atTime(21, 30),
+        Airport("Enugu", "ENU"),
+        Airport("Owerri", "QOW"),
+        R.color.blue_grey_700))
 
     val currentMonth22 = currentMonth.atDay(22)
     list.add(Flight(currentMonth22.atTime(13, 20), Airport("Ibadan", "IBA"), Airport("Benin", "BNI"), R.color.blue_800))

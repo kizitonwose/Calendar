@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example2CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example2CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example2FragmentBinding

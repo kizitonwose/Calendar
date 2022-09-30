@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarsample
+package com.kizitonwose.calendarsample.view
 
 import android.content.Context
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example7CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example7FragmentBinding
 import com.kizitonwose.calendarview.model.CalendarDay
