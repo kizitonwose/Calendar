@@ -15,6 +15,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     buildTypes {
         release {
@@ -30,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.compose_compiler
+    }
 }
 
 dependencies {
@@ -42,7 +46,13 @@ dependencies {
     implementation deps.androidx.core_ktx
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.cardview
-    implementation deps.material_library
+    implementation deps.androidx.material_view
+
+    implementation deps.compose.ui
+    implementation deps.compose.tooling
+    implementation deps.compose.foundation
+    implementation deps.compose.material
+    implementation deps.compose.activity
 
     testImplementation deps.test.junit
 

@@ -10,9 +10,6 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import java.time.DayOfWeek
-import java.time.temporal.WeekFields
-import java.util.*
 
 fun View.makeVisible() {
     visibility = View.VISIBLE
@@ -46,13 +43,6 @@ internal fun Context.getColorCompat(@ColorRes color: Int) =
 
 internal fun TextView.setTextColorRes(@ColorRes color: Int) =
     setTextColor(context.getColorCompat(color))
-
-fun daysOfWeek(firstDayOfWeek: DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek): List<DayOfWeek> {
-    val pivot = 7 - firstDayOfWeek.ordinal
-    val daysOfWeek = DayOfWeek.values()
-    // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
-    return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
-}
 
 fun GradientDrawable.setCornerRadius(
     topLeft: Float = 0F,

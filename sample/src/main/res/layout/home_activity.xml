@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/homeRootLayout"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".view.CalendarViewActivity">
 
@@ -15,22 +16,36 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/activityToolbar"
             android:layout_width="match_parent"
-            app:title="@string/app_name_view"
+            app:title="@string/app_name"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/homeContainer"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/examplesRv"
+        <Button
+            android:text="Calendar View Examples"
+            android:id="@+id/calendarViewSample"
+            android:layout_width="wrap_content"
+            tools:ignore="HardcodedText"
+            android:layout_height="60dp" />
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+            android:layout_height="10dp" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <Button
+            android:text="Calendar Compose Examples"
+            android:id="@+id/calendarComposeSample"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+</LinearLayout>

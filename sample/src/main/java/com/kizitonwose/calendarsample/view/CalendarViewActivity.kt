@@ -13,7 +13,7 @@ class CalendarViewActivity : AppCompatActivity() {
 
     internal lateinit var binding: CalendarViewActivityBinding
 
-    private val examplesAdapter = HomeOptionsAdapter {
+    private val examplesAdapter = CalendarViewOptionsAdapter {
         val fragment = it.createView()
         val anim = it.animation
         supportFragmentManager.beginTransaction()

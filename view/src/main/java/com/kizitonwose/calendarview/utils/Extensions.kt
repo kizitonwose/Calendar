@@ -6,8 +6,11 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.temporal.WeekFields
+import java.util.*
 
 internal fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
     return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -33,3 +36,13 @@ val YearMonth.next: YearMonth
 
 val YearMonth.previous: YearMonth
     get() = this.minusMonths(1)
+
+fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
+    val pivot = 7 - firstDayOfWeek.ordinal
+    val daysOfWeek = DayOfWeek.values()
+    // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
+    return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
+}
+
+fun firstDayOfWeekFromLocale(): DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+

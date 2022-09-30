@@ -20,6 +20,7 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.Size
+import com.kizitonwose.calendarview.utils.daysOfWeek
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 

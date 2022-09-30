@@ -35,8 +35,8 @@ val horizontal = Animation(
     popExit = R.anim.slide_out_right
 )
 
-class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
-    RecyclerView.Adapter<HomeOptionsAdapter.HomeOptionsViewHolder>() {
+class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
+    RecyclerView.Adapter<CalendarViewOptionsAdapter.HomeOptionsViewHolder>() {
 
     val examples = listOf(
         ExampleItem(
