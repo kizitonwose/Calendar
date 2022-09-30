@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +31,7 @@ fun Example1Page() {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
-    val selected = remember { mutableStateListOf<CalendarDay>() }
+    val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
     Column {
         val state = rememberCalendarState(
@@ -44,8 +41,18 @@ fun Example1Page() {
             firstDayOfWeek = daysOfWeek.first(),
         )
         val coroutineScope = rememberCoroutineScope()
+        var visibleMonth by remember {
+            // We can directly use state.firstVisibleMonth via a derived state
+            // but we want the header to change only after scrolling stops.
+            mutableStateOf(startMonth)
+        }
+        LaunchedEffect(state.isScrollInProgress) {
+            if (!state.isScrollInProgress) {
+                visibleMonth = state.firstVisibleMonth
+            }
+        }
         CalendarTitle(
-            currentMonth = state.firstVisibleMonth,
+            currentMonth = visibleMonth,
             goToPrevious = {
                 coroutineScope.launch {
                     state.animateScrollToMonth(state.firstVisibleMonth.minusMonths(1))
@@ -60,11 +67,11 @@ fun Example1Page() {
         HorizontalCalendar(
             state = state,
             dayContent = { day ->
-                Day(day, selected = selected.contains(day)) { clicked ->
-                    if (selected.contains(clicked)) {
-                        selected.remove(clicked)
+                Day(day, isSelected = selections.contains(day)) { clicked ->
+                    if (selections.contains(clicked)) {
+                        selections.remove(clicked)
                     } else {
-                        selected.add(clicked)
+                        selections.add(clicked)
                     }
                 }
             },
@@ -82,6 +89,7 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
             Text(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
+                fontSize = 15.sp,
                 text = dayOfWeek.displayText(),
                 fontWeight = FontWeight.Medium,
             )
@@ -90,25 +98,25 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 }
 
 @Composable
-private fun Day(day: CalendarDay, selected: Boolean, onClick: (CalendarDay) -> Unit) {
+private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
     Box(
         Modifier
             .aspectRatio(1f) // This is important for square-sizing!
             .padding(6.dp)
             .clip(CircleShape)
-            .background(color = if (selected) colorResource(id = R.color.example_1_selection_color) else Color.Transparent)
+            .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)
             // Disable clicks on inDates/outDates
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
-                showRipple = !selected,
+                showRipple = !isSelected,
                 onClick = { onClick(day) }
             ),
         contentAlignment = Alignment.Center
     ) {
         val textColor = when (day.position) {
             // Color.Unspecified will use the default text color from the current theme
-            DayPosition.MonthDate -> if (selected) Color.White else Color.Unspecified
-            DayPosition.InDate, DayPosition.OutDate -> Color.LightGray
+            DayPosition.MonthDate -> if (isSelected) Color.White else Color.Unspecified
+            DayPosition.InDate, DayPosition.OutDate -> colorResource(R.color.inactive_text_color)
         }
         Text(
             text = day.date.dayOfMonth.toString(),
@@ -124,43 +132,37 @@ private fun CalendarTitle(
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
 ) {
-    Column(
+    Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .height(IntrinsicSize.Max)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
+        Image(
             modifier = Modifier
-                .height(IntrinsicSize.Max)
-                .padding(horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f)
-                    .clip(CircleShape)
-                    .clickable(onClick = goToPrevious),
-                painter = painterResource(id = R.drawable.ic_chevron_left),
-                contentDescription = "Previous",
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = currentMonth.displayText(),
-                fontSize = 22.sp,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Medium,
-            )
-            Icon(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .aspectRatio(1f)
-                    .clip(CircleShape)
-                    .clickable(onClick = goToNext),
-                painter = painterResource(id = R.drawable.ic_chevron_right),
-                contentDescription = "Next",
-            )
-        }
+                .fillMaxHeight()
+                .aspectRatio(1f)
+                .clip(CircleShape)
+                .clickable(onClick = goToPrevious),
+            painter = painterResource(id = R.drawable.ic_chevron_left),
+            contentDescription = "Previous",
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = currentMonth.displayText(),
+            fontSize = 22.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Medium,
+        )
+        Icon(
+            modifier = Modifier
+                .fillMaxHeight()
+                .aspectRatio(1f)
+                .clip(CircleShape)
+                .clickable(onClick = goToNext),
+            painter = painterResource(id = R.drawable.ic_chevron_right),
+            contentDescription = "Next",
+        )
     }
 }
 

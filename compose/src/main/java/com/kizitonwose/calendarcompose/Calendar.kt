@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendarcompose.boxcalendar.BoxCalendarInternal
 import com.kizitonwose.calendarcompose.boxcalendar.WeekHeaderPosition
@@ -27,6 +28,7 @@ fun HorizontalCalendar(
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
     monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
@@ -45,6 +47,7 @@ fun HorizontalCalendar(
     monthContent = monthContent,
     monthFooter = monthFooter,
     monthContainer = monthContainer,
+    contentPadding = contentPadding,
 )
 
 @Composable
@@ -55,6 +58,7 @@ fun VerticalCalendar(
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
     monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
@@ -73,6 +77,7 @@ fun VerticalCalendar(
     monthContent = monthContent,
     monthFooter = monthFooter,
     monthContainer = monthContainer,
+    contentPadding = contentPadding,
 )
 
 @Composable
@@ -84,6 +89,7 @@ private fun Calendar(
     userScrollEnabled: Boolean,
     isVertical: Boolean,
     reverseLayout: Boolean,
+    contentPadding: PaddingValues,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
@@ -109,6 +115,7 @@ private fun Calendar(
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
             reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
         ) {
             CalendarItems(
                 itemsCount = itemsCount,
@@ -127,6 +134,7 @@ private fun Calendar(
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
             reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
         ) {
             CalendarItems(
                 itemsCount = itemsCount,
@@ -148,6 +156,7 @@ fun WeekCalendar(
     calendarScrollPaged: Boolean = false,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable RowScope.(LocalDate) -> Unit = { },
     weekHeader: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
     weekFooter: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
@@ -160,6 +169,7 @@ fun WeekCalendar(
     dayContent = dayContent,
     weekHeader = weekHeader,
     weekFooter = weekFooter,
+    contentPadding = contentPadding,
 )
 
 @Composable
@@ -168,6 +178,7 @@ fun BoxCalendar(
     state: CalendarState = rememberCalendarState(),
     weekHeaderPosition: WeekHeaderPosition = WeekHeaderPosition.Start,
     userScrollEnabled: Boolean = true,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable ColumnScope.(CalendarDay) -> Unit = { },
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
@@ -179,4 +190,5 @@ fun BoxCalendar(
     dayContent = dayContent,
     weekHeader = weekHeader,
     monthHeader = monthHeader,
+    contentPadding = contentPadding,
 )

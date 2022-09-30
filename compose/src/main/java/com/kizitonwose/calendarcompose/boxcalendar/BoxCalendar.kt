@@ -21,6 +21,7 @@ internal fun BoxCalendarInternal(
     state: CalendarState,
     userScrollEnabled: Boolean,
     weekHeaderPosition: WeekHeaderPosition,
+    contentPadding: PaddingValues,
     dayContent: @Composable ColumnScope.(CalendarDay) -> Unit,
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
@@ -51,6 +52,7 @@ internal fun BoxCalendarInternal(
             modifier = Modifier.weight(1f),
             state = state.listState,
             userScrollEnabled = userScrollEnabled,
+            contentPadding = contentPadding,
         ) {
             items(
                 count = itemsCount,

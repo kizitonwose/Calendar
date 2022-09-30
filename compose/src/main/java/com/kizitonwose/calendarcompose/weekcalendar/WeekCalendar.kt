@@ -16,6 +16,7 @@ internal fun WeekCalendarInternal(
     calendarScrollPaged: Boolean,
     userScrollEnabled: Boolean,
     reverseLayout: Boolean,
+    contentPadding: PaddingValues,
     dayContent: @Composable RowScope.(LocalDate) -> Unit,
     weekHeader: @Composable ColumnScope.(List<LocalDate>) -> Unit,
     weekFooter: @Composable ColumnScope.(List<LocalDate>) -> Unit,
@@ -36,6 +37,7 @@ internal fun WeekCalendarInternal(
         flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
         userScrollEnabled = userScrollEnabled,
         reverseLayout = reverseLayout,
+        contentPadding = contentPadding
     ) {
         items(
             count = weekIndexData.weekCount,

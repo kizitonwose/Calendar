@@ -40,4 +40,5 @@
     <color name="example_7_white">#D9FFFFFF</color>
     <color name="example_7_yellow">#FFEB3B</color>
     <color name="example_1_selection_color">#FCCA3E</color>
+    <color name="inactive_text_color">#BEBEBE</color>
 </resources>

@@ -14,10 +14,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarsample.ContinuousSelectionHelper.getSelection
+import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isInDateBetween
+import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isOutDateBetween
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example4CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example4CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example4FragmentBinding
+import com.kizitonwose.calendarsample.dateRangeDisplayText
+import com.kizitonwose.calendarsample.displayText
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -25,7 +30,6 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.daysOfWeek
-import com.kizitonwose.calendarview.utils.yearMonth
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -89,18 +93,16 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
             init {
                 view.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH && (day.date == today || day.date.isAfter(today))) {
-                        val date = day.date
-                        if (startDate != null) {
-                            if (date < startDate || endDate != null) {
-                                startDate = date
-                                endDate = null
-                            } else if (date != startDate) {
-                                endDate = date
-                            }
-                        } else {
-                            startDate = date
-                        }
+                    if (day.owner == DayOwner.THIS_MONTH &&
+                        (day.date == today || day.date.isAfter(today))
+                    ) {
+                        val selection = getSelection(
+                            day.date,
+                            selectionStartDate = startDate,
+                            selectionEndDate = endDate,
+                        )
+                        startDate = selection.startDate
+                        endDate = selection.endDate
                         this@Example4Fragment.binding.exFourCalendar.notifyCalendarChanged()
                         bindSummaryViews()
                     }
@@ -157,11 +159,17 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                     }
                     // Make the coloured selection background continuous on the invisible in and out dates across various months.
                     DayOwner.PREVIOUS_MONTH ->
-                        if (startDate != null && endDate != null && isInDateBetween(day.date, startDate, endDate)) {
+                        if (startDate != null &&
+                            endDate != null &&
+                            isInDateBetween(day.date, startDate, endDate)
+                        ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
                     DayOwner.NEXT_MONTH ->
-                        if (startDate != null && endDate != null && isOutDateBetween(day.date, startDate, endDate)) {
+                        if (startDate != null &&
+                            endDate != null &&
+                            isOutDateBetween(day.date, startDate, endDate)
+                        ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
                 }
@@ -171,43 +179,31 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = Example4CalendarHeaderBinding.bind(view).exFourHeaderText
         }
-        binding.exFourCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun create(view: View) = MonthViewContainer(view)
-            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                val monthTitle = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
-                container.textView.text = monthTitle
+        binding.exFourCalendar.monthHeaderBinder =
+            object : MonthHeaderFooterBinder<MonthViewContainer> {
+                override fun create(view: View) = MonthViewContainer(view)
+                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                    container.textView.text = month.yearMonth.displayText()
+                }
             }
-        }
 
         binding.exFourSaveButton.setOnClickListener click@{
             val startDate = startDate
             val endDate = endDate
             if (startDate != null && endDate != null) {
-                val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-                val text = "Selected: ${formatter.format(startDate)} - ${formatter.format(endDate)}"
+                val text = dateRangeDisplayText(startDate, endDate)
                 Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
             } else {
-                Snackbar.make(requireView(), "No selection. Searching all Airbnb listings.", Snackbar.LENGTH_LONG)
-                    .show()
+                Snackbar.make(
+                    requireView(),
+                    "No selection. Searching all Airbnb listings.",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
             fragmentManager?.popBackStack()
         }
 
         bindSummaryViews()
-    }
-
-    private fun isInDateBetween(inDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
-        if (startDate.yearMonth == endDate.yearMonth) return false
-        if (inDate.yearMonth == startDate.yearMonth) return true
-        val firstDateInThisMonth = inDate.plusMonths(1).yearMonth.atDay(1)
-        return firstDateInThisMonth >= startDate && firstDateInThisMonth <= endDate && startDate != firstDateInThisMonth
-    }
-
-    private fun isOutDateBetween(outDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
-        if (startDate.yearMonth == endDate.yearMonth) return false
-        if (outDate.yearMonth == endDate.yearMonth) return true
-        val lastDateInThisMonth = outDate.minusMonths(1).yearMonth.atEndOfMonth()
-        return lastDateInThisMonth >= startDate && lastDateInThisMonth <= endDate && endDate != lastDateInThisMonth
     }
 
     private fun bindSummaryViews() {
@@ -232,7 +228,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         }
 
         // Enable save button if a range is selected or no date is selected at all, Airbnb style.
-        binding.exFourSaveButton.isEnabled = endDate != null || (startDate == null && endDate == null)
+        binding.exFourSaveButton.isEnabled =
+            endDate != null || (startDate == null && endDate == null)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -257,11 +254,14 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
     override fun onStart() {
         super.onStart()
         val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
-            setColorFilter(requireContext().getColorCompat(R.color.example_4_grey), PorterDuff.Mode.SRC_ATOP)
+            setColorFilter(
+                requireContext().getColorCompat(R.color.example_4_grey),
+                PorterDuff.Mode.SRC_ATOP
+            )
         }
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
         requireActivity().window.apply {
-            // Update statusbar color to match toolbar color.
+            // Update status bar color to match toolbar color.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 statusBarColor = requireContext().getColorCompat(R.color.white)
                 decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -274,7 +274,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
     override fun onStop() {
         super.onStop()
         requireActivity().window.apply {
-            // Reset statusbar color.
+            // Reset status bar color.
             statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
             decorView.systemUiVisibility = 0
         }

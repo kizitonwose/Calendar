@@ -25,3 +25,4 @@ fun Modifier.clickable(
         onClick = onClick
     )
 }
+

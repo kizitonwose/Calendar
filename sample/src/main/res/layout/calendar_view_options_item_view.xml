@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textSize="22sp"
         tools:text="This is a title" />
 
     <TextView
