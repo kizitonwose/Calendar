@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CalendarView Sample</string>
+    <string name="app_name">Calendar Sample</string>
     <string name="example_1_title">Example 1</string>
     <string name="example_1_subtitle">Multiple selection, horizontal scrolling, shows usage of \"maxRowCount\" property to switch between week and month modes. Also shows usage of OutDateStyle \"endOfRow\".</string>
     <string name="example_2_title">Example 2</string>

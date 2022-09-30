@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarviewsample
+package com.kizitonwose.calendarsample
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,9 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
+import com.kizitonwose.calendarsample.databinding.Example6CalendarDayBinding
+import com.kizitonwose.calendarsample.databinding.Example6CalendarHeaderBinding
+import com.kizitonwose.calendarsample.databinding.Example6FragmentBinding
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -16,9 +19,6 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.Size
-import com.kizitonwose.calendarviewsample.databinding.Example6CalendarDayBinding
-import com.kizitonwose.calendarviewsample.databinding.Example6CalendarHeaderBinding
-import com.kizitonwose.calendarviewsample.databinding.Example6FragmentBinding
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 

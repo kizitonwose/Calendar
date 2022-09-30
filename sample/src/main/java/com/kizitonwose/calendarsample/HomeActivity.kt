@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarviewsample
+package com.kizitonwose.calendarsample
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarviewsample.databinding.HomeActivityBinding
+import com.kizitonwose.calendarsample.databinding.HomeActivityBinding
 
 class HomeActivity : AppCompatActivity() {
 

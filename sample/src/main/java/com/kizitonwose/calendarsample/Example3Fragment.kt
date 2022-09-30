@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarviewsample
+package com.kizitonwose.calendarsample
 
 import android.os.Bundle
 import android.view.View
@@ -16,16 +16,16 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarsample.databinding.Example3CalendarDayBinding
+import com.kizitonwose.calendarsample.databinding.Example3CalendarHeaderBinding
+import com.kizitonwose.calendarsample.databinding.Example3EventItemViewBinding
+import com.kizitonwose.calendarsample.databinding.Example3FragmentBinding
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarviewsample.databinding.Example3CalendarDayBinding
-import com.kizitonwose.calendarviewsample.databinding.Example3CalendarHeaderBinding
-import com.kizitonwose.calendarviewsample.databinding.Example3EventItemViewBinding
-import com.kizitonwose.calendarviewsample.databinding.Example3FragmentBinding
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter

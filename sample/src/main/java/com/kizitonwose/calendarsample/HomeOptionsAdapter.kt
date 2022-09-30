@@ -1,10 +1,10 @@
-package com.kizitonwose.calendarviewsample
+package com.kizitonwose.calendarsample
 
 import android.view.ViewGroup
 import androidx.annotation.AnimRes
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarviewsample.databinding.HomeOptionsItemViewBinding
+import com.kizitonwose.calendarsample.databinding.HomeOptionsItemViewBinding
 
 data class ExampleItem(
     @StringRes val titleRes: Int,

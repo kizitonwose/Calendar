@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarviewsample
+package com.kizitonwose.calendarsample
 
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity

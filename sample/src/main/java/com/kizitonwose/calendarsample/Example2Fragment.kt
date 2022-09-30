@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarviewsample
+package com.kizitonwose.calendarsample
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,15 +10,15 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarsample.databinding.Example2CalendarDayBinding
+import com.kizitonwose.calendarsample.databinding.Example2CalendarHeaderBinding
+import com.kizitonwose.calendarsample.databinding.Example2FragmentBinding
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarviewsample.databinding.Example2CalendarDayBinding
-import com.kizitonwose.calendarviewsample.databinding.Example2CalendarHeaderBinding
-import com.kizitonwose.calendarviewsample.databinding.Example2FragmentBinding
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter

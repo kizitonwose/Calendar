@@ -4,7 +4,7 @@ apply from: rootProject.file("dependencies.gradle")
 
 android {
     compileSdkVersion versions.compile_sdk
-    namespace 'com.kizitonwose.calendarviewsample'
+    namespace 'com.kizitonwose.calendarsample'
     defaultConfig {
         applicationId "com.kizitonwose.calendarviewsample"
         minSdkVersion versions.min_sdk_sample

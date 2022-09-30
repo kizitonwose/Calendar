@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarviewsample
+package com.kizitonwose.calendarsample
 
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarsample.databinding.Example4CalendarDayBinding
+import com.kizitonwose.calendarsample.databinding.Example4CalendarHeaderBinding
+import com.kizitonwose.calendarsample.databinding.Example4FragmentBinding
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -21,9 +24,6 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
-import com.kizitonwose.calendarviewsample.databinding.Example4CalendarDayBinding
-import com.kizitonwose.calendarviewsample.databinding.Example4CalendarHeaderBinding
-import com.kizitonwose.calendarviewsample.databinding.Example4FragmentBinding
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
