@@ -1,8 +1,8 @@
 package com.kizitonwose.calendarview.model
 
-import com.kizitonwose.calendarcore.next
-import com.kizitonwose.calendarcore.previous
-import com.kizitonwose.calendarcore.yearMonth
+import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.previous
+import com.kizitonwose.calendarview.utils.yearMonth
 import java.io.Serializable
 import java.time.LocalDate
 import java.time.YearMonth

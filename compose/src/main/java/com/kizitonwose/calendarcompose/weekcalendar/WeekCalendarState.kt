@@ -12,7 +12,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.kizitonwose.calendarcompose.VisibleItemState
-import com.kizitonwose.calendarcore.atStartOfMonth
+import com.kizitonwose.calendarcompose.atStartOfMonth
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth

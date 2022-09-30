@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
 import kotlinx.parcelize.Parcelize
 import java.time.DayOfWeek
 import java.time.YearMonth
@@ -33,11 +32,11 @@ class CalendarState internal constructor(
     visibleItemState: VisibleItemState?,
 ) : ScrollableState {
 
-    internal var startMonth by mutableStateOf(startMonth)
+    var startMonth by mutableStateOf(startMonth)
 
-    internal var endMonth by mutableStateOf(endMonth)
+    var endMonth by mutableStateOf(endMonth)
 
-    internal var firstDayOfWeek by mutableStateOf(firstDayOfWeek)
+    var firstDayOfWeek by mutableStateOf(firstDayOfWeek)
 
     internal val listState = LazyListState(
         firstVisibleItemIndex = visibleItemState?.firstVisibleItemIndex

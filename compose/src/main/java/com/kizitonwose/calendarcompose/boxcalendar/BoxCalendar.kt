@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcompose.CalendarDay
 import com.kizitonwose.calendarcompose.CalendarMonth
 import com.kizitonwose.calendarcompose.CalendarState
+import com.kizitonwose.calendarcompose.daysOfWeek
 import com.kizitonwose.calendarcompose.shared.CalendarDataStore
 import com.kizitonwose.calendarcompose.shared.getBoxCalendarMonthData
 import com.kizitonwose.calendarcompose.shared.getMonthIndicesCount
-import com.kizitonwose.calendarcore.daysOfWeek
 import java.time.DayOfWeek
 
 @Composable
