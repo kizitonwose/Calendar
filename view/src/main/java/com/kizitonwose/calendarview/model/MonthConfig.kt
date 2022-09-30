@@ -7,22 +7,38 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 
-data class MonthConfig(
-    val outDateStyle: OutDateStyle,
-    val inDateStyle: InDateStyle,
-    val maxRowCount: Int,
-    val startMonth: YearMonth,
-    val endMonth: YearMonth,
-    val firstDayOfWeek: DayOfWeek,
-    val hasBoundaries: Boolean,
-    val job: Job
+internal data class MonthConfig(
+    internal val outDateStyle: OutDateStyle,
+    internal val inDateStyle: InDateStyle,
+    internal val maxRowCount: Int,
+    internal val startMonth: YearMonth,
+    internal val endMonth: YearMonth,
+    internal val firstDayOfWeek: DayOfWeek,
+    internal val hasBoundaries: Boolean,
+    internal val job: Job,
 ) {
 
-    val months: List<CalendarMonth> = run {
+    internal val months: List<CalendarMonth> = run {
         return@run if (hasBoundaries) {
-            generateBoundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle, job)
+            generateBoundedMonths(
+                startMonth,
+                endMonth,
+                firstDayOfWeek,
+                maxRowCount,
+                inDateStyle,
+                outDateStyle,
+                job
+            )
         } else {
-            generateUnboundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle, job)
+            generateUnboundedMonths(
+                startMonth,
+                endMonth,
+                firstDayOfWeek,
+                maxRowCount,
+                inDateStyle,
+                outDateStyle,
+                job
+            )
         }
     }
 
@@ -42,7 +58,7 @@ data class MonthConfig(
             maxRowCount: Int,
             inDateStyle: InDateStyle,
             outDateStyle: OutDateStyle,
-            job: Job = uninterruptedJob
+            job: Job = uninterruptedJob,
         ): List<CalendarMonth> {
             val months = mutableListOf<CalendarMonth>()
             var currentMonth = startMonth
@@ -63,7 +79,12 @@ data class MonthConfig(
                 calendarMonths.addAll(
                     weekDaysGroup.chunked(maxRowCount) { monthDays ->
                         // Use monthDays.toList() to create a copy of the ephemeral list.
-                        CalendarMonth(currentMonth, monthDays.toList(), indexInSameMonth++, numberOfSameMonth)
+                        CalendarMonth(
+                            currentMonth,
+                            monthDays.toList(),
+                            indexInSameMonth++,
+                            numberOfSameMonth,
+                        )
                     }
                 )
 
@@ -81,7 +102,7 @@ data class MonthConfig(
             maxRowCount: Int,
             inDateStyle: InDateStyle,
             outDateStyle: OutDateStyle,
-            job: Job = uninterruptedJob
+            job: Job = uninterruptedJob,
         ): List<CalendarMonth> {
 
             // Generate a flat list of all days in the given month range
@@ -100,7 +121,12 @@ data class MonthConfig(
                     // We don't generate outDates for any month, they are added manually down below.
                     // This is because if outDates are enabled with boundaries disabled, we show them
                     // on the last month only.
-                    generateWeekDays(currentMonth, firstDayOfWeek, generateInDates, OutDateStyle.NONE).flatten()
+                    generateWeekDays(
+                        currentMonth,
+                        firstDayOfWeek,
+                        generateInDates,
+                        OutDateStyle.NONE,
+                    ).flatten()
                 )
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
@@ -158,7 +184,8 @@ data class MonthConfig(
                         // Update the last week to 7 days instead of adding a new row.
                         // Handles the case when we've added all the first inDates and the
                         // last week row in the CalendarMonth is not filled up to 7 days.
-                        monthWeeks[monthWeeks.lastIndex] = (monthWeeks.last() + nextRowDates).take(7)
+                        monthWeeks[monthWeeks.lastIndex] =
+                            (monthWeeks.last() + nextRowDates).take(7)
                     } else {
                         monthWeeks.add(nextRowDates)
                     }
@@ -181,7 +208,7 @@ data class MonthConfig(
             yearMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
             generateInDates: Boolean,
-            outDateStyle: OutDateStyle
+            outDateStyle: OutDateStyle,
         ): List<List<CalendarDay>> {
             val year = yearMonth.year
             val month = yearMonth.monthValue
@@ -193,7 +220,8 @@ data class MonthConfig(
             val weekDaysGroup = if (generateInDates) {
                 // Group days by week of month so we can add the in dates if necessary.
                 val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
-                val groupByWeekOfMonth = thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
+                val groupByWeekOfMonth =
+                    thisMonthDays.groupBy { it.date.get(weekOfMonthField) }.values.toMutableList()
 
                 // Add in-dates if necessary
                 val firstWeek = groupByWeekOfMonth.first()

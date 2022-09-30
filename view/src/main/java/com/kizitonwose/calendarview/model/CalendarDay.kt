@@ -13,7 +13,7 @@ data class CalendarDay(val date: LocalDate, val owner: DayOwner) :
     val day = date.dayOfMonth
 
     // Find the actual month on the calendar that owns this date.
-    val positionYearMonth: YearMonth
+    internal val positionYearMonth: YearMonth
         get() = when (owner) {
             DayOwner.THIS_MONTH -> date.yearMonth
             DayOwner.PREVIOUS_MONTH -> date.yearMonth.next

@@ -6,7 +6,7 @@ android {
     compileSdkVersion versions.compile_sdk
     namespace 'com.kizitonwose.calendarsample'
     defaultConfig {
-        applicationId "com.kizitonwose.calendarviewsample"
+        applicationId "com.kizitonwose.calendarsample"
         minSdkVersion versions.min_sdk_sample
         targetSdkVersion versions.target_sdk
         versionCode versions.version_code
@@ -33,7 +33,8 @@ android {
 }
 
 dependencies {
-    api project(':view')
+    implementation project(':view')
+    implementation project(':compose')
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8
     implementation deps.androidx.legacy
