@@ -104,19 +104,8 @@ private fun Day(
     onClick: (CalendarDay) -> Unit,
 ) {
     var textColor = Color.Transparent
-    // We use two Boxes as there's some clipping done in the continuous
-    // background highlight and we don't want to clip the actual content.
     Box(modifier = Modifier
         .aspectRatio(1f) // This is important for square-sizing!
-        .continuousBackgroundHighlight(
-            day = day,
-            selection = selection,
-            color = continuousSelectionColor,
-            padding = 4.dp,
-        )
-    )
-    Box(modifier = Modifier
-        .aspectRatio(1f)
         .clickable(
             enabled = day.position == DayPosition.MonthDate && day.date >= today,
             showRipple = false,
@@ -126,8 +115,8 @@ private fun Day(
             day = day,
             today = today,
             selection = selection,
-            color = selectionColor,
-            padding = 4.dp) { textColor = it },
+            selectionColor = selectionColor,
+            continuousSelectionColor = continuousSelectionColor) { textColor = it },
         contentAlignment = Alignment.Center) {
         Text(
             text = day.date.dayOfMonth.toString(),
@@ -249,6 +238,7 @@ private fun CalendarBottom(
         }
     }
 }
+
 
 @Preview(heightDp = 700)
 @Composable
