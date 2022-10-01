@@ -41,6 +41,7 @@ fun Example2Page(
     val today = remember { LocalDate.now() }
     var selection by remember { mutableStateOf(DateSelection()) }
     val daysOfWeek = remember { daysOfWeek() }
+    ToggleStatusBarColor(Color.White, isLight = true)
     MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column {
@@ -153,8 +154,8 @@ private fun CalendarTop(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp, top = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row(
                 modifier = Modifier.height(IntrinsicSize.Max),
@@ -192,7 +193,9 @@ private fun CalendarTop(
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
             )
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp)) {
                 for (dayOfWeek in daysOfWeek) {
                     Text(
                         modifier = Modifier.weight(1f),

@@ -97,7 +97,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                         (day.date == today || day.date.isAfter(today))
                     ) {
                         val selection = getSelection(
-                            day.date,
+                            clickedDate = day.date,
                             selectionStartDate = startDate,
                             selectionEndDate = endDate,
                         )
