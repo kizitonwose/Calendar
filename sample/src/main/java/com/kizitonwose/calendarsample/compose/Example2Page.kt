@@ -1,7 +1,6 @@
 package com.kizitonwose.calendarsample.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -10,10 +9,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.*
 import com.kizitonwose.calendarsample.ContinuousSelectionHelper.getSelection
-import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isInDateBetween
-import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isOutDateBetween
 import com.kizitonwose.calendarsample.DateSelection
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.displayText
@@ -32,6 +27,8 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 private val primaryColor = Color.Black.copy(alpha = 0.9f)
+private val selectionColor = primaryColor
+private val continuousSelectionColor = Color.LightGray.copy(alpha = 0.3f)
 
 @Composable
 fun Example2Page(
@@ -107,17 +104,31 @@ private fun Day(
     onClick: (CalendarDay) -> Unit,
 ) {
     var textColor = Color.Transparent
-    Box(
-        Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
-            .backgroundHighlight(day, today = today, selection = selection) { textColor = it }
-            .clickable(
-                enabled = day.position == DayPosition.MonthDate && day.date >= today,
-                showRipple = false,
-                onClick = { onClick(day) }
-            ),
-        contentAlignment = Alignment.Center
-    ) {
+    // We use two Boxes as there's some clipping done in the continuous
+    // background highlight and we don't want to clip the actual content.
+    Box(modifier = Modifier
+        .aspectRatio(1f) // This is important for square-sizing!
+        .continuousBackgroundHighlight(
+            day = day,
+            selection = selection,
+            color = continuousSelectionColor,
+            padding = 4.dp,
+        )
+    )
+    Box(modifier = Modifier
+        .aspectRatio(1f)
+        .clickable(
+            enabled = day.position == DayPosition.MonthDate && day.date >= today,
+            showRipple = false,
+            onClick = { onClick(day) }
+        )
+        .backgroundHighlight(
+            day = day,
+            today = today,
+            selection = selection,
+            color = selectionColor,
+            padding = 4.dp) { textColor = it },
+        contentAlignment = Alignment.Center) {
         Text(
             text = day.date.dayOfMonth.toString(),
             color = textColor,
@@ -143,12 +154,13 @@ private fun MonthHeader(calendarMonth: CalendarMonth) {
 
 @Composable
 private fun CalendarTop(
+    modifier: Modifier = Modifier,
     daysOfWeek: List<DayOfWeek>,
     selection: DateSelection,
     close: () -> Unit,
     clearDates: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -174,7 +186,7 @@ private fun CalendarTop(
                     modifier = Modifier
                         .clip(RoundedCornerShape(percent = 50))
                         .clickable(onClick = clearDates)
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     text = "Clear",
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.End,
@@ -238,91 +250,8 @@ private fun CalendarBottom(
     }
 }
 
-private fun Modifier.backgroundHighlight(
-    day: CalendarDay,
-    today: LocalDate,
-    selection: DateSelection,
-    textColor: (Color) -> Unit,
-): Modifier = composed {
-    val (startDate, endDate) = selection
-    val padding = 4.dp
-    when (day.position) {
-        DayPosition.MonthDate -> {
-            when {
-                day.date.isBefore(today) -> {
-                    textColor(colorResource(R.color.inactive_text_color))
-                    this
-                }
-                startDate == day.date && endDate == null -> {
-                    textColor(Color.White)
-                    padding(padding)
-                        .background(color = primaryColor, shape = CircleShape)
-                }
-                day.date == startDate -> {
-                    textColor(Color.White)
-                    padding(vertical = padding)
-                        .background(
-                            color = primaryColor,
-                            shape = RoundedCornerShape(
-                                topStartPercent = 50,
-                                bottomStartPercent = 50
-                            )
-                        )
-                }
-                startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
-                    textColor(Color.White)
-                    padding(vertical = padding)
-                        .background(color = primaryColor)
-                }
-                day.date == endDate -> {
-                    textColor(Color.White)
-                    padding(vertical = padding)
-                        .background(
-                            color = primaryColor,
-                            shape = RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50)
-                        )
-                }
-                day.date == today -> {
-                    textColor(colorResource(R.color.example_4_grey))
-                    padding(padding)
-                        .border(
-                            width = 1.dp,
-                            shape = CircleShape,
-                            color = colorResource(R.color.inactive_text_color))
-                }
-                else -> {
-                    textColor(colorResource(R.color.example_4_grey))
-                    this
-                }
-            }
-        }
-        DayPosition.InDate -> {
-            textColor(Color.Transparent)
-            if (startDate != null &&
-                endDate != null &&
-                isInDateBetween(day.date, startDate, endDate)
-            ) {
-                padding(vertical = padding)
-                    .background(color = primaryColor)
-            } else this
-        }
-        DayPosition.OutDate -> {
-            textColor(Color.Transparent)
-            if (startDate != null &&
-                endDate != null &&
-                isOutDateBetween(day.date, startDate, endDate)
-            ) {
-                padding(vertical = padding)
-                    .background(color = primaryColor)
-            } else this
-        }
-    }
-}
-
-
 @Preview(heightDp = 700)
 @Composable
 private fun Example2Preview() {
     Example2Page()
 }
-
