@@ -153,11 +153,11 @@ private fun Calendar(
 fun WeekCalendar(
     modifier: Modifier = Modifier,
     state: WeekCalendarState = rememberWeekCalendarState(),
-    calendarScrollPaged: Boolean = false,
+    calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    dayContent: @Composable RowScope.(LocalDate) -> Unit = { },
+    dayContent: @Composable BoxScope.(LocalDate) -> Unit = { },
     weekHeader: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
     weekFooter: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
 ) = WeekCalendarInternal(

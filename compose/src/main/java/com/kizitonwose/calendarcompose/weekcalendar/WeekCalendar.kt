@@ -17,18 +17,16 @@ internal fun WeekCalendarInternal(
     userScrollEnabled: Boolean,
     reverseLayout: Boolean,
     contentPadding: PaddingValues,
-    dayContent: @Composable RowScope.(LocalDate) -> Unit,
+    dayContent: @Composable BoxScope.(LocalDate) -> Unit,
     weekHeader: @Composable ColumnScope.(List<LocalDate>) -> Unit,
     weekFooter: @Composable ColumnScope.(List<LocalDate>) -> Unit,
 ) {
-    val weekIndexData = remember(state.startDate, state.endDate, state.firstDayOfWeek) {
-        getWeekCalendarIndexData(state.startDate, state.endDate, state.firstDayOfWeek)
+    val weekIndexCount = remember(state.startDate, state.endDate) {
+        getWeekIndicesCount(state.startDate, state.endDate)
     }
-    state.startDateAdjusted = weekIndexData.startDateAdjusted
-    state.endDateAdjusted = weekIndexData.endDateAdjusted
-    val dataStore = remember(weekIndexData.startDateAdjusted) {
+    val dataStore = remember(state.startDate) {
         CalendarDataStore { offset ->
-            getWeekCalendarData(weekIndexData.startDateAdjusted, offset)
+            getWeekCalendarData(state.startDate, offset)
         }
     }
     LazyRow(
@@ -40,7 +38,7 @@ internal fun WeekCalendarInternal(
         contentPadding = contentPadding
     ) {
         items(
-            count = weekIndexData.weekCount,
+            count = weekIndexCount,
             key = { offset -> dataStore[offset].firstDayInWeek }) { offset ->
             val columnModifier = if (calendarScrollPaged) {
                 Modifier.fillParentMaxWidth()
@@ -50,7 +48,12 @@ internal fun WeekCalendarInternal(
                 weekHeader(data.days)
                 Row {
                     for (date in data.days) {
-                        dayContent(date)
+                        val boxModifier = if (calendarScrollPaged) {
+                            Modifier.weight(1f)
+                        } else Modifier
+                        Box(modifier = boxModifier) {
+                            dayContent(date)
+                        }
                     }
                 }
                 weekFooter(data.days)

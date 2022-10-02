@@ -90,17 +90,19 @@ private fun WeekHeader(days: List<LocalDate>) {
 
 @Preview(heightDp = 300)
 @Composable
-fun WeekCalendarPreview() {
+private fun WeekCalendarPreview() {
     val state = rememberWeekCalendarState(
-        startMonth = YearMonth.now().atStartOfMonth(),
-        endMonth = YearMonth.now().plusMonths(2).atEndOfMonth(),
-        firstDayOfWeek = DayOfWeek.SUNDAY
+        startDate = YearMonth.now().minusMonths(1).atStartOfMonth(),
+        endDate = YearMonth.now().atEndOfMonth(),
+        firstVisibleDate = LocalDate.now(),
+        firstDayOfWeek = DayOfWeek.SATURDAY
     )
 
     val coroutineScope = rememberCoroutineScope()
 
     Column {
         WeekCalendar(state = state,
+            calendarScrollPaged = true,
             dayContent = { day -> Day(day) },
             weekHeader = { days -> WeekHeader(days) })
 

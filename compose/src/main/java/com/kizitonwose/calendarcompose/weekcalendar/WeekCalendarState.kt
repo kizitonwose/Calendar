@@ -13,48 +13,76 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.kizitonwose.calendarcompose.VisibleItemState
 import com.kizitonwose.calendarcompose.atStartOfMonth
+import com.kizitonwose.calendarcompose.firstDayOfWeekFromLocale
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
-import java.time.temporal.WeekFields
-import java.util.*
 
-// TODO: Implement first visible date constructor property.
 @Stable
 class WeekCalendarState internal constructor(
     startDate: LocalDate,
     endDate: LocalDate,
+    firstVisibleDate: LocalDate,
     firstDayOfWeek: DayOfWeek,
-    visibleItemState: VisibleItemState,
+    visibleItemState: VisibleItemState?,
 ) : ScrollableState {
-    internal val listState = LazyListState(
-        firstVisibleItemIndex = visibleItemState.firstVisibleItemIndex,
-        firstVisibleItemScrollOffset = visibleItemState.firstVisibleItemScrollOffset
-    )
 
-    var startDate by mutableStateOf(startDate)
+    private var _startDate by mutableStateOf(startDate)
+    var startDate: LocalDate
+        get() = _startDate
+        set(value) {
+            if (value != _startDate) {
+                adjustDateRange(startDate = value, endDate = endDate)
+            }
+        }
 
-    var endDate by mutableStateOf(endDate)
+    private var _endDate by mutableStateOf(endDate)
+    var endDate: LocalDate
+        get() = _endDate
+        set(value) {
+            if (value != _endDate) {
+                adjustDateRange(startDate = startDate, endDate = value)
+            }
+        }
 
-    var startDateAdjusted by mutableStateOf(startDate)
-        internal set
+    private var _firstDayOfWeek by mutableStateOf(firstDayOfWeek)
+    var firstDayOfWeek: DayOfWeek
+        get() = _firstDayOfWeek
+        set(value) {
+            if (value != _firstDayOfWeek) {
+                _firstDayOfWeek = value
+                adjustDateRange(startDate = startDate, endDate = endDate)
+            }
+        }
 
-    var endDateAdjusted by mutableStateOf(endDate)
-        internal set
+    internal val listState = run {
+        val item = visibleItemState ?: run {
+            adjustDateRange(startDate = startDate, endDate = endDate)
+            VisibleItemState(firstVisibleItemIndex = getScrollIndex(firstVisibleDate) ?: 0)
+        }
+        LazyListState(
+            firstVisibleItemIndex = item.firstVisibleItemIndex,
+            firstVisibleItemScrollOffset = item.firstVisibleItemScrollOffset
+        )
+    }
 
-    var firstDayOfWeek by mutableStateOf(firstDayOfWeek)
+    private fun adjustDateRange(startDate: LocalDate, endDate: LocalDate) {
+        val data = getWeekCalendarAdjustedRange(startDate, endDate, firstDayOfWeek)
+        _startDate = data.startDateAdjusted
+        _endDate = data.endDateAdjusted
+    }
 
     val firstVisibleDate: LocalDate
-        get() = startDateAdjusted.plusWeeks(listState.firstVisibleItemIndex.toLong())
+        get() = startDate.plusWeeks(listState.firstVisibleItemIndex.toLong())
 
     val lastVisibleDate: LocalDate
-        get() = startDateAdjusted.plusWeeks(
+        get() = startDate.plusWeeks(
             listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index?.toLong() ?: 0
         )
 
     val layoutInfo: WeekCalendarLayoutInfo
-        get() = WeekCalendarLayoutInfo(listState.layoutInfo, startDateAdjusted)
+        get() = WeekCalendarLayoutInfo(listState.layoutInfo, startDate)
 
     suspend fun scrollToDate(date: LocalDate) {
         listState.scrollToItem(getScrollIndex(date) ?: return)
@@ -78,7 +106,7 @@ class WeekCalendarState internal constructor(
             Log.d("WeekCalendarState", "Attempting to scroll out of range; $date")
             return null
         }
-        return ChronoUnit.WEEKS.between(startDateAdjusted, date).toInt()
+        return ChronoUnit.WEEKS.between(startDate, date).toInt()
     }
 
     companion object {
@@ -88,14 +116,21 @@ class WeekCalendarState internal constructor(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
                     firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset
                 )
-                listOf(it.startDate, it.endDate, it.firstDayOfWeek, visibleItemState)
+                listOf(
+                    it.startDate,
+                    it.endDate,
+                    it.firstVisibleDate,
+                    it.firstDayOfWeek,
+                    visibleItemState,
+                )
             },
             restore = {
                 WeekCalendarState(
                     startDate = it[0] as LocalDate,
                     endDate = it[1] as LocalDate,
-                    firstDayOfWeek = it[2] as DayOfWeek,
-                    visibleItemState = it[3] as VisibleItemState,
+                    firstVisibleDate = it[2] as LocalDate,
+                    firstDayOfWeek = it[3] as DayOfWeek,
+                    visibleItemState = it[4] as VisibleItemState,
                 )
             }
         )
@@ -116,16 +151,18 @@ class WeekCalendarItemInfo(info: LazyListItemInfo, val dates: List<LocalDate>) :
 
 @Composable
 fun rememberWeekCalendarState(
-    startMonth: LocalDate = YearMonth.now().atStartOfMonth(),
-    endMonth: LocalDate = YearMonth.now().atEndOfMonth(),
-    firstDayOfWeek: DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek,
+    startDate: LocalDate = YearMonth.now().atStartOfMonth(),
+    endDate: LocalDate = YearMonth.now().atEndOfMonth(),
+    firstVisibleDate: LocalDate = LocalDate.now(),
+    firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): WeekCalendarState {
     return rememberSaveable(saver = WeekCalendarState.Saver) {
         WeekCalendarState(
-            startDate = startMonth,
-            endDate = endMonth,
+            startDate = startDate,
+            endDate = endDate,
+            firstVisibleDate = firstVisibleDate,
             firstDayOfWeek = firstDayOfWeek,
-            visibleItemState = VisibleItemState(),
+            visibleItemState = null,
         )
     }
 }

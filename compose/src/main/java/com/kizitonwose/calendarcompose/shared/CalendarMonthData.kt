@@ -4,6 +4,7 @@ import com.kizitonwose.calendarcompose.*
 import kotlinx.parcelize.IgnoredOnParcel
 import java.time.DayOfWeek
 import java.time.YearMonth
+import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 
 internal data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) {
@@ -75,4 +76,9 @@ internal fun getBoxCalendarMonthData(
         if (totalDays % 7 != 0) 7 - (totalDays % 7) else 0
     }
     return MonthData(month, inDays, outDays)
+}
+
+internal fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
+    // Add one to include the start month itself!
+    return ChronoUnit.MONTHS.between(startMonth, endMonth).toInt() + 1
 }
