@@ -50,7 +50,7 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
     ),
     Example6(
         title = "Example 6",
-        subtitle = "Box Calendar - Dynamic month header, continuous scroll. Similar to GitHub's contributions chart.",
+        subtitle = "HeatMap Calendar - Dynamic month header, continuous scroll. Similar to GitHub's contributions chart.",
         showToolBar = true
     ),
     Example7(

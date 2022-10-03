@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kizitonwose.calendarcompose.BoxCalendar
 import com.kizitonwose.calendarcompose.CalendarLayoutInfo
 import com.kizitonwose.calendarcompose.CalendarState
+import com.kizitonwose.calendarcompose.HeatMapCalendar
 import com.kizitonwose.calendarcompose.rememberCalendarState
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
@@ -73,7 +73,7 @@ fun Example6Page() {
             firstVisibleMonth = endDate.yearMonth,
             firstDayOfWeek = firstDayOfWeekFromLocale(),
         )
-        BoxCalendar(
+        HeatMapCalendar(
             modifier = Modifier.padding(vertical = 10.dp),
             state = state,
             contentPadding = PaddingValues(end = 6.dp),

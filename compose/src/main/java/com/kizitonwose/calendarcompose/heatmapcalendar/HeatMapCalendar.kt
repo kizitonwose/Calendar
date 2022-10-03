@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarcompose.boxcalendar
+package com.kizitonwose.calendarcompose.heatmapcalendar
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -16,11 +16,11 @@ import com.kizitonwose.calendarinternal.getMonthIndicesCount
 import java.time.DayOfWeek
 
 @Composable
-internal fun BoxCalendarInternal(
+internal fun HeatMapCalendarInternal(
     modifier: Modifier,
     state: CalendarState,
     userScrollEnabled: Boolean,
-    weekHeaderPosition: WeekHeaderPosition,
+    weekHeaderPosition: HeatMapWeekHeaderPosition,
     contentPadding: PaddingValues,
     dayContent: @Composable ColumnScope.(CalendarDay) -> Unit,
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit,
@@ -41,7 +41,7 @@ internal fun BoxCalendarInternal(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom
     ) {
-        if (weekHeaderPosition == WeekHeaderPosition.Start) {
+        if (weekHeaderPosition == HeatMapWeekHeaderPosition.Start) {
             WeekHeaderColumn(
                 horizontalAlignment = Alignment.End,
                 firstDayOfWeek = firstDayOfWeek,
@@ -72,7 +72,7 @@ internal fun BoxCalendarInternal(
                 }
             }
         }
-        if (weekHeaderPosition == WeekHeaderPosition.End) {
+        if (weekHeaderPosition == HeatMapWeekHeaderPosition.End) {
             WeekHeaderColumn(
                 horizontalAlignment = Alignment.Start,
                 firstDayOfWeek = firstDayOfWeek,

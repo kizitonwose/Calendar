@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarcompose.boxcalendar
+package com.kizitonwose.calendarcompose.heatmapcalendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,9 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kizitonwose.calendarcompose.BoxCalendar
 import com.kizitonwose.calendarcompose.CalendarLayoutInfo
 import com.kizitonwose.calendarcompose.CalendarState
+import com.kizitonwose.calendarcompose.HeatMapCalendar
 import com.kizitonwose.calendarcompose.rememberCalendarState
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
@@ -104,9 +104,9 @@ private fun getMonthWithYear(layoutInfo: CalendarLayoutInfo, density: Density): 
     }
 }
 
-@Preview(heightDp = 300)
+@Preview
 @Composable
-private fun BoxCalendarPreview() {
+private fun HeatMapCalendarPreview() {
     val state = rememberCalendarState(
         startMonth = YearMonth.now(),
         endMonth = YearMonth.now().plusMonths(10),
@@ -117,7 +117,7 @@ private fun BoxCalendarPreview() {
     val coroutineScope = rememberCoroutineScope()
 
     Column {
-        BoxCalendar(state = state,
+        HeatMapCalendar(state = state,
             dayContent = { Day(it) },
             weekHeader = { WeekHeader(it) },
             monthHeader = { MonthHeader(it, state) }

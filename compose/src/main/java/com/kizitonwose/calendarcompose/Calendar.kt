@@ -9,8 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
-import com.kizitonwose.calendarcompose.boxcalendar.BoxCalendarInternal
-import com.kizitonwose.calendarcompose.boxcalendar.WeekHeaderPosition
+import com.kizitonwose.calendarcompose.heatmapcalendar.HeatMapCalendarInternal
+import com.kizitonwose.calendarcompose.heatmapcalendar.HeatMapWeekHeaderPosition
 import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarInternal
 import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendarcompose.weekcalendar.rememberWeekCalendarState
@@ -176,16 +176,16 @@ fun WeekCalendar(
 )
 
 @Composable
-fun BoxCalendar(
+fun HeatMapCalendar(
     modifier: Modifier = Modifier,
     state: CalendarState = rememberCalendarState(),
-    weekHeaderPosition: WeekHeaderPosition = WeekHeaderPosition.Start,
+    weekHeaderPosition: HeatMapWeekHeaderPosition = HeatMapWeekHeaderPosition.Start,
     userScrollEnabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable ColumnScope.(CalendarDay) -> Unit = { },
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
-) = BoxCalendarInternal(
+) = HeatMapCalendarInternal(
     modifier = modifier,
     state = state,
     weekHeaderPosition = weekHeaderPosition,
