@@ -10,10 +10,10 @@ import androidx.core.view.isVisible
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example7CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example7FragmentBinding
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.Size
+import com.kizitonwose.calendarview2.model.CalendarDay
+import com.kizitonwose.calendarview2.ui.DayBinder
+import com.kizitonwose.calendarview2.ui.ViewContainer
+import com.kizitonwose.calendarview2.utils.Size
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth

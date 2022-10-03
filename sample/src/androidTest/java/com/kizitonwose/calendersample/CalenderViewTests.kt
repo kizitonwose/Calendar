@@ -14,14 +14,15 @@ import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.view.*
-import com.kizitonwose.calendarview.CalendarView
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.yearMonth
+import com.kizitonwose.calendarview2.CalendarView2
+import com.kizitonwose.calendarview2.model.CalendarDay
+import com.kizitonwose.calendarview2.model.CalendarMonth
+import com.kizitonwose.calendarview2.model.DayOwner
+import com.kizitonwose.calendarview2.ui.DayBinder
+import com.kizitonwose.calendarview2.ui.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview2.ui.ViewContainer
+import com.kizitonwose.calendarview2.utils.daysOfWeek
+import com.kizitonwose.calendarview2.utils.yearMonth
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -62,7 +63,8 @@ class CalenderViewTests {
 
         class DayViewContainer(view: View) : ViewContainer(view)
 
-        val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
+        val calendarView =
+            findFragment<Example1Fragment>().findViewById<CalendarView2>(R.id.exOneCalendar)
 
         var boundDay: CalendarDay? = null
 
@@ -97,7 +99,8 @@ class CalenderViewTests {
 
         class TestViewContainer(view: View) : ViewContainer(view)
 
-        val calendarView = findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
+        val calendarView =
+            findFragment<Example2Fragment>().findViewById<CalendarView2>(R.id.exTwoCalendar)
 
         val boundDays = mutableSetOf<CalendarDay>()
         var boundHeaderMonth: CalendarMonth? = null
@@ -137,7 +140,8 @@ class CalenderViewTests {
     fun programmaticScrollWorksAsExpected() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
 
-        val calendarView = findFragment<Example5Fragment>().findViewById<CalendarView>(R.id.exFiveCalendar)
+        val calendarView =
+            findFragment<Example5Fragment>().findViewById<CalendarView2>(R.id.exFiveCalendar)
 
         assertTrue(calendarView.findViewWithTag<View>(currentMonth.atDay(1).hashCode()) != null)
 
@@ -157,7 +161,8 @@ class CalenderViewTests {
     fun scrollToDateWorksOnVerticalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
-        val calendarView = findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
+        val calendarView =
+            findFragment<Example2Fragment>().findViewById<CalendarView2>(R.id.exTwoCalendar)
 
         val targetDate = currentMonth.plusMonths(4).atDay(20)
 
@@ -182,7 +187,8 @@ class CalenderViewTests {
     fun scrollToDateWorksOnHorizontalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
 
-        val calendarView = findFragment<Example6Fragment>().findViewById<CalendarView>(R.id.exSixCalendar)
+        val calendarView =
+            findFragment<Example6Fragment>().findViewById<CalendarView2>(R.id.exSixCalendar)
 
         val targetDate = currentMonth.plusMonths(3).atDay(18)
 
@@ -207,7 +213,8 @@ class CalenderViewTests {
     fun monthScrollListenerIsCalledWhenScrolled() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
 
-        val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
+        val calendarView =
+            findFragment<Example1Fragment>().findViewById<CalendarView2>(R.id.exOneCalendar)
 
         var targetCalMonth: CalendarMonth? = null
         calendarView.monthScrollListener = { month ->
@@ -247,7 +254,8 @@ class CalenderViewTests {
     fun findVisibleDaysAndMonthsWorksOnVerticalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
-        val calendarView = findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
+        val calendarView =
+            findFragment<Example2Fragment>().findViewById<CalendarView2>(R.id.exTwoCalendar)
 
         homeScreenRule.runOnUiThread {
             // Scroll to a random date
@@ -273,7 +281,8 @@ class CalenderViewTests {
     fun findVisibleDaysAndMonthsWorksOnHorizontalOrientation() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
 
-        val calendarView = findFragment<Example6Fragment>().findViewById<CalendarView>(R.id.exSixCalendar)
+        val calendarView =
+            findFragment<Example6Fragment>().findViewById<CalendarView2>(R.id.exSixCalendar)
 
         homeScreenRule.runOnUiThread {
             // Scroll to a random date
@@ -301,7 +310,8 @@ class CalenderViewTests {
     fun multipleSetupCallsRetainPositionIfCalendarHasBoundaries() {
         onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
 
-        val calendarView = findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
+        val calendarView =
+            findFragment<Example1Fragment>().findViewById<CalendarView2>(R.id.exOneCalendar)
 
         val targetVisibleMonth = currentMonth.plusMonths(2)
 
@@ -331,7 +341,7 @@ class CalenderViewTests {
 
     @Test
     fun completionBlocksAreCalledOnTheMainThread() {
-        val calendarView = CalendarView(homeScreenRule.activity)
+        val calendarView = CalendarView2(homeScreenRule.activity)
         homeScreenRule.runOnUiThread {
             val threadName = Thread.currentThread().name
             calendarView.setupAsync(YearMonth.now(), YearMonth.now().plusMonths(10), DayOfWeek.SUNDAY) {

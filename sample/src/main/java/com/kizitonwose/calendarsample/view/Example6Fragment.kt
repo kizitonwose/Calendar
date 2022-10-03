@@ -13,14 +13,14 @@ import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example6FragmentBinding
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.Size
-import com.kizitonwose.calendarview.utils.daysOfWeek
+import com.kizitonwose.calendarview2.model.CalendarDay
+import com.kizitonwose.calendarview2.model.CalendarMonth
+import com.kizitonwose.calendarview2.model.DayOwner
+import com.kizitonwose.calendarview2.ui.DayBinder
+import com.kizitonwose.calendarview2.ui.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview2.ui.ViewContainer
+import com.kizitonwose.calendarview2.utils.Size
+import com.kizitonwose.calendarview2.utils.daysOfWeek
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 

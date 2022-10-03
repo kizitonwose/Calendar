@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    implementation project(':view')
+    implementation project(':view2')
     implementation project(':compose')
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8

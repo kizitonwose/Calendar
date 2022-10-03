@@ -32,7 +32,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.kizitonwose.calendarview.CalendarView
+    <com.kizitonwose.calendarview2.CalendarView2
         android:id="@+id/exTwoCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

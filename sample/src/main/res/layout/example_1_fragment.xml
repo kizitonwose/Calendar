@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kizitonwose.calendarview.CalendarView
+        <com.kizitonwose.calendarview2.CalendarView2
             android:id="@+id/exOneCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
