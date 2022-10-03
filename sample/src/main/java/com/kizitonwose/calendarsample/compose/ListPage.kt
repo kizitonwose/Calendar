@@ -24,23 +24,51 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
     ),
     Example1(
         title = "Example 1",
-        subtitle = "Horizontal Calendar. month header, paged scroll style, programmatic scrolling, multiple selection.",
+        subtitle = "Horizontal Calendar - Month header, paged scroll style, programmatic scrolling, multiple selection.",
         showToolBar = true
     ),
     Example2(
         title = "Example 2",
-        subtitle = "Vertical Calendar. Sticky header, continuous selection within one month and across multiple months, " +
+        subtitle = "Vertical Calendar - Sticky header, continuous selection within one month and across multiple months, " +
                 "dates older than the current day are disabled. Similar to what is in the Airbnb app.",
         showToolBar = false
     ),
     Example3(
         title = "Example 3",
-        subtitle = "Simple Calendar. Sticky header, paged scroll style, programmatic scrolling, single selection.",
+        subtitle = "Horizontal Calendar - Single selection, shows the \"EndOfGrid\" implementation of \"OutDateStyle\" property. A flight schedule calender.",
+        showToolBar = false
+    ),
+    Example4(
+        title = "Example 4",
+        subtitle = "Horizontal Calendar - Custom date width and height, custom month container and content backgrounds, continuous horizontal scroll style.",
+        showToolBar = true
+    ),
+    Example5(
+        title = "Example 5",
+        subtitle = "Week Calendar - Single selection, paged scroll and visible items observation.",
+        showToolBar = false
+    ),
+    Example6(
+        title = "Example 6",
+        subtitle = "Box Calendar - Dynamic month header, continuous scroll. Similar to GitHub's contributions chart.",
+        showToolBar = true
+    ),
+    Example7(
+        title = "Example 7",
+        subtitle = "Week Calendar - Continuous scroll, custom day content width, single selection.",
         showToolBar = true
     );
 }
 
-val items = listOf(Page.Example1, Page.Example2)
+val items = listOf(
+    Page.Example1,
+    Page.Example2,
+    Page.Example3,
+    Page.Example4,
+    Page.Example5,
+    Page.Example6,
+    Page.Example7,
+)
 
 @Composable
 fun ListPage(click: (Page) -> Unit) {
@@ -50,7 +78,7 @@ fun ListPage(click: (Page) -> Unit) {
                 modifier = Modifier
                     .fillParentMaxWidth()
                     .clickable { click(item) }
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 val titleStyle = MaterialTheme.typography.subtitle1
@@ -58,7 +86,7 @@ fun ListPage(click: (Page) -> Unit) {
                     text = item.title,
                     fontWeight = FontWeight.Medium,
                     style = titleStyle.copy(
-                        fontSize = 22.sp,
+                        fontSize = 20.sp,
                         color = titleStyle.color.copy(alpha = ContentAlpha.high)),
                 )
                 val subtitleStyle = MaterialTheme.typography.body2

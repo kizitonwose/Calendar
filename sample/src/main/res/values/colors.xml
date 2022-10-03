@@ -27,6 +27,8 @@
     <color name="example_5_text_grey">#bdbdbd</color>
     <color name="example_5_text_grey_light">#616161</color>
     <color name="example_6_month_bg_color">#b2ebf2</color>
+    <color name="example_6_month_bg_color2">#F2C4B2</color>
+    <color name="example_6_month_bg_color3">#B2B8F2</color>
     <color name="brown_700">#5D4037</color>
     <color name="blue_grey_700">#455A64</color>
     <color name="orange_800">#EF6C00</color>

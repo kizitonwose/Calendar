@@ -3,23 +3,11 @@ package com.kizitonwose.calendarsample.compose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,31 +22,24 @@ class CalendarComposeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val primaryColor = colorResource(id = R.color.colorPrimary)
-            var topBarTitle by remember { mutableStateOf("") }
-            var toolbarVisible by remember { mutableStateOf(true) }
-            var backButtonVisible by remember { mutableStateOf(true) }
+            var toolBarTitle by remember { mutableStateOf("") }
+            var toolBarVisible by remember { mutableStateOf(true) }
             val navController = rememberNavController()
             val coroutineScope = rememberCoroutineScope()
             val scaffoldState = rememberScaffoldState()
             LaunchedEffect(navController) {
                 navController.currentBackStackEntryFlow.collect { backStackEntry ->
                     val page = Page.valueOf(backStackEntry.destination.route ?: return@collect)
-                    topBarTitle = page.title
-                    toolbarVisible = page.showToolBar
-                    backButtonVisible = page != Page.List
+                    toolBarTitle = page.title
+                    toolBarVisible = page.showToolBar
                 }
             }
             MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
                 Scaffold(
                     scaffoldState = scaffoldState,
                     topBar = {
-                        if (toolbarVisible) {
-                            TopAppBar(
-                                title = { Text(text = topBarTitle) },
-                                navigationIcon = if (backButtonVisible) {
-                                    { NavigationIcon { navController.popBackStack() } }
-                                } else null,
-                            )
+                        if (toolBarVisible) {
+                            AppToolBar(title = toolBarTitle, navController)
                         }
                     },
                     content = {
@@ -75,6 +56,25 @@ class CalendarComposeActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    @Composable
+    private fun AppToolBar(title: String, navController: NavHostController) {
+        TopAppBar(
+            title = { Text(text = title) },
+            navigationIcon = {
+                NavigationIcon icon@{
+                    val destination =
+                        navController.currentBackStackEntry?.destination
+                    val page = Page.valueOf(destination?.route ?: return@icon)
+                    if (page == Page.List) {
+                        finishAfterTransition()
+                    } else {
+                        navController.popBackStack()
+                    }
+                }
+            },
+        )
     }
 
     @Composable
@@ -96,26 +96,14 @@ class CalendarComposeActivity : AppCompatActivity() {
                     dateSelected = { startDate, endDate ->
                         navController.popBackStack()
                         showSnack(dateRangeDisplayText(startDate, endDate))
-                    })
+                    }
+                )
             }
+            composable(Page.Example3.name) { Example3Page() }
+            composable(Page.Example4.name) { Example4Page() }
+            composable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
+            composable(Page.Example6.name) { Example6Page() }
+            composable(Page.Example7.name) { Example7Page() }
         }
-    }
-}
-
-@Composable
-private fun NavigationIcon(onClick: () -> Unit) {
-    Box(modifier = Modifier
-        .fillMaxHeight()
-        .aspectRatio(1f)
-        .padding(4.dp)
-        .clip(shape = CircleShape)
-        .clickable(role = Role.Button, onClick = onClick)) {
-        Icon(
-            tint = Color.White,
-            modifier = Modifier
-                .align(Alignment.Center),
-            imageVector = Icons.Default.ArrowBack,
-            contentDescription = null
-        )
     }
 }

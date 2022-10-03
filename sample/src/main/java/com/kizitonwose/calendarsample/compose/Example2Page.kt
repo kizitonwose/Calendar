@@ -59,7 +59,6 @@ fun Example2Page(
                 )
                 VerticalCalendar(
                     state = state,
-                    calendarScrollPaged = false,
                     contentPadding = PaddingValues(bottom = 100.dp),
                     dayContent = { value ->
                         Day(value,
@@ -243,7 +242,7 @@ private fun CalendarBottom(
 }
 
 
-@Preview(heightDp = 700)
+@Preview(heightDp = 800)
 @Composable
 private fun Example2Preview() {
     Example2Page()

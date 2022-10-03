@@ -1,19 +1,22 @@
 package com.kizitonwose.calendarsample.compose
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,17 +44,9 @@ fun Example1Page() {
             firstDayOfWeek = daysOfWeek.first(),
         )
         val coroutineScope = rememberCoroutineScope()
-        var visibleMonth by remember {
-            // We can directly use state.firstVisibleMonth via a derived state
-            // but we want the header to change only after scrolling stops.
-            mutableStateOf(startMonth)
-        }
-        LaunchedEffect(state.isScrollInProgress) {
-            if (!state.isScrollInProgress) {
-                visibleMonth = state.firstVisibleMonth
-            }
-        }
+        val visibleMonth = rememberFirstCompletelyVisibleMonth(initialValue = currentMonth, state)
         CalendarTitle(
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
             currentMonth = visibleMonth,
             goToPrevious = {
                 coroutineScope.launch {
@@ -127,26 +122,29 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
 }
 
 @Composable
-private fun CalendarTitle(
+fun CalendarTitle(
+    modifier: Modifier,
     currentMonth: YearMonth,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .height(IntrinsicSize.Max)
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(
-            modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(1f)
-                .clip(CircleShape)
-                .clickable(onClick = goToPrevious),
-            painter = painterResource(id = R.drawable.ic_chevron_left),
-            contentDescription = "Previous",
-        )
+        Box(modifier = Modifier
+            .size(40.dp)
+            .clip(shape = CircleShape)
+            .clickable(role = Role.Button, onClick = goToPrevious)) {
+            Icon(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(4.dp)
+                    .align(Alignment.Center),
+                painter = painterResource(id = R.drawable.ic_chevron_left),
+                contentDescription = "Previous",
+            )
+        }
         Text(
             modifier = Modifier.weight(1f),
             text = currentMonth.displayText(),
@@ -154,21 +152,24 @@ private fun CalendarTitle(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
         )
-        Icon(
-            modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(1f)
-                .clip(CircleShape)
-                .clickable(onClick = goToNext),
-            painter = painterResource(id = R.drawable.ic_chevron_right),
-            contentDescription = "Next",
-        )
+        Box(modifier = Modifier
+            .size(40.dp)
+            .clip(shape = CircleShape)
+            .clickable(role = Role.Button, onClick = goToNext)) {
+            Icon(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(4.dp)
+                    .align(Alignment.Center),
+                painter = painterResource(id = R.drawable.ic_chevron_right),
+                contentDescription = "Next",
+            )
+        }
     }
 }
 
-@Preview(heightDp = 700)
+@Preview
 @Composable
 private fun Example1Preview() {
     Example1Page()
 }
-

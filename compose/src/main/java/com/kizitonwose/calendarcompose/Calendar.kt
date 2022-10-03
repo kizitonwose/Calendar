@@ -55,7 +55,7 @@ fun VerticalCalendar(
     modifier: Modifier = Modifier,
     state: CalendarState = rememberCalendarState(),
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
-    calendarScrollPaged: Boolean = true,
+    calendarScrollPaged: Boolean = false,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),

@@ -21,7 +21,6 @@ data class CalendarMonth internal constructor(
 ) : Serializable {
     val year: Int = yearMonth.year
     val month: Month = yearMonth.month
-    val monthValue: Int = yearMonth.monthValue
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

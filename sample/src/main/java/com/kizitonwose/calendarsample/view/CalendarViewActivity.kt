@@ -28,6 +28,7 @@ class CalendarViewActivity : AppCompatActivity() {
         binding = CalendarViewActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.activityToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.examplesRv.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = examplesAdapter

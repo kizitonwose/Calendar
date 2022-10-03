@@ -42,7 +42,7 @@ private class HalfSizeShape(private val clipStart: Boolean) : Shape {
 
 /**
  * Modern AirBnb highlight style, as seen in the app.
- * See [backgroundHighlightLegacy].
+ * See also [backgroundHighlightLegacy].
  */
 fun Modifier.backgroundHighlight(
     day: CalendarDay,
@@ -124,7 +124,7 @@ fun Modifier.backgroundHighlight(
 
 /**
  * Old AirBnb highlight style, like in the View example 4.
- * See [backgroundHighlight].
+ * See also [backgroundHighlight].
  */
 fun Modifier.backgroundHighlightLegacy(
     day: CalendarDay,

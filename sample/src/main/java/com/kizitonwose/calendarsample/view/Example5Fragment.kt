@@ -16,6 +16,7 @@ import com.kizitonwose.calendarsample.databinding.Example5CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example5CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example5EventItemViewBinding
 import com.kizitonwose.calendarsample.databinding.Example5FragmentBinding
+import com.kizitonwose.calendarsample.flightDateTimeFormatter
 import com.kizitonwose.calendarsample.generateFlights
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -36,8 +37,6 @@ class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Examp
 
     val flights = mutableListOf<Flight>()
 
-    private val formatter = DateTimeFormatter.ofPattern("EEE'\n'dd MMM'\n'HH:mm")
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example5FlightsViewHolder {
         return Example5FlightsViewHolder(
             Example5EventItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
@@ -55,7 +54,7 @@ class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Examp
 
         fun bind(flight: Flight) {
             binding.itemFlightDateText.apply {
-                text = formatter.format(flight.time)
+                text = flightDateTimeFormatter.format(flight.time)
                 setBackgroundColor(itemView.context.getColorCompat(flight.color))
             }
 
