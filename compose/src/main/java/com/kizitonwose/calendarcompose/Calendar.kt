@@ -11,12 +11,15 @@ import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendarcompose.boxcalendar.BoxCalendarInternal
 import com.kizitonwose.calendarcompose.boxcalendar.WeekHeaderPosition
-import com.kizitonwose.calendarcompose.shared.CalendarDataStore
-import com.kizitonwose.calendarcompose.shared.getCalendarMonthData
-import com.kizitonwose.calendarcompose.shared.getMonthIndicesCount
 import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarInternal
 import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendarcompose.weekcalendar.rememberWeekCalendarState
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarcore.OutDateStyle
+import com.kizitonwose.calendarinternal.CalendarDataStore
+import com.kizitonwose.calendarinternal.getCalendarMonthData
+import com.kizitonwose.calendarinternal.getMonthIndicesCount
 import java.time.DayOfWeek
 import java.time.LocalDate
 

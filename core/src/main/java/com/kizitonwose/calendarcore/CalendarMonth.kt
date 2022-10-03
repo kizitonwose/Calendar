@@ -1,21 +1,10 @@
-package com.kizitonwose.calendarcompose
+package com.kizitonwose.calendarcore
 
 import java.io.Serializable
-import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 
-enum class OutDateStyle {
-    EndOfRow, EndOfGrid
-}
-
-enum class DayPosition {
-    InDate, MonthDate, OutDate
-}
-
-data class CalendarDay(val date: LocalDate, val position: DayPosition) : Serializable
-
-data class CalendarMonth internal constructor(
+data class CalendarMonth(
     val yearMonth: YearMonth,
     val weekDays: List<List<CalendarDay>>,
 ) : Serializable {

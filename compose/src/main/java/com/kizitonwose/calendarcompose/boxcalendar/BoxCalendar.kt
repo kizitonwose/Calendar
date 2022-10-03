@@ -6,13 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.kizitonwose.calendarcompose.CalendarDay
-import com.kizitonwose.calendarcompose.CalendarMonth
 import com.kizitonwose.calendarcompose.CalendarState
-import com.kizitonwose.calendarcompose.daysOfWeek
-import com.kizitonwose.calendarcompose.shared.CalendarDataStore
-import com.kizitonwose.calendarcompose.shared.getBoxCalendarMonthData
-import com.kizitonwose.calendarcompose.shared.getMonthIndicesCount
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarcore.daysOfWeek
+import com.kizitonwose.calendarinternal.CalendarDataStore
+import com.kizitonwose.calendarinternal.getBoxCalendarMonthData
+import com.kizitonwose.calendarinternal.getMonthIndicesCount
 import java.time.DayOfWeek
 
 @Composable

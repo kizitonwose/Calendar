@@ -17,8 +17,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.kizitonwose.calendarcompose.CalendarDay
-import com.kizitonwose.calendarcompose.DayPosition
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.DayPosition
 import com.kizitonwose.calendarsample.ContinuousSelectionHelper
 import com.kizitonwose.calendarsample.DateSelection
 import com.kizitonwose.calendarsample.R

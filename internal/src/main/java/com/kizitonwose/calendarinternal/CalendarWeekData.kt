@@ -1,17 +1,15 @@
-package com.kizitonwose.calendarcompose.weekcalendar
+package com.kizitonwose.calendarinternal
 
-import com.kizitonwose.calendarcompose.shared.daysUntil
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-internal data class WeekDateRange(
+data class WeekDateRange(
     val startDateAdjusted: LocalDate,
     val endDateAdjusted: LocalDate,
-//    val weekCount: Int,
 )
 
-internal fun getWeekCalendarAdjustedRange(
+fun getWeekCalendarAdjustedRange(
     startDate: LocalDate,
     endDate: LocalDate,
     firstDayOfWeek: DayOfWeek,
@@ -24,16 +22,16 @@ internal fun getWeekCalendarAdjustedRange(
     return WeekDateRange(startDateAdjusted = startDateAdjusted, endDateAdjusted = endDateAdjusted)
 }
 
-internal fun getWeekCalendarData(startDate: LocalDate, offset: Int): WeekData {
+fun getWeekCalendarData(startDate: LocalDate, offset: Int): WeekData {
     val firstDayInWeek = startDate.plusWeeks(offset.toLong())
     return WeekData(firstDayInWeek)
 }
 
-internal data class WeekData(val firstDayInWeek: LocalDate) {
+data class WeekData(val firstDayInWeek: LocalDate) {
     val days = (0 until 7).map { firstDayInWeek.plusDays(it.toLong()) }
 }
 
-internal fun getWeekIndicesCount(startDate: LocalDate, endDate: LocalDate): Int {
+fun getWeekIndicesCount(startDate: LocalDate, endDate: LocalDate): Int {
     // Add one to include the start week itself!
     return ChronoUnit.WEEKS.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toInt() + 1
 }

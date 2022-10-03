@@ -1,14 +1,12 @@
-package com.kizitonwose.calendarcompose
+package com.kizitonwose.calendarinternal
 
-import com.kizitonwose.calendarcompose.shared.daysUntil
-import com.kizitonwose.calendarcompose.shared.getMonthIndicesCount
+import com.kizitonwose.calendarcore.daysOfWeek
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.YearMonth
 
-class UtilsTests {
-
+class ExtensionTests {
     @Test
     fun `days until works as expected`() {
         assertEquals(5, DayOfWeek.FRIDAY.daysUntil(DayOfWeek.WEDNESDAY))
@@ -20,7 +18,8 @@ class UtilsTests {
     fun `month count includes start index`() {
         val startMonth = YearMonth.now()
         assertEquals(1, getMonthIndicesCount(startMonth, startMonth))
-        assertEquals(3, getMonthIndicesCount(startMonth, startMonth.plusMonths(2)))
+        assertEquals(3, getMonthIndicesCount(startMonth,
+            startMonth.plusMonths(2)))
     }
 
     @Test

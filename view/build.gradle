@@ -13,7 +13,7 @@ android {
         minSdkVersion versions.min_sdk_library
         targetSdkVersion versions.target_sdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true // Because library's minSdk < 21
+        multiDexEnabled true // Needed for desugar because minSdk < 21
     }
     buildTypes {
         release {
@@ -38,23 +38,15 @@ android {
 }
 
 dependencies {
+    api project(':core')
+    implementation project(':internal')
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8
     implementation deps.androidx.core_ktx
     implementation deps.kotlin.coroutines_core
     implementation deps.kotlin.coroutines_android
 
-
-    // Expose RecyclerView which is CalendarView's superclass to
-    // prevent a compile error when using the library in a project:
-    // Error: Supertypes of the following classes cannot be resolved.
-    // Please make sure you have the required dependencies in the classpath:
-    // class com.kizitonwose.calendarview.CalendarView,
-    // unresolved supertypes: androidx.recyclerview.widget.RecyclerView
-
-    // Not exposing RecyclerView also means that calling findViewById<CalendarView>
-    // results in an error: Type argument is not within its bounds, Expected: View.
-    // This is because CalendarView's superclass type cannot be determined.
+    // Expose RecyclerView which is CalendarView's superclass.
     api deps.androidx.recyclerview
 
     testImplementation deps.test.junit

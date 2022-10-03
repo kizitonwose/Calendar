@@ -44,6 +44,8 @@ android {
 }
 
 dependencies {
+    api project(':core')
+    implementation project(':internal')
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8
     implementation deps.androidx.core_ktx

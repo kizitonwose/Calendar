@@ -20,7 +20,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kizitonwose.calendarcompose.*
+import com.kizitonwose.calendarcompose.HorizontalCalendar
+import com.kizitonwose.calendarcompose.rememberCalendarState
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarcore.DayPosition
+import com.kizitonwose.calendarcore.daysOfWeek
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.displayText
 import java.time.DayOfWeek

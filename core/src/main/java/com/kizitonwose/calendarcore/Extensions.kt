@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarcompose
+package com.kizitonwose.calendarcore
 
 import java.time.DayOfWeek
 import java.time.LocalDate

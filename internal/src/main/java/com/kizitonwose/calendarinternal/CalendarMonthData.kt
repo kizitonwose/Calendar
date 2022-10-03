@@ -1,27 +1,21 @@
-package com.kizitonwose.calendarcompose.shared
+package com.kizitonwose.calendarinternal
 
-import com.kizitonwose.calendarcompose.*
-import kotlinx.parcelize.IgnoredOnParcel
+import com.kizitonwose.calendarcore.*
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 
-internal data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) {
+data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) {
 
-    @IgnoredOnParcel
     private val totalDays = inDays + month.lengthOfMonth() + outDays
 
-    @IgnoredOnParcel
     private val firstDay = month.atStartOfMonth().minusDays(inDays.toLong())
 
-    @IgnoredOnParcel
     private val rows = (0 until totalDays).chunked(7)
 
-    @IgnoredOnParcel
     private val cache = mutableMapOf<Int, CalendarDay>()
 
-    @IgnoredOnParcel
     val calendarMonth =
         CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
 
@@ -39,11 +33,11 @@ internal data class MonthData(val month: YearMonth, val inDays: Int, val outDays
     }
 }
 
-internal fun getCalendarMonthData(
+fun getCalendarMonthData(
     startMonth: YearMonth,
     offset: Int,
     firstDayOfWeek: DayOfWeek,
-    outDateStyle: OutDateStyle
+    outDateStyle: OutDateStyle,
 ): MonthData {
     val month = startMonth.plusMonths(offset.toLong())
     val firstDay = month.atStartOfMonth()
@@ -60,10 +54,10 @@ internal fun getCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-internal fun getBoxCalendarMonthData(
+fun getBoxCalendarMonthData(
     startMonth: YearMonth,
     offset: Int,
-    firstDayOfWeek: DayOfWeek
+    firstDayOfWeek: DayOfWeek,
 ): MonthData {
     val month = startMonth.plusMonths(offset.toLong())
     val firstDay = month.atStartOfMonth()
@@ -78,7 +72,7 @@ internal fun getBoxCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-internal fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
+fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
     // Add one to include the start month itself!
     return ChronoUnit.MONTHS.between(startMonth, endMonth).toInt() + 1
 }

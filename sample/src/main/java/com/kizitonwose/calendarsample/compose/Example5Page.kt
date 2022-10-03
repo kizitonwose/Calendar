@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.WeekCalendar
 import com.kizitonwose.calendarcompose.weekcalendar.rememberWeekCalendarState
-import com.kizitonwose.calendarcompose.yearMonth
+import com.kizitonwose.calendarcore.yearMonth
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.displayText
 import java.time.LocalDate

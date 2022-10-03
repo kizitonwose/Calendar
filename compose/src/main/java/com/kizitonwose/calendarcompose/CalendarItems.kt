@@ -5,7 +5,9 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.kizitonwose.calendarcompose.shared.MonthData
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarinternal.MonthData
 
 @Suppress("FunctionName")
 internal fun LazyListScope.CalendarItems(

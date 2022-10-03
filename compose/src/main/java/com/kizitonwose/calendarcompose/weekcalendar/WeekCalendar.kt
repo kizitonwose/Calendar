@@ -6,7 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
-import com.kizitonwose.calendarcompose.shared.CalendarDataStore
+import com.kizitonwose.calendarinternal.CalendarDataStore
+import com.kizitonwose.calendarinternal.getWeekCalendarData
+import com.kizitonwose.calendarinternal.getWeekIndicesCount
 import java.time.LocalDate
 
 @Composable

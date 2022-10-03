@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.WeekCalendar
-import com.kizitonwose.calendarcompose.atStartOfMonth
+import com.kizitonwose.calendarcore.atStartOfMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
