@@ -24,9 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.HorizontalCalendar
 import com.kizitonwose.calendarcompose.rememberCalendarState
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarcore.DayPosition
-import com.kizitonwose.calendarcore.daysOfWeek
+import com.kizitonwose.calendarcore.*
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.displayText
 import kotlinx.coroutines.launch
@@ -54,12 +52,12 @@ fun Example1Page() {
             currentMonth = visibleMonth,
             goToPrevious = {
                 coroutineScope.launch {
-                    state.animateScrollToMonth(state.firstVisibleMonth.minusMonths(1))
+                    state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
                 }
             },
             goToNext = {
                 coroutineScope.launch {
-                    state.animateScrollToMonth(state.firstVisibleMonth.plusMonths(1))
+                    state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
                 }
             }
         )

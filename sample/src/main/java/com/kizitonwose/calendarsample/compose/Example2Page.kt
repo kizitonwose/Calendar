@@ -42,7 +42,7 @@ fun Example2Page(
 ) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }
-    val endMonth = remember { currentMonth.plusMonths(10) }
+    val endMonth = remember { currentMonth.plusMonths(12) }
     val today = remember { LocalDate.now() }
     var selection by remember { mutableStateOf(DateSelection()) }
     val daysOfWeek = remember { daysOfWeek() }
@@ -158,7 +158,7 @@ private fun CalendarTop(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp),
+                .padding(top = 6.dp, bottom = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row(
@@ -171,7 +171,7 @@ private fun CalendarTop(
                         .aspectRatio(1f)
                         .clip(CircleShape)
                         .clickable(onClick = close)
-                        .padding(10.dp),
+                        .padding(12.dp),
                     painter = painterResource(id = R.drawable.ic_close),
                     contentDescription = "Close",
                 )

@@ -4,7 +4,7 @@ package com.kizitonwose.calendarinternal
  * Basically [MutableMap.getOrPut] but allows us read the map
  * in multiple places without calling `getOrPut` everywhere.
  */
-class CalendarDataStore<V>(private val create: (offset: Int) -> V) :
+class DataStore<V>(private val create: (offset: Int) -> V) :
     HashMap<Int, V>() {
     override fun get(key: Int): V {
         val value = super.get(key)
@@ -16,4 +16,6 @@ class CalendarDataStore<V>(private val create: (offset: Int) -> V) :
             value
         }
     }
+
+    fun getOrNull(key: Int): V? = super.get(key)
 }

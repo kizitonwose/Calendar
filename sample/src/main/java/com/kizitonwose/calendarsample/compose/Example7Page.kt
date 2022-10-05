@@ -36,7 +36,7 @@ fun Example7Page() {
         val state = rememberWeekCalendarState(
             startDate = startDate,
             endDate = endDate,
-            firstVisibleDate = currentDate,
+            firstVisibleWeekDate = currentDate,
         )
         // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
@@ -44,8 +44,8 @@ fun Example7Page() {
                 modifier = Modifier.padding(vertical = 4.dp),
                 state = state,
                 calendarScrollPaged = false,
-                dayContent = { date ->
-                    Day(date, selected = selection == date) {
+                dayContent = { day ->
+                    Day(day.date, selected = selection == day.date) {
                         selection = it
                     }
                 },

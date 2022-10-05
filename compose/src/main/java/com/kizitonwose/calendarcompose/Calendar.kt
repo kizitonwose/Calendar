@@ -5,29 +5,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendarcompose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendarcompose.heatmapcalendar.HeatMapCalendarInternal
+import com.kizitonwose.calendarcompose.heatmapcalendar.HeatMapCalendarState
 import com.kizitonwose.calendarcompose.heatmapcalendar.HeatMapWeekHeaderPosition
+import com.kizitonwose.calendarcompose.heatmapcalendar.rememberHeatMapCalendarState
 import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarInternal
 import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendarcompose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
-import com.kizitonwose.calendarcore.OutDateStyle
-import com.kizitonwose.calendarinternal.CalendarDataStore
-import com.kizitonwose.calendarinternal.getCalendarMonthData
-import com.kizitonwose.calendarinternal.getMonthIndicesCount
+import com.kizitonwose.calendarcore.WeekDay
 import java.time.DayOfWeek
-import java.time.LocalDate
 
 @Composable
 fun HorizontalCalendar(
     modifier: Modifier = Modifier,
     state: CalendarState = rememberCalendarState(),
-    outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
@@ -40,7 +36,6 @@ fun HorizontalCalendar(
 ) = Calendar(
     modifier = modifier,
     state = state,
-    outDateStyle = outDateStyle,
     calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
     isVertical = false,
@@ -57,7 +52,6 @@ fun HorizontalCalendar(
 fun VerticalCalendar(
     modifier: Modifier = Modifier,
     state: CalendarState = rememberCalendarState(),
-    outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
     calendarScrollPaged: Boolean = false,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
@@ -70,7 +64,6 @@ fun VerticalCalendar(
 ) = Calendar(
     modifier = modifier,
     state = state,
-    outDateStyle = outDateStyle,
     calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
     isVertical = true,
@@ -87,7 +80,6 @@ fun VerticalCalendar(
 private fun Calendar(
     modifier: Modifier,
     state: CalendarState,
-    outDateStyle: OutDateStyle,
     calendarScrollPaged: Boolean,
     userScrollEnabled: Boolean,
     isVertical: Boolean,
@@ -99,18 +91,6 @@ private fun Calendar(
     monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit,
 ) {
-    val startMonth = state.startMonth
-    val endMonth = state.endMonth
-    val firstDayOfWeek = state.firstDayOfWeek
-    val itemsCount = remember(startMonth, endMonth) {
-        getMonthIndicesCount(startMonth, endMonth)
-    }
-    val dataStore = remember(startMonth, firstDayOfWeek, outDateStyle) {
-        CalendarDataStore { offset ->
-            getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle)
-        }
-    }
-
     if (isVertical) {
         LazyColumn(
             modifier = modifier.fillMaxHeight(),
@@ -121,8 +101,8 @@ private fun Calendar(
             contentPadding = contentPadding,
         ) {
             CalendarItems(
-                itemsCount = itemsCount,
-                monthData = { offset -> dataStore[offset] },
+                itemsCount = state.monthIndexCount,
+                monthData = { offset -> state.store[offset] },
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthContent = monthContent,
@@ -140,8 +120,8 @@ private fun Calendar(
             contentPadding = contentPadding,
         ) {
             CalendarItems(
-                itemsCount = itemsCount,
-                monthData = { offset -> dataStore[offset] },
+                itemsCount = state.monthIndexCount,
+                monthData = { offset -> state.store[offset] },
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthContent = monthContent,
@@ -160,9 +140,9 @@ fun WeekCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    dayContent: @Composable BoxScope.(LocalDate) -> Unit = { },
-    weekHeader: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
-    weekFooter: @Composable ColumnScope.(List<LocalDate>) -> Unit = { },
+    dayContent: @Composable BoxScope.(WeekDay) -> Unit = { },
+    weekHeader: @Composable ColumnScope.(List<WeekDay>) -> Unit = { },
+    weekFooter: @Composable ColumnScope.(List<WeekDay>) -> Unit = { },
 ) = WeekCalendarInternal(
     modifier = modifier,
     state = state,
@@ -178,11 +158,11 @@ fun WeekCalendar(
 @Composable
 fun HeatMapCalendar(
     modifier: Modifier = Modifier,
-    state: CalendarState = rememberCalendarState(),
+    state: HeatMapCalendarState = rememberHeatMapCalendarState(),
     weekHeaderPosition: HeatMapWeekHeaderPosition = HeatMapWeekHeaderPosition.Start,
     userScrollEnabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    dayContent: @Composable ColumnScope.(CalendarDay) -> Unit = { },
+    dayContent: @Composable ColumnScope.(day: CalendarDay, week: List<CalendarDay>) -> Unit,
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
 ) = HeatMapCalendarInternal(

@@ -105,7 +105,7 @@ val CalendarLayoutInfo.firstCompletelyVisibleMonth: YearMonth?
             if (firstItem != null && firstItem.offset < this.viewportStartOffset) {
                 visibleItemsInfo.removeFirst()
             }
-            visibleItemsInfo.map { it.month }.firstOrNull()
+            visibleItemsInfo.map { it.month.yearMonth }.firstOrNull()
         }
     }
 
@@ -141,7 +141,7 @@ fun rememberFirstVisibleMonthAfterScroll(
         derivedStateOf { state.isScrollInProgress }
     }
     if (!isScrollInProgress.value) {
-        visibleMonth.value = state.firstVisibleMonth
+        visibleMonth.value = state.firstVisibleMonth.yearMonth
     }
     return visibleMonth.value
 }

@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.CalendarLayoutInfo
-import com.kizitonwose.calendarcompose.CalendarState
 import com.kizitonwose.calendarcompose.HeatMapCalendar
-import com.kizitonwose.calendarcompose.rememberCalendarState
+import com.kizitonwose.calendarcompose.heatmapcalendar.HeatMapCalendarState
+import com.kizitonwose.calendarcompose.heatmapcalendar.rememberHeatMapCalendarState
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
 import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
@@ -67,7 +67,7 @@ fun Example6Page() {
         selection = null
     }
     Column(modifier = Modifier.fillMaxSize()) {
-        val state = rememberCalendarState(
+        val state = rememberHeatMapCalendarState(
             startMonth = startDate.yearMonth,
             endMonth = endDate.yearMonth,
             firstVisibleMonth = endDate.yearMonth,
@@ -77,12 +77,13 @@ fun Example6Page() {
             modifier = Modifier.padding(vertical = 10.dp),
             state = state,
             contentPadding = PaddingValues(end = 6.dp),
-            dayContent = {
-                Day(day = it,
+            dayContent = { day, week ->
+                Day(day = day,
                     startDate = startDate,
                     endDate = endDate,
-                    color = data.value[it.date] ?: level0) { day ->
-                    selection = Pair(day, data.value[it.date] ?: level0)
+                    week = week,
+                    color = data.value[day.date] ?: level0) { clicked ->
+                    selection = Pair(clicked, data.value[clicked] ?: level0)
                 }
             },
             weekHeader = { WeekHeader(it) },
@@ -158,6 +159,7 @@ private fun Day(
     day: CalendarDay,
     startDate: LocalDate,
     endDate: LocalDate,
+    week: List<CalendarDay>,
     color: Color,
     onClick: (LocalDate) -> Unit,
 ) {
@@ -165,8 +167,13 @@ private fun Day(
     // past 12 months. Since the calendar is month-based, we ignore
     // the future dates in the current month and those in the start
     // month that are older than 12 months from today.
+    // We draw a transparent box on the empty spaces in the first week
+    // so the items are laid out properly as the column is top to bottom.
+    val weekDates = week.map { it.date }
     if (day.date in startDate..endDate) {
         Level(color) { onClick(day.date) }
+    } else if (weekDates.contains(startDate)) {
+        Level(Color.Transparent)
     }
 }
 
@@ -199,7 +206,7 @@ private fun WeekHeader(dayOfWeek: DayOfWeek) {
 private fun MonthHeader(
     calendarMonth: CalendarMonth,
     endDate: LocalDate,
-    state: CalendarState,
+    state: HeatMapCalendarState,
 ) {
     val density = LocalDensity.current
     val firstFullyVisibleMonth by remember {
@@ -231,15 +238,15 @@ private fun getMonthWithYear(
     val visibleItemsInfo = layoutInfo.visibleMonthsInfo
     return when {
         visibleItemsInfo.isEmpty() -> null
-        visibleItemsInfo.count() == 1 -> visibleItemsInfo.first().month
+        visibleItemsInfo.count() == 1 -> visibleItemsInfo.first().month.yearMonth
         else -> {
             val firstItem = visibleItemsInfo.first()
             if (firstItem.offset < layoutInfo.viewportStartOffset &&
                 (layoutInfo.viewportStartOffset - firstItem.offset > with(density) { daySize.toPx() })
             ) {
-                visibleItemsInfo[1].month
+                visibleItemsInfo[1].month.yearMonth
             } else {
-                firstItem.month
+                firstItem.month.yearMonth
             }
         }
     }

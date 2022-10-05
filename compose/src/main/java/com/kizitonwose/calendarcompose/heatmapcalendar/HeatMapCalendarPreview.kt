@@ -17,9 +17,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.CalendarLayoutInfo
-import com.kizitonwose.calendarcompose.CalendarState
 import com.kizitonwose.calendarcompose.HeatMapCalendar
-import com.kizitonwose.calendarcompose.rememberCalendarState
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
 import kotlinx.coroutines.launch
@@ -66,7 +64,7 @@ private fun WeekHeader(dayOfWeek: DayOfWeek) {
 }
 
 @Composable
-private fun MonthHeader(calendarMonth: CalendarMonth, state: CalendarState) {
+private fun MonthHeader(calendarMonth: CalendarMonth, state: HeatMapCalendarState) {
     val density = LocalDensity.current
     val firstFullyVisibleMonth by remember {
         derivedStateOf { getMonthWithYear(state.layoutInfo, density) }
@@ -90,15 +88,15 @@ private fun getMonthWithYear(layoutInfo: CalendarLayoutInfo, density: Density): 
     val visibleItemsInfo = layoutInfo.visibleMonthsInfo
     return when {
         visibleItemsInfo.isEmpty() -> null
-        visibleItemsInfo.count() == 1 -> visibleItemsInfo.first().month
+        visibleItemsInfo.count() == 1 -> visibleItemsInfo.first().month.yearMonth
         else -> {
             val firstItem = visibleItemsInfo.first()
             if (firstItem.offset < layoutInfo.viewportStartOffset &&
                 (layoutInfo.viewportStartOffset - firstItem.offset > with(density) { daySize.toPx() })
             ) {
-                visibleItemsInfo[1].month
+                visibleItemsInfo[1].month.yearMonth
             } else {
-                firstItem.month
+                firstItem.month.yearMonth
             }
         }
     }
@@ -107,7 +105,7 @@ private fun getMonthWithYear(layoutInfo: CalendarLayoutInfo, density: Density): 
 @Preview
 @Composable
 private fun HeatMapCalendarPreview() {
-    val state = rememberCalendarState(
+    val state = rememberHeatMapCalendarState(
         startMonth = YearMonth.now(),
         endMonth = YearMonth.now().plusMonths(10),
         firstVisibleMonth = YearMonth.now().plusMonths(2),
@@ -118,7 +116,7 @@ private fun HeatMapCalendarPreview() {
 
     Column {
         HeatMapCalendar(state = state,
-            dayContent = { Day(it) },
+            dayContent = { day, _ -> Day(day) },
             weekHeader = { WeekHeader(it) },
             monthHeader = { MonthHeader(it, state) }
         )

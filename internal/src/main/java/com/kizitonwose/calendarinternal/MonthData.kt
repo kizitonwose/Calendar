@@ -6,7 +6,7 @@ import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 
-data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) {
+data class MonthData internal constructor(val month: YearMonth, val inDays: Int, val outDays: Int) {
 
     private val totalDays = inDays + month.lengthOfMonth() + outDays
 
@@ -14,22 +14,18 @@ data class MonthData(val month: YearMonth, val inDays: Int, val outDays: Int) {
 
     private val rows = (0 until totalDays).chunked(7)
 
-    private val cache = mutableMapOf<Int, CalendarDay>()
-
     val calendarMonth =
         CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
 
-    private fun getDay(columnOffset: Int): CalendarDay {
-        return cache.getOrPut(columnOffset) {
-            val date = firstDay.plusDays(columnOffset.toLong())
-            val position = when (date.yearMonth) {
-                month -> DayPosition.MonthDate
-                month.minusMonths(1) -> DayPosition.InDate
-                month.plusMonths(1) -> DayPosition.OutDate
-                else -> throw IllegalArgumentException("Invalid date: $date in month: $month")
-            }
-            return@getOrPut CalendarDay(date, position)
+    private fun getDay(dayOffset: Int): CalendarDay {
+        val date = firstDay.plusDays(dayOffset.toLong())
+        val position = when (date.yearMonth) {
+            month -> DayPosition.MonthDate
+            month.minusMonths(1) -> DayPosition.InDate
+            month.plusMonths(1) -> DayPosition.OutDate
+            else -> throw IllegalArgumentException("Invalid date: $date in month: $month")
         }
+        return CalendarDay(date, position)
     }
 }
 
@@ -54,7 +50,7 @@ fun getCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-fun getBoxCalendarMonthData(
+fun getHeatMapCalendarMonthData(
     startMonth: YearMonth,
     offset: Int,
     firstDayOfWeek: DayOfWeek,
@@ -72,7 +68,11 @@ fun getBoxCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
+fun getMonthIndex(startMonth: YearMonth, endMonth: YearMonth): Int {
+    return ChronoUnit.MONTHS.between(startMonth, endMonth).toInt()
+}
+
 fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
     // Add one to include the start month itself!
-    return ChronoUnit.MONTHS.between(startMonth, endMonth).toInt() + 1
+    return getMonthIndex(startMonth, endMonth) + 1
 }

@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.WeekCalendar
+import com.kizitonwose.calendarcore.WeekDay
 import com.kizitonwose.calendarcore.atStartOfMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
@@ -66,7 +67,7 @@ private fun Day(date: LocalDate) {
 }
 
 @Composable
-private fun WeekHeader(days: List<LocalDate>) {
+private fun WeekHeader(days: List<WeekDay>) {
     val get: (LocalDate) -> String = { date ->
         "${date.dayOfMonth} ${
             date.month.getDisplayName(
@@ -75,7 +76,7 @@ private fun WeekHeader(days: List<LocalDate>) {
             )
         } ${date.year}"
     }
-    val title = "${get(days.first())} - ${get(days.last())}"
+    val title = "${get(days.first().date)} - ${get(days.last().date)}"
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -94,7 +95,7 @@ private fun WeekCalendarPreview() {
     val state = rememberWeekCalendarState(
         startDate = YearMonth.now().minusMonths(1).atStartOfMonth(),
         endDate = YearMonth.now().atEndOfMonth(),
-        firstVisibleDate = LocalDate.now(),
+        firstVisibleWeekDate = LocalDate.now(),
         firstDayOfWeek = DayOfWeek.SATURDAY
     )
 
@@ -103,7 +104,7 @@ private fun WeekCalendarPreview() {
     Column {
         WeekCalendar(state = state,
             calendarScrollPaged = true,
-            dayContent = { day -> Day(day) },
+            dayContent = { day -> Day(day.date) },
             weekHeader = { days -> WeekHeader(days) })
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

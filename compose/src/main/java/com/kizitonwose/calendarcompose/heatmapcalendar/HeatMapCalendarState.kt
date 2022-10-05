@@ -1,23 +1,24 @@
-package com.kizitonwose.calendarcompose
+package com.kizitonwose.calendarcompose.heatmapcalendar
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.kizitonwose.calendarcore.OutDateStyle
+import com.kizitonwose.calendarcompose.MonthCalendarState
+import com.kizitonwose.calendarcompose.VisibleItemState
 import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
 import com.kizitonwose.calendarinternal.MonthData
-import com.kizitonwose.calendarinternal.getCalendarMonthData
+import com.kizitonwose.calendarinternal.getHeatMapCalendarMonthData
 import java.time.DayOfWeek
 import java.time.YearMonth
 
 @Stable
-class CalendarState internal constructor(
+class HeatMapCalendarState internal constructor(
     startMonth: YearMonth,
     endMonth: YearMonth,
-    firstDayOfWeek: DayOfWeek,
     firstVisibleMonth: YearMonth,
-    outDateStyle: OutDateStyle,
+    firstDayOfWeek: DayOfWeek,
     visibleItemState: VisibleItemState?,
 ) : MonthCalendarState(
     startMonth = startMonth,
@@ -26,24 +27,16 @@ class CalendarState internal constructor(
     firstVisibleMonth = firstVisibleMonth,
     visibleItemState = visibleItemState,
 ) {
-    private var _outDateStyle by mutableStateOf(outDateStyle)
-    internal var outDateStyle: OutDateStyle
-        get() = _outDateStyle
-        set(value) {
-            if (value != outDateStyle) {
-                _outDateStyle = value
-                monthDataChanged()
-            }
-        }
 
     override fun getMonthData(
         startMonth: YearMonth,
         offset: Int,
         firstDayOfWeek: DayOfWeek,
-    ): MonthData = getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle)
+    ): MonthData = getHeatMapCalendarMonthData(startMonth, offset, firstDayOfWeek)
+
 
     companion object {
-        internal val Saver: Saver<CalendarState, *> = listSaver(
+        internal val Saver: Saver<HeatMapCalendarState, *> = listSaver(
             save = {
                 val visibleItemState = VisibleItemState(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
@@ -54,18 +47,16 @@ class CalendarState internal constructor(
                     it.endMonth,
                     it.firstVisibleMonth.yearMonth,
                     it.firstDayOfWeek,
-                    it.outDateStyle,
                     visibleItemState,
                 )
             },
             restore = {
-                CalendarState(
+                HeatMapCalendarState(
                     startMonth = it[0] as YearMonth,
                     endMonth = it[1] as YearMonth,
                     firstVisibleMonth = it[2] as YearMonth,
                     firstDayOfWeek = it[3] as DayOfWeek,
-                    outDateStyle = it[4] as OutDateStyle,
-                    visibleItemState = it[5] as VisibleItemState,
+                    visibleItemState = it[4] as VisibleItemState,
                 )
             }
         )
@@ -73,22 +64,19 @@ class CalendarState internal constructor(
 }
 
 @Composable
-fun rememberCalendarState(
+fun rememberHeatMapCalendarState(
     startMonth: YearMonth = YearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
-    outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
-): CalendarState {
-    return rememberSaveable(saver = CalendarState.Saver) {
-        CalendarState(
+): HeatMapCalendarState {
+    return rememberSaveable(saver = HeatMapCalendarState.Saver) {
+        HeatMapCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
             firstDayOfWeek = firstDayOfWeek,
             firstVisibleMonth = firstVisibleMonth,
-            outDateStyle = outDateStyle,
             visibleItemState = null
         )
     }
 }
-

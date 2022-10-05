@@ -12,29 +12,33 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.kizitonwose.calendarcompose.VisibleItemState
+import com.kizitonwose.calendarcore.WeekDay
 import com.kizitonwose.calendarcore.atStartOfMonth
 import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
-import com.kizitonwose.calendarinternal.getWeekCalendarAdjustedRange
+import com.kizitonwose.calendarinternal.*
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.temporal.ChronoUnit
 
 @Stable
 class WeekCalendarState internal constructor(
     startDate: LocalDate,
     endDate: LocalDate,
-    firstVisibleDate: LocalDate,
+    firstVisibleWeekDate: LocalDate,
     firstDayOfWeek: DayOfWeek,
     visibleItemState: VisibleItemState?,
 ) : ScrollableState {
+
+    private var startDateAdjusted by mutableStateOf(startDate)
+    private var endDateAdjusted by mutableStateOf(endDate)
 
     private var _startDate by mutableStateOf(startDate)
     var startDate: LocalDate
         get() = _startDate
         set(value) {
             if (value != _startDate) {
-                adjustDateRange(startDate = value, endDate = endDate)
+                _startDate = value
+                adjustDateRange()
             }
         }
 
@@ -43,7 +47,8 @@ class WeekCalendarState internal constructor(
         get() = _endDate
         set(value) {
             if (value != _endDate) {
-                adjustDateRange(startDate = startDate, endDate = value)
+                _endDate = value
+                adjustDateRange()
             }
         }
 
@@ -53,14 +58,20 @@ class WeekCalendarState internal constructor(
         set(value) {
             if (value != _firstDayOfWeek) {
                 _firstDayOfWeek = value
-                adjustDateRange(startDate = startDate, endDate = endDate)
+                adjustDateRange()
             }
         }
 
+    internal val store = DataStore { offset ->
+        getWeekCalendarData(startDateAdjusted, offset, startDate, endDate)
+    }
+
+    internal var weekIndexCount by mutableStateOf(0)
+
     internal val listState = run {
+        adjustDateRange() // Update date range and weekIndexCount initially.
         val item = visibleItemState ?: run {
-            adjustDateRange(startDate = startDate, endDate = endDate)
-            VisibleItemState(firstVisibleItemIndex = getScrollIndex(firstVisibleDate) ?: 0)
+            VisibleItemState(firstVisibleItemIndex = getScrollIndex(firstVisibleWeekDate) ?: 0)
         }
         LazyListState(
             firstVisibleItemIndex = item.firstVisibleItemIndex,
@@ -68,22 +79,19 @@ class WeekCalendarState internal constructor(
         )
     }
 
-    private fun adjustDateRange(startDate: LocalDate, endDate: LocalDate) {
+    private fun adjustDateRange() {
         val data = getWeekCalendarAdjustedRange(startDate, endDate, firstDayOfWeek)
-        _startDate = data.startDateAdjusted
-        _endDate = data.endDateAdjusted
+        startDateAdjusted = data.startDateAdjusted
+        endDateAdjusted = data.endDateAdjusted
+        store.clear()
+        weekIndexCount = getWeekIndicesCount(startDateAdjusted, endDateAdjusted)
     }
 
-    val firstVisibleDate: LocalDate
-        get() = startDate.plusWeeks(listState.firstVisibleItemIndex.toLong())
-
-    val lastVisibleDate: LocalDate
-        get() = startDate.plusWeeks(
-            listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index?.toLong() ?: 0
-        )
+    val firstVisibleWeek: List<WeekDay>
+        get() = store[listState.firstVisibleItemIndex].days
 
     val layoutInfo: WeekCalendarLayoutInfo
-        get() = WeekCalendarLayoutInfo(listState.layoutInfo, startDate)
+        get() = WeekCalendarLayoutInfo(listState.layoutInfo) { index -> store[index].days }
 
     suspend fun scrollToDate(date: LocalDate) {
         listState.scrollToItem(getScrollIndex(date) ?: return)
@@ -103,11 +111,11 @@ class WeekCalendarState internal constructor(
     ) = listState.scroll(scrollPriority, block)
 
     private fun getScrollIndex(date: LocalDate): Int? {
-        if (date !in startDate..endDate) {
+        if (date !in startDateAdjusted..endDateAdjusted) {
             Log.d("WeekCalendarState", "Attempting to scroll out of range; $date")
             return null
         }
-        return ChronoUnit.WEEKS.between(startDate, date).toInt()
+        return getWeekIndex(startDateAdjusted, date)
     }
 
     companion object {
@@ -120,7 +128,7 @@ class WeekCalendarState internal constructor(
                 listOf(
                     it.startDate,
                     it.endDate,
-                    it.firstVisibleDate,
+                    it.firstVisibleWeek.first(),
                     it.firstDayOfWeek,
                     visibleItemState,
                 )
@@ -129,7 +137,7 @@ class WeekCalendarState internal constructor(
                 WeekCalendarState(
                     startDate = it[0] as LocalDate,
                     endDate = it[1] as LocalDate,
-                    firstVisibleDate = it[2] as LocalDate,
+                    firstVisibleWeekDate = it[2] as LocalDate,
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = it[4] as VisibleItemState,
                 )
@@ -138,30 +146,32 @@ class WeekCalendarState internal constructor(
     }
 }
 
-class WeekCalendarLayoutInfo(info: LazyListLayoutInfo, private val startDate: LocalDate) :
+class WeekCalendarLayoutInfo(
+    info: LazyListLayoutInfo,
+    private val getIndexData: (Int) -> List<WeekDay>,
+) :
     LazyListLayoutInfo by info {
     val visibleWeeksInfo: List<WeekCalendarItemInfo>
         get() = visibleItemsInfo.map { info ->
-            val start = startDate.plusWeeks(info.index.toLong())
-            WeekCalendarItemInfo(info, (0 until 7).map { start.plusDays(it.toLong()) })
+            WeekCalendarItemInfo(info, getIndexData(info.index))
         }
 }
 
-class WeekCalendarItemInfo(info: LazyListItemInfo, val dates: List<LocalDate>) :
+class WeekCalendarItemInfo(info: LazyListItemInfo, val dates: List<WeekDay>) :
     LazyListItemInfo by info
 
 @Composable
 fun rememberWeekCalendarState(
     startDate: LocalDate = YearMonth.now().atStartOfMonth(),
     endDate: LocalDate = YearMonth.now().atEndOfMonth(),
-    firstVisibleDate: LocalDate = LocalDate.now(),
+    firstVisibleWeekDate: LocalDate = LocalDate.now(),
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): WeekCalendarState {
     return rememberSaveable(saver = WeekCalendarState.Saver) {
         WeekCalendarState(
             startDate = startDate,
             endDate = endDate,
-            firstVisibleDate = firstVisibleDate,
+            firstVisibleWeekDate = firstVisibleWeekDate,
             firstDayOfWeek = firstDayOfWeek,
             visibleItemState = null,
         )

@@ -10,17 +10,17 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarcore.DayPosition
+import com.kizitonwose.calendarcore.daysOfWeek
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example2CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example2CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example2FragmentBinding
-import com.kizitonwose.calendarview2.model.CalendarDay
-import com.kizitonwose.calendarview2.model.CalendarMonth
-import com.kizitonwose.calendarview2.model.DayOwner
-import com.kizitonwose.calendarview2.ui.DayBinder
-import com.kizitonwose.calendarview2.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview2.ui.ViewContainer
-import com.kizitonwose.calendarview2.utils.daysOfWeek
+import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -49,7 +49,11 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
             }
         }
 
-        binding.exTwoCalendar.setup(YearMonth.now(), YearMonth.now().plusMonths(10), daysOfWeek.first())
+        binding.exTwoCalendar.setup(
+            YearMonth.now(),
+            YearMonth.now().plusMonths(10),
+            daysOfWeek.first(),
+        )
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
@@ -58,7 +62,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
 
             init {
                 textView.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH) {
+                    if (day.position == DayPosition.MonthDate) {
                         if (selectedDate == day.date) {
                             selectedDate = null
                             binding.exTwoCalendar.notifyDayChanged(day)
@@ -81,7 +85,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
                 val textView = container.textView
                 textView.text = day.date.dayOfMonth.toString()
 
-                if (day.owner == DayOwner.THIS_MONTH) {
+                if (day.position == DayPosition.MonthDate) {
                     textView.makeVisible()
                     when (day.date) {
                         selectedDate -> {
@@ -106,13 +110,15 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = Example2CalendarHeaderBinding.bind(view).exTwoHeaderText
         }
-        binding.exTwoCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun create(view: View) = MonthViewContainer(view)
-            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                @SuppressLint("SetTextI18n") // Concatenation warning for `setText` call.
-                container.textView.text = "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+        binding.exTwoCalendar.monthHeaderBinder =
+            object : MonthHeaderFooterBinder<MonthViewContainer> {
+                override fun create(view: View) = MonthViewContainer(view)
+                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                    @SuppressLint("SetTextI18n") // Concatenation warning for `setText` call.
+                    container.textView.text =
+                        "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+                }
             }
-        }
     }
 
     private lateinit var menuItem: MenuItem

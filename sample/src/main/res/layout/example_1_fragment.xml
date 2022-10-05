@@ -56,15 +56,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kizitonwose.calendarview2.CalendarView2
+        <com.kizitonwose.calendarview.CalendarView
             android:id="@+id/exOneCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cv_dayViewResource="@layout/example_1_calendar_day"
-            app:cv_orientation="horizontal"
-            app:cv_outDateStyle="endOfRow"
-            app:cv_inDateStyle="allMonths"
-            app:cv_scrollMode="paged" />
+            app:cvv_dayViewResource="@layout/example_1_calendar_day"
+            app:cvv_outDateStyle="endOfRow" />
 
         <CheckBox
             android:id="@+id/weekModeCheckBox"

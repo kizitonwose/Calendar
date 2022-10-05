@@ -27,10 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.HorizontalCalendar
 import com.kizitonwose.calendarcompose.rememberCalendarState
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarcore.DayPosition
-import com.kizitonwose.calendarcore.OutDateStyle
-import com.kizitonwose.calendarcore.daysOfWeek
+import com.kizitonwose.calendarcore.*
 import com.kizitonwose.calendarsample.*
 import com.kizitonwose.calendarsample.Flight.Airport
 import com.kizitonwose.calendarsample.R
@@ -69,6 +66,7 @@ fun Example3Page() {
             endMonth = endMonth,
             firstVisibleMonth = currentMonth,
             firstDayOfWeek = daysOfWeek.first(),
+            outDateStyle = OutDateStyle.EndOfGrid,
         )
         val coroutineScope = rememberCoroutineScope()
         val visibleMonth = rememberFirstCompletelyVisibleMonth(initialValue = currentMonth, state)
@@ -86,19 +84,18 @@ fun Example3Page() {
                 currentMonth = visibleMonth,
                 goToPrevious = {
                     coroutineScope.launch {
-                        state.animateScrollToMonth(state.firstVisibleMonth.minusMonths(1))
+                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
                     }
                 },
                 goToNext = {
                     coroutineScope.launch {
-                        state.animateScrollToMonth(state.firstVisibleMonth.plusMonths(1))
+                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
                     }
                 }
             )
             HorizontalCalendar(
                 modifier = Modifier.wrapContentWidth(),
                 state = state,
-                outDateStyle = OutDateStyle.EndOfGrid,
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {

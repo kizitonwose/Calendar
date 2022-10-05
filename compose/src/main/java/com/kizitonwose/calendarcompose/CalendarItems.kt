@@ -7,12 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
-import com.kizitonwose.calendarinternal.MonthData
 
 @Suppress("FunctionName")
 internal fun LazyListScope.CalendarItems(
     itemsCount: Int,
-    monthData: (offset: Int) -> MonthData,
+    monthData: (offset: Int) -> CalendarMonth,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
@@ -21,14 +20,14 @@ internal fun LazyListScope.CalendarItems(
 ) {
     items(
         count = itemsCount,
-        key = { offset -> monthData(offset).month }) { offset ->
-        val data = monthData(offset)
-        monthContainer(data.calendarMonth) {
+        key = { offset -> monthData(offset).yearMonth }) { offset ->
+        val calendarMonth = monthData(offset)
+        monthContainer(calendarMonth) {
             Column(modifier = Modifier.fillParentMaxWidth()) {
-                monthHeader(data.calendarMonth)
-                monthContent(data.calendarMonth) {
+                monthHeader(calendarMonth)
+                monthContent(calendarMonth) {
                     Column {
-                        for (week in data.calendarMonth.weekDays) {
+                        for (week in calendarMonth.weekDays) {
                             Row {
                                 for (day in week) {
                                     Box(modifier = Modifier.weight(1f)) {
@@ -39,7 +38,7 @@ internal fun LazyListScope.CalendarItems(
                         }
                     }
                 }
-                monthFooter(data.calendarMonth)
+                monthFooter(calendarMonth)
             }
         }
     }

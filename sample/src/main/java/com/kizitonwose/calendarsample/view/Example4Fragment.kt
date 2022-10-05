@@ -14,6 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarcore.DayPosition
+import com.kizitonwose.calendarcore.daysOfWeek
 import com.kizitonwose.calendarsample.ContinuousSelectionHelper.getSelection
 import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isInDateBetween
 import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isOutDateBetween
@@ -23,13 +27,9 @@ import com.kizitonwose.calendarsample.databinding.Example4CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example4FragmentBinding
 import com.kizitonwose.calendarsample.dateRangeDisplayText
 import com.kizitonwose.calendarsample.displayText
-import com.kizitonwose.calendarview2.model.CalendarDay
-import com.kizitonwose.calendarview2.model.CalendarMonth
-import com.kizitonwose.calendarview2.model.DayOwner
-import com.kizitonwose.calendarview2.ui.DayBinder
-import com.kizitonwose.calendarview2.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview2.ui.ViewContainer
-import com.kizitonwose.calendarview2.utils.daysOfWeek
+import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -84,7 +84,11 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         }
 
         val currentMonth = YearMonth.now()
-        binding.exFourCalendar.setup(currentMonth, currentMonth.plusMonths(12), daysOfWeek.first())
+        binding.exFourCalendar.setup(
+            currentMonth,
+            currentMonth.plusMonths(12),
+            daysOfWeek.first(),
+        )
         binding.exFourCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
@@ -93,7 +97,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
             init {
                 view.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH &&
+                    if (day.position == DayPosition.MonthDate &&
                         (day.date == today || day.date.isAfter(today))
                     ) {
                         val selection = getSelection(
@@ -124,8 +128,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                 val startDate = startDate
                 val endDate = endDate
 
-                when (day.owner) {
-                    DayOwner.THIS_MONTH -> {
+                when (day.position) {
+                    DayPosition.MonthDate -> {
                         textView.text = day.day.toString()
                         if (day.date.isBefore(today)) {
                             textView.setTextColorRes(R.color.example_4_grey_past)
@@ -158,14 +162,14 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                         }
                     }
                     // Make the coloured selection background continuous on the invisible in and out dates across various months.
-                    DayOwner.PREVIOUS_MONTH ->
+                    DayPosition.InDate ->
                         if (startDate != null &&
                             endDate != null &&
                             isInDateBetween(day.date, startDate, endDate)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
-                    DayOwner.NEXT_MONTH ->
+                    DayPosition.OutDate ->
                         if (startDate != null &&
                             endDate != null &&
                             isOutDateBetween(day.date, startDate, endDate)

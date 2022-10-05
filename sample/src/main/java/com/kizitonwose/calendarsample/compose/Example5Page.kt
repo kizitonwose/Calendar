@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.WeekCalendar
 import com.kizitonwose.calendarcompose.weekcalendar.rememberWeekCalendarState
+import com.kizitonwose.calendarcore.WeekDay
 import com.kizitonwose.calendarcore.yearMonth
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.displayText
@@ -33,19 +34,17 @@ fun Example5Page(close: () -> Unit = {}) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
             endDate = endDate,
-            firstVisibleDate = currentDate,
+            firstVisibleWeekDate = currentDate,
         )
         val isScrollInProgress = remember {
             derivedStateOf { state.isScrollInProgress }
         }
         val visibleWeek = remember {
-            derivedStateOf { state.layoutInfo.visibleWeeksInfo.firstOrNull() }
+            derivedStateOf { state.firstVisibleWeek }
         }
         if (!isScrollInProgress.value) {
-            val datesInWeek = visibleWeek.value?.dates
-            if (datesInWeek != null) {
-                toolBarTitle = getPageTitle(datesInWeek)
-            }
+            val datesInWeek = visibleWeek.value
+            toolBarTitle = getPageTitle(datesInWeek)
         }
         TopAppBar(
             elevation = 0.dp,
@@ -55,8 +54,8 @@ fun Example5Page(close: () -> Unit = {}) {
         WeekCalendar(
             modifier = Modifier.background(color = colorResource(R.color.colorPrimary)),
             state = state,
-            dayContent = { date ->
-                Day(date, isSelected = selection == date) { clicked ->
+            dayContent = { day ->
+                Day(day.date, isSelected = selection == day.date) { clicked ->
                     if (selection != clicked) {
                         selection = clicked
                     }
@@ -106,9 +105,9 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
     }
 }
 
-private fun getPageTitle(datesInWeek: List<LocalDate>): String {
-    val firstDate = datesInWeek.first()
-    val lastDate = datesInWeek.last()
+private fun getPageTitle(datesInWeek: List<WeekDay>): String {
+    val firstDate = datesInWeek.first().date
+    val lastDate = datesInWeek.last().date
     return when {
         firstDate.yearMonth == lastDate.yearMonth -> {
             firstDate.yearMonth.displayText()

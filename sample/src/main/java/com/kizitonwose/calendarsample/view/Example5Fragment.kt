@@ -5,33 +5,25 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarsample.Flight
+import com.kizitonwose.calendarcore.*
+import com.kizitonwose.calendarsample.*
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example5CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example5CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example5EventItemViewBinding
 import com.kizitonwose.calendarsample.databinding.Example5FragmentBinding
-import com.kizitonwose.calendarsample.flightDateTimeFormatter
-import com.kizitonwose.calendarsample.generateFlights
-import com.kizitonwose.calendarview2.model.CalendarDay
-import com.kizitonwose.calendarview2.model.CalendarMonth
-import com.kizitonwose.calendarview2.model.DayOwner
-import com.kizitonwose.calendarview2.ui.DayBinder
-import com.kizitonwose.calendarview2.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview2.ui.ViewContainer
-import com.kizitonwose.calendarview2.utils.daysOfWeek
-import com.kizitonwose.calendarview2.utils.next
-import com.kizitonwose.calendarview2.utils.previous
+import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.*
 
 class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Example5FlightsViewHolder>() {
 
@@ -95,15 +87,19 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
 
         val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
-        binding.exFiveCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
+        val startMonth = currentMonth.minusMonths(100)
+        val endMonth = currentMonth.plusMonths(100)
+        binding.exFiveCalendar.setup(startMonth, endMonth, daysOfWeek.first())
         binding.exFiveCalendar.scrollToMonth(currentMonth)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val binding = Example5CalendarDayBinding.bind(view)
+
             init {
                 view.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH) {
+                    Toast.makeText(it.context, day.date.toString(), Toast.LENGTH_SHORT).show()
+                    if (day.position == DayPosition.MonthDate) {
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
                             selectedDate = day.date
@@ -129,7 +125,7 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                 flightTopView.background = null
                 flightBottomView.background = null
 
-                if (day.owner == DayOwner.THIS_MONTH) {
+                if (day.position == DayPosition.MonthDate) {
                     textView.setTextColorRes(R.color.example_5_text_grey)
                     layout.setBackgroundResource(if (selectedDate == day.date) R.drawable.example_5_selected_bg else 0)
 
@@ -152,18 +148,19 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val legendLayout = Example5CalendarHeaderBinding.bind(view).legendLayout.root
         }
-        binding.exFiveCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun create(view: View) = MonthViewContainer(view)
-            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                // Setup each header day text if we have not done that already.
-                if (container.legendLayout.tag == null) {
-                    container.legendLayout.tag = month.yearMonth
-                    container.legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
-                        tv.text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
-                            .toUpperCase(Locale.ENGLISH)
-                        tv.setTextColorRes(R.color.example_5_text_grey)
-                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
-                    }
+        binding.exFiveCalendar.monthHeaderBinder =
+            object : MonthHeaderFooterBinder<MonthViewContainer> {
+                override fun create(view: View) = MonthViewContainer(view)
+                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                    // Setup each header day text if we have not done that already.
+                    if (container.legendLayout.tag == null) {
+                        container.legendLayout.tag = month.yearMonth
+                        container.legendLayout.children.map { it as TextView }
+                            .forEachIndexed { index, tv ->
+                                tv.text = daysOfWeek[index].displayText()
+                                tv.setTextColorRes(R.color.example_5_text_grey)
+                                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                            }
                     month.yearMonth
                 }
             }
@@ -183,13 +180,13 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
 
         binding.exFiveNextMonthImage.setOnClickListener {
             binding.exFiveCalendar.findFirstVisibleMonth()?.let {
-                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.next)
+                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.nextMonth)
             }
         }
 
         binding.exFivePreviousMonthImage.setOnClickListener {
             binding.exFiveCalendar.findFirstVisibleMonth()?.let {
-                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.previous)
+                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.previousMonth)
             }
         }
     }

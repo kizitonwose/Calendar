@@ -16,18 +16,18 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.CalendarMonth
+import com.kizitonwose.calendarcore.DayPosition
+import com.kizitonwose.calendarcore.daysOfWeek
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example3CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example3CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example3EventItemViewBinding
 import com.kizitonwose.calendarsample.databinding.Example3FragmentBinding
-import com.kizitonwose.calendarview2.model.CalendarDay
-import com.kizitonwose.calendarview2.model.CalendarMonth
-import com.kizitonwose.calendarview2.model.DayOwner
-import com.kizitonwose.calendarview2.ui.DayBinder
-import com.kizitonwose.calendarview2.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview2.ui.ViewContainer
-import com.kizitonwose.calendarview2.utils.daysOfWeek
+import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -152,7 +152,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
             init {
                 view.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH) {
+                    if (day.position == DayPosition.MonthDate) {
                         selectDate(day.date)
                     }
                 }
@@ -167,7 +167,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
                 textView.text = day.date.dayOfMonth.toString()
 
-                if (day.owner == DayOwner.THIS_MONTH) {
+                if (day.position == DayPosition.MonthDate) {
                     textView.makeVisible()
                     when (day.date) {
                         today -> {
@@ -208,17 +208,19 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val legendLayout = Example3CalendarHeaderBinding.bind(view).legendLayout.root
         }
-        binding.exThreeCalendar.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
-            override fun create(view: View) = MonthViewContainer(view)
-            override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                // Setup each header day text if we have not done that already.
-                if (container.legendLayout.tag == null) {
-                    container.legendLayout.tag = month.yearMonth
-                    container.legendLayout.children.map { it as TextView }.forEachIndexed { index, tv ->
-                        tv.text = daysOfWeek[index].name.first().toString()
-                        tv.setTextColorRes(R.color.example_3_black)
+        binding.exThreeCalendar.monthHeaderBinder =
+            object : MonthHeaderFooterBinder<MonthViewContainer> {
+                override fun create(view: View) = MonthViewContainer(view)
+                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                    // Setup each header day text if we have not done that already.
+                    if (container.legendLayout.tag == null) {
+                        container.legendLayout.tag = month.yearMonth
+                        container.legendLayout.children.map { it as TextView }
+                            .forEachIndexed { index, tv ->
+                                tv.text = daysOfWeek[index].name.first().toString()
+                                tv.setTextColorRes(R.color.example_3_black)
+                            }
                     }
-                }
             }
         }
 
