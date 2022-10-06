@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarcore.*
-import com.kizitonwose.calendarinternal.DataStore
-import com.kizitonwose.calendarinternal.getCalendarMonthData
-import com.kizitonwose.calendarinternal.getMonthIndex
-import com.kizitonwose.calendarinternal.getMonthIndicesCount
+import com.kizitonwose.calendardata.DataStore
+import com.kizitonwose.calendardata.getCalendarMonthData
+import com.kizitonwose.calendardata.getMonthIndex
+import com.kizitonwose.calendardata.getMonthIndicesCount
 import com.kizitonwose.calendarview.CalendarView
 import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
@@ -163,11 +163,15 @@ internal class MonthCalendarAdapter(
     private val layoutManager: MonthCalendarLayoutManager
         get() = calView.layoutManager as MonthCalendarLayoutManager
 
-    fun findFirstVisibleMonth(): CalendarMonth? =
-        dataStore.getOrNull(findFirstVisibleMonthPosition())
+    fun findFirstVisibleMonth(): CalendarMonth? {
+        val index = findFirstVisibleMonthPosition()
+        return if (index == NO_INDEX) null else dataStore[index]
+    }
 
-    fun findLastVisibleMonth(): CalendarMonth? =
-        dataStore.getOrNull(findLastVisibleMonthPosition())
+    fun findLastVisibleMonth(): CalendarMonth? {
+        val index = findLastVisibleMonthPosition()
+        return if (index == NO_INDEX) null else dataStore[index]
+    }
 
     fun findFirstVisibleDay(): CalendarDay? = findVisibleDay(true)
 

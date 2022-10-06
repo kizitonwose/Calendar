@@ -9,7 +9,7 @@ import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
 import com.kizitonwose.calendarcore.DayPosition
 import com.kizitonwose.calendarcore.OutDateStyle
-import com.kizitonwose.calendarinternal.checkDateRange
+import com.kizitonwose.calendardata.checkDateRange
 import com.kizitonwose.calendarview.internal.CalenderPageSnapHelper
 import com.kizitonwose.calendarview.internal.MarginValues
 import com.kizitonwose.calendarview.internal.monthcalendar.MonthCalendarAdapter

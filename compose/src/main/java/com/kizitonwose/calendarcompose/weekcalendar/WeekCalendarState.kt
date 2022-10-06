@@ -15,7 +15,7 @@ import com.kizitonwose.calendarcompose.VisibleItemState
 import com.kizitonwose.calendarcore.WeekDay
 import com.kizitonwose.calendarcore.atStartOfMonth
 import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
-import com.kizitonwose.calendarinternal.*
+import com.kizitonwose.calendardata.*
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth

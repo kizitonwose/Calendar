@@ -37,7 +37,6 @@ android {
 }
 
 dependencies {
-    implementation project(':view2')
     implementation project(':view')
     implementation project(':compose')
     coreLibraryDesugaring deps.desugaring

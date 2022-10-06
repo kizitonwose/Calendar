@@ -6,8 +6,8 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.kizitonwose.calendarcore.OutDateStyle
 import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
-import com.kizitonwose.calendarinternal.MonthData
-import com.kizitonwose.calendarinternal.getCalendarMonthData
+import com.kizitonwose.calendardata.MonthData
+import com.kizitonwose.calendardata.getCalendarMonthData
 import java.time.DayOfWeek
 import java.time.YearMonth
 

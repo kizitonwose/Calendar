@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarcore.WeekDay
-import com.kizitonwose.calendarinternal.*
+import com.kizitonwose.calendardata.*
 import com.kizitonwose.calendarview.ViewContainer
 import com.kizitonwose.calendarview.WeekCalendarView
 import com.kizitonwose.calendarview.WeekDayBinder
@@ -131,11 +131,15 @@ internal class WeekCalendarAdapter(
     private val layoutManager: WeekCalendarLayoutManager
         get() = calView.layoutManager as WeekCalendarLayoutManager
 
-    fun findFirstVisibleWeek(): List<WeekDay>? =
-        dataStore.getOrNull(findFirstVisibleWeekPosition())?.days
+    fun findFirstVisibleWeek(): List<WeekDay>? {
+        val index = findFirstVisibleWeekPosition()
+        return if (index == NO_INDEX) null else dataStore[index].days
+    }
 
-    fun findLastVisibleWeek(): List<WeekDay>? =
-        dataStore.getOrNull(findLastVisibleWeekPosition())?.days
+    fun findLastVisibleWeek(): List<WeekDay>? {
+        val index = findLastVisibleWeekPosition()
+        return if (index == NO_INDEX) null else dataStore[index].days
+    }
 
     fun findFirstVisibleDay(): WeekDay? = findVisibleDay(true)
 

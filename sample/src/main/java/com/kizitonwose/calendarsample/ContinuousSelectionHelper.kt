@@ -1,6 +1,6 @@
 package com.kizitonwose.calendarsample
 
-import com.kizitonwose.calendarview2.utils.yearMonth
+import com.kizitonwose.calendarcore.yearMonth
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit

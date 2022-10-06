@@ -8,8 +8,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import com.kizitonwose.calendarcompose.MonthCalendarState
 import com.kizitonwose.calendarcompose.VisibleItemState
 import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
-import com.kizitonwose.calendarinternal.MonthData
-import com.kizitonwose.calendarinternal.getHeatMapCalendarMonthData
+import com.kizitonwose.calendardata.MonthData
+import com.kizitonwose.calendardata.getHeatMapCalendarMonthData
 import java.time.DayOfWeek
 import java.time.YearMonth
 

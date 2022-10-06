@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.kizitonwose.calendarcore.CalendarMonth
-import com.kizitonwose.calendarinternal.*
+import com.kizitonwose.calendardata.*
 import java.io.Serializable
 import java.time.DayOfWeek
 import java.time.YearMonth

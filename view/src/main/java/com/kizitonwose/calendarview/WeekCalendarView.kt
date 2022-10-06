@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarcore.*
-import com.kizitonwose.calendarinternal.checkDateRange
+import com.kizitonwose.calendardata.checkDateRange
 import com.kizitonwose.calendarview.internal.CalenderPageSnapHelper
 import com.kizitonwose.calendarview.internal.MarginValues
 import com.kizitonwose.calendarview.internal.weekcalendar.WeekCalendarAdapter
