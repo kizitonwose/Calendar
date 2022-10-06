@@ -1,15 +1,12 @@
 package com.kizitonwose.calendarview.internal.weekcalendar
 
-import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.WeekCalendarView
 import com.kizitonwose.calendarview.internal.CalendarLayoutManager
 import com.kizitonwose.calendarview.internal.MarginValues
 import java.time.LocalDate
 
-internal class WeekCalendarLayoutManager(
-    private val calView: WeekCalendarView,
-    @RecyclerView.Orientation orientation: Int,
-) : CalendarLayoutManager<LocalDate, LocalDate>(calView, orientation) {
+internal class WeekCalendarLayoutManager(private val calView: WeekCalendarView) :
+    CalendarLayoutManager<LocalDate, LocalDate>(calView, HORIZONTAL) {
 
     private val adapter: WeekCalendarAdapter
         get() = calView.adapter as WeekCalendarAdapter

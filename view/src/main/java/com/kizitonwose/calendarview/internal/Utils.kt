@@ -2,6 +2,7 @@ package com.kizitonwose.calendarview.internal
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -73,11 +74,14 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
     }
 
     val itemView = itemViewClass?.let {
-        val customLayout = Class.forName(it)
-            .getDeclaredConstructor(Context::class.java)
-            .newInstance(rootLayout.context) as ViewGroup
+        val customLayout = runCatching {
+            Class.forName(it)
+                .getDeclaredConstructor(Context::class.java)
+                .newInstance(rootLayout.context) as ViewGroup
+        }.onFailure { Log.e("CalendarView", "failure loading custom class", it) }
+            .getOrNull()
 
-        customLayout.apply {
+        customLayout?.apply {
             setupRoot(this)
             addView(rootLayout)
         }

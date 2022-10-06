@@ -105,19 +105,6 @@ open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The [RecyclerView.Orientation] used for the layout manager.
-     * This determines the scroll direction of the the calendar.
-     */
-    @Orientation
-    var orientation = HORIZONTAL
-        set(value) {
-            if (field != value) {
-                field = value
-                (layoutManager as? WeekCalendarLayoutManager)?.orientation = value
-            }
-        }
-
-    /**
      * The scrolling behavior of the calendar. If [ScrollMode.PAGED],
      * the calendar will snap to the nearest month after a scroll or swipe action.
      * If [ScrollMode.CONTINUOUS], the calendar scrolls normally.
@@ -193,7 +180,6 @@ open class WeekCalendarView : RecyclerView {
             weekFooterResource =
                 getResourceId(R.styleable.WeekCalendarView_cv_weekFooterResource,
                     weekFooterResource)
-            orientation = getInt(R.styleable.WeekCalendarView_cv_orientation, orientation)
             scrollPaged = getBoolean(R.styleable.WeekCalendarView_cv_scrollPaged, scrollPaged)
             daySize = DaySize.values()[
                     getInt(R.styleable.WeekCalendarView_cv_daySize, daySize.ordinal)
@@ -342,7 +328,7 @@ open class WeekCalendarView : RecyclerView {
         removeOnScrollListener(scrollListenerInternal)
         addOnScrollListener(scrollListenerInternal)
 
-        layoutManager = WeekCalendarLayoutManager(calView = this, orientation)
+        layoutManager = WeekCalendarLayoutManager(this)
         adapter = WeekCalendarAdapter(
             calView = this,
             startDate = startDate,
@@ -358,7 +344,7 @@ open class WeekCalendarView : RecyclerView {
      * the calendar with a large date range instead of updating the range frequently.
      */
     @JvmOverloads
-    fun updateData(
+    fun updateWeekData(
         startDate: LocalDate = requireStartDate(),
         endDate: LocalDate = requireEndDate(),
         firstDayOfWeek: DayOfWeek = requireFirstDayOfWeek(),

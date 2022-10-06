@@ -74,8 +74,8 @@ class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, 
 
         val currentMonth = YearMonth.now()
         binding.exSevenCalendar.setup(
-            currentMonth.minusMonths(3).atStartOfMonth(),
-            currentMonth.plusMonths(3).atEndOfMonth(),
+            currentMonth.minusMonths(5).atStartOfMonth(),
+            currentMonth.plusMonths(5).atEndOfMonth(),
             firstDayOfWeekFromLocale(),
         )
         binding.exSevenCalendar.scrollToDate(LocalDate.now())

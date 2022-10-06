@@ -3,12 +3,6 @@
     <!-- The xml resource that is inflated and used as the day cell view, must be provided. -->
     <attr name="cv_dayViewResource" format="reference" />
 
-    <!--This determines the scroll direction of the the calendar. -->
-    <attr name="cv_orientation" format="enum">
-        <enum name="horizontal" value="0" />
-        <enum name="vertical" value="1" />
-    </attr>
-
     <!-- Determines how outDates are generated for each month on the calendar.
     If set to `endOfRow`, the calendar will generate outDates until
     it reaches the first end of a row. This means that if a month has 6 rows,
@@ -47,7 +41,12 @@
          exclude the name and constructor of this class from code obfuscation if enabled. -->
         <attr name="cv_monthViewClass" format="string" />
 
-        <attr name="cv_orientation" />
+        <!--This determines the scroll direction of the the calendar. -->
+        <attr name="cv_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+
         <attr name="cv_outDateStyle" />
         <attr name="cv_scrollPaged" />
         <attr name="cv_daySize" />
@@ -67,7 +66,6 @@
          exclude the name and constructor of this class from code obfuscation if enabled. -->
         <attr name="cv_weekViewClass" format="string" />
 
-        <attr name="cv_orientation" />
         <attr name="cv_scrollPaged" />
         <attr name="cv_daySize" />
     </declare-styleable>
