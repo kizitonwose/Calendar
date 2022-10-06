@@ -19,15 +19,16 @@ import com.kizitonwose.calendarcore.CalendarMonth
 import com.kizitonwose.calendarcore.DayPosition
 import com.kizitonwose.calendarcore.daysOfWeek
 import com.kizitonwose.calendarsample.ContinuousSelectionHelper.getSelection
-import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isInDateBetween
-import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isOutDateBetween
+import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isInDateBetweenSelection
+import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isOutDateBetweenSelection
+import com.kizitonwose.calendarsample.DateSelection
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example4CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example4CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example4FragmentBinding
 import com.kizitonwose.calendarsample.dateRangeDisplayText
 import com.kizitonwose.calendarsample.displayText
-import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
@@ -45,8 +46,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
     private val today = LocalDate.now()
 
-    private var startDate: LocalDate? = null
-    private var endDate: LocalDate? = null
+    private var selection = DateSelection()
 
     private val headerDateFormatter = DateTimeFormatter.ofPattern("EEE'\n'd MMM")
 
@@ -100,13 +100,10 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                     if (day.position == DayPosition.MonthDate &&
                         (day.date == today || day.date.isAfter(today))
                     ) {
-                        val selection = getSelection(
+                        selection = getSelection(
                             clickedDate = day.date,
-                            selectionStartDate = startDate,
-                            selectionEndDate = endDate,
+                            dateSelection = selection,
                         )
-                        startDate = selection.startDate
-                        endDate = selection.endDate
                         this@Example4Fragment.binding.exFourCalendar.notifyCalendarChanged()
                         bindSummaryViews()
                     }
@@ -114,7 +111,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
             }
         }
 
-        binding.exFourCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exFourCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
@@ -125,8 +122,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                 textView.background = null
                 roundBgView.makeInVisible()
 
-                val startDate = startDate
-                val endDate = endDate
+                val (startDate, endDate) = selection
 
                 when (day.position) {
                     DayPosition.MonthDate -> {
@@ -163,16 +159,14 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                     }
                     // Make the coloured selection background continuous on the invisible in and out dates across various months.
                     DayPosition.InDate ->
-                        if (startDate != null &&
-                            endDate != null &&
-                            isInDateBetween(day.date, startDate, endDate)
+                        if (startDate != null && endDate != null &&
+                            isInDateBetweenSelection(day.date, startDate, endDate)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
                     DayPosition.OutDate ->
-                        if (startDate != null &&
-                            endDate != null &&
-                            isOutDateBetween(day.date, startDate, endDate)
+                        if (startDate != null && endDate != null &&
+                            isOutDateBetweenSelection(day.date, startDate, endDate)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
@@ -192,19 +186,12 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
             }
 
         binding.exFourSaveButton.setOnClickListener click@{
-            val startDate = startDate
-            val endDate = endDate
+            val (startDate, endDate) = selection
             if (startDate != null && endDate != null) {
                 val text = dateRangeDisplayText(startDate, endDate)
                 Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
-            } else {
-                Snackbar.make(
-                    requireView(),
-                    "No selection. Searching all Airbnb listings.",
-                    Snackbar.LENGTH_LONG
-                ).show()
             }
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
         }
 
         bindSummaryViews()
@@ -212,8 +199,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
     private fun bindSummaryViews() {
         binding.exFourStartDateText.apply {
-            if (startDate != null) {
-                text = headerDateFormatter.format(startDate)
+            if (selection.startDate != null) {
+                text = headerDateFormatter.format(selection.startDate)
                 setTextColorRes(R.color.example_4_grey)
             } else {
                 text = getString(R.string.start_date)
@@ -222,8 +209,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         }
 
         binding.exFourEndDateText.apply {
-            if (endDate != null) {
-                text = headerDateFormatter.format(endDate)
+            if (selection.endDate != null) {
+                text = headerDateFormatter.format(selection.endDate)
                 setTextColorRes(R.color.example_4_grey)
             } else {
                 text = getString(R.string.end_date)
@@ -231,9 +218,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
             }
         }
 
-        // Enable save button if a range is selected or no date is selected at all, Airbnb style.
-        binding.exFourSaveButton.isEnabled =
-            endDate != null || (startDate == null && endDate == null)
+        binding.exFourSaveButton.isEnabled = selection.daysBetween != null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -247,8 +232,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
             }
         }
         menu.findItem(R.id.menuItemClear).setOnMenuItemClickListener {
-            startDate = null
-            endDate = null
+            selection = DateSelection()
             binding.exFourCalendar.notifyCalendarChanged()
             bindSummaryViews()
             true

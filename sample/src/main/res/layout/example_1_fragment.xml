@@ -60,8 +60,8 @@
             android:id="@+id/exOneCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cvv_dayViewResource="@layout/example_1_calendar_day"
-            app:cvv_outDateStyle="endOfRow" />
+            app:cv_dayViewResource="@layout/example_1_calendar_day"
+            app:cv_outDateStyle="endOfRow" />
 
         <CheckBox
             android:id="@+id/weekModeCheckBox"

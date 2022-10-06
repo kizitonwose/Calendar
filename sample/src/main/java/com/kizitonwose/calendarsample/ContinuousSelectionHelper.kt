@@ -21,9 +21,9 @@ fun dateRangeDisplayText(startDate: LocalDate, endDate: LocalDate): String {
 object ContinuousSelectionHelper {
     fun getSelection(
         clickedDate: LocalDate,
-        selectionStartDate: LocalDate?,
-        selectionEndDate: LocalDate?,
+        dateSelection: DateSelection,
     ): DateSelection {
+        val (selectionStartDate, selectionEndDate) = dateSelection
         return if (selectionStartDate != null) {
             if (clickedDate < selectionStartDate || selectionEndDate != null) {
                 DateSelection(startDate = clickedDate, endDate = null)
@@ -37,17 +37,29 @@ object ContinuousSelectionHelper {
         }
     }
 
-    fun isInDateBetween(inDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
+    fun isInDateBetweenSelection(
+        inDate: LocalDate,
+        startDate: LocalDate,
+        endDate: LocalDate,
+    ): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (inDate.yearMonth == startDate.yearMonth) return true
         val firstDateInThisMonth = inDate.plusMonths(1).yearMonth.atDay(1)
-        return firstDateInThisMonth >= startDate && firstDateInThisMonth <= endDate && startDate != firstDateInThisMonth
+        return firstDateInThisMonth >= startDate &&
+                firstDateInThisMonth <= endDate &&
+                startDate != firstDateInThisMonth
     }
 
-    fun isOutDateBetween(outDate: LocalDate, startDate: LocalDate, endDate: LocalDate): Boolean {
+    fun isOutDateBetweenSelection(
+        outDate: LocalDate,
+        startDate: LocalDate,
+        endDate: LocalDate,
+    ): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (outDate.yearMonth == endDate.yearMonth) return true
         val lastDateInThisMonth = outDate.minusMonths(1).yearMonth.atEndOfMonth()
-        return lastDateInThisMonth >= startDate && lastDateInThisMonth <= endDate && endDate != lastDateInThisMonth
+        return lastDateInThisMonth >= startDate &&
+                lastDateInThisMonth <= endDate &&
+                endDate != lastDateInThisMonth
     }
 }

@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.DayPosition
-import com.kizitonwose.calendarsample.ContinuousSelectionHelper
+import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isInDateBetweenSelection
+import com.kizitonwose.calendarsample.ContinuousSelectionHelper.isOutDateBetweenSelection
 import com.kizitonwose.calendarsample.DateSelection
 import com.kizitonwose.calendarsample.R
 import java.time.LocalDate
@@ -103,7 +104,7 @@ fun Modifier.backgroundHighlight(
         DayPosition.InDate -> {
             textColor(Color.Transparent)
             if (startDate != null && endDate != null &&
-                ContinuousSelectionHelper.isInDateBetween(day.date, startDate, endDate)
+                isInDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
                     .background(color = continuousSelectionColor)
@@ -112,7 +113,7 @@ fun Modifier.backgroundHighlight(
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
             if (startDate != null && endDate != null &&
-                ContinuousSelectionHelper.isOutDateBetween(day.date, startDate, endDate)
+                isOutDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
                     .background(color = continuousSelectionColor)
@@ -187,9 +188,8 @@ fun Modifier.backgroundHighlightLegacy(
         }
         DayPosition.InDate -> {
             textColor(Color.Transparent)
-            if (startDate != null &&
-                endDate != null &&
-                ContinuousSelectionHelper.isInDateBetween(day.date, startDate, endDate)
+            if (startDate != null && endDate != null &&
+                isInDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
                     .background(color = selectionColor)
@@ -197,9 +197,8 @@ fun Modifier.backgroundHighlightLegacy(
         }
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
-            if (startDate != null &&
-                endDate != null &&
-                ContinuousSelectionHelper.isOutDateBetween(day.date, startDate, endDate)
+            if (startDate != null && endDate != null &&
+                isOutDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
                     .background(color = selectionColor)

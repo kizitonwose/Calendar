@@ -16,10 +16,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendarcompose.WeekCalendar
 import com.kizitonwose.calendarcompose.weekcalendar.rememberWeekCalendarState
-import com.kizitonwose.calendarcore.WeekDay
-import com.kizitonwose.calendarcore.yearMonth
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.displayText
+import com.kizitonwose.calendarsample.getWeekPageTitle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -44,7 +43,7 @@ fun Example5Page(close: () -> Unit = {}) {
         }
         if (!isScrollInProgress.value) {
             val datesInWeek = visibleWeek.value
-            toolBarTitle = getPageTitle(datesInWeek)
+            toolBarTitle = getWeekPageTitle(datesInWeek)
         }
         TopAppBar(
             elevation = 0.dp,
@@ -105,21 +104,6 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
     }
 }
 
-private fun getPageTitle(datesInWeek: List<WeekDay>): String {
-    val firstDate = datesInWeek.first().date
-    val lastDate = datesInWeek.last().date
-    return when {
-        firstDate.yearMonth == lastDate.yearMonth -> {
-            firstDate.yearMonth.displayText()
-        }
-        firstDate.year == lastDate.year -> {
-            "${firstDate.month.displayText(short = false)} - ${lastDate.yearMonth.displayText()}"
-        }
-        else -> {
-            "${firstDate.yearMonth.displayText()} - ${lastDate.yearMonth.displayText()}"
-        }
-    }
-}
 
 @Preview
 @Composable

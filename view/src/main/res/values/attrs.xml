@@ -1,48 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CalendarView">
+    <!-- The xml resource that is inflated and used as the day cell view, must be provided. -->
+    <attr name="cv_dayViewResource" format="reference" />
 
-        <!-- The xml resource that is inflated and used as the day cell view, must be provided. -->
-        <attr name="cvv_dayViewResource" format="reference" />
+    <!--This determines the scroll direction of the the calendar. -->
+    <attr name="cv_orientation" format="enum">
+        <enum name="horizontal" value="0" />
+        <enum name="vertical" value="1" />
+    </attr>
+
+    <!-- Determines how outDates are generated for each month on the calendar.
+    If set to `endOfRow`, the calendar will generate outDates until
+    it reaches the first end of a row. This means that if a month has 6 rows,
+    it will display 6 rows and if a month has 5 rows, it will display 5 rows.
+    If set to `endOfGrid`, the calendar will generate outDates until
+    it reaches the end of a 6 x 7 grid. This means that all months will have 6 rows. -->
+    <attr name="cv_outDateStyle" format="enum">
+        <enum name="endOfRow" value="0" />
+        <enum name="endOfGrid" value="1" />
+    </attr>
+
+    <!-- The scrolling behavior of the calendar. If `paged`, the calendar
+    will snap to the nearest month/week after a scroll or swipe action.
+    If `continuous`, the calendar scrolls normally. -->
+    <attr name="cv_scrollPaged" format="boolean" />
+
+    <!-- TODO: DOCUMENT -->
+    <attr name="cv_daySize" format="enum">
+        <enum name="square" value="0" />
+        <enum name="seventhWidth" value="1" />
+        <enum name="freeForm" value="2" />
+    </attr>
+
+    <declare-styleable name="CalendarView">
+        <attr name="cv_dayViewResource" />
 
         <!-- The xml resource that is inflated and used as a header for every month. -->
-        <attr name="cvv_monthHeaderResource" format="reference" />
+        <attr name="cv_monthHeaderResource" format="reference" />
 
         <!-- The xml resource that is inflated and used as a footer for every month. -->
-        <attr name="cvv_monthFooterResource" format="reference" />
+        <attr name="cv_monthFooterResource" format="reference" />
+
 
         <!-- A ViewGroup which is instantiated and used as the background for each month.
          This class must have a constructor which takes only a Context. You should
          exclude the name and constructor of this class from code obfuscation if enabled. -->
-        <attr name="cvv_monthViewClass" format="string" />
+        <attr name="cv_monthViewClass" format="string" />
 
+        <attr name="cv_orientation" />
+        <attr name="cv_outDateStyle" />
+        <attr name="cv_scrollPaged" />
+        <attr name="cv_daySize" />
+    </declare-styleable>
 
-        <!--This determines the scroll direction of the the calendar. -->
-        <attr name="cvv_orientation" format="enum">
-            <enum name="horizontal" value="0" />
-            <enum name="vertical" value="1" />
-        </attr>
+    <declare-styleable name="WeekCalendarView">
+        <attr name="cv_dayViewResource" />
 
-        <!-- Determines how outDates are generated for each month on the calendar.
-        If set to `endOfRow`, the calendar will generate outDates until
-        it reaches the first end of a row. This means that if a month has 6 rows,
-        it will display 6 rows and if a month has 5 rows, it will display 5 rows.
-        If set to `endOfGrid`, the calendar will generate outDates until
-        it reaches the end of a 6 x 7 grid. This means that all months will have 6 rows.
-        If set to `none`, no outDates will be generated. -->
-        <attr name="cvv_outDateStyle" format="enum">
-            <enum name="endOfRow" value="0" />
-            <enum name="endOfGrid" value="1" />
-        </attr>
+        <!-- The xml resource that is inflated and used as a header for every month. -->
+        <attr name="cv_weekHeaderResource" format="reference" />
 
-        <!-- The scrolling behavior of the calendar. If `paged`, the calendar
-        will snap to the nearest month after a scroll or swipe action.
-        If `continuous`, the calendar scrolls normally. -->
-        <attr name="cvv_scrollPaged" format="boolean" />
+        <!-- The xml resource that is inflated and used as a footer for every week. -->
+        <attr name="cv_weekFooterResource" format="reference" />
 
-        <!-- If the day cells should have equal width and height. If true, each
-        view's width and height will be the width of the calender divided by 7. -->
-        <attr name="cvv_daySizeSquare" format="boolean" />
+        <!-- A ViewGroup which is instantiated and used as the background for each week.
+         This class must have a constructor which takes only a Context. You should
+         exclude the name and constructor of this class from code obfuscation if enabled. -->
+        <attr name="cv_weekViewClass" format="string" />
 
+        <attr name="cv_orientation" />
+        <attr name="cv_scrollPaged" />
+        <attr name="cv_daySize" />
     </declare-styleable>
 </resources>

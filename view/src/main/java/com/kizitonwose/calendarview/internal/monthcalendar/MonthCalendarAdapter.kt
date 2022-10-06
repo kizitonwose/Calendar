@@ -1,15 +1,10 @@
-package com.kizitonwose.calendarview.internal
+package com.kizitonwose.calendarview.internal.monthcalendar
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Rect
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarcore.*
 import com.kizitonwose.calendarinternal.DataStore
@@ -17,14 +12,16 @@ import com.kizitonwose.calendarinternal.getCalendarMonthData
 import com.kizitonwose.calendarinternal.getMonthIndex
 import com.kizitonwose.calendarinternal.getMonthIndicesCount
 import com.kizitonwose.calendarview.CalendarView
-import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
+import com.kizitonwose.calendarview.internal.NO_INDEX
+import com.kizitonwose.calendarview.internal.setupItemRoot
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
-internal class CalendarAdapter(
+internal class MonthCalendarAdapter(
     private val calView: CalendarView,
     private var outDateStyle: OutDateStyle,
     private var startMonth: YearMonth,
@@ -36,11 +33,6 @@ internal class CalendarAdapter(
     private val dataStore = DataStore { offset ->
         getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle).calendarMonth
     }
-
-    // Values of headerViewId & footerViewId will be
-    // replaced with IDs set in the XML if present.
-    private var headerViewId = ViewCompat.generateViewId()
-    private var footerViewId = ViewCompat.generateViewId()
 
     init {
         setHasStableIds(true)
@@ -55,89 +47,29 @@ internal class CalendarAdapter(
 
     private fun getItem(position: Int): CalendarMonth = dataStore[position]
 
-    override fun getItemId(position: Int): Long = getItem(position).hashCode().toLong()
+    override fun getItemId(position: Int): Long = getItem(position).yearMonth.hashCode().toLong()
 
     override fun getItemCount(): Int = itemCount
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MonthViewHolder {
-        val context = parent.context
-        val rootLayout = LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
-        }
-
-        if (calView.monthHeaderResource != 0) {
-            val monthHeaderView = rootLayout.inflate(calView.monthHeaderResource)
-            // Don't overwrite ID set by the user.
-            if (monthHeaderView.id == View.NO_ID) {
-                monthHeaderView.id = headerViewId
-            } else {
-                headerViewId = monthHeaderView.id
-            }
-            rootLayout.addView(monthHeaderView)
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        val dayConfig = DayConfig(
-            daySizeSquare = calView.daySizeSquare,
-            calView.dayViewResource,
-            calView.dayBinder as DayBinder<ViewContainer>
+        val content = setupItemRoot(
+            itemMargins = calView.monthMargins,
+            daySize = calView.daySize,
+            context = calView.context,
+            dayViewResource = calView.dayViewResource,
+            itemHeaderResource = calView.monthHeaderResource,
+            itemFooterResource = calView.monthFooterResource,
+            weekSize = 6,
+            itemViewClass = calView.monthViewClass,
+            dayBinder = calView.dayBinder as MonthDayBinder,
         )
-
-        val weekHolders = (1..6)
-            .map { WeekHolder(dayConfig.daySizeSquare, (1..7).map { DayHolder(dayConfig) }) }
-            .onEach { weekHolder -> rootLayout.addView(weekHolder.inflateWeekView(rootLayout)) }
-
-        if (calView.monthFooterResource != 0) {
-            val monthFooterView = rootLayout.inflate(calView.monthFooterResource)
-            // Don't overwrite ID set by the user.
-            if (monthFooterView.id == View.NO_ID) {
-                monthFooterView.id = footerViewId
-            } else {
-                footerViewId = monthFooterView.id
-            }
-            rootLayout.addView(monthFooterView)
-        }
-
-        fun setupRoot(root: ViewGroup) {
-            ViewCompat.setPaddingRelative(
-                root,
-                calView.monthPaddingStart,
-                calView.monthPaddingTop,
-                calView.monthPaddingEnd,
-                calView.monthPaddingBottom
-            )
-            val width = if (calView.daySizeSquare) MATCH_PARENT else WRAP_CONTENT
-            root.layoutParams = ViewGroup.MarginLayoutParams(width, WRAP_CONTENT).apply {
-                bottomMargin = calView.monthMarginBottom
-                topMargin = calView.monthMarginTop
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    marginStart = calView.monthMarginStart
-                    marginEnd = calView.monthMarginEnd
-                } else {
-                    leftMargin = calView.monthMarginStart
-                    rightMargin = calView.monthMarginEnd
-                }
-            }
-        }
-
-        val userRoot = calView.monthViewClass?.let {
-            val customLayout = Class.forName(it)
-                .getDeclaredConstructor(Context::class.java)
-                .newInstance(context) as ViewGroup
-
-            customLayout.apply {
-                setupRoot(this)
-                addView(rootLayout)
-            }
-        } ?: rootLayout.apply { setupRoot(this) }
 
         @Suppress("UNCHECKED_CAST")
         return MonthViewHolder(
-            rootLayout = userRoot,
-            headerViewId = headerViewId,
-            footerViewId = footerViewId,
-            weekHolders = weekHolders,
+            rootLayout = content.itemView,
+            headerView = content.headerView,
+            footerView = content.footerView,
+            weekHolders = content.weekHolders,
             monthHeaderBinder = calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
             monthFooterBinder = calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
         )
@@ -207,8 +139,8 @@ internal class CalendarAdapter(
                 // paged mode and just matches parent's height instead.
                 // Only happens when the CalenderView wraps its height.
                 if (calView.scrollPaged && calView.layoutParams.height == WRAP_CONTENT) {
-                    val visibleVH = calView.findViewHolderForAdapterPosition(visibleItemPos)
-                            as? MonthViewHolder ?: return
+                    val visibleVH =
+                        calView.findViewHolderForAdapterPosition(visibleItemPos) ?: return
                     // Fixes #199, #266
                     visibleVH.itemView.requestLayout()
                 }
@@ -225,13 +157,11 @@ internal class CalendarAdapter(
     }
 
     internal fun getAdapterPosition(day: CalendarDay): Int {
-        val index = getAdapterPosition(day.positionYearMonth)
-        if (!indexInCount(index, itemCount)) return NO_INDEX
-        return index
+        return getAdapterPosition(day.positionYearMonth)
     }
 
-    private val layoutManager: CalendarLayoutManager
-        get() = calView.layoutManager as CalendarLayoutManager
+    private val layoutManager: MonthCalendarLayoutManager
+        get() = calView.layoutManager as MonthCalendarLayoutManager
 
     fun findFirstVisibleMonth(): CalendarMonth? =
         dataStore.getOrNull(findFirstVisibleMonthPosition())
@@ -260,7 +190,7 @@ internal class CalendarAdapter(
         return dataStore[visibleIndex].weekDays.flatten()
             .run { if (isFirst) this else reversed() }
             .firstOrNull {
-                val dayView = visibleItemView.findViewWithTag<View>(it.date.hashCode())
+                val dayView = visibleItemView.findViewWithTag<View>(it.hashCode())
                     ?: return@firstOrNull false
                 dayView.getGlobalVisibleRect(dayRect)
                 dayRect.intersect(monthRect)
@@ -282,10 +212,6 @@ internal class CalendarAdapter(
         dataStore.clear()
         notifyDataSetChanged()
     }
-}
-
-private fun indexInCount(index: Int, count: Int): Boolean {
-    return index < count
 }
 
 // Find the actual month on the calendar that owns this date.

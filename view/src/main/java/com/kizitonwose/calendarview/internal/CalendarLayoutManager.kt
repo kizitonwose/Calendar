@@ -1,77 +1,73 @@
 package com.kizitonwose.calendarview.internal
 
-import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarcore.CalendarDay
-import com.kizitonwose.calendarview.CalendarView
-import java.time.YearMonth
 
-internal class CalendarLayoutManager(
-    private val calView: CalendarView,
+internal abstract class CalendarLayoutManager<IndexData, DayData>(
+    private val calView: RecyclerView,
     @RecyclerView.Orientation orientation: Int,
 ) : LinearLayoutManager(calView.context, orientation, false) {
 
-    private val adapter: CalendarAdapter
-        get() = calView.adapter as CalendarAdapter
+    abstract fun getaItemAdapterPosition(data: IndexData): Int
+    abstract fun getaDayAdapterPosition(data: DayData): Int
+    abstract fun getItemMargins(): MarginValues
+    abstract fun scrollPaged(): Boolean
+    abstract fun notifyScrollListenerIfNeeded()
 
-    private val context: Context
-        get() = calView.context
-
-    fun scrollToMonth(month: YearMonth) {
-        val position = adapter.getAdapterPosition(month)
+    fun scrollToIndex(indexData: IndexData) {
+        val position = getaItemAdapterPosition(indexData)
         if (position == NO_INDEX) return
         scrollToPositionWithOffset(position, 0)
-        calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
+        calView.post { notifyScrollListenerIfNeeded() }
     }
 
-    fun smoothScrollToMonth(month: YearMonth) {
-        val position = adapter.getAdapterPosition(month)
+    fun smoothScrollToIndex(indexData: IndexData) {
+        val position = getaItemAdapterPosition(indexData)
         if (position == NO_INDEX) return
         startSmoothScroll(CalendarSmoothScroller(position, null))
     }
 
-    fun smoothScrollToDay(day: CalendarDay) {
-        val monthPosition = adapter.getAdapterPosition(day)
-        if (monthPosition == NO_INDEX) return
+    fun smoothScrollToDay(day: DayData) {
+        val indexPosition = getaDayAdapterPosition(day)
+        if (indexPosition == NO_INDEX) return
         // Can't target a specific day in a paged calendar.
-        val isPaged = calView.scrollPaged
-        startSmoothScroll(CalendarSmoothScroller(monthPosition, if (isPaged) null else day))
+        startSmoothScroll(CalendarSmoothScroller(indexPosition, if (scrollPaged()) null else day))
     }
 
-    fun scrollToDay(day: CalendarDay) {
-        val monthPosition = adapter.getAdapterPosition(day)
-        if (monthPosition == NO_INDEX) return
-        scrollToPositionWithOffset(monthPosition, 0)
+    fun scrollToDay(day: DayData) {
+        val indexPosition = getaDayAdapterPosition(day)
+        if (indexPosition == NO_INDEX) return
+        scrollToPositionWithOffset(indexPosition, 0)
         // Can't target a specific day in a paged calendar.
-        if (calView.scrollPaged) {
-            calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
+        if (scrollPaged()) {
+            calView.post { notifyScrollListenerIfNeeded() }
         } else {
             calView.post {
-                val viewHolder =
-                    calView.findViewHolderForAdapterPosition(monthPosition) as? MonthViewHolder
-                        ?: return@post
-                val offset = calculateDayViewOffsetInParent(day, viewHolder.itemView)
-                scrollToPositionWithOffset(monthPosition, -offset)
-                calView.post { adapter.notifyMonthScrollListenerIfNeeded() }
+                val itemView = calView.findViewHolderForAdapterPosition(indexPosition)?.itemView
+                    ?: return@post
+                val offset = calculateDayViewOffsetInParent(day, itemView)
+                scrollToPositionWithOffset(indexPosition, -offset)
+                calView.post { notifyScrollListenerIfNeeded() }
             }
         }
     }
 
-    private fun calculateDayViewOffsetInParent(day: CalendarDay, itemView: View): Int {
-        val dayView = itemView.findViewWithTag<View>(day.date.hashCode()) ?: return 0
+    private fun calculateDayViewOffsetInParent(day: DayData, itemView: View): Int {
+        val dayView = itemView.findViewWithTag<View>(day.hashCode()) ?: return 0
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)
-        return if (calView.isVertical) rect.top + calView.monthMarginTop else rect.left + calView.monthMarginStart
+        val isVertical = orientation == VERTICAL
+        val margins = getItemMargins()
+        return if (isVertical) rect.top + margins.top else rect.left + margins.start
     }
 
-    private inner class CalendarSmoothScroller(position: Int, val day: CalendarDay?) :
-        LinearSmoothScroller(context) {
+    private inner class CalendarSmoothScroller(position: Int, val day: DayData?) :
+        LinearSmoothScroller(calView.context) {
 
         init {
             targetPosition = position

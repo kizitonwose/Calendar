@@ -68,8 +68,8 @@ fun getHeatMapCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-fun getMonthIndex(startMonth: YearMonth, endMonth: YearMonth): Int {
-    return ChronoUnit.MONTHS.between(startMonth, endMonth).toInt()
+fun getMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Int {
+    return ChronoUnit.MONTHS.between(startMonth, targetMonth).toInt()
 }
 
 fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {

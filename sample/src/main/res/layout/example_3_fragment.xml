@@ -22,8 +22,8 @@
                 android:id="@+id/exThreeCalendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cvv_dayViewResource="@layout/example_3_calendar_day"
-                app:cvv_monthHeaderResource="@layout/example_3_calendar_header" />
+                app:cv_dayViewResource="@layout/example_3_calendar_day"
+                app:cv_monthHeaderResource="@layout/example_3_calendar_header" />
 
             <TextView
                 android:id="@+id/exThreeSelectedDateText"

@@ -18,7 +18,7 @@ import com.kizitonwose.calendarsample.databinding.Example5CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example5CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example5EventItemViewBinding
 import com.kizitonwose.calendarsample.databinding.Example5FragmentBinding
-import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
@@ -112,7 +112,7 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                 }
             }
         }
-        binding.exFiveCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exFiveCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day

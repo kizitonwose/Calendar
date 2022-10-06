@@ -18,7 +18,7 @@ import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example2CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example2CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example2FragmentBinding
-import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
@@ -78,7 +78,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
             }
         }
 
-        binding.exTwoCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exTwoCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day

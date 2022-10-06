@@ -12,17 +12,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
+import com.kizitonwose.calendarcore.*
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.view.*
-import com.kizitonwose.calendarview2.CalendarView2
-import com.kizitonwose.calendarview2.model.CalendarDay
-import com.kizitonwose.calendarview2.model.CalendarMonth
-import com.kizitonwose.calendarview2.model.DayOwner
-import com.kizitonwose.calendarview2.ui.DayBinder
-import com.kizitonwose.calendarview2.ui.MonthHeaderFooterBinder
-import com.kizitonwose.calendarview2.ui.ViewContainer
-import com.kizitonwose.calendarview2.utils.daysOfWeek
-import com.kizitonwose.calendarview2.utils.yearMonth
+import com.kizitonwose.calendarview.CalendarView
+import com.kizitonwose.calendarview.MonthDayBinder
+import com.kizitonwose.calendarview.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ViewContainer
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -31,7 +27,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.Thread.sleep
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -59,22 +54,23 @@ class CalenderViewTests {
 
     @Test
     fun dayBinderIsCalledOnDayChanged() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0,
+            click()))
 
         class DayViewContainer(view: View) : ViewContainer(view)
 
         val calendarView =
-            findFragment<Example1Fragment>().findViewById<CalendarView2>(R.id.exOneCalendar)
+            findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
         var boundDay: CalendarDay? = null
 
         val changedDate = currentMonth.atDay(4)
 
         homeScreenRule.runOnUiThread {
-            calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+            calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, day: CalendarDay) {
-                    boundDay = day
+                override fun bind(container: DayViewContainer, value: CalendarDay) {
+                    boundDay = value
                 }
             }
         }
@@ -90,26 +86,27 @@ class CalenderViewTests {
         sleep(2000)
 
         assertTrue(boundDay?.date == changedDate)
-        assertTrue(boundDay?.owner == DayOwner.THIS_MONTH)
+        assertTrue(boundDay?.position == DayPosition.MonthDate)
     }
 
     @Test
     fun allBindersAreCalledOnMonthChanged() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1,
+            click()))
 
         class TestViewContainer(view: View) : ViewContainer(view)
 
         val calendarView =
-            findFragment<Example2Fragment>().findViewById<CalendarView2>(R.id.exTwoCalendar)
+            findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
 
         val boundDays = mutableSetOf<CalendarDay>()
         var boundHeaderMonth: CalendarMonth? = null
 
         homeScreenRule.runOnUiThread {
-            calendarView.dayBinder = object : DayBinder<TestViewContainer> {
+            calendarView.dayBinder = object : MonthDayBinder<TestViewContainer> {
                 override fun create(view: View) = TestViewContainer(view)
-                override fun bind(container: TestViewContainer, day: CalendarDay) {
-                    boundDays.add(day)
+                override fun bind(container: TestViewContainer, value: CalendarDay) {
+                    boundDays.add(value)
                 }
             }
             calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<TestViewContainer> {
@@ -133,17 +130,22 @@ class CalenderViewTests {
         sleep(2000)
 
         assertTrue(boundHeaderMonth?.yearMonth == currentMonth)
-        assertTrue(boundDays.count { it.owner == DayOwner.THIS_MONTH && it.date.yearMonth == currentMonth } == currentMonth.lengthOfMonth())
+        val monthDatesCount = boundDays.count {
+            it.position == DayPosition.MonthDate && it.date.yearMonth == currentMonth
+        }
+        assertTrue(monthDatesCount == currentMonth.lengthOfMonth())
     }
 
     @Test
     fun programmaticScrollWorksAsExpected() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(4,
+            click()))
 
         val calendarView =
-            findFragment<Example5Fragment>().findViewById<CalendarView2>(R.id.exFiveCalendar)
+            findFragment<Example5Fragment>().findViewById<CalendarView>(R.id.exFiveCalendar)
 
-        assertTrue(calendarView.findViewWithTag<View>(currentMonth.atDay(1).hashCode()) != null)
+        assertTrue(calendarView.findViewWithTag<View>(currentMonth.atDay(1).asMonthDay()
+            .hashCode()) != null)
 
         val nextFourMonths = currentMonth.plusMonths(4)
 
@@ -153,16 +155,19 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        assertTrue(calendarView.findViewWithTag<View>(currentMonth.atDay(1).hashCode()) == null)
-        assertTrue(calendarView.findViewWithTag<View>(nextFourMonths.atDay(1).hashCode()) != null)
+        assertTrue(calendarView.findViewWithTag<View>(currentMonth.atDay(1).asMonthDay()
+            .hashCode()) == null)
+        assertTrue(calendarView.findViewWithTag<View>(nextFourMonths.atDay(1).asMonthDay()
+            .hashCode()) != null)
     }
 
     @Test
     fun scrollToDateWorksOnVerticalOrientation() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1,
+            click()))
 
         val calendarView =
-            findFragment<Example2Fragment>().findViewById<CalendarView2>(R.id.exTwoCalendar)
+            findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
 
         val targetDate = currentMonth.plusMonths(4).atDay(20)
 
@@ -172,7 +177,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val dayView = calendarView.findViewWithTag<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewWithTag<View>(targetDate.asMonthDay().hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -185,10 +190,11 @@ class CalenderViewTests {
 
     @Test
     fun scrollToDateWorksOnHorizontalOrientation() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5,
+            click()))
 
         val calendarView =
-            findFragment<Example6Fragment>().findViewById<CalendarView2>(R.id.exSixCalendar)
+            findFragment<Example6Fragment>().findViewById<CalendarView>(R.id.exSixCalendar)
 
         val targetDate = currentMonth.plusMonths(3).atDay(18)
 
@@ -198,7 +204,7 @@ class CalenderViewTests {
 
         sleep(2000)
 
-        val dayView = calendarView.findViewWithTag<View>(targetDate.hashCode())
+        val dayView = calendarView.findViewWithTag<View>(targetDate.asMonthDay().hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -211,10 +217,11 @@ class CalenderViewTests {
 
     @Test
     fun monthScrollListenerIsCalledWhenScrolled() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0,
+            click()))
 
         val calendarView =
-            findFragment<Example1Fragment>().findViewById<CalendarView2>(R.id.exOneCalendar)
+            findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
         var targetCalMonth: CalendarMonth? = null
         calendarView.monthScrollListener = { month ->
@@ -252,10 +259,11 @@ class CalenderViewTests {
 
     @Test
     fun findVisibleDaysAndMonthsWorksOnVerticalOrientation() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1,
+            click()))
 
         val calendarView =
-            findFragment<Example2Fragment>().findViewById<CalendarView2>(R.id.exTwoCalendar)
+            findFragment<Example2Fragment>().findViewById<CalendarView>(R.id.exTwoCalendar)
 
         homeScreenRule.runOnUiThread {
             // Scroll to a random date
@@ -279,10 +287,11 @@ class CalenderViewTests {
 
     @Test
     fun findVisibleDaysAndMonthsWorksOnHorizontalOrientation() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5,
+            click()))
 
         val calendarView =
-            findFragment<Example6Fragment>().findViewById<CalendarView2>(R.id.exSixCalendar)
+            findFragment<Example6Fragment>().findViewById<CalendarView>(R.id.exSixCalendar)
 
         homeScreenRule.runOnUiThread {
             // Scroll to a random date
@@ -308,10 +317,11 @@ class CalenderViewTests {
 
     @Test
     fun multipleSetupCallsRetainPositionIfCalendarHasBoundaries() {
-        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.examplesRv)).perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0,
+            click()))
 
         val calendarView =
-            findFragment<Example1Fragment>().findViewById<CalendarView2>(R.id.exOneCalendar)
+            findFragment<Example1Fragment>().findViewById<CalendarView>(R.id.exOneCalendar)
 
         val targetVisibleMonth = currentMonth.plusMonths(2)
 
@@ -339,28 +349,11 @@ class CalenderViewTests {
         assertTrue(calendarView.findFirstVisibleMonth() == targetVisibleCalMonth)
     }
 
-    @Test
-    fun completionBlocksAreCalledOnTheMainThread() {
-        val calendarView = CalendarView2(homeScreenRule.activity)
-        homeScreenRule.runOnUiThread {
-            val threadName = Thread.currentThread().name
-            calendarView.setupAsync(YearMonth.now(), YearMonth.now().plusMonths(10), DayOfWeek.SUNDAY) {
-                assertTrue(threadName == Thread.currentThread().name)
-                calendarView.updateMonthConfigurationAsync {
-                    assertTrue(threadName == Thread.currentThread().name)
-                    calendarView.updateMonthRangeAsync {
-                        assertTrue(threadName == Thread.currentThread().name)
-                    }
-                }
-            }
-        }
-        sleep(3000)
-    }
-
     private inline fun <reified T : Fragment> findFragment(): T {
         return homeScreenRule.activity.supportFragmentManager
             .findFragmentByTag(T::class.java.simpleName) as T
     }
 
     private fun <T : View> Fragment.findViewById(@IdRes id: Int): T = requireView().findViewById(id)
+    private fun LocalDate.asMonthDay(): CalendarDay = CalendarDay(this, DayPosition.MonthDate)
 }

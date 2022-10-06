@@ -1,7 +1,6 @@
 package com.kizitonwose.calendarsample.view
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,13 +32,6 @@ class CalendarViewActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = examplesAdapter
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> onBackPressed().let { true }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 }

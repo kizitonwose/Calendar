@@ -17,9 +17,10 @@ import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example6FragmentBinding
-import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
+import com.kizitonwose.calendarview.internal.MarginValues
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
@@ -49,10 +50,12 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
             // Add margins around our card view.
             val horizontalMargin = dpToPx(8, requireContext())
             val verticalMargin = dpToPx(14, requireContext())
-            setMonthMargins(start = horizontalMargin,
+            monthMargins = MarginValues(
+                start = horizontalMargin,
                 end = horizontalMargin,
                 top = verticalMargin,
-                bottom = verticalMargin)
+                bottom = verticalMargin,
+            )
         }
 
         // We don't want a square calendar.
@@ -62,7 +65,7 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = Example6CalendarDayBinding.bind(view).exSixDayText
         }
-        binding.exSixCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exSixCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View): DayViewContainer {
                 view.updateLayoutParams<ViewGroup.LayoutParams> {
                     width = dayWidth

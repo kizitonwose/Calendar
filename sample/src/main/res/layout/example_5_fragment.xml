@@ -73,9 +73,9 @@
             android:id="@+id/exFiveCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cvv_dayViewResource="@layout/example_5_calendar_day"
-            app:cvv_monthHeaderResource="@layout/example_5_calendar_header"
-            app:cvv_outDateStyle="endOfGrid" />
+            app:cv_dayViewResource="@layout/example_5_calendar_day"
+            app:cv_monthHeaderResource="@layout/example_5_calendar_header"
+            app:cv_outDateStyle="endOfGrid" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exFiveRv"

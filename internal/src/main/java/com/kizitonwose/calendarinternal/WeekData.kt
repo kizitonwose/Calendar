@@ -27,25 +27,25 @@ fun getWeekCalendarAdjustedRange(
 fun getWeekCalendarData(
     startDateAdjusted: LocalDate,
     offset: Int,
-    calendarStartDate: LocalDate,
-    calendarEndDate: LocalDate,
+    desiredStartDate: LocalDate,
+    desiredEndDate: LocalDate,
 ): WeekData {
     val firstDayInWeek = startDateAdjusted.plusWeeks(offset.toLong())
-    return WeekData(firstDayInWeek, calendarStartDate, calendarEndDate)
+    return WeekData(firstDayInWeek, desiredStartDate, desiredEndDate)
 }
 
 data class WeekData internal constructor(
     val firstDayInWeek: LocalDate,
-    val calendarStartDate: LocalDate,
-    val calendarEndDate: LocalDate,
+    private val desiredStartDate: LocalDate,
+    private val desiredEndDate: LocalDate,
 ) {
     val days = (0 until 7).map { dayOffset -> getDay(dayOffset) }
 
     private fun getDay(dayOffset: Int): WeekDay {
         val date = firstDayInWeek.plusDays(dayOffset.toLong())
         val position = when {
-            date < calendarStartDate -> WeekDayPosition.InDate
-            date > calendarEndDate -> WeekDayPosition.OutDate
+            date < desiredStartDate -> WeekDayPosition.InDate
+            date > desiredEndDate -> WeekDayPosition.OutDate
             else -> WeekDayPosition.RangeDate
         }
         return WeekDay(date, position)

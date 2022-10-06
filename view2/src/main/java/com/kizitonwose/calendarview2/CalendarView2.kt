@@ -265,26 +265,28 @@ open class CalendarView2 : RecyclerView {
             defStyleRes
         ) {
             dayViewResource =
-                getResourceId(R.styleable.CalendarView2_cv_dayViewResource, dayViewResource)
+                getResourceId(R.styleable.CalendarView2_cv2_dayViewResource, dayViewResource)
             monthHeaderResource =
-                getResourceId(R.styleable.CalendarView2_cv_monthHeaderResource, monthHeaderResource)
+                getResourceId(R.styleable.CalendarView2_cv2_monthHeaderResource,
+                    monthHeaderResource)
             monthFooterResource =
-                getResourceId(R.styleable.CalendarView2_cv_monthFooterResource, monthFooterResource)
-            orientation = getInt(R.styleable.CalendarView2_cv_orientation, orientation)
+                getResourceId(R.styleable.CalendarView2_cv2_monthFooterResource,
+                    monthFooterResource)
+            orientation = getInt(R.styleable.CalendarView2_cv2_orientation, orientation)
             scrollMode = ScrollMode.values()[
-                    getInt(R.styleable.CalendarView2_cv_scrollMode, scrollMode.ordinal)
+                    getInt(R.styleable.CalendarView2_cv2_scrollMode, scrollMode.ordinal)
             ]
             outDateStyle = OutDateStyle.values()[
-                    getInt(R.styleable.CalendarView2_cv_outDateStyle, outDateStyle.ordinal)
+                    getInt(R.styleable.CalendarView2_cv2_outDateStyle, outDateStyle.ordinal)
             ]
             inDateStyle = InDateStyle.values()[
-                    getInt(R.styleable.CalendarView2_cv_inDateStyle, inDateStyle.ordinal)
+                    getInt(R.styleable.CalendarView2_cv2_inDateStyle, inDateStyle.ordinal)
             ]
-            maxRowCount = getInt(R.styleable.CalendarView2_cv_maxRowCount, maxRowCount)
-            monthViewClass = getString(R.styleable.CalendarView2_cv_monthViewClass)
-            hasBoundaries = getBoolean(R.styleable.CalendarView2_cv_hasBoundaries, hasBoundaries)
+            maxRowCount = getInt(R.styleable.CalendarView2_cv2_maxRowCount, maxRowCount)
+            monthViewClass = getString(R.styleable.CalendarView2_cv2_monthViewClass)
+            hasBoundaries = getBoolean(R.styleable.CalendarView2_cv2_hasBoundaries, hasBoundaries)
             wrappedPageHeightAnimationDuration = getInt(
-                R.styleable.CalendarView2_cv_wrappedPageHeightAnimationDuration,
+                R.styleable.CalendarView2_cv2_wrappedPageHeightAnimationDuration,
                 wrappedPageHeightAnimationDuration
             )
         }

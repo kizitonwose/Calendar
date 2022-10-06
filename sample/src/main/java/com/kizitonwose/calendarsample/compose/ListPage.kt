@@ -45,7 +45,7 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
     ),
     Example5(
         title = "Example 5",
-        subtitle = "Week Calendar - Single selection, paged scroll and visible items observation.",
+        subtitle = "Week Calendar - Single selection, paged scroll and visible item observation.",
         showToolBar = false
     ),
     Example6(

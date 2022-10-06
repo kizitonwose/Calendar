@@ -74,8 +74,7 @@ fun Example2Page(
                             ) {
                                 selection = getSelection(
                                     clickedDate = day.date,
-                                    selectionStartDate = selection.startDate,
-                                    selectionEndDate = selection.endDate,
+                                    dateSelection = selection,
                                 )
                             }
                         }

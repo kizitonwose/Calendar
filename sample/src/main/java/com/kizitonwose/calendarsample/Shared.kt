@@ -3,6 +3,8 @@ package com.kizitonwose.calendarsample
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import com.kizitonwose.calendarcore.WeekDay
+import com.kizitonwose.calendarcore.yearMonth
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.YearMonth
@@ -31,4 +33,20 @@ fun Context.findActivity(): Activity {
         context = context.baseContext
     }
     throw IllegalStateException("no activity")
+}
+
+fun getWeekPageTitle(datesInWeek: List<WeekDay>): String {
+    val firstDate = datesInWeek.first().date
+    val lastDate = datesInWeek.last().date
+    return when {
+        firstDate.yearMonth == lastDate.yearMonth -> {
+            firstDate.yearMonth.displayText()
+        }
+        firstDate.year == lastDate.year -> {
+            "${firstDate.month.displayText(short = false)} - ${lastDate.yearMonth.displayText()}"
+        }
+        else -> {
+            "${firstDate.yearMonth.displayText()} - ${lastDate.yearMonth.displayText()}"
+        }
+    }
 }

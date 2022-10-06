@@ -107,7 +107,7 @@ private fun getMonthWithYear(layoutInfo: CalendarLayoutInfo, density: Density): 
 private fun HeatMapCalendarPreview() {
     val state = rememberHeatMapCalendarState(
         startMonth = YearMonth.now(),
-        endMonth = YearMonth.now().plusMonths(10),
+        endMonth = YearMonth.now().plusMonths(2),
         firstVisibleMonth = YearMonth.now().plusMonths(2),
         firstDayOfWeek = DayOfWeek.MONDAY,
     )

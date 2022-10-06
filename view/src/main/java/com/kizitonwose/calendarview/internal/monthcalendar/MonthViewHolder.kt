@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarview.internal
+package com.kizitonwose.calendarview.internal.monthcalendar
 
 import android.view.View
 import android.view.ViewGroup
@@ -7,18 +7,16 @@ import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
+import com.kizitonwose.calendarview.internal.WeekHolder
 
 internal class MonthViewHolder constructor(
     rootLayout: ViewGroup,
-    headerViewId: Int,
-    footerViewId: Int,
-    private val weekHolders: List<WeekHolder>,
+    private val headerView: View?,
+    private val footerView: View?,
+    private val weekHolders: List<WeekHolder<CalendarDay>>,
     private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
     private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?,
 ) : RecyclerView.ViewHolder(rootLayout) {
-
-    private val headerView: View? = rootLayout.findViewById(headerViewId)
-    private val footerView: View? = rootLayout.findViewById(footerViewId)
 
     private var headerContainer: ViewContainer? = null
     private var footerContainer: ViewContainer? = null

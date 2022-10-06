@@ -11,7 +11,7 @@ import com.kizitonwose.calendarcore.daysOfWeek
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example1CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example1FragmentBinding
-import com.kizitonwose.calendarview.DayBinder
+import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
@@ -68,7 +68,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             }
         }
 
-        binding.exOneCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.exOneCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day

@@ -9,46 +9,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/exSevenMonthText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@color/example_7_white"
-            android:textSize="14sp"
-            tools:text="Jun" />
-
-        <TextView
-            android:id="@+id/exSevenDateText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center"
-            android:textColor="@color/example_7_white"
-            android:textSize="18sp"
-            tools:text="24" />
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingVertical="10dp">
 
         <TextView
             android:id="@+id/exSevenDayText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/example_7_white"
+            android:textSize="12sp"
+            tools:text="Mon" />
+
+        <TextView
             android:layout_marginTop="4dp"
-            android:gravity="center"
+            android:id="@+id/exSevenDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
             android:textColor="@color/example_7_white"
             android:textSize="14sp"
-            tools:text="Mon" />
+            tools:text="24" />
     </LinearLayout>
 
     <View
         android:id="@+id/exSevenSelectedView"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
+        android:layout_height="5dp"
         android:layout_gravity="bottom"
         android:background="@color/example_7_yellow" />
 
