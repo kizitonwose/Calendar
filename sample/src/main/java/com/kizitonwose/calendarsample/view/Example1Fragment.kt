@@ -11,13 +11,11 @@ import com.kizitonwose.calendarcore.daysOfWeek
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example1CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example1FragmentBinding
+import com.kizitonwose.calendarsample.displayText
 import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.*
 
 class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
@@ -30,22 +28,21 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     private val selectedDates = mutableSetOf<LocalDate>()
     private val today = LocalDate.now()
-    private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example1FragmentBinding.bind(view)
         val daysOfWeek = daysOfWeek()
-        binding.legendLayout.root.children.forEachIndexed { index, view ->
-            (view as TextView).apply {
-                text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(Locale.ENGLISH)
+        binding.legendLayout.root.children.forEachIndexed { index, child ->
+            (child as TextView).apply {
+                text = daysOfWeek[index].displayText()
                 setTextColorRes(R.color.example_1_white_light)
             }
         }
 
         val currentMonth = YearMonth.now()
-        val startMonth = currentMonth.minusMonths(10)
-        val endMonth = currentMonth.plusMonths(10)
+        val startMonth = currentMonth.minusMonths(100)
+        val endMonth = currentMonth.plusMonths(100)
         binding.exOneCalendar.setup(startMonth, endMonth, daysOfWeek.first())
         binding.exOneCalendar.scrollToMonth(currentMonth)
 
@@ -70,17 +67,17 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
         binding.exOneCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.day = day
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.day = data
                 val textView = container.textView
-                textView.text = day.date.dayOfMonth.toString()
-                if (day.position == DayPosition.MonthDate) {
+                textView.text = data.date.dayOfMonth.toString()
+                if (data.position == DayPosition.MonthDate) {
                     when {
-                        selectedDates.contains(day.date) -> {
+                        selectedDates.contains(data.date) -> {
                             textView.setTextColorRes(R.color.example_1_bg)
                             textView.setBackgroundResource(R.drawable.example_1_selected_bg)
                         }
-                        today == day.date -> {
+                        today == data.date -> {
                             textView.setTextColorRes(R.color.example_1_white)
                             textView.setBackgroundResource(R.drawable.example_1_today_bg)
                         }
@@ -98,7 +95,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
         binding.exOneCalendar.monthScrollListener = {
             binding.exOneYearText.text = it.yearMonth.year.toString()
-            binding.exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
+            binding.exOneMonthText.text = it.yearMonth.month.displayText(short = false)
 //            if (binding.exOneCalendar.maxRowCount == 6) {
 //                binding.exOneYearText.text = it.yearMonth.year.toString()
 //                binding.exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)

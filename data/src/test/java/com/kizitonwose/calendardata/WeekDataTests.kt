@@ -7,13 +7,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.Month
+import java.time.Month.*
 import java.time.YearMonth
 
 class WeekDataTests {
 
-    private val may2019 = YearMonth.of(2019, 5)
-    private val november2019 = YearMonth.of(2019, 11)
+    private val may2019 = YearMonth.of(2019, MAY)
+    private val november2019 = YearMonth.of(2019, NOVEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** May and November 2019 with Monday as the first day of week.
@@ -40,8 +40,8 @@ class WeekDataTests {
         val nov01 = november2019.atDay(1)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, nov01, firstDayOfWeek)
 
-        assertEquals(LocalDate.of(2019, Month.APRIL, 29), adjustedWeekRange.startDateAdjusted)
-        assertEquals(LocalDate.of(2019, Month.NOVEMBER, 3), adjustedWeekRange.endDateAdjusted)
+        assertEquals(LocalDate.of(2019, APRIL, 29), adjustedWeekRange.startDateAdjusted)
+        assertEquals(LocalDate.of(2019, NOVEMBER, 3), adjustedWeekRange.endDateAdjusted)
     }
 
     @Test
@@ -51,8 +51,8 @@ class WeekDataTests {
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, nov01, firstDayOfWeek)
         val weekData = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, nov01)
 
-        assertEquals(LocalDate.of(2019, Month.APRIL, 29), weekData.days.first().date)
-        assertEquals(LocalDate.of(2019, Month.MAY, 5), weekData.days.last().date)
+        assertEquals(LocalDate.of(2019, APRIL, 29), weekData.days.first().date)
+        assertEquals(LocalDate.of(2019, MAY, 5), weekData.days.last().date)
     }
 
     @Test

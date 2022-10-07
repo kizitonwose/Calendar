@@ -65,7 +65,7 @@ class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, 
 
         binding.exSevenCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, value: WeekDay) = container.bind(value)
+            override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
         }
 
         binding.exSevenCalendar.weekScrollListener = { weekDays ->

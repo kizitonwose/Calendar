@@ -22,12 +22,10 @@
         </activity>
         <activity
             android:name=".view.CalendarViewActivity"
-            android:parentActivityName=".HomeActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".compose.CalendarComposeActivity"
-            android:parentActivityName=".HomeActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
     </application>

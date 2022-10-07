@@ -25,10 +25,9 @@ import com.kizitonwose.calendarcompose.rememberCalendarState
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarcore.CalendarMonth
 import com.kizitonwose.calendarcore.DayPosition
-import com.kizitonwose.calendarcore.daysOfWeek
+import com.kizitonwose.calendarcore.firstDayOfWeekFromLocale
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.displayText
-import java.time.DayOfWeek
 import java.time.YearMonth
 
 @Composable
@@ -36,18 +35,17 @@ fun Example4Page() {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }
     val endMonth = remember { currentMonth.plusMonths(500) }
-    val daysOfWeek = remember { daysOfWeek() }
     Column {
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
             firstVisibleMonth = currentMonth,
-            firstDayOfWeek = daysOfWeek.first(),
+            firstDayOfWeek = firstDayOfWeekFromLocale(),
         )
         HorizontalCalendar(
             state = state,
             dayContent = { day -> Day(day) },
-            monthHeader = { month -> MonthHeader(month, daysOfWeek = daysOfWeek) },
+            monthHeader = { month -> MonthHeader(month) },
             calendarScrollPaged = false,
             contentPadding = PaddingValues(4.dp),
             monthContainer = { _, container ->
@@ -83,9 +81,8 @@ fun Example4Page() {
 }
 
 @Composable
-private fun MonthHeader(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek>) {
-    // We can also get the days from the month content.
-    // val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
+private fun MonthHeader(calendarMonth: CalendarMonth) {
+    val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -95,7 +92,7 @@ private fun MonthHeader(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = calendarMonth.yearMonth.displayText(),
+            text = calendarMonth.yearMonth.displayText(short = true),
             fontSize = 18.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
@@ -106,7 +103,7 @@ private fun MonthHeader(calendarMonth: CalendarMonth, daysOfWeek: List<DayOfWeek
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                     fontSize = 15.sp,
-                    text = dayOfWeek.displayText(),
+                    text = dayOfWeek.name.first().toString(),
                     fontWeight = FontWeight.Medium,
                 )
             }

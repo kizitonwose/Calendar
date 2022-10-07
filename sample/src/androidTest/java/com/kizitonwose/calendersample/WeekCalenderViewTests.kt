@@ -51,8 +51,8 @@ class WeekCalenderViewTests {
         homeScreenRule.scenario.onActivity {
             calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, value: WeekDay) {
-                    boundDay = value
+                override fun bind(container: DayViewContainer, data: WeekDay) {
+                    boundDay = data
                 }
             }
         }
@@ -80,8 +80,8 @@ class WeekCalenderViewTests {
         homeScreenRule.scenario.onActivity {
             calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, value: WeekDay) {
-                    boundDays.add(value)
+                override fun bind(container: DayViewContainer, data: WeekDay) {
+                    boundDays.add(data)
                 }
             }
             calendarView.weekHeaderResource = R.layout.example_3_calendar_header

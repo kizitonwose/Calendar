@@ -57,9 +57,12 @@ dependencies {
 
     testImplementation deps.test.junit
 
-    androidTestImplementation deps.test.android.espresso_core
-    androidTestImplementation deps.test.android.espresso_contrib // RecyclerView actions.
-    androidTestImplementation deps.test.android.runner
-    androidTestImplementation deps.test.android.rules
-    androidTestImplementation deps.test.android.ext_junit
+    androidTestImplementation deps.test.view.espresso_core
+    androidTestImplementation deps.test.view.espresso_contrib // RecyclerView actions.
+    androidTestImplementation deps.test.view.runner
+    androidTestImplementation deps.test.view.rules
+    androidTestImplementation deps.test.view.ext_junit
+
+    androidTestImplementation deps.test.compose.ui_junit
+    debugImplementation deps.test.compose.ui_manifest // Compose test runner activity
 }

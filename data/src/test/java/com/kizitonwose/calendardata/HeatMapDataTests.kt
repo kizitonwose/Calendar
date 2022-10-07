@@ -5,15 +5,15 @@ import com.kizitonwose.calendarcore.daysOfWeek
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-
 import java.time.DayOfWeek
+import java.time.Month.*
 import java.time.YearMonth
 
 class HeatMapDataTests {
 
-    private val october2022 = YearMonth.of(2022, 10)
-    private val november2022 = YearMonth.of(2022, 11)
-    private val december2022 = YearMonth.of(2022, 12)
+    private val october2022 = YearMonth.of(2022, OCTOBER)
+    private val november2022 = YearMonth.of(2022, NOVEMBER)
+    private val december2022 = YearMonth.of(2022, DECEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** October, November and December 2022

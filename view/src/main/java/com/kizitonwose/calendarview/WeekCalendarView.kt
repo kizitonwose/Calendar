@@ -225,20 +225,30 @@ open class WeekCalendarView : RecyclerView {
     }
 
     fun scrollToDate(date: LocalDate) {
-        calendarLayoutManager.scrollToDay(date)
+        val day = calendarAdapter.findWeekDay(date)?.first ?: return
+        scrollToDay(day)
     }
 
     fun smoothScrollToDate(date: LocalDate) {
-        calendarLayoutManager.smoothScrollToDay(date)
+        val day = calendarAdapter.findWeekDay(date)?.first ?: return
+        smoothScrollToDay(day)
     }
 
-    fun scrollToWeek(day: WeekDay) = scrollToWeek(day.date)
+    fun scrollToWeek(day: WeekDay) {
+        calendarLayoutManager.scrollToIndex(day.date)
+    }
 
-    fun smoothScrollToWeek(day: WeekDay) = smoothScrollToWeek(day.date)
+    fun smoothScrollToWeek(day: WeekDay) {
+        calendarLayoutManager.smoothScrollToIndex(day.date)
+    }
 
-    fun scrollToDay(day: WeekDay) = scrollToDate(day.date)
+    fun scrollToDay(day: WeekDay) {
+        calendarLayoutManager.scrollToDay(day)
+    }
 
-    fun smoothScrollToDay(day: WeekDay) = smoothScrollToDate(day.date)
+    fun smoothScrollToDay(day: WeekDay) {
+        calendarLayoutManager.smoothScrollToDay(day)
+    }
 
     /**
      * Notify the CalendarView to reload the cell for this [CalendarDay]

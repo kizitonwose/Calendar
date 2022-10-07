@@ -89,9 +89,15 @@ internal class WeekCalendarAdapter(
     }
 
     fun reloadDay(date: LocalDate) {
+        val (day, position) = findWeekDay(date) ?: return
+        notifyItemChanged(position, day)
+    }
+
+    fun findWeekDay(date: LocalDate): Pair<WeekDay, Int>? {
         val position = getAdapterPosition(date)
-        if (position != NO_INDEX) {
-            notifyItemChanged(position, dataStore[position].days.first { it.date == date })
+        return if (position != NO_INDEX) null else {
+            val day = dataStore[position].days.first { it.date == date }
+            Pair(day, position)
         }
     }
 

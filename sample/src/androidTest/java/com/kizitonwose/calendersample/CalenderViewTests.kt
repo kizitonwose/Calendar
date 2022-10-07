@@ -56,8 +56,8 @@ class CalenderViewTests {
         homeScreenRule.scenario.onActivity {
             calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, value: CalendarDay) {
-                    boundDay = value
+                override fun bind(container: DayViewContainer, data: CalendarDay) {
+                    boundDay = data
                 }
             }
         }
@@ -89,14 +89,14 @@ class CalenderViewTests {
         homeScreenRule.scenario.onActivity {
             calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, value: CalendarDay) {
-                    boundDays.add(value)
+                override fun bind(container: DayViewContainer, data: CalendarDay) {
+                    boundDays.add(data)
                 }
             }
             calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, value: CalendarMonth) {
-                    boundHeaderMonth = value
+                override fun bind(container: DayViewContainer, data: CalendarMonth) {
+                    boundHeaderMonth = data
                 }
             }
         }

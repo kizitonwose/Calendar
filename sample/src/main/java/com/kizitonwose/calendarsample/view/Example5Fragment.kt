@@ -23,7 +23,6 @@ import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 
 class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Example5FlightsViewHolder>() {
 
@@ -67,7 +66,6 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
     override val titleRes: Int = R.string.example_5_title
 
     private var selectedDate: LocalDate? = null
-    private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
 
     private val flightsAdapter = Example5FlightsAdapter()
     private val flights = generateFlights().groupBy { it.time.toLocalDate() }
@@ -87,8 +85,8 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
 
         val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
-        val startMonth = currentMonth.minusMonths(100)
-        val endMonth = currentMonth.plusMonths(100)
+        val startMonth = currentMonth.minusMonths(200)
+        val endMonth = currentMonth.plusMonths(200)
         binding.exFiveCalendar.setup(startMonth, endMonth, daysOfWeek.first())
         binding.exFiveCalendar.scrollToMonth(currentMonth)
 
@@ -114,22 +112,22 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         }
         binding.exFiveCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.day = day
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.day = data
                 val textView = container.binding.exFiveDayText
                 val layout = container.binding.exFiveDayLayout
-                textView.text = day.date.dayOfMonth.toString()
+                textView.text = data.date.dayOfMonth.toString()
 
                 val flightTopView = container.binding.exFiveDayFlightTop
                 val flightBottomView = container.binding.exFiveDayFlightBottom
                 flightTopView.background = null
                 flightBottomView.background = null
 
-                if (day.position == DayPosition.MonthDate) {
+                if (data.position == DayPosition.MonthDate) {
                     textView.setTextColorRes(R.color.example_5_text_grey)
-                    layout.setBackgroundResource(if (selectedDate == day.date) R.drawable.example_5_selected_bg else 0)
+                    layout.setBackgroundResource(if (selectedDate == data.date) R.drawable.example_5_selected_bg else 0)
 
-                    val flights = flights[day.date]
+                    val flights = flights[data.date]
                     if (flights != null) {
                         if (flights.count() == 1) {
                             flightBottomView.setBackgroundColor(view.context.getColorCompat(flights[0].color))
@@ -151,24 +149,22 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         binding.exFiveCalendar.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
-                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
-                        container.legendLayout.tag = month.yearMonth
+                        container.legendLayout.tag = data.yearMonth
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 tv.text = daysOfWeek[index].displayText()
                                 tv.setTextColorRes(R.color.example_5_text_grey)
                                 tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
                             }
-                    month.yearMonth
-                }
+                    }
             }
         }
 
         binding.exFiveCalendar.monthScrollListener = { month ->
-            val title = "${monthTitleFormatter.format(month.yearMonth)} ${month.yearMonth.year}"
-            binding.exFiveMonthYearText.text = title
+            binding.exFiveMonthYearText.text = month.yearMonth.displayText()
 
             selectedDate?.let {
                 // Clear selection if we scroll to a new month.

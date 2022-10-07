@@ -34,12 +34,10 @@ import com.kizitonwose.calendarview.ViewContainer
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.*
 
 class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, HasBackButton {
 
-    override val toolbar: Toolbar?
+    override val toolbar: Toolbar
         get() = binding.exFourToolbar
 
     override val titleRes: Int? = null
@@ -75,9 +73,9 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
         // Set the First day of week depending on Locale
         val daysOfWeek = daysOfWeek()
-        binding.legendLayout.root.children.forEachIndexed { index, view ->
-            (view as TextView).apply {
-                text = daysOfWeek[index].getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+        binding.legendLayout.root.children.forEachIndexed { index, child ->
+            (child as TextView).apply {
+                text = daysOfWeek[index].displayText()
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
                 setTextColorRes(R.color.example_4_grey)
             }
@@ -113,8 +111,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
         binding.exFourCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.day = day
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.day = data
                 val textView = container.binding.exFourDayText
                 val roundBgView = container.binding.exFourRoundBgView
 
@@ -124,31 +122,31 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
                 val (startDate, endDate) = selection
 
-                when (day.position) {
+                when (data.position) {
                     DayPosition.MonthDate -> {
-                        textView.text = day.day.toString()
-                        if (day.date.isBefore(today)) {
+                        textView.text = data.day.toString()
+                        if (data.date.isBefore(today)) {
                             textView.setTextColorRes(R.color.example_4_grey_past)
                         } else {
                             when {
-                                startDate == day.date && endDate == null -> {
+                                startDate == data.date && endDate == null -> {
                                     textView.setTextColorRes(R.color.white)
                                     roundBgView.makeVisible()
                                     roundBgView.setBackgroundResource(R.drawable.example_4_single_selected_bg)
                                 }
-                                day.date == startDate -> {
+                                data.date == startDate -> {
                                     textView.setTextColorRes(R.color.white)
                                     textView.background = startBackground
                                 }
-                                startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
+                                startDate != null && endDate != null && (data.date > startDate && data.date < endDate) -> {
                                     textView.setTextColorRes(R.color.white)
                                     textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                                 }
-                                day.date == endDate -> {
+                                data.date == endDate -> {
                                     textView.setTextColorRes(R.color.white)
                                     textView.background = endBackground
                                 }
-                                day.date == today -> {
+                                data.date == today -> {
                                     textView.setTextColorRes(R.color.example_4_grey)
                                     roundBgView.makeVisible()
                                     roundBgView.setBackgroundResource(R.drawable.example_4_today_bg)
@@ -160,13 +158,13 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                     // Make the coloured selection background continuous on the invisible in and out dates across various months.
                     DayPosition.InDate ->
                         if (startDate != null && endDate != null &&
-                            isInDateBetweenSelection(day.date, startDate, endDate)
+                            isInDateBetweenSelection(data.date, startDate, endDate)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
                     DayPosition.OutDate ->
                         if (startDate != null && endDate != null &&
-                            isOutDateBetweenSelection(day.date, startDate, endDate)
+                            isOutDateBetweenSelection(data.date, startDate, endDate)
                         ) {
                             textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
                         }
@@ -180,8 +178,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         binding.exFourCalendar.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
-                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                    container.textView.text = month.yearMonth.displayText()
+                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                    container.textView.text = data.yearMonth.displayText()
                 }
             }
 

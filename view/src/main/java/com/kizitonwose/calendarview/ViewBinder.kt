@@ -9,7 +9,7 @@ open class ViewContainer(val view: View)
 
 interface Binder<Data, Container : ViewContainer> {
     fun create(view: View): Container
-    fun bind(container: Container, value: Data)
+    fun bind(container: Container, data: Data)
 }
 
 interface WeekDayBinder<Container : ViewContainer> : Binder<WeekDay, Container>

@@ -11,7 +11,7 @@ fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
 fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
     val pivot = 7 - firstDayOfWeek.ordinal
     val daysOfWeek = DayOfWeek.values()
-    // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
+    // Order `daysOfWeek` array so that firstDayOfWeek is at the start position.
     return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
 }
 

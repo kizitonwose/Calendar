@@ -43,14 +43,9 @@ dependencies {
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8
     implementation deps.androidx.core_ktx
-    // TODO Remove (incl in deps file)
-//    implementation deps.kotlin.coroutines_core
-//    implementation deps.kotlin.coroutines_android
 
     // Expose RecyclerView which is CalendarView's superclass.
     api deps.androidx.recyclerview
-
-    testImplementation deps.test.junit
 }
 
 afterEvaluate {

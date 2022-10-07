@@ -6,14 +6,15 @@ import com.kizitonwose.calendarcore.daysOfWeek
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-
 import java.time.DayOfWeek
+import java.time.Month.MAY
+import java.time.Month.NOVEMBER
 import java.time.YearMonth
 
 class MonthDataTests {
 
-    private val may2019 = YearMonth.of(2019, 5)
-    private val november2019 = YearMonth.of(2019, 11)
+    private val may2019 = YearMonth.of(2019, MAY)
+    private val november2019 = YearMonth.of(2019, NOVEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** May and November 2019 with Monday as the first day of week.

@@ -1,6 +1,5 @@
 package com.kizitonwose.calendarsample.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -18,6 +17,7 @@ import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example2CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example2CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example2FragmentBinding
+import com.kizitonwose.calendarsample.displayText
 import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
@@ -27,7 +27,7 @@ import java.time.format.DateTimeFormatter
 
 class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, HasBackButton {
 
-    override val toolbar: Toolbar?
+    override val toolbar: Toolbar
         get() = binding.exTwoToolbar
 
     override val titleRes: Int = R.string.example_2_title
@@ -42,8 +42,8 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
         setHasOptionsMenu(true)
         binding = Example2FragmentBinding.bind(view)
         val daysOfWeek = daysOfWeek()
-        binding.legendLayout.root.children.forEachIndexed { index, view ->
-            (view as TextView).apply {
+        binding.legendLayout.root.children.forEachIndexed { index, child ->
+            (child as TextView).apply {
                 text = daysOfWeek[index].name.first().toString()
                 setTextColorRes(R.color.example_2_white)
             }
@@ -51,7 +51,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
 
         binding.exTwoCalendar.setup(
             YearMonth.now(),
-            YearMonth.now().plusMonths(10),
+            YearMonth.now().plusMonths(200),
             daysOfWeek.first(),
         )
 
@@ -80,14 +80,14 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
 
         binding.exTwoCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.day = day
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.day = data
                 val textView = container.textView
-                textView.text = day.date.dayOfMonth.toString()
+                textView.text = data.date.dayOfMonth.toString()
 
-                if (day.position == DayPosition.MonthDate) {
+                if (data.position == DayPosition.MonthDate) {
                     textView.makeVisible()
-                    when (day.date) {
+                    when (data.date) {
                         selectedDate -> {
                             textView.setTextColorRes(R.color.example_2_white)
                             textView.setBackgroundResource(R.drawable.example_2_selected_bg)
@@ -113,10 +113,8 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
         binding.exTwoCalendar.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
-                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                    @SuppressLint("SetTextI18n") // Concatenation warning for `setText` call.
-                    container.textView.text =
-                        "${month.yearMonth.month.name.toLowerCase().capitalize()} ${month.year}"
+                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                    container.textView.text = data.yearMonth.displayText()
                 }
             }
     }
@@ -132,7 +130,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
             val date = selectedDate ?: return false
             val text = "Selected: ${DateTimeFormatter.ofPattern("d MMMM yyyy").format(date)}"
             Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT).show()
-            fragmentManager?.popBackStack()
+            parentFragmentManager.popBackStack()
             return true
         }
         return super.onOptionsItemSelected(item)

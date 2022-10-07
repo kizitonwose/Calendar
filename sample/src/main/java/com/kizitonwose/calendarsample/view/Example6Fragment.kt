@@ -17,12 +17,12 @@ import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example6FragmentBinding
+import com.kizitonwose.calendarsample.displayText
 import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
 import com.kizitonwose.calendarview.internal.MarginValues
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 
 // We assign this class to the `monthViewClass` attribute in XML.
 // See usage in example_6_fragment.xml
@@ -38,8 +38,6 @@ class Example6MonthView(context: Context) : CardView(context) {
 class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButton {
 
     override val titleRes: Int = R.string.example_6_title
-
-    private val titleFormatter = DateTimeFormatter.ofPattern("MMM yyyy")
 
     private lateinit var binding: Example6FragmentBinding
 
@@ -74,11 +72,11 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
                 return DayViewContainer(view)
             }
 
-            override fun bind(container: DayViewContainer, day: CalendarDay) {
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
                 val textView = container.textView
 
-                if (day.position == DayPosition.MonthDate) {
-                    textView.text = day.date.dayOfMonth.toString()
+                if (data.position == DayPosition.MonthDate) {
+                    textView.text = data.date.dayOfMonth.toString()
                     textView.makeVisible()
                 } else {
                     textView.makeInVisible()
@@ -102,11 +100,11 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
         binding.exSixCalendar.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
-                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                    container.textView.text = titleFormatter.format(month.yearMonth)
+                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                    container.textView.text = data.yearMonth.displayText(short = true)
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
-                        container.legendLayout.tag = month.yearMonth
+                        container.legendLayout.tag = data.yearMonth
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 tv.text = daysOfWeek[index].name.first().toString()

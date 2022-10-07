@@ -47,9 +47,6 @@ dependencies {
     implementation project(':data')
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8
-    implementation deps.androidx.core_ktx
-    implementation deps.kotlin.coroutines_core
-    implementation deps.kotlin.coroutines_android
 
     implementation deps.compose.ui
     implementation deps.compose.tooling

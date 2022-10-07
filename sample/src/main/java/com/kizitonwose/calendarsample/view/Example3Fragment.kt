@@ -102,11 +102,13 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
                 setOnShowListener {
                     // Show the keyboard
                     editText.requestFocus()
-                    context.inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+                    context.inputMethodManager
+                        .toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
                 }
                 setOnDismissListener {
                     // Hide the keyboard
-                    context.inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+                    context.inputMethodManager
+                        .toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
                 }
             }
     }
@@ -135,7 +137,11 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
         binding.exThreeCalendar.apply {
-            setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), daysOfWeek.first())
+            setup(
+                currentMonth.minusMonths(50),
+                currentMonth.plusMonths(50),
+                daysOfWeek.first(),
+            )
             scrollToMonth(currentMonth)
         }
 
@@ -160,16 +166,16 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         }
         binding.exThreeCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.day = day
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.day = data
                 val textView = container.binding.exThreeDayText
                 val dotView = container.binding.exThreeDotView
 
-                textView.text = day.date.dayOfMonth.toString()
+                textView.text = data.date.dayOfMonth.toString()
 
-                if (day.position == DayPosition.MonthDate) {
+                if (data.position == DayPosition.MonthDate) {
                     textView.makeVisible()
-                    when (day.date) {
+                    when (data.date) {
                         today -> {
                             textView.setTextColorRes(R.color.example_3_white)
                             textView.setBackgroundResource(R.drawable.example_3_today_bg)
@@ -183,7 +189,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
                         else -> {
                             textView.setTextColorRes(R.color.example_3_black)
                             textView.background = null
-                            dotView.isVisible = events[day.date].orEmpty().isNotEmpty()
+                            dotView.isVisible = events[data.date].orEmpty().isNotEmpty()
                         }
                     }
                 } else {
@@ -211,18 +217,18 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         binding.exThreeCalendar.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
-                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
+                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
-                        container.legendLayout.tag = month.yearMonth
+                        container.legendLayout.tag = data.yearMonth
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 tv.text = daysOfWeek[index].name.first().toString()
                                 tv.setTextColorRes(R.color.example_3_black)
                             }
                     }
+                }
             }
-        }
 
         binding.exThreeAddButton.setOnClickListener {
             inputDialog.show()
@@ -241,10 +247,12 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
     private fun saveEvent(text: String) {
         if (text.isBlank()) {
-            Toast.makeText(requireContext(), R.string.example_3_empty_input_text, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.example_3_empty_input_text, Toast.LENGTH_LONG)
+                .show()
         } else {
             selectedDate?.let {
-                events[it] = events[it].orEmpty().plus(Event(UUID.randomUUID().toString(), text, it))
+                events[it] =
+                    events[it].orEmpty().plus(Event(UUID.randomUUID().toString(), text, it))
                 updateAdapterForDate(it)
             }
         }
@@ -268,12 +276,14 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
     override fun onStart() {
         super.onStart()
         activityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.example_3_toolbar_color))
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_3_statusbar_color)
+        requireActivity().window.statusBarColor =
+            requireContext().getColorCompat(R.color.example_3_statusbar_color)
     }
 
     override fun onStop() {
         super.onStop()
         activityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.colorPrimary))
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
+        requireActivity().window.statusBarColor =
+            requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
 }
