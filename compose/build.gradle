@@ -51,11 +51,7 @@ dependencies {
     implementation deps.compose.ui
     implementation deps.compose.tooling
     implementation deps.compose.foundation
-    // TODO move to sample app - Comment Related code or just recreate Text() which is the only thing needed)
-    implementation deps.compose.material
     implementation deps.compose.snapper
-
-    testImplementation deps.test.junit
 }
 
 afterEvaluate {
