@@ -15,7 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/activityToolbar"
             android:layout_width="match_parent"
-            app:title="@string/app_name_view"
+            app:title="@string/activity_title_view"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -28,7 +28,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/examplesRv"
+            android:id="@+id/examplesRecyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>

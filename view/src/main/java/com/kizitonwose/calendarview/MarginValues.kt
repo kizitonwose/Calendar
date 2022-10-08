@@ -1,4 +1,4 @@
-package com.kizitonwose.calendarview.internal
+package com.kizitonwose.calendarview
 
 import androidx.annotation.Px
 

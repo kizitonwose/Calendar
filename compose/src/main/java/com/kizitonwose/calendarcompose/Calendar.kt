@@ -20,6 +20,38 @@ import com.kizitonwose.calendarcore.CalendarMonth
 import com.kizitonwose.calendarcore.WeekDay
 import java.time.DayOfWeek
 
+/**
+ * A horizontally scrolling calendar.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startMonth`, `endMonth`, `firstDayOfWeek`, `firstVisibleMonth`, `outDateStyle`.
+ * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
+ * snap to the nearest month after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param reverseLayout reverse the direction of scrolling and layout. When `true`, months will be
+ * composed from the end to the start and [CalendarState.startMonth] will be located at the end.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first month or after the last one. If you want to add a spacing
+ * between each month use the [monthContainer] composable.
+ * @param dayContent a composable block which describes the day content.
+ * @param monthHeader a composable block which describes the month header content. The header is
+ * placed above each month on the calendar.
+ * @param monthBody a composable block which describes the month body content. This is the container
+ * where all the month days are placed, excluding the header and footer. This is useful if you
+ * want to customize the day container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param monthFooter a composable block which describes the month footer content. The footer is
+ * placed below each month on the calendar.
+ * @param monthContainer a composable block which describes the entire month content. This is the
+ * container where all the month contents are placed (header => days => footer). This is useful if
+ * you want to customize the month container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ */
 @Composable
 fun HorizontalCalendar(
     modifier: Modifier = Modifier,
@@ -28,9 +60,9 @@ fun HorizontalCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    dayContent: @Composable BoxScope.(CalendarDay) -> Unit = { },
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
-    monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
+    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
     monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit = { _, container -> container() },
 ) = Calendar(
@@ -38,16 +70,48 @@ fun HorizontalCalendar(
     state = state,
     calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
-    isVertical = false,
+    isHorizontal = true,
     reverseLayout = reverseLayout,
     dayContent = dayContent,
     monthHeader = monthHeader,
-    monthContent = monthContent,
+    monthBody = monthBody,
     monthFooter = monthFooter,
     monthContainer = monthContainer,
     contentPadding = contentPadding,
 )
 
+/**
+ * A vertically scrolling calendar.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startMonth`, `endMonth`, `firstDayOfWeek`, `firstVisibleMonth`, `outDateStyle`.
+ * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
+ * snap to the nearest month after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param reverseLayout reverse the direction of scrolling and layout. When `true`, months will be
+ * composed from the end to the start and [CalendarState.startMonth] will be located at the end.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first month or after the last one. If you want to add a spacing
+ * between each month use the [monthContainer] composable.
+ * @param dayContent a composable block which describes the day content.
+ * @param monthHeader a composable block which describes the month header content. The header is
+ * placed above each month on the calendar.
+ * @param monthBody a composable block which describes the month body content. This is the container
+ * where all the month days are placed, excluding the header and footer. This is useful if you
+ * want to customize the day container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param monthFooter a composable block which describes the month footer content. The footer is
+ * placed below each month on the calendar.
+ * @param monthContainer a composable block which describes the entire month content. This is the
+ * container where all the month contents are placed (header => days => footer). This is useful if
+ * you want to customize the month container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ */
 @Composable
 fun VerticalCalendar(
     modifier: Modifier = Modifier,
@@ -56,9 +120,9 @@ fun VerticalCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    dayContent: @Composable BoxScope.(CalendarDay) -> Unit = { },
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
-    monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
+    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
     monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit = { _, container -> container() },
 ) = Calendar(
@@ -66,11 +130,11 @@ fun VerticalCalendar(
     state = state,
     calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
-    isVertical = true,
+    isHorizontal = false,
     reverseLayout = reverseLayout,
     dayContent = dayContent,
     monthHeader = monthHeader,
-    monthContent = monthContent,
+    monthBody = monthBody,
     monthFooter = monthFooter,
     monthContainer = monthContainer,
     contentPadding = contentPadding,
@@ -82,35 +146,16 @@ private fun Calendar(
     state: CalendarState,
     calendarScrollPaged: Boolean,
     userScrollEnabled: Boolean,
-    isVertical: Boolean,
+    isHorizontal: Boolean,
     reverseLayout: Boolean,
     contentPadding: PaddingValues,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
-    monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
+    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
     monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit,
 ) {
-    if (isVertical) {
-        LazyColumn(
-            modifier = modifier.fillMaxHeight(),
-            state = state.listState,
-            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
-            userScrollEnabled = userScrollEnabled,
-            reverseLayout = reverseLayout,
-            contentPadding = contentPadding,
-        ) {
-            CalendarItems(
-                itemsCount = state.monthIndexCount,
-                monthData = { offset -> state.store[offset] },
-                dayContent = dayContent,
-                monthHeader = monthHeader,
-                monthContent = monthContent,
-                monthFooter = monthFooter,
-                monthContainer = monthContainer,
-            )
-        }
-    } else {
+    if (isHorizontal) {
         LazyRow(
             modifier = modifier.wrapContentHeight(),
             state = state.listState,
@@ -124,7 +169,26 @@ private fun Calendar(
                 monthData = { offset -> state.store[offset] },
                 dayContent = dayContent,
                 monthHeader = monthHeader,
-                monthContent = monthContent,
+                monthBody = monthBody,
+                monthFooter = monthFooter,
+                monthContainer = monthContainer,
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier.fillMaxHeight(),
+            state = state.listState,
+            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
+            userScrollEnabled = userScrollEnabled,
+            reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
+        ) {
+            CalendarItems(
+                itemsCount = state.monthIndexCount,
+                monthData = { offset -> state.store[offset] },
+                dayContent = dayContent,
+                monthHeader = monthHeader,
+                monthBody = monthBody,
                 monthFooter = monthFooter,
                 monthContainer = monthContainer,
             )
@@ -132,6 +196,27 @@ private fun Calendar(
     }
 }
 
+/**
+ * A horizontally scrolling week calendar.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startDate`, `endDate`, `firstDayOfWeek`, `firstVisibleWeek`.
+ * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
+ * snap to the nearest week after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param reverseLayout reverse the direction of scrolling and layout. When `true`, weeks will be
+ * composed from the end to the start and [WeekCalendarState.startDate] will be located at the end.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first week or after the last one.
+ * @param dayContent a composable block which describes the day content.
+ * @param weekHeader a composable block which describes the week header content. The header is
+ * placed above each week on the calendar.
+ * @param weekFooter a composable block which describes the week footer content. The footer is
+ * placed below each week on the calendar.
+ */
 @Composable
 fun WeekCalendar(
     modifier: Modifier = Modifier,
@@ -140,7 +225,7 @@ fun WeekCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    dayContent: @Composable BoxScope.(WeekDay) -> Unit = { },
+    dayContent: @Composable BoxScope.(WeekDay) -> Unit,
     weekHeader: @Composable ColumnScope.(List<WeekDay>) -> Unit = { },
     weekFooter: @Composable ColumnScope.(List<WeekDay>) -> Unit = { },
 ) = WeekCalendarInternal(
@@ -155,6 +240,25 @@ fun WeekCalendar(
     contentPadding = contentPadding,
 )
 
+/**
+ * A horizontal scrolling heatmap calendar, useful for showing how data changes over time.
+ * A popular example is the user contribution chart on GitHub.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startMonth`, `endMonth`, `firstDayOfWeek`, `firstVisibleMonth`.
+ * @param weekHeaderPosition Determines the position for the [weekHeader] composable.
+ *  @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first month or after the last one.
+ * @param dayContent a composable block which describes the day content.
+ * @param weekHeader a composable block which describes the day of week (Mon, Tue, Wed...) on the
+ * horizontal axis of the calendar. The position is determined by the [weekHeaderPosition] property.
+ * @param monthHeader a composable block which describes the month header content. The header is
+ * placed above each month on the calendar.
+ */
 @Composable
 fun HeatMapCalendar(
     modifier: Modifier = Modifier,

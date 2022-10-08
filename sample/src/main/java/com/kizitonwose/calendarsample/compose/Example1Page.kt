@@ -47,7 +47,7 @@ fun Example1Page() {
             firstDayOfWeek = daysOfWeek.first(),
         )
         val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstCompletelyVisibleMonth(initialValue = currentMonth, state)
+        val visibleMonth = rememberFirstCompletelyVisibleMonthNonNull(state)
         CalendarTitle(
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
             currentMonth = visibleMonth,

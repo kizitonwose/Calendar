@@ -18,10 +18,10 @@ import com.kizitonwose.calendarsample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendarsample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendarsample.databinding.Example6FragmentBinding
 import com.kizitonwose.calendarsample.displayText
+import com.kizitonwose.calendarview.MarginValues
 import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
-import com.kizitonwose.calendarview.internal.MarginValues
 import java.time.YearMonth
 
 // We assign this class to the `monthViewClass` attribute in XML.

@@ -5,22 +5,19 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarcore.*
+import com.kizitonwose.calendarcore.WeekDay
 import com.kizitonwose.calendardata.checkDateRange
 import com.kizitonwose.calendarview.internal.CalenderPageSnapHelper
-import com.kizitonwose.calendarview.internal.MarginValues
 import com.kizitonwose.calendarview.internal.weekcalendar.WeekCalendarAdapter
 import com.kizitonwose.calendarview.internal.weekcalendar.WeekCalendarLayoutManager
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.YearMonth
 
 open class WeekCalendarView : RecyclerView {
 
     /**
-     * The [MonthDayBinder] instance used for managing day cell views
-     * creation and reuse. Changing the binder means that the view
-     * creation logic could have changed too. We refresh the Calender.
+     * The [WeekDayBinder] instance used for managing day
+     * cell view creation and reuse.
      */
     var dayBinder: WeekDayBinder<*>? = null
         set(value) {
@@ -29,8 +26,8 @@ open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The [MonthHeaderFooterBinder] instance used for managing header views.
-     * The header view is shown above each month on the Calendar.
+     * The [WeekHeaderFooterBinder] instance used for managing header views.
+     * The header view is shown above each week on the Calendar.
      */
     var weekHeaderBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
@@ -40,7 +37,7 @@ open class WeekCalendarView : RecyclerView {
 
     /**
      * The [WeekHeaderFooterBinder] instance used for managing footer views.
-     * The footer view is shown below each month on the Calendar.
+     * The footer view is shown below each week on the Calendar.
      */
     var weekFooterBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
@@ -49,8 +46,8 @@ open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * Called when the calender scrolls to a new month. Mostly beneficial
-     * if [ScrollMode] is [ScrollMode.PAGED].
+     * Called when the calender scrolls to a new week.
+     * Mostly beneficial if [scrollPaged] is `true`.
      */
     var weekScrollListener: WeekScrollListener? = null
 
@@ -61,14 +58,14 @@ open class WeekCalendarView : RecyclerView {
     var dayViewResource = 0
         set(value) {
             if (field != value) {
-                if (value == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
+                check(value != 0) { "Invalid 'dayViewResource' value." }
                 field = value
                 invalidateViewHolders()
             }
         }
 
     /**
-     * The xml resource that is inflated and used as a header for every month.
+     * The xml resource that is inflated and used as a header for every week.
      * Set zero to disable.
      */
     var weekHeaderResource = 0
@@ -105,9 +102,9 @@ open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The scrolling behavior of the calendar. If [ScrollMode.PAGED],
-     * the calendar will snap to the nearest month after a scroll or swipe action.
-     * If [ScrollMode.CONTINUOUS], the calendar scrolls normally.
+     * The scrolling behavior of the calendar. If `true`, the calendar will
+     * snap to the nearest week after a scroll or swipe action.
+     * If `false`, the calendar scrolls normally.
      */
     var scrollPaged = true
         set(value) {
@@ -117,6 +114,10 @@ open class WeekCalendarView : RecyclerView {
             }
         }
 
+    /**
+     * Determines how the size of each day on the calendar is calculated.
+     * Can be [DaySize.Square], [DaySize.SeventhWidth] or [DaySize.FreeForm].
+     */
     var daySize: DaySize = DaySize.Square
         set(value) {
             if (field != value) {
@@ -127,7 +128,7 @@ open class WeekCalendarView : RecyclerView {
 
     /**
      * The margins, in pixels to be applied each week view.
-     * this can be used to add a space between two items.
+     * this can be used to add a space between two weeks.
      */
     var weekMargins = MarginValues()
         set(value) {
@@ -212,97 +213,147 @@ open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Scroll to a specific month on the calendar. This only
-     * shows the view for the month without any animations.
-     * For a smooth scrolling effect, use [smoothScrollToMonth]
+     * Scroll to the week containing this [date] on the calendar.
+     * This instantly shows the view for the week without any animations.
+     * For a smooth scrolling effect, use [smoothScrollToWeek]
      */
     fun scrollToWeek(date: LocalDate) {
         calendarLayoutManager.scrollToIndex(date)
     }
 
+    /**
+     * Scroll to the week containing this [date] on the calendar
+     * using a smooth scrolling animation.
+     * Just like [scrollToWeek], but with a smooth scrolling animation.
+     */
     fun smoothScrollToWeek(date: LocalDate) {
         calendarLayoutManager.smoothScrollToIndex(date)
     }
 
+    /**
+     * Scroll to a specific date. This brings the date cell
+     * view's left edge to the left edge of the WeekCalendarView.
+     * No animation is performed.
+     * For a smooth scrolling effect, use [smoothScrollToDate].
+     */
     fun scrollToDate(date: LocalDate) {
-        val day = calendarAdapter.findWeekDay(date)?.first ?: return
-        scrollToDay(day)
-    }
-
-    fun smoothScrollToDate(date: LocalDate) {
-        val day = calendarAdapter.findWeekDay(date)?.first ?: return
-        smoothScrollToDay(day)
-    }
-
-    fun scrollToWeek(day: WeekDay) {
-        calendarLayoutManager.scrollToIndex(day.date)
-    }
-
-    fun smoothScrollToWeek(day: WeekDay) {
-        calendarLayoutManager.smoothScrollToIndex(day.date)
-    }
-
-    fun scrollToDay(day: WeekDay) {
-        calendarLayoutManager.scrollToDay(day)
-    }
-
-    fun smoothScrollToDay(day: WeekDay) {
-        calendarLayoutManager.smoothScrollToDay(day)
+        calendarLayoutManager.scrollToDay(date)
     }
 
     /**
-     * Notify the CalendarView to reload the cell for this [CalendarDay]
-     * This causes [MonthDayBinder.bind] to be called with the [ViewContainer]
+     * Scroll to a specific date using a smooth scrolling animation.
+     * Just like [scrollToDate], but with a smooth scrolling animation.
+     */
+    fun smoothScrollToDate(date: LocalDate) {
+        calendarLayoutManager.smoothScrollToDay(date)
+    }
+
+    /**
+     * Scroll to the week containing this [WeekDay] on the calendar.
+     * This instantly shows the view for the week without any animations.
+     * For a smooth scrolling effect, use [smoothScrollToWeek]
+     */
+    fun scrollToWeek(day: WeekDay) {
+        scrollToWeek(day.date)
+    }
+
+    /**
+     * Scroll to the week containing this [WeekDay] on the calendar
+     * using a smooth scrolling animation.
+     * Just like [scrollToWeek], but with a smooth scrolling animation.
+     */
+    fun smoothScrollToWeek(day: WeekDay) {
+        smoothScrollToWeek(day.date)
+    }
+
+    /**
+     * Scroll to a specific [WeekDay]. This brings the date cell
+     * view's left edge to the left edge of the WeekCalendarView.
+     * No animation is performed.
+     * For a smooth scrolling effect, use [smoothScrollToDay].
+     */
+    fun scrollToDay(day: WeekDay) {
+        scrollToDate(day.date)
+    }
+
+    /**
+     * Scroll to a specific [WeekDay] using a smooth scrolling animation.
+     * Just like [scrollToDay], but with a smooth scrolling animation.
+     */
+    fun smoothScrollToDay(day: WeekDay) {
+        smoothScrollToDate(day.date)
+    }
+
+    /**
+     * Notify the WeekCalendarView to reload the cell for this [date].
+     * This causes [WeekDayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
     fun notifyDateChanged(date: LocalDate) {
         calendarAdapter.reloadDay(date)
     }
 
-    fun notifyDayChanged(day: WeekDay) = notifyDateChanged(day.date)
+    /**
+     * Notify the WeekCalendarView to reload the cell for this [WeekDay].
+     * This causes [WeekDayBinder.bind] to be called with the [ViewContainer]
+     * at this position. Use this to reload a date cell on the Calendar.
+     */
+    fun notifyDayChanged(day: WeekDay) {
+        notifyDateChanged(day.date)
+    }
 
 
     /**
-     * Notify the CalendarView to reload the view for this [YearMonth]
-     * This causes the following sequence pf events:
-     * [MonthDayBinder.bind] will be called for all dates in this month.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
+     * Notify the WeekCalendarView to reload the view for the week containing
+     * this [date]. This causes the following sequence of events:
+     * [WeekDayBinder.bind] will be called for all dates in the week.
+     * [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
+     * [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
      */
     fun notifyWeekChanged(date: LocalDate) {
         calendarAdapter.reloadWeek(date)
     }
 
-    fun notifyWeekChanged(day: WeekDay) = notifyWeekChanged(day.date)
+    /**
+     * Notify the WeekCalendarView to reload the view for the week containing
+     * this [WeekDay]. This causes the following sequence of events:
+     * [WeekDayBinder.bind] will be called for all dates in the week.
+     * [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
+     * [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
+     */
+    fun notifyWeekChanged(day: WeekDay) {
+        notifyWeekChanged(day.date)
+    }
 
     /**
-     * Notify the CalendarView to reload all months.
-     * Just like calling [notifyMonthChanged] for all months.
+     * Notify the WeekCalendarView to reload all weeks.
+     *
+     * @see [notifyWeekChanged]
      */
     fun notifyCalendarChanged() {
         calendarAdapter.reloadCalendar()
     }
 
     /**
-     * Find the first visible month on the CalendarView.
+     * Find the first visible week on the WeekCalendarView.
      *
-     * @return The first visible month or null if not found.
+     * @return The first visible week or null if not found.
      */
     fun findFirstVisibleWeek(): List<WeekDay>? {
         return calendarAdapter.findFirstVisibleWeek()
     }
 
     /**
-     * Find the last visible month on the CalendarView.
+     * Find the last visible week on the WeekCalendarView.
      *
-     * @return The last visible month or null if not found.
+     * @return The last visible week or null if not found.
      */
     fun findLastVisibleWeek(): List<WeekDay>? {
         return calendarAdapter.findLastVisibleWeek()
     }
 
     /**
-     * Find the first visible day on the CalendarView.
+     * Find the first visible day on the WeekCalendarView.
      * This is the day at the top-left corner of the calendar.
      *
      * @return The first visible day or null if not found.
@@ -312,7 +363,7 @@ open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible day on the CalendarView.
+     * Find the last visible day on the WeekCalendarView.
      * This is the day at the bottom-right corner of the calendar.
      *
      * @return The last visible day or null if not found.
@@ -322,12 +373,12 @@ open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Setup the CalendarView.
-     * See [updateMonthData] to change the [startMonth] and [endMonth] values.
+     * Setup the WeekCalendarView.
+     * See [updateWeekData] to update these values.
      *
-     * @param startMonth The first month on the calendar.
-     * @param endMonth The last month on the calendar.
-     * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
+     * @param startDate A date in the first week on the calendar.
+     * @param endDate A date in the last week on the calendar.
+     * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
      */
     fun setup(startDate: LocalDate, endDate: LocalDate, firstDayOfWeek: DayOfWeek) {
         checkDateRange(startDate = startDate, endDate = endDate)
@@ -348,7 +399,7 @@ open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Update the CalendarView's start or end month, and optionally the first day of week.
+     * Update the WeekCalendarView's start date or end date or the first day of week.
      * This can be called only if you have called [setup] in the past.
      * The calendar can handle really large date ranges so you may want to setup
      * the calendar with a large date range instead of updating the range frequently.

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarview.MarginValues
 
 internal abstract class CalendarLayoutManager<IndexData, DayData>(
     private val calView: RecyclerView,
@@ -14,6 +15,7 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
 
     abstract fun getaItemAdapterPosition(data: IndexData): Int
     abstract fun getaDayAdapterPosition(data: DayData): Int
+    abstract fun getDayTag(data: DayData): Int
     abstract fun getItemMargins(): MarginValues
     abstract fun scrollPaged(): Boolean
     abstract fun notifyScrollListenerIfNeeded()
@@ -57,7 +59,7 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
     }
 
     private fun calculateDayViewOffsetInParent(day: DayData, itemView: View): Int {
-        val dayView = itemView.findViewWithTag<View>(day.hashCode()) ?: return 0
+        val dayView = itemView.findViewWithTag<View>(getDayTag(day)) ?: return 0
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)

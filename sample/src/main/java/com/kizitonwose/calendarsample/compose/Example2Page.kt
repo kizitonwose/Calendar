@@ -46,7 +46,7 @@ fun Example2Page(
     val today = remember { LocalDate.now() }
     var selection by remember { mutableStateOf(DateSelection()) }
     val daysOfWeek = remember { daysOfWeek() }
-    ToggleStatusBarColor(Color.White, isLight = true)
+    StatusBarColorUpdateEffect(Color.White, isLight = true)
     MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column {

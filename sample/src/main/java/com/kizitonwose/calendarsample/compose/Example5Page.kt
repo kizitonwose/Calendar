@@ -28,26 +28,16 @@ fun Example5Page(close: () -> Unit = {}) {
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
-    var toolBarTitle by remember { mutableStateOf("") }
     Column {
         val state = rememberWeekCalendarState(
             startDate = startDate,
             endDate = endDate,
             firstVisibleWeekDate = currentDate,
         )
-        val isScrollInProgress = remember {
-            derivedStateOf { state.isScrollInProgress }
-        }
-        val visibleWeek = remember {
-            derivedStateOf { state.firstVisibleWeek }
-        }
-        if (!isScrollInProgress.value) {
-            val datesInWeek = visibleWeek.value
-            toolBarTitle = getWeekPageTitle(datesInWeek)
-        }
+        val visibleWeek = rememberFirstVisibleWeekAfterScroll(state)
         TopAppBar(
             elevation = 0.dp,
-            title = { Text(text = toolBarTitle) },
+            title = { Text(text = getWeekPageTitle(visibleWeek)) },
             navigationIcon = { NavigationIcon(onBackClick = close) },
         )
         WeekCalendar(

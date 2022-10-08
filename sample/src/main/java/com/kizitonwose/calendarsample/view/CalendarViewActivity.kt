@@ -29,7 +29,7 @@ class CalendarViewActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.activityToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.examplesRv.apply {
+        binding.examplesRecyclerview.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = examplesAdapter
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))

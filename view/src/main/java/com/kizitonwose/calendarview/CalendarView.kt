@@ -11,7 +11,6 @@ import com.kizitonwose.calendarcore.DayPosition
 import com.kizitonwose.calendarcore.OutDateStyle
 import com.kizitonwose.calendardata.checkDateRange
 import com.kizitonwose.calendarview.internal.CalenderPageSnapHelper
-import com.kizitonwose.calendarview.internal.MarginValues
 import com.kizitonwose.calendarview.internal.monthcalendar.MonthCalendarAdapter
 import com.kizitonwose.calendarview.internal.monthcalendar.MonthCalendarLayoutManager
 import java.time.DayOfWeek
@@ -21,9 +20,8 @@ import java.time.YearMonth
 open class CalendarView : RecyclerView {
 
     /**
-     * The [MonthDayBinder] instance used for managing day cell views
-     * creation and reuse. Changing the binder means that the view
-     * creation logic could have changed too. We refresh the Calender.
+     * The [MonthDayBinder] instance used for managing day
+     * cell view creation and reuse on the calendar.
      */
     var dayBinder: MonthDayBinder<*>? = null
         set(value) {
@@ -52,8 +50,8 @@ open class CalendarView : RecyclerView {
         }
 
     /**
-     * Called when the calender scrolls to a new month. Mostly beneficial
-     * if [ScrollMode] is [ScrollMode.PAGED].
+     * Called when the calender scrolls to a new month.
+     * Mostly beneficial if [scrollPaged] is `true`.
      */
     var monthScrollListener: MonthScrollListener? = null
 
@@ -64,7 +62,7 @@ open class CalendarView : RecyclerView {
     var dayViewResource = 0
         set(value) {
             if (field != value) {
-                if (value == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
+                check(value != 0) { "Invalid 'dayViewResource' value." }
                 field = value
                 invalidateViewHolders()
             }
@@ -109,10 +107,10 @@ open class CalendarView : RecyclerView {
 
     /**
      * The [RecyclerView.Orientation] used for the layout manager.
-     * This determines the scroll direction of the the calendar.
+     * This determines the scroll direction of the calendar.
      */
     @Orientation
-    var orientation = HORIZONTAL
+    var orientation: Int = HORIZONTAL
         set(value) {
             if (field != value) {
                 field = value
@@ -121,9 +119,9 @@ open class CalendarView : RecyclerView {
         }
 
     /**
-     * The scrolling behavior of the calendar. If [ScrollMode.PAGED],
-     * the calendar will snap to the nearest month after a scroll or swipe action.
-     * If [ScrollMode.CONTINUOUS], the calendar scrolls normally.
+     * The scrolling behavior of the calendar. If `true`, the calendar will
+     * snap to the nearest month after a scroll or swipe action.
+     * If `false`, the calendar scrolls normally.
      */
     var scrollPaged = true
         set(value) {
@@ -135,15 +133,9 @@ open class CalendarView : RecyclerView {
 
     /**
      * Determines how outDates are generated for each month on the calendar.
-     * If set to [OutDateStyle.END_OF_ROW], the calendar will generate outDates until
-     * it reaches the first end of a row. This means that if a month has 6 rows,
-     * it will display 6 rows and if a month has 5 rows, it will display 5 rows.
-     * If set to [OutDateStyle.END_OF_GRID], the calendar will generate outDates until
-     * it reaches the end of a 6 x 7 grid. This means that all months will have 6 rows.
-     * If set to [OutDateStyle.NONE], no outDates will be generated.
+     * Can be [OutDateStyle.EndOfRow] or [OutDateStyle.EndOfGrid].
      *
-     * Note: This causes calendar data to be regenerated, consider using [updateMonthConfiguration]
-     * if updating this value property [inDateStyle], [maxRowCount] or [hasBoundaries].
+     * @see [DayPosition]
      */
     var outDateStyle = OutDateStyle.EndOfRow
         set(value) {
@@ -153,6 +145,10 @@ open class CalendarView : RecyclerView {
             }
         }
 
+    /**
+     * Determines how the size of each day on the calendar is calculated.
+     * Can be [DaySize.Square], [DaySize.SeventhWidth] or [DaySize.FreeForm].
+     */
     var daySize: DaySize = DaySize.Square
         set(value) {
             if (field != value) {
@@ -162,7 +158,7 @@ open class CalendarView : RecyclerView {
         }
 
     /**
-     * The margins, in pixels to be applied each month view.
+     * The margins, in pixels to be applied on each month view.
      * this can be used to add a space between two months.
      */
     var monthMargins = MarginValues()
@@ -187,9 +183,6 @@ open class CalendarView : RecyclerView {
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
     private var firstDayOfWeek: DayOfWeek? = null
-
-    internal val isVertical: Boolean
-        get() = orientation == VERTICAL
 
     constructor(context: Context) : super(context)
 
@@ -253,7 +246,7 @@ open class CalendarView : RecyclerView {
     }
 
     /**
-     * Scroll to a specific month on the calendar. This only
+     * Scroll to a specific month on the calendar. This instantly
      * shows the view for the month without any animations.
      * For a smooth scrolling effect, use [smoothScrollToMonth]
      */
@@ -323,7 +316,7 @@ open class CalendarView : RecyclerView {
 
     /**
      * Notify the CalendarView to reload the view for this [YearMonth]
-     * This causes the following sequence pf events:
+     * This causes the following sequence of events:
      * [MonthDayBinder.bind] will be called for all dates in this month.
      * [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
      * [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
@@ -334,7 +327,7 @@ open class CalendarView : RecyclerView {
 
     /**
      * Notify the CalendarView to reload all months.
-     * Just like calling [notifyMonthChanged] for all months.
+     * @see [notifyMonthChanged].
      */
     fun notifyCalendarChanged() {
         calendarAdapter.reloadCalendar()
@@ -380,11 +373,11 @@ open class CalendarView : RecyclerView {
 
     /**
      * Setup the CalendarView.
-     * See [updateMonthData] to change the [startMonth] and [endMonth] values.
+     * See [updateMonthData] to update these values.
      *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
-     * @param firstDayOfWeek An instance of [DayOfWeek] enum to be the first day of week.
+     * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
      */
     fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
         checkDateRange(startMonth = startMonth, endMonth = endMonth)
@@ -406,7 +399,7 @@ open class CalendarView : RecyclerView {
     }
 
     /**
-     * Update the CalendarView's start or end month, and optionally the first day of week.
+     * Update the CalendarView's start month or end month or the first day of week.
      * This can be called only if you have called [setup] in the past.
      * The calendar can handle really large date ranges so you may want to setup
      * the calendar with a large date range instead of updating the range frequently.

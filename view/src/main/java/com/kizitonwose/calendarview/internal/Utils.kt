@@ -11,7 +11,9 @@ import android.view.ViewGroup.MarginLayoutParams
 import android.widget.LinearLayout
 import com.kizitonwose.calendarview.Binder
 import com.kizitonwose.calendarview.DaySize
+import com.kizitonwose.calendarview.MarginValues
 import com.kizitonwose.calendarview.ViewContainer
+import java.time.LocalDate
 
 internal data class ItemContent<Day>(
     val itemView: ViewGroup,
@@ -95,3 +97,5 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
         weekHolders = weekHolders,
     )
 }
+
+internal fun dayTag(date: LocalDate): Int = date.hashCode()

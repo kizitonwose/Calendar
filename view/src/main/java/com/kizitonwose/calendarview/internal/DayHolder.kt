@@ -10,9 +10,12 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import androidx.core.view.*
+import com.kizitonwose.calendarcore.CalendarDay
+import com.kizitonwose.calendarcore.WeekDay
 import com.kizitonwose.calendarview.Binder
 import com.kizitonwose.calendarview.DaySize
 import com.kizitonwose.calendarview.ViewContainer
+import java.time.LocalDate
 
 internal data class DayConfig<Day>(
     val daySize: DaySize,
@@ -78,9 +81,9 @@ internal class DayHolder<Day>(private val config: DayConfig<Day>) {
             viewContainer = config.dayBinder.create(dateView)
         }
 
-        val dayHash = currentDay.hashCode()
-        if (dateViewParent.tag != dayHash) {
-            dateViewParent.tag = dayHash
+        val dayTag = dayTag(findDate(currentDay))
+        if (dateViewParent.tag != dayTag) {
+            dateViewParent.tag = dayTag
         }
 
         config.dayBinder.bind(viewContainer, currentDay)
@@ -93,5 +96,13 @@ internal class DayHolder<Day>(private val config: DayConfig<Day>) {
         } else {
             false
         }
+    }
+}
+
+private fun findDate(day: Any?): LocalDate {
+    return when (day) {
+        is CalendarDay -> day.date
+        is WeekDay -> day.date
+        else -> throw IllegalArgumentException("Invalid day type: $day")
     }
 }

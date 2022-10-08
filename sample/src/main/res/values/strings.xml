@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">Calendar Sample</string>
-    <string name="app_name_view">Calendar View Sample</string>
-    <string name="app_name_compose">Calendar Compose Sample</string>
+    <string name="activity_title_view">Calendar View Sample</string>
     <string name="example_1_title">Example 1</string>
-    <string name="example_1_subtitle">Multiple selection, paged horizontal scrolling, shows the \"endOfRow\" implementation of outDateStyle option.</string>
+    <string name="example_1_subtitle">Multiple selection, paged horizontal scrolling, shows the \"EndOfRow\" implementation of OutDateStyle property.</string>
     <string name="example_2_title">Example 2</string>
     <string name="example_2_subtitle">Month header view, single selection, vertical scrolling, hides in and out dates.</string>
     <string name="example_3_title">Example 3</string>
@@ -11,7 +10,7 @@
     <string name="example_4_title">Example 4</string>
     <string name="example_4_subtitle">Continuous selection within one month and across multiple months, dates older than the current day are disabled. Similar to what is in the Airbnb app.</string>
     <string name="example_5_title">Example 5</string>
-    <string name="example_5_subtitle">Single selection, programmatic calendar scrolling, generates six rows for all months showing \"endOfGrid\" implementation of \"outDateStyle\" option. A flight schedule calender.</string>
+    <string name="example_5_subtitle">Single selection, programmatic calendar scrolling, generates six rows for all months showing \"EndOfGrid\" implementation of OutDateStyle property. A flight schedule calender.</string>
     <string name="example_6_title">Example 6</string>
     <string name="example_6_subtitle">Custom date width and height, custom month view, item decoration on the CalendarView, continuous horizontal scrolling style.</string>
     <string name="example_7_title">Example 7</string>

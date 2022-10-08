@@ -124,7 +124,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
                 when (data.position) {
                     DayPosition.MonthDate -> {
-                        textView.text = data.day.toString()
+                        textView.text = data.date.dayOfMonth.toString()
                         if (data.date.isBefore(today)) {
                             textView.setTextColorRes(R.color.example_4_grey_past)
                         } else {

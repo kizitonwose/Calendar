@@ -6,8 +6,12 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 
-fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
-
+/**
+ * Provides the days of week values such that the desired
+ * [firstDayOfWeek] property is at the start position.
+ *
+ * @see [firstDayOfWeekFromLocale]
+ */
 fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
     val pivot = 7 - firstDayOfWeek.ordinal
     val daysOfWeek = DayOfWeek.values()
@@ -15,7 +19,16 @@ fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<Day
     return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
 }
 
+/**
+ * Provides the first day of the week from the default locale.
+ */
 fun firstDayOfWeekFromLocale(): DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+
+/**
+ * Provides the first day of the month.
+ * Complements [YearMonth.atEndOfMonth].
+ */
+fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
 
 val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)

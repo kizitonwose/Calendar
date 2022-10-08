@@ -3,8 +3,9 @@ package com.kizitonwose.calendarview.internal.monthcalendar
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarcore.CalendarDay
 import com.kizitonwose.calendarview.CalendarView
+import com.kizitonwose.calendarview.MarginValues
 import com.kizitonwose.calendarview.internal.CalendarLayoutManager
-import com.kizitonwose.calendarview.internal.MarginValues
+import com.kizitonwose.calendarview.internal.dayTag
 import java.time.YearMonth
 
 internal class MonthCalendarLayoutManager(
@@ -17,6 +18,7 @@ internal class MonthCalendarLayoutManager(
 
     override fun getaItemAdapterPosition(data: YearMonth): Int = adapter.getAdapterPosition(data)
     override fun getaDayAdapterPosition(data: CalendarDay): Int = adapter.getAdapterPosition(data)
+    override fun getDayTag(data: CalendarDay): Int = dayTag(data.date)
     override fun getItemMargins(): MarginValues = calView.monthMargins
     override fun scrollPaged(): Boolean = calView.scrollPaged
     override fun notifyScrollListenerIfNeeded() = adapter.notifyMonthScrollListenerIfNeeded()

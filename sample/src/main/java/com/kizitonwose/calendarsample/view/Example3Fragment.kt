@@ -200,7 +200,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         }
 
         binding.exThreeCalendar.monthScrollListener = {
-            activityToolbar.title = if (it.year == today.year) {
+            activityToolbar.title = if (it.yearMonth.year == today.year) {
                 titleSameYearFormatter.format(it.yearMonth)
             } else {
                 titleFormatter.format(it.yearMonth)

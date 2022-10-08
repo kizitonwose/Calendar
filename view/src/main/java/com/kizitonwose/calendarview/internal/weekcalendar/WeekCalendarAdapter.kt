@@ -12,6 +12,7 @@ import com.kizitonwose.calendarview.WeekCalendarView
 import com.kizitonwose.calendarview.WeekDayBinder
 import com.kizitonwose.calendarview.WeekHeaderFooterBinder
 import com.kizitonwose.calendarview.internal.NO_INDEX
+import com.kizitonwose.calendarview.internal.dayTag
 import com.kizitonwose.calendarview.internal.setupItemRoot
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -89,15 +90,9 @@ internal class WeekCalendarAdapter(
     }
 
     fun reloadDay(date: LocalDate) {
-        val (day, position) = findWeekDay(date) ?: return
-        notifyItemChanged(position, day)
-    }
-
-    fun findWeekDay(date: LocalDate): Pair<WeekDay, Int>? {
         val position = getAdapterPosition(date)
-        return if (position != NO_INDEX) null else {
-            val day = dataStore[position].days.first { it.date == date }
-            Pair(day, position)
+        if (position != NO_INDEX) {
+            notifyItemChanged(position, dataStore[position].days.first { it.date == date })
         }
     }
 
@@ -168,7 +163,7 @@ internal class WeekCalendarAdapter(
         return dataStore[visibleIndex].days
             .run { if (isFirst) this else reversed() }
             .firstOrNull {
-                val dayView = visibleItemView.findViewWithTag<View>(it.hashCode())
+                val dayView = visibleItemView.findViewWithTag<View>(dayTag(it.date))
                     ?: return@firstOrNull false
                 dayView.getGlobalVisibleRect(dayRect)
                 dayRect.intersect(weekRect)

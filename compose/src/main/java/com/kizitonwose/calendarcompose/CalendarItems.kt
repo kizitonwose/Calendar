@@ -14,7 +14,7 @@ internal fun LazyListScope.CalendarItems(
     monthData: (offset: Int) -> CalendarMonth,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
-    monthContent: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
+    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
     monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit,
 ) {
@@ -25,7 +25,7 @@ internal fun LazyListScope.CalendarItems(
         monthContainer(calendarMonth) {
             Column(modifier = Modifier.fillParentMaxWidth()) {
                 monthHeader(calendarMonth)
-                monthContent(calendarMonth) {
+                monthBody(calendarMonth) {
                     Column {
                         for (week in calendarMonth.weekDays) {
                             Row {

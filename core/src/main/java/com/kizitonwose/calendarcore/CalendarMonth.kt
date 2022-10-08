@@ -1,16 +1,18 @@
 package com.kizitonwose.calendarcore
 
 import java.io.Serializable
-import java.time.Month
 import java.time.YearMonth
 
+/**
+ * Represents a month on the calendar.
+ *
+ * @param yearMonth the calendar month value.
+ * @param weekDays the weeks in this month.
+ */
 data class CalendarMonth(
     val yearMonth: YearMonth,
     val weekDays: List<List<CalendarDay>>,
 ) : Serializable {
-    val year: Int = yearMonth.year
-    val month: Month = yearMonth.month
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

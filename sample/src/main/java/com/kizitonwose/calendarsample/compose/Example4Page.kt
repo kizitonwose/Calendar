@@ -64,7 +64,7 @@ fun Example4Page() {
                     container()
                 }
             },
-            monthContent = { _, content ->
+            monthBody = { _, content ->
                 Box(modifier = Modifier.background(
                     brush = Brush.verticalGradient(
                         colors = listOf(

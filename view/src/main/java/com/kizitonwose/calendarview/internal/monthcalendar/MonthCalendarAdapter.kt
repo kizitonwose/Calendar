@@ -16,6 +16,7 @@ import com.kizitonwose.calendarview.MonthDayBinder
 import com.kizitonwose.calendarview.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ViewContainer
 import com.kizitonwose.calendarview.internal.NO_INDEX
+import com.kizitonwose.calendarview.internal.dayTag
 import com.kizitonwose.calendarview.internal.setupItemRoot
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -194,7 +195,7 @@ internal class MonthCalendarAdapter(
         return dataStore[visibleIndex].weekDays.flatten()
             .run { if (isFirst) this else reversed() }
             .firstOrNull {
-                val dayView = visibleItemView.findViewWithTag<View>(it.hashCode())
+                val dayView = visibleItemView.findViewWithTag<View>(dayTag(it.date))
                     ?: return@firstOrNull false
                 dayView.getGlobalVisibleRect(dayRect)
                 dayRect.intersect(monthRect)

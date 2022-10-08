@@ -25,10 +25,13 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import com.kizitonwose.calendarcompose.CalendarLayoutInfo
 import com.kizitonwose.calendarcompose.CalendarState
+import com.kizitonwose.calendarcompose.weekcalendar.WeekCalendarState
+import com.kizitonwose.calendarcore.WeekDay
 import com.kizitonwose.calendarsample.R
 import com.kizitonwose.calendarsample.findActivity
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import java.time.YearMonth
 
 fun Modifier.clickable(
@@ -49,7 +52,7 @@ fun Modifier.clickable(
 }
 
 @Composable
-fun ToggleStatusBarColor(color: Color, isLight: Boolean = false) {
+fun StatusBarColorUpdateEffect(color: Color, isLight: Boolean = false) {
     val activity = LocalContext.current.findActivity()
     val defaultStatusBarColor = colorResource(R.color.colorPrimaryDark)
     DisposableEffect(LocalLifecycleOwner.current) {
@@ -67,7 +70,6 @@ fun ToggleStatusBarColor(color: Color, isLight: Boolean = false) {
         }
     }
 }
-
 
 @Composable
 fun NavigationIcon(onBackClick: () -> Unit) {
@@ -88,60 +90,49 @@ fun NavigationIcon(onBackClick: () -> Unit) {
 
 /**
  * Returns the first fully visible month in the layout.
- * This property is observable.
+ *
+ * @see [rememberFirstVisibleMonthAfterScroll]
  */
-val CalendarLayoutInfo.firstCompletelyVisibleMonth: YearMonth?
-    get() {
-        val visibleItemsInfo = this.visibleMonthsInfo.toMutableList()
-        return if (visibleItemsInfo.isEmpty()) {
-            null
-        } else {
-            val lastItem = visibleItemsInfo.last()
-            val viewportSize = this.viewportEndOffset + this.viewportStartOffset
-            if (lastItem.offset + lastItem.size > viewportSize) {
-                visibleItemsInfo.removeLast()
-            }
-            val firstItem = visibleItemsInfo.firstOrNull()
-            if (firstItem != null && firstItem.offset < this.viewportStartOffset) {
-                visibleItemsInfo.removeFirst()
-            }
-            visibleItemsInfo.map { it.month.yearMonth }.firstOrNull()
-        }
-    }
-
 @Composable
-fun rememberFirstCompletelyVisibleMonth(
-    initialValue: YearMonth,
-    state: CalendarState,
-): YearMonth {
-    val visibleMonth = remember { mutableStateOf(initialValue) }
-    val visibleMonthStore = remember {
-        derivedStateOf { state.layoutInfo.firstCompletelyVisibleMonth }
-    }
+fun rememberFirstCompletelyVisibleMonthNonNull(state: CalendarState): YearMonth {
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth.yearMonth) }
     // Only take non-null values as null will be produced when the
-    // list is mid-scroll because no index will be completely visible.
-    val newValue = visibleMonthStore.value
-    if (newValue != null) {
-        visibleMonth.value = newValue
+    // list is mid-scroll as no index will be completely visible.
+    LaunchedEffect(state) {
+        snapshotFlow { state.firstCompletelyVisibleMonth?.yearMonth }
+            .filterNotNull()
+            .collect { month -> visibleMonth.value = month }
     }
     return visibleMonth.value
 }
 
 /**
- * Alternative way to find first visible month but there is a very small
- * delay, probably because the update is performed AFTER scrolling stops.
+ * Alternative way to find first visible month in a paged calendar **after** scrolling stops.
+ *
+ * @see [rememberFirstCompletelyVisibleMonthNonNull]
+ * @see [rememberFirstVisibleWeekAfterScroll]
  */
 @Composable
-fun rememberFirstVisibleMonthAfterScroll(
-    initialValue: YearMonth,
-    state: CalendarState,
-): YearMonth {
-    val visibleMonth = remember { mutableStateOf(initialValue) }
-    val isScrollInProgress = remember {
-        derivedStateOf { state.isScrollInProgress }
-    }
-    if (!isScrollInProgress.value) {
-        visibleMonth.value = state.firstVisibleMonth.yearMonth
+fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): YearMonth {
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth.yearMonth) }
+    LaunchedEffect(state) {
+        snapshotFlow { state.isScrollInProgress }
+            .filter { scrolling -> !scrolling }
+            .collect { visibleMonth.value = state.firstVisibleMonth.yearMonth }
     }
     return visibleMonth.value
+}
+
+/**
+ * Find first visible week in a paged week calendar **after** scrolling stops.
+ */
+@Composable
+fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): List<WeekDay> {
+    val visibleWeek = remember(state) { mutableStateOf(state.firstVisibleWeek) }
+    LaunchedEffect(state) {
+        snapshotFlow { state.isScrollInProgress }
+            .filter { scrolling -> !scrolling }
+            .collect { visibleWeek.value = state.firstVisibleWeek }
+    }
+    return visibleWeek.value
 }

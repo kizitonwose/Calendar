@@ -57,7 +57,7 @@ fun Example3Page() {
             if (date == null) emptyList() else flights[date].orEmpty()
         }
     }
-    ToggleStatusBarColor(color = toolbarColor)
+    StatusBarColorUpdateEffect(toolbarColor)
     Column(Modifier
         .fillMaxHeight()
         .background(color = pageBackGroundColor)) {
@@ -69,7 +69,7 @@ fun Example3Page() {
             outDateStyle = OutDateStyle.EndOfGrid,
         )
         val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstCompletelyVisibleMonth(initialValue = currentMonth, state)
+        val visibleMonth = rememberFirstCompletelyVisibleMonthNonNull(state)
         LaunchedEffect(visibleMonth) {
             // Clear selection if we scroll to a new month.
             selection = null
@@ -185,7 +185,7 @@ private fun MonthHeader(
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 color = Color.White,
-                text = dayOfWeek.displayText(true),
+                text = dayOfWeek.displayText(uppercase = true),
                 fontWeight = FontWeight.Light,
             )
         }
