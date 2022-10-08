@@ -4,7 +4,7 @@ apply from: rootProject.file("dependencies.gradle")
 
 android {
     compileSdkVersion versions.compile_sdk
-    namespace 'com.kizitonwose.calendarcore'
+    namespace 'com.kizitonwose.calendar.core'
     defaultConfig {
         minSdkVersion versions.min_sdk_library
         targetSdkVersion versions.target_sdk

@@ -8,7 +8,7 @@ def artifact = 'CalendarView'
 
 android {
     compileSdkVersion versions.compile_sdk
-    namespace 'com.kizitonwose.calendarview'
+    namespace 'com.kizitonwose.calendar.view'
     defaultConfig {
         minSdkVersion versions.min_sdk_library
         targetSdkVersion versions.target_sdk

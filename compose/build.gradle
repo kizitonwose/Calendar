@@ -8,7 +8,7 @@ def artifact = 'CalendarCompose'
 
 android {
     compileSdkVersion versions.compile_sdk
-    namespace 'com.kizitonwose.calendarcompose'
+    namespace 'com.kizitonwose.calendar.compose'
     defaultConfig {
         minSdkVersion versions.min_sdk_library_compose
         targetSdkVersion versions.target_sdk

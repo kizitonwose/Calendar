@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kizitonwose.calendarview.CalendarView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.kizitonwose.calendar.view.CalendarView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/exSixCalendar"
@@ -12,5 +12,5 @@
     app:cv_monthHeaderResource="@layout/example_6_calendar_header"
     app:cv_scrollPaged="false"
     app:cv_daySize="freeForm"
-    app:cv_monthViewClass="com.kizitonwose.calendarsample.view.Example6MonthView"
+    app:cv_monthViewClass="com.kizitonwose.calendar.sample.view.Example6MonthView"
     tools:context=".view.Example6Fragment" />

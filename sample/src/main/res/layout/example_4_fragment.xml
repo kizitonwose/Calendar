@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kizitonwose.calendarview.CalendarView
+        <com.kizitonwose.calendar.view.CalendarView
             android:id="@+id/exFourCalendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
