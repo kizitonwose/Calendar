@@ -12,7 +12,6 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.VisibleItemState
-import com.kizitonwose.calendar.compose.completelyVisibleMonths
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.*
@@ -106,47 +105,19 @@ class HeatMapCalendarState internal constructor(
     /**
      * The first month that is visible.
      *
-     * @see [firstCompletelyVisibleMonth]
+     * @see [lastVisibleMonth]
      */
     val firstVisibleMonth: CalendarMonth by derivedStateOf {
         store[listState.firstVisibleItemIndex]
     }
 
     /**
-     * The first month that is fully visible.
-     * In a paged calendar, this could be used to update the title to reflect the currently
-     * visible month. As this property is updated during scroll, null values can be produced
-     * when no month is fully visible. Depending on the use case, null values could be filtered
-     * or you could use this property in combination with [isScrollInProgress] to get only
-     * non-null values when scrolling stops.
-     *
-     * See Example1Page in the sample app for usage.
-     */
-    val firstCompletelyVisibleMonth: CalendarMonth? by derivedStateOf {
-        layoutInfo.completelyVisibleMonths.firstOrNull()
-    }
-
-    /**
      * The last month that is visible.
      *
-     * @see [lastCompletelyVisibleMonth]
+     * @see [firstVisibleMonth]
      */
     val lastVisibleMonth: CalendarMonth by derivedStateOf {
         store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0]
-    }
-
-    /**
-     * The last month that is fully visible.
-     * In a paged calendar, this could be used to update the title to reflect the currently
-     * visible month. As this property is updated during scroll, null values can be produced
-     * when no month is fully visible. Depending on the use case, null values could be filtered
-     * or you could use this property in combination with [isScrollInProgress] to get only
-     * non-null values when scrolling stops.
-     *
-     * See Example1Page in the sample app for usage.
-     */
-    val lastCompletelyVisibleMonth: CalendarMonth? by derivedStateOf {
-        layoutInfo.completelyVisibleMonths.lastOrNull()
     }
 
     /**

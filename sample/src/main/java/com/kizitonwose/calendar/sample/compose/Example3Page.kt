@@ -69,7 +69,7 @@ fun Example3Page() {
             outDateStyle = OutDateStyle.EndOfGrid,
         )
         val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstCompletelyVisibleMonthNonNull(state)
+        val visibleMonth = rememberFirstCompletelyVisibleMonth(state)
         LaunchedEffect(visibleMonth) {
             // Clear selection if we scroll to a new month.
             selection = null

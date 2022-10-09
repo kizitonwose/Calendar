@@ -25,8 +25,10 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.findActivity
@@ -89,17 +91,17 @@ fun NavigationIcon(onBackClick: () -> Unit) {
 }
 
 /**
- * Returns the first fully visible month in the layout.
+ * Alternative way to find the first fully visible month in the layout.
  *
  * @see [rememberFirstVisibleMonthAfterScroll]
  */
 @Composable
-fun rememberFirstCompletelyVisibleMonthNonNull(state: CalendarState): YearMonth {
+fun rememberFirstCompletelyVisibleMonth(state: CalendarState): YearMonth {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth.yearMonth) }
     // Only take non-null values as null will be produced when the
     // list is mid-scroll as no index will be completely visible.
     LaunchedEffect(state) {
-        snapshotFlow { state.firstCompletelyVisibleMonth?.yearMonth }
+        snapshotFlow { state.layoutInfo.completelyVisibleMonths.firstOrNull()?.yearMonth }
             .filterNotNull()
             .collect { month -> visibleMonth.value = month }
     }
@@ -107,10 +109,9 @@ fun rememberFirstCompletelyVisibleMonthNonNull(state: CalendarState): YearMonth 
 }
 
 /**
- * Alternative way to find first visible month in a paged calendar **after** scrolling stops.
+ * Returns the first visible month in a paged calendar **after** scrolling stops.
  *
- * @see [rememberFirstCompletelyVisibleMonthNonNull]
- * @see [rememberFirstVisibleWeekAfterScroll]
+ * @see [rememberFirstCompletelyVisibleMonth]
  */
 @Composable
 fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): YearMonth {
@@ -136,3 +137,22 @@ fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): List<WeekDay>
     }
     return visibleWeek.value
 }
+
+private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
+    get() {
+        val visibleItemsInfo = this.visibleMonthsInfo.toMutableList()
+        return if (visibleItemsInfo.isEmpty()) {
+            emptyList()
+        } else {
+            val lastItem = visibleItemsInfo.last()
+            val viewportSize = this.viewportEndOffset + this.viewportStartOffset
+            if (lastItem.offset + lastItem.size > viewportSize) {
+                visibleItemsInfo.removeLast()
+            }
+            val firstItem = visibleItemsInfo.firstOrNull()
+            if (firstItem != null && firstItem.offset < this.viewportStartOffset) {
+                visibleItemsInfo.removeFirst()
+            }
+            visibleItemsInfo.map { it.month }
+        }
+    }
