@@ -21,7 +21,7 @@ enum class DaySize {
     SeventhWidth,
 
     /**
-     * This day is allowed to determine its width and height by
+     * The day is allowed to determine its width and height by
      * setting specific values or using [ViewGroup.LayoutParams.WRAP_CONTENT].
      */
     FreeForm;

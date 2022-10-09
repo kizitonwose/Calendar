@@ -12,6 +12,7 @@ import java.util.*
  *
  * @see [firstDayOfWeekFromLocale]
  */
+@JvmOverloads
 fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
     val pivot = 7 - firstDayOfWeek.ordinal
     val daysOfWeek = DayOfWeek.values()

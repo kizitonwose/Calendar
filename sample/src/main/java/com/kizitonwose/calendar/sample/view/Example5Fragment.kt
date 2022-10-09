@@ -1,11 +1,11 @@
 package com.kizitonwose.calendar.sample.view
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -96,7 +96,6 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
 
             init {
                 view.setOnClickListener { v ->
-                    Toast.makeText(v.context, day.date.toString(), Toast.LENGTH_SHORT).show()
                     if (day.position == DayPosition.MonthDate) {
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
@@ -146,6 +145,8 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val legendLayout = Example5CalendarHeaderBinding.bind(view).legendLayout.root
         }
+
+        val typeFace = Typeface.create("sans-serif-light", Typeface.NORMAL)
         binding.exFiveCalendar.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
@@ -155,9 +156,10 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                         container.legendLayout.tag = data.yearMonth
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
-                                tv.text = daysOfWeek[index].displayText()
-                                tv.setTextColorRes(R.color.example_5_text_grey)
+                                tv.text = daysOfWeek[index].displayText(uppercase = true)
+                                tv.setTextColorRes(R.color.white)
                                 tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                                tv.typeface = typeFace
                             }
                     }
             }

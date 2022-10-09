@@ -187,11 +187,13 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     override fun onStart() {
         super.onStart()
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_1_bg_light)
+        requireActivity().window.statusBarColor =
+            requireContext().getColorCompat(R.color.example_1_bg_light)
     }
 
     override fun onStop() {
         super.onStop()
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
+        requireActivity().window.statusBarColor =
+            requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
 }

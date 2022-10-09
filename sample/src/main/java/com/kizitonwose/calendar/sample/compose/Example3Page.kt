@@ -41,7 +41,7 @@ private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 private val pageBackGroundColor: Color @Composable get() = colorResource(R.color.example_5_page_bg_color)
 private val itemBackGroundColor: Color @Composable get() = colorResource(R.color.example_5_item_view_bg_color)
 private val toolbarColor: Color @Composable get() = colorResource(R.color.example_5_toolbar_color)
-private val activeTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.example_5_text_grey)
 private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
 
 @Composable
@@ -136,7 +136,7 @@ private fun Day(
         .aspectRatio(1f) // This is important for square-sizing!
         .border(
             width = if (isSelected) 1.dp else 0.dp,
-            color = if (isSelected) activeTextColor else Color.Transparent)
+            color = if (isSelected) selectedItemColor else Color.Transparent)
         .padding(1.dp)
         .background(color = itemBackGroundColor)
         // Disable clicks on inDates/outDates

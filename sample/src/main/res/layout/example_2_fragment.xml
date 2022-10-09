@@ -24,7 +24,7 @@
 
         <include
             android:id="@+id/legendLayout"
-            layout="@layout/calendar_day_legend"
+            layout="@layout/calendar_day_legend_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
