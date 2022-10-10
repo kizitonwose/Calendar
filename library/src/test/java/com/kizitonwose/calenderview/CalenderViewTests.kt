@@ -1,9 +1,6 @@
 package com.kizitonwose.calenderview
 
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.model.InDateStyle
-import com.kizitonwose.calendarview.model.MonthConfig
-import com.kizitonwose.calendarview.model.OutDateStyle
+import com.kizitonwose.calendarview.model.*
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.DayOfWeek
@@ -20,6 +17,7 @@ class CalenderViewTests {
     private val may2019 = YearMonth.of(2019, 5)
     private val nov2019 = may2019.plusMonths(6)
     private val firstDayOfWeek = DayOfWeek.MONDAY
+    private val scrollMode = ScrollMode.CONTINUOUS
 
     @Test
     fun `test all month in date generation works as expected`() {
@@ -41,7 +39,7 @@ class CalenderViewTests {
     @Test
     fun `test first month in date generation works as expected`() {
         val months = MonthConfig.generateBoundedMonths(
-            may2019, nov2019, firstDayOfWeek, 6, InDateStyle.FIRST_MONTH, OutDateStyle.NONE
+            may2019, nov2019, firstDayOfWeek, 6, scrollMode, InDateStyle.FIRST_MONTH, OutDateStyle.NONE
         )
 
         // inDates are in the first month.
@@ -95,7 +93,7 @@ class CalenderViewTests {
         val maxRowCount = 3
         val months = MonthConfig.generateBoundedMonths(
             may2019, may2019.plusMonths(20),
-            firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_ROW
+            firstDayOfWeek, maxRowCount, scrollMode, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_ROW
         )
 
         assertTrue(months.all { it.weekDays.count() <= maxRowCount })
@@ -121,7 +119,7 @@ class CalenderViewTests {
         val maxRowCount = 3
         val months = MonthConfig.generateUnboundedMonths(
             may2019.minusMonths(40), may2019.plusMonths(50),
-            firstDayOfWeek, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
+            firstDayOfWeek, maxRowCount, scrollMode, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
         )
 
         // The number of weeks in all CalendarMonth instances except the last one must match
@@ -137,7 +135,7 @@ class CalenderViewTests {
         val maxRowCount = 6
         MonthConfig.generateUnboundedMonths(
             YearMonth.of(2019, 2), YearMonth.of(2021, 2),
-            DayOfWeek.SUNDAY, maxRowCount, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
+            DayOfWeek.SUNDAY, maxRowCount, scrollMode, InDateStyle.ALL_MONTHS, OutDateStyle.END_OF_GRID
         )
         // No assertion necessary, as this particular range would throw an exception previously
         // when trying to build a day that is out of bounds (eg: December 32).

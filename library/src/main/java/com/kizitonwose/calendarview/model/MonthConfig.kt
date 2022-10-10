@@ -11,6 +11,7 @@ internal data class MonthConfig(
     internal val outDateStyle: OutDateStyle,
     internal val inDateStyle: InDateStyle,
     internal val maxRowCount: Int,
+    internal val scrollMode: ScrollMode,
     internal val startMonth: YearMonth,
     internal val endMonth: YearMonth,
     internal val firstDayOfWeek: DayOfWeek,
@@ -20,9 +21,9 @@ internal data class MonthConfig(
 
     internal val months: List<CalendarMonth> = run {
         return@run if (hasBoundaries) {
-            generateBoundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle, job)
+            generateBoundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, scrollMode, inDateStyle, outDateStyle, job)
         } else {
-            generateUnboundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, inDateStyle, outDateStyle, job)
+            generateUnboundedMonths(startMonth, endMonth, firstDayOfWeek, maxRowCount, scrollMode, inDateStyle, outDateStyle, job)
         }
     }
 
@@ -40,6 +41,7 @@ internal data class MonthConfig(
             endMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
             maxRowCount: Int,
+            scrollMode: ScrollMode,
             inDateStyle: InDateStyle,
             outDateStyle: OutDateStyle,
             job: Job = uninterruptedJob
@@ -53,8 +55,12 @@ internal data class MonthConfig(
                     InDateStyle.NONE -> false
                 }
 
+                val weekDays = generateWeekDays(currentMonth, firstDayOfWeek, generateInDates, outDateStyle)
                 val weekDaysGroup =
-                    generateWeekDays(currentMonth, firstDayOfWeek, generateInDates, outDateStyle)
+                    // Regroup days by 1 for week mode scrolling (enables using of custom snaphelper)
+                    if (maxRowCount == 1 && scrollMode == ScrollMode.CONTINUOUS) {
+                        weekDays.flatten().chunked(1).toList()
+                    } else weekDays
 
                 // Group rows by maxRowCount into CalendarMonth classes.
                 val calendarMonths = mutableListOf<CalendarMonth>()
@@ -79,6 +85,7 @@ internal data class MonthConfig(
             endMonth: YearMonth,
             firstDayOfWeek: DayOfWeek,
             maxRowCount: Int,
+            scrollMode: ScrollMode,
             inDateStyle: InDateStyle,
             outDateStyle: OutDateStyle,
             job: Job = uninterruptedJob
@@ -105,8 +112,9 @@ internal data class MonthConfig(
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
 
-            // Regroup data into 7 days. Use toList() to create a copy of the ephemeral list.
-            val allDaysGroup = allDays.chunked(7).toList()
+            // Regroup data into 7 days (or 1 day for scrolling in week mode). Use toList() to create a copy of the ephemeral list.
+            val chunkSize = if (maxRowCount == 1 && scrollMode == ScrollMode.CONTINUOUS) 1 else 7
+            val allDaysGroup = allDays.chunked(chunkSize).toList()
 
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount

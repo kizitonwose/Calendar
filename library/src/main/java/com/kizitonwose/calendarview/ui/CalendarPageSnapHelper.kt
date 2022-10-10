@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 
-internal class CalenderPageSnapHelper : PagerSnapHelper() {
+internal class CalendarPageSnapHelper : PagerSnapHelper() {
 
     /**
      * The default implementation of this method in [PagerSnapHelper.calculateDistanceToFinalSnap] uses the distance
@@ -23,6 +23,36 @@ internal class CalenderPageSnapHelper : PagerSnapHelper() {
             this[1] = if (layoutManager.canScrollVertically())
                 distanceToStart(targetView, getVerticalHelper(layoutManager)) else 0
         }
+    }
+
+    override fun findSnapView(layoutManager: RecyclerView.LayoutManager): View? {
+        if (layoutManager.canScrollHorizontally()) {
+            return findFirstView(layoutManager, getHorizontalHelper(layoutManager))
+        } else {
+            return findFirstView(layoutManager, getVerticalHelper(layoutManager))
+        }
+    }
+
+    private fun findFirstView(layoutManager: RecyclerView.LayoutManager?, helper: OrientationHelper): View? {
+        if (layoutManager == null) return null
+
+        val childCount = layoutManager.childCount
+        if (childCount == 0) return null
+
+        var absClosest = Integer.MAX_VALUE
+        var closestView: View? = null
+        val start = helper.startAfterPadding
+
+        for (i in 0 until childCount) {
+            val child = layoutManager.getChildAt(i)
+            val childStart = helper.getDecoratedStart(child)
+            val absDistanceToStart = Math.abs(childStart - start)
+            if (absDistanceToStart < absClosest) {
+                absClosest = absDistanceToStart
+                closestView = child
+            }
+        }
+        return closestView
     }
 
     private fun distanceToStart(targetView: View, helper: OrientationHelper): Int {

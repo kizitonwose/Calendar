@@ -133,6 +133,7 @@ open class CalendarView : RecyclerView {
             if (field != value) {
                 field = value
                 pagerSnapHelper.attachToRecyclerView(if (value == ScrollMode.PAGED) this else null)
+                updateAdapterMonthConfig()
             }
         }
 
@@ -225,7 +226,7 @@ open class CalendarView : RecyclerView {
      */
     var wrappedPageHeightAnimationDuration = 200
 
-    private val pagerSnapHelper = CalenderPageSnapHelper()
+    private val pagerSnapHelper = CalendarPageSnapHelper()
 
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
@@ -438,6 +439,7 @@ open class CalendarView : RecyclerView {
                 outDateStyle,
                 inDateStyle,
                 maxRowCount,
+                scrollMode,
                 startMonth ?: return,
                 endMonth ?: return,
                 firstDayOfWeek ?: return,
@@ -804,6 +806,7 @@ open class CalendarView : RecyclerView {
             outDateStyle,
             inDateStyle,
             maxRowCount,
+            scrollMode,
             requireStartMonth(),
             requireEndMonth(),
             requireFirstDayOfWeek(),
