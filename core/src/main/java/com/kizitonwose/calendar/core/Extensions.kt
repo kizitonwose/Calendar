@@ -7,7 +7,7 @@ import java.time.temporal.WeekFields
 import java.util.*
 
 /**
- * Provides the days of week values such that the desired
+ * Returns the days of week values such that the desired
  * [firstDayOfWeek] property is at the start position.
  *
  * @see [firstDayOfWeekFromLocale]
@@ -21,12 +21,13 @@ fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<Day
 }
 
 /**
- * Provides the first day of the week from the default locale.
+ * Returns the first day of the week from the default locale.
  */
 fun firstDayOfWeekFromLocale(): DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
 
 /**
- * Provides the first day of the month.
+ * Returns a [LocalDate] at the start of the month.
+ *
  * Complements [YearMonth.atEndOfMonth].
  */
 fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)

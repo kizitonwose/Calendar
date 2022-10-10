@@ -1,19 +1,26 @@
 package com.kizitonwose.calendar.sample.view
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.view.children
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.daysOfWeek
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
+import com.kizitonwose.calendar.core.*
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.databinding.Example1CalendarDayBinding
 import com.kizitonwose.calendar.sample.databinding.Example1FragmentBinding
 import com.kizitonwose.calendar.sample.displayText
-import com.kizitonwose.calendar.view.MonthDayBinder
-import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendar.view.*
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -25,6 +32,8 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
     override val titleRes: Int = R.string.example_1_title
 
     private lateinit var binding: Example1FragmentBinding
+    private val monthCalendarView: CalendarView get() = binding.exOneCalendar
+    private val weekCalendarView: WeekCalendarView get() = binding.exOneWeekCalendar
 
     private val selectedDates = mutableSetOf<LocalDate>()
     private val today = LocalDate.now()
@@ -33,19 +42,33 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
         super.onViewCreated(view, savedInstanceState)
         binding = Example1FragmentBinding.bind(view)
         val daysOfWeek = daysOfWeek()
-        binding.legendLayout.root.children.forEachIndexed { index, child ->
-            (child as TextView).apply {
-                text = daysOfWeek[index].displayText()
-                setTextColorRes(R.color.example_1_white_light)
+        binding.legendLayout.root.children
+            .map { it as TextView }
+            .forEachIndexed { index, textView ->
+                textView.text = daysOfWeek[index].displayText()
+                textView.setTextColorRes(R.color.example_1_white_light)
             }
-        }
 
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
         val endMonth = currentMonth.plusMonths(100)
-        binding.exOneCalendar.setup(startMonth, endMonth, daysOfWeek.first())
-        binding.exOneCalendar.scrollToMonth(currentMonth)
+        setupMonthCalendar(startMonth, endMonth, currentMonth, daysOfWeek)
+        setupWeekCalendar(startMonth, endMonth, currentMonth, daysOfWeek)
 
+        monthCalendarView.isInvisible = binding.weekModeCheckBox.isChecked
+        weekCalendarView.isInvisible = !binding.weekModeCheckBox.isChecked
+
+        binding.weekModeCheckBox.setOnCheckedChangeListener(weekModeToggled)
+    }
+
+    private fun setupMonthCalendar(
+        startMonth: YearMonth,
+        endMonth: YearMonth,
+        currentMonth: YearMonth,
+        daysOfWeek: List<DayOfWeek>,
+    ) {
+        monthCalendarView.setup(startMonth, endMonth, daysOfWeek.first())
+        monthCalendarView.scrollToMonth(currentMonth)
         class DayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
             lateinit var day: CalendarDay
@@ -54,134 +77,181 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             init {
                 view.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
-                        if (selectedDates.contains(day.date)) {
-                            selectedDates.remove(day.date)
-                        } else {
-                            selectedDates.add(day.date)
-                        }
-                        binding.exOneCalendar.notifyDayChanged(day)
+                        dateClicked(date = day.date)
                     }
                 }
             }
         }
 
-        binding.exOneCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
+        monthCalendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.day = data
-                val textView = container.textView
-                textView.text = data.date.dayOfMonth.toString()
-                if (data.position == DayPosition.MonthDate) {
-                    when {
-                        selectedDates.contains(data.date) -> {
-                            textView.setTextColorRes(R.color.example_1_bg)
-                            textView.setBackgroundResource(R.drawable.example_1_selected_bg)
-                        }
-                        today == data.date -> {
-                            textView.setTextColorRes(R.color.example_1_white)
-                            textView.setBackgroundResource(R.drawable.example_1_today_bg)
-                        }
-                        else -> {
-                            textView.setTextColorRes(R.color.example_1_white)
-                            textView.background = null
-                        }
-                    }
-                } else {
-                    textView.setTextColorRes(R.color.example_1_white_light)
-                    textView.background = null
-                }
+                bindDate(data.date, container.textView, data.position == DayPosition.MonthDate)
             }
         }
 
-        binding.exOneCalendar.monthScrollListener = {
-            binding.exOneYearText.text = it.yearMonth.year.toString()
-            binding.exOneMonthText.text = it.yearMonth.month.displayText(short = false)
-//            if (binding.exOneCalendar.maxRowCount == 6) {
-//                binding.exOneYearText.text = it.yearMonth.year.toString()
-//                binding.exOneMonthText.text = monthTitleFormatter.format(it.yearMonth)
-//            } else {
-//                // In week mode, we show the header a bit differently.
-//                // We show indices with dates from different months since
-//                // dates overflow and cells in one index can belong to different
-//                // months/years.
-//                val firstDate = it.weekDays.first().first().date
-//                val lastDate = it.weekDays.last().last().date
-//                if (firstDate.yearMonth == lastDate.yearMonth) {
-//                    binding.exOneYearText.text = firstDate.yearMonth.year.toString()
-//                    binding.exOneMonthText.text = monthTitleFormatter.format(firstDate)
-//                } else {
-//                    binding.exOneMonthText.text =
-//                        "${monthTitleFormatter.format(firstDate)} - ${monthTitleFormatter.format(lastDate)}"
-//                    if (firstDate.year == lastDate.year) {
-//                        binding.exOneYearText.text = firstDate.yearMonth.year.toString()
-//                    } else {
-//                        binding.exOneYearText.text = "${firstDate.yearMonth.year} - ${lastDate.yearMonth.year}"
-//                    }
-//                }
-//            }
+        monthCalendarView.monthScrollListener = { updateTitle() }
+    }
+
+    private fun setupWeekCalendar(
+        startMonth: YearMonth,
+        endMonth: YearMonth,
+        currentMonth: YearMonth,
+        daysOfWeek: List<DayOfWeek>,
+    ) {
+        weekCalendarView.setup(
+            startMonth.atStartOfMonth(),
+            endMonth.atEndOfMonth(),
+            daysOfWeek.first(),
+        )
+        weekCalendarView.scrollToWeek(currentMonth.atStartOfMonth())
+        class WeekDayViewContainer(view: View) : ViewContainer(view) {
+            // Will be set when this container is bound. See the dayBinder.
+            lateinit var day: WeekDay
+            val textView = Example1CalendarDayBinding.bind(view).exOneDayText
+
+            init {
+                view.setOnClickListener {
+                    if (day.position == WeekDayPosition.RangeDate) {
+                        dateClicked(date = day.date)
+                    }
+                }
+            }
         }
+        weekCalendarView.dayBinder = object : WeekDayBinder<WeekDayViewContainer> {
+            override fun create(view: View): WeekDayViewContainer = WeekDayViewContainer(view)
+            override fun bind(container: WeekDayViewContainer, data: WeekDay) {
+                container.day = data
+                bindDate(data.date, container.textView, data.position == WeekDayPosition.RangeDate)
+            }
+        }
+        weekCalendarView.weekScrollListener = { updateTitle() }
+    }
 
-        binding.weekModeCheckBox.setOnCheckedChangeListener { _, monthToWeek ->
-//            val firstDate = binding.exOneCalendar.findFirstVisibleDay()?.date ?: return@setOnCheckedChangeListener
-//            val lastDate = binding.exOneCalendar.findLastVisibleDay()?.date ?: return@setOnCheckedChangeListener
-//
-//            val oneWeekHeight = binding.exOneCalendar.daySize.height
-//            val oneMonthHeight = oneWeekHeight * 6
-//
-//            val oldHeight = if (monthToWeek) oneMonthHeight else oneWeekHeight
-//            val newHeight = if (monthToWeek) oneWeekHeight else oneMonthHeight
-//
-//            // Animate calendar height changes.
-//            val animator = ValueAnimator.ofInt(oldHeight, newHeight)
-//            animator.addUpdateListener { animator ->
-//                binding.exOneCalendar.updateLayoutParams {
-//                    height = animator.animatedValue as Int
-//                }
-//            }
+    private fun bindDate(date: LocalDate, textView: TextView, isSelectable: Boolean) {
+        textView.text = date.dayOfMonth.toString()
+        if (isSelectable) {
+            when {
+                selectedDates.contains(date) -> {
+                    textView.setTextColorRes(R.color.example_1_bg)
+                    textView.setBackgroundResource(R.drawable.example_1_selected_bg)
+                }
+                today == date -> {
+                    textView.setTextColorRes(R.color.example_1_white)
+                    textView.setBackgroundResource(R.drawable.example_1_today_bg)
+                }
+                else -> {
+                    textView.setTextColorRes(R.color.example_1_white)
+                    textView.background = null
+                }
+            }
+        } else {
+            textView.setTextColorRes(R.color.example_1_white_light)
+            textView.background = null
+        }
+    }
 
-            // When changing from month to week mode, we change the calendar's
-            // config at the end of the animation(doOnEnd) but when changing
-            // from week to month mode, we change the calendar's config at
-            // the start of the animation(doOnStart). This is so that the change
-            // in height is visible. You can do this whichever way you prefer.
+    private fun dateClicked(date: LocalDate) {
+        if (selectedDates.contains(date)) {
+            selectedDates.remove(date)
+        } else {
+            selectedDates.add(date)
+        }
+        // Refresh both calendar views..
+        monthCalendarView.notifyDateChanged(date)
+        weekCalendarView.notifyDateChanged(date)
+    }
 
-//            animator.doOnStart {
-//                if (!monthToWeek) {
-//                    binding.exOneCalendar.updateMonthConfiguration(
-//                        inDateStyle = InDateStyle.ALL_MONTHS,
-//                        maxRowCount = 6,
-//                        hasBoundaries = true
-//                    )
-//                }
-//            }
-//            animator.doOnEnd {
-//                if (monthToWeek) {
-//                    binding.exOneCalendar.updateMonthConfiguration(
-//                        inDateStyle = InDateStyle.FIRST_MONTH,
-//                        maxRowCount = 1,
-//                        hasBoundaries = false
-//                    )
-//                }
-//
-//                if (monthToWeek) {
-//                    // We want the first visible day to remain
-//                    // visible when we change to week mode.
-//                    binding.exOneCalendar.scrollToDate(firstDate)
-//                } else {
-//                    // When changing to month mode, we choose current
-//                    // month if it is the only one in the current frame.
-//                    // if we have multiple months in one frame, we prefer
-//                    // the second one unless it's an outDate in the last index.
-//                    if (firstDate.yearMonth == lastDate.yearMonth) {
-//                        binding.exOneCalendar.scrollToMonth(firstDate.yearMonth)
-//                    } else {
-//                        // We compare the next with the last month on the calendar so we don't go over.
-//                        binding.exOneCalendar.scrollToMonth(minOf(firstDate.yearMonth.next, endMonth))
-//                    }
-//                }
-//            }
-//            animator.duration = 250
-//            animator.start()
+    @SuppressLint("SetTextI18n")
+    private fun updateTitle() {
+        val isMonthMode = !binding.weekModeCheckBox.isChecked
+        if (isMonthMode) {
+            val month = monthCalendarView.findFirstVisibleMonth()?.yearMonth ?: return
+            binding.exOneYearText.text = month.year.toString()
+            binding.exOneMonthText.text = month.month.displayText(short = false)
+        } else {
+            val week = weekCalendarView.findFirstVisibleWeek() ?: return
+            // In week mode, we show the header a bit differently because
+            // an index can contain dates from different months/years.
+            val firstDate = week.first().date
+            val lastDate = week.last().date
+            if (firstDate.yearMonth == lastDate.yearMonth) {
+                binding.exOneYearText.text = firstDate.year.toString()
+                binding.exOneMonthText.text = firstDate.month.displayText(short = false)
+            } else {
+                binding.exOneMonthText.text =
+                    firstDate.month.displayText(short = false) + " - " +
+                            lastDate.month.displayText(short = false)
+                if (firstDate.year == lastDate.year) {
+                    binding.exOneYearText.text = firstDate.year.toString()
+                } else {
+                    binding.exOneYearText.text = "${firstDate.year} - ${lastDate.year}"
+                }
+            }
+        }
+    }
+
+    private val weekModeToggled = object : CompoundButton.OnCheckedChangeListener {
+        override fun onCheckedChanged(buttonView: CompoundButton, monthToWeek: Boolean) {
+            val targetDate = if (monthToWeek) {
+                monthCalendarView.findFirstVisibleDay()?.date ?: return
+            } else {
+                val visibleWeek = weekCalendarView.findFirstVisibleWeek().orEmpty()
+                val firstDate = visibleWeek.firstOrNull()?.date ?: return
+                val lastDate = visibleWeek.lastOrNull()?.date ?: return
+                // When changing to month view, if we have only one month in the visible
+                // week, we choose that month. But if we have multiple months, we prefer
+                // the second one. Please use what works best for your use case.
+                if (firstDate.yearMonth == lastDate.yearMonth) firstDate else lastDate
+            }
+
+            val weekHeight = weekCalendarView.height
+            // If OutDateStyle is EndOfGrid, you could simply multiply weekHeight by 6.
+            val visibleMonthHeight = weekHeight *
+                    monthCalendarView.findFirstVisibleMonth()?.weekDays.orEmpty().count()
+
+            val oldHeight = if (monthToWeek) visibleMonthHeight else weekHeight
+            val newHeight = if (monthToWeek) weekHeight else visibleMonthHeight
+
+            // Animate calendar height changes.
+            val animator = ValueAnimator.ofInt(oldHeight, newHeight)
+            animator.addUpdateListener { anim ->
+                monthCalendarView.updateLayoutParams {
+                    height = anim.animatedValue as Int
+                }
+                // A bug is causing the month calendar to not redraw its children
+                // with the updated height during animation, this is a workaround.
+                monthCalendarView.children.forEach { child ->
+                    child.requestLayout()
+                }
+            }
+
+            // We want the first visible day to remain visible after the
+            // change so we scroll to the position on the target calendar.
+            animator.doOnStart {
+                if (monthToWeek) {
+                    weekCalendarView.scrollToWeek(targetDate)
+                } else {
+                    monthCalendarView.scrollToMonth(targetDate.yearMonth)
+                    weekCalendarView.isInvisible = true
+                    monthCalendarView.isVisible = true
+                }
+            }
+            animator.doOnEnd {
+                if (monthToWeek) {
+                    weekCalendarView.isVisible = true
+                    monthCalendarView.isInvisible = true
+                } else {
+                    // Allow the month calendar to be able to expand to 6-week months
+                    // in case we animated using the height of a visible 5-week month.
+                    // Not needed if OutDateStyle is EndOfGrid.
+                    monthCalendarView.updateLayoutParams { height = WRAP_CONTENT }
+                }
+                updateTitle()
+            }
+            animator.duration = 250
+            animator.start()
         }
     }
 
