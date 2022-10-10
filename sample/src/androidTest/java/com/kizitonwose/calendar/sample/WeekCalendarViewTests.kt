@@ -30,7 +30,7 @@ import java.time.YearMonth
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class WeekCalenderViewTests {
+class WeekCalendarViewTests {
 
     @get:Rule
     val homeScreenRule = ActivityScenarioRule(CalendarViewActivity::class.java)

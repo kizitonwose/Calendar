@@ -18,7 +18,7 @@ import java.time.YearMonth
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class CalenderComposeTests {
+class CalendarComposeTests {
 
     @get:Rule
     val composeTestRule = createComposeRule()

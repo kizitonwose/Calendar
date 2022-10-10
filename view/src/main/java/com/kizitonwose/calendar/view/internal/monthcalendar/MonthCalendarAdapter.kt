@@ -138,7 +138,7 @@ internal class MonthCalendarAdapter(
                 // indices are also missing the last row. I think there should be a better way to fix this.
                 // New: Also fixes issue where the calendar does not wrap each month's height when in vertical,
                 // paged mode and just matches parent's height instead.
-                // Only happens when the CalenderView wraps its height.
+                // Only happens when the CalendarView wraps its height.
                 if (calView.scrollPaged && calView.layoutParams.height == WRAP_CONTENT) {
                     val visibleVH =
                         calView.findViewHolderForAdapterPosition(visibleItemPos) ?: return

@@ -10,7 +10,7 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.data.checkDateRange
-import com.kizitonwose.calendar.view.internal.CalenderPageSnapHelper
+import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarAdapter
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarLayoutManager
 import java.time.DayOfWeek
@@ -50,7 +50,7 @@ open class CalendarView : RecyclerView {
         }
 
     /**
-     * Called when the calender scrolls to a new month.
+     * Called when the calendar scrolls to a new month.
      * Mostly beneficial if [scrollPaged] is `true`.
      */
     var monthScrollListener: MonthScrollListener? = null
@@ -178,7 +178,7 @@ open class CalendarView : RecyclerView {
         }
     }
 
-    private val pagerSnapHelper = CalenderPageSnapHelper()
+    private val pagerSnapHelper = CalendarPageSnapHelper()
 
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null

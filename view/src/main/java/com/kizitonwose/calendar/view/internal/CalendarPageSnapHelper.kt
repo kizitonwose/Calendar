@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 
-internal class CalenderPageSnapHelper : PagerSnapHelper() {
+internal class CalendarPageSnapHelper : PagerSnapHelper() {
 
     /**
      * The default implementation of this method in [PagerSnapHelper.calculateDistanceToFinalSnap] uses the distance

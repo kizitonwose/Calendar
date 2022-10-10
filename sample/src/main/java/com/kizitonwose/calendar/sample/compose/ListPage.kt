@@ -35,7 +35,7 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
     ),
     Example3(
         title = "Example 3",
-        subtitle = "Horizontal Calendar - Single selection, shows the \"EndOfGrid\" implementation of \"OutDateStyle\" property. A flight schedule calender.",
+        subtitle = "Horizontal Calendar - Single selection, shows the \"EndOfGrid\" implementation of \"OutDateStyle\" property. A flight schedule calendar.",
         showToolBar = false
     ),
     Example4(

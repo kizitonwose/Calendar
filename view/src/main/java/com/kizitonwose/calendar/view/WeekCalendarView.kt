@@ -7,7 +7,7 @@ import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.data.checkDateRange
-import com.kizitonwose.calendar.view.internal.CalenderPageSnapHelper
+import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
 import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarAdapter
 import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarLayoutManager
 import java.time.DayOfWeek
@@ -46,7 +46,7 @@ open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * Called when the calender scrolls to a new week.
+     * Called when the calendar scrolls to a new week.
      * Mostly beneficial if [scrollPaged] is `true`.
      */
     var weekScrollListener: WeekScrollListener? = null
@@ -147,7 +147,7 @@ open class WeekCalendarView : RecyclerView {
         }
     }
 
-    private val pagerSnapHelper = CalenderPageSnapHelper()
+    private val pagerSnapHelper = CalendarPageSnapHelper()
 
     private var startDate: LocalDate? = null
     private var endDate: LocalDate? = null
