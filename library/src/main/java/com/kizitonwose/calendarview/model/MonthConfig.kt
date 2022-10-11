@@ -112,9 +112,8 @@ internal data class MonthConfig(
                 if (currentMonth != endMonth) currentMonth = currentMonth.next else break
             }
 
-            // Regroup data into 7 days (or 1 day for scrolling in week mode). Use toList() to create a copy of the ephemeral list.
-            val chunkSize = if (maxRowCount == 1 && scrollMode == ScrollMode.CONTINUOUS) 1 else 7
-            val allDaysGroup = allDays.chunked(chunkSize).toList()
+            // Regroup data into 7 days. Use toList() to create a copy of the ephemeral list.
+            val allDaysGroup = allDays.chunked(7).toList()
 
             val calendarMonths = mutableListOf<CalendarMonth>()
             val calMonthsCount = allDaysGroup.size roundDiv maxRowCount
@@ -172,11 +171,19 @@ internal data class MonthConfig(
                     }
                 }
 
-                calendarMonths.add(
-                    // numberOfSameMonth is the total number of all months and
-                    // indexInSameMonth is basically this item's index in the entire month list.
-                    CalendarMonth(startMonth, monthWeeks, calendarMonths.size, calMonthsCount)
-                )
+                val mothWeeksGroup =
+                    if (maxRowCount == 1 && scrollMode == ScrollMode.CONTINUOUS)
+                        // Regroup by 1 so we can scroll day by day in week mode
+                        monthWeeks.flatMap { it.chunked(1) }
+                    else monthWeeks
+
+                mothWeeksGroup.forEach { mothWeek ->
+                    calendarMonths.add(
+                        // numberOfSameMonth is the total number of all months and
+                        // indexInSameMonth is basically this item's index in the entire month list.
+                        CalendarMonth(startMonth, listOf(mothWeek), calendarMonths.size, calMonthsCount)
+                    )
+                }
             }
 
             return calendarMonths
