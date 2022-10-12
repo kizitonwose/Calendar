@@ -28,6 +28,7 @@ import com.kizitonwose.calendar.sample.databinding.Example3FragmentBinding
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -134,105 +135,31 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
             addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         }
 
-        val daysOfWeek = daysOfWeek()
-        val currentMonth = YearMonth.now()
-        binding.exThreeCalendar.apply {
-            setup(
-                currentMonth.minusMonths(50),
-                currentMonth.plusMonths(50),
-                daysOfWeek.first(),
-            )
-            scrollToMonth(currentMonth)
-        }
-
-        if (savedInstanceState == null) {
-            binding.exThreeCalendar.post {
-                // Show today's events initially.
-                selectDate(today)
-            }
-        }
-
-        class DayViewContainer(view: View) : ViewContainer(view) {
-            lateinit var day: CalendarDay // Will be set when this container is bound.
-            val binding = Example3CalendarDayBinding.bind(view)
-
-            init {
-                view.setOnClickListener {
-                    if (day.position == DayPosition.MonthDate) {
-                        selectDate(day.date)
-                    }
-                }
-            }
-        }
-        binding.exThreeCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
-            override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, data: CalendarDay) {
-                container.day = data
-                val textView = container.binding.exThreeDayText
-                val dotView = container.binding.exThreeDotView
-
-                textView.text = data.date.dayOfMonth.toString()
-
-                if (data.position == DayPosition.MonthDate) {
-                    textView.makeVisible()
-                    when (data.date) {
-                        today -> {
-                            textView.setTextColorRes(R.color.example_3_white)
-                            textView.setBackgroundResource(R.drawable.example_3_today_bg)
-                            dotView.makeInVisible()
-                        }
-                        selectedDate -> {
-                            textView.setTextColorRes(R.color.example_3_blue)
-                            textView.setBackgroundResource(R.drawable.example_3_selected_bg)
-                            dotView.makeInVisible()
-                        }
-                        else -> {
-                            textView.setTextColorRes(R.color.example_3_black)
-                            textView.background = null
-                            dotView.isVisible = events[data.date].orEmpty().isNotEmpty()
-                        }
-                    }
-                } else {
-                    textView.makeInVisible()
-                    dotView.makeInVisible()
-                }
-            }
-        }
-
         binding.exThreeCalendar.monthScrollListener = {
             activityToolbar.title = if (it.yearMonth.year == today.year) {
                 titleSameYearFormatter.format(it.yearMonth)
             } else {
                 titleFormatter.format(it.yearMonth)
             }
-
-            // Select the first day of the month when
-            // we scroll to a new month.
+            // Select the first day of the visible month.
             selectDate(it.yearMonth.atDay(1))
         }
 
-        class MonthViewContainer(view: View) : ViewContainer(view) {
-            val legendLayout = Example3CalendarHeaderBinding.bind(view).legendLayout.root
+        val daysOfWeek = daysOfWeek()
+        val currentMonth = YearMonth.now()
+        val startMonth = currentMonth.minusMonths(50)
+        val endMonth = currentMonth.plusMonths(50)
+        configureBinders(daysOfWeek)
+        binding.exThreeCalendar.apply {
+            setup(startMonth, endMonth, daysOfWeek.first())
+            scrollToMonth(currentMonth)
         }
-        binding.exThreeCalendar.monthHeaderBinder =
-            object : MonthHeaderFooterBinder<MonthViewContainer> {
-                override fun create(view: View) = MonthViewContainer(view)
-                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
-                    // Setup each header day text if we have not done that already.
-                    if (container.legendLayout.tag == null) {
-                        container.legendLayout.tag = data.yearMonth
-                        container.legendLayout.children.map { it as TextView }
-                            .forEachIndexed { index, tv ->
-                                tv.text = daysOfWeek[index].name.first().toString()
-                                tv.setTextColorRes(R.color.example_3_black)
-                            }
-                    }
-                }
-            }
 
-        binding.exThreeAddButton.setOnClickListener {
-            inputDialog.show()
+        if (savedInstanceState == null) {
+            // Show today's events initially.
+            binding.exThreeCalendar.post { selectDate(today) }
         }
+        binding.exThreeAddButton.setOnClickListener { inputDialog.show() }
     }
 
     private fun selectDate(date: LocalDate) {
@@ -285,5 +212,73 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         activityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.colorPrimary))
         requireActivity().window.statusBarColor =
             requireContext().getColorCompat(R.color.colorPrimaryDark)
+    }
+
+    private fun configureBinders(daysOfWeek: List<DayOfWeek>) {
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            lateinit var day: CalendarDay // Will be set when this container is bound.
+            val binding = Example3CalendarDayBinding.bind(view)
+
+            init {
+                view.setOnClickListener {
+                    if (day.position == DayPosition.MonthDate) {
+                        selectDate(day.date)
+                    }
+                }
+            }
+        }
+        binding.exThreeCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.day = data
+                val textView = container.binding.exThreeDayText
+                val dotView = container.binding.exThreeDotView
+
+                textView.text = data.date.dayOfMonth.toString()
+
+                if (data.position == DayPosition.MonthDate) {
+                    textView.makeVisible()
+                    when (data.date) {
+                        today -> {
+                            textView.setTextColorRes(R.color.example_3_white)
+                            textView.setBackgroundResource(R.drawable.example_3_today_bg)
+                            dotView.makeInVisible()
+                        }
+                        selectedDate -> {
+                            textView.setTextColorRes(R.color.example_3_blue)
+                            textView.setBackgroundResource(R.drawable.example_3_selected_bg)
+                            dotView.makeInVisible()
+                        }
+                        else -> {
+                            textView.setTextColorRes(R.color.example_3_black)
+                            textView.background = null
+                            dotView.isVisible = events[data.date].orEmpty().isNotEmpty()
+                        }
+                    }
+                } else {
+                    textView.makeInVisible()
+                    dotView.makeInVisible()
+                }
+            }
+        }
+
+        class MonthViewContainer(view: View) : ViewContainer(view) {
+            val legendLayout = Example3CalendarHeaderBinding.bind(view).legendLayout.root
+        }
+        binding.exThreeCalendar.monthHeaderBinder =
+            object : MonthHeaderFooterBinder<MonthViewContainer> {
+                override fun create(view: View) = MonthViewContainer(view)
+                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                    // Setup each header day text if we have not done that already.
+                    if (container.legendLayout.tag == null) {
+                        container.legendLayout.tag = data.yearMonth
+                        container.legendLayout.children.map { it as TextView }
+                            .forEachIndexed { index, tv ->
+                                tv.text = daysOfWeek[index].name.first().toString()
+                                tv.setTextColorRes(R.color.example_3_black)
+                            }
+                    }
+                }
+            }
     }
 }

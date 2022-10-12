@@ -67,8 +67,6 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
         currentMonth: YearMonth,
         daysOfWeek: List<DayOfWeek>,
     ) {
-        monthCalendarView.setup(startMonth, endMonth, daysOfWeek.first())
-        monthCalendarView.scrollToMonth(currentMonth)
         class DayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
             lateinit var day: CalendarDay
@@ -82,7 +80,6 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
                 }
             }
         }
-
         monthCalendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, data: CalendarDay) {
@@ -90,8 +87,9 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
                 bindDate(data.date, container.textView, data.position == DayPosition.MonthDate)
             }
         }
-
         monthCalendarView.monthScrollListener = { updateTitle() }
+        monthCalendarView.setup(startMonth, endMonth, daysOfWeek.first())
+        monthCalendarView.scrollToMonth(currentMonth)
     }
 
     private fun setupWeekCalendar(
@@ -100,12 +98,6 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
         currentMonth: YearMonth,
         daysOfWeek: List<DayOfWeek>,
     ) {
-        weekCalendarView.setup(
-            startMonth.atStartOfMonth(),
-            endMonth.atEndOfMonth(),
-            daysOfWeek.first(),
-        )
-        weekCalendarView.scrollToWeek(currentMonth.atStartOfMonth())
         class WeekDayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
             lateinit var day: WeekDay
@@ -127,6 +119,12 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             }
         }
         weekCalendarView.weekScrollListener = { updateTitle() }
+        weekCalendarView.setup(
+            startMonth.atStartOfMonth(),
+            endMonth.atEndOfMonth(),
+            daysOfWeek.first(),
+        )
+        weekCalendarView.scrollToWeek(currentMonth.atStartOfMonth())
     }
 
     private fun bindDate(date: LocalDate, textView: TextView, isSelectable: Boolean) {

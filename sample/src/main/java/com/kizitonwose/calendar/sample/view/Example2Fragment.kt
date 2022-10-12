@@ -49,11 +49,33 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
             }
         }
 
+        configureBinders()
         binding.exTwoCalendar.setup(
             YearMonth.now(),
             YearMonth.now().plusMonths(200),
             daysOfWeek.first(),
         )
+    }
+
+    private lateinit var menuItem: MenuItem
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.example_2_menu, menu)
+        menuItem = menu.getItem(0)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menuItemDone) {
+            val date = selectedDate ?: return false
+            val text = "Selected: ${DateTimeFormatter.ofPattern("d MMMM yyyy").format(date)}"
+            Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT).show()
+            parentFragmentManager.popBackStack()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun configureBinders() {
+        val calendarView = binding.exTwoCalendar
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
@@ -65,12 +87,12 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
                     if (day.position == DayPosition.MonthDate) {
                         if (selectedDate == day.date) {
                             selectedDate = null
-                            binding.exTwoCalendar.notifyDayChanged(day)
+                            calendarView.notifyDayChanged(day)
                         } else {
                             val oldDate = selectedDate
                             selectedDate = day.date
-                            binding.exTwoCalendar.notifyDateChanged(day.date)
-                            oldDate?.let { binding.exTwoCalendar.notifyDateChanged(oldDate) }
+                            calendarView.notifyDateChanged(day.date)
+                            oldDate?.let { calendarView.notifyDateChanged(oldDate) }
                         }
                         menuItem.isVisible = selectedDate != null
                     }
@@ -78,7 +100,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
             }
         }
 
-        binding.exTwoCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
+        calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.day = data
@@ -110,29 +132,13 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = Example2CalendarHeaderBinding.bind(view).exTwoHeaderText
         }
-        binding.exTwoCalendar.monthHeaderBinder =
+        calendarView.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
                 override fun bind(container: MonthViewContainer, data: CalendarMonth) {
                     container.textView.text = data.yearMonth.displayText()
                 }
             }
-    }
 
-    private lateinit var menuItem: MenuItem
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.example_2_menu, menu)
-        menuItem = menu.getItem(0)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuItemDone) {
-            val date = selectedDate ?: return false
-            val text = "Selected: ${DateTimeFormatter.ofPattern("d MMMM yyyy").format(date)}"
-            Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 }

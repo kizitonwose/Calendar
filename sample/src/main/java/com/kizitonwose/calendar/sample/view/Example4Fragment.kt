@@ -81,6 +81,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
             }
         }
 
+        configureBinders()
         val currentMonth = YearMonth.now()
         binding.exFourCalendar.setup(
             currentMonth,
@@ -89,6 +90,90 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         )
         binding.exFourCalendar.scrollToMonth(currentMonth)
 
+        binding.exFourSaveButton.setOnClickListener click@{
+            val (startDate, endDate) = selection
+            if (startDate != null && endDate != null) {
+                val text = dateRangeDisplayText(startDate, endDate)
+                Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
+            }
+            parentFragmentManager.popBackStack()
+        }
+
+        bindSummaryViews()
+    }
+
+    private fun bindSummaryViews() {
+        binding.exFourStartDateText.apply {
+            if (selection.startDate != null) {
+                text = headerDateFormatter.format(selection.startDate)
+                setTextColorRes(R.color.example_4_grey)
+            } else {
+                text = getString(R.string.start_date)
+                setTextColor(Color.GRAY)
+            }
+        }
+
+        binding.exFourEndDateText.apply {
+            if (selection.endDate != null) {
+                text = headerDateFormatter.format(selection.endDate)
+                setTextColorRes(R.color.example_4_grey)
+            } else {
+                text = getString(R.string.end_date)
+                setTextColor(Color.GRAY)
+            }
+        }
+
+        binding.exFourSaveButton.isEnabled = selection.daysBetween != null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.example_4_menu, menu)
+        binding.exFourToolbar.post {
+            // Configure menu text to match what is in the Airbnb app.
+            binding.exFourToolbar.findViewById<TextView>(R.id.menuItemClear).apply {
+                setTextColor(requireContext().getColorCompat(R.color.example_4_grey))
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                isAllCaps = false
+            }
+        }
+        menu.findItem(R.id.menuItemClear).setOnMenuItemClickListener {
+            selection = DateSelection()
+            binding.exFourCalendar.notifyCalendarChanged()
+            bindSummaryViews()
+            true
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
+            setColorFilter(
+                requireContext().getColorCompat(R.color.example_4_grey),
+                PorterDuff.Mode.SRC_ATOP
+            )
+        }
+        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
+        requireActivity().window.apply {
+            // Update status bar color to match toolbar color.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                statusBarColor = requireContext().getColorCompat(R.color.white)
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            } else {
+                statusBarColor = Color.GRAY
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().window.apply {
+            // Reset status bar color.
+            statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
+            decorView.systemUiVisibility = 0
+        }
+    }
+
+    private fun configureBinders() {
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val binding = Example4CalendarDayBinding.bind(view)
@@ -183,86 +268,5 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                 }
             }
 
-        binding.exFourSaveButton.setOnClickListener click@{
-            val (startDate, endDate) = selection
-            if (startDate != null && endDate != null) {
-                val text = dateRangeDisplayText(startDate, endDate)
-                Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG).show()
-            }
-            parentFragmentManager.popBackStack()
-        }
-
-        bindSummaryViews()
-    }
-
-    private fun bindSummaryViews() {
-        binding.exFourStartDateText.apply {
-            if (selection.startDate != null) {
-                text = headerDateFormatter.format(selection.startDate)
-                setTextColorRes(R.color.example_4_grey)
-            } else {
-                text = getString(R.string.start_date)
-                setTextColor(Color.GRAY)
-            }
-        }
-
-        binding.exFourEndDateText.apply {
-            if (selection.endDate != null) {
-                text = headerDateFormatter.format(selection.endDate)
-                setTextColorRes(R.color.example_4_grey)
-            } else {
-                text = getString(R.string.end_date)
-                setTextColor(Color.GRAY)
-            }
-        }
-
-        binding.exFourSaveButton.isEnabled = selection.daysBetween != null
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.example_4_menu, menu)
-        binding.exFourToolbar.post {
-            // Configure menu text to match what is in the Airbnb app.
-            binding.exFourToolbar.findViewById<TextView>(R.id.menuItemClear).apply {
-                setTextColor(requireContext().getColorCompat(R.color.example_4_grey))
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-                isAllCaps = false
-            }
-        }
-        menu.findItem(R.id.menuItemClear).setOnMenuItemClickListener {
-            selection = DateSelection()
-            binding.exFourCalendar.notifyCalendarChanged()
-            bindSummaryViews()
-            true
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
-            setColorFilter(
-                requireContext().getColorCompat(R.color.example_4_grey),
-                PorterDuff.Mode.SRC_ATOP
-            )
-        }
-        (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
-        requireActivity().window.apply {
-            // Update status bar color to match toolbar color.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                statusBarColor = requireContext().getColorCompat(R.color.white)
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            } else {
-                statusBarColor = Color.GRAY
-            }
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        requireActivity().window.apply {
-            // Reset status bar color.
-            statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
-            decorView.systemUiVisibility = 0
-        }
     }
 }

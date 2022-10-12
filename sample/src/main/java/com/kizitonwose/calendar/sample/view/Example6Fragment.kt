@@ -22,6 +22,7 @@ import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import java.time.DayOfWeek
 import java.time.YearMonth
 
 // We assign this class to the `monthViewClass` attribute in XML.
@@ -56,9 +57,22 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
             )
         }
 
+        val daysOfWeek = daysOfWeek()
+        configureBinders(daysOfWeek)
+        val currentMonth = YearMonth.now()
+        binding.exSixCalendar.setup(
+            currentMonth.minusMonths(10),
+            currentMonth.plusMonths(10),
+            daysOfWeek.first())
+        binding.exSixCalendar.scrollToMonth(currentMonth)
+
+
+    }
+
+    private fun configureBinders(daysOfWeek: List<DayOfWeek>) {
         // We don't want a square calendar.
-        val dayWidth = dpToPx(28, view.context)
-        val dayHeight = dpToPx(60, view.context)
+        val dayWidth = dpToPx(28, requireContext())
+        val dayHeight = dpToPx(60, requireContext())
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val textView = Example6CalendarDayBinding.bind(view).exSixDayText
@@ -83,15 +97,6 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
                 }
             }
         }
-
-        val daysOfWeek = daysOfWeek()
-        val currentMonth = YearMonth.now()
-        binding.exSixCalendar.setup(
-            currentMonth.minusMonths(10),
-            currentMonth.plusMonths(10),
-            daysOfWeek.first())
-        binding.exSixCalendar.scrollToMonth(currentMonth)
-
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val binding = Example6CalendarHeaderBinding.bind(view)
             val textView = binding.exSixMonthText
