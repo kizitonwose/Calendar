@@ -46,7 +46,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             .map { it as TextView }
             .forEachIndexed { index, textView ->
                 textView.text = daysOfWeek[index].displayText()
-                textView.setTextColorRes(R.color.example_1_white_light)
+                textView.setTextColorRes(R.color.example_1_white)
             }
 
         val currentMonth = YearMonth.now()
@@ -194,16 +194,16 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     private val weekModeToggled = object : CompoundButton.OnCheckedChangeListener {
         override fun onCheckedChanged(buttonView: CompoundButton, monthToWeek: Boolean) {
-            val targetDate = if (monthToWeek) {
-                monthCalendarView.findFirstVisibleDay()?.date ?: return
+            // We want the first visible day to remain visible after the
+            // change so we scroll to the position on the target calendar.
+            if (monthToWeek) {
+                val targetDate = monthCalendarView.findFirstVisibleDay()?.date ?: return
+                weekCalendarView.scrollToWeek(targetDate)
             } else {
-                val visibleWeek = weekCalendarView.findFirstVisibleWeek().orEmpty()
-                val firstDate = visibleWeek.firstOrNull()?.date ?: return
-                val lastDate = visibleWeek.lastOrNull()?.date ?: return
-                // When changing to month view, if we have only one month in the visible
-                // week, we choose that month. But if we have multiple months, we prefer
-                // the second one. Please use what works best for your use case.
-                if (firstDate.yearMonth == lastDate.yearMonth) firstDate else lastDate
+                // It is possible to have two months in the visible week (30 | 31 | 1 | 2 | 3 | 4 | 5)
+                // We always choose the second one. Please use what works best for your use case.
+                val targetMonth = weekCalendarView.findLastVisibleDay()?.date?.yearMonth ?: return
+                monthCalendarView.scrollToMonth(targetMonth)
             }
 
             val weekHeight = weekCalendarView.height
@@ -227,13 +227,8 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
                 }
             }
 
-            // We want the first visible day to remain visible after the
-            // change so we scroll to the position on the target calendar.
             animator.doOnStart {
-                if (monthToWeek) {
-                    weekCalendarView.scrollToWeek(targetDate)
-                } else {
-                    monthCalendarView.scrollToMonth(targetDate.yearMonth)
+                if (!monthToWeek) {
                     weekCalendarView.isInvisible = true
                     monthCalendarView.isVisible = true
                 }

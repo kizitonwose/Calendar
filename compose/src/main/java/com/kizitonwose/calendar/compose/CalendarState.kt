@@ -5,6 +5,7 @@ import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
@@ -152,6 +153,8 @@ class CalendarState internal constructor(
      *
      * If you want to run some side effects like sending an analytics event or updating a state
      * based on this value consider using "snapshotFlow".
+     *
+     * see [LazyListLayoutInfo]
      */
     val layoutInfo: CalendarLayoutInfo
         get() = CalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }

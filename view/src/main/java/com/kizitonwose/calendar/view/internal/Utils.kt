@@ -75,7 +75,6 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
         }
     }
 
-    // TODO: Check
     val itemView = itemViewClass?.let {
         val customLayout = runCatching {
             Class.forName(it)

@@ -1,4 +1,22 @@
-# Calendar View Documentations
+# Calendar View Documentation
+
+## Table of Contents
+
+- [Quick links](#quick-links)
+- [Class information](#class-information)
+- [Usage](#usage)
+  * [Setup](#step-1)
+  * [First day of the week](#first-day-of-the-week-and-day-of-week-titles)
+  * [Headers and footers](#month-headers-and-footers)
+  * [Attributes](#attributes)
+  * [Properties](#properties)
+  * [Methods](#methods)
+  * [Date clicks](#date-clicks)
+  * [Date Selection](#date-selection)
+  * [Disabling dates](#disabling-dates)
+- [Week view](#week-view)
+- [FAQ](#faq)
+- [Migration](#migration)
 
 ## Quick links
 
@@ -8,19 +26,22 @@ Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/
 
 Read the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/master/sample)
 
-**If you are looking for the Compose documentations, you can find them [here](https://github.com/kizitonwose/Calendar/blob/master/docs/Compose.md)**
+Add the library to your project [here](https://github.com/kizitonwose/Calendar#setup)
+
+**If you are looking for the compose documentation, you can find it [here](https://github.com/kizitonwose/Calendar/blob/master/docs/Compose.md)**
 
 ## Class information
 
-The library can be used via two classes `CalendarView` and c. From the names, you can already have an idea what they do. 
+The library can be used via two classes: 
 
-`CalendarView` is the typical month-based calendar.
+`CalendarView`: The typical month-based calendar.
 
-`WeekCalendarView` is the week-based calendar.
+`WeekCalendarView`: The week-based calendar.
 
 Both classes extend from `RecyclerView` so you can use all `RecyclerView` customizations like decorators etc.
 
-In the examples below, we will mostly use the `CalendarView` class since they both share the same basic concept. If you want to use the week-based calendar, replace `CalendarView` in your xml/code with `WeekCalendarView`. Most xml attributes and class properties/methods with the name prefix/suffix `month` (e.g monthHeaderResource) in the `CalendarView` will have an equivalent with the name prefix/suffix `week` (e.g weekHeaderResource) in the `WeekCalendarView`.
+In the examples below, we will mostly use the `CalendarView` class since the two classes share the same basic concept. If you want a week-based calendar, replace `CalendarView` in your xml/code with `WeekCalendarView`. 
+Most xml attributes and class properties/methods with the name prefix/suffix `month` (e.g `monthHeaderResource`) in the `CalendarView` will have an equivalent with the name prefix/suffix `week` (e.g `weekHeaderResource`) in the `WeekCalendarView`.
 
 ## Usage
 
@@ -79,7 +100,7 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
 Setup the desired dates in your Fragment or Activity:
 
-**`CalendarView`:**
+**`CalendarView` setup:**
 ```kotlin
 val currentMonth = YearMonth.now()
 val startMonth = currentMonth.minusMonths(100)  // Adjust as needed
@@ -89,7 +110,16 @@ calendarView.setup(startMonth, endMonth, firstDayOfWeek)
 calendarView.scrollToMonth(currentMonth)
 ```
 
-**`WeekCalendarView`:**
+**`WeekCalendarView` setup:**
+
+```diff
+- <com.kizitonwose.calendar.view.CalendarView
++ <com.kizitonwose.calendar.view.WeekCalendarView
+    android:id="@+id/weekCalendarView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cv_dayViewResource="@layout/calendar_day_layout" />
+```
 ```kotlin
 val currentDate = LocalDate.now()
 val currentMonth = YearMonth.now()
@@ -100,21 +130,21 @@ weekCalendarView.setup(startDate, endDate, firstDayOfWeek)
 weekCalendarView.scrollToWeek(currentDate)
 ```
 
-**And that's all you need for a simple usage! But keep reading, there's more!**
+**And that's all you need for simple usage! But keep reading, there's more!**
 
 ### First day of the week and Day of week titles.
 
 Of course, you want to show the day of week titles on the appropriate days on the calendar.
 
-// Sun | Mon | Tue | Wed | Thu | Fri | Sat
+`Sun | Mon | Tue | Wed | Thu | Fri | Sat`
 
-Here's a method which generates the weekdays from the user's current Locale. 
+Here's a function that generates the weekdays from the user's current Locale. 
 
 ```kotlin
 val daysOfWeek = daysOfWeek() // Available in the library
 ```
 
-The function takes a `firstDayOfWeek` parameter in case you want to generate the days of week such that a desired day is at the first position.
+The function takes a `firstDayOfWeek` parameter in case you want to generate the days of week such that the desired day is at the first position.
 
 For example:
 
@@ -126,14 +156,15 @@ Using the `daysOfWeek` list, you can set up the calendar so the first day of the
 
 To set up the calendar using the provided `daysOfWeek` list:
 
-```kotlin
-val daysOfWeek = daysOfWeek()
-calendarView.setup(startMonth, endMonth, daysOfWeek.first())
+```diff
+- val firstDayOfWeek = firstDayOfWeekFromLocale()
++ val daysOfWeek = daysOfWeek()
+  calendarView.setup(startMonth, endMonth, daysOfWeek.first())
 ```
 
 You should also use the `daysOfWeek` list values to set up the weekday titles, this way it matches what is shown on the CalendarView.
 
-To set up the day of week titles, you can either use the month header which would show the tiltle on every month and allow the titles to scroll with the month, or you can show the title on a static view above the calendar. Both ways are covered below:
+To set up the day of week titles, you can either use the month header which would show the titles on every month and allow the titles to scroll with the month, or you can show the title on a static view above the calendar. Both ways are covered below:
 
 Setup days of week using a static view:
 
@@ -198,7 +229,7 @@ Add the titles container in the same layout as the CalendarView:
 
 #### Step 2
 
-Now you can setup the tiles using the `daysOfWeek` list discussed previously:
+Now you can set up the titles using the `daysOfWeek` list discussed previously:
 
 ```kotlin
 val titlesContainer = findViewById<ViewGroup>(R.id.titlesContainer)
@@ -251,8 +282,8 @@ calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewConta
                     val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                     textView.text = title
                     // In the code above, we use the same `daysOfWeek` list 
-                    // that was created when we set up the calender. 
-                    // However, we can also get the daysOfWeek from the month content:
+                    // that was created when we set up the calendar. 
+                    // However, we can also get the `daysOfWeek` list from the month data:
                     // val daysOfWeek = data.weekDays.first().map { it.date.dayOfWeek }
                     // Alternatively, you can get the value for this specific index:
                     // val dayOfWeek = data.weekDays.first()[index].date.dayOfWeek
@@ -262,7 +293,7 @@ calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewConta
 }
 ```
 
-You can do more than just using the day titles as the header. For example, you can also show the month name if it is not already shown outside the calendar on a separate view. Feel free to get creative with your month headers and footers! For more complex usages, please see the sample project.
+You can do more than just use the day titles as the header. For example, you can also show the month name if it is not already shown outside the calendar on a separate view. Feel free to get creative with your month headers and footers! For more complex usages, please see the sample project.
 
 ### Attributes
 
@@ -325,7 +356,7 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
 - **weekFooterResource**: The xml resource that is inflated and used as a footer for every week.
 
-- **weekViewClass**: A ViewGroup which is instantiated and used as the container for each week. This class must have a constructor which takes only a Context. You should exclude the name and constructor of this class from code obfuscation if enabled.
+- **weekViewClass**: A ViewGroup that is instantiated and used as the container for each week. This class must have a constructor which takes only a Context. You should exclude the name and constructor of this class from code obfuscation if enabled.
 
 ### Properties
 
@@ -393,7 +424,7 @@ All the respective XML attributes listed above are also available as properties 
 
 - **updateWeekData()**: Update the WeeCalendarView's start date or end date or the first day of week after the initial setup. The currently visible week is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
 
-There's no need to list all available methods or repeating the documentation here. Please see the [CalendarView](https://github.com/kizitonwose/Calendar/blob/master/view/src/main/java/com/kizitonwose/calendar/view/CalendarView.kt) and [WeekCalendarView](https://github.com/kizitonwose/Calendar/blob/master/view/src/main/java/com/kizitonwose/calendar/view/WeekCalendarView.kt) classes for all properties and methods available with proper documentation.
+There's no need to list all available methods or repeat the documentation here. Please see the [CalendarView](https://github.com/kizitonwose/Calendar/blob/master/view/src/main/java/com/kizitonwose/calendar/view/CalendarView.kt) and [WeekCalendarView](https://github.com/kizitonwose/Calendar/blob/master/view/src/main/java/com/kizitonwose/calendar/view/WeekCalendarView.kt) classes for all properties and methods available with proper documentation.
 
 ### Date clicks
 
@@ -529,7 +560,7 @@ For more complex selection logic like range selection, please see the sample pro
 
 As expected, the library does not provide this logic internally so you have complete flexibility.
 
-To disable dates, you can simply set the texts on those dates to look "disabled" and ignore clicks on those dates. For example, if we want to show in and out dates but "disable" them so that they cannot be selected, we can just set the alpha property for those dates in the `dayBinder` to give the effect of being disabled. Of course, you can set a different colour if that's what you prefer.
+To disable dates, you can simply set the texts on those dates to look disabled and ignore clicks on those dates. For example, if we want to show in and out dates but disable them so that they cannot be selected, we can just set the alpha property for those dates in the `dayBinder` to give the effect of being disabled. Of course, you can set a different color if that's what you prefer.
 
 Continuing with the example in the date selection section, we already ignore clicks for in and out dates using this logic:
 
@@ -555,52 +586,43 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 }
 ```
 
-And that's all you need to do. Of course you can go wild and do a whole lot more, see the sample project for some complex implementations.
+And we've now covered the typical usage. The beauty of the library is in its limitless possibilities. You are not constrained on how to build your user interface, the library provides you with the needed calendar data logic and you provide the desired UI logic. 
 
-### Week view and Month view
+See the sample project for some complex implementations.
 
-This library has no concept of week/month view. You'll need to configure the calendar to mimic this behavior by changing its state between a 6 or 1 row calendar, depending on your needs. This feature can be seen in Example 1 in the sample app. In summary, here's what you need:
+## Week view
+
+As discussed previously, the library provides two classes `CalendarView` and `WeekCalendarView`. The `WeekCalendarView` class is a week-based calendar implementation. Almost all topics covered above for the month calendar will apply to the week calendar. The main difference is that the xml attributes and class properties/methods will have a slightly different name, typically with a `week` prefix/suffix instead of `month`. 
+
+For example: `monthHeaderResource` => `weekHeaderResource`, `scrollToMonth()` => `scrollToWeek()`, `findFirstVisibleMonth()` => `findFirstVisibleWeek()` and many others, but you get the idea.
+
+To show the week calendar in your layout, add the view:
 
 ```xml
-<!-- Common configurations for both modes. -->
-app:cv_orientation="horizontal"
-app:cv_outDateStyle="endOfRow"
-app:cv_inDateStyle="allMonths"
-app:cv_scrollMode="paged"
+<com.kizitonwose.calendar.view.WeekCalendarView
+    android:id="@+id/weekCalendarView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cv_dayViewResource="@layout/calendar_day_layout" />
 ```
 
-```kotlin
-val monthToWeek = monthViewCheckBox.isChecked
-if (monthToWeek) { 
-    // One row calendar for week mode
-    calendarView.updateMonthConfiguration(
-        inDateStyle = InDateStyle.ALL_MONTHS,
-        maxRowCount = 1,
-        hasBoundaries = false
-    )
-} else {
-    // Six row calendar for month mode
-    calendarView.updateMonthConfiguration(
-        inDateStyle = InDateStyle.FIRST_MONTH,
-        maxRowCount = 6,
-        hasBoundaries = true
-    )
-}
-```
+Then follow the setup instructions above to provide a day resource/binder etc as you would do for the month calendar.
 
-With the configuration above, you get the result below:
+If you would like to toggle the calendar between month and week views, please see the `Example1Fragment` in the sample app where we did exactly this. The result is shown below:
 
-<img src="https://user-images.githubusercontent.com/15170090/59875600-100bd100-9399-11e9-8329-7c24944bb106.gif" alt="Week and month modes" width="250">
+<img src="https://user-images.githubusercontent.com/15170090/195636303-a99312c9-23a3-44cd-8a38-6ba21b3c4802.gif" alt="Week and month modes" width="250">
 
-If you wish to animate height changes on the CalendarView when switching between week and month modes, please see Example 1 in the sample app where we use a `ValueAnimator`, of course you can use whichever animation logic you prefer.
+If you wish to animate height changes on the CalendarView when switching between week and month modes, please see Example 1 in the sample app where we use a `ValueAnimator`. You can use whichever animation logic you prefer.
 
-You can also set `hasBoundaries` to `true` for a week mode calendar. This helps the library make very few optimizations, however, you should also change `scrollMode` to `ScrollMode.CONTINUOUS` as pagination behavior may not be as expected due to boundary limitations. See Example 7 in the sample app for a week mode calendar with this configuration, a screenshot is shown below: 
+If you wish to show more or less than 7 days at a time on the week calendar, you should set the `scrollPaged` attribute to `false`. Also, set the `daySize` property to `FreeForm` which gives you the freedom to define a preferred size for your day cells. Please read the documentation in the `DaySize` class to fully understand the available options.
 
-<img src="https://user-images.githubusercontent.com/15170090/59904118-9f959c00-93fa-11e9-836d-2248f77130ac.png" alt="Week mode" width="260">
+A week calendar implementation from the sample app:
 
-Remember that all the screenshots above are just examples of what you can achieve with this library and you can absolutely build your calendar to look however you want.
+<img src="https://user-images.githubusercontent.com/15170090/195638551-dfced7be-c18f-4611-b015-cfefab480cee.png" alt="Week calendar" width="250">
 
-**Made a cool calendar with this library? Share an image [here](https://github.com/kizitonwose/CalendarView/issues/1).**
+Remember that all the screenshots shown so far are just examples of what you can achieve with the library and you can absolutely build your calendar to look however you want.
+
+**Made a cool calendar with this library? Share an image [here](https://github.com/kizitonwose/Calendar/issues/1).**
 
 ## FAQ
 
@@ -611,3 +633,7 @@ Remember that all the screenshots above are just examples of what you can achiev
 **Q**: How do I disable user scrolling on the calendar so I can only scroll programmatically?
 
 **A**: See [this](https://github.com/kizitonwose/Calendar/issues/38#issuecomment-525786644).
+
+## Migration
+
+Please see [the migration guide](https://github.com/kizitonwose/calendar/blob/master/docs/MigrationGuide.md#view).
