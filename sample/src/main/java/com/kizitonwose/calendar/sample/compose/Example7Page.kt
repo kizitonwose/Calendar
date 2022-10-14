@@ -32,7 +32,9 @@ fun Example7Page() {
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf<LocalDate?>(null) }
-    Column {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
             endDate = endDate,
@@ -67,7 +69,7 @@ private fun Day(
     Box(
         modifier = Modifier
             // If paged scrolling is disabled (calendarScrollPaged = false),
-            // you must set the day width!
+            // you must set the day width on the WeekCalendar!
             .width(screenWidth / 9)
             .padding(2.dp)
             .clip(RoundedCornerShape(8.dp))

@@ -204,6 +204,7 @@ private fun Calendar(
  * Examples: `startDate`, `endDate`, `firstDayOfWeek`, `firstVisibleWeek`.
  * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
  * snap to the nearest week after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * Note that when `false`, you should set the desired day width on the [dayContent] composable.
  * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
  * is allowed. You can still scroll programmatically using the state even when it is disabled.
  * @param reverseLayout reverse the direction of scrolling and layout. When `true`, weeks will be

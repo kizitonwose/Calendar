@@ -35,7 +35,9 @@ fun Example4Page() {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }
     val endMonth = remember { currentMonth.plusMonths(500) }
-    Column {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,

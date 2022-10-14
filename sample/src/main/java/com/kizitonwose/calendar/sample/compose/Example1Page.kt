@@ -39,7 +39,9 @@ fun Example1Page() {
     val endMonth = remember { currentMonth.plusMonths(500) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
-    Column {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,

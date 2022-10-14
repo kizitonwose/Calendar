@@ -38,8 +38,8 @@ import java.util.*
 
 private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 
-private val pageBackGroundColor: Color @Composable get() = colorResource(R.color.example_5_page_bg_color)
-private val itemBackGroundColor: Color @Composable get() = colorResource(R.color.example_5_item_view_bg_color)
+private val pageBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_page_bg_color)
+private val itemBackgroundColor: Color @Composable get() = colorResource(R.color.example_5_item_view_bg_color)
 private val toolbarColor: Color @Composable get() = colorResource(R.color.example_5_toolbar_color)
 private val selectedItemColor: Color @Composable get() = colorResource(R.color.example_5_text_grey)
 private val inActiveTextColor: Color @Composable get() = colorResource(R.color.example_5_text_grey_light)
@@ -58,9 +58,9 @@ fun Example3Page() {
         }
     }
     StatusBarColorUpdateEffect(toolbarColor)
-    Column(Modifier
-        .fillMaxHeight()
-        .background(color = pageBackGroundColor)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(pageBackgroundColor)) {
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
@@ -115,7 +115,7 @@ fun Example3Page() {
                     )
                 }
             )
-            Divider(color = pageBackGroundColor)
+            Divider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = flightsInSelectedDate.value) { flight ->
                     FlightInformation(flight)
@@ -138,7 +138,7 @@ private fun Day(
             width = if (isSelected) 1.dp else 0.dp,
             color = if (isSelected) selectedItemColor else Color.Transparent)
         .padding(1.dp)
-        .background(color = itemBackGroundColor)
+        .background(color = itemBackgroundColor)
         // Disable clicks on inDates/outDates
         .clickable(
             enabled = day.position == DayPosition.MonthDate,
@@ -214,21 +214,21 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
             )
         }
         Box(modifier = Modifier
-            .background(color = itemBackGroundColor)
+            .background(color = itemBackgroundColor)
             .weight(1f)
             .fillMaxHeight()) {
             AirportInformation(flight.departure, isDeparture = true)
         }
         Box(
             modifier = Modifier
-                .background(color = itemBackGroundColor)
+                .background(color = itemBackgroundColor)
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
             AirportInformation(flight.destination, isDeparture = false)
         }
     }
-    Divider(color = pageBackGroundColor, thickness = 2.dp)
+    Divider(color = pageBackgroundColor, thickness = 2.dp)
 }
 
 @Composable

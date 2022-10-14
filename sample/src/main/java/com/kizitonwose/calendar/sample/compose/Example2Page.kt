@@ -48,7 +48,9 @@ fun Example2Page(
     val daysOfWeek = remember { daysOfWeek() }
     StatusBarColorUpdateEffect(Color.White, isLight = true)
     MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
             Column {
                 val state = rememberCalendarState(
                     startMonth = startMonth,

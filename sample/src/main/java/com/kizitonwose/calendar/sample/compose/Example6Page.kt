@@ -60,13 +60,14 @@ fun Example6Page() {
     val data = remember { mutableStateOf<Map<LocalDate, Color>>(emptyMap()) }
     var selection by remember { mutableStateOf<Pair<LocalDate, Color>?>(null) }
     LaunchedEffect(startDate, endDate, refreshKey) {
-        val value = withContext(Dispatchers.IO) {
+        selection = null
+        data.value = withContext(Dispatchers.IO) {
             generateRandomData(startDate, endDate)
         }
-        data.value = value
-        selection = null
     }
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
         val state = rememberHeatMapCalendarState(
             startMonth = startDate.yearMonth,
             endMonth = endDate.yearMonth,

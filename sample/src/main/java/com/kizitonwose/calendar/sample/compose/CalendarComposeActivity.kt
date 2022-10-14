@@ -3,19 +3,23 @@ package com.kizitonwose.calendar.sample.compose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentScope.SlideDirection.*
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.*
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.dateRangeDisplayText
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalAnimationApi::class)
 class CalendarComposeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +28,7 @@ class CalendarComposeActivity : AppCompatActivity() {
             val primaryColor = colorResource(id = R.color.colorPrimary)
             var toolBarTitle by remember { mutableStateOf("") }
             var toolBarVisible by remember { mutableStateOf(true) }
-            val navController = rememberNavController()
+            val navController = rememberAnimatedNavController()
             val coroutineScope = rememberCoroutineScope()
             val scaffoldState = rememberScaffoldState()
             LaunchedEffect(navController) {
@@ -83,14 +87,16 @@ class CalendarComposeActivity : AppCompatActivity() {
         navController: NavHostController = rememberNavController(),
         showSnack: (String) -> Unit = {},
     ) {
-        NavHost(
+        AnimatedNavHost(
             modifier = modifier,
             navController = navController,
             startDestination = Page.List.name
         ) {
-            composable(Page.List.name) { ListPage { page -> navController.navigate(page.name) } }
-            composable(Page.Example1.name) { Example1Page() }
-            composable(Page.Example2.name) {
+            composable(Page.List.name) {
+                ListPage { page -> navController.navigate(page.name) }
+            }
+            horizontallyAnimatedComposable(Page.Example1.name) { Example1Page() }
+            verticallyAnimatedComposable(Page.Example2.name) {
                 Example2Page(
                     close = { navController.popBackStack() },
                     dateSelected = { startDate, endDate ->
@@ -99,11 +105,11 @@ class CalendarComposeActivity : AppCompatActivity() {
                     }
                 )
             }
-            composable(Page.Example3.name) { Example3Page() }
-            composable(Page.Example4.name) { Example4Page() }
-            composable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
-            composable(Page.Example6.name) { Example6Page() }
-            composable(Page.Example7.name) { Example7Page() }
+            verticallyAnimatedComposable(Page.Example3.name) { Example3Page() }
+            horizontallyAnimatedComposable(Page.Example4.name) { Example4Page() }
+            horizontallyAnimatedComposable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
+            horizontallyAnimatedComposable(Page.Example6.name) { Example6Page() }
+            horizontallyAnimatedComposable(Page.Example7.name) { Example7Page() }
         }
     }
 }

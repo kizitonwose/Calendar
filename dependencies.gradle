@@ -44,7 +44,7 @@ ext.deps = [
                 material  : "androidx.compose.material:material:1.2.1",
                 snapper   : "dev.chrisbanes.snapper:snapper:0.3.0",
                 activity  : "androidx.activity:activity-compose:1.6.0",
-                navigation: "androidx.navigation:navigation-compose:2.5.2",
+                navigation: "com.google.accompanist:accompanist-navigation-animation:0.26.5-rc",
         ],
 
         test      : [
