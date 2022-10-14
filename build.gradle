@@ -11,6 +11,7 @@ buildscript {
         classpath deps.plugins.kotlin
         classpath deps.plugins.ktlint
         classpath deps.plugins.versions
+        classpath deps.plugins.maven_publish
     }
 }
 

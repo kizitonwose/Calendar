@@ -9,8 +9,8 @@ android {
         applicationId "com.kizitonwose.calendar.sample"
         minSdkVersion versions.min_sdk_sample
         targetSdkVersion versions.target_sdk
-        versionCode versions.version_code
-        versionName versions.version_name
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {

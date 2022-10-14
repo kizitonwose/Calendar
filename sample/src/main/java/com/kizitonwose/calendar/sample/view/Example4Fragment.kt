@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.sample.view
 
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +11,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.CalendarDay
@@ -147,10 +148,9 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
     override fun onStart() {
         super.onStart()
         val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
-            setColorFilter(
+            colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 requireContext().getColorCompat(R.color.example_4_grey),
-                PorterDuff.Mode.SRC_ATOP
-            )
+                BlendModeCompat.SRC_ATOP)
         }
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
         requireActivity().window.apply {

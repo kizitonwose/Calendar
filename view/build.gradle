@@ -1,16 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'maven-publish'
+apply plugin: 'com.vanniktech.maven.publish'
 apply from: rootProject.file("dependencies.gradle")
-
-group = 'com.github.kizitonwose'
-def artifact = 'CalendarView'
 
 android {
     compileSdkVersion versions.compile_sdk
     namespace 'com.kizitonwose.calendar.view'
     defaultConfig {
-        minSdkVersion versions.min_sdk_library
+        minSdkVersion versions.min_sdk_library_view
         targetSdkVersion versions.target_sdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true // Needed for desugar because minSdk < 21
@@ -28,12 +25,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs += ['-module-name', "$group.$artifact"]
-    }
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-        }
     }
 }
 
@@ -46,17 +37,4 @@ dependencies {
 
     // Expose RecyclerView which is CalendarView's superclass.
     api deps.androidx.recyclerview
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-//            release(MavenPublication) {
-//                from components.release
-//                groupId = 'com.github.kizitonwose'
-//                artifactId = 'CalendarView'
-//                version = versions.version_name
-//            }
-        }
-    }
 }

@@ -4,6 +4,7 @@ A highly customizable calendar library for Android, powered by RecyclerView for 
 
 [![CI](https://github.com/kizitonwose/Calendar/workflows/CI/badge.svg?branch=master)](https://github.com/kizitonwose/Calendar/actions) 
 [![JitPack](https://jitpack.io/v/kizitonwose/Calendar.svg)](https://jitpack.io/#kizitonwose/Calendar) 
+[![Maven Central](https://img.shields.io/maven-central/v/com.kizitonwose.calendar/view)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kizitonwose/Calendar/blob/master/LICENSE.md) 
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
 
@@ -73,31 +74,19 @@ You can find the latest version of `desugar_jdk_libs` [here](https://mvnreposito
 
 #### Step 2
 
-Add the JitPack repository to your project level `build.gradle`:
-
-```groovy
-allprojects {
- repositories {
-    google()
-    jcenter()
-    maven { url "https://jitpack.io" }
- }
-}
-```
-
 Add the desired calendar library (view or compose) to your app `build.gradle`:
 
 ```groovy
 dependencies {
     // The view calendar implementation
-	implementation 'com.github.kizitonwose.calendar:view:<latest-version>'
+    implementation 'com.kizitonwose.calendar:view:<latest-version>'
   
     // The compose calendar implementation
-	implementation 'com.github.kizitonwose.calendar:compose:<latest-version>'
+    implementation 'com.kizitonwose.calendar:compose:<latest-version>'
 }
 ```
 
-You can find the latest version of the library on the JitPack badge above the preview images.
+You can find the latest version of the library on the maven central badge above.
 
 **Note: If you're upgrading from version 1.x.x to 2.x.x, see the [migration guide](https://github.com/kizitonwose/Calendar#migration).**
 
