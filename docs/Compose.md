@@ -154,13 +154,13 @@ To set up the calendar state using the provided `daysOfWeek` list:
 ```diff
 - val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
 + val daysOfWeek = remember { daysOfWeek() }
-  val state = rememberWeekCalendarState(
-        startDate = startDate,
-        endDate = endDate,
-        firstVisibleWeekDate = currentDate,
--        firstDayOfWeek = firstDayOfWeek
-+        firstDayOfWeek = daysOfWeek.first()
-    )
+  val state = rememberCalendarState(
+      startMonth = startMonth,
+      endMonth = endMonth,
+      firstVisibleMonth = currentMonth,
+-     firstDayOfWeek = firstDayOfWeek
++     firstDayOfWeek = daysOfWeek.first()
+  )
 ```
 
 You should also use the `daysOfWeek` list values to set up the weekday titles, this way it matches what is shown on the calendar.
@@ -328,7 +328,7 @@ All properties set when creating the state via `rememberCalendarState()` or `rem
 
 If you are wondering what `outDates` and `inDates` mean, let's use the screenshot below as an example.
 
-<img src="https://raw.githubusercontent.com/kizitonwose/Calendar/main/images/screenshot_in_out_dates.png" alt="inDate and outDates" width="300">
+<img src="https://raw.githubusercontent.com/kizitonwose/Calendar/main/images/in_out_dates.png" alt="in-dates and out-dates" width="300">
 
 In the image, the dates within the green annotation are `inDates`, the ones within the red annotation are `outDates` while those without annotation are `monthDates`. You can check for this when your calendar day is rendered. To achieve the exact effect on the image, we update our `Day` composable: 
 
