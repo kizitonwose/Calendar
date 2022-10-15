@@ -14,18 +14,25 @@ A highly customizable calendar library for Android, powered by RecyclerView for 
 
 ## Features
 
-- [x] Single or range selection - The library provides the calendar logic which enables you to implement the view/composable whichever way you like.
-- [x] Week or month mode - show a week-based calendar, or the typical month calendar.
+- [x] Single, multiple or range selection - Total flexibility to implement the date selection
+  whichever way you like.
+- [x] Week or month mode - Show a week-based calendar, or the typical month calendar.
 - [x] Disable desired dates - Prevent selection of some dates by disabling them.
-- [x] Boundary dates - limit the calendar date range.
-- [x] Custom date view/composable - make your day cells look however you want, with any functionality you want.
-- [x] Custom calendar view/composable - make your calendar look however you want, with whatever functionality you want.
+- [x] Boundary dates - Limit the calendar date range.
+- [x] Custom date view/composable - Make your day cells look however you want, with any
+  functionality you want.
+- [x] Custom calendar view/composable - Make your calendar look however you want, with whatever
+  functionality you want.
 - [x] Custom first day of the week - Use any day as the first day of the week.
 - [x] Horizontal or vertical scrolling calendar.
+- [x] HeatMap calendar - Suitable for showing how data changes over time, like GitHub's contribution
+  chart.
 - [x] Month/Week headers and footers - Add headers/footers of any kind on each month/week.
-- [x] Easily scroll to any date/week/month on the calendar via user swipe actions or programmatically.
-- [x] Use all RecyclerView/LazyRow/LazyColumn customizations since the calendar extends from RecyclerView for the view system and uses LazyRow/LazyColumn for compose.
-- [x] Design your calendar [however you want.](https://github.com/kizitonwose/Calendar/issues/1) The library provides the logic, you provide the views/composables.
+- [x] Easily scroll to any date/week/month on the calendar via swipe actions or programmatically.
+- [x] Use all RecyclerView/LazyRow/LazyColumn customizations since the calendar extends from
+  RecyclerView for the view system and uses LazyRow/LazyColumn for compose.
+- [x] Design your calendar [however you want.](https://github.com/kizitonwose/Calendar/issues/1) The
+  library provides the logic, you provide the views/composables.
 
 ## Sample project
 
