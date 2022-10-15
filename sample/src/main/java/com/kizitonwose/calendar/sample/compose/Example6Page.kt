@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.HeatMapCalendar
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
+import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeek
 import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -170,7 +171,7 @@ private fun Day(
     day: CalendarDay,
     startDate: LocalDate,
     endDate: LocalDate,
-    week: List<CalendarDay>,
+    week: HeatMapWeek,
     color: Color,
     onClick: (LocalDate) -> Unit,
 ) {
@@ -180,7 +181,7 @@ private fun Day(
     // month that are older than 12 months from today.
     // We draw a transparent box on the empty spaces in the first week
     // so the items are laid out properly as the column is top to bottom.
-    val weekDates = week.map { it.date }
+    val weekDates = week.days.map { it.date }
     if (day.date in startDate..endDate) {
         Level(color) { onClick(day.date) }
     } else if (weekDates.contains(startDate)) {

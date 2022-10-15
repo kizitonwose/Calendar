@@ -17,7 +17,7 @@ internal fun HeatMapCalendarInternal(
     userScrollEnabled: Boolean,
     weekHeaderPosition: HeatMapWeekHeaderPosition,
     contentPadding: PaddingValues,
-    dayContent: @Composable ColumnScope.(day: CalendarDay, week: List<CalendarDay>) -> Unit,
+    dayContent: @Composable ColumnScope.(day: CalendarDay, week: HeatMapWeek) -> Unit,
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit,
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
 ) {
@@ -49,7 +49,7 @@ internal fun HeatMapCalendarInternal(
                         for (week in calendarMonth.weekDays) {
                             Column {
                                 for (day in week) {
-                                    dayContent(day, week)
+                                    dayContent(day, HeatMapWeek(week))
                                 }
                             }
                         }

@@ -11,7 +11,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.kizitonwose.calendar.compose.VisibleItemState
-import com.kizitonwose.calendar.core.WeekDay
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
@@ -131,15 +131,15 @@ class WeekCalendarState internal constructor(
     /**
      * The first week that is visible.
      */
-    val firstVisibleWeek: List<WeekDay> by derivedStateOf {
-        store[listState.firstVisibleItemIndex].days
+    val firstVisibleWeek: Week by derivedStateOf {
+        store[listState.firstVisibleItemIndex]
     }
 
     /**
      * The last week that is visible.
      */
-    val lastVisibleWeek: List<WeekDay> by derivedStateOf {
-        store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0].days
+    val lastVisibleWeek: Week by derivedStateOf {
+        store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0]
     }
 
     /**
@@ -159,10 +159,10 @@ class WeekCalendarState internal constructor(
      * based on this value consider using "snapshotFlow".
      */
     val layoutInfo: WeekCalendarLayoutInfo
-        get() = WeekCalendarLayoutInfo(listState.layoutInfo) { index -> store[index].days }
+        get() = WeekCalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
     internal val store = DataStore { offset ->
-        getWeekCalendarData(startDateAdjusted, offset, startDate, endDate)
+        getWeekCalendarData(startDateAdjusted, offset, startDate, endDate).week
     }
 
     internal var weekIndexCount by mutableStateOf(0)
@@ -248,7 +248,7 @@ class WeekCalendarState internal constructor(
                 listOf(
                     it.startDate,
                     it.endDate,
-                    it.firstVisibleWeek.first(),
+                    it.firstVisibleWeek.days.first().date,
                     it.firstDayOfWeek,
                     visibleItemState,
                 )

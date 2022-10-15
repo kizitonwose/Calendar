@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.sample.view.CalendarViewActivity
 import com.kizitonwose.calendar.view.ViewContainer
@@ -73,7 +74,7 @@ class WeekCalendarViewTests {
         val calendarView = getWeekCalendarView()
 
         val boundDays = mutableSetOf<WeekDay>()
-        var boundHeaderWeek: List<WeekDay>? = null
+        var boundHeaderWeek: Week? = null
 
         homeScreenRule.scenario.onActivity {
             calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
@@ -85,7 +86,7 @@ class WeekCalendarViewTests {
             calendarView.weekHeaderResource = R.layout.example_3_calendar_header
             calendarView.weekHeaderBinder = object : WeekHeaderFooterBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, data: List<WeekDay>) {
+                override fun bind(container: DayViewContainer, data: Week) {
                     boundHeaderWeek = data
                 }
             }
@@ -106,8 +107,8 @@ class WeekCalendarViewTests {
         // Allow time for date change event to be propagated.
         sleep(2000)
 
-        assertEquals(firstDate, boundHeaderWeek?.first()?.date)
-        assertEquals(lastDate, boundHeaderWeek?.last()?.date)
+        assertEquals(firstDate, boundHeaderWeek?.days?.first()?.date)
+        assertEquals(lastDate, boundHeaderWeek?.days?.last()?.date)
         assertTrue(boundDays.map { it.date }.contains(firstDate))
         assertTrue(boundDays.map { it.date }.contains(lastDate))
     }
@@ -146,7 +147,7 @@ class WeekCalendarViewTests {
     fun weekScrollListenerIsCalledWhenScrolled() {
         val calendarView = getWeekCalendarView()
 
-        var targetWeek: List<WeekDay>? = null
+        var targetWeek: Week? = null
         calendarView.weekScrollListener = { weekDays ->
             targetWeek = weekDays
         }
@@ -156,7 +157,7 @@ class WeekCalendarViewTests {
             calendarView.smoothScrollToWeek(dateInTwoMonths)
         }
         sleep(3000) // Enough time for smooth scrolling animation.
-        assertTrue(targetWeek.orEmpty().map { it.date }.contains(dateInTwoMonths))
+        assertTrue(targetWeek?.days.orEmpty().map { it.date }.contains(dateInTwoMonths))
     }
 
     @Test
@@ -170,7 +171,7 @@ class WeekCalendarViewTests {
 
         sleep(2000)
 
-        val firstVisibleWeek = calendarView.findFirstVisibleWeek().orEmpty().map { it.date }
+        val firstVisibleWeek = calendarView.findFirstVisibleWeek()?.days.orEmpty().map { it.date }
         assertTrue(firstVisibleWeek.contains(dateInTwoMonths))
     }
 
@@ -183,7 +184,7 @@ class WeekCalendarViewTests {
 
         var targetVisibleDay: WeekDay? = null
         calendarView.weekScrollListener = { week ->
-            targetVisibleDay = week.first()
+            targetVisibleDay = week.days.first()
         }
 
         homeScreenRule.scenario.onActivity {

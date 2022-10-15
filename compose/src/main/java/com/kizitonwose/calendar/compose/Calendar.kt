@@ -8,15 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
-import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarInternal
-import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
-import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeekHeaderPosition
-import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarState
+import com.kizitonwose.calendar.compose.heatmapcalendar.*
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarInternal
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import java.time.DayOfWeek
 
@@ -227,8 +225,8 @@ fun WeekCalendar(
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
-    weekHeader: @Composable ColumnScope.(List<WeekDay>) -> Unit = { },
-    weekFooter: @Composable ColumnScope.(List<WeekDay>) -> Unit = { },
+    weekHeader: @Composable ColumnScope.(Week) -> Unit = { },
+    weekFooter: @Composable ColumnScope.(Week) -> Unit = { },
 ) = WeekCalendarInternal(
     modifier = modifier,
     state = state,
@@ -267,7 +265,7 @@ fun HeatMapCalendar(
     weekHeaderPosition: HeatMapWeekHeaderPosition = HeatMapWeekHeaderPosition.Start,
     userScrollEnabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    dayContent: @Composable ColumnScope.(day: CalendarDay, week: List<CalendarDay>) -> Unit,
+    dayContent: @Composable ColumnScope.(day: CalendarDay, week: HeatMapWeek) -> Unit,
     weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
     monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
 ) = HeatMapCalendarInternal(

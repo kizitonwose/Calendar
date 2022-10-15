@@ -23,4 +23,5 @@ android {
 
 dependencies {
     coreLibraryDesugaring deps.desugaring
+    implementation deps.compose.runtime // Only needed for @Immutable annotation.
 }

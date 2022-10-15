@@ -49,10 +49,10 @@ class WeekDataTests {
         val may01 = may2019.atDay(1)
         val nov01 = november2019.atDay(1)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, nov01, firstDayOfWeek)
-        val weekData = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, nov01)
+        val week = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, nov01).week
 
-        assertEquals(LocalDate.of(2019, APRIL, 29), weekData.days.first().date)
-        assertEquals(LocalDate.of(2019, MAY, 5), weekData.days.last().date)
+        assertEquals(LocalDate.of(2019, APRIL, 29), week.days.first().date)
+        assertEquals(LocalDate.of(2019, MAY, 5), week.days.last().date)
     }
 
     @Test
@@ -60,10 +60,10 @@ class WeekDataTests {
         val may01 = may2019.atDay(1)
         val nov01 = november2019.atDay(1)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, nov01, firstDayOfWeek)
-        val weekData = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, nov01)
+        val week = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, nov01).week
 
-        val inDates = weekData.days.take(2)
-        val rangeDays = weekData.days.takeLast(5)
+        val inDates = week.days.take(2)
+        val rangeDays = week.days.takeLast(5)
         assertTrue(inDates.all { it.position == WeekDayPosition.InDate })
         assertTrue(rangeDays.all { it.position == WeekDayPosition.RangeDate })
     }
@@ -73,10 +73,10 @@ class WeekDataTests {
         val may01 = may2019.atDay(1)
         val may31 = may2019.atDay(31)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, may31, firstDayOfWeek)
-        val weekData = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 4, may01, may31)
+        val week = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 4, may01, may31).week
 
-        val outDates = weekData.days.takeLast(2)
-        val rangeDays = weekData.days.take(5)
+        val outDates = week.days.takeLast(2)
+        val rangeDays = week.days.take(5)
         assertTrue(outDates.all { it.position == WeekDayPosition.OutDate })
         assertTrue(rangeDays.all { it.position == WeekDayPosition.RangeDate })
     }
@@ -86,10 +86,10 @@ class WeekDataTests {
         val may01 = may2019.atDay(2)
         val may31 = may2019.atDay(31)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, may31, firstDayOfWeek)
-        val weekData = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, may31)
+        val week = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, may31).week
 
         val daysOfWeek = daysOfWeek(firstDayOfWeek)
-        weekData.days.forEachIndexed { index, day ->
+        week.days.forEachIndexed { index, day ->
             assertEquals(daysOfWeek[index], day.date.dayOfWeek)
         }
     }
@@ -99,10 +99,10 @@ class WeekDataTests {
         val may01 = may2019.atDay(2)
         val may31 = may2019.atDay(31)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, may31, firstDayOfWeek)
-        val weekData = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 2, may01, may31)
+        val week = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 2, may01, may31).week
 
-        assertEquals(may2019.atDay(13), weekData.days.first().date)
-        assertEquals(may2019.atDay(19), weekData.days.last().date)
+        assertEquals(may2019.atDay(13), week.days.first().date)
+        assertEquals(may2019.atDay(19), week.days.last().date)
     }
 
     @Test

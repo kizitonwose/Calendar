@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.data
 
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.WeekDayPosition
 import java.time.DayOfWeek
@@ -35,11 +36,11 @@ fun getWeekCalendarData(
 }
 
 data class WeekData internal constructor(
-    val firstDayInWeek: LocalDate,
+    private val firstDayInWeek: LocalDate,
     private val desiredStartDate: LocalDate,
     private val desiredEndDate: LocalDate,
 ) {
-    val days = (0 until 7).map { dayOffset -> getDay(dayOffset) }
+    val week = Week((0 until 7).map { dayOffset -> getDay(dayOffset) })
 
     private fun getDay(dayOffset: Int): WeekDay {
         val date = firstDayInWeek.plusDays(dayOffset.toLong())

@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.data.checkDateRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
@@ -340,7 +341,7 @@ open class WeekCalendarView : RecyclerView {
      *
      * @return The first visible week or null if not found.
      */
-    fun findFirstVisibleWeek(): List<WeekDay>? {
+    fun findFirstVisibleWeek(): Week? {
         return calendarAdapter.findFirstVisibleWeek()
     }
 
@@ -349,7 +350,7 @@ open class WeekCalendarView : RecyclerView {
      *
      * @return The last visible week or null if not found.
      */
-    fun findLastVisibleWeek(): List<WeekDay>? {
+    fun findLastVisibleWeek(): Week? {
         return calendarAdapter.findLastVisibleWeek()
     }
 

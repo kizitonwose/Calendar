@@ -172,8 +172,8 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             val week = weekCalendarView.findFirstVisibleWeek() ?: return
             // In week mode, we show the header a bit differently because
             // an index can contain dates from different months/years.
-            val firstDate = week.first().date
-            val lastDate = week.last().date
+            val firstDate = week.days.first().date
+            val lastDate = week.days.last().date
             if (firstDate.yearMonth == lastDate.yearMonth) {
                 binding.exOneYearText.text = firstDate.year.toString()
                 binding.exOneMonthText.text = firstDate.month.displayText(short = false)

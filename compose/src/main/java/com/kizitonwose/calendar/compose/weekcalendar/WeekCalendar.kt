@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 
 @Composable
@@ -16,8 +17,8 @@ internal fun WeekCalendarInternal(
     reverseLayout: Boolean,
     contentPadding: PaddingValues,
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
-    weekHeader: @Composable ColumnScope.(List<WeekDay>) -> Unit,
-    weekFooter: @Composable ColumnScope.(List<WeekDay>) -> Unit,
+    weekHeader: @Composable ColumnScope.(Week) -> Unit,
+    weekFooter: @Composable ColumnScope.(Week) -> Unit,
 ) {
     LazyRow(
         modifier = modifier,
@@ -29,16 +30,16 @@ internal fun WeekCalendarInternal(
     ) {
         items(
             count = state.weekIndexCount,
-            key = { offset -> state.store[offset].firstDayInWeek }
+            key = { offset -> state.store[offset].days.first().date }
         ) { offset ->
             val columnModifier = if (calendarScrollPaged) {
                 Modifier.fillParentMaxWidth()
             } else Modifier.width(IntrinsicSize.Max)
-            val weekData = state.store[offset]
+            val week = state.store[offset]
             Column(modifier = columnModifier) {
-                weekHeader(weekData.days)
+                weekHeader(week)
                 Row {
-                    for (date in weekData.days) {
+                    for (date in week.days) {
                         val boxModifier = if (calendarScrollPaged) {
                             Modifier.weight(1f)
                         } else Modifier
@@ -47,7 +48,7 @@ internal fun WeekCalendarInternal(
                         }
                     }
                 }
-                weekFooter(weekData.days)
+                weekFooter(week)
             }
         }
     }

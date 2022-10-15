@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.core
 
+import androidx.compose.runtime.Immutable
 import java.io.Serializable
 import java.time.YearMonth
 
@@ -9,6 +10,7 @@ import java.time.YearMonth
  * @param yearMonth the calendar month value.
  * @param weekDays the weeks in this month.
  */
+@Immutable
 data class CalendarMonth(
     val yearMonth: YearMonth,
     val weekDays: List<List<CalendarDay>>,

@@ -42,6 +42,7 @@ ext.deps = [
                 ui        : "androidx.compose.ui:ui:$compose_lib_version",
                 foundation: "androidx.compose.foundation:foundation:$compose_lib_version",
                 tooling   : "androidx.compose.ui:ui-tooling:$compose_lib_version",
+                runtime   : "androidx.compose.runtime:runtime:$compose_lib_version",
                 material  : "androidx.compose.material:material:1.2.1",
                 snapper   : "dev.chrisbanes.snapper:snapper:0.3.0",
                 activity  : "androidx.activity:activity-compose:1.6.0",

@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.data.*
 import com.kizitonwose.calendar.view.ViewContainer
@@ -30,7 +31,7 @@ internal class WeekCalendarAdapter(
     private var itemCount =
         getWeekIndicesCount(adjustedData.startDateAdjusted, adjustedData.endDateAdjusted)
     private val dataStore = DataStore { offset ->
-        getWeekCalendarData(startDateAdjusted, offset, startDate, endDate)
+        getWeekCalendarData(startDateAdjusted, offset, startDate, endDate).week
     }
 
     init {
@@ -44,10 +45,10 @@ internal class WeekCalendarAdapter(
         calView.post { notifyWeekScrollListenerIfNeeded() }
     }
 
-    private fun getItem(position: Int): WeekData = dataStore[position]
+    private fun getItem(position: Int): Week = dataStore[position]
 
     override fun getItemId(position: Int): Long =
-        getItem(position).firstDayInWeek.hashCode().toLong()
+        getItem(position).days.first().date.hashCode().toLong()
 
     override fun getItemCount(): Int = itemCount
 
@@ -86,7 +87,7 @@ internal class WeekCalendarAdapter(
     }
 
     override fun onBindViewHolder(holder: WeekViewHolder, position: Int) {
-        holder.bindWeek(getItem(position).days)
+        holder.bindWeek(getItem(position))
     }
 
     fun reloadDay(date: LocalDate) {
@@ -104,7 +105,7 @@ internal class WeekCalendarAdapter(
         notifyItemRangeChanged(0, itemCount)
     }
 
-    private var visibleWeek: WeekData? = null
+    private var visibleWeek: Week? = null
     fun notifyWeekScrollListenerIfNeeded() {
         if (!isAttached) return
 
@@ -120,7 +121,7 @@ internal class WeekCalendarAdapter(
 
             if (visibleWeek != this.visibleWeek) {
                 this.visibleWeek = visibleWeek
-                calView.weekScrollListener?.invoke(visibleWeek.days)
+                calView.weekScrollListener?.invoke(visibleWeek)
             }
         }
     }
@@ -132,14 +133,14 @@ internal class WeekCalendarAdapter(
     private val layoutManager: WeekCalendarLayoutManager
         get() = calView.layoutManager as WeekCalendarLayoutManager
 
-    fun findFirstVisibleWeek(): List<WeekDay>? {
+    fun findFirstVisibleWeek(): Week? {
         val index = findFirstVisibleWeekPosition()
-        return if (index == NO_INDEX) null else dataStore[index].days
+        return if (index == NO_INDEX) null else dataStore[index]
     }
 
-    fun findLastVisibleWeek(): List<WeekDay>? {
+    fun findLastVisibleWeek(): Week? {
         val index = findLastVisibleWeekPosition()
-        return if (index == NO_INDEX) null else dataStore[index].days
+        return if (index == NO_INDEX) null else dataStore[index]
     }
 
     fun findFirstVisibleDay(): WeekDay? = findVisibleDay(true)

@@ -3,6 +3,7 @@ package com.kizitonwose.calendar.view.internal.weekcalendar
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
@@ -20,9 +21,9 @@ internal class WeekViewHolder constructor(
     private var headerContainer: ViewContainer? = null
     private var footerContainer: ViewContainer? = null
 
-    lateinit var week: List<WeekDay>
+    lateinit var week: Week
 
-    fun bindWeek(week: List<WeekDay>) {
+    fun bindWeek(week: Week) {
         this.week = week
         headerView?.let { view ->
             val headerContainer = headerContainer ?: weekHeaderBinder!!.create(view).also {
@@ -36,7 +37,7 @@ internal class WeekViewHolder constructor(
             }
             weekFooterBinder?.bind(footerContainer, week)
         }
-        weekHolders.bindWeekView(week)
+        weekHolders.bindWeekView(week.days)
     }
 
     fun reloadDay(day: WeekDay) {
