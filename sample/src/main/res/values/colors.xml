@@ -24,9 +24,11 @@
     <color name="example_5_page_bg_color">#0E0E0E</color>
     <color name="example_5_item_view_bg_color">#1B1B1B</color>
     <color name="example_5_toolbar_color">#282828</color>
-    <color name="example_5_text_grey">#bdbdbd</color>
+    <color name="example_5_text_grey">#DCDCDC</color>
     <color name="example_5_text_grey_light">#616161</color>
     <color name="example_6_month_bg_color">#b2ebf2</color>
+    <color name="example_6_month_bg_color2">#F2C4B2</color>
+    <color name="example_6_month_bg_color3">#B2B8F2</color>
     <color name="brown_700">#5D4037</color>
     <color name="blue_grey_700">#455A64</color>
     <color name="orange_800">#EF6C00</color>
@@ -39,4 +41,6 @@
     <color name="example_6_black">#BF000000</color>
     <color name="example_7_white">#D9FFFFFF</color>
     <color name="example_7_yellow">#FFEB3B</color>
+    <color name="example_1_selection_color">#FCCA3E</color>
+    <color name="inactive_text_color">#BEBEBE</color>
 </resources>

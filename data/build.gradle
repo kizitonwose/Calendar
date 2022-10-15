@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.vanniktech.maven.publish'
+apply from: rootProject.file("dependencies.gradle")
+
+android {
+    compileSdkVersion versions.compile_sdk
+    namespace 'com.kizitonwose.calendar.data'
+    defaultConfig {
+        minSdkVersion versions.min_sdk_library_common
+        targetSdkVersion versions.target_sdk
+        multiDexEnabled true // Needed for desugar because minSdk < 21
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation project(':core')
+    coreLibraryDesugaring deps.desugaring
+    implementation deps.kotlin.stdlib8
+    testImplementation deps.test.junit
+}

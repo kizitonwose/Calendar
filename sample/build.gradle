@@ -4,21 +4,22 @@ apply from: rootProject.file("dependencies.gradle")
 
 android {
     compileSdkVersion versions.compile_sdk
+    namespace 'com.kizitonwose.calendar.sample'
     defaultConfig {
-        applicationId "com.kizitonwose.calendarviewsample"
+        applicationId "com.kizitonwose.calendar.sample"
         minSdkVersion versions.min_sdk_sample
         targetSdkVersion versions.target_sdk
-        versionCode versions.version_code
-        versionName versions.version_name
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -29,10 +30,14 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.compose_compiler
+    }
 }
 
 dependencies {
-    implementation project(':library')
+    implementation project(':view')
+    implementation project(':compose')
     coreLibraryDesugaring deps.desugaring
     implementation deps.kotlin.stdlib8
     implementation deps.androidx.legacy
@@ -40,13 +45,23 @@ dependencies {
     implementation deps.androidx.core_ktx
     implementation deps.androidx.constraint_layout
     implementation deps.androidx.cardview
-    implementation deps.material_library
+    implementation deps.androidx.material_view
+
+    implementation deps.compose.ui
+    implementation deps.compose.tooling
+    implementation deps.compose.foundation
+    implementation deps.compose.material
+    implementation deps.compose.activity
+    implementation deps.compose.navigation
 
     testImplementation deps.test.junit
 
-    androidTestImplementation deps.test.android.espresso_core
-    androidTestImplementation deps.test.android.espresso_contrib // RecyclerView actions.
-    androidTestImplementation deps.test.android.runner
-    androidTestImplementation deps.test.android.rules
-    androidTestImplementation deps.test.android.ext_junit
+    androidTestImplementation deps.test.view.espresso_core
+    androidTestImplementation deps.test.view.espresso_contrib // RecyclerView actions.
+    androidTestImplementation deps.test.view.runner
+    androidTestImplementation deps.test.view.rules
+    androidTestImplementation deps.test.view.ext_junit
+
+    androidTestImplementation deps.test.compose.ui_junit
+    debugImplementation deps.test.compose.ui_manifest // Compose test runner activity
 }

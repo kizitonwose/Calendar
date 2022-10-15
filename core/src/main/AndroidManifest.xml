@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:tools="http://schemas.android.com/tools">
+    <!-- Override minSdk 21 in the runtime library for the core module.
+    We only use it for the @Immutable annotation on the models. -->
+    <uses-sdk tools:overrideLibrary="androidx.compose.runtime" />
+</manifest>

@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    tools:context=".Example4Fragment">
+    tools:context=".view.Example4Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exFourAppBarLayout"
@@ -79,7 +79,7 @@
 
         <include
             android:id="@+id/legendLayout"
-            layout="@layout/calendar_day_legend"
+            layout="@layout/calendar_day_legend_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -91,12 +91,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kizitonwose.calendarview.CalendarView
+        <com.kizitonwose.calendar.view.CalendarView
             android:id="@+id/exFourCalendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingBottom="100dp"
+            app:cv_orientation="vertical"
+            app:cv_scrollPaged="false"
             app:cv_dayViewResource="@layout/example_4_calendar_day"
             app:cv_monthHeaderResource="@layout/example_4_calendar_header" />
 
@@ -107,15 +109,15 @@
             android:background="@color/white"
             android:elevation="10dp">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
+                android:theme="@style/Example4ButtonTheme"
                 android:id="@+id/exFourSaveButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/save"
-                app:backgroundTint="@color/example_4_green" />
+                android:text="@string/save" />
 
         </FrameLayout>
 

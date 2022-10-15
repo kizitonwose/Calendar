@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    tools:context=".Example5Fragment">
+    tools:context=".view.Example5Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exFiveAppBarLayout"
@@ -29,7 +29,7 @@
                 android:layout_height="36dp"
                 android:layout_marginEnd="22dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/example_5_text_grey"
+                app:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:textColor="@color/example_5_text_grey"
+                android:textColor="@color/white"
                 android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/exFiveNextMonthImage"
@@ -53,7 +53,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="@color/example_5_text_grey"
+                app:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -69,15 +69,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kizitonwose.calendarview.CalendarView
+        <com.kizitonwose.calendar.view.CalendarView
             android:id="@+id/exFiveCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cv_dayViewResource="@layout/example_5_calendar_day"
             app:cv_monthHeaderResource="@layout/example_5_calendar_header"
-            app:cv_orientation="horizontal"
-            app:cv_outDateStyle="endOfGrid"
-            app:cv_scrollMode="paged" />
+            app:cv_outDateStyle="endOfGrid" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exFiveRv"

@@ -19,7 +19,7 @@
 
     <include
         android:id="@+id/legendLayout"
-        layout="@layout/calendar_day_legend" />
+        layout="@layout/calendar_day_legend_container" />
 
     <View
         android:layout_width="match_parent"

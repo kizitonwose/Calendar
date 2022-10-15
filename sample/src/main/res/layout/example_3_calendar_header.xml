@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/legendLayout"
-        layout="@layout/calendar_day_legend" />
+        layout="@layout/calendar_day_legend_container" />
 
 </FrameLayout>
 

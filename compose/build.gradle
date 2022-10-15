@@ -1,0 +1,40 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.vanniktech.maven.publish'
+apply from: rootProject.file("dependencies.gradle")
+
+android {
+    compileSdkVersion versions.compile_sdk
+    namespace 'com.kizitonwose.calendar.compose'
+    defaultConfig {
+        minSdkVersion versions.min_sdk_library_compose
+        targetSdkVersion versions.target_sdk
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.compose_compiler
+    }
+}
+
+dependencies {
+    api project(':core')
+    implementation project(':data')
+    coreLibraryDesugaring deps.desugaring
+    implementation deps.kotlin.stdlib8
+
+    implementation deps.compose.ui
+    implementation deps.compose.tooling
+    implementation deps.compose.foundation
+    implementation deps.compose.snapper
+}

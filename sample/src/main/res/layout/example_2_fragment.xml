@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    tools:context=".Example2Fragment">
+    tools:context=".view.Example2Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/exTwoAppBarLayout"
@@ -24,7 +24,7 @@
 
         <include
             android:id="@+id/legendLayout"
-            layout="@layout/calendar_day_legend"
+            layout="@layout/calendar_day_legend_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -32,12 +32,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.kizitonwose.calendarview.CalendarView
+    <com.kizitonwose.calendar.view.CalendarView
         android:id="@+id/exTwoCalendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cv_dayViewResource="@layout/example_2_calendar_day"
         app:cv_monthHeaderResource="@layout/example_2_calendar_header"
+        app:cv_scrollPaged="false"
         app:cv_orientation="vertical" />
 
 </LinearLayout>
