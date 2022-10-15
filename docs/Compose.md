@@ -24,11 +24,11 @@ Check out the sample app if you have not yet done so. Most techniques that you w
 
 Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
 
-Read the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/master/sample)
+Read the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
 
 Add the library to your project [here](https://github.com/kizitonwose/Calendar#setup)
 
-**If you are looking for the view-based documentation, you can find it [here](https://github.com/kizitonwose/Calendar/blob/master/docs/View.md)**
+**If you are looking for the view-based documentation, you can find it [here](https://github.com/kizitonwose/Calendar/blob/main/docs/View.md)**
 
 ## Composables
 
@@ -328,7 +328,7 @@ All properties set when creating the state via `rememberCalendarState()` or `rem
 
 If you are wondering what `outDates` and `inDates` mean, let's use the screenshot below as an example.
 
-<img src="https://raw.githubusercontent.com/kizitonwose/CalendarView/master/images/screenshot_in_out_dates.png" alt="inDate and outDates" width="300">
+<img src="https://raw.githubusercontent.com/kizitonwose/Calendar/main/images/screenshot_in_out_dates.png" alt="inDate and outDates" width="300">
 
 In the image, the dates within the green annotation are `inDates`, the ones within the red annotation are `outDates` while those without annotation are `monthDates`. You can check for this when your calendar day is rendered. To achieve the exact effect on the image, we update our `Day` composable: 
 

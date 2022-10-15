@@ -24,11 +24,11 @@ Check out the sample app if you have not yet done so. Most techniques that you w
 
 Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
 
-Read the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/master/sample)
+Read the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
 
 Add the library to your project [here](https://github.com/kizitonwose/Calendar#setup)
 
-**If you are looking for the compose documentation, you can find it [here](https://github.com/kizitonwose/Calendar/blob/master/docs/Compose.md)**
+**If you are looking for the compose documentation, you can find it [here](https://github.com/kizitonwose/Calendar/blob/main/docs/Compose.md)**
 
 ## Class information
 
@@ -120,6 +120,7 @@ calendarView.scrollToMonth(currentMonth)
     android:layout_height="wrap_content"
     app:cv_dayViewResource="@layout/calendar_day_layout" />
 ```
+
 ```kotlin
 val currentDate = LocalDate.now()
 val currentMonth = YearMonth.now()
@@ -326,7 +327,7 @@ You can do more than just use the day titles as the header. For example, you can
 
 If you are wondering what `outDates` and `inDates` mean, let's use the screenshot below as an example.
 
-<img src="https://raw.githubusercontent.com/kizitonwose/CalendarView/master/images/screenshot_in_out_dates.png" alt="inDate and outDates" width="300">
+<img src="https://raw.githubusercontent.com/kizitonwose/Calendar/main/images/screenshot_in_out_dates.png" alt="inDate and outDates" width="300">
 
 In the image, the dates within the green annotation are `inDates`, the ones within the red annotation are `outDates` while those without annotation are `monthDates`. You can check for this when binding your calendar. To achieve the exact effect on the image, we do this: 
 
@@ -424,7 +425,10 @@ All the respective XML attributes listed above are also available as properties 
 
 - **updateWeekData()**: Update the WeeCalendarView's start date or end date or the first day of week after the initial setup. The currently visible week is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
 
-There's no need to list all available methods or repeat the documentation here. Please see the [CalendarView](https://github.com/kizitonwose/Calendar/blob/master/view/src/main/java/com/kizitonwose/calendar/view/CalendarView.kt) and [WeekCalendarView](https://github.com/kizitonwose/Calendar/blob/master/view/src/main/java/com/kizitonwose/calendar/view/WeekCalendarView.kt) classes for all properties and methods available with proper documentation.
+There's no need to list all available methods or repeat the documentation here. Please see
+the [CalendarView](https://github.com/kizitonwose/Calendar/blob/main/view/src/main/java/com/kizitonwose/calendar/view/CalendarView.kt)
+and [WeekCalendarView](https://github.com/kizitonwose/Calendar/blob/main/view/src/main/java/com/kizitonwose/calendar/view/WeekCalendarView.kt)
+classes for all properties and methods available with proper documentation.
 
 ### Date clicks
 
@@ -636,4 +640,4 @@ Remember that all the screenshots shown so far are just examples of what you can
 
 ## Migration
 
-Please see [the migration guide](https://github.com/kizitonwose/calendar/blob/master/docs/MigrationGuide.md#view).
+Please see [the migration guide](https://github.com/kizitonwose/calendar/blob/main/docs/MigrationGuide.md#view).

@@ -1,12 +1,12 @@
 # Calendar
 
-A highly customizable calendar library for Android, powered by RecyclerView for the view system, and LazyRow/LazyColumn for compose.
+A highly customizable calendar library for Android, powered by RecyclerView for the view system, and
+LazyRow/LazyColumn for compose.
 
-[![CI](https://github.com/kizitonwose/Calendar/workflows/CI/badge.svg?branch=master)](https://github.com/kizitonwose/Calendar/actions) 
-[![Maven Central](https://img.shields.io/maven-central/v/com.kizitonwose.calendar/view)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/) 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kizitonwose/Calendar/blob/master/LICENSE.md) 
+[![CI](https://github.com/kizitonwose/Calendar/workflows/CI/badge.svg?branch=main)](https://github.com/kizitonwose/Calendar/actions)
+[![Maven Central](https://img.shields.io/maven-central/v/com.kizitonwose.calendar/view)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kizitonwose/Calendar/blob/main/LICENSE.md)
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
-
 
 **With this library, your calendar will look however you want it to.**
 
@@ -39,9 +39,10 @@ A highly customizable calendar library for Android, powered by RecyclerView for 
 It's important to check out the sample app. There are lots of examples provided for both view and compose implementations. 
 Most techniques that you would want to implement are already done in the examples.
 
-Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
+Download the sample
+app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
 
-View the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/master/sample)
+View the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
 
 ## Setup
 
@@ -84,23 +85,25 @@ Add the desired calendar library (view or compose) to your app `build.gradle`:
 
 ```groovy
 dependencies {
-    // The view calendar implementation
-    implementation 'com.kizitonwose.calendar:view:<latest-version>'
-  
-    // The compose calendar implementation
-    implementation 'com.kizitonwose.calendar:compose:<latest-version>'
+  // The view calendar implementation
+  implementation 'com.kizitonwose.calendar:view:<latest-version>'
+
+  // The compose calendar implementation
+  implementation 'com.kizitonwose.calendar:compose:<latest-version>'
 }
 ```
 
 You can find the latest version of the library on the maven central badge above.
 
-**Note: If you're upgrading from version 1.x.x to 2.x.x, see the [migration guide](https://github.com/kizitonwose/Calendar#migration).**
+Snapshots of the development version are available in [Sonatype’s snapshots repository](https://s01.oss.sonatype.org/content/repositories/snapshots/com/kizitonwose/calendar/).
+
+**Note: If you're upgrading from version 1.x.x to 2.x.x, see the [migration guide](https://github.com/kizitonwose/calendar/blob/main/docs/MigrationGuide.md).**
 
 ## Usage
 
 You can find the relevant documentation for the library in the links below.
 
-|[View-based documentation](https://github.com/kizitonwose/Calendar/blob/master/docs/View.md)|[Compose documentation](https://github.com/kizitonwose/Calendar/blob/master/docs/Compose.md)|
+|[View-based documentation](https://github.com/kizitonwose/Calendar/blob/main/docs/View.md)|[Compose documentation](https://github.com/kizitonwose/Calendar/blob/main/docs/Compose.md)|
 |:-:|:-:|
 
 ## Share your creations
@@ -112,4 +115,6 @@ Made a cool calendar with this library? Share an image [here](https://github.com
 Found a bug? feel free to fix it and send a pull request or [open an issue](https://github.com/kizitonwose/Calendar/issues).
 
 ## License
-Calendar library is distributed under the MIT license. See [LICENSE](https://github.com/kizitonwose/Calendar/blob/master/LICENSE.md) for details.
+
+Calendar library is distributed under the MIT license.
+See [LICENSE](https://github.com/kizitonwose/Calendar/blob/main/LICENSE.md) for details.
