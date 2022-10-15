@@ -219,7 +219,7 @@ internal class MonthCalendarAdapter(
     }
 }
 
-// Find the actual month on the calendar that owns this date.
+// Find the actual month on the calendar where this date is shown.
 internal val CalendarDay.positionYearMonth: YearMonth
     get() = when (position) {
         DayPosition.InDate -> date.yearMonth.nextMonth

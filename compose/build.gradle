@@ -11,12 +11,6 @@ android {
         targetSdkVersion versions.target_sdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility = 1.8

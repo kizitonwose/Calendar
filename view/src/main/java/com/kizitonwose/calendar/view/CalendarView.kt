@@ -123,7 +123,7 @@ open class CalendarView : RecyclerView {
      * snap to the nearest month after a scroll or swipe action.
      * If `false`, the calendar scrolls normally.
      */
-    var scrollPaged = true
+    var scrollPaged = false
         set(value) {
             if (field != value) {
                 field = value
@@ -211,7 +211,9 @@ open class CalendarView : RecyclerView {
             monthFooterResource =
                 getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
             orientation = getInt(R.styleable.CalendarView_cv_orientation, orientation)
-            scrollPaged = getBoolean(R.styleable.CalendarView_cv_scrollPaged, scrollPaged)
+            // Enable paged scrolling by default only for the horizontal calendar.
+            scrollPaged =
+                getBoolean(R.styleable.CalendarView_cv_scrollPaged, orientation == HORIZONTAL)
             daySize = DaySize.values()[
                     getInt(R.styleable.CalendarView_cv_daySize, daySize.ordinal)
             ]
@@ -220,8 +222,6 @@ open class CalendarView : RecyclerView {
             ]
             monthViewClass = getString(R.styleable.CalendarView_cv_monthViewClass)
         }
-        // Initial scroll setup since we check field when assigning and default value is `true`
-        if (scrollPaged) pagerSnapHelper.attachToRecyclerView(this)
         check(dayViewResource != 0) { "No value set for `cv_dayViewResource` attribute." }
     }
 
