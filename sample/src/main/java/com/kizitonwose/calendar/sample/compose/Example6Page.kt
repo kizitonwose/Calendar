@@ -65,9 +65,11 @@ fun Example6Page() {
             generateRandomData(startDate, endDate)
         }
     }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         val state = rememberHeatMapCalendarState(
             startMonth = startDate.yearMonth,
             endMonth = endDate.yearMonth,
@@ -79,26 +81,32 @@ fun Example6Page() {
             state = state,
             contentPadding = PaddingValues(end = 6.dp),
             dayContent = { day, week ->
-                Day(day = day,
+                Day(
+                    day = day,
                     startDate = startDate,
                     endDate = endDate,
                     week = week,
-                    color = data.value[day.date] ?: level0) { clicked ->
+                    color = data.value[day.date] ?: level0
+                ) { clicked ->
                     selection = Pair(clicked, data.value[clicked] ?: level0)
                 }
             },
             weekHeader = { WeekHeader(it) },
             monthHeader = { MonthHeader(it, endDate, state) }
         )
-        CalendarInfo(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 44.dp))
-        Box(modifier = Modifier.weight(1f)) {
-            BottomContent(modifier = Modifier
+        CalendarInfo(
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
-                .align(Alignment.BottomCenter),
-                selection = selection) { refreshKey += 1 }
+                .padding(horizontal = 44.dp)
+        )
+        Box(modifier = Modifier.weight(1f)) {
+            BottomContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .align(Alignment.BottomCenter),
+                selection = selection
+            ) { refreshKey += 1 }
         }
     }
 }
@@ -125,9 +133,12 @@ private fun BottomContent(
                 Level(color = selection.second)
             }
         }
-        Button(modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp), onClick = refresh) {
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            onClick = refresh
+        ) {
             Text(
                 text = "Generate random data",
                 fontSize = 16.sp,
@@ -135,7 +146,6 @@ private fun BottomContent(
             )
         }
     }
-
 }
 
 @Composable
@@ -180,12 +190,14 @@ private fun Day(
 
 @Composable
 private fun Level(color: Color, onClick: (() -> Unit)? = null) {
-    Box(Modifier
-        .size(daySize) // Must set a size on the day.
-        .padding(2.dp)
-        .clip(RoundedCornerShape(2.dp))
-        .background(color = color)
-        .clickable(enabled = onClick != null) { onClick?.invoke() })
+    Box(
+        modifier = Modifier
+            .size(daySize) // Must set a size on the day.
+            .padding(2.dp)
+            .clip(RoundedCornerShape(2.dp))
+            .background(color = color)
+            .clickable(enabled = onClick != null) { onClick?.invoke() }
+    )
 }
 
 @Composable
@@ -221,14 +233,15 @@ private fun MonthHeader(
         } else {
             month.month.displayText()
         }
-        Box(Modifier
-            .fillMaxWidth()
-            .padding(bottom = 1.dp, start = 2.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 1.dp, start = 2.dp)
+        ) {
             Text(text = title, fontSize = 10.sp)
         }
     }
 }
-
 
 // Find the first index with at most one box out of bounds.
 private fun getMonthWithYear(

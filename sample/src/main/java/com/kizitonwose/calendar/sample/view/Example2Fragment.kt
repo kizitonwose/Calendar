@@ -139,6 +139,5 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
                     container.textView.text = data.yearMonth.displayText()
                 }
             }
-
     }
 }

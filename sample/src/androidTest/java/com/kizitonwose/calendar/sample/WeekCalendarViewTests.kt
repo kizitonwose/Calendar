@@ -10,7 +10,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.sample.view.CalendarViewActivity
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
@@ -21,7 +20,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.Thread.sleep
-import java.time.LocalDate
 import java.time.YearMonth
 
 /**
@@ -48,6 +46,7 @@ class WeekCalendarViewTests {
         val changedDate = currentMonth.atDay(4)
 
         homeScreenRule.scenario.onActivity {
+            calendarView.scrollToDate(changedDate)
             calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
                 override fun bind(container: DayViewContainer, data: WeekDay) {
@@ -86,8 +85,8 @@ class WeekCalendarViewTests {
             calendarView.weekHeaderResource = R.layout.example_3_calendar_header
             calendarView.weekHeaderBinder = object : WeekHeaderFooterBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, value: List<WeekDay>) {
-                    boundHeaderWeek = value
+                override fun bind(container: DayViewContainer, data: List<WeekDay>) {
+                    boundHeaderWeek = data
                 }
             }
         }
@@ -125,7 +124,7 @@ class WeekCalendarViewTests {
 
         sleep(2000)
 
-        assertNotNull(calendarView.findViewWithTag(dateInFourMonths.asWeekDay().hashCode()))
+        assertNotNull(calendarView.findViewWithTag(dateInFourMonths.hashCode()))
     }
 
     @Test
@@ -140,7 +139,7 @@ class WeekCalendarViewTests {
 
         sleep(2000)
 
-        assertNotNull(calendarView.findViewWithTag(dateInFourMonths.asWeekDay().hashCode()))
+        assertNotNull(calendarView.findViewWithTag(dateInFourMonths.hashCode()))
     }
 
     @Test
@@ -171,8 +170,8 @@ class WeekCalendarViewTests {
 
         sleep(2000)
 
-        val firstVisibleWeek = calendarView.findFirstVisibleWeek()!!
-        assertTrue(firstVisibleWeek.contains(dateInTwoMonths.asWeekDay()))
+        val firstVisibleWeek = calendarView.findFirstVisibleWeek().orEmpty().map { it.date }
+        assertTrue(firstVisibleWeek.contains(dateInTwoMonths))
     }
 
     @Test
@@ -215,6 +214,4 @@ class WeekCalendarViewTests {
         sleep(1000)
         return calendarView
     }
-
-    private fun LocalDate.asWeekDay(): WeekDay = WeekDay(this, WeekDayPosition.RangeDate)
 }

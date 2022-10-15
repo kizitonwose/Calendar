@@ -28,9 +28,11 @@ fun Example5Page(close: () -> Unit = {}) {
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
             endDate = endDate,
@@ -86,16 +88,16 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
             )
         }
         if (isSelected) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(5.dp)
-                .background(colorResource(R.color.example_7_yellow))
-                .align(Alignment.BottomCenter)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(5.dp)
+                    .background(colorResource(R.color.example_7_yellow))
+                    .align(Alignment.BottomCenter)
             )
         }
     }
 }
-
 
 @Preview
 @Composable

@@ -75,9 +75,11 @@ val items = listOf(
 
 @Composable
 fun ListPage(click: (Page) -> Unit) {
-    LazyColumn(modifier = Modifier
+    LazyColumn(
+        modifier = Modifier
         .fillMaxSize()
-        .background(Color.White)) {
+        .background(Color.White)
+    ) {
         items(items) { item ->
             Column(
                 modifier = Modifier
@@ -92,14 +94,16 @@ fun ListPage(click: (Page) -> Unit) {
                     fontWeight = FontWeight.Medium,
                     style = titleStyle.copy(
                         fontSize = 20.sp,
-                        color = titleStyle.color.copy(alpha = ContentAlpha.high)),
+                        color = titleStyle.color.copy(alpha = ContentAlpha.high)
+                    ),
                 )
                 val subtitleStyle = MaterialTheme.typography.body2
                 Text(
                     text = item.subtitle,
                     style = subtitleStyle.copy(
                         fontSize = 16.sp,
-                        color = subtitleStyle.color.copy(alpha = ContentAlpha.medium)),
+                        color = subtitleStyle.color.copy(alpha = ContentAlpha.medium)
+                    ),
                 )
             }
             Divider()

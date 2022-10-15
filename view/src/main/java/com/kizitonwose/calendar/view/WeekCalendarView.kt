@@ -176,11 +176,13 @@ open class WeekCalendarView : RecyclerView {
             dayViewResource =
                 getResourceId(R.styleable.WeekCalendarView_cv_dayViewResource, dayViewResource)
             weekHeaderResource =
-                getResourceId(R.styleable.WeekCalendarView_cv_weekHeaderResource,
-                    weekHeaderResource)
+                getResourceId(
+                    R.styleable.WeekCalendarView_cv_weekHeaderResource, weekHeaderResource
+                )
             weekFooterResource =
-                getResourceId(R.styleable.WeekCalendarView_cv_weekFooterResource,
-                    weekFooterResource)
+                getResourceId(
+                    R.styleable.WeekCalendarView_cv_weekFooterResource, weekFooterResource
+                )
             scrollPaged = getBoolean(R.styleable.WeekCalendarView_cv_scrollPaged, scrollPaged)
             daySize = DaySize.values()[
                     getInt(R.styleable.WeekCalendarView_cv_daySize, daySize.ordinal)
@@ -301,7 +303,6 @@ open class WeekCalendarView : RecyclerView {
     fun notifyDayChanged(day: WeekDay) {
         notifyDateChanged(day.date)
     }
-
 
     /**
      * Notify the WeekCalendarView to reload the view for the week containing

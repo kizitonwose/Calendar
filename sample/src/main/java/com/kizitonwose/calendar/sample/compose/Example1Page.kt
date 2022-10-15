@@ -39,9 +39,11 @@ fun Example1Page() {
     val endMonth = remember { currentMonth.plusMonths(500) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
@@ -85,7 +87,7 @@ fun Example1Page() {
 
 @Composable
 private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(Modifier.fillMaxWidth()) {
         for (dayOfWeek in daysOfWeek) {
             Text(
                 modifier = Modifier.weight(1f),
@@ -138,10 +140,12 @@ fun CalendarTitle(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(modifier = Modifier
-            .size(40.dp)
-            .clip(shape = CircleShape)
-            .clickable(role = Role.Button, onClick = goToPrevious)) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(shape = CircleShape)
+                .clickable(role = Role.Button, onClick = goToPrevious)
+        ) {
             Icon(
                 modifier = Modifier
                     .fillMaxSize()
@@ -160,10 +164,12 @@ fun CalendarTitle(
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
         )
-        Box(modifier = Modifier
-            .size(40.dp)
-            .clip(shape = CircleShape)
-            .clickable(role = Role.Button, onClick = goToNext)) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(shape = CircleShape)
+                .clickable(role = Role.Button, onClick = goToNext)
+        ) {
             Icon(
                 modifier = Modifier
                     .fillMaxSize()

@@ -29,7 +29,8 @@ internal fun WeekCalendarInternal(
     ) {
         items(
             count = state.weekIndexCount,
-            key = { offset -> state.store[offset].firstDayInWeek }) { offset ->
+            key = { offset -> state.store[offset].firstDayInWeek }
+        ) { offset ->
             val columnModifier = if (calendarScrollPaged) {
                 Modifier.fillParentMaxWidth()
             } else Modifier.width(IntrinsicSize.Max)

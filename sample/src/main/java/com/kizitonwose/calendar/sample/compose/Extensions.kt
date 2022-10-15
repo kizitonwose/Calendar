@@ -75,12 +75,14 @@ fun StatusBarColorUpdateEffect(color: Color, isLight: Boolean = false) {
 
 @Composable
 fun NavigationIcon(onBackClick: () -> Unit) {
-    Box(modifier = Modifier
+    Box(
+        modifier = Modifier
         .fillMaxHeight()
         .aspectRatio(1f)
         .padding(8.dp)
         .clip(shape = CircleShape)
-        .clickable(role = Role.Button, onClick = onBackClick)) {
+        .clickable(role = Role.Button, onClick = onBackClick)
+    ) {
         Icon(
             tint = Color.White,
             modifier = Modifier.align(Alignment.Center),

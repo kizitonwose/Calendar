@@ -35,9 +35,11 @@ fun Example4Page() {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth }
     val endMonth = remember { currentMonth.plusMonths(500) }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
@@ -53,28 +55,31 @@ fun Example4Page() {
             monthContainer = { _, container ->
                 val configuration = LocalConfiguration.current
                 val screenWidth = configuration.screenWidthDp.dp
-                Box(modifier = Modifier
-                    .width(screenWidth * 0.73f)
-                    .padding(8.dp)
-                    .clip(shape = RoundedCornerShape(8.dp))
-                    .border(
-                        color = colorResource(R.color.black),
-                        width = 1.dp,
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                Box(
+                    modifier = Modifier
+                        .width(screenWidth * 0.73f)
+                        .padding(8.dp)
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .border(
+                            color = colorResource(R.color.black),
+                            width = 1.dp,
+                            shape = RoundedCornerShape(8.dp)
+                        )
                 ) {
                     container()
                 }
             },
             monthBody = { _, content ->
-                Box(modifier = Modifier.background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            colorResource(R.color.example_6_month_bg_color),
-                            colorResource(R.color.example_6_month_bg_color3),
+                Box(
+                    modifier = Modifier.background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                colorResource(R.color.example_6_month_bg_color),
+                                colorResource(R.color.example_6_month_bg_color3),
+                            )
                         )
                     )
-                )) {
+                ) {
                     content()
                 }
             }
@@ -112,7 +117,6 @@ private fun MonthHeader(calendarMonth: CalendarMonth) {
         }
         Divider(color = Color.Black)
     }
-
 }
 
 @Composable

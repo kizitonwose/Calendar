@@ -126,7 +126,7 @@ class CalendarViewTests {
 
         val calendarView = getCalendarView(R.id.exFiveCalendar)
 
-        assertNotNull(calendarView.findViewWithTag(currentMonth.atDay(1).asMonthDay().hashCode()))
+        assertNotNull(calendarView.findViewWithTag(currentMonth.atDay(1).hashCode()))
 
         val nextFourMonths = currentMonth.plusMonths(4)
 
@@ -136,8 +136,8 @@ class CalendarViewTests {
 
         sleep(2000)
 
-        assertNull(calendarView.findViewWithTag(currentMonth.atDay(1).asMonthDay().hashCode()))
-        assertNotNull(calendarView.findViewWithTag(nextFourMonths.atDay(1).asMonthDay().hashCode()))
+        assertNull(calendarView.findViewWithTag(currentMonth.atDay(1).hashCode()))
+        assertNotNull(calendarView.findViewWithTag(nextFourMonths.atDay(1).hashCode()))
     }
 
     @Test
@@ -155,7 +155,7 @@ class CalendarViewTests {
 
         sleep(2000)
 
-        val dayView = calendarView.findViewWithTag<View>(targetDate.asMonthDay().hashCode())
+        val dayView = calendarView.findViewWithTag<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -181,7 +181,7 @@ class CalendarViewTests {
 
         sleep(2000)
 
-        val dayView = calendarView.findViewWithTag<View>(targetDate.asMonthDay().hashCode())
+        val dayView = calendarView.findViewWithTag<View>(targetDate.hashCode())
 
         val calendarViewRect = Rect()
         calendarView.getGlobalVisibleRect(calendarViewRect)
@@ -334,6 +334,4 @@ class CalendarViewTests {
     }
 
     private class DayViewContainer(view: View) : ViewContainer(view)
-
-    private fun LocalDate.asMonthDay(): CalendarDay = CalendarDay(this, DayPosition.MonthDate)
 }

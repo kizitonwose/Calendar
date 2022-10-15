@@ -3,8 +3,7 @@
 A highly customizable calendar library for Android, powered by RecyclerView for the view system, and LazyRow/LazyColumn for compose.
 
 [![CI](https://github.com/kizitonwose/Calendar/workflows/CI/badge.svg?branch=master)](https://github.com/kizitonwose/Calendar/actions) 
-[![JitPack](https://jitpack.io/v/kizitonwose/Calendar.svg)](https://jitpack.io/#kizitonwose/Calendar) 
-[![Maven Central](https://img.shields.io/maven-central/v/com.kizitonwose.calendar/view)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.kizitonwose.calendar/view)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/) 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kizitonwose/Calendar/blob/master/LICENSE.md) 
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
 

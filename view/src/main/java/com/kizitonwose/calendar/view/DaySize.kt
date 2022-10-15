@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.view;
+package com.kizitonwose.calendar.view
 
 import android.view.ViewGroup
 

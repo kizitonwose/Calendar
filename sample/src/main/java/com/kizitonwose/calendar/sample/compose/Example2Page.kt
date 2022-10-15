@@ -48,9 +48,11 @@ fun Example2Page(
     val daysOfWeek = remember { daysOfWeek() }
     StatusBarColorUpdateEffect(Color.White, isLight = true)
     MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
             Column {
                 val state = rememberCalendarState(
                     startMonth = startMonth,
@@ -68,9 +70,11 @@ fun Example2Page(
                     state = state,
                     contentPadding = PaddingValues(bottom = 100.dp),
                     dayContent = { value ->
-                        Day(value,
+                        Day(
+                            value,
                             today = today,
-                            selection = selection) { day ->
+                            selection = selection
+                        ) { day ->
                             if (day.position == DayPosition.MonthDate &&
                                 (day.date == today || day.date.isAfter(today))
                             ) {
@@ -110,20 +114,23 @@ private fun Day(
     onClick: (CalendarDay) -> Unit,
 ) {
     var textColor = Color.Transparent
-    Box(modifier = Modifier
-        .aspectRatio(1f) // This is important for square-sizing!
-        .clickable(
-            enabled = day.position == DayPosition.MonthDate && day.date >= today,
-            showRipple = false,
-            onClick = { onClick(day) }
-        )
-        .backgroundHighlight(
-            day = day,
-            today = today,
-            selection = selection,
-            selectionColor = selectionColor,
-            continuousSelectionColor = continuousSelectionColor) { textColor = it },
-        contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .aspectRatio(1f) // This is important for square-sizing!
+            .clickable(
+                enabled = day.position == DayPosition.MonthDate && day.date >= today,
+                showRipple = false,
+                onClick = { onClick(day) }
+            )
+            .backgroundHighlight(
+                day = day,
+                today = today,
+                selection = selection,
+                selectionColor = selectionColor,
+                continuousSelectionColor = continuousSelectionColor
+            ) { textColor = it },
+        contentAlignment = Alignment.Center
+    ) {
         Text(
             text = day.date.dayOfMonth.toString(),
             color = textColor,
@@ -135,9 +142,11 @@ private fun Day(
 
 @Composable
 private fun MonthHeader(calendarMonth: CalendarMonth) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 12.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+    ) {
         Text(
             textAlign = TextAlign.Center,
             text = calendarMonth.yearMonth.displayText(),
@@ -155,7 +164,7 @@ private fun CalendarTop(
     close: () -> Unit,
     clearDates: () -> Unit,
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -198,9 +207,11 @@ private fun CalendarTop(
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
             )
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+            ) {
                 for (dayOfWeek in daysOfWeek) {
                     Text(
                         modifier = Modifier.weight(1f),
@@ -216,14 +227,13 @@ private fun CalendarTop(
     }
 }
 
-
 @Composable
 private fun CalendarBottom(
     modifier: Modifier = Modifier,
     selection: DateSelection,
     save: () -> Unit,
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier.fillMaxWidth()) {
         Divider()
         Row(
             modifier = Modifier.padding(16.dp),
@@ -246,7 +256,6 @@ private fun CalendarBottom(
         }
     }
 }
-
 
 @Preview(heightDp = 800)
 @Composable

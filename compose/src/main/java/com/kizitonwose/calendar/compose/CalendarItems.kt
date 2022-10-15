@@ -20,7 +20,8 @@ internal fun LazyListScope.CalendarItems(
 ) {
     items(
         count = itemsCount,
-        key = { offset -> monthData(offset).yearMonth }) { offset ->
+        key = { offset -> monthData(offset).yearMonth }
+    ) { offset ->
         val calendarMonth = monthData(offset)
         monthContainer(calendarMonth) {
             Column(modifier = Modifier.fillParentMaxWidth()) {

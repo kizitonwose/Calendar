@@ -58,9 +58,11 @@ fun Example3Page() {
         }
     }
     StatusBarColorUpdateEffect(toolbarColor)
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(pageBackgroundColor)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(pageBackgroundColor)
+    ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
@@ -101,9 +103,11 @@ fun Example3Page() {
                         val colors = if (day.position == DayPosition.MonthDate) {
                             flights[day.date].orEmpty().map { colorResource(it.color) }
                         } else emptyList()
-                        Day(day = day,
+                        Day(
+                            day = day,
                             isSelected = selection == day,
-                            colors = colors) { clicked ->
+                            colors = colors
+                        ) { clicked ->
                             selection = clicked
                         }
                     }
@@ -132,18 +136,21 @@ private fun Day(
     colors: List<Color> = emptyList(),
     onClick: (CalendarDay) -> Unit = {},
 ) {
-    Box(Modifier
-        .aspectRatio(1f) // This is important for square-sizing!
-        .border(
-            width = if (isSelected) 1.dp else 0.dp,
-            color = if (isSelected) selectedItemColor else Color.Transparent)
-        .padding(1.dp)
-        .background(color = itemBackgroundColor)
-        // Disable clicks on inDates/outDates
-        .clickable(
-            enabled = day.position == DayPosition.MonthDate,
-            onClick = { onClick(day) }
-        )) {
+    Box(
+        modifier = Modifier
+            .aspectRatio(1f) // This is important for square-sizing!
+            .border(
+                width = if (isSelected) 1.dp else 0.dp,
+                color = if (isSelected) selectedItemColor else Color.Transparent
+            )
+            .padding(1.dp)
+            .background(color = itemBackgroundColor)
+            // Disable clicks on inDates/outDates
+            .clickable(
+                enabled = day.position == DayPosition.MonthDate,
+                onClick = { onClick(day) }
+            )
+    ) {
         val textColor = when (day.position) {
             DayPosition.MonthDate -> Color.Unspecified
             DayPosition.InDate, DayPosition.OutDate -> inActiveTextColor
@@ -164,10 +171,12 @@ private fun Day(
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             for (color in colors) {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(5.dp)
-                    .background(color))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(5.dp)
+                        .background(color)
+                )
             }
         }
     }
@@ -178,7 +187,7 @@ private fun MonthHeader(
     modifier: Modifier = Modifier,
     daysOfWeek: List<DayOfWeek> = emptyList(),
 ) {
-    Row(modifier = modifier.fillMaxWidth()) {
+    Row(modifier.fillMaxWidth()) {
         for (dayOfWeek in daysOfWeek) {
             Text(
                 modifier = Modifier.weight(1f),
@@ -200,10 +209,11 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
             .height(IntrinsicSize.Max),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        Box(modifier = Modifier
-            .background(color = colorResource(flight.color))
-            .fillParentMaxWidth(1 / 7f)
-            .aspectRatio(1f),
+        Box(
+            modifier = Modifier
+                .background(color = colorResource(flight.color))
+                .fillParentMaxWidth(1 / 7f)
+                .aspectRatio(1f),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -213,10 +223,12 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
                 fontSize = 12.sp,
             )
         }
-        Box(modifier = Modifier
-            .background(color = itemBackgroundColor)
-            .weight(1f)
-            .fillMaxHeight()) {
+        Box(
+            modifier = Modifier
+                .background(color = itemBackgroundColor)
+                .weight(1f)
+                .fillMaxHeight()
+        ) {
             AirportInformation(flight.departure, isDeparture = true)
         }
         Box(
@@ -233,9 +245,11 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
 
 @Composable
 private fun AirportInformation(airport: Airport, isDeparture: Boolean) {
-    Row(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight()) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
         val resource = if (isDeparture) {
             R.drawable.ic_airplane_takeoff
         } else R.drawable.ic_airplane_landing

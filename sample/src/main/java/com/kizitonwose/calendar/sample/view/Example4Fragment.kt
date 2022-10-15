@@ -150,7 +150,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
             colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 requireContext().getColorCompat(R.color.example_4_grey),
-                BlendModeCompat.SRC_ATOP)
+                BlendModeCompat.SRC_ATOP
+            )
         }
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
         requireActivity().window.apply {
@@ -267,6 +268,5 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                     container.textView.text = data.yearMonth.displayText()
                 }
             }
-
     }
 }

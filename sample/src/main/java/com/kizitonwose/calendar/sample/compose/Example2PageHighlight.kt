@@ -70,8 +70,10 @@ fun Modifier.backgroundHighlight(
                 day.date == startDate -> {
                     textColor(Color.White)
                     padding(vertical = padding)
-                        .background(color = continuousSelectionColor,
-                            shape = HalfSizeShape(clipStart = true))
+                        .background(
+                            color = continuousSelectionColor,
+                            shape = HalfSizeShape(clipStart = true)
+                        )
                         .padding(horizontal = padding)
                         .background(color = selectionColor, shape = CircleShape)
                 }
@@ -83,17 +85,21 @@ fun Modifier.backgroundHighlight(
                 day.date == endDate -> {
                     textColor(Color.White)
                     padding(vertical = padding)
-                        .background(color = continuousSelectionColor,
-                            shape = HalfSizeShape(clipStart = false))
+                        .background(
+                            color = continuousSelectionColor,
+                            shape = HalfSizeShape(clipStart = false)
+                        )
                         .padding(horizontal = padding)
                         .background(color = selectionColor, shape = CircleShape)
                 }
                 day.date == today -> {
                     textColor(colorResource(R.color.example_4_grey))
                     padding(padding)
-                        .border(width = 1.dp,
+                        .border(
+                            width = 1.dp,
                             shape = CircleShape,
-                            color = colorResource(R.color.inactive_text_color))
+                            color = colorResource(R.color.inactive_text_color)
+                        )
                 }
                 else -> {
                     textColor(colorResource(R.color.example_4_grey))
@@ -121,7 +127,6 @@ fun Modifier.backgroundHighlight(
         }
     }
 }
-
 
 /**
  * Old Airbnb highlight style, like in the View example 4.
@@ -178,7 +183,8 @@ fun Modifier.backgroundHighlightLegacy(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = colorResource(R.color.inactive_text_color))
+                            color = colorResource(R.color.inactive_text_color)
+                        )
                 }
                 else -> {
                     textColor(colorResource(R.color.example_4_grey))

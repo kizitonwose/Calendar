@@ -40,7 +40,8 @@ internal fun HeatMapCalendarInternal(
         ) {
             items(
                 count = state.monthIndexCount,
-                key = { offset -> state.store[offset].yearMonth }) { offset ->
+                key = { offset -> state.store[offset].yearMonth }
+            ) { offset ->
                 val calendarMonth = state.store[offset]
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
                     monthHeader(calendarMonth)
