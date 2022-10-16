@@ -239,7 +239,7 @@ class WeekCalendarState internal constructor(
     }
 
     companion object {
-        val Saver: Saver<WeekCalendarState, *> = listSaver(
+        val Saver: Saver<WeekCalendarState, Any> = listSaver(
             save = {
                 val visibleItemState = VisibleItemState(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
