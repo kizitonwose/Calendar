@@ -37,4 +37,7 @@ dependencies {
     implementation deps.compose.tooling
     implementation deps.compose.foundation
     implementation deps.compose.snapper
+
+    testImplementation deps.test.junit
+
 }

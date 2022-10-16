@@ -213,7 +213,7 @@ class HeatMapCalendarState internal constructor(
     ) = listState.scroll(scrollPriority, block)
 
     companion object {
-        internal val Saver: Saver<HeatMapCalendarState, *> = listSaver(
+        internal val Saver: Saver<HeatMapCalendarState, Any> = listSaver(
             save = {
                 val visibleItemState = VisibleItemState(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,

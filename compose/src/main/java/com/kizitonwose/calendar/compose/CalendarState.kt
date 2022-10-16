@@ -233,7 +233,7 @@ class CalendarState internal constructor(
     ) = listState.scroll(scrollPriority, block)
 
     companion object {
-        internal val Saver: Saver<CalendarState, *> = listSaver(
+        internal val Saver: Saver<CalendarState, Any> = listSaver(
             save = {
                 val visibleItemState = VisibleItemState(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
