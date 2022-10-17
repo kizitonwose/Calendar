@@ -1,8 +1,6 @@
 package com.kizitonwose.calendar.data
 
-import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -36,24 +34,43 @@ class MonthDataTests {
      **/
 
     @Test
-    fun `number of in and out dates are accurate`() {
+    fun `number of day positions are accurate`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
-
-        assertEquals(2, monthData.inDays)
-        assertEquals(2, monthData.outDays)
+        val days = monthData.calendarMonth.weekDays.flatten()
+        assertEquals(2, days.count { it.position == DayPosition.InDate })
+        assertEquals(2, days.count { it.position == DayPosition.OutDate })
+        assertEquals(31, days.count { it.position == DayPosition.MonthDate })
+        assertEquals(35, days.count())
     }
 
     @Test
-    fun `month in and out dates are in the correct positions`() {
+    fun `dates are in the correct positions`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
+        val days = monthData.calendarMonth.weekDays.flatten()
 
-        val inDates = monthData.calendarMonth.weekDays.flatten().take(2)
-        val outDates = monthData.calendarMonth.weekDays.flatten().takeLast(2)
-        val monthDates = monthData.calendarMonth.weekDays.flatten().drop(2).dropLast(2)
+        val inDates = days.take(2)
+        val outDates = days.takeLast(2)
+        val monthDates = days.drop(2).dropLast(2)
 
         assertTrue(inDates.all { it.position == DayPosition.InDate })
         assertTrue(outDates.all { it.position == DayPosition.OutDate })
         assertTrue(monthDates.all { it.position == DayPosition.MonthDate })
+    }
+
+    @Test
+    fun `dates have the correct month values`() {
+        val previousMonth = may2019.previousMonth
+        val nextMonth = may2019.nextMonth
+        val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
+        val days = monthData.calendarMonth.weekDays.flatten()
+
+        val inDates = days.take(2)
+        val outDates = days.takeLast(2)
+        val monthDates = days.drop(2).dropLast(2)
+
+        assertTrue(inDates.all { it.date.yearMonth == previousMonth })
+        assertTrue(outDates.all { it.date.yearMonth == nextMonth })
+        assertTrue(monthDates.all { it.date.yearMonth == may2019 })
     }
 
     @Test
@@ -72,7 +89,7 @@ class MonthDataTests {
         assertEquals(endOfGridMonthData.calendarMonth.weekDays.count(), 6)
         assertTrue(
             endOfGridMonthData.calendarMonth.weekDays.last()
-            .all { it.position == DayPosition.OutDate }
+                .all { it.position == DayPosition.OutDate }
         )
     }
 

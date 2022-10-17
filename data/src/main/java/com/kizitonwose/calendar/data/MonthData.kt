@@ -6,13 +6,21 @@ import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 import java.time.temporal.WeekFields
 
-data class MonthData internal constructor(val month: YearMonth, val inDays: Int, val outDays: Int) {
+data class MonthData internal constructor(
+    private val month: YearMonth,
+    private val inDays: Int,
+    private val outDays: Int,
+) {
 
     private val totalDays = inDays + month.lengthOfMonth() + outDays
 
     private val firstDay = month.atStartOfMonth().minusDays(inDays.toLong())
 
     private val rows = (0 until totalDays).chunked(7)
+
+    private val previousMonth = month.previousMonth
+
+    private val nextMonth = month.nextMonth
 
     val calendarMonth =
         CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
@@ -21,8 +29,8 @@ data class MonthData internal constructor(val month: YearMonth, val inDays: Int,
         val date = firstDay.plusDays(dayOffset.toLong())
         val position = when (date.yearMonth) {
             month -> DayPosition.MonthDate
-            month.minusMonths(1) -> DayPosition.InDate
-            month.plusMonths(1) -> DayPosition.OutDate
+            previousMonth -> DayPosition.InDate
+            nextMonth -> DayPosition.OutDate
             else -> throw IllegalArgumentException("Invalid date: $date in month: $month")
         }
         return CalendarDay(date, position)
