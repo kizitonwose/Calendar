@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.data
 
-import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -17,7 +16,8 @@ class HeatMapDataTests {
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** October, November and December 2022
-     *  with Monday as the first day of week.
+     *  with October as the start month and
+     *  Monday as the first day of week.
     ┌──┬─────────────────┬───────────┬───────────┐
     │  │Oct 2022         │Nov 2022   │Dec 2022   │
     ├──┼──┬──┬──┬──┬──┬──┼──┬──┬──┬──┼──┬──┬──┬──┤
@@ -38,31 +38,81 @@ class HeatMapDataTests {
      **/
 
     @Test
-    fun `number of in and out dates are accurate`() {
+    fun `number of day positions are accurate`() {
         val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
+        val weekDays = monthData.calendarMonth.weekDays.flatten()
 
-        assertEquals(5, monthData.inDays)
-        assertEquals(6, monthData.outDays)
+        assertEquals(5, weekDays.count { it.position == DayPosition.InDate })
+        assertEquals(6, weekDays.count { it.position == DayPosition.OutDate })
+        assertEquals(31, weekDays.count { it.position == DayPosition.MonthDate })
+        assertEquals(42, weekDays.count())
     }
 
     @Test
-    fun `negative number of in are accurate`() {
+    fun `first date in the following month is accurate`() {
         val novemberMonthData = getHeatMapCalendarMonthData(october2022, 1, firstDayOfWeek)
+        val weekDays = novemberMonthData.calendarMonth.weekDays.flatten()
 
-        assertEquals(-6, novemberMonthData.inDays)
+        assertEquals(7, weekDays.first().date.dayOfMonth)
+        assertEquals(october2022.nextMonth, weekDays.first().date.yearMonth)
+        assertEquals(DayPosition.MonthDate, weekDays.first().position)
     }
 
     @Test
-    fun `month in and out dates are in the correct positions`() {
-        val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
+    fun `dates in the following month are in the correct positions`() {
+        val novemberMonthData = getHeatMapCalendarMonthData(october2022, 1, firstDayOfWeek)
+        val days = novemberMonthData.calendarMonth.weekDays.flatten()
 
-        val inDates = monthData.calendarMonth.weekDays.flatten().take(5)
-        val outDates = monthData.calendarMonth.weekDays.flatten().takeLast(6)
-        val monthDates = monthData.calendarMonth.weekDays.flatten().drop(5).dropLast(6)
+        val monthDates = days.take(24)
+        val outDates = days.takeLast(4)
+
+        assertTrue(outDates.all { it.position == DayPosition.OutDate })
+        assertTrue(monthDates.all { it.position == DayPosition.MonthDate })
+        assertEquals(28, days.count())
+    }
+
+    @Test
+    fun `dates in the following month have the correct month values`() {
+        val november2022 = october2022.nextMonth
+        val december2022 = november2022.nextMonth
+        val novemberMonthData = getHeatMapCalendarMonthData(october2022, 1, firstDayOfWeek)
+        val days = novemberMonthData.calendarMonth.weekDays.flatten()
+
+        val monthDates = days.take(24)
+        val outDates = days.takeLast(4)
+
+        assertTrue(outDates.all { it.date.yearMonth == december2022 })
+        assertTrue(monthDates.all { it.date.yearMonth == november2022 })
+    }
+
+    @Test
+    fun `dates in the first month are in the correct positions`() {
+        val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
+        val days = monthData.calendarMonth.weekDays.flatten()
+
+        val inDates = days.take(5)
+        val outDates = days.takeLast(6)
+        val monthDates = days.drop(5).dropLast(6)
 
         assertTrue(inDates.all { it.position == DayPosition.InDate })
         assertTrue(outDates.all { it.position == DayPosition.OutDate })
         assertTrue(monthDates.all { it.position == DayPosition.MonthDate })
+    }
+
+    @Test
+    fun `dates in the first month have the correct month values`() {
+        val previousMonth = october2022.previousMonth
+        val nextMonth = october2022.nextMonth
+        val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
+        val days = monthData.calendarMonth.weekDays.flatten()
+
+        val inDates = days.take(5)
+        val outDates = days.takeLast(6)
+        val monthDates = days.drop(5).dropLast(6)
+
+        assertTrue(inDates.all { it.date.yearMonth == previousMonth })
+        assertTrue(outDates.all { it.date.yearMonth == nextMonth })
+        assertTrue(monthDates.all { it.date.yearMonth == october2022 })
     }
 
     @Test
