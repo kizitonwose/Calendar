@@ -1,43 +1,45 @@
+import com.kizitonwose.calendar.buildsrc.Android
+import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Libs
+import com.kizitonwose.calendar.buildsrc.Kotlin
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.vanniktech.maven.publish'
-apply from: rootProject.file("dependencies.gradle")
 
 android {
-    compileSdkVersion versions.compile_sdk
+    compileSdkVersion Android.compileSdk
     namespace 'com.kizitonwose.calendar.compose'
     defaultConfig {
-        minSdkVersion versions.min_sdk_library_compose
-        targetSdkVersion versions.target_sdk
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        minSdkVersion Android.minSdkLibraryCompose
+        targetSdkVersion Android.targetSdk
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = Config.compatibleJavaVersion
+        targetCompatibility = Config.compatibleJavaVersion
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Config.compatibleJavaVersion
     }
     buildFeatures {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion versions.compose_compiler
+        kotlinCompilerExtensionVersion Android.composeCompiler
     }
 }
 
 dependencies {
     api project(':core')
     implementation project(':data')
-    coreLibraryDesugaring deps.desugaring
-    implementation deps.kotlin.stdlib8
+    coreLibraryDesugaring Libs.Core.deSugar
+    implementation Kotlin.stdLib
 
-    implementation deps.compose.ui
-    implementation deps.compose.tooling
-    implementation deps.compose.foundation
-    implementation deps.compose.snapper
+    implementation Libs.Compose.ui
+    implementation Libs.Compose.tooling
+    implementation Libs.Compose.foundation
+    implementation Libs.Compose.snapper
 
-    testImplementation deps.test.junit
-
+    testImplementation Libs.Core.Test.junit
 }
