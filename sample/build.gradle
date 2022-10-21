@@ -1,14 +1,18 @@
+import com.kizitonwose.calendar.buildsrc.Android
+import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Libs
+import com.kizitonwose.calendar.buildsrc.Kotlin
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply from: rootProject.file("dependencies.gradle")
 
 android {
-    compileSdkVersion versions.compile_sdk
+    compileSdkVersion Android.compileSdk
     namespace 'com.kizitonwose.calendar.sample'
     defaultConfig {
         applicationId "com.kizitonwose.calendar.sample"
-        minSdkVersion versions.min_sdk_sample
-        targetSdkVersion versions.target_sdk
+        minSdkVersion Android.minSdkSample
+        targetSdkVersion Android.targetSdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -24,44 +28,45 @@ android {
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = Config.compatibleJavaVersion
+        targetCompatibility = Config.compatibleJavaVersion
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Config.compatibleJavaVersion
     }
     composeOptions {
-        kotlinCompilerExtensionVersion versions.compose_compiler
+        kotlinCompilerExtensionVersion Android.composeCompiler
     }
 }
 
 dependencies {
     implementation project(':view')
     implementation project(':compose')
-    coreLibraryDesugaring deps.desugaring
-    implementation deps.kotlin.stdlib8
-    implementation deps.androidx.legacy
-    implementation deps.androidx.appcompat
-    implementation deps.androidx.core_ktx
-    implementation deps.androidx.constraint_layout
-    implementation deps.androidx.cardview
-    implementation deps.androidx.material_view
+    coreLibraryDesugaring Libs.Core.deSugar
+    implementation Kotlin.stdLib
 
-    implementation deps.compose.ui
-    implementation deps.compose.tooling
-    implementation deps.compose.foundation
-    implementation deps.compose.material
-    implementation deps.compose.activity
-    implementation deps.compose.navigation
+    implementation Libs.View.legacySupport
+    implementation Libs.View.appCompat
+    implementation Libs.View.coreKtx
+    implementation Libs.View.constraintLayout
+    implementation Libs.View.cardView
+    implementation Libs.View.materialView
 
-    testImplementation deps.test.junit
+    implementation Libs.Compose.ui
+    implementation Libs.Compose.tooling
+    implementation Libs.Compose.foundation
+    implementation Libs.Compose.material
+    implementation Libs.Compose.activity
+    implementation Libs.Compose.navigation
 
-    androidTestImplementation deps.test.view.espresso_core
-    androidTestImplementation deps.test.view.espresso_contrib // RecyclerView actions.
-    androidTestImplementation deps.test.view.runner
-    androidTestImplementation deps.test.view.rules
-    androidTestImplementation deps.test.view.ext_junit
+    testImplementation Libs.Core.Test.junit
 
-    androidTestImplementation deps.test.compose.ui_junit
-    debugImplementation deps.test.compose.ui_manifest // Compose test runner activity
+    androidTestImplementation Libs.View.Test.espressoCore
+    androidTestImplementation Libs.View.Test.espressoContrib // RecyclerView actions.
+    androidTestImplementation Libs.View.Test.runner
+    androidTestImplementation Libs.View.Test.rules
+    androidTestImplementation Libs.View.Test.extJunit
+
+    androidTestImplementation Libs.Compose.Test.uiJunit
+    debugImplementation Libs.Compose.Test.uiManifest // Compose test runner activity
 }

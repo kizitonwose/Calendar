@@ -1,17 +1,18 @@
+import com.kizitonwose.calendar.buildsrc.Plugins
+
 apply plugin: "com.github.ben-manes.versions"
 buildscript {
-    apply from: rootProject.file("dependencies.gradle")
     repositories {
         google()
         gradlePluginPortal()
         mavenCentral()
     }
     dependencies {
-        classpath deps.plugins.android
-        classpath deps.plugins.kotlin
-        classpath deps.plugins.ktlint
-        classpath deps.plugins.versions
-        classpath deps.plugins.maven_publish
+        classpath Plugins.android
+        classpath Plugins.kotlin
+        classpath Plugins.ktLint
+        classpath Plugins.versions
+        classpath Plugins.mavenPublish
     }
 }
 

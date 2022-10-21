@@ -1,27 +1,30 @@
+import com.kizitonwose.calendar.buildsrc.Android
+import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Libs
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.vanniktech.maven.publish'
-apply from: rootProject.file("dependencies.gradle")
 
 android {
-    compileSdkVersion versions.compile_sdk
+    compileSdkVersion Android.compileSdk
     namespace 'com.kizitonwose.calendar.core'
     defaultConfig {
-        minSdkVersion versions.min_sdk_library_common
-        targetSdkVersion versions.target_sdk
+        minSdkVersion Android.minSdkLibraryCore
+        targetSdkVersion Android.targetSdk
         multiDexEnabled true // Needed for desugar because minSdk < 21
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = Config.compatibleJavaVersion
+        targetCompatibility = Config.compatibleJavaVersion
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Config.compatibleJavaVersion
     }
 }
 
 dependencies {
-    coreLibraryDesugaring deps.desugaring
-    implementation deps.compose.runtime // Only needed for @Immutable annotation.
+    coreLibraryDesugaring Libs.Core.deSugar
+    implementation Libs.Compose.runtime // Only needed for @Immutable annotation.
 }
