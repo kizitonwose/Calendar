@@ -29,7 +29,7 @@ LazyRow/LazyColumn for compose.
   chart.
 - [x] Month/Week headers and footers - Add headers/footers of any kind on each month/week.
 - [x] Easily scroll to any date/week/month on the calendar via swipe actions or programmatically.
-- [x] Use all RecyclerView/LazyRow/LazyColumn customizations since the calendar extends from
+- [x] Uses all RecyclerView/LazyRow/LazyColumn customizations since the calendar extends from
   RecyclerView for the view system and uses LazyRow/LazyColumn for compose.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/Calendar/issues/1) The
   library provides the logic, you provide the views/composables.
