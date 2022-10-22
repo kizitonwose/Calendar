@@ -6,10 +6,11 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 5
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - uses: gradle/wrapper-validation-action@v1
-            - uses: actions/setup-java@v1
+            - uses: actions/setup-java@v3
               with:
+                  distribution: 'zulu'
                   java-version: 11
 
             - name: Check style
@@ -20,10 +21,11 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - uses: gradle/wrapper-validation-action@v1
-            - uses: actions/setup-java@v1
+            - uses: actions/setup-java@v3
               with:
+                  distribution: 'zulu'
                   java-version: 11
 
             - name: Unit tests
@@ -32,21 +34,47 @@ jobs:
     instrumentation-tests:
         name: Instrumentation tests
         runs-on: macOS-latest
-        timeout-minutes: 20
+        timeout-minutes: 30
         strategy:
             fail-fast: true
             matrix:
                 api-level: [24, 29, 33]
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - uses: gradle/wrapper-validation-action@v1
-            - uses: actions/setup-java@v1
+            - uses: actions/setup-java@v3
               with:
+                  distribution: 'zulu'
                   java-version: 11
+
+            # API 32+ emulators have no `default` system images.
+            - name: Determine emulator target
+              id: determine-target
+              env:
+                API_LEVEL: ${{ matrix.api-level }}
+              run: |
+                TARGET="default"
+                if [ "$API_LEVEL" -ge "32" ]; then
+                TARGET="google_apis"
+                fi
+                echo "::set-output name=TARGET::$TARGET"
+
+            # API 30+ emulators only have x86_64 system images.
+            - name: Determine emulator arch
+              id: determine-arch
+              env:
+                API_LEVEL: ${{ matrix.api-level }}
+              run: |
+                ARCH="x86"
+                if [ "$API_LEVEL" -ge "30" ]; then
+                ARCH="x86_64"
+                fi
+                echo "::set-output name=ARCH::$ARCH"      
 
             - name: Instrumentation tests
               uses: reactivecircus/android-emulator-runner@v2
               with:
                   api-level: ${{ matrix.api-level }}
-                  arch: x86
+                  target: ${{ steps.determine-target.outputs.TARGET }}
+                  arch: ${{ steps.determine-arch.outputs.ARCH }}
                   script: ./gradlew connectedDebugAndroidTest
