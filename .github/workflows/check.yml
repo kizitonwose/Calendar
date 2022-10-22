@@ -8,8 +8,8 @@ on:
       - '.github/workflows/check.yml'
 
 jobs:
-  check:
-    name: Check
+  ktlint:
+    name: Ktlint
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -34,7 +34,7 @@ jobs:
           distribution: 'zulu'
           java-version: 11
 
-      - name: Check style
+      - name: Run Ktlint
         run: ./gradlew ktlintCheck
 
   unit-tests:

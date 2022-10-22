@@ -1,13 +1,13 @@
-name: Publish Snapshot
+name: Publish Release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - '*.*.*'
 
 jobs:
-  publish-snapshot:
-    name: Publish Snapshot
+  publish-release:
+    name: Publish Release
     runs-on: ubuntu-latest
     if: github.repository == 'kizitonwose/Calendar'
     steps:
@@ -33,9 +33,20 @@ jobs:
         run: |
           echo "VERSION_NAME=$(cat gradle.properties | grep -w "VERSION_NAME" | cut -d'=' -f2)" >> $GITHUB_ENV
 
-      - name: Publish Snapshot to Maven
+      - name: Deploy Release to Maven
         run: ./gradlew publish
-        if: endsWith(env.VERSION_NAME, '-SNAPSHOT')
+        if: "!endsWith(env.VERSION_NAME, '-SNAPSHOT')"
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_PASSWORD }}
+
+      # => MANUALLY RELEASE VIA SONATYPE UI FOR NOW <=
+      # - name: Publish Release to Maven
+      #   run: ./gradlew closeAndReleaseRepository
+      #   if: "!endsWith(env.VERSION_NAME, '-SNAPSHOT')"
+      #   env:
+      #     ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+      #     ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
