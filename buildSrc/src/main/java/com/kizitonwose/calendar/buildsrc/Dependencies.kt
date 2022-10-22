@@ -54,12 +54,12 @@ object Libs {
         const val materialView = "com.google.android.material:material:1.6.1"
 
         object Test {
-            private const val espressoVersion = "3.4.0"
+            private const val espressoVersion = "3.5.0-beta01"
             const val espressoCore = "androidx.test.espresso:espresso-core:$espressoVersion"
             const val espressoContrib = "androidx.test.espresso:espresso-contrib:$espressoVersion"
-            const val runner = "androidx.test:runner:1.4.0"
-            const val rules = "androidx.test:rules:1.4.0"
-            const val extJunit = "androidx.test.ext:junit:1.1.3"
+            const val runner = "androidx.test:runner:1.5.0-beta01"
+            const val rules = "androidx.test:rules:1.4.1-beta01"
+            const val extJunit = "androidx.test.ext:junit:1.1.4-beta01"
         }
     }
 
@@ -75,7 +75,7 @@ object Libs {
         const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.26.5-rc"
 
         object Test {
-            const val uiJunit = "androidx.compose.ui:ui-test-junit4:1.2.1"
+            const val uiJunit = "androidx.compose.ui:ui-test-junit4:1.3.0-rc01"
             const val uiManifest = "androidx.compose.ui:ui-test-manifest:1.3.0-rc01"
         }
     }

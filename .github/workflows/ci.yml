@@ -36,7 +36,7 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                api-level: [22, 25, 29]
+                api-level: [24, 29, 33]
         steps:
             - uses: actions/checkout@v2
             - uses: gradle/wrapper-validation-action@v1
