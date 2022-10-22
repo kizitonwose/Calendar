@@ -39,8 +39,7 @@ LazyRow/LazyColumn for compose.
 It's important to check out the sample app. There are lots of examples provided for both view and compose implementations. 
 Most techniques that you would want to implement are already done in the examples.
 
-Download the sample
-app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
+Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
 
 View the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
 
@@ -90,10 +89,10 @@ Add the desired calendar library (view or compose) to your app `build.gradle`:
 
 ```groovy
 dependencies {
-  // The view calendar implementation
+  // The view calendar library
   implementation 'com.kizitonwose.calendar:view:<latest-version>'
 
-  // The compose calendar implementation
+  // The compose calendar library
   implementation 'com.kizitonwose.calendar:compose:<latest-version>'
 }
 ```

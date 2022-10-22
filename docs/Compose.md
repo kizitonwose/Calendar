@@ -328,7 +328,7 @@ All properties set when creating the state via `rememberCalendarState()` or `rem
 
 If you are wondering what `outDates` and `inDates` mean, let's use the screenshot below as an example.
 
-<img src="https://raw.githubusercontent.com/kizitonwose/Calendar/main/images/in_out_dates.png" alt="in-dates and out-dates" width="300">
+<img src="https://user-images.githubusercontent.com/15170090/197358602-c9c6f796-fb28-4c82-9101-458d7a66f3a0.png" alt="in-dates and out-dates" width="300">
 
 In the image, the dates within the green annotation are `inDates`, the ones within the red annotation are `outDates` while those without annotation are `monthDates`. You can check for this when your calendar day is rendered. To achieve the exact effect on the image, we update our `Day` composable: 
 
