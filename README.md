@@ -3,14 +3,14 @@
 A highly customizable calendar library for Android, backed by RecyclerView for the view system, and
 LazyRow/LazyColumn for compose.
 
-[![CI](https://github.com/kizitonwose/Calendar/workflows/Check/badge.svg?branch=main)](https://github.com/kizitonwose/Calendar/actions)
-[![Maven Central](https://img.shields.io/maven-central/v/com.kizitonwose.calendar/view)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
+[![Tests](https://github.com/kizitonwose/Calendar/workflows/Check/badge.svg?branch=main)](https://github.com/kizitonwose/Calendar/actions)
+[![Maven Central](https://img.shields.io/badge/dynamic/xml.svg?label=Maven%20Central&color=blue&query=%2F%2Fmetadata%2Fversioning%2Flatest&url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fkizitonwose%2Fcalendar%2Fcore%2Fmaven-metadata.xml)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
 [![License](https://img.shields.io/badge/License-MIT-0097A7.svg)](https://github.com/kizitonwose/Calendar/blob/main/LICENSE.md)
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
 
 **With this library, your calendar will look however you want it to.**
 
-![Preview](https://user-images.githubusercontent.com/15170090/195625381-3955abc3-70fa-4577-94c1-54a96eade604.png)
+![Preview](https://user-images.githubusercontent.com/15170090/197389318-b3925b65-aed9-4e1f-a778-ba73007cbdf7.png)
 
 ## Features
 

@@ -3,7 +3,8 @@
 ## Table of Contents
 
 - [Quick links](#quick-links)
-- [Composables](#composables)
+- [Compose versions](#compose-versions)
+- [Calendar Composables](#calendar-composables)
 - [Usage](#usage)
   * [Calendar state](#usage)
   * [First day of the week](#first-day-of-the-week-and-day-of-week-titles)
@@ -30,7 +31,15 @@ Add the library to your project [here](https://github.com/kizitonwose/Calendar#s
 
 **If you are looking for the view-based documentation, you can find it [here](https://github.com/kizitonwose/Calendar/blob/main/docs/View.md)**
 
-## Composables
+## Compose versions
+
+Ensure that you are using the library version that matches with the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency.
+
+|Compose UI|Calendar Library|
+|   :-:    |      :-:       |
+|  1.2.x   |     2.0.x      |
+
+## Calendar Composables
 
 The library can be used via four composables:
 
@@ -213,9 +222,9 @@ fun MainScreen() {
     HorizontalCalendar(
         state = state,
         dayContent = { Day(it) },
-      monthHeader = {
-        DaysOfWeekTitle(daysOfWeek = daysOfWeek) // Use the title as month header
-      }
+        monthHeader = {
+            DaysOfWeekTitle(daysOfWeek = daysOfWeek) // Use the title as month header
+        }
     )
 }
 ```
