@@ -20,6 +20,7 @@
     <color name="example_3_statusbar_color">#455A64</color>
     <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>
+    <color name="example_4_continuous_selection">#0F000000</color>
     <color name="example_4_grey_past">#BEBEBE</color>
     <color name="example_5_page_bg_color">#0E0E0E</color>
     <color name="example_5_item_view_bg_color">#1B1B1B</color>

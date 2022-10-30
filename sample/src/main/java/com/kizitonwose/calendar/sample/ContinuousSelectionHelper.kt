@@ -1,5 +1,8 @@
 package com.kizitonwose.calendar.sample
 
+import com.kizitonwose.calendar.core.atStartOfMonth
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -44,10 +47,8 @@ object ContinuousSelectionHelper {
     ): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (inDate.yearMonth == startDate.yearMonth) return true
-        val firstDateInThisMonth = inDate.plusMonths(1).yearMonth.atDay(1)
-        return firstDateInThisMonth >= startDate &&
-                firstDateInThisMonth <= endDate &&
-                startDate != firstDateInThisMonth
+        val firstDateInThisMonth = inDate.yearMonth.nextMonth.atStartOfMonth()
+        return firstDateInThisMonth in startDate..endDate && startDate != firstDateInThisMonth
     }
 
     fun isOutDateBetweenSelection(
@@ -57,9 +58,7 @@ object ContinuousSelectionHelper {
     ): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (outDate.yearMonth == endDate.yearMonth) return true
-        val lastDateInThisMonth = outDate.minusMonths(1).yearMonth.atEndOfMonth()
-        return lastDateInThisMonth >= startDate &&
-                lastDateInThisMonth <= endDate &&
-                endDate != lastDateInThisMonth
+        val lastDateInThisMonth = outDate.yearMonth.previousMonth.atEndOfMonth()
+        return lastDateInThisMonth in startDate..endDate && endDate != lastDateInThisMonth
     }
 }

@@ -1,7 +1,7 @@
 package com.kizitonwose.calendar.sample.view
 
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
@@ -49,29 +49,12 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
     private val headerDateFormatter = DateTimeFormatter.ofPattern("EEE'\n'd MMM")
 
-    private val startBackground: GradientDrawable by lazy {
-        requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start) as GradientDrawable
-    }
-
-    private val endBackground: GradientDrawable by lazy {
-        requireContext().getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end) as GradientDrawable
-    }
-
     private lateinit var binding: Example4FragmentBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         binding = Example4FragmentBinding.bind(view)
-        // We set the radius of the continuous selection background drawable dynamically
-        // since the view size is `match parent` hence we cannot determine the appropriate
-        // radius value which would equal half of the view's size beforehand.
-        binding.exFourCalendar.post {
-            val radius = ((binding.exFourCalendar.width / 7) / 2).toFloat()
-            startBackground.setCornerRadius(topLeft = radius, bottomLeft = radius)
-            endBackground.setCornerRadius(topRight = radius, bottomRight = radius)
-        }
-
         // Set the First day of week depending on Locale
         val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children.forEachIndexed { index, child ->
@@ -175,6 +158,21 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
     }
 
     private fun configureBinders() {
+        val clipLevelHalf = 5000
+        val ctx = requireContext()
+        val rangeStartBackground =
+            ctx.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start).also {
+                it.level = clipLevelHalf // Used by ClipDrawable
+            }
+        val rangeEndBackground =
+            ctx.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end).also {
+                it.level = clipLevelHalf // Used by ClipDrawable
+            }
+        val rangeMiddleBackground =
+            ctx.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_middle)
+        val singleBackground = ctx.getDrawableCompat(R.drawable.example_4_single_selected_bg)
+        val todayBackground = ctx.getDrawableCompat(R.drawable.example_4_today_bg)
+
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val binding = Example4CalendarDayBinding.bind(view)
@@ -200,11 +198,12 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
             override fun bind(container: DayViewContainer, data: CalendarDay) {
                 container.day = data
                 val textView = container.binding.exFourDayText
-                val roundBgView = container.binding.exFourRoundBgView
+                val roundBgView = container.binding.exFourRoundBackgroundView
+                val continuousBgView = container.binding.exFourContinuousBackgroundView
 
                 textView.text = null
-                textView.background = null
                 roundBgView.makeInVisible()
+                continuousBgView.makeInVisible()
 
                 val (startDate, endDate) = selection
 
@@ -217,44 +216,50 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                             when {
                                 startDate == data.date && endDate == null -> {
                                     textView.setTextColorRes(R.color.white)
-                                    roundBgView.makeVisible()
-                                    roundBgView.setBackgroundResource(R.drawable.example_4_single_selected_bg)
+                                    roundBgView.applyBackground(singleBackground)
                                 }
                                 data.date == startDate -> {
                                     textView.setTextColorRes(R.color.white)
-                                    textView.background = startBackground
+                                    continuousBgView.applyBackground(rangeStartBackground)
+                                    roundBgView.applyBackground(singleBackground)
                                 }
                                 startDate != null && endDate != null && (data.date > startDate && data.date < endDate) -> {
-                                    textView.setTextColorRes(R.color.white)
-                                    textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                                    textView.setTextColorRes(R.color.example_4_grey)
+                                    continuousBgView.applyBackground(rangeMiddleBackground)
                                 }
                                 data.date == endDate -> {
                                     textView.setTextColorRes(R.color.white)
-                                    textView.background = endBackground
+                                    continuousBgView.applyBackground(rangeEndBackground)
+                                    roundBgView.applyBackground(singleBackground)
                                 }
                                 data.date == today -> {
                                     textView.setTextColorRes(R.color.example_4_grey)
-                                    roundBgView.makeVisible()
-                                    roundBgView.setBackgroundResource(R.drawable.example_4_today_bg)
+                                    roundBgView.applyBackground(todayBackground)
                                 }
                                 else -> textView.setTextColorRes(R.color.example_4_grey)
                             }
                         }
                     }
-                    // Make the coloured selection background continuous on the invisible in and out dates across various months.
+                    // Make the coloured selection background continuous on the
+                    // invisible in and out dates across various months.
                     DayPosition.InDate ->
                         if (startDate != null && endDate != null &&
                             isInDateBetweenSelection(data.date, startDate, endDate)
                         ) {
-                            textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                            continuousBgView.applyBackground(rangeMiddleBackground)
                         }
                     DayPosition.OutDate ->
                         if (startDate != null && endDate != null &&
                             isOutDateBetweenSelection(data.date, startDate, endDate)
                         ) {
-                            textView.setBackgroundResource(R.drawable.example_4_continuous_selected_bg_middle)
+                            continuousBgView.applyBackground(rangeMiddleBackground)
                         }
                 }
+            }
+
+            private fun View.applyBackground(drawable: Drawable) {
+                makeVisible()
+                background = drawable
             }
         }
 

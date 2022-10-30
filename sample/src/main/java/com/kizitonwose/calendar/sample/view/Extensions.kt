@@ -1,6 +1,7 @@
 package com.kizitonwose.calendar.sample.view
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -35,8 +36,8 @@ internal val Context.layoutInflater: LayoutInflater
 internal val Context.inputMethodManager
     get() = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-internal fun Context.getDrawableCompat(@DrawableRes drawable: Int) =
-    ContextCompat.getDrawable(this, drawable)
+internal fun Context.getDrawableCompat(@DrawableRes drawable: Int): Drawable =
+    requireNotNull(ContextCompat.getDrawable(this, drawable))
 
 internal fun Context.getColorCompat(@ColorRes color: Int) =
     ContextCompat.getColor(this, color)

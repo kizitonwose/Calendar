@@ -4,13 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--We have top and bottom margins on the TextView so there's more space between
-     continuous selected rows. This means that setting an oval background on it when
-     a single date is selected will result in a the background not being a perfect circle
-     since the view is not square in shape.
+    <View
+        android:id="@+id/exFourContinuousBackgroundView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp" />
+
+    <!--We have top and bottom margins on the exFourContinuousBackgroundView so
+     there's vertical space between continuous selected rows. This means that
+     setting an oval background (single selection / today) on it will result in
+     the background not being a perfect circle since the view is not square in shape.
      So we set the background on this view which has a margin on all sides instead-->
     <View
-        android:id="@+id/exFourRoundBgView"
+        android:id="@+id/exFourRoundBackgroundView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="4dp" />
@@ -19,8 +26,6 @@
         android:id="@+id/exFourDayText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
         android:gravity="center"
         android:textSize="16sp"
         tools:text="22" />
