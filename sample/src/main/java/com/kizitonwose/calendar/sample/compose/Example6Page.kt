@@ -37,19 +37,20 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
 
-private val level4 = Color(0xFF216E3A)
-private val level3 = Color(0xFF30A14E)
-private val level2 = Color(0xFF40C463)
-private val level1 = Color(0xFF9BE9A8)
-private val level0 = Color(0xFFEBEDF0)
+private enum class Level(val color: Color) {
+    Zero(Color(0xFFEBEDF0)),
+    One(Color(0xFF9BE9A8)),
+    Two(Color(0xFF40C463)),
+    Three(Color(0xFF30A14E)),
+    Four(Color(0xFF216E3A)),
+}
 
-private val allLevels = listOf(level0, level1, level2, level3, level4)
-private fun generateRandomData(startDate: LocalDate, endDate: LocalDate): Map<LocalDate, Color> {
-    val data = hashMapOf<LocalDate, Color>()
-    (0..ChronoUnit.DAYS.between(startDate, endDate)).map { count ->
-        data.put(startDate.plusDays(count), allLevels.random())
-    }
-    return data
+private fun generateRandomData(startDate: LocalDate, endDate: LocalDate): Map<LocalDate, Level> {
+    val levels = Level.values()
+    return (0..ChronoUnit.DAYS.between(startDate, endDate))
+        .associateTo(hashMapOf()) { count ->
+            startDate.plusDays(count) to levels.random()
+        }
 }
 
 @Composable
@@ -58,8 +59,8 @@ fun Example6Page() {
     val endDate = remember { LocalDate.now() }
     // GitHub only shows contributions for the past 12 months
     val startDate = remember { endDate.minusMonths(12) }
-    val data = remember { mutableStateOf<Map<LocalDate, Color>>(emptyMap()) }
-    var selection by remember { mutableStateOf<Pair<LocalDate, Color>?>(null) }
+    val data = remember { mutableStateOf<Map<LocalDate, Level>>(emptyMap()) }
+    var selection by remember { mutableStateOf<Pair<LocalDate, Level>?>(null) }
     LaunchedEffect(startDate, endDate, refreshKey) {
         selection = null
         data.value = withContext(Dispatchers.IO) {
@@ -87,9 +88,9 @@ fun Example6Page() {
                     startDate = startDate,
                     endDate = endDate,
                     week = week,
-                    color = data.value[day.date] ?: level0
+                    level = data.value[day.date] ?: Level.Zero
                 ) { clicked ->
-                    selection = Pair(clicked, data.value[clicked] ?: level0)
+                    selection = Pair(clicked, data.value[clicked] ?: Level.Zero)
                 }
             },
             weekHeader = { WeekHeader(it) },
@@ -117,7 +118,7 @@ private val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
 @Composable
 private fun BottomContent(
     modifier: Modifier = Modifier,
-    selection: Pair<LocalDate, Color>? = null,
+    selection: Pair<LocalDate, Level>? = null,
     refresh: (() -> Unit),
 ) {
     Column(
@@ -131,7 +132,7 @@ private fun BottomContent(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 Text(text = "Clicked: ${formatter.format(selection.first)}")
-                Level(color = selection.second)
+                LevelBox(color = selection.second.color)
             }
         }
         Button(
@@ -157,8 +158,8 @@ private fun CalendarInfo(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.Bottom,
     ) {
         Text(text = "Less", fontSize = 10.sp)
-        allLevels.forEach { color ->
-            Level(color)
+        Level.values().forEach { level ->
+            LevelBox(level.color)
         }
         Text(text = "More", fontSize = 10.sp)
     }
@@ -172,7 +173,7 @@ private fun Day(
     startDate: LocalDate,
     endDate: LocalDate,
     week: HeatMapWeek,
-    color: Color,
+    level: Level,
     onClick: (LocalDate) -> Unit,
 ) {
     // We only want to draw boxes on the days that are in the
@@ -183,14 +184,14 @@ private fun Day(
     // so the items are laid out properly as the column is top to bottom.
     val weekDates = week.days.map { it.date }
     if (day.date in startDate..endDate) {
-        Level(color) { onClick(day.date) }
+        LevelBox(level.color) { onClick(day.date) }
     } else if (weekDates.contains(startDate)) {
-        Level(Color.Transparent)
+        LevelBox(Color.Transparent)
     }
 }
 
 @Composable
-private fun Level(color: Color, onClick: (() -> Unit)? = null) {
+private fun LevelBox(color: Color, onClick: (() -> Unit)? = null) {
     Box(
         modifier = Modifier
             .size(daySize) // Must set a size on the day.
@@ -256,8 +257,10 @@ private fun getMonthWithYear(
         visibleItemsInfo.count() == 1 -> visibleItemsInfo.first().month.yearMonth
         else -> {
             val firstItem = visibleItemsInfo.first()
-            if (firstItem.offset < layoutInfo.viewportStartOffset &&
-                (layoutInfo.viewportStartOffset - firstItem.offset > with(density) { daySize.toPx() })
+            val daySizePx = with(density) { daySize.toPx() }
+            if (firstItem.size < daySizePx * 3 || // Ensure the Month + Year text can fit.
+                (firstItem.offset < layoutInfo.viewportStartOffset && // Ensure the week row size - 1 is visible.
+                        (layoutInfo.viewportStartOffset - firstItem.offset > daySizePx))
             ) {
                 visibleItemsInfo[1].month.yearMonth
             } else {

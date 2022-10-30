@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.Keep
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
@@ -27,7 +28,9 @@ import java.time.YearMonth
 
 // We assign this class to the `monthViewClass` attribute in XML.
 // See usage in example_6_fragment.xml
-class Example6MonthView(context: Context) : CardView(context) {
+// This can also be set programmatically:
+// calendarView.monthViewClass = Example6MonthView::class.java.name
+class Example6MonthView @Keep constructor(context: Context) : CardView(context) {
 
     init {
         setCardBackgroundColor(context.getColorCompat(R.color.example_6_month_bg_color))
