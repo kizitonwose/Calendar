@@ -110,7 +110,7 @@ fun MainScreen() {
     WeekCalendar(
         state = state,
         dayContent = { Day(it) }
-    )  
+    )
 }
 ```
 
@@ -119,13 +119,13 @@ Your `Day` composable in its simplest form would be:
 ```kotlin
 @Composable
 fun Day(day: CalendarDay) {
-  Box(
-    modifier = Modifier
-      .aspectRatio(1f), // This is important for square sizing!
-    contentAlignment = Alignment.Center
-  ) {
-    Text(text = day.date.dayOfMonth.toString())
-  }
+    Box(
+        modifier = Modifier
+            .aspectRatio(1f), // This is important for square sizing!
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = day.date.dayOfMonth.toString())
+    }
 }
 ```
 
@@ -181,8 +181,8 @@ Setup days of week using a static title composable:
 ```kotlin
 @Composable
 fun DaysOfWeekTitle(daysOfWeek: List<DayOfWeek>) {
-  Row(modifier = Modifier.fillMaxWidth()) {
-    for (dayOfWeek in daysOfWeek) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        for (dayOfWeek in daysOfWeek) {
             Text(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
@@ -263,41 +263,41 @@ For example, if you want to draw a gradient behind the container where all the d
 ```kotlin
 @Composable
 fun MainScreen() {
-  HorizontalCalendar(
-    // Draw the day content gradient.
-    monthBody = { _, content ->
-      Box(
-        modifier = Modifier.background(
-          brush = Brush.verticalGradient(
-            colors = listOf(
-              Color(0xFFB2EBF2),
-              Color(0xFFB2B8F2)
-            )
-          )
-        )
-      ) {
-        content() // Render the provided content!
-      }
-    },
-    // Add the corners/borders and month width.
-    monthContainer = { _, container ->
-      val configuration = LocalConfiguration.current
-      val screenWidth = configuration.screenWidthDp.dp
-      Box(
-        modifier = Modifier
-          .width(screenWidth * 0.73f)
-          .padding(8.dp)
-          .clip(shape = RoundedCornerShape(8.dp))
-          .border(
-            color = Color.Black,
-            width = 1.dp,
-            shape = RoundedCornerShape(8.dp)
-          )
-      ) {
-        container() // Render the provided container!
-      }
-    }
-  )
+    HorizontalCalendar(
+        // Draw the day content gradient.
+        monthBody = { _, content ->
+            Box(
+                modifier = Modifier.background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFB2EBF2),
+                            Color(0xFFB2B8F2)
+                        )
+                    )
+                )
+            ) {
+                content() // Render the provided content!
+            }
+        },
+        // Add the corners/borders and month width.
+        monthContainer = { _, container ->
+            val configuration = LocalConfiguration.current
+            val screenWidth = configuration.screenWidthDp.dp
+            Box(
+                modifier = Modifier
+                    .width(screenWidth * 0.73f)
+                    .padding(8.dp)
+                    .clip(shape = RoundedCornerShape(8.dp))
+                    .border(
+                        color = Color.Black,
+                        width = 1.dp,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+            ) {
+                container() // Render the provided container!
+            }
+        }
+    )
 }
 ```
 
@@ -330,8 +330,8 @@ All properties set when creating the state via `rememberCalendarState()` or `rem
 - **isScrollInProgress**: Whether this calendar is currently scrolling by gesture, fling, or programmatically.
 
 - **outDateStyle**: This determines how outDates are generated for each month on the calendar. It can be one of two values:
-    1. **endOfRow**: The calendar will generate `outDates` until it reaches the end of the month row. This means that if a month has 5 rows, it will display 5 rows and if a month has 6 rows, it will display 6 rows.
-    2. **endOfGrid**: The calendar will generate `outDates` until it reaches the end of a 6 x 7 grid on each month. This means that all months will have 6 rows.
+    1. **EndOfRow**: The calendar will generate `outDates` until it reaches the end of the month row. This means that if a month has 5 rows, it will display 5 rows and if a month has 6 rows, it will display 6 rows.
+    2. **EndOfGrid**: The calendar will generate `outDates` until it reaches the end of a 6 x 7 grid on each month. This means that all months will have 6 rows.
 
     This value can also be provided when the calendar state is initialized via `rememberCalendarState(outDateStyle = ...)`.
 
@@ -344,16 +344,16 @@ In the image, the dates within the green annotation are `inDates`, the ones with
 ```kotlin
 @Composable
 fun Day(day: CalendarDay) {
-  Box(
-    modifier = Modifier
-      .aspectRatio(1f),
-    contentAlignment = Alignment.Center
-  ) {
-    Text(
-      text = day.date.dayOfMonth.toString(),
-      color = if (day.position == DayPosition.MonthDate) Color.White else Color.Gray
-    )
-  }
+    Box(
+        modifier = Modifier
+            .aspectRatio(1f),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = day.date.dayOfMonth.toString(),
+            color = if (day.position == DayPosition.MonthDate) Color.White else Color.Gray
+        )
+    }
 }
 ```
 
@@ -395,18 +395,18 @@ You can handle clicks in your `Day` composable as you would for any other compos
 
 ```kotlin
 @Composable
-private fun Day(day: CalendarDay, onClick: (CalendarDay) -> Unit) {
-  Box(
-    modifier = Modifier
-      .aspectRatio(1f)
-      .clickable(
-        enabled = day.position == DayPosition.MonthDate,
-        onClick = { onClick(day) }
-      ),
-    contentAlignment = Alignment.Center
-  ) {
-    Text(text = day.date.dayOfMonth.toString())
-  }
+fun Day(day: CalendarDay, onClick: (CalendarDay) -> Unit) {
+    Box(
+        modifier = Modifier
+            .aspectRatio(1f)
+            .clickable(
+                enabled = day.position == DayPosition.MonthDate,
+                onClick = { onClick(day) }
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = day.date.dayOfMonth.toString())
+    }
 }
 ```
 
@@ -422,20 +422,20 @@ Firstly, we update our `Day` composable to show a circle background if the date 
 
 ```kotlin
 @Composable
-private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
-  Box(
-    modifier = Modifier
-      .aspectRatio(1f)
-      .clip(CircleShape)
-      .background(color = if (isSelected) Color.Green else Color.Transparent)
-      .clickable(
-        enabled = day.position == DayPosition.MonthDate,
-        onClick = { onClick(day) }
-      ),
-    contentAlignment = Alignment.Center
-  ) {
-    Text(text = day.date.dayOfMonth.toString())
-  }
+fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
+    Box(
+        modifier = Modifier
+            .aspectRatio(1f)
+            .clip(CircleShape)
+            .background(color = if (isSelected) Color.Green else Color.Transparent)
+            .clickable(
+                enabled = day.position == DayPosition.MonthDate,
+                onClick = { onClick(day) }
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = day.date.dayOfMonth.toString())
+    }
 }
 ```
 
@@ -468,21 +468,21 @@ We actually already did this with the example in the date click section, we alre
 
 ```kotlin
 @Composable
-private fun Day(day: CalendarDay, onClick: (CalendarDay) -> Unit) {
-  Box(
-    modifier = Modifier
-      .aspectRatio(1f)
-      .clickable(
-        enabled = day.position == DayPosition.MonthDate, // Only month-dates are clickable.
-        onClick = { onClick(day) }
-      ),
-    contentAlignment = Alignment.Center
-  ) { // Change the color of in-dates and out-dates, you can also hide them completely!
-    Text(
-      text = day.date.dayOfMonth.toString(),
-      color = if (day.position == DayPosition.MonthDate) Color.White else Color.Gray
-    )
-  }
+fun Day(day: CalendarDay, onClick: (CalendarDay) -> Unit) {
+    Box(
+        modifier = Modifier
+            .aspectRatio(1f)
+            .clickable(
+                enabled = day.position == DayPosition.MonthDate, // Only month-dates are clickable.
+                onClick = { onClick(day) }
+            ),
+        contentAlignment = Alignment.Center
+    ) { // Change the color of in-dates and out-dates, you can also hide them completely!
+        Text(
+            text = day.date.dayOfMonth.toString(),
+            color = if (day.position == DayPosition.MonthDate) Color.White else Color.Gray
+        )
+    }
 }
 ```
 
