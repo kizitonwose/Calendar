@@ -167,6 +167,7 @@ open class WeekCalendarView : RecyclerView {
 
     private fun init(attributeSet: AttributeSet, defStyleAttr: Int, defStyleRes: Int) {
         if (isInEditMode) return
+        itemAnimator = null
         setHasFixedSize(true)
         context.withStyledAttributes(
             attributeSet,
