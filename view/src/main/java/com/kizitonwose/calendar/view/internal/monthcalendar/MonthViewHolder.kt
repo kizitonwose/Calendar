@@ -31,14 +31,14 @@ internal class MonthViewHolder constructor(
             }
             monthHeaderBinder?.bind(headerContainer, month)
         }
+        weekHolders.forEachIndexed { index, week ->
+            week.bindWeekView(month.weekDays.getOrNull(index).orEmpty())
+        }
         footerView?.let { view ->
             val footerContainer = footerContainer ?: monthFooterBinder!!.create(view).also {
                 footerContainer = it
             }
             monthFooterBinder?.bind(footerContainer, month)
-        }
-        weekHolders.forEachIndexed { index, week ->
-            week.bindWeekView(month.weekDays.getOrNull(index).orEmpty())
         }
     }
 

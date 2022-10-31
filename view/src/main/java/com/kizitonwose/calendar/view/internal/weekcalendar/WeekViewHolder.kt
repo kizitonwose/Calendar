@@ -31,13 +31,13 @@ internal class WeekViewHolder constructor(
             }
             weekHeaderBinder?.bind(headerContainer, week)
         }
+        weekHolders.bindWeekView(week.days)
         footerView?.let { view ->
             val footerContainer = footerContainer ?: weekFooterBinder!!.create(view).also {
                 footerContainer = it
             }
             weekFooterBinder?.bind(footerContainer, week)
         }
-        weekHolders.bindWeekView(week.days)
     }
 
     fun reloadDay(day: WeekDay) {
