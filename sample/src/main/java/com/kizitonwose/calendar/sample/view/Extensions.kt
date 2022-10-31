@@ -2,7 +2,6 @@ package com.kizitonwose.calendar.sample.view
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -26,8 +25,9 @@ fun View.makeGone() {
 
 fun dpToPx(dp: Int, context: Context): Int =
     TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(),
-        context.resources.displayMetrics
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp.toFloat(),
+        context.resources.displayMetrics,
     ).toInt()
 
 internal val Context.layoutInflater: LayoutInflater
@@ -44,17 +44,3 @@ internal fun Context.getColorCompat(@ColorRes color: Int) =
 
 internal fun TextView.setTextColorRes(@ColorRes color: Int) =
     setTextColor(context.getColorCompat(color))
-
-fun GradientDrawable.setCornerRadius(
-    topLeft: Float = 0F,
-    topRight: Float = 0F,
-    bottomRight: Float = 0F,
-    bottomLeft: Float = 0F
-) {
-    cornerRadii = arrayOf(
-        topLeft, topLeft,
-        topRight, topRight,
-        bottomRight, bottomRight,
-        bottomLeft, bottomLeft
-    ).toFloatArray()
-}
