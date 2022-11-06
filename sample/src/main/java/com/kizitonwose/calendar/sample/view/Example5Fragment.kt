@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.*
@@ -25,13 +24,14 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
-class Example5FlightsAdapter : RecyclerView.Adapter<Example5FlightsAdapter.Example5FlightsViewHolder>() {
+class Example5FlightsAdapter :
+    RecyclerView.Adapter<Example5FlightsAdapter.Example5FlightsViewHolder>() {
 
     val flights = mutableListOf<Flight>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example5FlightsViewHolder {
         return Example5FlightsViewHolder(
-            Example5EventItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
+            Example5EventItemViewBinding.inflate(parent.context.layoutInflater, parent, false),
         )
     }
 
@@ -80,7 +80,6 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         binding.exFiveRv.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = flightsAdapter
-            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
         }
         flightsAdapter.notifyDataSetChanged()
 
@@ -118,7 +117,8 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
 
     override fun onStart() {
         super.onStart()
-        requireActivity().window.statusBarColor = requireContext().getColorCompat(R.color.example_5_toolbar_color)
+        requireActivity().window.statusBarColor =
+            requireContext().getColorCompat(R.color.example_5_toolbar_color)
     }
 
     override fun onStop() {

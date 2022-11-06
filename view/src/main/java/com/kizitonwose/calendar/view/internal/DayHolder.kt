@@ -1,20 +1,16 @@
 package com.kizitonwose.calendar.view.internal
 
-import android.content.Context
-import android.os.Build
-import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.*
 import androidx.core.view.*
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.view.Binder
 import com.kizitonwose.calendar.view.DaySize
 import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendar.view.internal.constraints.ConstraintLayoutParams
 import java.time.LocalDate
 
 internal data class DayConfig<Day>(
@@ -23,67 +19,51 @@ internal data class DayConfig<Day>(
     val dayBinder: Binder<Day, ViewContainer>,
 )
 
-private class DaySquareFrameLayout : FrameLayout {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) :
-            super(context, attrs, defStyle)
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, widthMeasureSpec)
-    }
-}
-
 internal class DayHolder<Day>(private val config: DayConfig<Day>) {
 
-    private lateinit var dateView: View
-    private lateinit var dateViewParent: FrameLayout
+    private lateinit var dayView: View
     private lateinit var viewContainer: ViewContainer
     private var day: Day? = null
 
-    fun inflateDayView(parent: LinearLayout): View {
-        // This will be placed in the WeekLayout(A LinearLayout) hence we
-        // use LinearLayout.LayoutParams and set the weight appropriately.
-        // The parent's wightSum is already set to 7 to accommodate seven week days.
-        dateViewParent = when (config.daySize) {
-            DaySize.Square -> DaySquareFrameLayout(parent.context).apply {
-                layoutParams = LinearLayout.LayoutParams(0, MATCH_PARENT, 1f)
-            }
-            DaySize.SeventhWidth -> FrameLayout(parent.context).apply {
-                layoutParams = LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f)
-            }
-            DaySize.FreeForm -> FrameLayout(parent.context).apply {
-                layoutParams = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            }
-        }
-        dateView = dateViewParent.inflate(config.dayViewRes).also { view ->
-            if (config.daySize.parentDecidesWidth) {
-                val height = if (config.daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
-                val lp = FrameLayout.LayoutParams(MATCH_PARENT, height)
-                lp.topMargin = view.marginTop
-                lp.bottomMargin = view.marginBottom
-                lp.leftMargin = view.marginLeft
-                lp.rightMargin = view.marginRight
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    lp.marginEnd = view.marginEnd
-                    lp.marginStart = view.marginStart
+    @Suppress("KotlinConstantConditions")
+    fun inflateDayView(parent: ConstraintLayout, id: Int, startId: Int, endId: Int): View {
+        return parent.inflate(config.dayViewRes).also { dayView ->
+            this.dayView = dayView
+            val daySize = config.daySize
+            dayView.id = id
+            dayView.layoutParams = ConstraintLayoutParams(dayView.layoutParams).apply {
+                if (startId == PARENT_ID) startToStart = startId else startToEnd = startId
+                topToTop = PARENT_ID
+                bottomToBottom = PARENT_ID
+                if (endId == PARENT_ID) endToEnd = endId else endToStart = endId
+                when (daySize) {
+                    DaySize.Square -> {
+                        width = MATCH_CONSTRAINT
+                        height = MATCH_CONSTRAINT
+                        dimensionRatio = "1:1"
+                    }
+                    DaySize.SeventhWidth -> {
+                        width = MATCH_CONSTRAINT
+                    }
+                    DaySize.FreeForm -> {}
+                    DaySize.Rectangle -> {
+                        width = MATCH_CONSTRAINT
+                        height = MATCH_CONSTRAINT
+                    }
                 }
-                view.layoutParams = lp
             }
         }
-        dateViewParent.addView(dateView)
-        return dateViewParent
     }
 
     fun bindDayView(currentDay: Day) {
         this.day = currentDay
         if (!::viewContainer.isInitialized) {
-            viewContainer = config.dayBinder.create(dateView)
+            viewContainer = config.dayBinder.create(dayView)
         }
 
         val dayTag = dayTag(findDate(currentDay))
-        if (dateViewParent.tag != dayTag) {
-            dateViewParent.tag = dayTag
+        if (dayView.tag != dayTag) {
+            dayView.tag = dayTag
         }
 
         config.dayBinder.bind(viewContainer, currentDay)

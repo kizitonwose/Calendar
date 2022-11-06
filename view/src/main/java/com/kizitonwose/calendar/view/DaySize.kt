@@ -13,6 +13,16 @@ enum class DaySize {
     Square,
 
     /**
+     * Each day will have its width matching the width of the
+     * calendar divided by 7, and its height matching the
+     * height of the calendar divided by the number of weeks
+     * in the index - could be 4, 5 or 6 for the month calendar,
+     * and 1 for the week calendar. Use this if you want each
+     * month or week to fill the parent's width and height.
+     */
+    Rectangle,
+
+    /**
      * Each day will have its width matching the width of
      * the calendar divided by 7. This day is allowed to
      * determine its height by setting a specific value
@@ -27,8 +37,8 @@ enum class DaySize {
     FreeForm;
 
     internal val parentDecidesWidth: Boolean
-        get() = this == Square || this == SeventhWidth
+        get() = this == Square || this == SeventhWidth || this == Rectangle
 
     internal val parentDecidesHeight: Boolean
-        get() = this == Square
+        get() = this == Rectangle
 }

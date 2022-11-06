@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="1dp"
     android:background="@color/example_5_item_view_bg_color">
 
     <TextView
@@ -24,21 +25,13 @@
         app:layout_constraintWidth_percent="0.143"
         tools:text="THU\nJUN 30\n14:00" />
 
-    <!--Colored view dividers-->
+    <!--Colored view divider-->
     <View
-        android:layout_width="1.3dp"
+        android:layout_width="2dp"
         android:layout_height="0dp"
-        android:background="@color/black"
+        android:background="@color/example_5_page_bg_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/itemFlightDateText"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="0.7dp"
-        android:layout_height="0dp"
-        android:background="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/itemFlightDateText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
@@ -141,7 +134,7 @@
 
     <!--Departure/Destination dividers-->
     <View
-        android:layout_width="1.3dp"
+        android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/example_5_page_bg_color"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -149,27 +142,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:layout_width="0.7dp"
+        android:layout_width="1dp"
         android:layout_height="0dp"
         android:background="@color/example_5_page_bg_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/itemFlightDestinationImage"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Edge dividers-->
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/example_5_page_bg_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:background="@color/example_5_page_bg_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

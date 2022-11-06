@@ -1,7 +1,7 @@
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Libs
 import com.kizitonwose.calendar.buildsrc.Kotlin
+import com.kizitonwose.calendar.buildsrc.Libs
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
@@ -31,6 +31,7 @@ dependencies {
     coreLibraryDesugaring Libs.Core.deSugar
     implementation Kotlin.stdLib
     implementation Libs.View.coreKtx
+    implementation Libs.View.constraintLayout
 
     // Expose RecyclerView which is CalendarView's superclass.
     api Libs.View.recyclerView

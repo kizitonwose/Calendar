@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewGroup.MarginLayoutParams
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.kizitonwose.calendar.view.Binder
 import com.kizitonwose.calendar.view.DaySize
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendar.view.internal.constraints.ConstraintLayoutParams
+import com.kizitonwose.calendar.view.internal.constraints.ItemChildVerticalChain
 import java.time.LocalDate
 
 internal data class ItemContent<Day>(
@@ -33,36 +35,63 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
     itemViewClass: String?,
     dayBinder: Binder<Day, Container>,
 ): ItemContent<Day> {
-    val rootLayout = LinearLayout(context).apply {
-        orientation = LinearLayout.VERTICAL
-    }
+    val rootLayout = ConstraintLayout(context)
 
     val itemHeaderView = if (itemHeaderResource != 0) {
-        rootLayout.inflate(itemHeaderResource).also { headerView ->
-            rootLayout.addView(headerView)
-        }
+        rootLayout.inflate(itemHeaderResource)
     } else null
+
+    val itemFooterView = if (itemFooterResource != 0) {
+        rootLayout.inflate(itemFooterResource)
+    } else null
+
+    val constraintChain = ItemChildVerticalChain(
+        headerId = itemHeaderView?.id,
+        footerId = itemFooterView?.id,
+        weekSize = weekSize,
+    )
+
+    if (itemHeaderView != null) {
+        itemHeaderView.id = constraintChain.getNextLink().id
+        rootLayout.addView(
+            itemHeaderView,
+            HeaderFooterLayoutParams(itemHeaderView, isHeader = true),
+        )
+    }
 
     @Suppress("UNCHECKED_CAST")
     val dayConfig = DayConfig(
         daySize = daySize,
         dayViewRes = dayViewResource,
-        dayBinder = dayBinder as Binder<Day, ViewContainer>
+        dayBinder = dayBinder as Binder<Day, ViewContainer>,
     )
 
-    val weekHolders = (1..weekSize)
-        .map { WeekHolder(dayConfig.daySize, (1..7).map { DayHolder(dayConfig) }) }
-        .onEach { weekHolder -> rootLayout.addView(weekHolder.inflateWeekView(rootLayout)) }
+    val weekHolders = List(weekSize) {
+        WeekHolder(dayConfig.daySize, List(7) { DayHolder(dayConfig) })
+    }.onEach { weekHolder ->
+        val link = constraintChain.getNextLink()
+        rootLayout.addView(
+            weekHolder.inflateWeekView(
+                parent = rootLayout,
+                id = link.id,
+                topId = link.previousId,
+                bottomId = link.nextId,
+            ),
+        )
+    }
 
-    val itemFooterView = if (itemFooterResource != 0) {
-        rootLayout.inflate(itemFooterResource).also { footerView ->
-            rootLayout.addView(footerView)
-        }
-    } else null
+    if (itemFooterView != null) {
+        itemFooterView.id = constraintChain.getNextLink().id
+        rootLayout.addView(
+            itemFooterView,
+            HeaderFooterLayoutParams(itemFooterView, isHeader = false),
+        )
+    }
 
     fun setupRoot(root: ViewGroup) {
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
-        root.layoutParams = MarginLayoutParams(width, WRAP_CONTENT).apply {
+        val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
+        root.layoutParams = MarginLayoutParams(width, height).apply {
             bottomMargin = itemMargins.bottom
             topMargin = itemMargins.top
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -98,3 +127,21 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
 }
 
 internal fun dayTag(date: LocalDate): Int = date.hashCode()
+
+private class HeaderFooterLayoutParams(
+    view: View,
+    isHeader: Boolean,
+) : ConstraintLayoutParams(view.layoutParams) {
+    init {
+        this.startToStart = PARENT_ID
+        this.endToEnd = PARENT_ID
+        if (isHeader) {
+            this.topToTop = PARENT_ID
+        } else {
+            this.bottomToBottom = PARENT_ID
+        }
+        if (view.layoutParams.width == MATCH_PARENT) {
+            this.width = MATCH_CONSTRAINT
+        }
+    }
+}

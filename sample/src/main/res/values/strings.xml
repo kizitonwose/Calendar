@@ -15,6 +15,8 @@
     <string name="example_6_subtitle">Custom date width and height, custom month view, item decoration on the CalendarView, continuous horizontal scrolling style.</string>
     <string name="example_7_title">Example 7</string>
     <string name="example_7_subtitle">Week calendar with single selection, paged scroll and visible item observation.</string>
+    <string name="example_8_title">Example 8</string>
+    <string name="example_8_subtitle">Full screen calendar, paged horizontal scrolling, shows the \"Rectangle\" DaySize option and the \"EndOfGrid\" implementation of OutDateStyle property.</string>
     <string name="save">Save</string>
     <string name="close">Close</string>
     <string name="example_3_input_dialog_title">Enter event title</string>

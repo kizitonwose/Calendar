@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/example_1_bg"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    tools:context=".view.Example8Fragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/exEightAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/example_1_bg_light"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:id="@+id/exEightYearText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/example_1_white_light"
+                android:textSize="24sp"
+                tools:text="2019" />
+
+            <TextView
+                android:id="@+id/exEightMonthText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/example_1_white"
+                android:textSize="38sp"
+                tools:text="April" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/legendLayout"
+            layout="@layout/calendar_day_legend_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.kizitonwose.calendar.view.CalendarView
+        android:id="@+id/exEightCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cv_daySize="rectangle"
+        app:cv_dayViewResource="@layout/example_8_calendar_day"
+        app:cv_outDateStyle="endOfGrid" />
+
+</LinearLayout>
