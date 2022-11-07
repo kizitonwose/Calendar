@@ -10,8 +10,8 @@ import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.databinding.Example7CalendarDayBinding
 import com.kizitonwose.calendar.sample.databinding.Example7FragmentBinding
-import com.kizitonwose.calendar.sample.displayText
-import com.kizitonwose.calendar.sample.getWeekPageTitle
+import com.kizitonwose.calendar.sample.shared.displayText
+import com.kizitonwose.calendar.sample.shared.getWeekPageTitle
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
 import java.time.LocalDate
@@ -57,7 +57,9 @@ class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, 
 
                 val colorRes = if (day.date == selectedDate) {
                     R.color.example_7_yellow
-                } else R.color.example_7_white
+                } else {
+                    R.color.example_7_white
+                }
                 bind.exSevenDateText.setTextColor(view.context.getColorCompat(colorRes))
                 bind.exSevenSelectedView.isVisible = day.date == selectedDate
             }

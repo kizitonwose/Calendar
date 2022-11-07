@@ -1,7 +1,5 @@
 package com.kizitonwose.calendar.sample.compose
 
-import android.os.Build
-import android.view.View
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,7 +11,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -22,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
@@ -30,8 +31,8 @@ import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.Week
-import com.kizitonwose.calendar.sample.R
-import com.kizitonwose.calendar.sample.findActivity
+import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
+import com.kizitonwose.calendar.sample.shared.findActivity
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import java.time.YearMonth
@@ -49,27 +50,19 @@ fun Modifier.clickable(
         enabled = enabled,
         onClickLabel = onClickLabel,
         role = role,
-        onClick = onClick
+        onClick = onClick,
     )
 }
 
 @Composable
-fun StatusBarColorUpdateEffect(color: Color, isLight: Boolean = false) {
+fun StatusBarColorUpdateEffect(color: Color) {
     val activity = LocalContext.current.findActivity()
-    val defaultStatusBarColor = colorResource(R.color.colorPrimaryDark)
-    DisposableEffect(LocalLifecycleOwner.current) {
-        activity.window.apply {
-            statusBarColor = color.toArgb()
-            if (isLight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            }
-        }
-        onDispose {
-            activity.window.apply {
-                statusBarColor = defaultStatusBarColor.toArgb()
-                if (isLight) decorView.systemUiVisibility = 0
-            }
-        }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val observer = remember {
+        StatusBarColorLifecycleObserver(activity, color.toArgb())
+    }
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.addObserver(observer)
     }
 }
 
@@ -81,13 +74,13 @@ fun NavigationIcon(onBackClick: () -> Unit) {
             .aspectRatio(1f)
             .padding(8.dp)
             .clip(shape = CircleShape)
-            .clickable(role = Role.Button, onClick = onBackClick)
+            .clickable(role = Role.Button, onClick = onBackClick),
     ) {
         Icon(
             tint = Color.White,
             modifier = Modifier.align(Alignment.Center),
             imageVector = Icons.Default.ArrowBack,
-            contentDescription = "Back"
+            contentDescription = "Back",
         )
     }
 }

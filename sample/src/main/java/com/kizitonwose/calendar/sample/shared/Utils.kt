@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.sample
+package com.kizitonwose.calendar.sample.shared
 
 import android.app.Activity
 import android.content.Context

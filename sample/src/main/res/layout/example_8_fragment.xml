@@ -29,6 +29,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/example_1_white_light"
                 android:textSize="24sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="6dp"
                 tools:text="2019" />
 
             <TextView
@@ -38,17 +40,10 @@
                 android:fontFamily="sans-serif-light"
                 android:textColor="@color/example_1_white"
                 android:textSize="38sp"
+                android:letterSpacing="0.2"
                 tools:text="April" />
 
         </LinearLayout>
-
-        <include
-            android:id="@+id/legendLayout"
-            layout="@layout/calendar_day_legend_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -57,6 +52,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cv_daySize="rectangle"
+        app:cv_scrollPaged="true"
+        app:cv_monthHeaderResource="@layout/example_8_calendar_header"
+        app:cv_monthFooterResource="@layout/example_8_calendar_footer"
         app:cv_dayViewResource="@layout/example_8_calendar_day"
         app:cv_outDateStyle="endOfGrid" />
 

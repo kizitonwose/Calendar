@@ -7,6 +7,7 @@
     <color name="black">#000</color>
     <color name="example_1_bg">#3A284C</color>
     <color name="example_1_bg_light">#433254</color>
+    <color name="example_1_bg_secondary">#51356E</color>
     <color name="example_1_white_light">#4DFFFFFF</color>
     <color name="example_1_white">#D9FFFFFF</color>
     <color name="example_2_black">#D9000000</color>

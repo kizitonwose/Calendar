@@ -2,7 +2,6 @@ package com.kizitonwose.calendar.sample.view
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
@@ -19,16 +18,16 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.sample.ContinuousSelectionHelper.getSelection
-import com.kizitonwose.calendar.sample.ContinuousSelectionHelper.isInDateBetweenSelection
-import com.kizitonwose.calendar.sample.ContinuousSelectionHelper.isOutDateBetweenSelection
-import com.kizitonwose.calendar.sample.DateSelection
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.databinding.Example4CalendarDayBinding
 import com.kizitonwose.calendar.sample.databinding.Example4CalendarHeaderBinding
 import com.kizitonwose.calendar.sample.databinding.Example4FragmentBinding
-import com.kizitonwose.calendar.sample.dateRangeDisplayText
-import com.kizitonwose.calendar.sample.displayText
+import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.getSelection
+import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.isInDateBetweenSelection
+import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.isOutDateBetweenSelection
+import com.kizitonwose.calendar.sample.shared.DateSelection
+import com.kizitonwose.calendar.sample.shared.dateRangeDisplayText
+import com.kizitonwose.calendar.sample.shared.displayText
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
@@ -53,6 +52,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addStatusBarColorUpdate(R.color.white)
         setHasOptionsMenu(true)
         binding = Example4FragmentBinding.bind(view)
         // Set the First day of week depending on Locale
@@ -130,31 +130,13 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
 
     override fun onStart() {
         super.onStart()
-        val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close)?.apply {
+        val closeIndicator = requireContext().getDrawableCompat(R.drawable.ic_close).apply {
             colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 requireContext().getColorCompat(R.color.example_4_grey),
-                BlendModeCompat.SRC_ATOP
+                BlendModeCompat.SRC_ATOP,
             )
         }
         (activity as AppCompatActivity).supportActionBar?.setHomeAsUpIndicator(closeIndicator)
-        requireActivity().window.apply {
-            // Update status bar color to match toolbar color.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                statusBarColor = requireContext().getColorCompat(R.color.white)
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            } else {
-                statusBarColor = Color.GRAY
-            }
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        requireActivity().window.apply {
-            // Reset status bar color.
-            statusBarColor = requireContext().getColorCompat(R.color.colorPrimaryDark)
-            decorView.systemUiVisibility = 0
-        }
     }
 
     private fun configureBinders() {

@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.sample
+package com.kizitonwose.calendar.sample.shared
 
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.nextMonth

@@ -18,7 +18,7 @@ import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.databinding.Example6CalendarDayBinding
 import com.kizitonwose.calendar.sample.databinding.Example6CalendarHeaderBinding
 import com.kizitonwose.calendar.sample.databinding.Example6FragmentBinding
-import com.kizitonwose.calendar.sample.displayText
+import com.kizitonwose.calendar.sample.shared.displayText
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder

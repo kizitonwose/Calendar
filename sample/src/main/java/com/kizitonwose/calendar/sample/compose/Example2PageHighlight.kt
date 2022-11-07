@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.sample.ContinuousSelectionHelper.isInDateBetweenSelection
-import com.kizitonwose.calendar.sample.ContinuousSelectionHelper.isOutDateBetweenSelection
-import com.kizitonwose.calendar.sample.DateSelection
 import com.kizitonwose.calendar.sample.R
+import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.isInDateBetweenSelection
+import com.kizitonwose.calendar.sample.shared.ContinuousSelectionHelper.isOutDateBetweenSelection
+import com.kizitonwose.calendar.sample.shared.DateSelection
 import java.time.LocalDate
 
 private class HalfSizeShape(private val clipStart: Boolean) : Shape {

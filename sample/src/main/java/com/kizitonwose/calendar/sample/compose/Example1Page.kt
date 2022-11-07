@@ -2,7 +2,14 @@ package com.kizitonwose.calendar.sample.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -25,9 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.*
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.sample.R
-import com.kizitonwose.calendar.sample.displayText
+import com.kizitonwose.calendar.sample.shared.displayText
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.YearMonth
@@ -42,7 +53,7 @@ fun Example1Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -64,7 +75,7 @@ fun Example1Page() {
                 coroutineScope.launch {
                     state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
                 }
-            }
+            },
         )
         HorizontalCalendar(
             modifier = Modifier.testTag("Calendar"),
@@ -80,7 +91,7 @@ fun Example1Page() {
             },
             monthHeader = {
                 MonthHeader(daysOfWeek = daysOfWeek)
-            }
+            },
         )
     }
 }
@@ -112,9 +123,9 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 showRipple = !isSelected,
-                onClick = { onClick(day) }
+                onClick = { onClick(day) },
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         val textColor = when (day.position) {
             // Color.Unspecified will use the default text color from the current theme
@@ -144,7 +155,7 @@ fun CalendarTitle(
             modifier = Modifier
                 .size(40.dp)
                 .clip(shape = CircleShape)
-                .clickable(role = Role.Button, onClick = goToPrevious)
+                .clickable(role = Role.Button, onClick = goToPrevious),
         ) {
             Icon(
                 modifier = Modifier
@@ -168,7 +179,7 @@ fun CalendarTitle(
             modifier = Modifier
                 .size(40.dp)
                 .clip(shape = CircleShape)
-                .clickable(role = Role.Button, onClick = goToNext)
+                .clickable(role = Role.Button, onClick = goToNext),
         ) {
             Icon(
                 modifier = Modifier

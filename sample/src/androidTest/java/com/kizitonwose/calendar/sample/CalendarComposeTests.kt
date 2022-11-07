@@ -1,12 +1,19 @@
 package com.kizitonwose.calendar.sample
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeLeft
+import androidx.compose.ui.test.swipeRight
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.sample.compose.Example1Page
+import com.kizitonwose.calendar.sample.shared.displayText
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

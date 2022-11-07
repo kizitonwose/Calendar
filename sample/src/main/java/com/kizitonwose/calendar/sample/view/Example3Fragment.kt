@@ -43,7 +43,7 @@ class Example3EventsAdapter(val onClick: (Event) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example3EventsViewHolder {
         return Example3EventsViewHolder(
-            Example3EventItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
+            Example3EventItemViewBinding.inflate(parent.context.layoutInflater, parent, false),
         )
     }
 
@@ -128,6 +128,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addStatusBarColorUpdate(R.color.example_3_statusbar_color)
         binding = Example3FragmentBinding.bind(view)
         binding.exThreeRv.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -202,16 +203,16 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
     override fun onStart() {
         super.onStart()
-        activityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.example_3_toolbar_color))
-        requireActivity().window.statusBarColor =
-            requireContext().getColorCompat(R.color.example_3_statusbar_color)
+        activityToolbar.setBackgroundColor(
+            requireContext().getColorCompat(R.color.example_3_toolbar_color),
+        )
     }
 
     override fun onStop() {
         super.onStop()
-        activityToolbar.setBackgroundColor(requireContext().getColorCompat(R.color.colorPrimary))
-        requireActivity().window.statusBarColor =
-            requireContext().getColorCompat(R.color.colorPrimaryDark)
+        activityToolbar.setBackgroundColor(
+            requireContext().getColorCompat(R.color.colorPrimary),
+        )
     }
 
     private fun configureBinders(daysOfWeek: List<DayOfWeek>) {

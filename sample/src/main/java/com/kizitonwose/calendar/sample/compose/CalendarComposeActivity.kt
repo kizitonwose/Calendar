@@ -3,20 +3,29 @@ package com.kizitonwose.calendar.sample.compose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.*
-import androidx.compose.animation.AnimatedContentScope.SlideDirection.*
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.navigation.*
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.kizitonwose.calendar.sample.R
-import com.kizitonwose.calendar.sample.dateRangeDisplayText
+import com.kizitonwose.calendar.sample.shared.dateRangeDisplayText
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -54,9 +63,9 @@ class CalendarComposeActivity : AppCompatActivity() {
                                 coroutineScope.launch {
                                     scaffoldState.snackbarHostState.showSnackbar(message)
                                 }
-                            }
+                            },
                         )
-                    }
+                    },
                 )
             }
         }
@@ -90,7 +99,7 @@ class CalendarComposeActivity : AppCompatActivity() {
         AnimatedNavHost(
             modifier = modifier,
             navController = navController,
-            startDestination = Page.List.name
+            startDestination = Page.List.name,
         ) {
             composable(Page.List.name) {
                 ListPage { page -> navController.navigate(page.name) }
@@ -102,7 +111,7 @@ class CalendarComposeActivity : AppCompatActivity() {
                     dateSelected = { startDate, endDate ->
                         navController.popBackStack()
                         showSnack(dateRangeDisplayText(startDate, endDate))
-                    }
+                    },
                 )
             }
             verticallyAnimatedComposable(Page.Example3.name) { Example3Page() }

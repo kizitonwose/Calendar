@@ -14,12 +14,22 @@ import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import com.kizitonwose.calendar.core.*
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.WeekDay
+import com.kizitonwose.calendar.core.WeekDayPosition
+import com.kizitonwose.calendar.core.atStartOfMonth
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.databinding.Example1CalendarDayBinding
 import com.kizitonwose.calendar.sample.databinding.Example1FragmentBinding
-import com.kizitonwose.calendar.sample.displayText
-import com.kizitonwose.calendar.view.*
+import com.kizitonwose.calendar.sample.shared.displayText
+import com.kizitonwose.calendar.view.CalendarView
+import com.kizitonwose.calendar.view.MonthDayBinder
+import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendar.view.WeekCalendarView
+import com.kizitonwose.calendar.view.WeekDayBinder
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -207,7 +217,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             val weekHeight = weekCalendarView.height
             // If OutDateStyle is EndOfGrid, you could simply multiply weekHeight by 6.
             val visibleMonthHeight = weekHeight *
-                    monthCalendarView.findFirstVisibleMonth()?.weekDays.orEmpty().count()
+                monthCalendarView.findFirstVisibleMonth()?.weekDays.orEmpty().count()
 
             val oldHeight = if (monthToWeek) visibleMonthHeight else weekHeight
             val newHeight = if (monthToWeek) weekHeight else visibleMonthHeight

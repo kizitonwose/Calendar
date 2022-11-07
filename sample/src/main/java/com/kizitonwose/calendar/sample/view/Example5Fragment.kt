@@ -10,13 +10,21 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendar.core.*
-import com.kizitonwose.calendar.sample.*
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.databinding.Example5CalendarDayBinding
 import com.kizitonwose.calendar.sample.databinding.Example5CalendarHeaderBinding
 import com.kizitonwose.calendar.sample.databinding.Example5EventItemViewBinding
 import com.kizitonwose.calendar.sample.databinding.Example5FragmentBinding
+import com.kizitonwose.calendar.sample.shared.Flight
+import com.kizitonwose.calendar.sample.shared.displayText
+import com.kizitonwose.calendar.sample.shared.flightDateTimeFormatter
+import com.kizitonwose.calendar.sample.shared.generateFlights
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
@@ -75,6 +83,7 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addStatusBarColorUpdate(R.color.example_5_toolbar_color)
         binding = Example5FragmentBinding.bind(view)
 
         binding.exFiveRv.apply {
@@ -113,18 +122,6 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                 binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.previousMonth)
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        requireActivity().window.statusBarColor =
-            requireContext().getColorCompat(R.color.example_5_toolbar_color)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        requireActivity().window.statusBarColor =
-            requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
 
     private fun updateAdapterForDate(date: LocalDate?) {
