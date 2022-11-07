@@ -7,7 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.data.*
+import com.kizitonwose.calendar.data.DataStore
+import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
+import com.kizitonwose.calendar.data.getWeekCalendarData
+import com.kizitonwose.calendar.data.getWeekIndex
+import com.kizitonwose.calendar.data.getWeekIndicesCount
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.WeekDayBinder
@@ -72,7 +76,7 @@ internal class WeekCalendarAdapter(
             footerView = content.footerView,
             weekHolders = content.weekHolders.first(),
             weekHeaderBinder = calView.weekHeaderBinder as WeekHeaderFooterBinder<ViewContainer>?,
-            weekFooterBinder = calView.weekFooterBinder as WeekHeaderFooterBinder<ViewContainer>?
+            weekFooterBinder = calView.weekFooterBinder as WeekHeaderFooterBinder<ViewContainer>?,
         )
     }
 

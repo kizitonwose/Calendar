@@ -49,7 +49,7 @@ fun Example4Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -74,8 +74,8 @@ fun Example4Page() {
                         .border(
                             color = colorResource(R.color.black),
                             width = 1.dp,
-                            shape = RoundedCornerShape(8.dp)
-                        )
+                            shape = RoundedCornerShape(8.dp),
+                        ),
                 ) {
                     container()
                 }
@@ -87,13 +87,13 @@ fun Example4Page() {
                             colors = listOf(
                                 colorResource(R.color.example_6_month_bg_color),
                                 colorResource(R.color.example_6_month_bg_color3),
-                            )
-                        )
-                    )
+                            ),
+                        ),
+                    ),
                 ) {
                     content()
                 }
-            }
+            },
         )
     }
 }

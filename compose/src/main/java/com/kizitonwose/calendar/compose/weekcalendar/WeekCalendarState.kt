@@ -6,16 +6,25 @@ import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.VisibleItemState
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.data.*
+import com.kizitonwose.calendar.data.DataStore
+import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
+import com.kizitonwose.calendar.data.getWeekCalendarData
+import com.kizitonwose.calendar.data.getWeekIndex
+import com.kizitonwose.calendar.data.getWeekIndicesCount
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -177,7 +186,7 @@ class WeekCalendarState internal constructor(
         }
         LazyListState(
             firstVisibleItemIndex = item.firstVisibleItemIndex,
-            firstVisibleItemScrollOffset = item.firstVisibleItemScrollOffset
+            firstVisibleItemScrollOffset = item.firstVisibleItemScrollOffset,
         )
     }
 
@@ -243,7 +252,7 @@ class WeekCalendarState internal constructor(
             save = {
                 val visibleItemState = VisibleItemState(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
-                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset
+                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset,
                 )
                 listOf(
                     it.startDate,
@@ -261,7 +270,7 @@ class WeekCalendarState internal constructor(
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = it[4] as VisibleItemState,
                 )
-            }
+            },
         )
     }
 }

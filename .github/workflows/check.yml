@@ -35,7 +35,7 @@ jobs:
           java-version: 11
 
       - name: Run Ktlint
-        run: ./gradlew ktlintCheck
+        run: ./gradlew lintKotlin
 
   unit-tests:
     name: Unit tests

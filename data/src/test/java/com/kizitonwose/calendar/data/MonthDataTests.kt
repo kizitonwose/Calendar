@@ -1,6 +1,11 @@
 package com.kizitonwose.calendar.data
 
-import com.kizitonwose.calendar.core.*
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.OutDateStyle
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
+import com.kizitonwose.calendar.core.yearMonth
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -16,21 +21,21 @@ class MonthDataTests {
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** May and November 2019 with Monday as the first day of week.
-    ┌────────────────────┐ ┌────────────────────┐
-    │      May 2019      │ │   November 2019    │
-    ├──┬──┬──┬──┬──┬──┬──┤ ├──┬──┬──┬──┬──┬──┬──┤
-    │Mo│Tu│We│Th│Fr│Sa│Su│ │Mo│Tu│We│Th│Fr│Sa│Su│
-    ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
-    │29│30│01│02│03│04│05│ │28│29│30│31│01│02│03│
-    ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
-    │06│07│08│09│10│11│12│ │04│05│06│07│08│09│10│
-    ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
-    │13│14│15│16│17│18│19│ │11│12│13│14│15│16│17│
-    ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
-    │20│21│22│23│24│25│26│ │18│19│20│21│22│23│24│
-    ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
-    │27│28│29│30│31│01│02│ │25│26│27│28│29│30│01│
-    └──┴──┴──┴──┴──┴──┴──┘ └──┴──┴──┴──┴──┴──┴──┘
+     * ┌────────────────────┐ ┌────────────────────┐
+     * │      May 2019      │ │   November 2019    │
+     * ├──┬──┬──┬──┬──┬──┬──┤ ├──┬──┬──┬──┬──┬──┬──┤
+     * │Mo│Tu│We│Th│Fr│Sa│Su│ │Mo│Tu│We│Th│Fr│Sa│Su│
+     * ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
+     * │29│30│01│02│03│04│05│ │28│29│30│31│01│02│03│
+     * ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
+     * │06│07│08│09│10│11│12│ │04│05│06│07│08│09│10│
+     * ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
+     * │13│14│15│16│17│18│19│ │11│12│13│14│15│16│17│
+     * ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
+     * │20│21│22│23│24│25│26│ │18│19│20│21│22│23│24│
+     * ├──┼──┼──┼──┼──┼──┼──┤ ├──┼──┼──┼──┼──┼──┼──┤
+     * │27│28│29│30│31│01│02│ │25│26│27│28│29│30│01│
+     * └──┴──┴──┴──┴──┴──┴──┘ └──┴──┴──┴──┴──┴──┴──┘
      **/
 
     @Test
@@ -89,7 +94,7 @@ class MonthDataTests {
         assertEquals(endOfGridMonthData.calendarMonth.weekDays.count(), 6)
         assertTrue(
             endOfGridMonthData.calendarMonth.weekDays.last()
-                .all { it.position == DayPosition.OutDate }
+                .all { it.position == DayPosition.OutDate },
         )
     }
 

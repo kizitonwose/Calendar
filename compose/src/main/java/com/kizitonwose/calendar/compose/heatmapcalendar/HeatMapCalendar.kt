@@ -1,6 +1,12 @@
 package com.kizitonwose.calendar.compose.heatmapcalendar
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +29,7 @@ internal fun HeatMapCalendarInternal(
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
     ) {
         if (weekHeaderPosition == HeatMapWeekHeaderPosition.Start) {
             WeekHeaderColumn(
@@ -40,7 +46,7 @@ internal fun HeatMapCalendarInternal(
         ) {
             items(
                 count = state.monthIndexCount,
-                key = { offset -> state.store[offset].yearMonth }
+                key = { offset -> state.store[offset].yearMonth },
             ) { offset ->
                 val calendarMonth = state.store[offset]
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
@@ -76,7 +82,7 @@ private fun WeekHeaderColumn(
     Column(
         modifier = Modifier.width(IntrinsicSize.Max),
         verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = horizontalAlignment
+        horizontalAlignment = horizontalAlignment,
     ) {
         for (dayOfWeek in daysOfWeek(firstDayOfWeek)) {
             weekHeader(dayOfWeek)

@@ -2,8 +2,12 @@
 
 package com.kizitonwose.calendar.sample.compose
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -30,7 +34,7 @@ fun NavGraphBuilder.horizontallyAnimatedComposable(
         },
         popExitTransition = {
             slideOutOfContainer(SlideDirection.Right, animationSpec = tween(animDurationMillis))
-        }
+        },
     )
 }
 
@@ -52,6 +56,6 @@ fun NavGraphBuilder.verticallyAnimatedComposable(
         },
         popExitTransition = {
             slideOutOfContainer(SlideDirection.Down, animationSpec = tween(animDurationMillis))
-        }
+        },
     )
 }

@@ -23,44 +23,45 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
     List(
         title = "Calendar Compose Sample",
         subtitle = "",
-        showToolBar = true
+        showToolBar = true,
     ),
     Example1(
         title = "Example 1",
         subtitle = "Horizontal Calendar - Month header, paged scroll style, programmatic scrolling, multiple selection.",
-        showToolBar = true
+        showToolBar = true,
     ),
     Example2(
         title = "Example 2",
         subtitle = "Vertical Calendar - Sticky header, continuous selection within one month and across multiple months, " +
-                "dates older than the current day are disabled. Similar to what is in the Airbnb app.",
-        showToolBar = false
+            "dates older than the current day are disabled. Similar to what is in the Airbnb app.",
+        showToolBar = false,
     ),
     Example3(
         title = "Example 3",
         subtitle = "Horizontal Calendar - Single selection, shows the \"EndOfGrid\" implementation of \"OutDateStyle\" property. A flight schedule calendar.",
-        showToolBar = false
+        showToolBar = false,
     ),
     Example4(
         title = "Example 4",
         subtitle = "Horizontal Calendar - Custom date width and height, custom month container and content backgrounds, continuous horizontal scroll style.",
-        showToolBar = true
+        showToolBar = true,
     ),
     Example5(
         title = "Example 5",
         subtitle = "Week Calendar - Single selection, paged scroll and visible item observation.",
-        showToolBar = false
+        showToolBar = false,
     ),
     Example6(
         title = "Example 6",
         subtitle = "HeatMap Calendar - Dynamic month header, continuous scroll. Similar to GitHub's contributions chart.",
-        showToolBar = true
+        showToolBar = true,
     ),
     Example7(
         title = "Example 7",
         subtitle = "Week Calendar - Continuous scroll, custom day content width, single selection.",
-        showToolBar = true
-    );
+        showToolBar = true,
+    ),
+    ;
 }
 
 val items = listOf(
@@ -77,8 +78,8 @@ val items = listOf(
 fun ListPage(click: (Page) -> Unit) {
     LazyColumn(
         modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)
+            .fillMaxSize()
+            .background(Color.White),
     ) {
         items(items) { item ->
             Column(
@@ -94,7 +95,7 @@ fun ListPage(click: (Page) -> Unit) {
                     fontWeight = FontWeight.Medium,
                     style = titleStyle.copy(
                         fontSize = 20.sp,
-                        color = titleStyle.color.copy(alpha = ContentAlpha.high)
+                        color = titleStyle.color.copy(alpha = ContentAlpha.high),
                     ),
                 )
                 val subtitleStyle = MaterialTheme.typography.body2
@@ -102,7 +103,7 @@ fun ListPage(click: (Page) -> Unit) {
                     text = item.subtitle,
                     style = subtitleStyle.copy(
                         fontSize = 16.sp,
-                        color = subtitleStyle.color.copy(alpha = ContentAlpha.medium)
+                        color = subtitleStyle.color.copy(alpha = ContentAlpha.medium),
                     ),
                 )
             }

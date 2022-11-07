@@ -5,7 +5,11 @@ import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import dev.chrisbanes.snapper.*
+import dev.chrisbanes.snapper.ExperimentalSnapperApi
+import dev.chrisbanes.snapper.SnapOffsets
+import dev.chrisbanes.snapper.SnapperFlingBehaviorDefaults
+import dev.chrisbanes.snapper.SnapperLayoutInfo
+import dev.chrisbanes.snapper.rememberSnapperFlingBehavior
 
 internal object CalendarDefaults {
     /**

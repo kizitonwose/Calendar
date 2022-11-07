@@ -1,6 +1,10 @@
 package com.kizitonwose.calendar.compose
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
@@ -20,7 +24,7 @@ internal fun LazyListScope.CalendarItems(
 ) {
     items(
         count = itemsCount,
-        key = { offset -> monthData(offset).yearMonth }
+        key = { offset -> monthData(offset).yearMonth },
     ) { offset ->
         val calendarMonth = monthData(offset)
         monthContainer(calendarMonth) {

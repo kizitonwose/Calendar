@@ -88,7 +88,7 @@ fun Example3Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(pageBackgroundColor)
+            .background(pageBackgroundColor),
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -120,7 +120,7 @@ fun Example3Page() {
                     coroutineScope.launch {
                         state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
                     }
-                }
+                },
             )
             HorizontalCalendar(
                 modifier = Modifier.wrapContentWidth(),
@@ -129,11 +129,13 @@ fun Example3Page() {
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
                             flights[day.date].orEmpty().map { colorResource(it.color) }
-                        } else emptyList()
+                        } else {
+                            emptyList()
+                        }
                         Day(
                             day = day,
                             isSelected = selection == day,
-                            colors = colors
+                            colors = colors,
                         ) { clicked ->
                             selection = clicked
                         }
@@ -144,7 +146,7 @@ fun Example3Page() {
                         modifier = Modifier.padding(vertical = 8.dp),
                         daysOfWeek = daysOfWeek,
                     )
-                }
+                },
             )
             Divider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -168,15 +170,15 @@ private fun Day(
             .aspectRatio(1f) // This is important for square-sizing!
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) selectedItemColor else Color.Transparent
+                color = if (isSelected) selectedItemColor else Color.Transparent,
             )
             .padding(1.dp)
             .background(color = itemBackgroundColor)
             // Disable clicks on inDates/outDates
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
-                onClick = { onClick(day) }
-            )
+                onClick = { onClick(day) },
+            ),
     ) {
         val textColor = when (day.position) {
             DayPosition.MonthDate -> Color.Unspecified
@@ -202,7 +204,7 @@ private fun Day(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(5.dp)
-                        .background(color)
+                        .background(color),
                 )
             }
         }
@@ -241,7 +243,7 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
                 .background(color = colorResource(flight.color))
                 .fillParentMaxWidth(1 / 7f)
                 .aspectRatio(1f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = flightDateTimeFormatter.format(flight.time).uppercase(Locale.ENGLISH),
@@ -254,7 +256,7 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
             modifier = Modifier
                 .background(color = itemBackgroundColor)
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
         ) {
             AirportInformation(flight.departure, isDeparture = true)
         }
@@ -275,7 +277,7 @@ private fun AirportInformation(airport: Airport, isDeparture: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxHeight(),
     ) {
         val resource = if (isDeparture) {
             R.drawable.ic_airplane_takeoff
@@ -303,14 +305,14 @@ private fun AirportInformation(airport: Airport, isDeparture: Boolean) {
                 text = airport.code,
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Black
+                fontWeight = FontWeight.Black,
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = airport.city,
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Light
+                fontWeight = FontWeight.Light,
             )
         }
     }

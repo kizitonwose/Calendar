@@ -72,7 +72,7 @@ fun Modifier.backgroundHighlight(
                     padding(vertical = padding)
                         .background(
                             color = continuousSelectionColor,
-                            shape = HalfSizeShape(clipStart = true)
+                            shape = HalfSizeShape(clipStart = true),
                         )
                         .padding(horizontal = padding)
                         .background(color = selectionColor, shape = CircleShape)
@@ -87,7 +87,7 @@ fun Modifier.backgroundHighlight(
                     padding(vertical = padding)
                         .background(
                             color = continuousSelectionColor,
-                            shape = HalfSizeShape(clipStart = false)
+                            shape = HalfSizeShape(clipStart = false),
                         )
                         .padding(horizontal = padding)
                         .background(color = selectionColor, shape = CircleShape)
@@ -98,7 +98,7 @@ fun Modifier.backgroundHighlight(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = colorResource(R.color.inactive_text_color)
+                            color = colorResource(R.color.inactive_text_color),
                         )
                 }
                 else -> {
@@ -160,8 +160,8 @@ fun Modifier.backgroundHighlightLegacy(
                             color = selectionColor,
                             shape = RoundedCornerShape(
                                 topStartPercent = 50,
-                                bottomStartPercent = 50
-                            )
+                                bottomStartPercent = 50,
+                            ),
                         )
                 }
                 startDate != null && endDate != null && (day.date > startDate && day.date < endDate) -> {
@@ -174,7 +174,7 @@ fun Modifier.backgroundHighlightLegacy(
                     padding(vertical = padding)
                         .background(
                             color = selectionColor,
-                            shape = RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50)
+                            shape = RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50),
                         )
                 }
                 day.date == today -> {
@@ -183,7 +183,7 @@ fun Modifier.backgroundHighlightLegacy(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = colorResource(R.color.inactive_text_color)
+                            color = colorResource(R.color.inactive_text_color),
                         )
                 }
                 else -> {

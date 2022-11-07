@@ -3,7 +3,8 @@ package com.kizitonwose.calendar.view.internal
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.*
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import androidx.core.view.isGone
 import com.kizitonwose.calendar.view.DaySize
 import com.kizitonwose.calendar.view.internal.constraints.DayCellHorizontalChain

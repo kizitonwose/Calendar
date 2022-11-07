@@ -46,7 +46,7 @@ fun Example7Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
@@ -90,7 +90,7 @@ private fun Day(
             .border(
                 shape = RoundedCornerShape(8.dp),
                 width = if (selected) 2.dp else 0.dp,
-                color = if (selected) colorResource(R.color.colorAccent) else Color.Transparent
+                color = if (selected) colorResource(R.color.colorAccent) else Color.Transparent,
             )
             .wrapContentHeight()
             .clickable { onClick(date) },
@@ -104,17 +104,17 @@ private fun Day(
             Text(
                 text = date.month.displayText(),
                 fontSize = 10.sp,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
             )
             Text(
                 text = dateFormatter.format(date),
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = date.dayOfWeek.displayText(),
                 fontSize = 10.sp,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
             )
         }
     }

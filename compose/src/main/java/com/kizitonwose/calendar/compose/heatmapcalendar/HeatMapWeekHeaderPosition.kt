@@ -15,5 +15,7 @@ enum class HeatMapWeekHeaderPosition {
     /**
      * The header is positioned at the end of the calendar.
      */
-    End;
+    End,
+
+    ;
 }

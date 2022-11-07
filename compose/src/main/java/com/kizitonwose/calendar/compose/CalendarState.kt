@@ -7,14 +7,23 @@ import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.data.*
+import com.kizitonwose.calendar.data.DataStore
+import com.kizitonwose.calendar.data.checkDateRange
+import com.kizitonwose.calendar.data.getCalendarMonthData
+import com.kizitonwose.calendar.data.getMonthIndex
+import com.kizitonwose.calendar.data.getMonthIndicesCount
 import java.time.DayOfWeek
 import java.time.YearMonth
 
@@ -42,7 +51,7 @@ fun rememberCalendarState(
             firstDayOfWeek = firstDayOfWeek,
             firstVisibleMonth = firstVisibleMonth,
             outDateStyle = outDateStyle,
-            visibleItemState = null
+            visibleItemState = null,
         )
     }
 }
@@ -170,7 +179,7 @@ class CalendarState internal constructor(
     internal val listState = LazyListState(
         firstVisibleItemIndex = visibleItemState?.firstVisibleItemIndex
             ?: getScrollIndex(firstVisibleMonth) ?: 0,
-        firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0
+        firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0,
     )
 
     internal var monthIndexCount by mutableStateOf(0)
@@ -237,7 +246,7 @@ class CalendarState internal constructor(
             save = {
                 val visibleItemState = VisibleItemState(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
-                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset
+                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset,
                 )
                 listOf(
                     it.startMonth,
@@ -257,7 +266,7 @@ class CalendarState internal constructor(
                     outDateStyle = it[4] as OutDateStyle,
                     visibleItemState = it[5] as VisibleItemState,
                 )
-            }
+            },
         )
     }
 }

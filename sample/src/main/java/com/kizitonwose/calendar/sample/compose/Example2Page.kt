@@ -86,7 +86,7 @@ fun Example2Page(
                     daysOfWeek = daysOfWeek,
                     selection = selection,
                     close = close,
-                    clearDates = { selection = DateSelection() }
+                    clearDates = { selection = DateSelection() },
                 )
                 VerticalCalendar(
                     state = state,
@@ -95,7 +95,7 @@ fun Example2Page(
                         Day(
                             value,
                             today = today,
-                            selection = selection
+                            selection = selection,
                         ) { day ->
                             if (day.position == DayPosition.MonthDate &&
                                 (day.date == today || day.date.isAfter(today))
@@ -107,7 +107,7 @@ fun Example2Page(
                             }
                         }
                     },
-                    monthHeader = { month -> MonthHeader(month) }
+                    monthHeader = { month -> MonthHeader(month) },
                 )
             }
             CalendarBottom(
@@ -122,7 +122,7 @@ fun Example2Page(
                     if (startDate != null && endDate != null) {
                         dateSelected(startDate, endDate)
                     }
-                }
+                },
             )
         }
     }
@@ -142,16 +142,16 @@ private fun Day(
             .clickable(
                 enabled = day.position == DayPosition.MonthDate && day.date >= today,
                 showRipple = false,
-                onClick = { onClick(day) }
+                onClick = { onClick(day) },
             )
             .backgroundHighlight(
                 day = day,
                 today = today,
                 selection = selection,
                 selectionColor = selectionColor,
-                continuousSelectionColor = continuousSelectionColor
+                continuousSelectionColor = continuousSelectionColor,
             ) { textColor = it },
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = day.date.dayOfMonth.toString(),
@@ -167,7 +167,7 @@ private fun MonthHeader(calendarMonth: CalendarMonth) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 12.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+            .padding(top = 12.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
     ) {
         Text(
             textAlign = TextAlign.Center,
@@ -191,7 +191,7 @@ private fun CalendarTop(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 6.dp, bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
                 modifier = Modifier.height(IntrinsicSize.Max),
@@ -219,7 +219,9 @@ private fun CalendarTop(
                 )
             }
             val daysBetween = selection.daysBetween
-            val text = if (daysBetween == null) "Select dates" else {
+            val text = if (daysBetween == null) {
+                "Select dates"
+            } else {
                 // Ideally you'd do this using the strings.xml file
                 "$daysBetween ${if (daysBetween == 1L) "night" else "nights"} in Munich"
             }
@@ -232,7 +234,7 @@ private fun CalendarTop(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 4.dp)
+                    .padding(top = 4.dp),
             ) {
                 for (dayOfWeek in daysOfWeek) {
                     Text(
@@ -259,11 +261,11 @@ private fun CalendarBottom(
         Divider()
         Row(
             modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "€75 night",
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.weight(1f))
             Button(
@@ -271,7 +273,7 @@ private fun CalendarBottom(
                     .height(40.dp)
                     .width(100.dp),
                 onClick = save,
-                enabled = selection.daysBetween != null
+                enabled = selection.daysBetween != null,
             ) {
                 Text(text = "Save")
             }

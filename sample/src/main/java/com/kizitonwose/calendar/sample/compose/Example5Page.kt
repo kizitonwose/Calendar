@@ -42,7 +42,7 @@ fun Example5Page(close: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
@@ -78,7 +78,7 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable { onClick(date) },
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier = Modifier.padding(vertical = 10.dp),
@@ -89,13 +89,13 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
                 text = date.dayOfWeek.displayText(),
                 fontSize = 12.sp,
                 color = Color.White,
-                fontWeight = FontWeight.Light
+                fontWeight = FontWeight.Light,
             )
             Text(
                 text = dateFormatter.format(date),
                 fontSize = 14.sp,
                 color = if (isSelected) colorResource(R.color.example_7_yellow) else Color.White,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
         if (isSelected) {
@@ -104,7 +104,7 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
                     .fillMaxWidth()
                     .height(5.dp)
                     .background(colorResource(R.color.example_7_yellow))
-                    .align(Alignment.BottomCenter)
+                    .align(Alignment.BottomCenter),
             )
         }
     }

@@ -20,11 +20,13 @@ internal class CalendarPageSnapHelper : PagerSnapHelper() {
         targetView: View,
     ): IntArray {
         return IntArray(2).apply {
-            this[0] = if (layoutManager.canScrollHorizontally())
-                distanceToStart(targetView, getHorizontalHelper(layoutManager)) else 0
+            this[0] = if (layoutManager.canScrollHorizontally()) {
+                distanceToStart(targetView, getHorizontalHelper(layoutManager))
+            } else 0
 
-            this[1] = if (layoutManager.canScrollVertically())
-                distanceToStart(targetView, getVerticalHelper(layoutManager)) else 0
+            this[1] = if (layoutManager.canScrollVertically()) {
+                distanceToStart(targetView, getVerticalHelper(layoutManager))
+            } else 0
         }
     }
 

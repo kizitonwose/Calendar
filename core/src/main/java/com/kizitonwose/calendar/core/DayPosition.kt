@@ -22,5 +22,7 @@ enum class DayPosition {
      * The day belongs to the next month on the calendar.
      * @see [OutDateStyle]
      */
-    OutDate;
+    OutDate,
+
+    ;
 }

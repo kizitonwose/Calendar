@@ -30,8 +30,8 @@ data class Week(val days: List<WeekDay>) : Serializable {
 
     override fun toString(): String {
         return "Week { " +
-                "first = ${days.first()}, " +
-                "last = ${days.last()} " +
-                "} "
+            "first = ${days.first()}, " +
+            "last = ${days.last()} " +
+            "} "
     }
 }

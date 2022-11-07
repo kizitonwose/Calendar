@@ -6,7 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendar.core.*
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.OutDateStyle
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
+import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.getCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
@@ -72,7 +78,7 @@ internal class MonthCalendarAdapter(
             footerView = content.footerView,
             weekHolders = content.weekHolders,
             monthHeaderBinder = calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
-            monthFooterBinder = calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?
+            monthFooterBinder = calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?,
         )
     }
 

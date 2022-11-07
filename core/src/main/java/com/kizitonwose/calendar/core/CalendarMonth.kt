@@ -37,8 +37,8 @@ data class CalendarMonth(
 
     override fun toString(): String {
         return "CalendarMonth { " +
-                "first = ${weekDays.first().first()}, " +
-                "last = ${weekDays.last().last()} " +
-                "} "
+            "first = ${weekDays.first().first()}, " +
+            "last = ${weekDays.last().last()} " +
+            "} "
     }
 }

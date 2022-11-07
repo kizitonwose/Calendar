@@ -161,7 +161,7 @@ open class WeekCalendarView : RecyclerView {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
-            super(context, attrs, defStyleAttr) {
+        super(context, attrs, defStyleAttr) {
         init(attrs, defStyleAttr, defStyleAttr)
     }
 
@@ -173,21 +173,23 @@ open class WeekCalendarView : RecyclerView {
             attributeSet,
             R.styleable.CalendarView,
             defStyleAttr,
-            defStyleRes
+            defStyleRes,
         ) {
-            dayViewResource =
-                getResourceId(R.styleable.WeekCalendarView_cv_dayViewResource, dayViewResource)
-            weekHeaderResource =
-                getResourceId(
-                    R.styleable.WeekCalendarView_cv_weekHeaderResource, weekHeaderResource
-                )
-            weekFooterResource =
-                getResourceId(
-                    R.styleable.WeekCalendarView_cv_weekFooterResource, weekFooterResource
-                )
+            dayViewResource = getResourceId(
+                R.styleable.WeekCalendarView_cv_dayViewResource,
+                dayViewResource,
+            )
+            weekHeaderResource = getResourceId(
+                R.styleable.WeekCalendarView_cv_weekHeaderResource,
+                weekHeaderResource,
+            )
+            weekFooterResource = getResourceId(
+                R.styleable.WeekCalendarView_cv_weekFooterResource,
+                weekFooterResource,
+            )
             scrollPaged = getBoolean(R.styleable.WeekCalendarView_cv_scrollPaged, scrollPaged)
             daySize = DaySize.values()[
-                    getInt(R.styleable.WeekCalendarView_cv_daySize, daySize.ordinal)
+                getInt(R.styleable.WeekCalendarView_cv_daySize, daySize.ordinal),
             ]
             weekViewClass = getString(R.styleable.WeekCalendarView_cv_weekViewClass)
         }

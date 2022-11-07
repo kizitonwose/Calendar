@@ -11,28 +11,28 @@ data class ExampleItem(
     @StringRes val titleRes: Int,
     @StringRes val subtitleRes: Int,
     val animation: Animation,
-    val createView: () -> BaseFragment
+    val createView: () -> BaseFragment,
 )
 
 data class Animation(
     @AnimRes val enter: Int,
     @AnimRes val exit: Int,
     @AnimRes val popEnter: Int,
-    @AnimRes val popExit: Int
+    @AnimRes val popExit: Int,
 )
 
 val vertical = Animation(
     enter = R.anim.slide_in_up,
     exit = R.anim.fade_out,
     popEnter = R.anim.fade_in,
-    popExit = R.anim.slide_out_down
+    popExit = R.anim.slide_out_down,
 )
 
 val horizontal = Animation(
     enter = R.anim.slide_in_right,
     exit = R.anim.slide_out_left,
     popEnter = R.anim.slide_in_left,
-    popExit = R.anim.slide_out_right
+    popExit = R.anim.slide_out_right,
 )
 
 class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
@@ -42,22 +42,22 @@ class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
         ExampleItem(
             R.string.example_1_title,
             R.string.example_1_subtitle,
-            vertical
+            vertical,
         ) { Example1Fragment() },
         ExampleItem(
             R.string.example_2_title,
             R.string.example_2_subtitle,
-            horizontal
+            horizontal,
         ) { Example2Fragment() },
         ExampleItem(
             R.string.example_3_title,
             R.string.example_3_subtitle,
-            horizontal
+            horizontal,
         ) { Example3Fragment() },
         ExampleItem(
             R.string.example_4_title,
             R.string.example_4_subtitle,
-            vertical
+            vertical,
         ) { Example4Fragment() },
         ExampleItem(
             R.string.example_5_title,
@@ -83,7 +83,11 @@ class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {
         return HomeOptionsViewHolder(
-            CalendarViewOptionsItemViewBinding.inflate(parent.context.layoutInflater, parent, false)
+            CalendarViewOptionsItemViewBinding.inflate(
+                parent.context.layoutInflater,
+                parent,
+                false,
+            ),
         )
     }
 

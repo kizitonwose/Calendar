@@ -1,6 +1,13 @@
 package com.kizitonwose.calendar.compose.weekcalendar
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,15 +33,17 @@ internal fun WeekCalendarInternal(
         flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
         userScrollEnabled = userScrollEnabled,
         reverseLayout = reverseLayout,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     ) {
         items(
             count = state.weekIndexCount,
-            key = { offset -> state.store[offset].days.first().date }
+            key = { offset -> state.store[offset].days.first().date },
         ) { offset ->
             val columnModifier = if (calendarScrollPaged) {
                 Modifier.fillParentMaxWidth()
-            } else Modifier.width(IntrinsicSize.Max)
+            } else {
+                Modifier.width(IntrinsicSize.Max)
+            }
             val week = state.store[offset]
             Column(modifier = columnModifier) {
                 weekHeader(week)
@@ -42,7 +51,9 @@ internal fun WeekCalendarInternal(
                     for (date in week.days) {
                         val boxModifier = if (calendarScrollPaged) {
                             Modifier.weight(1f)
-                        } else Modifier
+                        } else {
+                            Modifier
+                        }
                         Box(modifier = boxModifier) {
                             dayContent(date)
                         }

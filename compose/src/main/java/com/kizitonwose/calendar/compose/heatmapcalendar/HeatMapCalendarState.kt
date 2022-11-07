@@ -6,15 +6,24 @@ import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.VisibleItemState
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.data.*
+import com.kizitonwose.calendar.data.DataStore
+import com.kizitonwose.calendar.data.checkDateRange
+import com.kizitonwose.calendar.data.getHeatMapCalendarMonthData
+import com.kizitonwose.calendar.data.getMonthIndex
+import com.kizitonwose.calendar.data.getMonthIndicesCount
 import java.time.DayOfWeek
 import java.time.YearMonth
 
@@ -39,7 +48,7 @@ fun rememberHeatMapCalendarState(
             endMonth = endMonth,
             firstDayOfWeek = firstDayOfWeek,
             firstVisibleMonth = firstVisibleMonth,
-            visibleItemState = null
+            visibleItemState = null,
         )
     }
 }
@@ -150,7 +159,7 @@ class HeatMapCalendarState internal constructor(
     internal val listState = LazyListState(
         firstVisibleItemIndex = visibleItemState?.firstVisibleItemIndex
             ?: getScrollIndex(firstVisibleMonth) ?: 0,
-        firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0
+        firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0,
     )
 
     internal var monthIndexCount by mutableStateOf(0)
@@ -217,7 +226,7 @@ class HeatMapCalendarState internal constructor(
             save = {
                 val visibleItemState = VisibleItemState(
                     firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
-                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset
+                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset,
                 )
                 listOf(
                     it.startMonth,
@@ -235,7 +244,7 @@ class HeatMapCalendarState internal constructor(
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = it[4] as VisibleItemState,
                 )
-            }
+            },
         )
     }
 }

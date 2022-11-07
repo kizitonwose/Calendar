@@ -3,8 +3,8 @@ package com.kizitonwose.calendar.view.internal
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.*
-import androidx.core.view.*
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.view.Binder
@@ -42,14 +42,14 @@ internal class DayHolder<Day>(private val config: DayConfig<Day>) {
                         height = MATCH_CONSTRAINT
                         dimensionRatio = "1:1"
                     }
-                    DaySize.SeventhWidth -> {
-                        width = MATCH_CONSTRAINT
-                    }
-                    DaySize.FreeForm -> {}
                     DaySize.Rectangle -> {
                         width = MATCH_CONSTRAINT
                         height = MATCH_CONSTRAINT
                     }
+                    DaySize.SeventhWidth -> {
+                        width = MATCH_CONSTRAINT
+                    }
+                    DaySize.FreeForm -> {}
                 }
             }
         }

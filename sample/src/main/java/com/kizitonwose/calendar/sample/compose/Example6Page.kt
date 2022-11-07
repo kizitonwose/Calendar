@@ -85,7 +85,7 @@ fun Example6Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         val state = rememberHeatMapCalendarState(
             startMonth = startDate.yearMonth,
@@ -114,7 +114,7 @@ fun Example6Page() {
         CalendarInfo(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 44.dp)
+                .padding(horizontal = 44.dp),
         )
         Box(modifier = Modifier.weight(1f)) {
             BottomContent(
@@ -122,7 +122,7 @@ fun Example6Page() {
                     .fillMaxWidth()
                     .padding(20.dp)
                     .align(Alignment.BottomCenter),
-                selection = selection
+                selection = selection,
             ) { refreshKey += 1 }
         }
     }
@@ -144,7 +144,7 @@ private fun BottomContent(
             Row(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Text(text = "Clicked: ${formatter.format(selection.first)}")
                 LevelBox(color = selection.second.color)
@@ -154,7 +154,7 @@ private fun BottomContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            onClick = refresh
+            onClick = refresh,
         ) {
             Text(
                 text = "Generate random data",
@@ -213,7 +213,7 @@ private fun LevelBox(color: Color, onClick: (() -> Unit)? = null) {
             .padding(2.dp)
             .clip(RoundedCornerShape(2.dp))
             .background(color = color)
-            .clickable(enabled = onClick != null) { onClick?.invoke() }
+            .clickable(enabled = onClick != null) { onClick?.invoke() },
     )
 }
 
@@ -222,12 +222,12 @@ private fun WeekHeader(dayOfWeek: DayOfWeek) {
     Box(
         modifier = Modifier
             .height(daySize) // Must set a height on the day of week so it aligns with the day.
-            .padding(horizontal = 4.dp)
+            .padding(horizontal = 4.dp),
     ) {
         Text(
             text = dayOfWeek.displayText(),
             modifier = Modifier.align(Alignment.Center),
-            fontSize = 10.sp
+            fontSize = 10.sp,
         )
     }
 }
@@ -253,7 +253,7 @@ private fun MonthHeader(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 1.dp, start = 2.dp)
+                .padding(bottom = 1.dp, start = 2.dp),
         ) {
             Text(text = title, fontSize = 10.sp)
         }

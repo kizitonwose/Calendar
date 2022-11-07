@@ -34,7 +34,9 @@ enum class DaySize {
      * The day is allowed to determine its width and height by
      * setting specific values or using [ViewGroup.LayoutParams.WRAP_CONTENT].
      */
-    FreeForm;
+    FreeForm,
+
+    ;
 
     internal val parentDecidesWidth: Boolean
         get() = this == Square || this == SeventhWidth || this == Rectangle

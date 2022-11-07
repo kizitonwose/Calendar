@@ -9,6 +9,7 @@ trim_trailing_whitespace = true
 [*.{kt,kts}]
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
+ktlint_disabled_rules = multiline-if-else
 
 [*.md]
 trim_trailing_whitespace = false

@@ -190,7 +190,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             } else {
                 binding.exOneMonthText.text =
                     firstDate.month.displayText(short = false) + " - " +
-                            lastDate.month.displayText(short = false)
+                    lastDate.month.displayText(short = false)
                 if (firstDate.year == lastDate.year) {
                     binding.exOneYearText.text = firstDate.year.toString()
                 } else {

@@ -30,7 +30,7 @@ class StateSaverTests {
             firstVisibleMonth = now,
             outDateStyle = OutDateStyle.EndOfRow,
             firstDayOfWeek = firstDayOfWeek,
-            visibleItemState = VisibleItemState()
+            visibleItemState = VisibleItemState(),
         )
         val restored = restore(state, CalendarState.Saver)
         assertEquals(state.startMonth, restored.startMonth)
@@ -49,7 +49,7 @@ class StateSaverTests {
             endDate = now,
             firstVisibleWeekDate = now,
             firstDayOfWeek = firstDayOfWeek,
-            visibleItemState = VisibleItemState()
+            visibleItemState = VisibleItemState(),
         )
         val restored = restore(state, WeekCalendarState.Saver)
         assertEquals(state.startDate, restored.startDate)
@@ -67,7 +67,7 @@ class StateSaverTests {
             endMonth = now,
             firstVisibleMonth = now,
             firstDayOfWeek = firstDayOfWeek,
-            visibleItemState = VisibleItemState()
+            visibleItemState = VisibleItemState(),
         )
         val restored = restore(state, HeatMapCalendarState.Saver)
         assertEquals(state.startMonth, restored.startMonth)

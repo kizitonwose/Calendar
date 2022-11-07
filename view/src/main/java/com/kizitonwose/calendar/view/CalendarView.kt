@@ -191,7 +191,7 @@ open class CalendarView : RecyclerView {
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
-            super(context, attrs, defStyleAttr) {
+        super(context, attrs, defStyleAttr) {
         init(attrs, defStyleAttr, defStyleAttr)
     }
 
@@ -203,23 +203,31 @@ open class CalendarView : RecyclerView {
             attributeSet,
             R.styleable.CalendarView,
             defStyleAttr,
-            defStyleRes
+            defStyleRes,
         ) {
-            dayViewResource =
-                getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
-            monthHeaderResource =
-                getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
-            monthFooterResource =
-                getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
+            dayViewResource = getResourceId(
+                R.styleable.CalendarView_cv_dayViewResource,
+                dayViewResource,
+            )
+            monthHeaderResource = getResourceId(
+                R.styleable.CalendarView_cv_monthHeaderResource,
+                monthHeaderResource,
+            )
+            monthFooterResource = getResourceId(
+                R.styleable.CalendarView_cv_monthFooterResource,
+                monthFooterResource,
+            )
             orientation = getInt(R.styleable.CalendarView_cv_orientation, orientation)
             // Enable paged scrolling by default only for the horizontal calendar.
-            scrollPaged =
-                getBoolean(R.styleable.CalendarView_cv_scrollPaged, orientation == HORIZONTAL)
+            scrollPaged = getBoolean(
+                R.styleable.CalendarView_cv_scrollPaged,
+                orientation == HORIZONTAL,
+            )
             daySize = DaySize.values()[
-                    getInt(R.styleable.CalendarView_cv_daySize, daySize.ordinal)
+                getInt(R.styleable.CalendarView_cv_daySize, daySize.ordinal),
             ]
             outDateStyle = OutDateStyle.values()[
-                    getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal)
+                getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal),
             ]
             monthViewClass = getString(R.styleable.CalendarView_cv_monthViewClass)
         }

@@ -1,6 +1,10 @@
 package com.kizitonwose.calendar.compose
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
@@ -8,7 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
-import com.kizitonwose.calendar.compose.heatmapcalendar.*
+import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarInternal
+import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
+import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeek
+import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeekHeaderPosition
+import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarInternal
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState

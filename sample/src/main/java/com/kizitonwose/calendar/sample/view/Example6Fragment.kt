@@ -66,7 +66,7 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
         binding.exSixCalendar.setup(
             currentMonth.minusMonths(10),
             currentMonth.plusMonths(10),
-            daysOfWeek.first()
+            daysOfWeek.first(),
         )
         binding.exSixCalendar.scrollToMonth(currentMonth)
     }
