@@ -308,6 +308,8 @@ You can do more than just use the day titles as the header. For example, you can
 
 - **daySize**: Determines how the size of each day on the calendar is calculated. Can be one of three values:
     1. **square**: Each day will have both width and height matching the width of the calendar divided by 7.
+    2. **rectangle**: Each day will have its width matching the width of the calendar divided by 7, and its height matching the height of the calendar divided by the number of weeks in the index - could be 4, 5 or 6 for the month calendar, and 1 for the week calendar. 
+    Use this if you want each month or week to fill the parent's width and height.
     2. **seventhWidth**: Each day will have its width matching the width of the calendar divided by 7. The day is allowed to determine its height by setting a specific value or using `LayoutParams.WRAP_CONTENT`
     3. **freeForm**: This day is allowed to determine its width and height by setting specific values or using `LayoutParams.WRAP_CONTENT`.
 
