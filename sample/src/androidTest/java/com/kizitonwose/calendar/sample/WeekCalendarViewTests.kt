@@ -1,16 +1,15 @@
 package com.kizitonwose.calendar.sample
 
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
+import com.kizitonwose.calendar.sample.utils.TestDayViewContainer
+import com.kizitonwose.calendar.sample.utils.getView
+import com.kizitonwose.calendar.sample.utils.openExampleAt
+import com.kizitonwose.calendar.sample.utils.runOnMain
 import com.kizitonwose.calendar.sample.view.CalendarViewActivity
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekCalendarView
@@ -40,7 +39,7 @@ class WeekCalendarViewTests {
 
     @Test
     fun dayBinderIsCalledOnDayChanged() {
-        val calendarView = getWeekCalendarView()
+        val calendarView = openAndGetWeekCalendarView()
 
         class DayViewContainer(view: View) : ViewContainer(view)
 
@@ -48,7 +47,7 @@ class WeekCalendarViewTests {
 
         val changedDate = currentMonth.atDay(4)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToDate(changedDate)
             calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
@@ -61,7 +60,7 @@ class WeekCalendarViewTests {
         // Allow the calendar to be rebuilt due to dayBinder change.
         sleep(2000)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.notifyDateChanged(changedDate)
         }
 
@@ -73,22 +72,22 @@ class WeekCalendarViewTests {
 
     @Test
     fun allBindersAreCalledOnWeekChanged() {
-        val calendarView = getWeekCalendarView()
+        val calendarView = openAndGetWeekCalendarView()
 
         val boundDays = mutableSetOf<WeekDay>()
         var boundHeaderWeek: Week? = null
 
-        homeScreenRule.scenario.onActivity {
-            calendarView.dayBinder = object : WeekDayBinder<DayViewContainer> {
-                override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, data: WeekDay) {
+        runOnMain {
+            calendarView.dayBinder = object : WeekDayBinder<TestDayViewContainer> {
+                override fun create(view: View) = TestDayViewContainer(view)
+                override fun bind(container: TestDayViewContainer, data: WeekDay) {
                     boundDays.add(data)
                 }
             }
             calendarView.weekHeaderResource = R.layout.example_3_calendar_header
-            calendarView.weekHeaderBinder = object : WeekHeaderFooterBinder<DayViewContainer> {
-                override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, data: Week) {
+            calendarView.weekHeaderBinder = object : WeekHeaderFooterBinder<TestDayViewContainer> {
+                override fun create(view: View) = TestDayViewContainer(view)
+                override fun bind(container: TestDayViewContainer, data: Week) {
                     boundHeaderWeek = data
                 }
             }
@@ -100,7 +99,7 @@ class WeekCalendarViewTests {
         val firstDate = calendarView.findFirstVisibleDay()!!.date
         val lastDate = calendarView.findLastVisibleDay()!!.date
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             boundDays.clear()
             boundHeaderWeek = null
             calendarView.notifyWeekChanged(firstDate)
@@ -117,11 +116,11 @@ class WeekCalendarViewTests {
 
     @Test
     fun programmaticScrollToDateWorksAsExpected() {
-        val calendarView = getWeekCalendarView()
+        val calendarView = openAndGetWeekCalendarView()
 
         val dateInFourMonths = currentMonth.plusMonths(4).atDay(1)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToDate(dateInFourMonths)
         }
 
@@ -132,11 +131,11 @@ class WeekCalendarViewTests {
 
     @Test
     fun programmaticScrollToWeekWorksAsExpected() {
-        val calendarView = getWeekCalendarView()
+        val calendarView = openAndGetWeekCalendarView()
 
         val dateInFourMonths = currentMonth.plusMonths(4).atDay(1)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToWeek(dateInFourMonths)
         }
 
@@ -147,7 +146,7 @@ class WeekCalendarViewTests {
 
     @Test
     fun weekScrollListenerIsCalledWhenScrolled() {
-        val calendarView = getWeekCalendarView()
+        val calendarView = openAndGetWeekCalendarView()
 
         var targetWeek: Week? = null
         calendarView.weekScrollListener = { weekDays ->
@@ -155,7 +154,7 @@ class WeekCalendarViewTests {
         }
 
         val dateInTwoMonths = currentMonth.plusMonths(2).atDay(1)
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.smoothScrollToWeek(dateInTwoMonths)
         }
         sleep(3000) // Enough time for smooth scrolling animation.
@@ -164,10 +163,10 @@ class WeekCalendarViewTests {
 
     @Test
     fun findVisibleWeekWorksAsExpected() {
-        val calendarView = getWeekCalendarView()
+        val calendarView = openAndGetWeekCalendarView()
 
         val dateInTwoMonths = currentMonth.plusMonths(2).atDay(1)
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToDate(dateInTwoMonths)
         }
 
@@ -179,7 +178,7 @@ class WeekCalendarViewTests {
 
     @Test
     fun weekDataUpdateRetainsPosition() {
-        val calendarView = getWeekCalendarView()
+        val calendarView = openAndGetWeekCalendarView()
 
         val dateInTwoMonths = currentMonth.plusMonths(2).atDay(1)
         val dateInNineMonths = currentMonth.plusMonths(9).atDay(1)
@@ -189,13 +188,13 @@ class WeekCalendarViewTests {
             targetVisibleDay = week.days.first()
         }
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.smoothScrollToWeek(dateInTwoMonths)
         }
 
         sleep(3000) // Enough time for smooth scrolling animation.
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.updateWeekData(endDate = dateInNineMonths)
         }
 
@@ -204,17 +203,8 @@ class WeekCalendarViewTests {
         assertEquals(targetVisibleDay, calendarView.findFirstVisibleDay())
     }
 
-    private class DayViewContainer(view: View) : ViewContainer(view)
-
-    private fun getWeekCalendarView(): WeekCalendarView {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(6, click()))
-
-        lateinit var calendarView: WeekCalendarView
-        homeScreenRule.scenario.onActivity { activity ->
-            calendarView = activity.findViewById(R.id.exSevenCalendar)
-        }
-        sleep(1000)
-        return calendarView
+    private fun openAndGetWeekCalendarView(): WeekCalendarView {
+        openExampleAt(6)
+        return homeScreenRule.getView<WeekCalendarView>(R.id.exSevenCalendar)
     }
 }

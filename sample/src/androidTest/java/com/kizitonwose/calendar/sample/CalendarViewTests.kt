@@ -2,27 +2,32 @@ package com.kizitonwose.calendar.sample
 
 import android.graphics.Rect
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.IdRes
+import androidx.core.graphics.minus
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.google.android.material.appbar.AppBarLayout
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.yearMonth
+import com.kizitonwose.calendar.sample.utils.TestDayViewContainer
+import com.kizitonwose.calendar.sample.utils.getRectInWindow
+import com.kizitonwose.calendar.sample.utils.getView
+import com.kizitonwose.calendar.sample.utils.openExampleAt
+import com.kizitonwose.calendar.sample.utils.runOnMain
 import com.kizitonwose.calendar.sample.view.CalendarViewActivity
 import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
-import com.kizitonwose.calendar.view.ViewContainer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,19 +50,18 @@ class CalendarViewTests {
 
     @Test
     fun dayBinderIsCalledOnDayChanged() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        openExampleAt(0)
 
-        val calendarView = getCalendarView(R.id.exOneCalendar)
+        val calendarView = getView<CalendarView>(R.id.exOneCalendar)
 
         var boundDay: CalendarDay? = null
 
         val changedDate = currentMonth.atDay(4)
 
-        homeScreenRule.scenario.onActivity {
-            calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
-                override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, data: CalendarDay) {
+        runOnMain {
+            calendarView.dayBinder = object : MonthDayBinder<TestDayViewContainer> {
+                override fun create(view: View) = TestDayViewContainer(view)
+                override fun bind(container: TestDayViewContainer, data: CalendarDay) {
                     boundDay = data
                 }
             }
@@ -66,7 +70,7 @@ class CalendarViewTests {
         // Allow the calendar to be rebuilt due to dayBinder change.
         sleep(2000)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.notifyDateChanged(changedDate)
         }
 
@@ -79,33 +83,33 @@ class CalendarViewTests {
 
     @Test
     fun allBindersAreCalledOnMonthChanged() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        openExampleAt(1)
 
-        val calendarView = getCalendarView(R.id.exTwoCalendar)
+        val calendarView = getView<CalendarView>(R.id.exTwoCalendar)
 
         val boundDays = mutableSetOf<CalendarDay>()
         var boundHeaderMonth: CalendarMonth? = null
 
-        homeScreenRule.scenario.onActivity {
-            calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
-                override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, data: CalendarDay) {
+        runOnMain {
+            calendarView.dayBinder = object : MonthDayBinder<TestDayViewContainer> {
+                override fun create(view: View) = TestDayViewContainer(view)
+                override fun bind(container: TestDayViewContainer, data: CalendarDay) {
                     boundDays.add(data)
                 }
             }
-            calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<DayViewContainer> {
-                override fun create(view: View) = DayViewContainer(view)
-                override fun bind(container: DayViewContainer, data: CalendarMonth) {
-                    boundHeaderMonth = data
+            calendarView.monthHeaderBinder =
+                object : MonthHeaderFooterBinder<TestDayViewContainer> {
+                    override fun create(view: View) = TestDayViewContainer(view)
+                    override fun bind(container: TestDayViewContainer, data: CalendarMonth) {
+                        boundHeaderMonth = data
+                    }
                 }
-            }
         }
 
         // Allow the calendar to be rebuilt due to dayBinder change.
         sleep(2000)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             boundDays.clear()
             boundHeaderMonth = null
             calendarView.notifyMonthChanged(currentMonth)
@@ -123,16 +127,15 @@ class CalendarViewTests {
 
     @Test
     fun programmaticScrollWorksAsExpected() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
+        openExampleAt(4)
 
-        val calendarView = getCalendarView(R.id.exFiveCalendar)
+        val calendarView = getView<CalendarView>(R.id.exFiveCalendar)
 
         assertNotNull(calendarView.findViewWithTag(currentMonth.atDay(1).hashCode()))
 
         val nextFourMonths = currentMonth.plusMonths(4)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToMonth(nextFourMonths)
         }
 
@@ -144,14 +147,13 @@ class CalendarViewTests {
 
     @Test
     fun scrollToDateWorksOnVerticalOrientation() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        openExampleAt(1)
 
-        val calendarView = getCalendarView(R.id.exTwoCalendar)
+        val calendarView = getView<CalendarView>(R.id.exTwoCalendar)
 
         val targetDate = currentMonth.plusMonths(4).atDay(20)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToDate(targetDate)
         }
 
@@ -170,14 +172,13 @@ class CalendarViewTests {
 
     @Test
     fun scrollToDateWorksOnHorizontalOrientation() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
+        openExampleAt(5)
 
-        val calendarView = getCalendarView(R.id.exSixCalendar)
+        val calendarView = getView<CalendarView>(R.id.exSixCalendar)
 
         val targetDate = currentMonth.plusMonths(3).atDay(18)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToDate(targetDate)
         }
 
@@ -196,10 +197,9 @@ class CalendarViewTests {
 
     @Test
     fun monthScrollListenerIsCalledWhenScrolled() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        openExampleAt(0)
 
-        val calendarView = getCalendarView(R.id.exOneCalendar)
+        val calendarView = getView<CalendarView>(R.id.exOneCalendar)
 
         var targetCalMonth: CalendarMonth? = null
         calendarView.monthScrollListener = { month ->
@@ -207,28 +207,28 @@ class CalendarViewTests {
         }
 
         val twoMonthsAhead = currentMonth.plusMonths(2)
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.smoothScrollToMonth(twoMonthsAhead)
         }
         sleep(3000) // Enough time for smooth scrolling animation.
         assertEquals(twoMonthsAhead, targetCalMonth?.yearMonth)
 
         val fourMonthsAhead = currentMonth.plusMonths(4)
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToMonth(fourMonthsAhead)
         }
         sleep(3000)
         assertEquals(fourMonthsAhead, targetCalMonth?.yearMonth)
 
         val sixMonthsAhead = currentMonth.plusMonths(6)
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.smoothScrollToDate(sixMonthsAhead.atDay(1))
         }
         sleep(3000)
         assertEquals(sixMonthsAhead, targetCalMonth?.yearMonth)
 
         val eightMonthsAhead = currentMonth.plusMonths(8)
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.scrollToDate(eightMonthsAhead.atDay(1))
         }
         sleep(3000)
@@ -237,12 +237,11 @@ class CalendarViewTests {
 
     @Test
     fun findVisibleDaysAndMonthsWorksOnVerticalOrientation() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        openExampleAt(1)
 
-        val calendarView = getCalendarView(R.id.exTwoCalendar)
+        val calendarView = getView<CalendarView>(R.id.exTwoCalendar)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             // Scroll to a random date
             calendarView.scrollToDate(LocalDate.now().plusDays(120))
         }
@@ -268,12 +267,11 @@ class CalendarViewTests {
 
     @Test
     fun findVisibleDaysAndMonthsWorksOnHorizontalOrientation() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(5, click()))
+        openExampleAt(5)
 
-        val calendarView = getCalendarView(R.id.exSixCalendar)
+        val calendarView = getView<CalendarView>(R.id.exSixCalendar)
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             // Scroll to a random date
             calendarView.scrollToDate(LocalDate.now().plusDays(120))
         }
@@ -297,10 +295,9 @@ class CalendarViewTests {
 
     @Test
     fun monthDataUpdateRetainsPosition() {
-        onView(withId(R.id.examplesRecyclerview))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        openExampleAt(0)
 
-        val calendarView = getCalendarView(R.id.exOneCalendar)
+        val calendarView = getView<CalendarView>(R.id.exOneCalendar)
 
         val targetVisibleMonth = currentMonth.plusMonths(2)
 
@@ -309,16 +306,14 @@ class CalendarViewTests {
             targetVisibleCalMonth = month
         }
 
-        homeScreenRule.scenario.onActivity {
+        runOnMain {
             calendarView.smoothScrollToMonth(targetVisibleMonth)
         }
 
         sleep(3000) // Enough time for smooth scrolling animation.
 
-        homeScreenRule.scenario.onActivity {
-            calendarView.updateMonthData(
-                endMonth = targetVisibleMonth.plusMonths(10),
-            )
+        runOnMain {
+            calendarView.updateMonthData(endMonth = targetVisibleMonth.plusMonths(10))
         }
 
         sleep(2000) // Enough time for UI adjustments.
@@ -326,14 +321,61 @@ class CalendarViewTests {
         assertEquals(targetVisibleCalMonth, calendarView.findFirstVisibleMonth())
     }
 
-    private fun getCalendarView(@IdRes id: Int): CalendarView {
-        lateinit var calendarView: CalendarView
-        homeScreenRule.scenario.onActivity { activity ->
-            calendarView = activity.findViewById(id)
-        }
-        sleep(1000)
-        return calendarView
+    @Test
+    fun horizontalCalendarWithMatchParentAndRectangleDaySizeFillsParent() {
+        calendarWithMatchParentAndRectangleDaySizeFillsParent(RecyclerView.HORIZONTAL)
     }
 
-    private class DayViewContainer(view: View) : ViewContainer(view)
+    @Test
+    fun verticalCalendarWithMatchParentAndRectangleDaySizeFillsParent() {
+        calendarWithMatchParentAndRectangleDaySizeFillsParent(RecyclerView.VERTICAL)
+    }
+
+    private fun calendarWithMatchParentAndRectangleDaySizeFillsParent(@RecyclerView.Orientation orientation: Int) {
+        openExampleAt(7)
+
+        val calendarView = getView<CalendarView>(R.id.exEightCalendar)
+        val parent = calendarView.parent as ViewGroup
+        val appBarLayout = getView<AppBarLayout>(R.id.exEightAppBarLayout)
+        val targetMonth = currentMonth.plusMonths(2)
+
+        runOnMain {
+            calendarView.orientation = orientation
+            calendarView.smoothScrollToMonth(targetMonth)
+        }
+
+        sleep(2000) // Smooth scrolling.
+
+        val itemView = calendarView
+            .findViewHolderForItemId(targetMonth.hashCode().toLong())!!
+            .itemView as ViewGroup
+
+        val children = itemView.children.toList()
+        val weeks = children.drop(1).dropLast(1).map { it as ViewGroup }
+        val monthHeader = children.first()
+        val monthFooter = children.last()
+
+        assertEquals(
+            parent.getRectInWindow().minus(appBarLayout.getRectInWindow()).bounds,
+            itemView.getRectInWindow(),
+        )
+        assertEquals(8, children.count())
+        weeks.forEach { week ->
+            assertTrue(week.width > 0)
+            assertTrue(week.height > 0)
+
+            week.children.forEach { day ->
+                assertTrue(day.width > 0)
+                assertTrue(day.height > 0)
+            }
+            assertEquals(week.width, week.children.sumOf { it.width })
+        }
+        assertTrue(monthHeader.width > 0)
+        assertTrue(monthHeader.height > 0)
+        assertTrue(monthFooter.width > 0)
+        assertTrue(monthFooter.height > 0)
+        assertEquals(calendarView.height, children.sumOf { it.height })
+    }
+
+    private fun <T : View> getView(@IdRes id: Int): T = homeScreenRule.getView(id)
 }
