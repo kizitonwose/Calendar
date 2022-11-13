@@ -16,7 +16,7 @@ import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 
 @Composable
-internal fun WeekCalendarInternal(
+internal fun WeekCalendarImpl(
     modifier: Modifier,
     state: WeekCalendarState,
     calendarScrollPaged: Boolean,
@@ -24,8 +24,8 @@ internal fun WeekCalendarInternal(
     reverseLayout: Boolean,
     contentPadding: PaddingValues,
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
-    weekHeader: @Composable ColumnScope.(Week) -> Unit,
-    weekFooter: @Composable ColumnScope.(Week) -> Unit,
+    weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
+    weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
 ) {
     LazyRow(
         modifier = modifier,
@@ -46,7 +46,7 @@ internal fun WeekCalendarInternal(
             }
             val week = state.store[offset]
             Column(modifier = columnModifier) {
-                weekHeader(week)
+                weekHeader?.invoke(this, week)
                 Row {
                     for (date in week.days) {
                         val boxModifier = if (calendarScrollPaged) {
@@ -59,7 +59,7 @@ internal fun WeekCalendarInternal(
                         }
                     }
                 }
-                weekFooter(week)
+                weekFooter?.invoke(this, week)
             }
         }
     }

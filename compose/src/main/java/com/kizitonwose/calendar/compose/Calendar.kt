@@ -233,9 +233,9 @@ fun WeekCalendar(
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
-    weekHeader: @Composable ColumnScope.(Week) -> Unit = { },
-    weekFooter: @Composable ColumnScope.(Week) -> Unit = { },
-) = WeekCalendarInternal(
+    weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
+    weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
+) = WeekCalendarImpl(
     modifier = modifier,
     state = state,
     calendarScrollPaged = calendarScrollPaged,
@@ -274,9 +274,9 @@ fun HeatMapCalendar(
     userScrollEnabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     dayContent: @Composable ColumnScope.(day: CalendarDay, week: HeatMapWeek) -> Unit,
-    weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit = { },
-    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
-) = HeatMapCalendarInternal(
+    weekHeader: (@Composable ColumnScope.(DayOfWeek) -> Unit)? = null,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+) = HeatMapCalendarImpl(
     modifier = modifier,
     state = state,
     weekHeaderPosition = weekHeaderPosition,

@@ -17,21 +17,21 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
 
 @Composable
-internal fun HeatMapCalendarInternal(
+internal fun HeatMapCalendarImpl(
     modifier: Modifier,
     state: HeatMapCalendarState,
     userScrollEnabled: Boolean,
     weekHeaderPosition: HeatMapWeekHeaderPosition,
     contentPadding: PaddingValues,
     dayContent: @Composable ColumnScope.(day: CalendarDay, week: HeatMapWeek) -> Unit,
-    weekHeader: @Composable ColumnScope.(DayOfWeek) -> Unit,
-    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
+    weekHeader: (@Composable ColumnScope.(DayOfWeek) -> Unit)? = null,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom,
     ) {
-        if (weekHeaderPosition == HeatMapWeekHeaderPosition.Start) {
+        if (weekHeaderPosition == HeatMapWeekHeaderPosition.Start && weekHeader != null) {
             WeekHeaderColumn(
                 horizontalAlignment = Alignment.End,
                 firstDayOfWeek = state.firstDayOfWeek,
@@ -50,7 +50,7 @@ internal fun HeatMapCalendarInternal(
             ) { offset ->
                 val calendarMonth = state.store[offset]
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {
-                    monthHeader(calendarMonth)
+                    monthHeader?.invoke(this, calendarMonth)
                     Row {
                         for (week in calendarMonth.weekDays) {
                             Column {
@@ -63,7 +63,7 @@ internal fun HeatMapCalendarInternal(
                 }
             }
         }
-        if (weekHeaderPosition == HeatMapWeekHeaderPosition.End) {
+        if (weekHeaderPosition == HeatMapWeekHeaderPosition.End && weekHeader != null) {
             WeekHeaderColumn(
                 horizontalAlignment = Alignment.Start,
                 firstDayOfWeek = state.firstDayOfWeek,
