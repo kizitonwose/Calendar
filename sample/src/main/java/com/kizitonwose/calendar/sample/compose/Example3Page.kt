@@ -106,7 +106,7 @@ fun Example3Page() {
 
         // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
-            CalendarTitle(
+            SimpleCalendarTitle(
                 modifier = Modifier
                     .background(toolbarColor)
                     .padding(horizontal = 8.dp, vertical = 12.dp),

@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.sample.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +8,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -23,8 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,7 +58,7 @@ fun Example1Page() {
         )
         val coroutineScope = rememberCoroutineScope()
         val visibleMonth = rememberFirstVisibleMonthAfterScroll(state)
-        CalendarTitle(
+        SimpleCalendarTitle(
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
             currentMonth = visibleMonth,
             goToPrevious = {
@@ -137,59 +132,6 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
             color = textColor,
             fontSize = 14.sp,
         )
-    }
-}
-
-@Composable
-fun CalendarTitle(
-    modifier: Modifier,
-    currentMonth: YearMonth,
-    goToPrevious: () -> Unit,
-    goToNext: () -> Unit,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(shape = CircleShape)
-                .clickable(role = Role.Button, onClick = goToPrevious),
-        ) {
-            Icon(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(4.dp)
-                    .align(Alignment.Center),
-                painter = painterResource(id = R.drawable.ic_chevron_left),
-                contentDescription = "Previous",
-            )
-        }
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .testTag("MonthTitle"),
-            text = currentMonth.displayText(),
-            fontSize = 22.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium,
-        )
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(shape = CircleShape)
-                .clickable(role = Role.Button, onClick = goToNext),
-        ) {
-            Icon(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(4.dp)
-                    .align(Alignment.Center),
-                painter = painterResource(id = R.drawable.ic_chevron_right),
-                contentDescription = "Next",
-            )
-        }
     }
 }
 
