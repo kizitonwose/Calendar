@@ -106,6 +106,15 @@ fun Example8Page() {
                         }
                     }
                 },
+                // The month body is only needed for ui test tag.
+                monthBody = { _, content ->
+                    Box(
+                        modifier = Modifier
+                            .testTag("MonthBody"),
+                    ) {
+                        content()
+                    }
+                },
                 monthHeader = {
                     MonthHeader(daysOfWeek = daysOfWeek)
                 },
@@ -124,6 +133,7 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
     Row(
         Modifier
             .fillMaxWidth()
+            .testTag("MonthHeader")
             .background(colorResource(id = R.color.example_1_bg_secondary))
             .padding(vertical = 8.dp),
     ) {
@@ -144,6 +154,7 @@ private fun MonthFooter(selectionCount: Int) {
     Box(
         Modifier
             .fillMaxWidth()
+            .testTag("MonthFooter")
             .background(colorResource(id = R.color.example_1_bg_secondary))
             .padding(vertical = 10.dp),
         contentAlignment = Alignment.Center,

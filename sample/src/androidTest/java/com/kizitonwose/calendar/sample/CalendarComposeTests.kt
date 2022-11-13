@@ -1,19 +1,31 @@
 package com.kizitonwose.calendar.sample
 
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpRect
+import androidx.compose.ui.unit.height
+import androidx.compose.ui.unit.toSize
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.sample.compose.Example1Page
+import com.kizitonwose.calendar.sample.compose.Example8Page
 import com.kizitonwose.calendar.sample.shared.displayText
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -77,4 +89,55 @@ class CalendarComposeTests {
         composeTestRule.onNodeWithTag("Calendar").performTouchInput { swipeRight() }
         composeTestRule.onNodeWithTag("MonthTitle").assertTextEquals(previousMonth.displayText())
     }
+
+    @Test
+    fun filledCalenderWithFooterWorksAsExpected() {
+        composeTestRule.setContent {
+            Example8Page()
+        }
+
+        val headerHeight = composeTestRule.onAllNodes(hasTestTag("MonthHeader"))
+            .onFirst().size.height
+        val footerHeight = composeTestRule.onAllNodes(hasTestTag("MonthFooter"))
+            .onFirst().size.height
+        val bodyHeight = composeTestRule.onAllNodes(hasTestTag("MonthBody"))
+            .onFirst().size.height
+
+        val monthHeight = composeTestRule.onNodeWithTag("Calendar")
+            .size.height
+
+        assertEquals(monthHeight, headerHeight + footerHeight + bodyHeight)
+    }
 }
+
+private val SemanticsNodeInteractionCollection.sizes: List<DpRect>
+    get() {
+        val nodes =
+            fetchSemanticsNodes(errorMessageOnFail = "Failed to retrieve bounds of the node.")
+        return nodes.map { node ->
+            with(node.layoutInfo.density) {
+                node.unclippedBoundsInRoot.let {
+                    DpRect(it.left.toDp(), it.top.toDp(), it.right.toDp(), it.bottom.toDp())
+                }
+            }
+        }
+    }
+
+private val SemanticsNodeInteraction.size: DpRect
+    get() {
+        val node = fetchSemanticsNode("Failed to retrieve bounds of the node.")
+        return with(node.layoutInfo.density) {
+            node.unclippedBoundsInRoot.let {
+                DpRect(it.left.toDp(), it.top.toDp(), it.right.toDp(), it.bottom.toDp())
+            }
+        }
+    }
+
+private val SemanticsNode.unclippedBoundsInRoot: Rect
+    get() {
+        return if (layoutInfo.isPlaced) {
+            Rect(positionInRoot, size.toSize())
+        } else {
+            Dp.Unspecified.value.let { Rect(it, it, it, it) }
+        }
+    }
