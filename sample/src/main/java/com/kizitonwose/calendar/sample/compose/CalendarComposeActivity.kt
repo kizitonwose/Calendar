@@ -119,6 +119,7 @@ class CalendarComposeActivity : AppCompatActivity() {
             horizontallyAnimatedComposable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
             horizontallyAnimatedComposable(Page.Example6.name) { Example6Page() }
             horizontallyAnimatedComposable(Page.Example7.name) { Example7Page() }
+            verticallyAnimatedComposable(Page.Example8.name) { Example8Page() }
         }
     }
 }

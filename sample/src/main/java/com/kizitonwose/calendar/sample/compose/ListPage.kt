@@ -61,18 +61,13 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
         subtitle = "Week Calendar - Continuous scroll, custom day content width, single selection.",
         showToolBar = true,
     ),
+    Example8(
+        title = "Example 8",
+        subtitle = "Fullscreen Calendar - Month header and footer, paged horizontal scrolling. Shows the \"Fill\" option of ContentVerticalMode property.",
+        showToolBar = false,
+    ),
     ;
 }
-
-val items = listOf(
-    Page.Example1,
-    Page.Example2,
-    Page.Example3,
-    Page.Example4,
-    Page.Example5,
-    Page.Example6,
-    Page.Example7,
-)
 
 @Composable
 fun ListPage(click: (Page) -> Unit) {
@@ -81,7 +76,7 @@ fun ListPage(click: (Page) -> Unit) {
             .fillMaxSize()
             .background(Color.White),
     ) {
-        items(items) { item ->
+        items(Page.values().drop(1)) { item ->
             Column(
                 modifier = Modifier
                     .fillParentMaxWidth()

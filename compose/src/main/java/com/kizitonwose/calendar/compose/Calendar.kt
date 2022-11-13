@@ -3,8 +3,6 @@ package com.kizitonwose.calendar.compose
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,12 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
-import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarInternal
+import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarImpl
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeek
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeekHeaderPosition
 import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarState
-import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarInternal
+import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarImpl
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -42,6 +40,7 @@ import java.time.DayOfWeek
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
  * between each month use the [monthContainer] composable.
+ * @param contentVerticalMode TODO
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
  * placed above each month on the calendar.
@@ -66,10 +65,11 @@ fun HorizontalCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentVerticalMode: ContentVerticalMode = ContentVerticalMode.Wrap,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
-    monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit = { _, container -> container() },
 ) = Calendar(
     modifier = modifier,
@@ -78,6 +78,7 @@ fun HorizontalCalendar(
     userScrollEnabled = userScrollEnabled,
     isHorizontal = true,
     reverseLayout = reverseLayout,
+    contentVerticalMode = contentVerticalMode,
     dayContent = dayContent,
     monthHeader = monthHeader,
     monthBody = monthBody,
@@ -102,6 +103,7 @@ fun HorizontalCalendar(
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
  * between each month use the [monthContainer] composable.
+ * @param contentVerticalMode TODO
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
  * placed above each month on the calendar.
@@ -126,10 +128,11 @@ fun VerticalCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentVerticalMode: ContentVerticalMode = ContentVerticalMode.Wrap,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
-    monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit = { },
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit = { _, container -> container() },
 ) = Calendar(
     modifier = modifier,
@@ -138,6 +141,7 @@ fun VerticalCalendar(
     userScrollEnabled = userScrollEnabled,
     isHorizontal = false,
     reverseLayout = reverseLayout,
+    contentVerticalMode = contentVerticalMode,
     dayContent = dayContent,
     monthHeader = monthHeader,
     monthBody = monthBody,
@@ -155,24 +159,26 @@ private fun Calendar(
     isHorizontal: Boolean,
     reverseLayout: Boolean,
     contentPadding: PaddingValues,
+    contentVerticalMode: ContentVerticalMode,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
-    monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit,
 ) {
     if (isHorizontal) {
         LazyRow(
-            modifier = modifier.wrapContentHeight(),
+            modifier = modifier.calendarParentHeight(contentVerticalMode),
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
             reverseLayout = reverseLayout,
             contentPadding = contentPadding,
         ) {
-            CalendarItems(
-                itemsCount = state.monthIndexCount,
+            CalendarMonths(
+                monthCount = state.monthIndexCount,
                 monthData = { offset -> state.store[offset] },
+                contentVerticalMode = contentVerticalMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthBody = monthBody,
@@ -182,16 +188,17 @@ private fun Calendar(
         }
     } else {
         LazyColumn(
-            modifier = modifier.fillMaxHeight(),
+            modifier = modifier.calendarParentHeight(contentVerticalMode),
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
             reverseLayout = reverseLayout,
             contentPadding = contentPadding,
         ) {
-            CalendarItems(
-                itemsCount = state.monthIndexCount,
+            CalendarMonths(
+                monthCount = state.monthIndexCount,
                 monthData = { offset -> state.store[offset] },
+                contentVerticalMode = contentVerticalMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthBody = monthBody,
