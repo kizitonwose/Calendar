@@ -26,6 +26,7 @@ import com.kizitonwose.calendar.sample.compose.Example1Page
 import com.kizitonwose.calendar.sample.compose.Example8Page
 import com.kizitonwose.calendar.sample.shared.displayText
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -107,6 +108,9 @@ class CalendarComposeTests {
             .size.height
 
         assertEquals(monthHeight, headerHeight + footerHeight + bodyHeight)
+        assertNotEquals(0, headerHeight)
+        assertNotEquals(0, footerHeight)
+        assertNotEquals(0, bodyHeight)
     }
 }
 

@@ -110,6 +110,7 @@ fun Example8Page() {
                 monthBody = { _, content ->
                     Box(
                         modifier = Modifier
+                            .weight(1f)
                             .testTag("MonthBody"),
                     ) {
                         content()

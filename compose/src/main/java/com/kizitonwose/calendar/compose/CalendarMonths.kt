@@ -30,78 +30,40 @@ internal fun LazyListScope.CalendarMonths(
         key = { offset -> monthData(offset).yearMonth },
     ) { offset ->
         val month = monthData(offset)
-        val hasFooter = monthFooter != null
-        val hasHeader = monthHeader != null
-        val fillParentHeight = when (contentVerticalMode) {
+        val fillHeight = when (contentVerticalMode) {
             ContentVerticalMode.Wrap -> false
             ContentVerticalMode.Fill -> true
         }
         monthContainer(month) {
-            if (fillParentHeight && hasFooter) {
-                ColumnFilledWithFooter(
-                    modifier = Modifier
-                        .fillParentMaxSize(),
-                    hasHeader = hasHeader,
-                ) {
-                    MonthContent(
-                        month = month,
-                        contentVerticalMode = contentVerticalMode,
-                        dayContent = dayContent,
-                        monthHeader = monthHeader,
-                        monthBody = monthBody,
-                        monthFooter = monthFooter,
-                    )
-                }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillParentMaxWidth()
-                        .wrapContentHeight(),
-                ) {
-                    MonthContent(
-                        month = month,
-                        contentVerticalMode = contentVerticalMode,
-                        dayContent = dayContent,
-                        monthHeader = monthHeader,
-                        monthBody = monthBody,
-                        monthFooter = monthFooter,
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ColumnScope.MonthContent(
-    month: CalendarMonth,
-    contentVerticalMode: ContentVerticalMode,
-    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
-    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-) {
-    monthHeader?.invoke(this, month)
-    monthBody(month) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .calendarParentHeight(contentVerticalMode),
-        ) {
-            for (week in month.weekDays) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weekRowHeight(contentVerticalMode, this),
-                ) {
-                    for (day in week) {
-                        Box(modifier = Modifier.weight(1f)) {
-                            dayContent(day)
+            Column(
+                modifier = Modifier
+                    .fillParentMaxWidth()
+                    .then(if (fillHeight) Modifier.fillParentMaxHeight() else Modifier.wrapContentHeight()),
+            ) {
+                monthHeader?.invoke(this, month)
+                monthBody(month) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight()),
+                    ) {
+                        for (week in month.weekDays) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight()),
+                            ) {
+                                for (day in week) {
+                                    Box(modifier = Modifier.weight(1f)) {
+                                        dayContent(day)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+                monthFooter?.invoke(this, month)
             }
         }
     }
-    monthFooter?.invoke(this, month)
 }

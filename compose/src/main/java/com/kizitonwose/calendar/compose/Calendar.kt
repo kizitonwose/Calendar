@@ -168,7 +168,7 @@ private fun Calendar(
 ) {
     if (isHorizontal) {
         LazyRow(
-            modifier = modifier.calendarParentHeight(contentVerticalMode),
+            modifier = modifier,
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
@@ -188,7 +188,7 @@ private fun Calendar(
         }
     } else {
         LazyColumn(
-            modifier = modifier.calendarParentHeight(contentVerticalMode),
+            modifier = modifier,
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
