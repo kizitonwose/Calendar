@@ -5,8 +5,10 @@ import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -16,10 +18,13 @@ import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpRect
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.unit.width
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.sample.compose.Example1Page
@@ -31,6 +36,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.YearMonth
+import java.time.temporal.WeekFields
 
 /**
  * These are UI behaviour tests.
@@ -92,9 +98,61 @@ class CalendarComposeTests {
     }
 
     @Test
-    fun filledCalenderWithFooterWorksAsExpected() {
+    fun squareCalenderDaysWorkAsExpected() {
         composeTestRule.setContent {
-            Example8Page()
+            Example1Page()
+        }
+
+        val daySizes = composeTestRule.onNodeWithTag("Calendar")
+            .onChildren()
+            .filter(!hasTestTag("MonthHeader"))
+            .sizes
+
+        daySizes.forEach {
+            assertEquals(it.width.value, it.height.value, 0.0001f)
+            assertNotEquals(0, it.width)
+            assertNotEquals(0, it.height)
+        }
+    }
+
+    @Test
+    fun wrappedCalenderWorkAsExpected() {
+        val currentMonth = YearMonth.now()
+        val weekOfMonthField = WeekFields.of(firstDayOfWeekFromLocale(), 1).weekOfMonth()
+        val weeksInMonth = currentMonth.atEndOfMonth().get(weekOfMonthField)
+        composeTestRule.setContent {
+            Example1Page(adjacentMonths = 0)
+        }
+
+        val headerHeight = composeTestRule.onNodeWithTag("MonthHeader").size.height
+        val firstDayHeight = composeTestRule.onAllNodes(hasTestTag("MonthDay"))
+            .onFirst().size.height + (6.dp * 2) // Top + Bottom padding
+
+        val monthHeight = composeTestRule.onNodeWithTag("Calendar")
+            .size.height
+
+        assertEquals(
+            monthHeight.value,
+            headerHeight.value + firstDayHeight.value * weeksInMonth,
+            2f, // Sum of all content height on the calendar rounds up with extra ~ 2dp
+        )
+        assertNotEquals(0, headerHeight)
+        assertNotEquals(0, firstDayHeight)
+    }
+
+    @Test
+    fun filledHorizontalCalenderWithFooterWorksAsExpected() {
+        filledCalenderWithFooterWorksAsExpected(horizontal = true)
+    }
+
+    @Test
+    fun filledVerticalCalenderWithFooterWorksAsExpected() {
+        filledCalenderWithFooterWorksAsExpected(horizontal = false)
+    }
+
+    private fun filledCalenderWithFooterWorksAsExpected(horizontal: Boolean) {
+        composeTestRule.setContent {
+            Example8Page(horizontal)
         }
 
         val headerHeight = composeTestRule.onAllNodes(hasTestTag("MonthHeader"))

@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -56,6 +57,7 @@ fun Modifier.clickable(
 
 @Composable
 fun StatusBarColorUpdateEffect(color: Color) {
+    if (LocalInspectionMode.current) return // findActivity() will not work in preview.
     val activity = LocalContext.current.findActivity()
     val lifecycleOwner = LocalLifecycleOwner.current
     val observer = remember {

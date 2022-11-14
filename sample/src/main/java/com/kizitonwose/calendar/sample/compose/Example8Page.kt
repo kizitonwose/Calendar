@@ -2,7 +2,9 @@ package com.kizitonwose.calendar.sample.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,10 +32,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.ContentVerticalMode
 import com.kizitonwose.calendar.compose.HorizontalCalendar
+import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -47,7 +52,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 @Composable
-fun Example8Page() {
+fun Example8Page(horizontal: Boolean = true) {
     val today = remember { LocalDate.now() }
     val currentMonth = remember(today) { today.yearMonth }
     val startMonth = remember { currentMonth.minusMonths(500) }
@@ -86,13 +91,13 @@ fun Example8Page() {
                     }
                 },
             )
-            HorizontalCalendar(
+            FullScreenCalendar(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(colorResource(id = R.color.example_1_bg))
                     .testTag("Calendar"),
                 state = state,
-                contentVerticalMode = ContentVerticalMode.Fill,
+                horizontal = horizontal,
                 dayContent = { day ->
                     Day(
                         day = day,
@@ -126,6 +131,39 @@ fun Example8Page() {
                 },
             )
         }
+    }
+}
+
+@Composable
+private fun FullScreenCalendar(
+    modifier: Modifier,
+    state: CalendarState,
+    horizontal: Boolean,
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
+    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
+    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
+    monthFooter: @Composable ColumnScope.(CalendarMonth) -> Unit,
+) {
+    if (horizontal) {
+        HorizontalCalendar(
+            modifier = modifier,
+            state = state,
+            contentVerticalMode = ContentVerticalMode.Fill,
+            dayContent = dayContent,
+            monthBody = monthBody,
+            monthHeader = monthHeader,
+            monthFooter = monthFooter,
+        )
+    } else {
+        VerticalCalendar(
+            modifier = modifier,
+            state = state,
+            contentVerticalMode = ContentVerticalMode.Fill,
+            dayContent = dayContent,
+            monthBody = monthBody,
+            monthHeader = monthHeader,
+            monthFooter = monthFooter,
+        )
     }
 }
 

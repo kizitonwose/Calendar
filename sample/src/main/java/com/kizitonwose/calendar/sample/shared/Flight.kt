@@ -26,7 +26,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(14, 0),
                 Airport("Lagos", "LOS"),
                 Airport("Abuja", "ABV"),
-                R.color.brown_700,
+                R.color.blue_800,
             ),
         )
         add(
@@ -34,7 +34,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(21, 30),
                 Airport("Enugu", "ENU"),
                 Airport("Owerri", "QOW"),
-                R.color.blue_grey_700,
+                R.color.red_800,
             ),
         )
     }
@@ -45,7 +45,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(13, 20),
                 Airport("Ibadan", "IBA"),
                 Airport("Benin", "BNI"),
-                R.color.blue_800,
+                R.color.brown_700,
             ),
         )
         add(
@@ -53,7 +53,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(17, 40),
                 Airport("Sokoto", "SKO"),
                 Airport("Ilorin", "ILR"),
-                R.color.red_800,
+                R.color.blue_grey_700,
             ),
         )
     }

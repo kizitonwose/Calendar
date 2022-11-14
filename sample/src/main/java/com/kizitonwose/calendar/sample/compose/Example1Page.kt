@@ -39,10 +39,10 @@ import java.time.DayOfWeek
 import java.time.YearMonth
 
 @Composable
-fun Example1Page() {
+fun Example1Page(adjacentMonths: Long = 500) {
     val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(500) }
-    val endMonth = remember { currentMonth.plusMonths(500) }
+    val startMonth = remember { currentMonth.minusMonths(adjacentMonths) }
+    val endMonth = remember { currentMonth.plusMonths(adjacentMonths) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
     Column(
@@ -93,7 +93,11 @@ fun Example1Page() {
 
 @Composable
 private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
-    Row(Modifier.fillMaxWidth()) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag("MonthHeader"),
+    ) {
         for (dayOfWeek in daysOfWeek) {
             Text(
                 modifier = Modifier.weight(1f),
@@ -109,7 +113,8 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 @Composable
 private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
     Box(
-        Modifier
+        modifier = Modifier
+            .testTag("MonthDay")
             .aspectRatio(1f) // This is important for square-sizing!
             .padding(6.dp)
             .clip(CircleShape)
