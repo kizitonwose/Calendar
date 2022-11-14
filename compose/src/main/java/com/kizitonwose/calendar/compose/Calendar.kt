@@ -40,7 +40,7 @@ import java.time.DayOfWeek
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
  * between each month use the [monthContainer] composable.
- * @param contentVerticalMode TODO
+ * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
  * placed above each month on the calendar.
@@ -65,7 +65,7 @@ fun HorizontalCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    contentVerticalMode: ContentVerticalMode = ContentVerticalMode.Wrap,
+    contentHeightMode: ContentHeightMode = ContentHeightMode.Wrap,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
@@ -78,7 +78,7 @@ fun HorizontalCalendar(
     userScrollEnabled = userScrollEnabled,
     isHorizontal = true,
     reverseLayout = reverseLayout,
-    contentVerticalMode = contentVerticalMode,
+    contentHeightMode = contentHeightMode,
     dayContent = dayContent,
     monthHeader = monthHeader,
     monthBody = monthBody,
@@ -103,7 +103,7 @@ fun HorizontalCalendar(
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
  * between each month use the [monthContainer] composable.
- * @param contentVerticalMode TODO
+ * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
  * placed above each month on the calendar.
@@ -128,7 +128,7 @@ fun VerticalCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    contentVerticalMode: ContentVerticalMode = ContentVerticalMode.Wrap,
+    contentHeightMode: ContentHeightMode = ContentHeightMode.Wrap,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
@@ -141,7 +141,7 @@ fun VerticalCalendar(
     userScrollEnabled = userScrollEnabled,
     isHorizontal = false,
     reverseLayout = reverseLayout,
-    contentVerticalMode = contentVerticalMode,
+    contentHeightMode = contentHeightMode,
     dayContent = dayContent,
     monthHeader = monthHeader,
     monthBody = monthBody,
@@ -159,7 +159,7 @@ private fun Calendar(
     isHorizontal: Boolean,
     reverseLayout: Boolean,
     contentPadding: PaddingValues,
-    contentVerticalMode: ContentVerticalMode,
+    contentHeightMode: ContentHeightMode,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
@@ -178,7 +178,7 @@ private fun Calendar(
             CalendarMonths(
                 monthCount = state.monthIndexCount,
                 monthData = { offset -> state.store[offset] },
-                contentVerticalMode = contentVerticalMode,
+                contentHeightMode = contentHeightMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthBody = monthBody,
@@ -198,7 +198,7 @@ private fun Calendar(
             CalendarMonths(
                 monthCount = state.monthIndexCount,
                 monthData = { offset -> state.store[offset] },
-                contentVerticalMode = contentVerticalMode,
+                contentHeightMode = contentHeightMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthBody = monthBody,

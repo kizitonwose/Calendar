@@ -114,8 +114,8 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
     Box(
         modifier = Modifier
-            .testTag("MonthDay")
             .aspectRatio(1f) // This is important for square-sizing!
+            .testTag("MonthDay")
             .padding(6.dp)
             .clip(CircleShape)
             .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)

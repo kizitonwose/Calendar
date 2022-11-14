@@ -18,7 +18,7 @@ import com.kizitonwose.calendar.core.CalendarMonth
 internal fun LazyListScope.CalendarMonths(
     monthCount: Int,
     monthData: (offset: Int) -> CalendarMonth,
-    contentVerticalMode: ContentVerticalMode,
+    contentHeightMode: ContentHeightMode,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
@@ -30,9 +30,9 @@ internal fun LazyListScope.CalendarMonths(
         key = { offset -> monthData(offset).yearMonth },
     ) { offset ->
         val month = monthData(offset)
-        val fillHeight = when (contentVerticalMode) {
-            ContentVerticalMode.Wrap -> false
-            ContentVerticalMode.Fill -> true
+        val fillHeight = when (contentHeightMode) {
+            ContentHeightMode.Wrap -> false
+            ContentHeightMode.Fill -> true
         }
         monthContainer(month) {
             Column(

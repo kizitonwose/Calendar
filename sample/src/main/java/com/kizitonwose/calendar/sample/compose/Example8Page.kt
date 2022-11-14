@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.CalendarState
-import com.kizitonwose.calendar.compose.ContentVerticalMode
+import com.kizitonwose.calendar.compose.ContentHeightMode
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -148,7 +148,8 @@ private fun FullScreenCalendar(
         HorizontalCalendar(
             modifier = modifier,
             state = state,
-            contentVerticalMode = ContentVerticalMode.Fill,
+            calendarScrollPaged = true,
+            contentHeightMode = ContentHeightMode.Fill,
             dayContent = dayContent,
             monthBody = monthBody,
             monthHeader = monthHeader,
@@ -158,7 +159,8 @@ private fun FullScreenCalendar(
         VerticalCalendar(
             modifier = modifier,
             state = state,
-            contentVerticalMode = ContentVerticalMode.Fill,
+            calendarScrollPaged = true,
+            contentHeightMode = ContentHeightMode.Fill,
             dayContent = dayContent,
             monthBody = monthBody,
             monthHeader = monthHeader,
