@@ -377,5 +377,37 @@ class CalendarViewTests {
         assertEquals(calendarView.height, children.sumOf { it.height })
     }
 
+    @Test
+    fun squareCalendarWorksAsExpected() {
+        openExampleAt(4)
+
+        val calendarView = getView<CalendarView>(R.id.exFiveCalendar)
+
+        val itemView = calendarView.children.first() as ViewGroup
+
+        val children = itemView.children.toList()
+        val weeks = children.drop(1).map { it as ViewGroup }
+        val monthHeader = children.first()
+
+        assertEquals(
+            itemView.height,
+            weeks.sumOf { it.height } + monthHeader.height,
+        )
+        assertEquals(7, children.count())
+        weeks.forEach { week ->
+            assertTrue(week.width > 0)
+            assertTrue(week.height > 0)
+
+            week.children.forEach { day ->
+                assertTrue(day.width > 0)
+                assertTrue(day.height > 0)
+                assertEquals(day.height.toFloat(), day.width.toFloat(), 1f)
+            }
+            assertEquals(week.width, week.children.sumOf { it.width })
+        }
+        assertTrue(monthHeader.width > 0)
+        assertTrue(monthHeader.height > 0)
+    }
+
     private fun <T : View> getView(@IdRes id: Int): T = homeScreenRule.getView(id)
 }
