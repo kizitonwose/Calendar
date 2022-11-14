@@ -31,7 +31,6 @@ dependencies {
     coreLibraryDesugaring Libs.Core.deSugar
     implementation Kotlin.stdLib
     implementation Libs.View.coreKtx
-    implementation Libs.View.constraintLayout
 
     // Expose RecyclerView which is CalendarView's superclass.
     api Libs.View.recyclerView

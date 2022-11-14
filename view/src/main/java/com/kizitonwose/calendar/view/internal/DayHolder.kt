@@ -1,16 +1,15 @@
 package com.kizitonwose.calendar.view.internal
 
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.view.Binder
 import com.kizitonwose.calendar.view.DaySize
 import com.kizitonwose.calendar.view.ViewContainer
-import com.kizitonwose.calendar.view.internal.constraints.ConstraintLayoutParams
 import java.time.LocalDate
 
 internal data class DayConfig<Day>(
@@ -25,29 +24,22 @@ internal class DayHolder<Day>(private val config: DayConfig<Day>) {
     private lateinit var viewContainer: ViewContainer
     private var day: Day? = null
 
-    @Suppress("KotlinConstantConditions")
-    fun inflateDayView(parent: ConstraintLayout, id: Int, startId: Int, endId: Int): View {
-        return parent.inflate(config.dayViewRes).also { dayView ->
-            this.dayView = dayView
-            val daySize = config.daySize
-            dayView.id = id
-            dayView.layoutParams = ConstraintLayoutParams(dayView.layoutParams).apply {
-                if (startId == PARENT_ID) startToStart = startId else startToEnd = startId
-                topToTop = PARENT_ID
-                bottomToBottom = PARENT_ID
-                if (endId == PARENT_ID) endToEnd = endId else endToStart = endId
-                when (daySize) {
+    fun inflateDayView(parent: LinearLayout): View {
+        return parent.inflate(config.dayViewRes).apply {
+            dayView = this
+            layoutParams = DayLinearLayoutParams(layoutParams).apply {
+                weight = 1f // The parent's wightSum is set to 7.
+                when (config.daySize) {
                     DaySize.Square -> {
-                        width = MATCH_CONSTRAINT
-                        height = MATCH_CONSTRAINT
-                        dimensionRatio = "1:1"
+                        width = MATCH_PARENT
+                        height = MATCH_PARENT
                     }
                     DaySize.Rectangle -> {
-                        width = MATCH_CONSTRAINT
-                        height = MATCH_CONSTRAINT
+                        width = MATCH_PARENT
+                        height = MATCH_PARENT
                     }
                     DaySize.SeventhWidth -> {
-                        width = MATCH_CONSTRAINT
+                        width = MATCH_PARENT
                     }
                     DaySize.FreeForm -> {}
                 }
@@ -86,3 +78,11 @@ private fun findDate(day: Any?): LocalDate {
         else -> throw IllegalArgumentException("Invalid day type: $day")
     }
 }
+
+@Suppress("FunctionName")
+internal fun DayLinearLayoutParams(layoutParams: ViewGroup.LayoutParams): LinearLayout.LayoutParams =
+    if (layoutParams is ViewGroup.MarginLayoutParams) {
+        LinearLayout.LayoutParams(layoutParams)
+    } else {
+        LinearLayout.LayoutParams(layoutParams)
+    }

@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewGroup.MarginLayoutParams
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.LinearLayout
 import com.kizitonwose.calendar.view.Binder
 import com.kizitonwose.calendar.view.DaySize
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.ViewContainer
-import com.kizitonwose.calendar.view.internal.constraints.ConstraintLayoutParams
-import com.kizitonwose.calendar.view.internal.constraints.ItemChildVerticalChain
 import java.time.LocalDate
 
 internal data class ItemContent<Day>(
@@ -35,29 +33,15 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
     itemViewClass: String?,
     dayBinder: Binder<Day, Container>,
 ): ItemContent<Day> {
-    val rootLayout = ConstraintLayout(context)
+    val rootLayout = LinearLayout(context).apply {
+        orientation = LinearLayout.VERTICAL
+    }
 
     val itemHeaderView = if (itemHeaderResource != 0) {
-        rootLayout.inflate(itemHeaderResource)
+        rootLayout.inflate(itemHeaderResource).also { headerView ->
+            rootLayout.addView(headerView)
+        }
     } else null
-
-    val itemFooterView = if (itemFooterResource != 0) {
-        rootLayout.inflate(itemFooterResource)
-    } else null
-
-    val constraintChain = ItemChildVerticalChain(
-        headerId = itemHeaderView?.id,
-        footerId = itemFooterView?.id,
-        weekSize = weekSize,
-    )
-
-    if (itemHeaderView != null) {
-        itemHeaderView.id = constraintChain.getNextLink().id
-        rootLayout.addView(
-            itemHeaderView,
-            HeaderFooterLayoutParams(itemHeaderView, isHeader = true),
-        )
-    }
 
     @Suppress("UNCHECKED_CAST")
     val dayConfig = DayConfig(
@@ -69,24 +53,14 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
     val weekHolders = List(weekSize) {
         WeekHolder(dayConfig.daySize, List(7) { DayHolder(dayConfig) })
     }.onEach { weekHolder ->
-        val link = constraintChain.getNextLink()
-        rootLayout.addView(
-            weekHolder.inflateWeekView(
-                parent = rootLayout,
-                id = link.id,
-                topId = link.previousId,
-                bottomId = link.nextId,
-            ),
-        )
+        rootLayout.addView(weekHolder.inflateWeekView(rootLayout))
     }
 
-    if (itemFooterView != null) {
-        itemFooterView.id = constraintChain.getNextLink().id
-        rootLayout.addView(
-            itemFooterView,
-            HeaderFooterLayoutParams(itemFooterView, isHeader = false),
-        )
-    }
+    val itemFooterView = if (itemFooterResource != 0) {
+        rootLayout.inflate(itemFooterResource).also { footerView ->
+            rootLayout.addView(footerView)
+        }
+    } else null
 
     fun setupRoot(root: ViewGroup) {
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
@@ -127,21 +101,3 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
 }
 
 internal fun dayTag(date: LocalDate): Int = date.hashCode()
-
-private class HeaderFooterLayoutParams(
-    view: View,
-    isHeader: Boolean,
-) : ConstraintLayoutParams(view.layoutParams) {
-    init {
-        this.startToStart = PARENT_ID
-        this.endToEnd = PARENT_ID
-        if (isHeader) {
-            this.topToTop = PARENT_ID
-        } else {
-            this.bottomToBottom = PARENT_ID
-        }
-        if (view.layoutParams.width == MATCH_PARENT) {
-            this.width = MATCH_CONSTRAINT
-        }
-    }
-}
