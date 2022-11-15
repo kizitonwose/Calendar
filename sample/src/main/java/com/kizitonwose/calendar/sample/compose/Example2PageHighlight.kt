@@ -129,7 +129,7 @@ fun Modifier.backgroundHighlight(
 }
 
 /**
- * Old Airbnb highlight style, like in the View example 4.
+ * Old Airbnb highlight style.
  * See also [backgroundHighlight].
  */
 fun Modifier.backgroundHighlightLegacy(
