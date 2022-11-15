@@ -1,7 +1,7 @@
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Libs
 import com.kizitonwose.calendar.buildsrc.Kotlin
+import com.kizitonwose.calendar.buildsrc.Libs
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -50,7 +50,7 @@ dependencies {
     implementation Libs.View.coreKtx
     implementation Libs.View.constraintLayout
     implementation Libs.View.cardView
-    implementation Libs.View.materialView
+    implementation Libs.View.material
 
     implementation Libs.Compose.ui
     implementation Libs.Compose.tooling
