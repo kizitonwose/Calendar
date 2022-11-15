@@ -74,7 +74,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        api-level: [ 24, 29, 33 ]
+        # api-level: [ 24, 29, 33 ] # 33 is currently unreliable.
+        api-level: [ 24, 29 ]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
