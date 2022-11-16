@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -20,10 +21,10 @@ internal fun LazyListScope.CalendarMonths(
     monthData: (offset: Int) -> CalendarMonth,
     contentHeightMode: ContentHeightMode,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
-    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
 ) {
     items(
         count = monthCount,
@@ -34,14 +35,21 @@ internal fun LazyListScope.CalendarMonths(
             ContentHeightMode.Wrap -> false
             ContentHeightMode.Fill -> true
         }
-        monthContainer(month) {
+        val hasContainer = monthContainer != null
+        monthContainer.or(defaultMonthContainer)(month) {
             Column(
                 modifier = Modifier
-                    .fillParentMaxWidth()
-                    .then(if (fillHeight) Modifier.fillParentMaxHeight() else Modifier.wrapContentHeight()),
+                    .then(if (hasContainer) Modifier.fillMaxWidth() else Modifier.fillParentMaxWidth())
+                    .then(
+                        if (fillHeight) {
+                            if (hasContainer) Modifier.fillMaxHeight() else Modifier.fillParentMaxHeight()
+                        } else {
+                            Modifier.wrapContentHeight()
+                        },
+                    ),
             ) {
                 monthHeader?.invoke(this, month)
-                monthBody(month) {
+                monthBody.or(defaultMonthBody)(month) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -67,3 +75,11 @@ internal fun LazyListScope.CalendarMonths(
         }
     }
 }
+
+private val defaultMonthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit) =
+    { _, container -> container() }
+
+private val defaultMonthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit) =
+    { _, content -> content() }
+
+private fun <T> T?.or(default: T) = this ?: default

@@ -68,9 +68,9 @@ fun HorizontalCalendar(
     contentHeightMode: ContentHeightMode = ContentHeightMode.Wrap,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit = { _, container -> container() },
+    monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
 ) = Calendar(
     modifier = modifier,
     state = state,
@@ -131,9 +131,9 @@ fun VerticalCalendar(
     contentHeightMode: ContentHeightMode = ContentHeightMode.Wrap,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit = { _, content -> content() },
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit = { _, container -> container() },
+    monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
 ) = Calendar(
     modifier = modifier,
     state = state,
@@ -161,10 +161,10 @@ private fun Calendar(
     contentPadding: PaddingValues,
     contentHeightMode: ContentHeightMode,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthBody: @Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit,
-    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-    monthContainer: @Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
 ) {
     if (isHorizontal) {
         LazyRow(

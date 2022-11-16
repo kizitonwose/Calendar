@@ -39,22 +39,24 @@ internal fun WeekCalendarImpl(
             count = state.weekIndexCount,
             key = { offset -> state.store[offset].days.first().date },
         ) { offset ->
-            val columnModifier = if (calendarScrollPaged) {
-                Modifier.fillParentMaxWidth()
-            } else {
-                Modifier.width(IntrinsicSize.Max)
-            }
             val week = state.store[offset]
-            Column(modifier = columnModifier) {
+            Column(
+                modifier = Modifier
+                    .then(
+                        if (calendarScrollPaged) {
+                            Modifier.fillParentMaxWidth()
+                        } else {
+                            Modifier.width(IntrinsicSize.Max)
+                        },
+                    ),
+            ) {
                 weekHeader?.invoke(this, week)
                 Row {
                     for (date in week.days) {
-                        val boxModifier = if (calendarScrollPaged) {
-                            Modifier.weight(1f)
-                        } else {
-                            Modifier
-                        }
-                        Box(modifier = boxModifier) {
+                        Box(
+                            modifier = Modifier
+                                .then(if (calendarScrollPaged) Modifier.weight(1f) else Modifier),
+                        ) {
                             dayContent(date)
                         }
                     }
