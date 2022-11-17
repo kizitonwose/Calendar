@@ -37,7 +37,7 @@ object Kotlin {
 
 object Libs {
     object Core {
-        const val deSugar = "com.android.tools:desugar_jdk_libs:1.1.8"
+        const val deSugar = "com.android.tools:desugar_jdk_libs:1.2.2"
 
         object Test {
             const val junit = "junit:junit:4.13.2"
@@ -64,19 +64,19 @@ object Libs {
     }
 
     object Compose {
-        private const val composeVersion = "1.2.1"
+        private const val composeVersion = "1.3.2"
+        private const val composeFoundation = "1.3.1"
         const val ui = "androidx.compose.ui:ui:$composeVersion"
-        const val foundation = "androidx.compose.foundation:foundation:$composeVersion"
+        const val foundation = "androidx.compose.foundation:foundation:$composeFoundation"
         const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
         const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
-        const val material = "androidx.compose.material:material:1.2.1"
-        const val snapper = "dev.chrisbanes.snapper:snapper:0.3.0"
-        const val activity = "androidx.activity:activity-compose:1.6.0"
-        const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.26.5-rc"
+        const val material = "androidx.compose.material:material:1.3.1"
+        const val activity = "androidx.activity:activity-compose:1.6.1"
+        const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.28.0"
 
         object Test {
-            const val uiJunit = "androidx.compose.ui:ui-test-junit4:1.3.0-rc01"
-            const val uiManifest = "androidx.compose.ui:ui-test-manifest:1.3.0-rc01"
+            const val uiJunit = "androidx.compose.ui:ui-test-junit4:$composeVersion"
+            const val uiManifest = "androidx.compose.ui:ui-test-manifest:$composeVersion"
         }
     }
 }

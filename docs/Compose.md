@@ -38,6 +38,7 @@ Ensure that you are using the library version that matches with the Compose UI v
 |Compose UI|Calendar Library|
 |   :-:    |      :-:       |
 |  1.2.x   |     2.0.x      |
+|  1.3.x   |     2.1.x      |
 
 ## Calendar Composables
 
