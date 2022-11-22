@@ -13,7 +13,7 @@ internal class WeekViewHolder constructor(
     rootLayout: ViewGroup,
     private val headerView: View?,
     private val footerView: View?,
-    private val weekHolders: WeekHolder<WeekDay>,
+    private val weekHolder: WeekHolder<WeekDay>,
     private var weekHeaderBinder: WeekHeaderFooterBinder<ViewContainer>?,
     private var weekFooterBinder: WeekHeaderFooterBinder<ViewContainer>?,
 ) : RecyclerView.ViewHolder(rootLayout) {
@@ -31,7 +31,7 @@ internal class WeekViewHolder constructor(
             }
             weekHeaderBinder?.bind(headerContainer, week)
         }
-        weekHolders.bindWeekView(week.days)
+        weekHolder.bindWeekView(week.days)
         footerView?.let { view ->
             val footerContainer = footerContainer ?: weekFooterBinder!!.create(view).also {
                 footerContainer = it
@@ -41,6 +41,6 @@ internal class WeekViewHolder constructor(
     }
 
     fun reloadDay(day: WeekDay) {
-        weekHolders.reloadDay(day)
+        weekHolder.reloadDay(day)
     }
 }

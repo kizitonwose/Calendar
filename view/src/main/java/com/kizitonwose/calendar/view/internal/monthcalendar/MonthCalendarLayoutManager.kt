@@ -1,6 +1,5 @@
 package com.kizitonwose.calendar.view.internal.monthcalendar
 
-import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.view.CalendarView
 import com.kizitonwose.calendar.view.MarginValues
@@ -8,10 +7,8 @@ import com.kizitonwose.calendar.view.internal.CalendarLayoutManager
 import com.kizitonwose.calendar.view.internal.dayTag
 import java.time.YearMonth
 
-internal class MonthCalendarLayoutManager(
-    private val calView: CalendarView,
-    @RecyclerView.Orientation orientation: Int,
-) : CalendarLayoutManager<YearMonth, CalendarDay>(calView, orientation) {
+internal class MonthCalendarLayoutManager(private val calView: CalendarView) :
+    CalendarLayoutManager<YearMonth, CalendarDay>(calView, calView.orientation) {
 
     private val adapter: MonthCalendarAdapter
         get() = calView.adapter as MonthCalendarAdapter

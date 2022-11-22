@@ -74,7 +74,7 @@ internal class WeekCalendarAdapter(
             rootLayout = content.itemView,
             headerView = content.headerView,
             footerView = content.footerView,
-            weekHolders = content.weekHolders.first(),
+            weekHolder = content.weekHolders.first(),
             weekHeaderBinder = calView.weekHeaderBinder as WeekHeaderFooterBinder<ViewContainer>?,
             weekFooterBinder = calView.weekFooterBinder as WeekHeaderFooterBinder<ViewContainer>?,
         )

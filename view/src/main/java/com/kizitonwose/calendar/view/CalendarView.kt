@@ -397,7 +397,7 @@ open class CalendarView : RecyclerView {
         removeOnScrollListener(scrollListenerInternal)
         addOnScrollListener(scrollListenerInternal)
 
-        layoutManager = MonthCalendarLayoutManager(calView = this, orientation)
+        layoutManager = MonthCalendarLayoutManager(this)
         adapter = MonthCalendarAdapter(
             calView = this,
             outDateStyle = outDateStyle,
