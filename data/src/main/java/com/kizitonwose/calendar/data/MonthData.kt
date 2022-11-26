@@ -11,7 +11,6 @@ import com.kizitonwose.calendar.core.yearMonth
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
-import java.time.temporal.WeekFields
 
 data class MonthData internal constructor(
     private val month: YearMonth,
@@ -53,14 +52,13 @@ fun getCalendarMonthData(
     val month = startMonth.plusMonths(offset.toLong())
     val firstDay = month.atStartOfMonth()
     val inDays = firstDayOfWeek.daysUntil(firstDay.dayOfWeek)
-    val outDays = (inDays + month.lengthOfMonth()).let { totalDays ->
-        val endOfRow = if (totalDays % 7 != 0) 7 - (totalDays % 7) else 0
-        val endOfGrid = if (outDateStyle == OutDateStyle.EndOfRow) 0 else run {
-            val weekOfMonthField = WeekFields.of(firstDayOfWeek, 1).weekOfMonth()
-            val weeksInMonth = month.atEndOfMonth().get(weekOfMonthField)
+    val outDays = (inDays + month.lengthOfMonth()).let { inAndMonthDays ->
+        val endOfRowDays = if (inAndMonthDays % 7 != 0) 7 - (inAndMonthDays % 7) else 0
+        val endOfGridDays = if (outDateStyle == OutDateStyle.EndOfRow) 0 else run {
+            val weeksInMonth = (inAndMonthDays + endOfRowDays) / 7
             return@run (6 - weeksInMonth) * 7
         }
-        return@let endOfRow + endOfGrid
+        return@let endOfRowDays + endOfGridDays
     }
     return MonthData(month, inDays, outDays)
 }
@@ -77,8 +75,8 @@ fun getHeatMapCalendarMonthData(
     } else {
         -firstDay.dayOfWeek.daysUntil(firstDayOfWeek)
     }
-    val outDays = (inDays + month.lengthOfMonth()).let { totalDays ->
-        if (totalDays % 7 != 0) 7 - (totalDays % 7) else 0
+    val outDays = (inDays + month.lengthOfMonth()).let { inAndMonthDays ->
+        if (inAndMonthDays % 7 != 0) 7 - (inAndMonthDays % 7) else 0
     }
     return MonthData(month, inDays, outDays)
 }

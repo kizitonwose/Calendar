@@ -92,10 +92,10 @@ class MonthDataTests {
             getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfGrid)
 
         assertEquals(endOfGridMonthData.calendarMonth.weekDays.count(), 6)
-        assertTrue(
-            endOfGridMonthData.calendarMonth.weekDays.last()
-                .all { it.position == DayPosition.OutDate },
-        )
+        endOfGridMonthData.calendarMonth.weekDays.last().forEach { day ->
+            assertEquals(DayPosition.OutDate, day.position)
+            assertEquals(may2019.nextMonth, day.date.yearMonth)
+        }
     }
 
     @Test
