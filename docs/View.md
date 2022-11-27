@@ -614,11 +614,9 @@ To show the week calendar in your layout, add the view:
 
 Then follow the setup instructions above to provide a day resource/binder etc as you would do for the month calendar.
 
-If you would like to toggle the calendar between month and week views, please see the `Example1Fragment` in the sample app where we did exactly this. The result is shown below:
+If you would like to toggle the calendar between month and week views, please see the sample app where we did this using a `ValueAnimator`. You can use whichever animation logic you prefer. The result is shown below:
 
 <img src="https://user-images.githubusercontent.com/15170090/195636303-a99312c9-23a3-44cd-8a38-6ba21b3c4802.gif" alt="Week and month modes" width="250">
-
-If you wish to animate height changes on the CalendarView when switching between week and month modes, please see Example 1 in the sample app where we use a `ValueAnimator`. You can use whichever animation logic you prefer.
 
 If you wish to show more or less than 7 days at a time on the week calendar, you should set the `scrollPaged` attribute to `false`. Also, set the `daySize` property to `FreeForm` which gives you the freedom to define a preferred size for your day cells. Please read the documentation in the `DaySize` class to fully understand the available options.
 

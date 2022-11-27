@@ -518,6 +518,8 @@ A week calendar implementation from the sample app:
 
 <img src="https://user-images.githubusercontent.com/15170090/195638551-dfced7be-c18f-4611-b015-cfefab480cee.png" alt="Week calendar" width="250">
 
+If you would like to toggle the calendar between month and week modes, please see the sample app where we did this by animating the Modifier height and alternatively using the `AnimatedVisibility` API.
+
 ## HeatMap calendar
 
 This is a horizontally scrolling heatmap calendar implementation, useful for showing how data changes over time. A popular example is the user contribution chart on GitHub. Another usage could be to show changes in the frequency of a habit tracked by a user.
