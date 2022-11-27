@@ -79,7 +79,7 @@ fun Example8Page(horizontal: Boolean = true) {
         CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
             SimpleCalendarTitle(
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
-                currentMonth = visibleMonth,
+                currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
                     coroutineScope.launch {
                         state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)

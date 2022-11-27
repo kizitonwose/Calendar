@@ -36,7 +36,6 @@ import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
 import com.kizitonwose.calendar.sample.shared.findActivity
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
-import java.time.YearMonth
 
 fun Modifier.clickable(
     enabled: Boolean = true,
@@ -93,12 +92,12 @@ fun NavigationIcon(onBackClick: () -> Unit) {
  * @see [rememberFirstVisibleMonthAfterScroll]
  */
 @Composable
-fun rememberFirstCompletelyVisibleMonth(state: CalendarState): YearMonth {
-    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth.yearMonth) }
+fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
     // Only take non-null values as null will be produced when the
     // list is mid-scroll as no index will be completely visible.
     LaunchedEffect(state) {
-        snapshotFlow { state.layoutInfo.completelyVisibleMonths.firstOrNull()?.yearMonth }
+        snapshotFlow { state.layoutInfo.completelyVisibleMonths.firstOrNull() }
             .filterNotNull()
             .collect { month -> visibleMonth.value = month }
     }
@@ -111,12 +110,12 @@ fun rememberFirstCompletelyVisibleMonth(state: CalendarState): YearMonth {
  * @see [rememberFirstCompletelyVisibleMonth]
  */
 @Composable
-fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): YearMonth {
-    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth.yearMonth) }
+fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): CalendarMonth {
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
     LaunchedEffect(state) {
         snapshotFlow { state.isScrollInProgress }
             .filter { scrolling -> !scrolling }
-            .collect { visibleMonth.value = state.firstVisibleMonth.yearMonth }
+            .collect { visibleMonth.value = state.firstVisibleMonth }
     }
     return visibleMonth.value
 }

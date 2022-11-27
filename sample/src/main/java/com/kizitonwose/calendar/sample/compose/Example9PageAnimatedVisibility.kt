@@ -1,9 +1,6 @@
 package com.kizitonwose.calendar.sample.compose
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,9 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
@@ -30,20 +25,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -65,11 +55,11 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 /**
- * Go to [Example9PageAnimatedVisibility] to see how toggling between week and
- * month modes can be done using [AnimatedVisibility] if that interests you.
+ * Go to [Example9Page] to see how toggling between week and month
+ * modes can be done using the [Modifier] if that interests you.
  */
 @Composable
-fun Example9Page(adjacentMonths: Long = 500) {
+fun Example9PageAnimatedVisibility(adjacentMonths: Long = 500) {
     val currentDate = remember { LocalDate.now() }
     val currentMonth = remember(currentDate) { currentDate.yearMonth }
     val startMonth = remember(currentDate) { currentMonth.minusMonths(adjacentMonths) }
@@ -78,6 +68,7 @@ fun Example9Page(adjacentMonths: Long = 500) {
     val daysOfWeek = remember { daysOfWeek() }
 
     var isWeekMode by remember { mutableStateOf(false) }
+    var isAnimating by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -102,28 +93,11 @@ fun Example9Page(adjacentMonths: Long = 500) {
             monthState = monthState,
             weekState = weekState,
             coroutineScope = coroutineScope,
+            isAnimating = isAnimating,
         )
         CalendarHeader(daysOfWeek = daysOfWeek)
-        val monthCalendarAlpha by animateFloatAsState(if (isWeekMode) 0f else 1f)
-        val weekCalendarAlpha by animateFloatAsState(if (isWeekMode) 1f else 0f)
-        var weekCalendarSize by remember { mutableStateOf(DpSize.Zero) }
-        val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
-        val weeksInVisibleMonth = visibleMonth.weekDays.count()
-        val monthCalendarHeight by animateDpAsState(
-            if (isWeekMode) {
-                weekCalendarSize.height
-            } else {
-                weekCalendarSize.height * weeksInVisibleMonth
-            },
-            tween(durationMillis = 250),
-        )
-        val density = LocalDensity.current
-        Box {
+        AnimatedVisibility(visible = !isWeekMode) {
             HorizontalCalendar(
-                modifier = Modifier
-                    .height(monthCalendarHeight)
-                    .alpha(monthCalendarAlpha)
-                    .zIndex(if (isWeekMode) 0f else 1f),
                 state = monthState,
                 dayContent = { day ->
                     val isSelectable = day.position == DayPosition.MonthDate
@@ -140,17 +114,9 @@ fun Example9Page(adjacentMonths: Long = 500) {
                     }
                 },
             )
+        }
+        AnimatedVisibility(visible = isWeekMode) {
             WeekCalendar(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .onSizeChanged {
-                        val size = density.run { DpSize(it.width.toDp(), it.height.toDp()) }
-                        if (weekCalendarSize != size) {
-                            weekCalendarSize = size
-                        }
-                    }
-                    .alpha(weekCalendarAlpha)
-                    .zIndex(if (isWeekMode) 1f else 0f),
                 state = weekState,
                 dayContent = { day ->
                     val isSelectable = day.position == WeekDayPosition.RangeDate
@@ -172,7 +138,10 @@ fun Example9Page(adjacentMonths: Long = 500) {
         WeekModeToggle(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             isWeekMode = isWeekMode,
+            isClickable = !isAnimating,
         ) { weekMode ->
+            isAnimating = true
+            isWeekMode = weekMode
             coroutineScope.launch {
                 if (weekMode) {
                     val targetDate = monthState.firstVisibleMonth.weekDays.last().last().date
@@ -183,7 +152,7 @@ fun Example9Page(adjacentMonths: Long = 500) {
                     monthState.scrollToMonth(targetMonth)
                     monthState.animateScrollToMonth(targetMonth) // Trigger a layout pass for title update
                 }
-                isWeekMode = weekMode
+                isAnimating = false
             }
         }
     }
@@ -195,13 +164,17 @@ private fun CalendarTitle(
     monthState: CalendarState,
     weekState: WeekCalendarState,
     coroutineScope: CoroutineScope,
+    isAnimating: Boolean,
 ) {
     val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
     val visibleWeek = rememberFirstVisibleWeekAfterScroll(weekState)
+    val visibleWeekMonth = visibleWeek.days.first().date.yearMonth
+    // Track animation state to prevent updating the title too early before
+    // the correct value is available (after the animation).
     val currentMonth = if (isWeekMode) {
-        visibleWeek.days.first().date.yearMonth
+        if (isAnimating) visibleMonth.yearMonth else visibleWeekMonth
     } else {
-        visibleMonth.yearMonth
+        if (isAnimating) visibleWeekMonth else visibleMonth.yearMonth
     }
     SimpleCalendarTitle(
         modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
@@ -262,6 +235,7 @@ private fun Day(
             .padding(6.dp)
             .clip(CircleShape)
             .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)
+            // Disable clicks on inDates/outDates
             .clickable(
                 enabled = isSelectable,
                 showRipple = !isSelected,
@@ -286,6 +260,7 @@ private fun Day(
 private fun WeekModeToggle(
     modifier: Modifier,
     isWeekMode: Boolean,
+    isClickable: Boolean,
     weekModeToggled: (isWeekMode: Boolean) -> Unit,
 ) {
     // We want the entire content to be clickable, not just the checkbox.
@@ -293,7 +268,7 @@ private fun WeekModeToggle(
         modifier = modifier
             .padding(10.dp)
             .clip(MaterialTheme.shapes.small)
-            .clickable { weekModeToggled(!isWeekMode) }
+            .clickable(isClickable) { weekModeToggled(!isWeekMode) }
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
@@ -309,6 +284,6 @@ private fun WeekModeToggle(
 
 @Preview
 @Composable
-private fun Example9Preview() {
-    Example9Page()
+private fun Example9PageAnimatedVisibilityPreview() {
+    Example9PageAnimatedVisibility()
 }

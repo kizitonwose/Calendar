@@ -110,7 +110,7 @@ fun Example3Page() {
                 modifier = Modifier
                     .background(toolbarColor)
                     .padding(horizontal = 8.dp, vertical = 12.dp),
-                currentMonth = visibleMonth,
+                currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
                     coroutineScope.launch {
                         state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
