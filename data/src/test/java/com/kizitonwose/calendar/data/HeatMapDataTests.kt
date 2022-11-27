@@ -46,22 +46,26 @@ class HeatMapDataTests {
     @Test
     fun `number of day positions are accurate`() {
         val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
-        val weekDays = monthData.calendarMonth.weekDays.flatten()
+        val days = monthData.calendarMonth.weekDays.flatten()
 
-        assertEquals(5, weekDays.count { it.position == DayPosition.InDate })
-        assertEquals(6, weekDays.count { it.position == DayPosition.OutDate })
-        assertEquals(31, weekDays.count { it.position == DayPosition.MonthDate })
-        assertEquals(42, weekDays.count())
+        assertEquals(5, days.count { it.position == DayPosition.InDate })
+        assertEquals(6, days.count { it.position == DayPosition.OutDate })
+        assertEquals(31, days.count { it.position == DayPosition.MonthDate })
+        assertEquals(42, days.count())
+        assertEquals(6, monthData.calendarMonth.weekDays.count())
+        monthData.calendarMonth.weekDays.forEach { weekDays ->
+            assertEquals(7, weekDays.count())
+        }
     }
 
     @Test
     fun `first date in the following month is accurate`() {
         val novemberMonthData = getHeatMapCalendarMonthData(october2022, 1, firstDayOfWeek)
-        val weekDays = novemberMonthData.calendarMonth.weekDays.flatten()
+        val days = novemberMonthData.calendarMonth.weekDays.flatten()
 
-        assertEquals(7, weekDays.first().date.dayOfMonth)
-        assertEquals(october2022.nextMonth, weekDays.first().date.yearMonth)
-        assertEquals(DayPosition.MonthDate, weekDays.first().position)
+        assertEquals(7, days.first().date.dayOfMonth)
+        assertEquals(october2022.nextMonth, days.first().date.yearMonth)
+        assertEquals(DayPosition.MonthDate, days.first().position)
     }
 
     @Test

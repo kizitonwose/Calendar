@@ -39,23 +39,55 @@ class MonthDataTests {
      **/
 
     @Test
-    fun `number of day positions are accurate`() {
+    fun `number of day positions are accurate with EndOfRow OutDateStyle`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
         val days = monthData.calendarMonth.weekDays.flatten()
         assertEquals(2, days.count { it.position == DayPosition.InDate })
         assertEquals(2, days.count { it.position == DayPosition.OutDate })
         assertEquals(31, days.count { it.position == DayPosition.MonthDate })
         assertEquals(35, days.count())
+        assertEquals(5, monthData.calendarMonth.weekDays.count())
+        monthData.calendarMonth.weekDays.forEach { weekDays ->
+            assertEquals(7, weekDays.count())
+        }
     }
 
     @Test
-    fun `dates are in the correct positions`() {
+    fun `number of day positions are accurate with EndOfGrid OutDateStyle`() {
+        val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfGrid)
+        val days = monthData.calendarMonth.weekDays.flatten()
+        assertEquals(2, days.count { it.position == DayPosition.InDate })
+        assertEquals(9, days.count { it.position == DayPosition.OutDate })
+        assertEquals(31, days.count { it.position == DayPosition.MonthDate })
+        assertEquals(42, days.count())
+        assertEquals(6, monthData.calendarMonth.weekDays.count())
+        monthData.calendarMonth.weekDays.forEach { weekDays ->
+            assertEquals(7, weekDays.count())
+        }
+    }
+
+    @Test
+    fun `dates are in the correct positions with EndOfRow OutDateStyle`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
         val days = monthData.calendarMonth.weekDays.flatten()
 
         val inDates = days.take(2)
         val outDates = days.takeLast(2)
         val monthDates = days.drop(2).dropLast(2)
+
+        assertTrue(inDates.all { it.position == DayPosition.InDate })
+        assertTrue(outDates.all { it.position == DayPosition.OutDate })
+        assertTrue(monthDates.all { it.position == DayPosition.MonthDate })
+    }
+
+    @Test
+    fun `dates are in the correct positions with EndOfGrid OutDateStyle`() {
+        val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfGrid)
+        val days = monthData.calendarMonth.weekDays.flatten()
+
+        val inDates = days.take(2)
+        val outDates = days.takeLast(2)
+        val monthDates = days.drop(2).dropLast(9)
 
         assertTrue(inDates.all { it.position == DayPosition.InDate })
         assertTrue(outDates.all { it.position == DayPosition.OutDate })

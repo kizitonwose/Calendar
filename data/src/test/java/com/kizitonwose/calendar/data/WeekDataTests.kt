@@ -68,6 +68,7 @@ class WeekDataTests {
         val rangeDays = week.days.takeLast(5)
         assertTrue(inDates.all { it.position == WeekDayPosition.InDate })
         assertTrue(rangeDays.all { it.position == WeekDayPosition.RangeDate })
+        assertEquals(7, week.days.count())
     }
 
     @Test
@@ -81,6 +82,7 @@ class WeekDataTests {
         val rangeDays = week.days.take(5)
         assertTrue(outDates.all { it.position == WeekDayPosition.OutDate })
         assertTrue(rangeDays.all { it.position == WeekDayPosition.RangeDate })
+        assertEquals(7, week.days.count())
     }
 
     @Test
