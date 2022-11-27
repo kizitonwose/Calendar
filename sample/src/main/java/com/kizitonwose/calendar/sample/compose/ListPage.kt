@@ -66,6 +66,11 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
         subtitle = "Fullscreen Horizontal Calendar - Month header and footer, paged horizontal scrolling. Shows the \"Fill\" option of ContentHeightMode property.",
         showToolBar = false,
     ),
+    Example9(
+        title = "Example 9",
+        subtitle = "Month and week calendar toggle with animations.",
+        showToolBar = true,
+    ),
     ;
 }
 

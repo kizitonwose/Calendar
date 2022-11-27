@@ -120,6 +120,7 @@ class CalendarComposeActivity : AppCompatActivity() {
             horizontallyAnimatedComposable(Page.Example6.name) { Example6Page() }
             horizontallyAnimatedComposable(Page.Example7.name) { Example7Page() }
             verticallyAnimatedComposable(Page.Example8.name) { Example8Page() }
+            horizontallyAnimatedComposable(Page.Example9.name) { Example9Page() }
         }
     }
 }
