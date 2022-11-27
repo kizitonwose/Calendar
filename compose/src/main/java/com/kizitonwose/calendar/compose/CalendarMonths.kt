@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 
@@ -62,7 +63,11 @@ internal fun LazyListScope.CalendarMonths(
                                     .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight()),
                             ) {
                                 for (day in week) {
-                                    Box(modifier = Modifier.weight(1f)) {
+                                    Box(
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .clipToBounds(),
+                                    ) {
                                         dayContent(day)
                                     }
                                 }

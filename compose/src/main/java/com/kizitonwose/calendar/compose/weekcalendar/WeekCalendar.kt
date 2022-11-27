@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
@@ -55,7 +56,8 @@ internal fun WeekCalendarImpl(
                     for (date in week.days) {
                         Box(
                             modifier = Modifier
-                                .then(if (calendarScrollPaged) Modifier.weight(1f) else Modifier),
+                                .then(if (calendarScrollPaged) Modifier.weight(1f) else Modifier)
+                                .clipToBounds(),
                         ) {
                             dayContent(date)
                         }
