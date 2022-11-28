@@ -50,6 +50,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        addStatusBarColorUpdate(R.color.example_1_bg_light)
         binding = Example1FragmentBinding.bind(view)
         val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children
@@ -256,17 +257,5 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             animator.duration = 250
             animator.start()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        requireActivity().window.statusBarColor =
-            requireContext().getColorCompat(R.color.example_1_bg_light)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        requireActivity().window.statusBarColor =
-            requireContext().getColorCompat(R.color.colorPrimaryDark)
     }
 }

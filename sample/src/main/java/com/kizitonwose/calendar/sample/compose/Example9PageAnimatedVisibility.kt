@@ -2,20 +2,9 @@ package com.kizitonwose.calendar.sample.compose
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -25,15 +14,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -44,14 +26,12 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
-import com.kizitonwose.calendar.sample.R
-import com.kizitonwose.calendar.sample.shared.displayText
-import kotlinx.coroutines.CoroutineScope
+import com.kizitonwose.calendar.sample.compose.Example9PageSharedComponents.CalendarHeader
+import com.kizitonwose.calendar.sample.compose.Example9PageSharedComponents.Day
+import com.kizitonwose.calendar.sample.compose.Example9PageSharedComponents.MonthAndWeekCalendarTitle
+import com.kizitonwose.calendar.sample.compose.Example9PageSharedComponents.WeekModeToggle
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
 import java.time.LocalDate
 
 /**
@@ -92,7 +72,6 @@ fun Example9PageAnimatedVisibility(adjacentMonths: Long = 500) {
             isWeekMode = isWeekMode,
             monthState = monthState,
             weekState = weekState,
-            coroutineScope = coroutineScope,
             isAnimating = isAnimating,
         )
         CalendarHeader(daysOfWeek = daysOfWeek)
@@ -138,7 +117,6 @@ fun Example9PageAnimatedVisibility(adjacentMonths: Long = 500) {
         WeekModeToggle(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             isWeekMode = isWeekMode,
-            isClickable = !isAnimating,
         ) { weekMode ->
             isAnimating = true
             isWeekMode = weekMode
@@ -163,7 +141,6 @@ private fun CalendarTitle(
     isWeekMode: Boolean,
     monthState: CalendarState,
     weekState: WeekCalendarState,
-    coroutineScope: CoroutineScope,
     isAnimating: Boolean,
 ) {
     val visibleMonth = rememberFirstVisibleMonthAfterScroll(monthState)
@@ -176,110 +153,12 @@ private fun CalendarTitle(
     } else {
         if (isAnimating) visibleWeekMonth else visibleMonth.yearMonth
     }
-    SimpleCalendarTitle(
-        modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
+    MonthAndWeekCalendarTitle(
+        isWeekMode = isWeekMode,
         currentMonth = currentMonth,
-        goToPrevious = {
-            coroutineScope.launch {
-                if (isWeekMode) {
-                    val targetDate = weekState.firstVisibleWeek.days.first().date.minusDays(1)
-                    weekState.animateScrollToWeek(targetDate)
-                } else {
-                    val targetMonth = monthState.firstVisibleMonth.yearMonth.previousMonth
-                    monthState.animateScrollToMonth(targetMonth)
-                }
-            }
-        },
-        goToNext = {
-            coroutineScope.launch {
-                if (isWeekMode) {
-                    val targetDate = weekState.firstVisibleWeek.days.last().date.plusDays(1)
-                    weekState.animateScrollToWeek(targetDate)
-                } else {
-                    val targetMonth = monthState.firstVisibleMonth.yearMonth.nextMonth
-                    monthState.animateScrollToMonth(targetMonth)
-                }
-            }
-        },
+        monthState = monthState,
+        weekState = weekState,
     )
-}
-
-@Composable
-private fun CalendarHeader(daysOfWeek: List<DayOfWeek>) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-    ) {
-        for (dayOfWeek in daysOfWeek) {
-            Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                fontSize = 15.sp,
-                text = dayOfWeek.displayText(),
-                fontWeight = FontWeight.Medium,
-            )
-        }
-    }
-}
-
-@Composable
-private fun Day(
-    day: LocalDate,
-    isSelected: Boolean,
-    isSelectable: Boolean,
-    onClick: (LocalDate) -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
-            .padding(6.dp)
-            .clip(CircleShape)
-            .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)
-            // Disable clicks on inDates/outDates
-            .clickable(
-                enabled = isSelectable,
-                showRipple = !isSelected,
-                onClick = { onClick(day) },
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        val textColor = when {
-            isSelected -> Color.White
-            isSelectable -> Color.Unspecified
-            else -> colorResource(R.color.inactive_text_color)
-        }
-        Text(
-            text = day.dayOfMonth.toString(),
-            color = textColor,
-            fontSize = 14.sp,
-        )
-    }
-}
-
-@Composable
-private fun WeekModeToggle(
-    modifier: Modifier,
-    isWeekMode: Boolean,
-    isClickable: Boolean,
-    weekModeToggled: (isWeekMode: Boolean) -> Unit,
-) {
-    // We want the entire content to be clickable, not just the checkbox.
-    Row(
-        modifier = modifier
-            .padding(10.dp)
-            .clip(MaterialTheme.shapes.small)
-            .clickable(isClickable) { weekModeToggled(!isWeekMode) }
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
-    ) {
-        Checkbox(
-            checked = isWeekMode,
-            onCheckedChange = null, // Check is handled by parent.
-            colors = CheckboxDefaults.colors(checkedColor = colorResource(R.color.example_1_selection_color)),
-        )
-        Text(text = stringResource(R.string.week_mode))
-    }
 }
 
 @Preview
