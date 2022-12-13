@@ -185,7 +185,12 @@ class CalendarState internal constructor(
     internal var monthIndexCount by mutableStateOf(0)
 
     internal val store = DataStore { offset ->
-        getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle).calendarMonth
+        getCalendarMonthData(
+            startMonth = this.startMonth,
+            offset = offset,
+            firstDayOfWeek = this.firstDayOfWeek,
+            outDateStyle = this.outDateStyle,
+        ).calendarMonth
     }
 
     init {

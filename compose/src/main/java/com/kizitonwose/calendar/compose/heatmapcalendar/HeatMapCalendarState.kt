@@ -165,7 +165,11 @@ class HeatMapCalendarState internal constructor(
     internal var monthIndexCount by mutableStateOf(0)
 
     internal val store = DataStore { offset ->
-        getHeatMapCalendarMonthData(startMonth, offset, firstDayOfWeek).calendarMonth
+        getHeatMapCalendarMonthData(
+            startMonth = this.startMonth,
+            offset = offset,
+            firstDayOfWeek = this.firstDayOfWeek,
+        ).calendarMonth
     }
 
     init {

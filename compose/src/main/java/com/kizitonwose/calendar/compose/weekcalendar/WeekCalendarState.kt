@@ -171,7 +171,12 @@ class WeekCalendarState internal constructor(
         get() = WeekCalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
     internal val store = DataStore { offset ->
-        getWeekCalendarData(startDateAdjusted, offset, startDate, endDate).week
+        getWeekCalendarData(
+            startDateAdjusted = this.startDateAdjusted,
+            offset = offset,
+            desiredStartDate = this.startDate,
+            desiredEndDate = this.endDate,
+        ).week
     }
 
     internal var weekIndexCount by mutableStateOf(0)
