@@ -90,6 +90,7 @@ fun NavigationIcon(onBackClick: () -> Unit) {
  * Alternative way to find the first fully visible month in the layout.
  *
  * @see [rememberFirstVisibleMonthAfterScroll]
+ * @see [rememberFirstMostVisibleMonth]
  */
 @Composable
 fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
@@ -108,6 +109,7 @@ fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
  * Returns the first visible month in a paged calendar **after** scrolling stops.
  *
  * @see [rememberFirstCompletelyVisibleMonth]
+ * @see [rememberFirstMostVisibleMonth]
  */
 @Composable
 fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): CalendarMonth {
@@ -134,6 +136,26 @@ fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): Week {
     return visibleWeek.value
 }
 
+/**
+ * Find the first month on the calendar visible up to the given [viewportPercent] size.
+ *
+ * @see [rememberFirstCompletelyVisibleMonth]
+ * @see [rememberFirstVisibleMonthAfterScroll]
+ */
+@Composable
+fun rememberFirstMostVisibleMonth(
+    state: CalendarState,
+    viewportPercent: Float = 50f,
+): CalendarMonth {
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
+    LaunchedEffect(state) {
+        snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewportPercent) }
+            .filterNotNull()
+            .collect { month -> visibleMonth.value = month }
+    }
+    return visibleMonth.value
+}
+
 private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
     get() {
         val visibleItemsInfo = this.visibleMonthsInfo.toMutableList()
@@ -152,3 +174,18 @@ private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
             visibleItemsInfo.map { it.month }
         }
     }
+
+private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
+    return if (visibleMonthsInfo.isEmpty()) {
+        null
+    } else {
+        val viewportSize = (viewportEndOffset + viewportStartOffset) * viewportPercent / 100f
+        visibleMonthsInfo.firstOrNull { itemInfo ->
+            if (itemInfo.offset < 0) {
+                itemInfo.offset + itemInfo.size >= viewportSize
+            } else {
+                itemInfo.size - itemInfo.offset >= viewportSize
+            }
+        }?.month
+    }
+}

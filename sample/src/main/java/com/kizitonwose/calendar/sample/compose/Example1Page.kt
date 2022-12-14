@@ -57,7 +57,7 @@ fun Example1Page(adjacentMonths: Long = 500) {
             firstDayOfWeek = daysOfWeek.first(),
         )
         val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstVisibleMonthAfterScroll(state)
+        val visibleMonth = rememberFirstMostVisibleMonth(state, viewportPercent = 90f)
         SimpleCalendarTitle(
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
             currentMonth = visibleMonth.yearMonth,

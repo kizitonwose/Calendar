@@ -35,9 +35,11 @@
                 android:id="@+id/exOneMonthText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:fontFamily="sans-serif-light"
                 android:textColor="@color/example_1_white"
-                android:textSize="38sp"
+                android:textSize="32sp"
+                android:ellipsize="marquee"
                 tools:text="April" />
 
         </LinearLayout>
