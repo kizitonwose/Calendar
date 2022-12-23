@@ -171,7 +171,7 @@ open class WeekCalendarView : RecyclerView {
         setHasFixedSize(true)
         context.withStyledAttributes(
             attributeSet,
-            R.styleable.CalendarView,
+            R.styleable.WeekCalendarView,
             defStyleAttr,
             defStyleRes,
         ) {
