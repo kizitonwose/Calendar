@@ -5,7 +5,7 @@ package com.kizitonwose.calendar.buildsrc
 import org.gradle.api.JavaVersion
 
 object Config {
-    val compatibleJavaVersion = JavaVersion.VERSION_11
+    val compatibleJavaVersion = JavaVersion.VERSION_1_8
 }
 
 object Android {
