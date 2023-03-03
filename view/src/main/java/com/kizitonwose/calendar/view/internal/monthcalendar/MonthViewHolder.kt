@@ -43,6 +43,6 @@ internal class MonthViewHolder constructor(
     }
 
     fun reloadDay(day: CalendarDay) {
-        weekHolders.find { it.reloadDay(day) }
+        weekHolders.firstOrNull { it.reloadDay(day) }
     }
 }
