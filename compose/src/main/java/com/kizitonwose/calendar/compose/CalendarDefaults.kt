@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.Density
 
 internal object CalendarDefaults {
 
@@ -22,7 +23,8 @@ internal object CalendarDefaults {
     @Composable
     private fun pagedFlingBehavior(state: LazyListState): FlingBehavior {
         val snappingLayout = remember(state) {
-            SnapLayoutInfoProvider(state) { _, _ -> 0f }
+            val provider = SnapLayoutInfoProvider(state) { _, _ -> 0f }
+            CalendarSnapLayoutInfoProvider(provider)
         }
         return rememberSnapFlingBehavior(snappingLayout)
     }
@@ -34,4 +36,16 @@ internal object CalendarDefaults {
     fun flingBehavior(isPaged: Boolean, state: LazyListState): FlingBehavior {
         return if (isPaged) pagedFlingBehavior(state) else continuousFlingBehavior()
     }
+}
+
+@ExperimentalFoundationApi
+@Suppress("FunctionName")
+private fun CalendarSnapLayoutInfoProvider(snapLayoutInfoProvider: SnapLayoutInfoProvider):
+    SnapLayoutInfoProvider = object : SnapLayoutInfoProvider by snapLayoutInfoProvider {
+
+    /**
+     * In compose 1.3, the default was single page snapping (zero), but this changed
+     * in compose 1.4 to decayed page snapping which is not great for calendar usage.
+     */
+    override fun Density.calculateApproachOffset(initialVelocity: Float): Float = 0f
 }
