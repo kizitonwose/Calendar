@@ -65,13 +65,13 @@ android {
   compileOptions {
     // Enable support for the new language APIs
     coreLibraryDesugaringEnabled true
-    // Set compatibility to Java 8 (can be higher if desired)
+    // Set Java compatibility (version can be higher if desired)
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
   kotlinOptions {
-    // Also add this for Kotlin projects
+    // Also add this for Kotlin projects (version can be higher if desired)
     jvmTarget = "1.8"
   }
 }
