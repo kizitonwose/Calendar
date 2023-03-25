@@ -18,15 +18,15 @@ object Android {
 
     // See compose/kotlin version mapping
     // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    const val composeCompiler = "1.4.3"
+    const val composeCompiler = "1.4.4"
 }
 
 object Plugins {
     const val android = "com.android.tools.build:gradle:7.4.2"
     const val kotlin = Kotlin.gradlePlugin
-    const val kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.13.0"
+    const val kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.14.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.46.0"
-    const val mavenPublish = "com.vanniktech:gradle-maven-publish-plugin:0.24.0"
+    const val mavenPublish = "com.vanniktech:gradle-maven-publish-plugin:0.25.1"
 }
 
 object Kotlin {
@@ -50,7 +50,7 @@ object Libs {
         const val coreKtx = "androidx.core:core-ktx:1.9.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
         const val cardView = "androidx.cardview:cardview:1.0.0"
-        const val recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
+        const val recyclerView = "androidx.recyclerview:recyclerview:1.3.0"
         const val material = "com.google.android.material:material:1.8.0"
 
         object Test {
@@ -64,15 +64,14 @@ object Libs {
     }
 
     object Compose {
-        private const val composeVersion = "1.3.3"
-        private const val composeFoundation = "1.3.1"
+        private const val composeVersion = "1.4.0"
         const val ui = "androidx.compose.ui:ui:$composeVersion"
-        const val foundation = "androidx.compose.foundation:foundation:$composeFoundation"
+        const val foundation = "androidx.compose.foundation:foundation:$composeVersion"
         const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
         const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
-        const val material = "androidx.compose.material:material:1.3.1"
-        const val activity = "androidx.activity:activity-compose:1.6.1"
-        const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.28.0"
+        const val material = "androidx.compose.material:material:1.4.0"
+        const val activity = "androidx.activity:activity-compose:1.7.0"
+        const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.30.0"
 
         object Test {
             const val uiJunit = "androidx.compose.ui:ui-test-junit4:$composeVersion"
