@@ -132,9 +132,12 @@ class CalendarComposeTests {
             .size.height
 
         assertEquals(
+            /* expected = */
             monthHeight.value,
+            /* actual = */
             headerHeight.value + firstDayHeight.value * weeksInMonth,
-            5f, // Sum rounds up with extra ~ 2dp locally but ~ 5dp on the remote test device.
+            /* delta = */
+            firstDayHeight.value, // Account for when larger adjacent month is used as calendar height.
         )
         assertNotEquals(0, headerHeight)
         assertNotEquals(0, firstDayHeight)
