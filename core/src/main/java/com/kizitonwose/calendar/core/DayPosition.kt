@@ -23,6 +23,4 @@ enum class DayPosition {
      * @see [OutDateStyle]
      */
     OutDate,
-
-    ;
 }

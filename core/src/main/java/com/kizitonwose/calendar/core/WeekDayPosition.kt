@@ -22,6 +22,4 @@ enum class WeekDayPosition {
      * The day is after the provided end date.
      */
     OutDate,
-
-    ;
 }

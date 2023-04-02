@@ -25,5 +25,4 @@ enum class ContentHeightMode {
      * be created with [Modifier.fillMaxHeight] or [Modifier.height].
      */
     Fill,
-    ;
 }

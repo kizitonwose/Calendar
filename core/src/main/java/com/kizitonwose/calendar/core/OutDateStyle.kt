@@ -19,6 +19,4 @@ enum class OutDateStyle {
      * This means that all months will have 6 rows.
      */
     EndOfGrid,
-
-    ;
 }

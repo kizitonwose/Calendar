@@ -71,7 +71,6 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
         subtitle = "Month and week calendar toggle with animations.",
         showToolBar = true,
     ),
-    ;
 }
 
 @Composable
