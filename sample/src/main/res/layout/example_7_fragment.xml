@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cv_dayViewResource="@layout/example_7_calendar_day"
-            app:cv_daySize="seventhWidth"
+            app:cv_daySize="freeForm"
             app:cv_orientation="horizontal" />
 
     </com.google.android.material.appbar.AppBarLayout>

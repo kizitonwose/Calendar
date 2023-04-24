@@ -20,7 +20,7 @@ fun getWeekCalendarAdjustedRange(
     val inDays = firstDayOfWeek.daysUntil(startDate.dayOfWeek)
     val startDateAdjusted = startDate.minusDays(inDays.toLong())
     val weeksBetween =
-        ChronoUnit.WEEKS.between(startDateAdjusted, endDate).toInt()
+        ChronoUnit.DAYS.between(startDateAdjusted, endDate).toInt()
     val endDateAdjusted = startDateAdjusted.plusWeeks(weeksBetween.toLong()).plusDays(6)
     return WeekDateRange(startDateAdjusted = startDateAdjusted, endDateAdjusted = endDateAdjusted)
 }
@@ -31,7 +31,7 @@ fun getWeekCalendarData(
     desiredStartDate: LocalDate,
     desiredEndDate: LocalDate,
 ): WeekData {
-    val firstDayInWeek = startDateAdjusted.plusWeeks(offset.toLong())
+    val firstDayInWeek = startDateAdjusted.plusDays(offset.toLong())
     return WeekData(firstDayInWeek, desiredStartDate, desiredEndDate)
 }
 
@@ -40,7 +40,7 @@ data class WeekData internal constructor(
     private val desiredStartDate: LocalDate,
     private val desiredEndDate: LocalDate,
 ) {
-    val week = Week((0 until 7).map { dayOffset -> getDay(dayOffset) })
+    val week = Week((0 until 1).map { dayOffset -> getDay(dayOffset) })
 
     private fun getDay(dayOffset: Int): WeekDay {
         val date = firstDayInWeek.plusDays(dayOffset.toLong())
@@ -54,7 +54,7 @@ data class WeekData internal constructor(
 }
 
 fun getWeekIndex(startDateAdjusted: LocalDate, date: LocalDate): Int {
-    return ChronoUnit.WEEKS.between(startDateAdjusted, date).toInt()
+    return ChronoUnit.DAYS.between(startDateAdjusted, date).toInt()
 }
 
 fun getWeekIndicesCount(startDateAdjusted: LocalDate, endDateAdjusted: LocalDate): Int {
