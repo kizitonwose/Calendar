@@ -266,7 +266,7 @@ Now we can use the header to show the title:
 ```kotlin
 class MonthViewContainer(view: View) : ViewContainer(view) {
     // Alternatively, you can add an ID to the container layout and use findViewById()
-    val titlesContianer = view as ViewGroup 
+    val titlesContainer = view as ViewGroup 
 }
 
 calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
@@ -275,9 +275,9 @@ calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewConta
         // Remember that the header is reused so this will be called for each month.
         // However, the first day of the week will not change so no need to bind 
         // the same view every time it is reused.
-        if (container.titlesContianer.tag == null) {
-            container.titlesContianer.tag = data.yearMonth
-            container.titlesContianer.children.map { it as TextView }
+        if (container.titlesContainer.tag == null) {
+            container.titlesContainer.tag = data.yearMonth
+            container.titlesContainer.children.map { it as TextView }
                 .forEachIndexed { index, textView ->
                     val dayOfWeek = daysOfWeek[index]
                     val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
