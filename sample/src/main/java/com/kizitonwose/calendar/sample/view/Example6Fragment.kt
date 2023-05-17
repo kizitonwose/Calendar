@@ -26,10 +26,29 @@ import com.kizitonwose.calendar.view.ViewContainer
 import java.time.DayOfWeek
 import java.time.YearMonth
 
-// We assign this class to the `monthViewClass` attribute in XML.
-// See usage in example_6_fragment.xml
-// This can also be set programmatically:
-// calendarView.monthViewClass = Example6MonthView::class.java.name
+/**
+ * We assign this class to the `monthViewClass` attribute in XML.
+ * See usage in example_6_fragment.xml
+ * This can also be set programmatically:
+ * ```
+ * calendarView.monthViewClass = Example6MonthView::class.java.name
+ * ```
+ * **NOTE:** This class must have a constructor which takes only a [Context]. You should
+ * exclude the constructor of this class from code obfuscation if enabled. Use the [Keep]
+ * annotation on the class constructor OR add the following proguard rule:
+ * ```
+ * -keepclassmembers class com.kizitonwose.calendar.sample.view.Example6MonthView {
+ *   public <init>(android.content.Context);
+ * }
+ * ```
+ * If this class is assigned vial xml, you should also exclude the class
+ * name from code obfuscation:
+ *  ```
+ *  -keepnames class com.kizitonwose.calendar.sample.view.Example6MonthView
+ *  ```
+ *  Please replace com.kizitonwose.calendar.sample.view.Example6MonthView in the
+ *  proguard examples above with your class full qualified name.
+ */
 class Example6MonthView @Keep constructor(context: Context) : CardView(context) {
 
     init {

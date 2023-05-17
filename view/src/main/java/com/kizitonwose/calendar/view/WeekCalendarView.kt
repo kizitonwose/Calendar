@@ -91,8 +91,10 @@ open class WeekCalendarView : RecyclerView {
 
     /**
      * A [ViewGroup] which is instantiated and used as the container for each week.
-     * This class must have a constructor which takes only a [Context]. You should
-     * exclude the name and constructor of this class from code obfuscation if enabled.
+     * This class must have a constructor which takes only a [Context].
+     *
+     * **You should exclude the name and constructor of this class from code
+     * obfuscation if enabled**.
      */
     var weekViewClass: String? = null
         set(value) {

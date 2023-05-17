@@ -94,8 +94,10 @@ open class CalendarView : RecyclerView {
 
     /**
      * A [ViewGroup] which is instantiated and used as the container for each month.
-     * This class must have a constructor which takes only a [Context]. You should
-     * exclude the name and constructor of this class from code obfuscation if enabled.
+     * This class must have a constructor which takes only a [Context].
+     *
+     * **You should exclude the name and constructor of this class from code
+     * obfuscation if enabled**.
      */
     var monthViewClass: String? = null
         set(value) {
