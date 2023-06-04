@@ -5,7 +5,7 @@ package com.kizitonwose.calendar.buildsrc
 import org.gradle.api.JavaVersion
 
 object Config {
-    val compatibleJavaVersion = JavaVersion.VERSION_11
+    val compatibleJavaVersion = JavaVersion.VERSION_17
 }
 
 object Android {
@@ -18,11 +18,11 @@ object Android {
 
     // See compose/kotlin version mapping
     // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    const val composeCompiler = "1.4.4"
+    const val composeCompiler = "1.4.7"
 }
 
 object Plugins {
-    const val android = "com.android.tools.build:gradle:7.4.2"
+    const val android = "com.android.tools.build:gradle:8.0.2"
     const val kotlin = Kotlin.gradlePlugin
     const val kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.14.0"
     const val versions = "com.github.ben-manes:gradle-versions-plugin:0.46.0"
@@ -30,7 +30,7 @@ object Plugins {
 }
 
 object Kotlin {
-    private const val version = "1.8.10"
+    private const val version = "1.8.21"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
 }
