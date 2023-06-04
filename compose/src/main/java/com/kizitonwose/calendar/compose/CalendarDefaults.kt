@@ -23,7 +23,7 @@ internal object CalendarDefaults {
     @Composable
     private fun pagedFlingBehavior(state: LazyListState): FlingBehavior {
         val snappingLayout = remember(state) {
-            val provider = SnapLayoutInfoProvider(state) { _, _ -> 0f }
+            val provider = SnapLayoutInfoProvider(state) { _, _, _ -> 0 }
             CalendarSnapLayoutInfoProvider(provider)
         }
         return rememberSnapFlingBehavior(snappingLayout)
@@ -40,8 +40,9 @@ internal object CalendarDefaults {
 
 @ExperimentalFoundationApi
 @Suppress("FunctionName")
-private fun CalendarSnapLayoutInfoProvider(snapLayoutInfoProvider: SnapLayoutInfoProvider):
-    SnapLayoutInfoProvider = object : SnapLayoutInfoProvider by snapLayoutInfoProvider {
+private fun CalendarSnapLayoutInfoProvider(
+    snapLayoutInfoProvider: SnapLayoutInfoProvider,
+): SnapLayoutInfoProvider = object : SnapLayoutInfoProvider by snapLayoutInfoProvider {
 
     /**
      * In compose 1.3, the default was single page snapping (zero), but this changed

@@ -2,7 +2,7 @@
 
 package com.kizitonwose.calendar.sample.compose
 
-import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -14,7 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import com.google.accompanist.navigation.animation.composable
 
 private const val animDurationMillis = 400
-private typealias SlideDirection = AnimatedContentScope.SlideDirection
+private typealias SlideDirection = AnimatedContentTransitionScope.SlideDirection
 
 fun NavGraphBuilder.horizontallyAnimatedComposable(
     route: String,

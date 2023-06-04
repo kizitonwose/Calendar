@@ -64,14 +64,14 @@ object Libs {
     }
 
     object Compose {
-        private const val composeVersion = "1.4.0"
+        private const val composeVersion = "1.5.0-beta01"
         const val ui = "androidx.compose.ui:ui:$composeVersion"
         const val foundation = "androidx.compose.foundation:foundation:$composeVersion"
         const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
         const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
-        const val material = "androidx.compose.material:material:1.4.0"
+        const val material = "androidx.compose.material:material:$composeVersion"
         const val activity = "androidx.activity:activity-compose:1.7.0"
-        const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.30.0"
+        const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.31.3-beta"
 
         object Test {
             const val uiJunit = "androidx.compose.ui:ui-test-junit4:$composeVersion"
