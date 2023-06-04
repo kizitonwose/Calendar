@@ -37,7 +37,7 @@ object Kotlin {
 
 object Libs {
     object Core {
-        const val deSugar = "com.android.tools:desugar_jdk_libs:2.0.2"
+        const val deSugar = "com.android.tools:desugar_jdk_libs:2.0.3"
 
         object Test {
             const val junit = "junit:junit:4.13.2"
@@ -47,11 +47,11 @@ object Libs {
     object View {
         const val legacySupport = "androidx.legacy:legacy-support-v4:1.0.0"
         const val appCompat = "androidx.appcompat:appcompat:1.6.1"
-        const val coreKtx = "androidx.core:core-ktx:1.9.0"
+        const val coreKtx = "androidx.core:core-ktx:1.10.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
         const val cardView = "androidx.cardview:cardview:1.0.0"
         const val recyclerView = "androidx.recyclerview:recyclerview:1.3.0"
-        const val material = "com.google.android.material:material:1.8.0"
+        const val material = "com.google.android.material:material:1.9.0"
 
         object Test {
             private const val espressoVersion = "3.5.1"
@@ -70,7 +70,7 @@ object Libs {
         const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
         const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
         const val material = "androidx.compose.material:material:$composeVersion"
-        const val activity = "androidx.activity:activity-compose:1.7.0"
+        const val activity = "androidx.activity:activity-compose:1.7.2"
         const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.31.3-beta"
 
         object Test {
