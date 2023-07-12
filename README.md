@@ -4,7 +4,8 @@ A highly customizable calendar library for Android, backed by RecyclerView for t
 LazyRow/LazyColumn for compose.
 
 [![Tests](https://github.com/kizitonwose/Calendar/workflows/Check/badge.svg?branch=main)](https://github.com/kizitonwose/Calendar/actions)
-[![Maven Central](https://img.shields.io/badge/dynamic/xml.svg?label=Maven%20Central&color=blue&query=%2F%2Fmetadata%2Fversioning%2Flatest&url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fkizitonwose%2Fcalendar%2Fcore%2Fmaven-metadata.xml)](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
+[![Maven Central](https://img.shields.io/badge/dynamic/xml.svg?label=Maven%20Central&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27beta%27))][last()])](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
+[![Maven Central Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Maven%20Central%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
 [![License](https://img.shields.io/badge/License-MIT-0097A7.svg)](https://github.com/kizitonwose/Calendar/blob/main/LICENSE.md)
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
 
