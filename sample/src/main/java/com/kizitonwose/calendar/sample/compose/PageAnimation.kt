@@ -1,20 +1,16 @@
-@file:OptIn(ExperimentalAnimationApi::class)
-
 package com.kizitonwose.calendar.sample.compose
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-import com.google.accompanist.navigation.animation.composable
+import androidx.navigation.compose.composable
 
-private const val animDurationMillis = 400
-private typealias SlideDirection = AnimatedContentTransitionScope.SlideDirection
+private const val ANIM_DURATION_MILLIS = 400
 
 fun NavGraphBuilder.horizontallyAnimatedComposable(
     route: String,
@@ -24,16 +20,28 @@ fun NavGraphBuilder.horizontallyAnimatedComposable(
         route = route,
         content = content,
         enterTransition = {
-            slideIntoContainer(SlideDirection.Left, animationSpec = tween(animDurationMillis))
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(ANIM_DURATION_MILLIS),
+            )
         },
         exitTransition = {
-            slideOutOfContainer(SlideDirection.Left, animationSpec = tween(animDurationMillis))
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                animationSpec = tween(ANIM_DURATION_MILLIS),
+            )
         },
         popEnterTransition = {
-            slideIntoContainer(SlideDirection.Right, animationSpec = tween(animDurationMillis))
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(ANIM_DURATION_MILLIS),
+            )
         },
         popExitTransition = {
-            slideOutOfContainer(SlideDirection.Right, animationSpec = tween(animDurationMillis))
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(ANIM_DURATION_MILLIS),
+            )
         },
     )
 }
@@ -46,16 +54,22 @@ fun NavGraphBuilder.verticallyAnimatedComposable(
         route = route,
         content = content,
         enterTransition = {
-            slideIntoContainer(SlideDirection.Up, animationSpec = tween(animDurationMillis))
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                animationSpec = tween(ANIM_DURATION_MILLIS),
+            )
         },
         exitTransition = {
-            fadeOut(animationSpec = tween(animDurationMillis))
+            fadeOut(animationSpec = tween(ANIM_DURATION_MILLIS))
         },
         popEnterTransition = {
-            fadeIn(animationSpec = tween(animDurationMillis))
+            fadeIn(animationSpec = tween(ANIM_DURATION_MILLIS))
         },
         popExitTransition = {
-            slideOutOfContainer(SlideDirection.Down, animationSpec = tween(animDurationMillis))
+            slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                animationSpec = tween(ANIM_DURATION_MILLIS),
+            )
         },
     )
 }

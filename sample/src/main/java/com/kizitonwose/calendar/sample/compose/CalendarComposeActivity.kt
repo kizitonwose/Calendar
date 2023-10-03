@@ -3,7 +3,6 @@ package com.kizitonwose.calendar.sample.compose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -20,15 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.shared.dateRangeDisplayText
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalAnimationApi::class)
 class CalendarComposeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +34,7 @@ class CalendarComposeActivity : AppCompatActivity() {
             val primaryColor = colorResource(id = R.color.colorPrimary)
             var toolBarTitle by remember { mutableStateOf("") }
             var toolBarVisible by remember { mutableStateOf(true) }
-            val navController = rememberAnimatedNavController()
+            val navController = rememberNavController()
             val coroutineScope = rememberCoroutineScope()
             val scaffoldState = rememberScaffoldState()
             LaunchedEffect(navController) {
@@ -96,7 +93,7 @@ class CalendarComposeActivity : AppCompatActivity() {
         navController: NavHostController = rememberNavController(),
         showSnack: (String) -> Unit = {},
     ) {
-        AnimatedNavHost(
+        NavHost(
             modifier = modifier,
             navController = navController,
             startDestination = Page.List.name,

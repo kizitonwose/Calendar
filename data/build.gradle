@@ -1,14 +1,14 @@
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Libs
 import com.kizitonwose.calendar.buildsrc.Kotlin
+import com.kizitonwose.calendar.buildsrc.Libs
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.vanniktech.maven.publish'
 
 android {
-    compileSdkVersion Android.compileSdk
+    compileSdk Android.compileSdk
     namespace 'com.kizitonwose.calendar.data'
     defaultConfig {
         minSdkVersion Android.minSdkLibraryCore

@@ -14,23 +14,23 @@ object Android {
     const val minSdkLibraryCompose = 21
     const val minSdkSample = 21
     const val targetSdk = 33
-    const val compileSdk = 33
+    const val compileSdk = 34
 
     // See compose/kotlin version mapping
     // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    const val composeCompiler = "1.4.7"
+    const val composeCompiler = "1.5.3"
 }
 
 object Plugins {
-    const val android = "com.android.tools.build:gradle:8.0.2"
+    const val android = "com.android.tools.build:gradle:8.1.0"
     const val kotlin = Kotlin.gradlePlugin
-    const val kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.14.0"
-    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.46.0"
-    const val mavenPublish = "com.vanniktech:gradle-maven-publish-plugin:0.25.1"
+    const val kotlinter = "org.jmailen.gradle:kotlinter-gradle:3.16.0"
+    const val versions = "com.github.ben-manes:gradle-versions-plugin:0.48.0"
+    const val mavenPublish = "com.vanniktech:gradle-maven-publish-plugin:0.25.3"
 }
 
 object Kotlin {
-    private const val version = "1.8.21"
+    private const val version = "1.9.10"
     const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
     const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
 }
@@ -47,10 +47,10 @@ object Libs {
     object View {
         const val legacySupport = "androidx.legacy:legacy-support-v4:1.0.0"
         const val appCompat = "androidx.appcompat:appcompat:1.6.1"
-        const val coreKtx = "androidx.core:core-ktx:1.10.0"
+        const val coreKtx = "androidx.core:core-ktx:1.12.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
         const val cardView = "androidx.cardview:cardview:1.0.0"
-        const val recyclerView = "androidx.recyclerview:recyclerview:1.3.0"
+        const val recyclerView = "androidx.recyclerview:recyclerview:1.3.1"
         const val material = "com.google.android.material:material:1.9.0"
 
         object Test {
@@ -64,14 +64,14 @@ object Libs {
     }
 
     object Compose {
-        private const val composeVersion = "1.5.0-beta01"
+        private const val composeVersion = "1.5.2"
         const val ui = "androidx.compose.ui:ui:$composeVersion"
         const val foundation = "androidx.compose.foundation:foundation:$composeVersion"
         const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
         const val runtime = "androidx.compose.runtime:runtime:$composeVersion"
         const val material = "androidx.compose.material:material:$composeVersion"
         const val activity = "androidx.activity:activity-compose:1.7.2"
-        const val navigation = "com.google.accompanist:accompanist-navigation-animation:0.31.3-beta"
+        const val navigation = "androidx.navigation:navigation-compose:2.7.2"
 
         object Test {
             const val uiJunit = "androidx.compose.ui:ui-test-junit4:$composeVersion"

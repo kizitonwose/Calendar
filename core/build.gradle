@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.vanniktech.maven.publish'
 
 android {
-    compileSdkVersion Android.compileSdk
+    compileSdk Android.compileSdk
     namespace 'com.kizitonwose.calendar.core'
     defaultConfig {
         minSdkVersion Android.minSdkLibraryCore

@@ -7,7 +7,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion Android.compileSdk
+    compileSdk Android.compileSdk
     namespace 'com.kizitonwose.calendar.sample'
     defaultConfig {
         applicationId "com.kizitonwose.calendar.sample"
