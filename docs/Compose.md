@@ -35,12 +35,13 @@ Add the library to your project [here](https://github.com/kizitonwose/Calendar#s
 
 Ensure that you are using the library version that matches with the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency.
 
-|Compose UI|Calendar Library|
-|   :-:    |      :-:       |
-|  1.2.x   |     2.0.x      |
-|  1.3.x   | 2.1.x - 2.2.x  |
-|  1.4.x   |     2.3.x      |
-|  1.5.x   |     2.4.x      |
+| Compose UI | Calendar Library |
+|:----------:|:----------------:|
+|   1.2.x    |      2.0.x       |
+|   1.3.x    |  2.1.x - 2.2.x   |
+|   1.4.x    |      2.3.x       |
+|   1.5.x    |      2.4.x       |
+|   1.6.x    |      2.5.x       |
 
 ## Calendar Composables
 
