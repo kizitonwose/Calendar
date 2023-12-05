@@ -102,7 +102,17 @@ You can find the latest version of the library on the maven central badge above.
 
 Snapshots of the development version are available in [Sonatype’s snapshots repository](https://s01.oss.sonatype.org/content/repositories/snapshots/com/kizitonwose/calendar/).
 
-**Note: If you're upgrading from version 1.x.x to 2.x.x, see the [migration guide](https://github.com/kizitonwose/calendar/blob/main/docs/MigrationGuide.md).**
+If you're upgrading from version 1.x.x to 2.x.x, see the [migration guide](https://github.com/kizitonwose/calendar/blob/main/docs/MigrationGuide.md).
+
+For the compose calendar library, ensure that you are using the library version that matches the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency.
+
+| Compose UI | Calendar Library |
+|:----------:|:----------------:|
+|   1.2.x    |      2.0.x       |
+|   1.3.x    |  2.1.x - 2.2.x   |
+|   1.4.x    |      2.3.x       |
+|   1.5.x    |      2.4.x       |
+|   1.6.x    |      2.5.x       |
 
 ## Usage
 
