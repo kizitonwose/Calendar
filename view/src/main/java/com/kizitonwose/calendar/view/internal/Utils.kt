@@ -51,7 +51,10 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
     )
 
     val weekHolders = List(weekSize) {
-        WeekHolder(dayConfig.daySize, List(7) { DayHolder(dayConfig) })
+        WeekHolder(
+            daySize = dayConfig.daySize,
+            dayHolders = List(size = 7) { DayHolder(dayConfig) },
+        )
     }.onEach { weekHolder ->
         rootLayout.addView(weekHolder.inflateWeekView(rootLayout))
     }

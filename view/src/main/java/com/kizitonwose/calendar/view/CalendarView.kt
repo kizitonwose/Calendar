@@ -268,7 +268,7 @@ open class CalendarView : RecyclerView {
         }
         if (
             (orientation == HORIZONTAL && pageSnapHelper !== horizontalSnapHelper) ||
-            (orientation != VERTICAL && pageSnapHelper !== verticalSnapHelper)
+            (orientation == VERTICAL && pageSnapHelper !== verticalSnapHelper)
         ) {
             // Remove the currently attached snap helper.
             pageSnapHelper.attachToRecyclerView(null)
