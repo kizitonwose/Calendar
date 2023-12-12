@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.core.content.withStyledAttributes
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -11,6 +12,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.data.checkDateRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
+import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelperLegacy
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarAdapter
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarLayoutManager
 import java.time.DayOfWeek
@@ -117,6 +119,7 @@ open class CalendarView : RecyclerView {
             if (field != value) {
                 field = value
                 (layoutManager as? MonthCalendarLayoutManager)?.orientation = value
+                updateSnapHelper()
             }
         }
 
@@ -129,7 +132,7 @@ open class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                pagerSnapHelper.attachToRecyclerView(if (scrollPaged) this else null)
+                updateSnapHelper()
             }
         }
 
@@ -180,7 +183,9 @@ open class CalendarView : RecyclerView {
         }
     }
 
-    private val pagerSnapHelper = CalendarPageSnapHelper()
+    private val horizontalSnapHelper = CalendarPageSnapHelperLegacy()
+    private val verticalSnapHelper = CalendarPageSnapHelper()
+    private var pageSnapHelper: PagerSnapHelper = horizontalSnapHelper
 
     private var startMonth: YearMonth? = null
     private var endMonth: YearMonth? = null
@@ -225,10 +230,10 @@ open class CalendarView : RecyclerView {
                 R.styleable.CalendarView_cv_scrollPaged,
                 orientation == HORIZONTAL,
             )
-            daySize = DaySize.values()[
+            daySize = DaySize.entries[
                 getInt(R.styleable.CalendarView_cv_daySize, daySize.ordinal),
             ]
-            outDateStyle = OutDateStyle.values()[
+            outDateStyle = OutDateStyle.entries[
                 getInt(R.styleable.CalendarView_cv_outDateStyle, outDateStyle.ordinal),
             ]
             monthViewClass = getString(R.styleable.CalendarView_cv_monthViewClass)
@@ -254,6 +259,23 @@ open class CalendarView : RecyclerView {
         adapter = adapter
         layoutManager?.onRestoreInstanceState(state)
         post { calendarAdapter.notifyMonthScrollListenerIfNeeded() }
+    }
+
+    private fun updateSnapHelper() {
+        if (!scrollPaged) {
+            pageSnapHelper.attachToRecyclerView(null)
+            return
+        }
+        if (
+            (orientation == HORIZONTAL && pageSnapHelper !== horizontalSnapHelper) ||
+            (orientation != VERTICAL && pageSnapHelper !== verticalSnapHelper)
+        ) {
+            // Remove the currently attached snap helper.
+            pageSnapHelper.attachToRecyclerView(null)
+            pageSnapHelper =
+                if (orientation == HORIZONTAL) horizontalSnapHelper else verticalSnapHelper
+        }
+        pageSnapHelper.attachToRecyclerView(this)
     }
 
     /**
