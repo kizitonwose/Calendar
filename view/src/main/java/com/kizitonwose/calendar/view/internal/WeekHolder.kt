@@ -16,13 +16,13 @@ private class WidthDivisorLinearLayout : LinearLayout {
     constructor(context: Context, attrs: AttributeSet?, defStyle: Int) :
         super(context, attrs, defStyle)
 
-    var widthDivisor: Int = 0
+    var widthDivisorForHeight: Int = 0
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         @Suppress("NAME_SHADOWING")
-        val heightMeasureSpec = if (widthDivisor > 0) {
+        val heightMeasureSpec = if (widthDivisorForHeight > 0) {
             val width = MeasureSpec.getSize(widthMeasureSpec)
-            MeasureSpec.makeMeasureSpec(width / widthDivisor, MeasureSpec.EXACTLY)
+            MeasureSpec.makeMeasureSpec(width / widthDivisorForHeight, MeasureSpec.EXACTLY)
         } else {
             heightMeasureSpec
         }
@@ -53,7 +53,7 @@ internal class WeekHolder<Day>(
             layoutParams = LinearLayout.LayoutParams(width, height, weight)
             orientation = LinearLayout.HORIZONTAL
             weightSum = dayHolders.count().toFloat()
-            widthDivisor = if (daySize == DaySize.Square) dayHolders.count() else 0
+            widthDivisorForHeight = if (daySize == DaySize.Square) dayHolders.count() else 0
             for (holder in dayHolders) {
                 addView(holder.inflateDayView(this))
             }

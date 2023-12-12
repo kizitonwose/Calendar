@@ -9,7 +9,7 @@ import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.internal.WeekHolder
 
-internal class MonthViewHolder constructor(
+internal class MonthViewHolder(
     rootLayout: ViewGroup,
     private val headerView: View?,
     private val footerView: View?,

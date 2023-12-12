@@ -9,7 +9,7 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
 import com.kizitonwose.calendar.view.internal.WeekHolder
 
-internal class WeekViewHolder constructor(
+internal class WeekViewHolder(
     rootLayout: ViewGroup,
     private val headerView: View?,
     private val footerView: View?,
