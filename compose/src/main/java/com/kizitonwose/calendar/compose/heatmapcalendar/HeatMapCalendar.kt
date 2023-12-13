@@ -45,7 +45,7 @@ internal fun HeatMapCalendarImpl(
             contentPadding = contentPadding,
         ) {
             items(
-                count = state.monthIndexCount,
+                count = state.calendarInfo.indexCount,
                 key = { offset -> state.store[offset].yearMonth },
             ) { offset ->
                 val calendarMonth = state.store[offset]

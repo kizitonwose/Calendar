@@ -15,6 +15,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.VisibleItemState
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -162,7 +163,7 @@ class HeatMapCalendarState internal constructor(
         firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0,
     )
 
-    internal var monthIndexCount by mutableStateOf(0)
+    internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
     internal val store = DataStore { offset ->
         getHeatMapCalendarMonthData(
@@ -179,7 +180,10 @@ class HeatMapCalendarState internal constructor(
     private fun monthDataChanged() {
         store.clear()
         checkDateRange(startMonth, endMonth)
-        monthIndexCount = getMonthIndicesCount(startMonth, endMonth)
+        calendarInfo = CalendarInfo(
+            indexCount = getMonthIndicesCount(startMonth, endMonth),
+            firstDayOfWeek = firstDayOfWeek,
+        )
     }
 
     /**

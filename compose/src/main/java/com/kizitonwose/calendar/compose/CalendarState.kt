@@ -182,7 +182,7 @@ class CalendarState internal constructor(
         firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0,
     )
 
-    internal var monthIndexCount by mutableStateOf(0)
+    internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
     internal val store = DataStore { offset ->
         getCalendarMonthData(
@@ -200,7 +200,16 @@ class CalendarState internal constructor(
     private fun monthDataChanged() {
         store.clear()
         checkDateRange(startMonth, endMonth)
-        monthIndexCount = getMonthIndicesCount(startMonth, endMonth)
+        // Read the firstDayOfWeek and outDateStyle properties to ensure recomposition
+        // even though they are unused in the CalendarInfo. Alternatively, we could use
+        // mutableStateMapOf() as the backing store for DataStore() to ensure recomposition
+        // but not sure how compose handles recomposition of a lazy list that reads from
+        // such map when an entry unrelated to the visible indices changes.
+        calendarInfo = CalendarInfo(
+            indexCount = getMonthIndicesCount(startMonth, endMonth),
+            firstDayOfWeek = firstDayOfWeek,
+            outDateStyle = outDateStyle,
+        )
     }
 
     /**

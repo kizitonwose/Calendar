@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -61,7 +62,7 @@ private enum class Level(val color: Color) {
 }
 
 private fun generateRandomData(startDate: LocalDate, endDate: LocalDate): Map<LocalDate, Level> {
-    val levels = Level.values()
+    val levels = Level.entries
     return (0..ChronoUnit.DAYS.between(startDate, endDate))
         .associateTo(hashMapOf()) { count ->
             startDate.plusDays(count) to levels.random()
@@ -70,7 +71,7 @@ private fun generateRandomData(startDate: LocalDate, endDate: LocalDate): Map<Lo
 
 @Composable
 fun Example6Page() {
-    var refreshKey by remember { mutableStateOf(1) }
+    var refreshKey by remember { mutableIntStateOf(1) }
     val endDate = remember { LocalDate.now() }
     // GitHub only shows contributions for the past 12 months
     val startDate = remember { endDate.minusMonths(12) }
@@ -173,7 +174,7 @@ private fun CalendarInfo(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.Bottom,
     ) {
         Text(text = "Less", fontSize = 10.sp)
-        Level.values().forEach { level ->
+        Level.entries.forEach { level ->
             LevelBox(level.color)
         }
         Text(text = "More", fontSize = 10.sp)
