@@ -176,7 +176,7 @@ private fun Calendar(
             contentPadding = contentPadding,
         ) {
             CalendarMonths(
-                monthCount = state.monthIndexCount,
+                monthCount = state.calendarInfo.indexCount,
                 monthData = { offset -> state.store[offset] },
                 contentHeightMode = contentHeightMode,
                 dayContent = dayContent,
@@ -196,7 +196,7 @@ private fun Calendar(
             contentPadding = contentPadding,
         ) {
             CalendarMonths(
-                monthCount = state.monthIndexCount,
+                monthCount = state.calendarInfo.indexCount,
                 monthData = { offset -> state.store[offset] },
                 contentHeightMode = contentHeightMode,
                 dayContent = dayContent,

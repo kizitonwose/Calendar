@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
@@ -179,7 +180,7 @@ class WeekCalendarState internal constructor(
         ).week
     }
 
-    internal var weekIndexCount by mutableStateOf(0)
+    internal var weekIndexCount by mutableIntStateOf(0)
 
     internal val listState = run {
         // Update date range and weekIndexCount initially.
