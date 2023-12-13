@@ -4,13 +4,14 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
-import androidx.compose.foundation.gestures.snapping.SnapPositionInLayout
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.Density
 
 internal object CalendarDefaults {
+
     /**
      * The default implementation in [rememberSnapFlingBehavior] snaps to the center of the layout
      * but we want to snap to the start. For example, in a vertical calendar, when the layout size
@@ -22,7 +23,7 @@ internal object CalendarDefaults {
     @Composable
     private fun pagedFlingBehavior(state: LazyListState): FlingBehavior {
         val snappingLayout = remember(state) {
-            val provider = SnapLayoutInfoProvider(state, CalendarSnapPositionInLayout())
+            val provider = SnapLayoutInfoProvider(state) { _, _, _ -> 0 }
             CalendarSnapLayoutInfoProvider(provider)
         }
         return rememberSnapFlingBehavior(snappingLayout)
@@ -42,13 +43,10 @@ internal object CalendarDefaults {
 private fun CalendarSnapLayoutInfoProvider(
     snapLayoutInfoProvider: SnapLayoutInfoProvider,
 ): SnapLayoutInfoProvider = object : SnapLayoutInfoProvider by snapLayoutInfoProvider {
+
     /**
      * In compose 1.3, the default was single page snapping (zero), but this changed
      * in compose 1.4 to decayed page snapping which is not great for calendar usage.
      */
-    override fun calculateApproachOffset(initialVelocity: Float): Float = 0f
+    override fun Density.calculateApproachOffset(initialVelocity: Float): Float = 0f
 }
-
-@OptIn(ExperimentalFoundationApi::class)
-@Suppress("FunctionName")
-private fun CalendarSnapPositionInLayout() = SnapPositionInLayout { _, _, _, _, _ -> 0 }
