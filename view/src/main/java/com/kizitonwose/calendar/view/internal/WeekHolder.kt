@@ -52,8 +52,8 @@ internal class WeekHolder<Day>(
             val weight = if (daySize.parentDecidesHeight) 1f else 0f
             layoutParams = LinearLayout.LayoutParams(width, height, weight)
             orientation = LinearLayout.HORIZONTAL
-            weightSum = dayHolders.count().toFloat()
-            widthDivisorForHeight = if (daySize == DaySize.Square) dayHolders.count() else 0
+            weightSum = 7.5f
+            widthDivisorForHeight = if (daySize == DaySize.Square) 5 else 0
             for (holder in dayHolders) {
                 addView(holder.inflateDayView(this))
             }
