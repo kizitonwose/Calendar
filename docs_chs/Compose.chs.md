@@ -3,14 +3,14 @@
 ## 目录
 
 - [快速链接](#快速链接)
-- [Compose 版本](#Compose 版本)
-- [日历 Composables](#日历 Composables)
+- [Compose 版本](#Compose版本)
+- [日历 Composables](#日历Composables)
 - [使用方法](#使用方法)
   * [日历状态](#日历状态)
   * [一周的第一天](#一周的第一天)
   * [头部和尾部](#头部和尾部)
   * [日历容器](#日历容器)
-  * [Composable 参数](#Composable 参数)
+  * [Composable 参数](#Composable参数)
   * [状态属性](#状态属性)
   * [状态方法](#状态方法)
   * [日期点击](#日期点击)
@@ -43,7 +43,7 @@
 |   1.5.x    |      2.4.x       |
 |   1.6.x    |      2.5.x       |
 
-## 日历 Composables
+## 日历Composables
 
 该库可以通过四个可组合项使用：
 
@@ -308,7 +308,7 @@ fun MainScreen() {
 
 <img src="https://user-images.githubusercontent.com/15170090/195417341-fc263e3c-7468-47f0-84be-db6a76e29f8f.png" alt="Background styles" width="250">
 
-### Composable 参数
+### Composable参数
 
 - **calendarScrollPaged**: 日历的滚动行为。当设置为 `true` 时，在滚动或滑动操作后，日历将对齐到最近的月份。当设置为 `false` 时，日历将正常滚动。
 - **userScrollEnabled**: 是否允许通过用户手势或辅助功能操作进行滚动。即使禁用了用户滚动，您仍然可以通过状态进行编程方式的滚动。从 LazyRow/LazyColumn 继承。
