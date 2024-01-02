@@ -91,10 +91,10 @@ Add the desired calendar library (view or compose) to your app `build.gradle`:
 ```groovy
 dependencies {
   // The view calendar library
-  implementation 'com.kizitonwose.calendar:view:<latest-version>'
+  implementation 'fr.trecobat.calendar:view:<latest-version>'
 
   // The compose calendar library
-  implementation 'com.kizitonwose.calendar:compose:<latest-version>'
+  implementation 'fr.trecobat.calendar:compose:<latest-version>'
 }
 ```
 

@@ -1,7 +1,7 @@
-import com.kizitonwose.calendar.buildsrc.Android
-import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Kotlin
-import com.kizitonwose.calendar.buildsrc.Libs
+import fr.trecobat.calendar.buildsrc.Android
+import fr.trecobat.calendar.buildsrc.Config
+import fr.trecobat.calendar.buildsrc.Kotlin
+import fr.trecobat.calendar.buildsrc.Libs
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
@@ -9,7 +9,7 @@ apply plugin: 'com.vanniktech.maven.publish'
 
 android {
     compileSdk Android.compileSdk
-    namespace 'com.kizitonwose.calendar.view'
+    namespace 'fr.trecobat.calendar.view'
     defaultConfig {
         minSdkVersion Android.minSdkLibraryView
         targetSdkVersion Android.targetSdk

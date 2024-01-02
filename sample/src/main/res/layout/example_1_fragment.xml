@@ -58,13 +58,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.kizitonwose.calendar.view.CalendarView
+        <fr.trecobat.calendar.view.CalendarView
             android:id="@+id/exOneCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cv_dayViewResource="@layout/example_1_calendar_day" />
 
-        <com.kizitonwose.calendar.view.WeekCalendarView
+        <fr.trecobat.calendar.view.WeekCalendarView
             android:id="@+id/exOneWeekCalendar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

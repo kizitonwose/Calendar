@@ -50,7 +50,7 @@ Most xml attributes and class properties/methods with the name prefix/suffix `mo
 Add CalendarView to your XML like any other view.
 
 ```xml
-<com.kizitonwose.calendar.view.CalendarView
+<fr.trecobat.calendar.view.CalendarView
     android:id="@+id/calendarView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -113,8 +113,8 @@ calendarView.scrollToMonth(currentMonth)
 **`WeekCalendarView` setup:**
 
 ```diff
-- <com.kizitonwose.calendar.view.CalendarView
-+ <com.kizitonwose.calendar.view.WeekCalendarView
+- <fr.trecobat.calendar.view.CalendarView
++ <fr.trecobat.calendar.view.WeekCalendarView
     android:id="@+id/weekCalendarView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -219,7 +219,7 @@ Add the titles container in the same layout as the CalendarView:
         android:id="@+id/titlesContainer"
         layout="@layout/calendar_day_titles_container" />
 
-    <com.kizitonwose.calendar.view.CalendarView
+    <fr.trecobat.calendar.view.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -252,7 +252,7 @@ To add a header or footer to each month, the procedure is the same as we did for
 To add the days of week titles as the month header, we provide the title container as the header resource:
 
 ```xml
-<com.kizitonwose.calendar.view.CalendarView
+<fr.trecobat.calendar.view.CalendarView
     android:id="@+id/calendarView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -452,7 +452,7 @@ XML file for the date cell `calendar_day_layout.xml`:
 Of course, you need to set the file as `cv_dayViewResource` on the CalendarView:
 
 ```xml
-<com.kizitonwose.calendarview.CalendarView
+<fr.trecobat.calendarview.CalendarView
     android:id="@+id/calendarView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -605,7 +605,7 @@ For example: `monthHeaderResource` => `weekHeaderResource`, `scrollToMonth()` =>
 To show the week calendar in your layout, add the view:
 
 ```xml
-<com.kizitonwose.calendar.view.WeekCalendarView
+<fr.trecobat.calendar.view.WeekCalendarView
     android:id="@+id/weekCalendarView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

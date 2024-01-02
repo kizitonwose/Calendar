@@ -1,4 +1,4 @@
-import com.kizitonwose.calendar.buildsrc.Plugins
+import fr.trecobat.calendar.buildsrc.Plugins
 
 apply plugin: 'com.github.ben-manes.versions'
 

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.kizitonwose.calendar.view.CalendarView
+            <fr.trecobat.calendar.view.CalendarView
                 android:id="@+id/exThreeCalendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
