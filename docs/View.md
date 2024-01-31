@@ -208,7 +208,7 @@ Create a container resource to use the text in `res/layout/calendar_day_titles_c
 
 Add the titles container in the same layout as the CalendarView:
 
-```kotlin
+```xml
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
