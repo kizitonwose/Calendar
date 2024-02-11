@@ -37,7 +37,6 @@ val horizontal = Animation(
 
 class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
     RecyclerView.Adapter<CalendarViewOptionsAdapter.HomeOptionsViewHolder>() {
-
     val examples = listOf(
         ExampleItem(
             R.string.example_1_title,
@@ -99,7 +98,6 @@ class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
 
     inner class HomeOptionsViewHolder(private val binding: CalendarViewOptionsItemViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         init {
             itemView.setOnClickListener {
                 onClick(examples[bindingAdapterPosition])

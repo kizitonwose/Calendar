@@ -19,7 +19,6 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, HasBackButton {
-
     override val titleRes: Int = R.string.example_7_title
 
     override val toolbar: Toolbar

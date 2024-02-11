@@ -27,7 +27,6 @@ import com.kizitonwose.calendar.sample.shared.dateRangeDisplayText
 import kotlinx.coroutines.launch
 
 class CalendarComposeActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

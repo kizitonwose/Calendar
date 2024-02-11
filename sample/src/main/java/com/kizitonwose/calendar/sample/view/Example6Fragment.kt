@@ -50,7 +50,6 @@ import java.time.YearMonth
  *  proguard examples above with your class full qualified name.
  */
 class Example6MonthView @Keep constructor(context: Context) : CardView(context) {
-
     init {
         setCardBackgroundColor(context.getColorCompat(R.color.example_6_month_bg_color))
         radius = dpToPx(8, context).toFloat()
@@ -59,7 +58,6 @@ class Example6MonthView @Keep constructor(context: Context) : CardView(context) 
 }
 
 class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButton {
-
     override val titleRes: Int = R.string.example_6_title
 
     private lateinit var binding: Example6FragmentBinding

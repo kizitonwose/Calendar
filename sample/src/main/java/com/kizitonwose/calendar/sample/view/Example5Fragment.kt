@@ -34,7 +34,6 @@ import java.time.YearMonth
 
 class Example5FlightsAdapter :
     RecyclerView.Adapter<Example5FlightsAdapter.Example5FlightsViewHolder>() {
-
     val flights = mutableListOf<Flight>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example5FlightsViewHolder {
@@ -51,7 +50,6 @@ class Example5FlightsAdapter :
 
     inner class Example5FlightsViewHolder(val binding: Example5EventItemViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(flight: Flight) {
             binding.itemFlightDateText.apply {
                 text = flightDateTimeFormatter.format(flight.time)
@@ -68,7 +66,6 @@ class Example5FlightsAdapter :
 }
 
 class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
-
     override val toolbar: Toolbar?
         get() = null
 

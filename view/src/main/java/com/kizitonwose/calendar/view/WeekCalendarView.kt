@@ -15,7 +15,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 open class WeekCalendarView : RecyclerView {
-
     /**
      * The [WeekDayBinder] instance used for managing day
      * cell view creation and reuse.

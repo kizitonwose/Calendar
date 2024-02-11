@@ -4,7 +4,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
-import java.util.*
+import java.util.Locale
 
 /**
  * Returns the days of week values such that the desired
@@ -15,7 +15,7 @@ import java.util.*
 @JvmOverloads
 fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
     val pivot = 7 - firstDayOfWeek.ordinal
-    val daysOfWeek = DayOfWeek.values()
+    val daysOfWeek = DayOfWeek.entries
     // Order `daysOfWeek` array so that firstDayOfWeek is at the start position.
     return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
 }

@@ -114,7 +114,9 @@ fun Modifier.backgroundHighlight(
             ) {
                 padding(vertical = padding)
                     .background(color = continuousSelectionColor)
-            } else this
+            } else {
+                this
+            }
         }
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
@@ -123,7 +125,9 @@ fun Modifier.backgroundHighlight(
             ) {
                 padding(vertical = padding)
                     .background(color = continuousSelectionColor)
-            } else this
+            } else {
+                this
+            }
         }
     }
 }
@@ -199,7 +203,9 @@ fun Modifier.backgroundHighlightLegacy(
             ) {
                 padding(vertical = padding)
                     .background(color = selectionColor)
-            } else this
+            } else {
+                this
+            }
         }
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
@@ -208,7 +214,9 @@ fun Modifier.backgroundHighlightLegacy(
             ) {
                 padding(vertical = padding)
                     .background(color = selectionColor)
-            } else this
+            } else {
+                this
+            }
         }
     }
 }

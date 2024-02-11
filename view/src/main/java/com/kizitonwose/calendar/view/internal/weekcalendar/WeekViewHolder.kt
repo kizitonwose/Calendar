@@ -17,7 +17,6 @@ internal class WeekViewHolder(
     private var weekHeaderBinder: WeekHeaderFooterBinder<ViewContainer>?,
     private var weekFooterBinder: WeekHeaderFooterBinder<ViewContainer>?,
 ) : RecyclerView.ViewHolder(rootLayout) {
-
     private var headerContainer: ViewContainer? = null
     private var footerContainer: ViewContainer? = null
 

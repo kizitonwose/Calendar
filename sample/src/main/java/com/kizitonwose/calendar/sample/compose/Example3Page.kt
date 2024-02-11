@@ -61,7 +61,7 @@ import com.kizitonwose.calendar.sample.shared.generateFlights
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.YearMonth
-import java.util.*
+import java.util.Locale
 
 private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 

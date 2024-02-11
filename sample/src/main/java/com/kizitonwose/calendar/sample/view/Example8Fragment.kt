@@ -23,7 +23,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class Example8Fragment : BaseFragment(R.layout.example_8_fragment), HasToolbar {
-
     override val toolbar: Toolbar? = null
 
     override val titleRes: Int? = null

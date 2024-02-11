@@ -20,7 +20,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 open class CalendarView : RecyclerView {
-
     /**
      * The [MonthDayBinder] instance used for managing day
      * cell view creation and reuse on the calendar.
@@ -352,6 +351,7 @@ open class CalendarView : RecyclerView {
     // method is called with named args: notifyDateChanged(date = *, position = DayPosition.*)
     // because assigning single elements to varargs in named form is not allowed.
     // May consider removing the other one at some point.
+
     /**
      * Notify the CalendarView to reload the cells for this [LocalDate] in the
      * specified day positions. This causes [MonthDayBinder.bind] to be called

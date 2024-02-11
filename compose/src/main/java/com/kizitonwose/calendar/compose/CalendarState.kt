@@ -76,7 +76,6 @@ class CalendarState internal constructor(
     outDateStyle: OutDateStyle,
     visibleItemState: VisibleItemState?,
 ) : ScrollableState {
-
     /** Backing state for [startMonth] */
     private var _startMonth by mutableStateOf(startMonth)
 

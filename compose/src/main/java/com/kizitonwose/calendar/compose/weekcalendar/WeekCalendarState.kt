@@ -78,7 +78,6 @@ class WeekCalendarState internal constructor(
     firstDayOfWeek: DayOfWeek,
     visibleItemState: VisibleItemState?,
 ) : ScrollableState {
-
     /**
      * The adjusted first date on the calendar to ensure proper alignment
      * of the provided [firstDayOfWeek].

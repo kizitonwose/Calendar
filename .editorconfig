@@ -9,7 +9,19 @@ trim_trailing_whitespace = true
 [*.{kt,kts}]
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
-ktlint_standard_multiline-if-else = disabled
+ktlint_standard_multiline-expression-wrapping = disabled
+# string-template-indent requires multiline-expression-wrapping to be enabled
+ktlint_standard_string-template-indent = disabled
+ktlint_standard_parameter-list-wrapping = disabled
+ktlint_standard_function-signature = disabled
+ktlint_standard_blank-line-before-declaration = disabled
+ktlint_standard_value-argument-comment = disabled
+ktlint_function_naming_ignore_when_annotated_with = Composable
+ktlint_standard_annotation = disabled
+max_line_length = 200
+
+[**/test/**/*.kt]
+ktlint_experimental = disabled
 
 [*.md]
 trim_trailing_whitespace = false

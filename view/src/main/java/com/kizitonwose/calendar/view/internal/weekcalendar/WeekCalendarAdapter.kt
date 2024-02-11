@@ -28,7 +28,6 @@ internal class WeekCalendarAdapter(
     private var endDate: LocalDate,
     private var firstDayOfWeek: DayOfWeek,
 ) : RecyclerView.Adapter<WeekViewHolder>() {
-
     private var adjustedData = getWeekCalendarAdjustedRange(startDate, endDate, firstDayOfWeek)
     private val startDateAdjusted: LocalDate get() = adjustedData.startDateAdjusted
     private val endDateAdjusted: LocalDate get() = adjustedData.endDateAdjusted

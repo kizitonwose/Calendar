@@ -11,7 +11,9 @@ import kotlin.LazyThreadSafetyMode.NONE
 
 data class DateSelection(val startDate: LocalDate? = null, val endDate: LocalDate? = null) {
     val daysBetween by lazy(NONE) {
-        if (startDate == null || endDate == null) null else {
+        if (startDate == null || endDate == null) {
+            null
+        } else {
             ChronoUnit.DAYS.between(startDate, endDate)
         }
     }

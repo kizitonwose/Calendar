@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 
 internal class CalendarPageSnapHelperLegacy : PagerSnapHelper() {
-
     /**
      * The default implementation of this method in [PagerSnapHelper.calculateDistanceToFinalSnap] uses the distance
      * between the target view center vs RecyclerView center as final snap distance. This does not always give the
@@ -25,11 +24,15 @@ internal class CalendarPageSnapHelperLegacy : PagerSnapHelper() {
         return IntArray(2).apply {
             this[0] = if (layoutManager.canScrollHorizontally()) {
                 distanceToStart(targetView, getHorizontalHelper(layoutManager))
-            } else 0
+            } else {
+                0
+            }
 
             this[1] = if (layoutManager.canScrollVertically()) {
                 distanceToStart(targetView, getVerticalHelper(layoutManager))
-            } else 0
+            } else {
+                0
+            }
         }
     }
 

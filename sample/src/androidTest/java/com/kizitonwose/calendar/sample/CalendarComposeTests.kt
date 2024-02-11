@@ -45,7 +45,6 @@ import java.time.temporal.WeekFields
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class CalendarComposeTests {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -132,11 +131,11 @@ class CalendarComposeTests {
             .size.height
 
         assertEquals(
-            /* expected = */
+            // expected
             monthHeight.value,
-            /* actual = */
+            // actual
             headerHeight.value + firstDayHeight.value * weeksInMonth,
-            /* delta = */
+            // delta
             firstDayHeight.value, // Account for when larger adjacent month is used as calendar height.
         )
         assertNotEquals(0, headerHeight)

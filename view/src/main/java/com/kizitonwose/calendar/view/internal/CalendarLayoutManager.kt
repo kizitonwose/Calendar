@@ -12,7 +12,6 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
     private val calView: RecyclerView,
     @RecyclerView.Orientation orientation: Int,
 ) : LinearLayoutManager(calView.context, orientation, false) {
-
     abstract fun getaItemAdapterPosition(data: IndexData): Int
     abstract fun getaDayAdapterPosition(data: DayData): Int
     abstract fun getDayTag(data: DayData): Int
@@ -70,7 +69,6 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
 
     private inner class CalendarSmoothScroller(position: Int, val day: DayData?) :
         LinearSmoothScroller(calView.context) {
-
         init {
             targetPosition = position
         }

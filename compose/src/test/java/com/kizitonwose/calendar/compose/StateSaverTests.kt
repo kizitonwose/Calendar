@@ -19,7 +19,6 @@ import java.time.YearMonth
  * state restoration (e.g via rotation) will likely not happen often.
  */
 class StateSaverTests {
-
     @Test
     fun `month calendar state can be restored`() {
         val now = YearMonth.now()

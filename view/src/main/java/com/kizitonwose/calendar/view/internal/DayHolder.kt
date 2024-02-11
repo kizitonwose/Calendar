@@ -19,7 +19,6 @@ internal data class DayConfig<Day>(
 )
 
 internal class DayHolder<Day>(private val config: DayConfig<Day>) {
-
     private lateinit var dayView: View
     private lateinit var viewContainer: ViewContainer
     private var day: Day? = null

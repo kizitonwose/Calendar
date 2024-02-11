@@ -13,7 +13,6 @@ import com.kizitonwose.calendar.core.CalendarMonth
  */
 class CalendarLayoutInfo(info: LazyListLayoutInfo, private val month: (Int) -> CalendarMonth) :
     LazyListLayoutInfo by info {
-
     /**
      * The list of [CalendarItemInfo] representing all the currently visible months.
      */

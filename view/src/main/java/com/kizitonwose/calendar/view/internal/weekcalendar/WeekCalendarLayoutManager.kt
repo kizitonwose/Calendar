@@ -8,7 +8,6 @@ import java.time.LocalDate
 
 internal class WeekCalendarLayoutManager(private val calView: WeekCalendarView) :
     CalendarLayoutManager<LocalDate, LocalDate>(calView, HORIZONTAL) {
-
     private val adapter: WeekCalendarAdapter
         get() = calView.adapter as WeekCalendarAdapter
 

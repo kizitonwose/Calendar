@@ -10,7 +10,6 @@ import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.databinding.CalendarViewActivityBinding
 
 class CalendarViewActivity : AppCompatActivity() {
-
     internal lateinit var binding: CalendarViewActivityBinding
 
     private val examplesAdapter = CalendarViewOptionsAdapter {

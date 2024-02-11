@@ -17,7 +17,6 @@ data class MonthData internal constructor(
     private val inDays: Int,
     private val outDays: Int,
 ) {
-
     private val totalDays = inDays + month.lengthOfMonth() + outDays
 
     private val firstDay = month.atStartOfMonth().minusDays(inDays.toLong())
@@ -54,9 +53,11 @@ fun getCalendarMonthData(
     val inDays = firstDayOfWeek.daysUntil(firstDay.dayOfWeek)
     val outDays = (inDays + month.lengthOfMonth()).let { inAndMonthDays ->
         val endOfRowDays = if (inAndMonthDays % 7 != 0) 7 - (inAndMonthDays % 7) else 0
-        val endOfGridDays = if (outDateStyle == OutDateStyle.EndOfRow) 0 else run {
+        val endOfGridDays = if (outDateStyle == OutDateStyle.EndOfRow) {
+            0
+        } else {
             val weeksInMonth = (inAndMonthDays + endOfRowDays) / 7
-            return@run (6 - weeksInMonth) * 7
+            (6 - weeksInMonth) * 7
         }
         return@let endOfRowDays + endOfGridDays
     }

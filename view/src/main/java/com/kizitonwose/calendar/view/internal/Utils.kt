@@ -41,7 +41,9 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
         rootLayout.inflate(itemHeaderResource).also { headerView ->
             rootLayout.addView(headerView)
         }
-    } else null
+    } else {
+        null
+    }
 
     @Suppress("UNCHECKED_CAST")
     val dayConfig = DayConfig(
@@ -63,7 +65,9 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
         rootLayout.inflate(itemFooterResource).also { footerView ->
             rootLayout.addView(footerView)
         }
-    } else null
+    } else {
+        null
+    }
 
     fun setupRoot(root: ViewGroup) {
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT

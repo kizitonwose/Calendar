@@ -35,7 +35,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
-
     override val toolbar: Toolbar?
         get() = null
 

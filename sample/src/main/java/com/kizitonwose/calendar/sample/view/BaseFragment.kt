@@ -13,7 +13,6 @@ interface HasToolbar {
 interface HasBackButton
 
 abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
-
     abstract val titleRes: Int?
 
     val activityToolbar: Toolbar

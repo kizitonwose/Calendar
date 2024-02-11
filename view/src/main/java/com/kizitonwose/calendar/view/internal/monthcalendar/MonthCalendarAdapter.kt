@@ -34,7 +34,6 @@ internal class MonthCalendarAdapter(
     private var endMonth: YearMonth,
     private var firstDayOfWeek: DayOfWeek,
 ) : RecyclerView.Adapter<MonthViewHolder>() {
-
     private var itemCount = getMonthIndicesCount(startMonth, endMonth)
     private val dataStore = DataStore { offset ->
         getCalendarMonthData(startMonth, offset, firstDayOfWeek, outDateStyle).calendarMonth

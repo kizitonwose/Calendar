@@ -15,7 +15,6 @@ import java.time.Month.OCTOBER
 import java.time.YearMonth
 
 class HeatMapDataTests {
-
     private val october2022 = YearMonth.of(2022, OCTOBER)
     private val november2022 = YearMonth.of(2022, NOVEMBER)
     private val december2022 = YearMonth.of(2022, DECEMBER)

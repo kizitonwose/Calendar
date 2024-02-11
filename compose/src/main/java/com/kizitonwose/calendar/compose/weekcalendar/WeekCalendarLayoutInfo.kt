@@ -16,7 +16,6 @@ class WeekCalendarLayoutInfo(
     info: LazyListLayoutInfo,
     private val getIndexData: (Int) -> Week,
 ) : LazyListLayoutInfo by info {
-
     /**
      * The list of [WeekCalendarItemInfo] representing all the currently visible weeks.
      */

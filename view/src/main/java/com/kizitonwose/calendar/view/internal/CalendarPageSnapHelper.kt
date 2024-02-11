@@ -23,7 +23,6 @@ import kotlin.math.abs
  * or left(in horizontal) to match at the end of the snap.
  */
 internal class CalendarPageSnapHelper : PagerSnapHelper() {
-
     private var recyclerView: RecyclerView? = null
     private var flingTargetPosition: Int? = null
     private var scrollAction: ScrollAction? = null
@@ -41,11 +40,15 @@ internal class CalendarPageSnapHelper : PagerSnapHelper() {
         return IntArray(2).apply {
             this[0] = if (lm.canScrollHorizontally()) {
                 distanceToStart(targetView, getHorizontalHelper(lm))
-            } else 0
+            } else {
+                0
+            }
 
             this[1] = if (lm.canScrollVertically()) {
                 distanceToStart(targetView, getVerticalHelper(lm))
-            } else 0
+            } else {
+                0
+            }
         }
     }
 
@@ -74,7 +77,9 @@ internal class CalendarPageSnapHelper : PagerSnapHelper() {
             val firstVisibleItemPosition = findFirstVisibleItemPositionInLayout(lm)
             val firstVisibleItem = lm.findViewByPosition(firstVisibleItemPosition) ?: return null
             val firstVisibleItemDistanceToStart = distanceToStart(firstVisibleItem, helper)
-            if (firstVisibleItemDistanceToStart == 0) null else {
+            if (firstVisibleItemDistanceToStart == 0) {
+                null
+            } else {
                 when (scrollAction) {
                     Forward -> {
                         if (
@@ -88,6 +93,7 @@ internal class CalendarPageSnapHelper : PagerSnapHelper() {
                             firstVisibleItem
                         }
                     }
+
                     Backward -> {
                         val nextPos = (firstVisibleItemPosition + increment).coerceIn(lm.indices)
                         val nextItem = lm.findViewByPosition(nextPos) ?: return firstVisibleItem
@@ -100,6 +106,7 @@ internal class CalendarPageSnapHelper : PagerSnapHelper() {
                             firstVisibleItem
                         }
                     }
+
                     Layout -> firstVisibleItem
                     null -> firstVisibleItem
                 }
@@ -177,7 +184,9 @@ internal class CalendarPageSnapHelper : PagerSnapHelper() {
 }
 
 private enum class ScrollAction {
-    Forward, Backward, Layout
+    Forward,
+    Backward,
+    Layout,
 }
 
 private val LayoutManager.indices: IntRange get() = 0 until itemCount

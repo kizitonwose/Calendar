@@ -9,7 +9,7 @@ import java.time.DayOfWeek
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
 
 fun YearMonth.displayText(short: Boolean = false): String {
     return "${this.month.displayText(short = short)} ${this.year}"

@@ -36,7 +36,6 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, HasBackButton {
-
     override val toolbar: Toolbar
         get() = binding.exFourToolbar
 

@@ -32,13 +32,12 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.UUID
 
 data class Event(val id: String, val text: String, val date: LocalDate)
 
 class Example3EventsAdapter(val onClick: (Event) -> Unit) :
     RecyclerView.Adapter<Example3EventsAdapter.Example3EventsViewHolder>() {
-
     val events = mutableListOf<Event>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Example3EventsViewHolder {
@@ -55,7 +54,6 @@ class Example3EventsAdapter(val onClick: (Event) -> Unit) :
 
     inner class Example3EventsViewHolder(private val binding: Example3EventItemViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         init {
             itemView.setOnClickListener {
                 onClick(events[bindingAdapterPosition])
@@ -69,7 +67,6 @@ class Example3EventsAdapter(val onClick: (Event) -> Unit) :
 }
 
 class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButton {
-
     private val eventsAdapter = Example3EventsAdapter {
         AlertDialog.Builder(requireContext())
             .setMessage(R.string.example_3_dialog_delete_confirmation)

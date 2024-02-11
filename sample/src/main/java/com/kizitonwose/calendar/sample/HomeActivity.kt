@@ -8,7 +8,6 @@ import com.kizitonwose.calendar.sample.databinding.HomeActivityBinding
 import com.kizitonwose.calendar.sample.view.CalendarViewActivity
 
 class HomeActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = HomeActivityBinding.inflate(layoutInflater)

@@ -41,7 +41,6 @@ internal class WeekHolder<Day>(
     private val daySize: DaySize,
     private val dayHolders: List<DayHolder<Day>>,
 ) {
-
     private lateinit var weekContainer: LinearLayout
 
     fun inflateWeekView(parent: LinearLayout): View {

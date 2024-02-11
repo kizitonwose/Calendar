@@ -9,7 +9,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 class WeekCalendarStateTests {
-
     @Test
     fun `start date update is reflected in the state`() {
         val now = LocalDate.now()

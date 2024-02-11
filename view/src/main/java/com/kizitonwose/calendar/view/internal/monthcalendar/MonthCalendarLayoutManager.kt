@@ -9,7 +9,6 @@ import java.time.YearMonth
 
 internal class MonthCalendarLayoutManager(private val calView: CalendarView) :
     CalendarLayoutManager<YearMonth, CalendarDay>(calView, calView.orientation) {
-
     private val adapter: MonthCalendarAdapter
         get() = calView.adapter as MonthCalendarAdapter
 

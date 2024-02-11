@@ -17,7 +17,6 @@ internal class MonthViewHolder(
     private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
     private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?,
 ) : RecyclerView.ViewHolder(rootLayout) {
-
     private var headerContainer: ViewContainer? = null
     private var footerContainer: ViewContainer? = null
 
