@@ -43,7 +43,15 @@ fun rememberHeatMapCalendarState(
     firstVisibleMonth: YearMonth = startMonth,
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): HeatMapCalendarState {
-    return rememberSaveable(saver = HeatMapCalendarState.Saver) {
+    return rememberSaveable(
+        inputs = arrayOf(
+            startMonth,
+            endMonth,
+            firstVisibleMonth,
+            firstDayOfWeek,
+        ),
+        saver = HeatMapCalendarState.Saver,
+    ) {
         HeatMapCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,

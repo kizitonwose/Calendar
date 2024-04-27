@@ -45,7 +45,15 @@ fun rememberWeekCalendarState(
     firstVisibleWeekDate: LocalDate = LocalDate.now(),
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): WeekCalendarState {
-    return rememberSaveable(saver = WeekCalendarState.Saver) {
+    return rememberSaveable(
+        inputs = arrayOf(
+            startDate,
+            endDate,
+            firstVisibleWeekDate,
+            firstDayOfWeek,
+        ),
+        saver = WeekCalendarState.Saver,
+    ) {
         WeekCalendarState(
             startDate = startDate,
             endDate = endDate,

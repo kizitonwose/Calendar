@@ -44,7 +44,16 @@ fun rememberCalendarState(
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
 ): CalendarState {
-    return rememberSaveable(saver = CalendarState.Saver) {
+    return rememberSaveable(
+        inputs = arrayOf(
+            startMonth,
+            endMonth,
+            firstVisibleMonth,
+            firstDayOfWeek,
+            outDateStyle,
+        ),
+        saver = CalendarState.Saver,
+    ) {
         CalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
