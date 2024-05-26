@@ -20,11 +20,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalRippleConfiguration
+import androidx.compose.material.RippleConfiguration
 import androidx.compose.material.Text
 import androidx.compose.material.darkColors
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -126,7 +128,8 @@ fun Example3Page() {
                 modifier = Modifier.wrapContentWidth(),
                 state = state,
                 dayContent = { day ->
-                    CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
+                    @OptIn(ExperimentalMaterialApi::class)
+                    CompositionLocalProvider(LocalRippleConfiguration provides Example3RippleConfiguration) {
                         val colors = if (day.position == DayPosition.MonthDate) {
                             flights[day.date].orEmpty().map { colorResource(it.color) }
                         } else {
@@ -319,13 +322,17 @@ private fun AirportInformation(airport: Airport, isDeparture: Boolean) {
 }
 
 // The default dark them ripple is too bright so we tone it down.
-private object Example3RippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor() = RippleTheme.defaultRippleColor(Color.Gray, lightTheme = false)
-
-    @Composable
-    override fun rippleAlpha() = RippleTheme.defaultRippleAlpha(Color.Gray, lightTheme = false)
-}
+@OptIn(ExperimentalMaterialApi::class)
+private val Example3RippleConfiguration = RippleConfiguration(
+    color = Color.Gray,
+    // Copied from RippleTheme#DarkThemeRippleAlpha
+    rippleAlpha = RippleAlpha(
+        pressedAlpha = 0.10f,
+        focusedAlpha = 0.12f,
+        draggedAlpha = 0.08f,
+        hoveredAlpha = 0.04f,
+    ),
+)
 
 @Preview(heightDp = 600)
 @Composable
