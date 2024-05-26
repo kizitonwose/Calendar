@@ -3,9 +3,11 @@
 package com.kizitonwose.calendar.buildsrc
 
 import org.gradle.api.JavaVersion
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 object Config {
     val compatibleJavaVersion = JavaVersion.VERSION_17
+    val compatibleJavaLanguageVersion = JavaLanguageVersion.of(compatibleJavaVersion.majorVersion.toInt())
 }
 
 object Android {
