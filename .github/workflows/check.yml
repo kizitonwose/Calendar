@@ -69,7 +69,7 @@ jobs:
 
   instrumentation-tests:
     name: Instrumentation tests
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       fail-fast: true
@@ -121,6 +121,12 @@ jobs:
           ARCH="x86_64"
           fi
           echo "::set-output name=ARCH::$ARCH"
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
