@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.sample.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -96,7 +97,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
             }
             .setNegativeButton(R.string.close, null)
             .create()
-            .apply {
+            .apply @Suppress("DEPRECATION") {
                 setOnShowListener {
                     // Show the keyboard
                     editText.requestFocus()
@@ -189,6 +190,7 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
         updateAdapterForDate(date)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateAdapterForDate(date: LocalDate) {
         eventsAdapter.apply {
             events.clear()
@@ -242,11 +244,13 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
                             textView.setBackgroundResource(R.drawable.example_3_today_bg)
                             dotView.makeInVisible()
                         }
+
                         selectedDate -> {
                             textView.setTextColorRes(R.color.example_3_blue)
                             textView.setBackgroundResource(R.drawable.example_3_selected_bg)
                             dotView.makeInVisible()
                         }
+
                         else -> {
                             textView.setTextColorRes(R.color.example_3_black)
                             textView.background = null

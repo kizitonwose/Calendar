@@ -11,6 +11,7 @@ import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.view.getColorCompat
 import java.lang.ref.WeakReference
 
+@Suppress("DEPRECATION")
 class StatusBarColorLifecycleObserver(
     activity: Activity,
     @ColorInt private val color: Int,
