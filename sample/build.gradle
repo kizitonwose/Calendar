@@ -26,13 +26,18 @@ android {
             minifyEnabled false
         }
     }
+    java {
+        toolchain {
+            languageVersion = Config.compatibleJavaLanguageVersion
+        }
+    }
+    kotlin {
+        jvmToolchain {
+            languageVersion = Config.compatibleJavaLanguageVersion
+        }
+    }
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility = Config.compatibleJavaVersion
-        targetCompatibility = Config.compatibleJavaVersion
-    }
-    kotlinOptions {
-        jvmTarget = Config.compatibleJavaVersion
     }
     composeOptions {
         kotlinCompilerExtensionVersion Android.composeCompiler

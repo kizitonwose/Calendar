@@ -4,6 +4,7 @@ package com.kizitonwose.calendar.buildsrc
 
 import org.gradle.api.JavaVersion
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import kotlin.math.max
 
 object Config {
     val compatibleJavaVersion = JavaVersion.VERSION_17
@@ -11,10 +12,9 @@ object Config {
 }
 
 object Android {
-    const val minSdkLibraryCore = 4
     const val minSdkLibraryView = 15
     const val minSdkLibraryCompose = 21
-    const val minSdkSample = 21
+    val minSdkSample = max(minSdkLibraryView, minSdkLibraryCompose)
     const val targetSdk = 33
     const val compileSdk = 34
 

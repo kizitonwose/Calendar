@@ -13,22 +13,22 @@ android {
     defaultConfig {
         minSdkVersion Android.minSdkLibraryView
         targetSdkVersion Android.targetSdk
-        multiDexEnabled true // Needed for desugar because minSdk < 21
     }
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility = Config.compatibleJavaVersion
-        targetCompatibility = Config.compatibleJavaVersion
+    java {
+        toolchain {
+            languageVersion = Config.compatibleJavaLanguageVersion
+        }
     }
-    kotlinOptions {
-        jvmTarget = Config.compatibleJavaVersion
+    kotlin {
+        jvmToolchain {
+            languageVersion = Config.compatibleJavaLanguageVersion
+        }
     }
 }
 
 dependencies {
     api project(':core')
     implementation project(':data')
-    coreLibraryDesugaring Libs.Core.deSugar
     implementation Kotlin.stdLib
     implementation Libs.View.coreKtx
 

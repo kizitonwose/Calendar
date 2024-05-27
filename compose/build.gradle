@@ -14,13 +14,15 @@ android {
         minSdkVersion Android.minSdkLibraryCompose
         targetSdkVersion Android.targetSdk
     }
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility = Config.compatibleJavaVersion
-        targetCompatibility = Config.compatibleJavaVersion
+    java {
+        toolchain {
+            languageVersion = Config.compatibleJavaLanguageVersion
+        }
     }
-    kotlinOptions {
-        jvmTarget = Config.compatibleJavaVersion
+    kotlin {
+        jvmToolchain {
+            languageVersion = Config.compatibleJavaLanguageVersion
+        }
     }
     buildFeatures {
         compose true
@@ -33,7 +35,6 @@ android {
 dependencies {
     api project(':core')
     implementation project(':data')
-    coreLibraryDesugaring Libs.Core.deSugar
     implementation Kotlin.stdLib
 
     implementation Libs.Compose.ui
