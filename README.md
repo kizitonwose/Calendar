@@ -46,15 +46,13 @@ View the sample app's source code [here](https://github.com/kizitonwose/Calendar
 
 ## Setup
 
-The library uses `java.time` classes via [Java 8+ API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for backward compatibility since these classes were added in Java 8.
-
 #### Step 1
 
-This step is required ONLY if your app's `minSdkVersion` is below 26. Jump to [step 2](#step-2) if this does not apply to you.
+**This step is required ONLY if your app's `minSdkVersion` is below 26. Jump to [step 2](#step-2) if this does not apply to you.**
 
-To set up your project for desugaring, you need to first ensure that you are using [Android Gradle plugin](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) 4.0.0 or higher.
+Apps with `minSdkVersion` below 26 have to enable [Java 8+ API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for backward compatibility since `java.time` classes were added in Java 8 which is supported natively starting from Android SDK 26. To set up your project for desugaring, you need to first ensure that you are using [Android Gradle plugin](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) 4.0.0 or higher.
 
-Then include the following in your app's build.gradle file:
+Then include the following in your app's `build.gradle` file:
 
 ```groovy
 android {
