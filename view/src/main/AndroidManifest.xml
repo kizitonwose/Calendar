@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest>
+<manifest xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Override the min SDK 21 from the compose runtime library which
+     is imported in the core project for the @Immutable annotation. -->
+    <uses-sdk tools:overrideLibrary="androidx.compose.runtime" />
 
 </manifest>
