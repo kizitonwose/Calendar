@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -80,7 +80,7 @@ fun NavigationIcon(onBackClick: () -> Unit) {
         Icon(
             tint = Color.White,
             modifier = Modifier.align(Alignment.Center),
-            imageVector = Icons.Default.ArrowBack,
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = "Back",
         )
     }
