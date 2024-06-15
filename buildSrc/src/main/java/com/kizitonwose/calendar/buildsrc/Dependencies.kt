@@ -13,7 +13,7 @@ object Config {
 }
 
 object Android {
-    const val minSdkViewLibrary = 15
+    const val minSdkViewLibrary = 19
     const val minSdkComposeLibrary = 21
     val minSdkSampleApp = max(minSdkViewLibrary, minSdkComposeLibrary)
     const val targetSdk = 34
