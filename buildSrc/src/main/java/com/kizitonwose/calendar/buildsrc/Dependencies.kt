@@ -25,7 +25,7 @@ object Android {
 }
 
 object Plugins {
-    private const val agpVersion = "8.4.0"
+    private const val agpVersion = "8.4.2"
     const val androidApp = "com.android.application"
     const val androidLibrary = "com.android.library"
     const val kotlinJvm = "org.jetbrains.kotlin.jvm"
@@ -78,7 +78,7 @@ object Libs {
     }
 
     object Compose {
-        private const val composeVersion = "1.7.0-beta01"
+        private const val composeVersion = "1.7.0-beta03"
         const val ui = "androidx.compose.ui:ui:$composeVersion"
         const val foundation = "androidx.compose.foundation:foundation:$composeVersion"
         const val tooling = "androidx.compose.ui:ui-tooling:$composeVersion"
