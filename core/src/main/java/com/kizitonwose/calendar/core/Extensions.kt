@@ -21,9 +21,10 @@ fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<Day
 }
 
 /**
- * Returns the first day of the week from the default locale.
+ * Returns the first day of the week from the provided locale.
  */
-fun firstDayOfWeekFromLocale(): DayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+@JvmOverloads
+fun firstDayOfWeekFromLocale(locale: Locale = Locale.getDefault()): DayOfWeek = WeekFields.of(locale).firstDayOfWeek
 
 /**
  * Returns a [LocalDate] at the start of the month.
