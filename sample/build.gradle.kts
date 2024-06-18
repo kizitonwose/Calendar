@@ -8,6 +8,7 @@ plugins {
     with(com.kizitonwose.calendar.buildsrc.Plugins) {
         id(androidApp)
         id(kotlinAndroid)
+        id(composeCompiler)
     }
 }
 
@@ -43,9 +44,6 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Android.composeCompiler
     }
 }
 

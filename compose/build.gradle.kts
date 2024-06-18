@@ -7,6 +7,7 @@ plugins {
     with(com.kizitonwose.calendar.buildsrc.Plugins) {
         id(androidLibrary)
         id(kotlinAndroid)
+        id(composeCompiler)
         id(mavenPublish)
     }
 }
@@ -29,9 +30,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Android.composeCompiler
     }
 }
 

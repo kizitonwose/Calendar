@@ -18,14 +18,10 @@ object Android {
     val minSdkSampleApp = max(minSdkViewLibrary, minSdkComposeLibrary)
     const val targetSdk = 34
     const val compileSdk = 34
-
-    // See compose/kotlin version mapping
-    // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    const val composeCompiler = "1.5.14"
 }
 
 object Plugins {
-    private const val agpVersion = "8.4.2"
+    private const val agpVersion = "8.5.0"
     const val androidApp = "com.android.application"
     const val androidLibrary = "com.android.library"
     const val kotlinJvm = "org.jetbrains.kotlin.jvm"
@@ -33,11 +29,13 @@ object Plugins {
     const val kotlinter = "org.jmailen.kotlinter"
     const val mavenPublish = "com.vanniktech.maven.publish"
     const val versionCheck = "com.github.ben-manes.versions"
+    const val composeCompiler = "org.jetbrains.kotlin.plugin.compose"
 
     fun PluginDependenciesSpecScope.applyRootPlugins() {
         id(androidApp).version(agpVersion).apply(false)
         id(androidLibrary).version(agpVersion).apply(false)
         id(kotlinAndroid).version(Kotlin.version).apply(false)
+        id(composeCompiler).version(Kotlin.version).apply(false)
         id(kotlinter).version("4.3.0").apply(false)
         id(mavenPublish).version("0.28.0").apply(false)
         id(versionCheck).version("0.51.0").apply(true)
@@ -45,7 +43,7 @@ object Plugins {
 }
 
 object Kotlin {
-    internal const val version = "1.9.24"
+    internal const val version = "2.0.0"
     const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
 }
 
