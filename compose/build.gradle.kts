@@ -1,15 +1,12 @@
+
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Kotlin
-import com.kizitonwose.calendar.buildsrc.Libs
 
 plugins {
-    with(com.kizitonwose.calendar.buildsrc.Plugins) {
-        id(androidLibrary)
-        id(kotlinAndroid)
-        id(composeCompiler)
-        id(mavenPublish)
-    }
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.mavenPublish)
 }
 
 android {
@@ -36,11 +33,12 @@ android {
 dependencies {
     api(project(":core"))
     implementation(project(":data"))
-    implementation(Kotlin.stdLib)
+    implementation(libs.kotlin.stdlib)
 
-    implementation(Libs.Compose.ui)
-    implementation(Libs.Compose.tooling)
-    implementation(Libs.Compose.foundation)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.runtime)
 
-    testImplementation(Libs.Core.Test.junit)
+    testImplementation(libs.test.junit)
 }

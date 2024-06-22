@@ -1,15 +1,11 @@
 
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Kotlin
-import com.kizitonwose.calendar.buildsrc.Libs
 
 plugins {
-    with(com.kizitonwose.calendar.buildsrc.Plugins) {
-        id(androidApp)
-        id(kotlinAndroid)
-        id(composeCompiler)
-    }
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.composeCompiler)
 }
 
 android {
@@ -50,31 +46,31 @@ android {
 dependencies {
     implementation(project(":view"))
     implementation(project(":compose"))
-    coreLibraryDesugaring(Libs.Core.deSugar)
-    implementation(Kotlin.stdLib)
+    coreLibraryDesugaring(libs.desugar)
+    implementation(libs.kotlin.stdlib)
 
-    implementation(Libs.View.legacySupport)
-    implementation(Libs.View.appCompat)
-    implementation(Libs.View.coreKtx)
-    implementation(Libs.View.constraintLayout)
-    implementation(Libs.View.cardView)
-    implementation(Libs.View.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.cardview)
+    implementation(libs.material.view)
 
-    implementation(Libs.Compose.ui)
-    implementation(Libs.Compose.tooling)
-    implementation(Libs.Compose.foundation)
-    implementation(Libs.Compose.material)
-    implementation(Libs.Compose.activity)
-    implementation(Libs.Compose.navigation)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.material)
+    implementation(libs.compose.activity)
+    implementation(libs.compose.navigation)
 
-    testImplementation(Libs.Core.Test.junit)
+    testImplementation(libs.test.junit)
 
-    androidTestImplementation(Libs.View.Test.espressoCore)
-    androidTestImplementation(Libs.View.Test.espressoContrib) // RecyclerView actions.
-    androidTestImplementation(Libs.View.Test.runner)
-    androidTestImplementation(Libs.View.Test.rules)
-    androidTestImplementation(Libs.View.Test.extJunit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.espresso.contrib) // RecyclerView actions.
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.junit)
 
-    androidTestImplementation(Libs.Compose.Test.uiJunit)
-    debugImplementation(Libs.Compose.Test.uiManifest) // Compose test runner activity
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest) // Compose test runner activity
 }

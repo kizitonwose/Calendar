@@ -1,13 +1,16 @@
-import com.kizitonwose.calendar.buildsrc.Plugins
-
 plugins {
-    with(com.kizitonwose.calendar.buildsrc.Plugins) {
-        applyRootPlugins()
-    }
+    alias(libs.plugins.androidApplication) apply false
+    alias(libs.plugins.androidLibrary) apply false
+    alias(libs.plugins.kotlinJvm) apply false
+    alias(libs.plugins.kotlinAndroid) apply false
+    alias(libs.plugins.composeCompiler) apply false
+    alias(libs.plugins.kotlinter) apply false
+    alias(libs.plugins.mavenPublish) apply false
+    alias(libs.plugins.versionCheck)
 }
 
 allprojects {
-    apply(plugin = Plugins.kotlinter)
+    apply(plugin = rootProject.libs.plugins.kotlinter.get().pluginId)
 }
 
 tasks.register<Delete>("clean").configure {

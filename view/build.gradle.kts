@@ -1,14 +1,10 @@
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Kotlin
-import com.kizitonwose.calendar.buildsrc.Libs
 
 plugins {
-    with(com.kizitonwose.calendar.buildsrc.Plugins) {
-        id(androidLibrary)
-        id(kotlinAndroid)
-        id(mavenPublish)
-    }
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.mavenPublish)
 }
 
 android {
@@ -32,9 +28,9 @@ android {
 dependencies {
     api(project(":core"))
     implementation(project(":data"))
-    implementation(Kotlin.stdLib)
-    implementation(Libs.View.coreKtx)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.androidx.core.ktx)
 
     // Expose RecyclerView which is CalendarView"s superclass.
-    api(Libs.View.recyclerView)
+    api(libs.androidx.recyclerview)
 }

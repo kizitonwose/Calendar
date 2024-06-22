@@ -1,12 +1,9 @@
+
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Kotlin
-import com.kizitonwose.calendar.buildsrc.Libs
 
 plugins {
-    with(com.kizitonwose.calendar.buildsrc.Plugins) {
-        id(kotlinJvm)
-        id(mavenPublish)
-    }
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.mavenPublish)
 }
 
 java {
@@ -23,7 +20,7 @@ kotlin {
 
 dependencies {
     implementation(project(":core"))
-    implementation(Kotlin.stdLib)
+    implementation(libs.kotlin.stdlib)
 
-    testImplementation(Libs.Core.Test.junit)
+    testImplementation(libs.test.junit)
 }

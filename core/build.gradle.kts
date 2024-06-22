@@ -1,11 +1,8 @@
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Libs
 
 plugins {
-    with(com.kizitonwose.calendar.buildsrc.Plugins) {
-        id(kotlinJvm)
-        id(mavenPublish)
-    }
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.mavenPublish)
 }
 
 java {
@@ -21,5 +18,5 @@ kotlin {
 }
 
 dependencies {
-    implementation(Libs.Compose.runtime) // Only needed for @Immutable annotation.
+    implementation(libs.compose.runtime) // Only needed for @Immutable annotation.
 }
