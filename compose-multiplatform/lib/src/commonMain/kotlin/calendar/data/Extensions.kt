@@ -1,14 +1,17 @@
 package calendar.data
 
 import calendar.core.YearMonth
+import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Returns the days of week values such that the desired
@@ -39,25 +42,34 @@ val YearMonth.nextMonth: YearMonth
 val YearMonth.previousMonth: YearMonth
     get() = this.minusMonths(1)
 
-internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
+fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
 
-internal fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
+fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
 
-internal fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeUnit.MONTH)
+fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeUnit.MONTH)
 
-internal fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
+fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
 
-internal fun YearMonth.plusMonths(value: Int): YearMonth = atStartOfMonth().plusMonths(value).yearMonth
+fun YearMonth.plusMonths(value: Int): YearMonth =
+    atStartOfMonth().plusMonths(value).yearMonth
 
-internal fun YearMonth.minusMonths(value: Int): YearMonth = atStartOfMonth().minusMonths(value).yearMonth
+fun YearMonth.minusMonths(value: Int): YearMonth =
+    atStartOfMonth().minusMonths(value).yearMonth
 
-internal fun YearMonth.lengthOfMonth(): Int {
+fun YearMonth.lengthOfMonth(): Int {
     val thisMonthStart = atStartOfMonth()
     val nextMonthStart = thisMonthStart.plusMonths(1)
     return thisMonthStart.daysUntil(nextMonthStart)
 }
 
-internal fun YearMonth.monthsUntil(other: YearMonth): Int = atStartOfMonth().monthsUntil(other.atStartOfMonth())
+// TODO KMP Maybe restrict to group
+val YearMonth.Companion.current: YearMonth
+    get() = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date.yearMonth
+
+internal fun YearMonth.monthsUntil(other: YearMonth): Int =
+    atStartOfMonth().monthsUntil(other.atStartOfMonth())
 
 // E.g DayOfWeek.SATURDAY.daysUntil(DayOfWeek.TUESDAY) = 3
 internal fun DayOfWeek.daysUntil(other: DayOfWeek) = (7 + (other.isoDayNumber - isoDayNumber)) % 7

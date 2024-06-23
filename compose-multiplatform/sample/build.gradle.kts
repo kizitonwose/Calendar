@@ -112,11 +112,11 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
+        mainClass = "Calendar Sample"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.kizitonwose.calendarx"
+            packageName = "com.kizitonwose.calendar"
             packageVersion = "1.0.0"
         }
     }
