@@ -8,6 +8,7 @@ LazyRow/LazyColumn for compose.
 [![Maven Central Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Maven%20Central%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://repo1.maven.org/maven2/com/kizitonwose/calendar/)
 [![License](https://img.shields.io/badge/License-MIT-0097A7.svg)](https://github.com/kizitonwose/Calendar/blob/main/LICENSE.md)
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
+[![cn](https://img.shields.io/badge/Lang-Chinese-blue?color=%23FF0000)](docs_chs/README.chs.md)
 
 **With this library, your calendar will look however you want it to.**
 
