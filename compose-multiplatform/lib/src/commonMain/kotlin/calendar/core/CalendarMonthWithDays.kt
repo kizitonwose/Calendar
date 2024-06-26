@@ -9,15 +9,15 @@ import androidx.compose.runtime.Immutable
  * @param weekDays the weeks in this month.
  */
 @Immutable
-data class CalendarMonth internal constructor(
-    val yearMonth: YearMonth,
-    val weekDays: List<List<CalendarDay>>,
+open class CalendarMonthWithDays<YearMonth : Any, CalendarDay : Any> internal constructor(
+    open val yearMonth: YearMonth,
+    open val weekDays: List<List<CalendarDay>>,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
 
-        other as CalendarMonth
+        other as CalendarMonthWithDays<*, *>
 
         if (yearMonth != other.yearMonth) return false
         if (weekDays.first().first() != other.weekDays.first().first()) return false
@@ -40,3 +40,11 @@ data class CalendarMonth internal constructor(
             "} "
     }
 }
+
+class CalendarMonth(
+    override val yearMonth: YearMonth,
+    override val weekDays: List<List<CalendarDay>>,
+) : CalendarMonthWithDays<YearMonth, CalendarDay>(
+    yearMonth = yearMonth,
+    weekDays = weekDays,
+)

@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,20 +33,20 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import calendar.compose.CalendarLayoutInfo
+import calendar.compose.CalendarState
+import calendar.compose.HorizontalCalendar
+import calendar.compose.rememberCalendarState
 import calendar.core.CalendarDay
 import calendar.core.CalendarMonth
 import calendar.core.DayPosition
 import calendar.core.YearMonth
-import calendar.data.current
 import calendar.data.daysOfWeek
 import calendar.data.minusMonths
 import calendar.data.nextMonth
+import calendar.data.now
 import calendar.data.plusMonths
 import calendar.data.previousMonth
-import calendar.ui.CalendarLayoutInfo
-import calendar.ui.CalendarState
-import calendar.ui.HorizontalCalendar
-import calendar.ui.rememberCalendarState
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -61,7 +62,7 @@ fun App() {
 
 @Composable
 fun Example1Page(adjacentMonths: Int = 500) {
-    val currentMonth = remember { YearMonth.current }
+    val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(adjacentMonths) }
     val endMonth = remember { currentMonth.plusMonths(adjacentMonths) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
@@ -169,7 +170,7 @@ private fun Example1Preview() {
 
 @Composable
 fun rememberFirstMostVisibleMonth(
-    state: CalendarState,
+    state: CalendarState<YearMonth, CalendarMonth>,
     viewportPercent: Float = 50f,
 ): CalendarMonth {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
@@ -181,7 +182,7 @@ fun rememberFirstMostVisibleMonth(
     return visibleMonth.value
 }
 
-private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
+private fun CalendarLayoutInfo<CalendarMonth>.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
     return if (visibleMonthsInfo.isEmpty()) {
         null
     } else {

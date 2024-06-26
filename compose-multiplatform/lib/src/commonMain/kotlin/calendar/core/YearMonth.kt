@@ -1,11 +1,12 @@
 package calendar.core
 
 import androidx.compose.runtime.Immutable
+import calendar.data.JvmSerializable
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 
 @Immutable
-data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth> {
+data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, JvmSerializable {
     /**
      * Same as java.time.YearMonth.compareTo()
      */

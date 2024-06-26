@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation(project(":view"))
     implementation(project(":compose"))
+    implementation(project(":compose-multiplatform:lib"))
     coreLibraryDesugaring(libs.desugar)
     implementation(libs.kotlin.stdlib)
 

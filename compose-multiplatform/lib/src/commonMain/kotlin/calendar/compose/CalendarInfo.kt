@@ -1,4 +1,4 @@
-package calendar.ui
+package calendar.compose
 
 import androidx.compose.runtime.Immutable
 import calendar.core.OutDateStyle

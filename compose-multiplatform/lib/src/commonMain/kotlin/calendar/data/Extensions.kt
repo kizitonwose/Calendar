@@ -62,11 +62,11 @@ fun YearMonth.lengthOfMonth(): Int {
     return thisMonthStart.daysUntil(nextMonthStart)
 }
 
-// TODO KMP Maybe restrict to group
-val YearMonth.Companion.current: YearMonth
-    get() = Clock.System.now()
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .date.yearMonth
+fun LocalDate.Companion.now(): LocalDate = Clock.System.now()
+    .toLocalDateTime(TimeZone.currentSystemDefault())
+    .date
+
+fun YearMonth.Companion.now(): YearMonth = LocalDate.now().yearMonth
 
 internal fun YearMonth.monthsUntil(other: YearMonth): Int =
     atStartOfMonth().monthsUntil(other.atStartOfMonth())

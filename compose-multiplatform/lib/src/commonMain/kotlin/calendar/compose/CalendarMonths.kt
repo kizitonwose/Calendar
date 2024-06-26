@@ -1,4 +1,4 @@
-package calendar.ui
+package calendar.compose
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -11,13 +11,16 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import calendar.core.CalendarDay
 import calendar.core.CalendarMonth
+import calendar.core.CalendarMonthWithDays
+import calendar.core.YearMonth
 
 @Suppress("FunctionName")
-internal fun LazyListScope.CalendarMonths(
+internal fun <YearMonth : Any, CalendarDay, CalendarMonth : CalendarMonthWithDays<YearMonth, CalendarDay>> LazyListScope.CalendarMonths(
     monthCount: Int,
     monthData: (offset: Int) -> CalendarMonth,
     contentHeightMode: ContentHeightMode,
@@ -37,7 +40,7 @@ internal fun LazyListScope.CalendarMonths(
             ContentHeightMode.Fill -> true
         }
         val hasContainer = monthContainer != null
-        monthContainer.or(defaultMonthContainer)(month) {
+        monthContainer.or(remember { { _, container -> container() } })(month) {
             Column(
                 modifier = Modifier
                     .then(if (hasContainer) Modifier.fillMaxWidth() else Modifier.fillParentMaxWidth())
@@ -50,7 +53,7 @@ internal fun LazyListScope.CalendarMonths(
                     ),
             ) {
                 monthHeader?.invoke(this, month)
-                monthBody.or(defaultMonthBody)(month) {
+                monthBody.or(remember { { _, container -> container() } })(month) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -80,11 +83,5 @@ internal fun LazyListScope.CalendarMonths(
         }
     }
 }
-
-private val defaultMonthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit) =
-    { _, container -> container() }
-
-private val defaultMonthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit) =
-    { _, content -> content() }
 
 private fun <T> T?.or(default: T) = this ?: default

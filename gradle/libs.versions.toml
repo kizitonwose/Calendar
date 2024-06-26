@@ -46,4 +46,4 @@ versionCheck = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 
 # KMM
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.6.10" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.7.0-dev1698" }

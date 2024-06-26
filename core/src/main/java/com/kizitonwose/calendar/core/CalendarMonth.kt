@@ -11,7 +11,7 @@ import java.time.YearMonth
  * @param weekDays the weeks in this month.
  */
 @Immutable
-data class CalendarMonth(
+class CalendarMonth(
     val yearMonth: YearMonth,
     val weekDays: List<List<CalendarDay>>,
 ) : Serializable {

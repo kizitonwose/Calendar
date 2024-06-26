@@ -1,4 +1,4 @@
-package calendar.ui
+package calendar.compose
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
@@ -9,9 +9,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import calendar.compose.CalendarDefaults.flingBehavior
 import calendar.core.CalendarDay
 import calendar.core.CalendarMonth
-import calendar.ui.CalendarDefaults.flingBehavior
+import calendar.core.YearMonth
 
 /**
  * A horizontally scrolling calendar.
@@ -49,18 +50,18 @@ import calendar.ui.CalendarDefaults.flingBehavior
 @Composable
 fun HorizontalCalendar(
     modifier: Modifier = Modifier,
-    state: CalendarState = rememberCalendarState(),
+    state: CalendarState<YearMonth, CalendarMonth> = rememberCalendarState(),
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     contentHeightMode: ContentHeightMode = ContentHeightMode.Wrap,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthHeader: @Composable ColumnScope.(CalendarMonth) -> Unit,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
-) = Calendar(
+) = CalendarImpl(
     modifier = modifier,
     state = state,
     calendarScrollPaged = calendarScrollPaged,
@@ -112,7 +113,7 @@ fun HorizontalCalendar(
 @Composable
 fun VerticalCalendar(
     modifier: Modifier = Modifier,
-    state: CalendarState = rememberCalendarState(),
+    state: CalendarState<YearMonth, CalendarMonth> = rememberCalendarState(),
     calendarScrollPaged: Boolean = false,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
@@ -123,7 +124,7 @@ fun VerticalCalendar(
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
-) = Calendar(
+) = CalendarImpl(
     modifier = modifier,
     state = state,
     calendarScrollPaged = calendarScrollPaged,
@@ -140,9 +141,9 @@ fun VerticalCalendar(
 )
 
 @Composable
-private fun Calendar(
+internal fun CalendarImpl(
     modifier: Modifier,
-    state: CalendarState,
+    state: CalendarState<YearMonth, CalendarMonth>,
     calendarScrollPaged: Boolean,
     userScrollEnabled: Boolean,
     isHorizontal: Boolean,
@@ -150,10 +151,10 @@ private fun Calendar(
     contentPadding: PaddingValues,
     contentHeightMode: ContentHeightMode,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
-    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
-    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
-    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
-    monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
 ) {
     if (isHorizontal) {
         LazyRow(

@@ -1,4 +1,4 @@
-package calendar.ui
+package calendar.compose
 
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight

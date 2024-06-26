@@ -1,8 +1,7 @@
-package calendar.ui
+package calendar.compose
 
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
-import calendar.core.CalendarMonth
 
 /**
  * Contains useful information about the currently displayed layout state of the calendar.
@@ -11,12 +10,12 @@ import calendar.core.CalendarMonth
  * Use [CalendarState.layoutInfo] to retrieve this.
  * @see LazyListLayoutInfo
  */
-class CalendarLayoutInfo(info: LazyListLayoutInfo, private val month: (Int) -> CalendarMonth) :
+class CalendarLayoutInfo<CalendarMonth>(info: LazyListLayoutInfo, private val month: (Int) -> CalendarMonth) :
     LazyListLayoutInfo by info {
     /**
      * The list of [CalendarItemInfo] representing all the currently visible months.
      */
-    val visibleMonthsInfo: List<CalendarItemInfo>
+    val visibleMonthsInfo: List<CalendarItemInfo<CalendarMonth>>
         get() = visibleItemsInfo.map {
             CalendarItemInfo(it, month(it.index))
         }
@@ -30,4 +29,4 @@ class CalendarLayoutInfo(info: LazyListLayoutInfo, private val month: (Int) -> C
  * @see CalendarLayoutInfo
  * @see LazyListItemInfo
  */
-class CalendarItemInfo(info: LazyListItemInfo, val month: CalendarMonth) : LazyListItemInfo by info
+class CalendarItemInfo<CalendarMonth>(info: LazyListItemInfo, val month: CalendarMonth) : LazyListItemInfo by info

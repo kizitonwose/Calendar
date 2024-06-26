@@ -1,4 +1,4 @@
-package calendar.ui
+package calendar.compose
 
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
@@ -11,61 +11,34 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import calendar.core.CalendarMonth
 import calendar.core.OutDateStyle
-import calendar.core.YearMonth
 import calendar.data.DataStore
+import calendar.data.MonthDataProducer
 import calendar.data.VisibleItemState
 import calendar.data.checkDateRange
-import calendar.data.current
-import calendar.data.getCalendarMonthData
-import calendar.data.getMonthIndex
-import calendar.data.getMonthIndicesCount
 import kotlinx.datetime.DayOfWeek
 
-/**
- * Creates a [CalendarState] that is remembered across compositions.
- *
- * @param startMonth the initial value for [CalendarState.startMonth]
- * @param endMonth the initial value for [CalendarState.endMonth]
- * @param firstDayOfWeek the initial value for [CalendarState.firstDayOfWeek]
- * @param firstVisibleMonth the initial value for [CalendarState.firstVisibleMonth]
- * @param outDateStyle the initial value for [CalendarState.outDateStyle]
- */
 @Composable
-fun rememberCalendarState(
-    startMonth: YearMonth = YearMonth.current,
-    endMonth: YearMonth = startMonth,
-    firstVisibleMonth: YearMonth = startMonth,
-    // TODO KMP
-    firstDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
-    outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
-): CalendarState {
-    // TODO KMP
-//    return rememberSaveable(
-//        inputs = arrayOf(
-//            startMonth,
-//            endMonth,
-//            firstVisibleMonth,
-//            firstDayOfWeek,
-//            outDateStyle,
-//        ),
-//        saver = CalendarState.Saver,
-//    ) {
-//        CalendarState(
-//            startMonth = startMonth,
-//            endMonth = endMonth,
-//            firstDayOfWeek = firstDayOfWeek,
-//            firstVisibleMonth = firstVisibleMonth,
-//            outDateStyle = outDateStyle,
-//            visibleItemState = null,
-//        )
-//    }
-    return remember {
+internal fun <YearMonth : Comparable<YearMonth>, CalendarMonth> rememberCalendarStateImpl(
+    startMonth: YearMonth,
+    endMonth: YearMonth,
+    firstVisibleMonth: YearMonth,
+    firstDayOfWeek: DayOfWeek,
+    outDateStyle: OutDateStyle,
+    monthDataProducer: MonthDataProducer<YearMonth, CalendarMonth>,
+): CalendarState<YearMonth, CalendarMonth> {
+    return rememberSaveable(
+        inputs = arrayOf(
+            startMonth,
+            endMonth,
+            firstVisibleMonth,
+            firstDayOfWeek,
+            outDateStyle,
+        ),
+        saver = monthDataProducer.saver,
+    ) {
         CalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
@@ -73,6 +46,7 @@ fun rememberCalendarState(
             firstVisibleMonth = firstVisibleMonth,
             outDateStyle = outDateStyle,
             visibleItemState = null,
+            data = monthDataProducer,
         )
     }
 }
@@ -89,14 +63,15 @@ fun rememberCalendarState(
  * @param outDateStyle the preferred style for out date generation.
  */
 @Stable
-class CalendarState internal constructor(
+class CalendarState<YearMonth, CalendarMonth> internal constructor(
     startMonth: YearMonth,
     endMonth: YearMonth,
     firstDayOfWeek: DayOfWeek,
     firstVisibleMonth: YearMonth,
     outDateStyle: OutDateStyle,
     visibleItemState: VisibleItemState?,
-) : ScrollableState {
+    private val data: MonthDataProducer<YearMonth, CalendarMonth>,
+) : ScrollableState where YearMonth : Comparable<YearMonth> {
     /** Backing state for [startMonth] */
     private var _startMonth by mutableStateOf(startMonth)
 
@@ -185,7 +160,7 @@ class CalendarState internal constructor(
      *
      * see [LazyListLayoutInfo]
      */
-    val layoutInfo: CalendarLayoutInfo
+    val layoutInfo: CalendarLayoutInfo<CalendarMonth>
         get() = CalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
     /**
@@ -205,12 +180,12 @@ class CalendarState internal constructor(
     internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
     internal val store = DataStore { offset ->
-        getCalendarMonthData(
+        data.getCalendarMonthData(
             startMonth = this.startMonth,
             offset = offset,
             firstDayOfWeek = this.firstDayOfWeek,
             outDateStyle = this.outDateStyle,
-        ).calendarMonth
+        )
     }
 
     init {
@@ -226,7 +201,7 @@ class CalendarState internal constructor(
         // but not sure how compose handles recomposition of a lazy list that reads from
         // such map when an entry unrelated to the visible indices changes.
         calendarInfo = CalendarInfo(
-            indexCount = getMonthIndicesCount(startMonth, endMonth),
+            indexCount = data.getMonthIndicesCount(startMonth, endMonth),
             firstDayOfWeek = firstDayOfWeek,
             outDateStyle = outDateStyle,
         )
@@ -260,7 +235,7 @@ class CalendarState internal constructor(
 //            Log.d("CalendarState", "Attempting to scroll out of range: $month")
             return null
         }
-        return getMonthIndex(startMonth, month)
+        return data.getMonthIndex(startMonth, month)
     }
 
     /**
@@ -275,33 +250,4 @@ class CalendarState internal constructor(
         scrollPriority: MutatePriority,
         block: suspend ScrollScope.() -> Unit,
     ) = listState.scroll(scrollPriority, block)
-
-    companion object {
-        internal val Saver: Saver<CalendarState, Any> = listSaver(
-            save = {
-                val visibleItemState = VisibleItemState(
-                    firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
-                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset,
-                )
-                listOf(
-                    it.startMonth,
-                    it.endMonth,
-                    it.firstVisibleMonth.yearMonth,
-                    it.firstDayOfWeek,
-                    it.outDateStyle,
-                    visibleItemState,
-                )
-            },
-            restore = {
-                CalendarState(
-                    startMonth = it[0] as YearMonth,
-                    endMonth = it[1] as YearMonth,
-                    firstVisibleMonth = it[2] as YearMonth,
-                    firstDayOfWeek = it[3] as DayOfWeek,
-                    outDateStyle = it[4] as OutDateStyle,
-                    visibleItemState = it[5] as VisibleItemState,
-                )
-            },
-        )
-    }
 }
