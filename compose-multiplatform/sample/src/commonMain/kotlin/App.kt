@@ -35,13 +35,7 @@ import androidx.compose.ui.unit.sp
 import calendar.core.CalendarDay
 import calendar.core.CalendarMonth
 import calendar.core.DayPosition
-import calendar.core.YearMonth
-import calendar.data.current
 import calendar.data.daysOfWeek
-import calendar.data.minusMonths
-import calendar.data.nextMonth
-import calendar.data.plusMonths
-import calendar.data.previousMonth
 import calendar.ui.CalendarLayoutInfo
 import calendar.ui.CalendarState
 import calendar.ui.HorizontalCalendar
@@ -61,9 +55,9 @@ fun App() {
 
 @Composable
 fun Example1Page(adjacentMonths: Int = 500) {
-    val currentMonth = remember { YearMonth.current }
-    val startMonth = remember { currentMonth.minusMonths(adjacentMonths) }
-    val endMonth = remember { currentMonth.plusMonths(adjacentMonths) }
+    val currentMonth = remember { YearMonth.now() }
+    val startMonth = remember { YearMonth.now().copy(2020) }
+    val endMonth = remember { YearMonth.now().copy(2025) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek(DayOfWeek.SUNDAY) }
     Column(
@@ -76,7 +70,7 @@ fun Example1Page(adjacentMonths: Int = 500) {
             endMonth = endMonth,
             firstVisibleMonth = currentMonth,
             firstDayOfWeek = daysOfWeek.first(),
-        )
+        ).startMonth
         val coroutineScope = rememberCoroutineScope()
         val visibleMonth = rememberFirstMostVisibleMonth(state, viewportPercent = 90f)
         SimpleCalendarTitle(

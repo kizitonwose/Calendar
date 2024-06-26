@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation(project(":view"))
     implementation(project(":compose"))
+    implementation(project(":compose-multiplatform:lib"))
     coreLibraryDesugaring(libs.desugar)
     implementation(libs.kotlin.stdlib)
 
@@ -62,7 +63,7 @@ dependencies {
     implementation(libs.compose.material)
     implementation(libs.compose.activity)
     implementation(libs.compose.navigation)
-
+    implementation(libs.kotlinx.datetime)
     testImplementation(libs.test.junit)
 
     androidTestImplementation(libs.androidx.test.espresso.core)

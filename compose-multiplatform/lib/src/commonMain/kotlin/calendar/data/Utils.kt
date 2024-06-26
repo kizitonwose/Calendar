@@ -1,6 +1,6 @@
 package calendar.data
 
-import calendar.core.YearMonth
+import YearMonth
 import kotlinx.datetime.LocalDate
 
 fun checkDateRange(startMonth: YearMonth, endMonth: YearMonth) {

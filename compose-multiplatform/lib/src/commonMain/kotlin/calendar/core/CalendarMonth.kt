@@ -1,5 +1,6 @@
 package calendar.core
 
+import YearMonth
 import androidx.compose.runtime.Immutable
 
 /**

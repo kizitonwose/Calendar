@@ -1,11 +1,17 @@
 package calendar.data
 
+import YearMonth
+import atStartOfMonth
 import calendar.core.CalendarDay
 import calendar.core.CalendarMonth
 import calendar.core.DayPosition
 import calendar.core.OutDateStyle
-import calendar.core.YearMonth
 import kotlinx.datetime.DayOfWeek
+import lengthOfMonth
+import minusDays
+import nextMonth
+import plusMonths
+import previousMonth
 
 internal data class MonthData internal constructor(
     private val month: YearMonth,

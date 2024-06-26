@@ -1,7 +1,9 @@
 
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -15,11 +17,23 @@ kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         moduleName = "calendar"
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(project.projectDir.path)
+                    }
+                }
+            }
+        }
+        binaries.executable()
     }
 
     androidTarget {}
 
-    jvm("desktop")
+    jvm {} // fancy name for jvm("desktop")
 
     listOf(
         iosX64(),
@@ -33,7 +47,12 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
+        val jvmMain by getting
+        val commonMain by getting
+        val wasmJsMain by getting
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
 
         androidMain.dependencies {
             implementation(compose.preview)
@@ -45,11 +64,22 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(compose.components.uiToolingPreview)
-            api(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.datetime)
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
+        androidMain.get().dependsOn(jvmMain)
+        val nonJvmMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            wasmJsMain.dependsOn(this)
+            dependencies {}
         }
+    }
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
 

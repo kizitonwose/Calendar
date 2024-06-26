@@ -1,5 +1,7 @@
 package calendar.ui
 
+import CalYearMonth
+import YearMonth
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
@@ -17,11 +19,9 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
 import calendar.core.CalendarMonth
 import calendar.core.OutDateStyle
-import calendar.core.YearMonth
 import calendar.data.DataStore
 import calendar.data.VisibleItemState
 import calendar.data.checkDateRange
-import calendar.data.current
 import calendar.data.getCalendarMonthData
 import calendar.data.getMonthIndex
 import calendar.data.getMonthIndicesCount
@@ -38,7 +38,7 @@ import kotlinx.datetime.DayOfWeek
  */
 @Composable
 fun rememberCalendarState(
-    startMonth: YearMonth = YearMonth.current,
+    startMonth: YearMonth = CalYearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
     // TODO KMP
