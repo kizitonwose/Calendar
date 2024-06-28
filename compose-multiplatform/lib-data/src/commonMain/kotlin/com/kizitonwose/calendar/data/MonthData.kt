@@ -1,6 +1,6 @@
 package com.kizitonwose.calendar.data
 
-import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarDay3
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
@@ -15,7 +15,7 @@ import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.datetime.DayOfWeek
 
-internal data class MonthData internal constructor(
+data class MonthData internal constructor(
     private val month: YearMonth,
     private val inDays: Int,
     private val outDays: Int,
@@ -33,7 +33,7 @@ internal data class MonthData internal constructor(
     val calendarMonth =
         CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
 
-    private fun getDay(dayOffset: Int): CalendarDay {
+    private fun getDay(dayOffset: Int): CalendarDay3 {
         val date = firstDay.plusDays(dayOffset)
         val position = when (date.yearMonth) {
             month -> DayPosition.MonthDate
@@ -41,11 +41,11 @@ internal data class MonthData internal constructor(
             nextMonth -> DayPosition.OutDate
             else -> throw IllegalArgumentException("Invalid date: $date in month: $month")
         }
-        return CalendarDay(date, position)
+        return CalendarDay3(date, position)
     }
 }
 
-internal fun getCalendarMonthData(
+fun getCalendarMonthData(
     startMonth: YearMonth,
     offset: Int,
     firstDayOfWeek: DayOfWeek,
@@ -85,11 +85,11 @@ internal fun getHeatMapCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-internal fun getMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Int {
+fun getCalendarMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Int {
     return startMonth.monthsUntil(targetMonth)
 }
 
 internal fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
     // Add one to include the start month itself!
-    return getMonthIndex(startMonth, endMonth) + 1
+    return getCalendarMonthIndex(startMonth, endMonth) + 1
 }

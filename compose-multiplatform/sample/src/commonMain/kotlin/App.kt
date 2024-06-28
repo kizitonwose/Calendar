@@ -33,20 +33,20 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import calendar.compose.CalendarLayoutInfo
-import calendar.compose.CalendarState
-import calendar.compose.HorizontalCalendar
-import calendar.compose.rememberCalendarState
-import calendar.core.CalendarDay
-import calendar.core.CalendarMonth
-import calendar.core.DayPosition
-import calendar.core.YearMonth
-import calendar.data.daysOfWeek
-import calendar.data.minusMonths
-import calendar.data.nextMonth
-import calendar.data.now
-import calendar.data.plusMonths
-import calendar.data.previousMonth
+import com.kizitonwose.calendar.compose.CalendarLayoutInfo
+import com.kizitonwose.calendar.compose.CalendarState
+import com.kizitonwose.calendar.compose.HorizontalCalendar
+import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.CalendarDay3
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.minusMonths
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.now
+import com.kizitonwose.calendar.core.plusMonths
+import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -65,7 +65,7 @@ fun Example1Page(adjacentMonths: Int = 500) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(adjacentMonths) }
     val endMonth = remember { currentMonth.plusMonths(adjacentMonths) }
-    val selections = remember { mutableStateListOf<CalendarDay>() }
+    val selections = remember { mutableStateListOf<CalendarDay3>() }
     val daysOfWeek = remember { daysOfWeek(DayOfWeek.SUNDAY) }
     Column(
         modifier = Modifier
@@ -133,7 +133,7 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 }
 
 @Composable
-private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
+private fun Day(day: CalendarDay3, isSelected: Boolean, onClick: (CalendarDay3) -> Unit) {
     Box(
         modifier = Modifier
             .aspectRatio(1f) // This is important for square-sizing!

@@ -37,47 +37,47 @@ val horizontal = Animation(
 
 class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
     RecyclerView.Adapter<CalendarViewOptionsAdapter.HomeOptionsViewHolder>() {
-    val examples = listOf(
-        ExampleItem(
-            R.string.example_1_title,
-            R.string.example_1_subtitle,
-            vertical,
-        ) { Example1Fragment() },
-        ExampleItem(
-            R.string.example_2_title,
-            R.string.example_2_subtitle,
-            horizontal,
-        ) { Example2Fragment() },
-        ExampleItem(
-            R.string.example_3_title,
-            R.string.example_3_subtitle,
-            horizontal,
-        ) { Example3Fragment() },
-        ExampleItem(
-            R.string.example_4_title,
-            R.string.example_4_subtitle,
-            vertical,
-        ) { Example4Fragment() },
-        ExampleItem(
-            R.string.example_5_title,
-            R.string.example_5_subtitle,
-            vertical,
-        ) { Example5Fragment() },
-        ExampleItem(
-            R.string.example_6_title,
-            R.string.example_6_subtitle,
-            horizontal,
-        ) { Example6Fragment() },
-        ExampleItem(
-            R.string.example_7_title,
-            R.string.example_7_subtitle,
-            horizontal,
-        ) { Example7Fragment() },
-        ExampleItem(
-            R.string.example_8_title,
-            R.string.example_8_subtitle,
-            horizontal,
-        ) { Example8Fragment() },
+    val examples = listOf<ExampleItem>(
+//        ExampleItem(
+//            R.string.example_1_title,
+//            R.string.example_1_subtitle,
+//            vertical,
+//        ) { Example1Fragment() },
+//        ExampleItem(
+//            R.string.example_2_title,
+//            R.string.example_2_subtitle,
+//            horizontal,
+//        ) { Example2Fragment() },
+//        ExampleItem(
+//            R.string.example_3_title,
+//            R.string.example_3_subtitle,
+//            horizontal,
+//        ) { Example3Fragment() },
+//        ExampleItem(
+//            R.string.example_4_title,
+//            R.string.example_4_subtitle,
+//            vertical,
+//        ) { Example4Fragment() },
+//        ExampleItem(
+//            R.string.example_5_title,
+//            R.string.example_5_subtitle,
+//            vertical,
+//        ) { Example5Fragment() },
+//        ExampleItem(
+//            R.string.example_6_title,
+//            R.string.example_6_subtitle,
+//            horizontal,
+//        ) { Example6Fragment() },
+//        ExampleItem(
+//            R.string.example_7_title,
+//            R.string.example_7_subtitle,
+//            horizontal,
+//        ) { Example7Fragment() },
+//        ExampleItem(
+//            R.string.example_8_title,
+//            R.string.example_8_subtitle,
+//            horizontal,
+//        ) { Example8Fragment() },
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {

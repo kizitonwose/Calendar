@@ -1,25 +1,23 @@
 import com.kizitonwose.calendar.buildsrc.Config
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.mavenPublish)
-    alias(libs.plugins.composeCompiler)
+}
+
+java {
+    toolchain {
+        languageVersion.set(Config.compatibleJavaLanguageVersion)
+    }
 }
 
 kotlin {
-    jvm("jvm")  // fancy name for jvm("desktop")
-
-    sourceSets {
-        val jvmMain by getting
-        val commonMain by getting
-
-        jvmMain.dependencies {
-            implementation(project(":compose-multiplatform:lib-core"))
-            implementation(compose.runtime)
-        }
-    }
     jvmToolchain {
         languageVersion.set(Config.compatibleJavaLanguageVersion)
     }
+}
+
+dependencies {
+    implementation(libs.compose.runtime) // Only needed for @Immutable annotation.
+    api(project(":compose-multiplatform:lib-core"))
 }

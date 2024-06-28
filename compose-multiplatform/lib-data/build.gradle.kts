@@ -42,6 +42,7 @@ kotlin {
             implementation(project(":compose-multiplatform:lib-core"))
             implementation(project(":compose-multiplatform:lib-core-kmp"))
             implementation(libs.kotlinx.datetime)
+            implementation(compose.runtime)
         }
         val nonJvmMain by creating {
             dependsOn(commonMain)

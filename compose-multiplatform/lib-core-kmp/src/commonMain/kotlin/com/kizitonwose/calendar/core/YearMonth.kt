@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.core
 
 import androidx.compose.runtime.Immutable
-import com.kizitonwose.calendar.data.JvmSerializable
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
 

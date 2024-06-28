@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarMonth3
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.sample.R
@@ -98,7 +98,7 @@ fun Example4Page() {
 }
 
 @Composable
-private fun MonthHeader(calendarMonth: CalendarMonth) {
+private fun MonthHeader(calendarMonth: CalendarMonth3) {
     val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
     Column(
         modifier = Modifier

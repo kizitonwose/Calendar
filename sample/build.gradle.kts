@@ -44,9 +44,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":view"))
-    implementation(project(":compose"))
-    implementation(project(":compose-multiplatform:lib"))
+    implementation(project(":view")) {
+        exclude(module = "core")
+    }
+    implementation(project(":compose-multiplatform:lib-compose-jvm"))
+//    implementation(project(":compose"))
+//    implementation(project(":compose-multiplatform:lib-kmp"))
     coreLibraryDesugaring(libs.desugar)
     implementation(libs.kotlin.stdlib)
 

@@ -29,13 +29,12 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
-import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
-import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.Week
+import com.kizitonwose.calendar.core.CalendarMonth3
 import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
 import com.kizitonwose.calendar.sample.shared.findActivity
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+import java.time.YearMonth
 
 fun Modifier.clickable(
     enabled: Boolean = true,
@@ -93,7 +92,7 @@ fun NavigationIcon(onBackClick: () -> Unit) {
  * @see [rememberFirstMostVisibleMonth]
  */
 @Composable
-fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
+fun rememberFirstCompletelyVisibleMonth(state: CalendarState<YearMonth, CalendarMonth3>): CalendarMonth3 {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
     // Only take non-null values as null will be produced when the
     // list is mid-scroll as no index will be completely visible.
@@ -112,7 +111,7 @@ fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
  * @see [rememberFirstMostVisibleMonth]
  */
 @Composable
-fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): CalendarMonth {
+fun rememberFirstVisibleMonthAfterScroll(state: CalendarState<YearMonth, CalendarMonth3>): CalendarMonth3 {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
     LaunchedEffect(state) {
         snapshotFlow { state.isScrollInProgress }
@@ -122,19 +121,19 @@ fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): CalendarMonth {
     return visibleMonth.value
 }
 
-/**
- * Find first visible week in a paged week calendar **after** scrolling stops.
- */
-@Composable
-fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): Week {
-    val visibleWeek = remember(state) { mutableStateOf(state.firstVisibleWeek) }
-    LaunchedEffect(state) {
-        snapshotFlow { state.isScrollInProgress }
-            .filter { scrolling -> !scrolling }
-            .collect { visibleWeek.value = state.firstVisibleWeek }
-    }
-    return visibleWeek.value
-}
+///**
+// * Find first visible week in a paged week calendar **after** scrolling stops.
+// */
+//@Composable
+//fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): Week {
+//    val visibleWeek = remember(state) { mutableStateOf(state.firstVisibleWeek) }
+//    LaunchedEffect(state) {
+//        snapshotFlow { state.isScrollInProgress }
+//            .filter { scrolling -> !scrolling }
+//            .collect { visibleWeek.value = state.firstVisibleWeek }
+//    }
+//    return visibleWeek.value
+//}
 
 /**
  * Find the first month on the calendar visible up to the given [viewportPercent] size.
@@ -144,9 +143,9 @@ fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): Week {
  */
 @Composable
 fun rememberFirstMostVisibleMonth(
-    state: CalendarState,
+    state: CalendarState<YearMonth, CalendarMonth3>,
     viewportPercent: Float = 50f,
-): CalendarMonth {
+): CalendarMonth3 {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewportPercent) }
@@ -156,7 +155,7 @@ fun rememberFirstMostVisibleMonth(
     return visibleMonth.value
 }
 
-private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
+private val CalendarLayoutInfo<CalendarMonth3>.completelyVisibleMonths: List<CalendarMonth3>
     get() {
         val visibleItemsInfo = this.visibleMonthsInfo.toMutableList()
         return if (visibleItemsInfo.isEmpty()) {
@@ -175,7 +174,7 @@ private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
         }
     }
 
-private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
+private fun CalendarLayoutInfo<CalendarMonth3>.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth3? {
     return if (visibleMonthsInfo.isEmpty()) {
         null
     } else {

@@ -26,15 +26,29 @@ kotlin {
             isStatic = true
         }
     }
+    applyDefaultHierarchyTemplate()
 
     sourceSets {
         val jvmMain by getting
         val commonMain by getting
+        val wasmJsMain by getting
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
 
         commonMain.dependencies {
             implementation(project(":compose-multiplatform:lib-core"))
             implementation(libs.kotlinx.datetime)
             implementation(compose.runtime)
+        }
+
+        val nonJvmMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            wasmJsMain.dependsOn(this)
+            dependencies {}
         }
     }
     jvmToolchain {

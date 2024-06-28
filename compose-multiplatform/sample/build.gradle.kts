@@ -59,7 +59,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(project(":compose-multiplatform:lib"))
+            implementation(project(":compose-multiplatform:lib-compose-kmp"))
             implementation(libs.kotlinx.datetime)
         }
         desktopMain.dependencies {

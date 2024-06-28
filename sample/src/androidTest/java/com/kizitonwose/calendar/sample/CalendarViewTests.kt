@@ -12,7 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.android.material.appbar.AppBarLayout
 import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarMonth3
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.sample.utils.TestDayViewContainer
@@ -87,7 +87,7 @@ class CalendarViewTests {
         val calendarView = getView<CalendarView>(R.id.exTwoCalendar)
 
         val boundDays = mutableSetOf<CalendarDay>()
-        var boundHeaderMonth: CalendarMonth? = null
+        var boundHeaderMonth: CalendarMonth3? = null
 
         runOnMain {
             calendarView.dayBinder = object : MonthDayBinder<TestDayViewContainer> {
@@ -99,7 +99,7 @@ class CalendarViewTests {
             calendarView.monthHeaderBinder =
                 object : MonthHeaderFooterBinder<TestDayViewContainer> {
                     override fun create(view: View) = TestDayViewContainer(view)
-                    override fun bind(container: TestDayViewContainer, data: CalendarMonth) {
+                    override fun bind(container: TestDayViewContainer, data: CalendarMonth3) {
                         boundHeaderMonth = data
                     }
                 }
@@ -200,7 +200,7 @@ class CalendarViewTests {
 
         val calendarView = getView<CalendarView>(R.id.exOneCalendar)
 
-        var targetCalMonth: CalendarMonth? = null
+        var targetCalMonth: CalendarMonth3? = null
         calendarView.monthScrollListener = { month ->
             targetCalMonth = month
         }
@@ -300,7 +300,7 @@ class CalendarViewTests {
 
         val targetVisibleMonth = currentMonth.plusMonths(2)
 
-        var targetVisibleCalMonth: CalendarMonth? = null
+        var targetVisibleCalMonth: CalendarMonth3? = null
         calendarView.monthScrollListener = { month ->
             targetVisibleCalMonth = month
         }

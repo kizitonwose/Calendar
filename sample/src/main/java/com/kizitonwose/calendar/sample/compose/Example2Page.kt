@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.VerticalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarMonth3
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.sample.R
@@ -163,7 +163,7 @@ private fun Day(
 }
 
 @Composable
-private fun MonthHeader(calendarMonth: CalendarMonth) {
+private fun MonthHeader(calendarMonth: CalendarMonth3) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
