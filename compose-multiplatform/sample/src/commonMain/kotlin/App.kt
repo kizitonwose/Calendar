@@ -37,6 +37,8 @@ import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -63,8 +65,8 @@ fun Example1Page(adjacentMonths: Int = 500) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(adjacentMonths) }
     val endMonth = remember { currentMonth.plusMonths(adjacentMonths) }
-    val selections = remember { mutableStateListOf<com.kizitonwose.calendar.core.CalendarDay>() }
-    val daysOfWeek = remember { daysOfWeek(DayOfWeek.SUNDAY) }
+    val selections = remember { mutableStateListOf<CalendarDay>() }
+    val daysOfWeek = remember { daysOfWeek() }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -131,7 +133,7 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 }
 
 @Composable
-private fun Day(day: com.kizitonwose.calendar.core.CalendarDay, isSelected: Boolean, onClick: (com.kizitonwose.calendar.core.CalendarDay) -> Unit) {
+private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
     Box(
         modifier = Modifier
             .aspectRatio(1f) // This is important for square-sizing!
@@ -170,7 +172,7 @@ private fun Example1Preview() {
 fun rememberFirstMostVisibleMonth(
     state: CalendarState,
     viewportPercent: Float = 50f,
-): com.kizitonwose.calendar.core.CalendarMonth {
+): CalendarMonth {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewportPercent) }
@@ -180,7 +182,7 @@ fun rememberFirstMostVisibleMonth(
     return visibleMonth.value
 }
 
-private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): com.kizitonwose.calendar.core.CalendarMonth? {
+private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
     return if (visibleMonthsInfo.isEmpty()) {
         null
     } else {
