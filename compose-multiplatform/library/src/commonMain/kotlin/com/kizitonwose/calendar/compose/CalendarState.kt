@@ -17,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
@@ -40,7 +41,7 @@ fun rememberCalendarState(
     startMonth: YearMonth = YearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
-    firstDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
+    firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
 ): CalendarState {
     return rememberSaveable(
