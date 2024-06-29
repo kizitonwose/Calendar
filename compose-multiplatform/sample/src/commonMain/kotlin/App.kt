@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,20 +33,18 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import calendar.core.CalendarDay
-import calendar.core.CalendarMonth
-import calendar.core.DayPosition
-import calendar.core.YearMonth
-import calendar.data.current
-import calendar.data.daysOfWeek
-import calendar.data.minusMonths
-import calendar.data.nextMonth
-import calendar.data.plusMonths
-import calendar.data.previousMonth
-import calendar.ui.CalendarLayoutInfo
-import calendar.ui.CalendarState
-import calendar.ui.HorizontalCalendar
-import calendar.ui.rememberCalendarState
+import com.kizitonwose.calendar.compose.CalendarLayoutInfo
+import com.kizitonwose.calendar.compose.CalendarState
+import com.kizitonwose.calendar.compose.HorizontalCalendar
+import com.kizitonwose.calendar.compose.rememberCalendarState
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.minusMonths
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.now
+import com.kizitonwose.calendar.core.plusMonths
+import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -61,10 +60,10 @@ fun App() {
 
 @Composable
 fun Example1Page(adjacentMonths: Int = 500) {
-    val currentMonth = remember { YearMonth.current }
+    val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(adjacentMonths) }
     val endMonth = remember { currentMonth.plusMonths(adjacentMonths) }
-    val selections = remember { mutableStateListOf<CalendarDay>() }
+    val selections = remember { mutableStateListOf<com.kizitonwose.calendar.core.CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek(DayOfWeek.SUNDAY) }
     Column(
         modifier = Modifier
@@ -132,7 +131,7 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 }
 
 @Composable
-private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
+private fun Day(day: com.kizitonwose.calendar.core.CalendarDay, isSelected: Boolean, onClick: (com.kizitonwose.calendar.core.CalendarDay) -> Unit) {
     Box(
         modifier = Modifier
             .aspectRatio(1f) // This is important for square-sizing!
@@ -171,7 +170,7 @@ private fun Example1Preview() {
 fun rememberFirstMostVisibleMonth(
     state: CalendarState,
     viewportPercent: Float = 50f,
-): CalendarMonth {
+): com.kizitonwose.calendar.core.CalendarMonth {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewportPercent) }
@@ -181,7 +180,7 @@ fun rememberFirstMostVisibleMonth(
     return visibleMonth.value
 }
 
-private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
+private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): com.kizitonwose.calendar.core.CalendarMonth? {
     return if (visibleMonthsInfo.isEmpty()) {
         null
     } else {
