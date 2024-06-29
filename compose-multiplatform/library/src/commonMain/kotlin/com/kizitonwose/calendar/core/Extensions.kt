@@ -12,6 +12,7 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.until
 
 /**
  * Returns the days of week values such that the desired
@@ -58,6 +59,10 @@ internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUni
 
 internal fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
 
+internal fun LocalDate.plusWeeks(value: Int): LocalDate = plus(value, DateTimeUnit.WEEK)
+
+internal fun LocalDate.minusWeeks(value: Int): LocalDate = minus(value, DateTimeUnit.WEEK)
+
 internal fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeUnit.MONTH)
 
 internal fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
@@ -70,6 +75,9 @@ internal fun YearMonth.lengthOfMonth(): Int {
 
 internal fun YearMonth.monthsUntil(other: YearMonth): Int =
     atStartOfMonth().monthsUntil(other.atStartOfMonth())
+
+internal fun LocalDate.weeksUntil(other: LocalDate): Int =
+    until(other, DateTimeUnit.WEEK)
 
 // E.g DayOfWeek.SATURDAY.daysUntil(DayOfWeek.TUESDAY) = 3
 internal fun DayOfWeek.daysUntil(other: DayOfWeek) = (7 + (other.isoDayNumber - isoDayNumber)) % 7
