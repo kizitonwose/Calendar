@@ -1,6 +1,5 @@
 package com.kizitonwose.calendar.compose
 
-import android.util.Log
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
@@ -16,16 +15,16 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
+import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.checkDateRange
 import com.kizitonwose.calendar.data.getCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
-import java.time.DayOfWeek
-import java.time.YearMonth
+import kotlinx.datetime.DayOfWeek
 
 /**
  * Creates a [CalendarState] that is remembered across compositions.
@@ -41,7 +40,7 @@ fun rememberCalendarState(
     startMonth: YearMonth = YearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
-    firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
+    firstDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
 ): CalendarState {
     return rememberSaveable(
@@ -142,7 +141,7 @@ class CalendarState internal constructor(
      *
      * @see [lastVisibleMonth]
      */
-    val firstVisibleMonth: CalendarMonth by derivedStateOf {
+    val firstVisibleMonth: com.kizitonwose.calendar.core.CalendarMonth by derivedStateOf {
         store[listState.firstVisibleItemIndex]
     }
 
@@ -151,7 +150,7 @@ class CalendarState internal constructor(
      *
      * @see [firstVisibleMonth]
      */
-    val lastVisibleMonth: CalendarMonth by derivedStateOf {
+    val lastVisibleMonth: com.kizitonwose.calendar.core.CalendarMonth by derivedStateOf {
         store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0]
     }
 
@@ -244,7 +243,8 @@ class CalendarState internal constructor(
 
     private fun getScrollIndex(month: YearMonth): Int? {
         if (month !in startMonth..endMonth) {
-            Log.d("CalendarState", "Attempting to scroll out of range: $month")
+            // TODO KMP
+//            Log.d("CalendarState", "Attempting to scroll out of range: $month")
             return null
         }
         return getMonthIndex(startMonth, month)
