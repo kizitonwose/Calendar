@@ -239,16 +239,13 @@ class HeatMapCalendarState internal constructor(
     companion object {
         internal val Saver: Saver<HeatMapCalendarState, Any> = listSaver(
             save = {
-                val visibleItemState = VisibleItemState(
-                    firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
-                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset,
-                )
                 listOf(
                     it.startMonth,
                     it.endMonth,
                     it.firstVisibleMonth.yearMonth,
                     it.firstDayOfWeek,
-                    visibleItemState,
+                    it.listState.firstVisibleItemIndex,
+                    it.listState.firstVisibleItemScrollOffset,
                 )
             },
             restore = {
@@ -257,7 +254,10 @@ class HeatMapCalendarState internal constructor(
                     endMonth = it[1] as YearMonth,
                     firstVisibleMonth = it[2] as YearMonth,
                     firstDayOfWeek = it[3] as DayOfWeek,
-                    visibleItemState = it[4] as VisibleItemState,
+                    visibleItemState = VisibleItemState(
+                        firstVisibleItemIndex = it[4] as Int,
+                        firstVisibleItemScrollOffset = it[5] as Int,
+                    ),
                 )
             },
         )

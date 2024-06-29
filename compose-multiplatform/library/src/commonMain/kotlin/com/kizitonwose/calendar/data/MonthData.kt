@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.data
 
+import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
@@ -33,7 +34,7 @@ internal data class MonthData internal constructor(
 
     val calendarMonth = CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
 
-    private fun getDay(dayOffset: Int): com.kizitonwose.calendar.core.CalendarDay {
+    private fun getDay(dayOffset: Int): CalendarDay {
         val date = firstDay.plusDays(dayOffset)
         val position = when (date.yearMonth) {
             month -> DayPosition.MonthDate
@@ -41,7 +42,7 @@ internal data class MonthData internal constructor(
             nextMonth -> DayPosition.OutDate
             else -> throw IllegalArgumentException("Invalid date: $date in month: $month")
         }
-        return com.kizitonwose.calendar.core.CalendarDay(date, position)
+        return CalendarDay(date, position)
     }
 }
 

@@ -1,6 +1,5 @@
 package com.kizitonwose.calendar.compose.weekcalendar
 
-import android.util.Log
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
@@ -16,19 +15,21 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.kizitonwose.calendar.compose.VisibleItemState
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDayPosition
+import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.core.atEndOfMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
+import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
 import com.kizitonwose.calendar.data.getWeekCalendarData
 import com.kizitonwose.calendar.data.getWeekIndex
 import com.kizitonwose.calendar.data.getWeekIndicesCount
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.YearMonth
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDate
 
 /**
  * Creates a [WeekCalendarState] that is remembered across compositions.
@@ -254,7 +255,7 @@ class WeekCalendarState internal constructor(
 
     private fun getScrollIndex(date: LocalDate): Int? {
         if (date !in startDateAdjusted..endDateAdjusted) {
-            Log.d("WeekCalendarState", "Attempting to scroll out of range; $date")
+            println("WeekCalendarState - Attempting to scroll out of range; $date")
             return null
         }
         return getWeekIndex(startDateAdjusted, date)
