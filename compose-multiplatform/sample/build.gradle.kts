@@ -1,7 +1,7 @@
-
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
@@ -32,7 +32,7 @@ kotlin {
 
     androidTarget {}
 
-    jvm("desktop")
+    jvm("jvm")  // jvm("desktop")
 
     listOf(
         iosX64(),
@@ -45,12 +45,17 @@ kotlin {
         }
     }
 
-    sourceSets {
-        val desktopMain by getting
+    applyDefaultHierarchyTemplate()
 
+    sourceSets {
+        val jvmMain by getting
+        val commonMain by getting
+        val wasmJsMain by getting
+        val nativeMain by getting
+
+        androidMain.get().dependsOn(jvmMain)
         androidMain.dependencies {
             implementation(compose.preview)
-            implementation(libs.compose.activity)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -60,10 +65,21 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(project(":compose-multiplatform:library"))
+            implementation(libs.jetbrains.compose.navigation)
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
+        val nonJvmMain by creating {
+            dependsOn(commonMain)
+            nativeMain.dependsOn(this)
+            wasmJsMain.dependsOn(this)
+            dependencies {}
         }
+        jvmMain.dependencies {
+//            implementation(compose.desktop.currentOs)
+        }
+    }
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 }
 

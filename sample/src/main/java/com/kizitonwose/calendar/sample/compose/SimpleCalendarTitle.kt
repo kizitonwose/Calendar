@@ -11,19 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.shared.displayText
 import java.time.YearMonth
 
@@ -39,7 +40,7 @@ fun SimpleCalendarTitle(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.ic_chevron_left),
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             contentDescription = "Previous",
             onClick = goToPrevious,
         )
@@ -53,7 +54,7 @@ fun SimpleCalendarTitle(
             fontWeight = FontWeight.Medium,
         )
         CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.ic_chevron_right),
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Next",
             onClick = goToNext,
         )
@@ -62,7 +63,7 @@ fun SimpleCalendarTitle(
 
 @Composable
 private fun CalendarNavigationIcon(
-    icon: Painter,
+    imageVector: ImageVector,
     contentDescription: String,
     onClick: () -> Unit,
 ) = Box(
@@ -77,7 +78,7 @@ private fun CalendarNavigationIcon(
             .fillMaxSize()
             .padding(4.dp)
             .align(Alignment.Center),
-        painter = icon,
+        imageVector = imageVector,
         contentDescription = contentDescription,
     )
 }

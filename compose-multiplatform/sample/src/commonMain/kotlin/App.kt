@@ -1,215 +1,130 @@
-
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.kizitonwose.calendar.compose.CalendarLayoutInfo
-import com.kizitonwose.calendar.compose.CalendarState
-import com.kizitonwose.calendar.compose.HorizontalCalendar
-import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.minusMonths
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.now
-import com.kizitonwose.calendar.core.plusMonths
-import com.kizitonwose.calendar.core.previousMonth
-import kotlinx.coroutines.flow.filterNotNull
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
-import kotlinx.datetime.DayOfWeek
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        Example1Page()
+        Box(
+            Modifier.fillMaxSize(),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            val primaryColor = Colors.primary
+            var toolBarTitle by remember { mutableStateOf("") }
+            var toolBarVisible by remember { mutableStateOf(true) }
+            val navController = rememberNavController()
+            val coroutineScope = rememberCoroutineScope()
+            val snackbarHostState = remember { SnackbarHostState() }
+            LaunchedEffect(navController) {
+                navController.currentBackStackEntryFlow.collect { backStackEntry ->
+                    val page = Page.valueOf(backStackEntry.destination.route ?: return@collect)
+                    toolBarTitle = page.title
+                    toolBarVisible = page.showToolBar
+                }
+            }
+            MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(primary = primaryColor)) {
+                Scaffold(
+                    modifier = Modifier.widthIn(max = 600.dp),
+                    topBar = {
+                        if (toolBarVisible) {
+                            AppToolBar(title = toolBarTitle, navController)
+                        }
+                    },
+                    snackbarHost = {
+                        SnackbarHost(hostState = snackbarHostState)
+                    },
+                    content = {
+                        AppNavHost(
+                            modifier = Modifier.padding(it),
+                            navController = navController,
+                            showSnack = { message ->
+                                coroutineScope.launch {
+                                    snackbarHostState.showSnackbar(message)
+                                }
+                            },
+                        )
+                    },
+                )
+            }
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Example1Page(adjacentMonths: Int = 500) {
-    val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(adjacentMonths) }
-    val endMonth = remember { currentMonth.plusMonths(adjacentMonths) }
-    val selections = remember { mutableStateListOf<CalendarDay>() }
-    val daysOfWeek = remember { daysOfWeek() }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-    ) {
-        val state = rememberCalendarState(
-            startMonth = startMonth,
-            endMonth = endMonth,
-            firstVisibleMonth = currentMonth,
-            firstDayOfWeek = daysOfWeek.first(),
-        )
-        val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstMostVisibleMonth(state, viewportPercent = 90f)
-        SimpleCalendarTitle(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
-            currentMonth = visibleMonth.yearMonth,
-            goToPrevious = {
-                coroutineScope.launch {
-                    state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
+private fun AppToolBar(title: String, navController: NavHostController) {
+    TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(),
+        title = { Text(text = title) },
+        navigationIcon = navIcon@{
+            val destination = navController.currentBackStackEntry?.destination
+            val page = Page.valueOf(destination?.route ?: return@navIcon)
+            if (page == Page.List) {
+                Unit
+            } else {
+                NavigationIcon {
+                    navController.popBackStack()
                 }
-            },
-            goToNext = {
-                coroutineScope.launch {
-                    state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
-                }
-            },
-        )
-        HorizontalCalendar(
-            modifier = Modifier.testTag("Calendar"),
-            state = state,
-            dayContent = { day ->
-                Day(day, isSelected = selections.contains(day)) { clicked ->
-                    if (selections.contains(clicked)) {
-                        selections.remove(clicked)
-                    } else {
-                        selections.add(clicked)
-                    }
-                }
-            },
-            monthHeader = {
-                MonthHeader(daysOfWeek = daysOfWeek)
-            },
-        )
-    }
+            }
+        },
+    )
 }
 
 @Composable
-private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag("MonthHeader"),
+private fun AppNavHost(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    showSnack: (String) -> Unit = {},
+) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = Page.List.name,
     ) {
-        for (dayOfWeek in daysOfWeek) {
-            Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                fontSize = 15.sp,
-                text = dayOfWeek.name.lowercase().capitalize(Locale.current).take(3),
-                fontWeight = FontWeight.Medium,
+        composable(Page.List.name) {
+            ListPage { page -> navController.navigate(page.name) }
+        }
+        horizontallyAnimatedComposable(Page.Example1.name) { Example1Page() }
+        verticallyAnimatedComposable(Page.Example2.name) {
+            Example2Page(
+                close = { navController.popBackStack() },
+                dateSelected = { startDate, endDate ->
+                    navController.popBackStack()
+                    showSnack(dateRangeDisplayText(startDate, endDate))
+                },
             )
         }
+        verticallyAnimatedComposable(Page.Example3.name) { Example3Page() }
+        horizontallyAnimatedComposable(Page.Example4.name) { Example4Page() }
+        horizontallyAnimatedComposable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
+        horizontallyAnimatedComposable(Page.Example6.name) { Example6Page() }
+        horizontallyAnimatedComposable(Page.Example7.name) { Example7Page() }
+        horizontallyAnimatedComposable(Page.Example9.name) { Example9Page() }
     }
-}
-
-@Composable
-private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
-            .testTag("MonthDay")
-            .padding(6.dp)
-            .clip(CircleShape)
-            .background(color = if (isSelected) Color(0xFFFCCA3E) else Color.Transparent)
-            // Disable clicks on inDates/outDates
-            .clickable(
-                enabled = day.position == DayPosition.MonthDate,
-                showRipple = !isSelected,
-                onClick = { onClick(day) },
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        val textColor = when (day.position) {
-            // Color.Unspecified will use the default text color from the current theme
-            DayPosition.MonthDate -> if (isSelected) Color.White else Color.Unspecified
-            DayPosition.InDate, DayPosition.OutDate -> Color(0xFFBEBEBE)
-        }
-        Text(
-            text = day.date.dayOfMonth.toString(),
-            color = textColor,
-            fontSize = 14.sp,
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun Example1Preview() {
-    Example1Page()
-}
-
-@Composable
-fun rememberFirstMostVisibleMonth(
-    state: CalendarState,
-    viewportPercent: Float = 50f,
-): CalendarMonth {
-    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
-    LaunchedEffect(state) {
-        snapshotFlow { state.layoutInfo.firstMostVisibleMonth(viewportPercent) }
-            .filterNotNull()
-            .collect { month -> visibleMonth.value = month }
-    }
-    return visibleMonth.value
-}
-
-private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50f): CalendarMonth? {
-    return if (visibleMonthsInfo.isEmpty()) {
-        null
-    } else {
-        val viewportSize = (viewportEndOffset + viewportStartOffset) * viewportPercent / 100f
-        visibleMonthsInfo.firstOrNull { itemInfo ->
-            if (itemInfo.offset < 0) {
-                itemInfo.offset + itemInfo.size >= viewportSize
-            } else {
-                itemInfo.size - itemInfo.offset >= viewportSize
-            }
-        }?.month
-    }
-}
-
-fun Modifier.clickable(
-    enabled: Boolean = true,
-    showRipple: Boolean = true,
-    onClickLabel: String? = null,
-    role: Role? = null,
-    onClick: () -> Unit,
-): Modifier = composed {
-    clickable(
-        interactionSource = remember { MutableInteractionSource() },
-        indication = if (showRipple) LocalIndication.current else null,
-        enabled = enabled,
-        onClickLabel = onClickLabel,
-        role = role,
-        onClick = onClick,
-    )
 }

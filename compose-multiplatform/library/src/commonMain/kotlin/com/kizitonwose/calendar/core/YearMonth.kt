@@ -6,6 +6,14 @@ import kotlinx.datetime.number
 
 @Immutable
 data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, JvmSerializable {
+
+    init {
+        try {
+            atStartOfMonth()
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Year value $year is out of range", e)
+        }
+    }
     /**
      * Same as java.time.YearMonth.compareTo()
      */
