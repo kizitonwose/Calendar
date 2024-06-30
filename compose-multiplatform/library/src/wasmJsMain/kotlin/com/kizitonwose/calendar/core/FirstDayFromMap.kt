@@ -7,9 +7,9 @@ import kotlinx.datetime.DayOfWeek
 internal fun firstDayFromMap(locale: Locale): DayOfWeek =
     firstDays[locale.region]?.let { firstDayValues[it] } ?: DayOfWeek.SUNDAY
 
-private val USLocale = Locale("en-US")
+private val EnLocale = Locale("en-US")
 private var firstDayValues = DayOfWeek.entries.associateBy {
-    it.name.toLowerCase(USLocale).take(3)
+    it.name.toLowerCase(EnLocale).take(3)
 }
 
 // https://github.com/unicode-org/cldr-json/blob/main/cldr-json/cldr-core/supplemental/weekData.json#L7

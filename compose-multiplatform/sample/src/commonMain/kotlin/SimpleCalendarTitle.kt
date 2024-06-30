@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,9 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +38,7 @@ fun SimpleCalendarTitle(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CalendarNavigationIcon(
-            icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             contentDescription = "Previous",
             onClick = goToPrevious,
         )
@@ -47,13 +46,13 @@ fun SimpleCalendarTitle(
             modifier = Modifier
                 .weight(1f)
                 .testTag("MonthTitle"),
-            text = "${currentMonth.month.name.lowercase().capitalize(Locale.current)} ${currentMonth.year}",
+            text = currentMonth.displayText(),
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
         )
         CalendarNavigationIcon(
-            icon = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Next",
             onClick = goToNext,
         )
@@ -62,7 +61,7 @@ fun SimpleCalendarTitle(
 
 @Composable
 private fun CalendarNavigationIcon(
-    icon: ImageVector,
+    imageVector: ImageVector,
     contentDescription: String,
     onClick: () -> Unit,
 ) = Box(
@@ -77,7 +76,7 @@ private fun CalendarNavigationIcon(
             .fillMaxSize()
             .padding(4.dp)
             .align(Alignment.Center),
-        imageVector = icon,
+        imageVector = imageVector,
         contentDescription = contentDescription,
     )
 }

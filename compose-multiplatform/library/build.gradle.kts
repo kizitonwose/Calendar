@@ -62,7 +62,7 @@ kotlin {
             dependencies {}
         }
         jvmMain.dependencies {
-//            implementation(compose.desktop.currentOs)
+            implementation(compose.desktop.currentOs)
         }
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)

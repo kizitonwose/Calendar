@@ -30,6 +30,7 @@ compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-activity = { module = "androidx.activity:activity-compose", version = "1.9.0" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.7.7" }
+jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha02" }
 
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }

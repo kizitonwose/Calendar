@@ -17,12 +17,14 @@ import kotlinx.datetime.until
 /**
  * Returns the days of week values such that the desired
  * [firstDayOfWeek] property is at the start position.
+ *
+ * @see [firstDayOfWeekFromLocale]
  */
 fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
     val pivot = 7 - firstDayOfWeek.ordinal
     val daysOfWeek = DayOfWeek.entries
     // Order `daysOfWeek` array so that firstDayOfWeek is at the start position.
-    return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
+    return daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot)
 }
 
 /**
@@ -30,9 +32,11 @@ fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<Day
  */
 expect fun firstDayOfWeekFromLocale(locale: Locale = Locale.current): DayOfWeek
 
-fun YearMonth.atStartOfMonth(): LocalDate = LocalDate(year, month, 1)
+fun YearMonth.atStartOfMonth(): LocalDate = atDay(1)
 
-fun YearMonth.atEndOfMonth(): LocalDate = LocalDate(year, month, lengthOfMonth())
+fun YearMonth.atEndOfMonth(): LocalDate = atDay(lengthOfMonth())
+
+fun YearMonth.atDay(day: Int): LocalDate = LocalDate(year, month, day)
 
 val YearMonth.nextMonth: YearMonth
     get() = this.plusMonths(1)
@@ -68,6 +72,7 @@ internal fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeU
 internal fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
 
 internal fun YearMonth.lengthOfMonth(): Int {
+    DateTimeUnit.YEAR.months
     val thisMonthStart = atStartOfMonth()
     val nextMonthStart = thisMonthStart.plusMonths(1)
     return thisMonthStart.daysUntil(nextMonthStart)
