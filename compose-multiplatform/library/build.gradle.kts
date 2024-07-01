@@ -1,4 +1,3 @@
-
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
@@ -20,9 +19,11 @@ kotlin {
         binaries.library()
     }
 
-    androidTarget {}
+    androidTarget {
+        publishLibraryVariants("release")
+    }
 
-    jvm("jvm")  // jvm("desktop")
+    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -38,12 +39,15 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     sourceSets {
-        val jvmMain by getting
         val commonMain by getting
         val wasmJsMain by getting
         val nativeMain by getting
-
-        androidMain.get().dependsOn(jvmMain)
+        val desktopMain by getting
+        val androidMain by getting
+        val jvmMain by creating {
+            dependsOn(commonMain)
+        }
+        androidMain.dependsOn(jvmMain)
         androidMain.dependencies {
             implementation(compose.preview)
         }
@@ -61,7 +65,8 @@ kotlin {
             wasmJsMain.dependsOn(this)
             dependencies {}
         }
-        jvmMain.dependencies {
+        desktopMain.dependsOn(jvmMain)
+        desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
     }
@@ -72,7 +77,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.kizitonwose.calendarx"
+    namespace = "com.kizitonwose.calendar.compose.multiplatform"
     compileSdk = Android.compileSdk
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
