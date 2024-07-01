@@ -32,7 +32,7 @@ kotlin {
 
     androidTarget {}
 
-    jvm("jvm")  // jvm("desktop")
+    jvm("desktop")
 
     listOf(
         iosX64(),
@@ -48,12 +48,15 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
     sourceSets {
-        val jvmMain by getting
         val commonMain by getting
         val wasmJsMain by getting
         val nativeMain by getting
-
-        androidMain.get().dependsOn(jvmMain)
+        val desktopMain by getting
+        val androidMain by getting
+        val jvmMain by creating {
+            dependsOn(commonMain)
+        }
+        androidMain.dependsOn(jvmMain)
         androidMain.dependencies {
             implementation(compose.preview)
         }
@@ -73,9 +76,8 @@ kotlin {
             wasmJsMain.dependsOn(this)
             dependencies {}
         }
-        jvmMain.dependencies {
-//            implementation(compose.desktop.currentOs)
-        }
+        desktopMain.dependsOn(jvmMain)
+        desktopMain.dependencies {}
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
@@ -84,7 +86,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.kizitonwose.calendarx"
+    namespace = "com.kizitonwose.calendar.compose.multiplatform"
     compileSdk = Android.compileSdk
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -92,7 +94,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "com.kizitonwose.calendarx"
+        applicationId = "com.kizitonwose.calendar.compose.multiplatform"
         minSdk = Android.minSdkSampleApp
         targetSdk = Android.targetSdk
         versionCode = 1
@@ -132,7 +134,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.kizitonwose.calendar"
+            packageName = "com.kizitonwose.calendar.compose.multiplatform"
             packageVersion = "1.0.0"
         }
     }

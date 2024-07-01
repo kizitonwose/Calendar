@@ -1,8 +1,10 @@
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,8 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,11 +40,9 @@ fun Example7Page() {
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf<LocalDate?>(null) }
-    val widthPx = remember { mutableStateOf(0) }
-    Column(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .onSizeChanged { widthPx.value = it.width }
             .background(Color.White),
     ) {
         val state = rememberWeekCalendarState(
@@ -62,11 +60,7 @@ fun Example7Page() {
                     Day(
                         // If paged scrolling is disabled (calendarScrollPaged = false),
                         // you must set the day width on the WeekCalendar!
-                        modifier = Modifier.width(
-                            with(LocalDensity.current) {
-                                (widthPx.value / 9f).toDp()
-                            },
-                        ),
+                        modifier = Modifier.width(this@BoxWithConstraints.maxWidth / 9f),
                         date = day.date,
                         selected = selection == day.date,
                     ) {
