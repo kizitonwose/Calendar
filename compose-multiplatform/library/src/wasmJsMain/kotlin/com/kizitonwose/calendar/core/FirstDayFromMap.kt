@@ -5,11 +5,11 @@ import androidx.compose.ui.text.toLowerCase
 import kotlinx.datetime.DayOfWeek
 
 internal fun firstDayFromMap(locale: Locale): DayOfWeek =
-    firstDays[locale.region]?.let { firstDayValues[it] } ?: DayOfWeek.SUNDAY
+    firstDays[locale.region]?.let { firstDayValues[it] } ?: DayOfWeek.MONDAY
 
-private val EnLocale = Locale("en-US")
+private val enLocale = Locale("en-US")
 private var firstDayValues = DayOfWeek.entries.associateBy {
-    it.name.toLowerCase(EnLocale).take(3)
+    it.name.toLowerCase(enLocale).take(3)
 }
 
 // https://github.com/unicode-org/cldr-json/blob/main/cldr-json/cldr-core/supplemental/weekData.json#L7

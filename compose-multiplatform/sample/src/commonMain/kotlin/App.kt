@@ -1,15 +1,22 @@
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -26,51 +34,27 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.math.roundToInt
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        Box(
+    MaterialTheme(MaterialTheme.colorScheme.copy(primary = Colors.primary)) {
+        BoxWithConstraints(
             Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter,
         ) {
-            val primaryColor = Colors.primary
-            var toolBarTitle by remember { mutableStateOf("") }
-            var toolBarVisible by remember { mutableStateOf(true) }
-            val navController = rememberNavController()
-            val coroutineScope = rememberCoroutineScope()
-            val snackbarHostState = remember { SnackbarHostState() }
-            LaunchedEffect(navController) {
-                navController.currentBackStackEntryFlow.collect { backStackEntry ->
-                    val page = Page.valueOf(backStackEntry.destination.route ?: return@collect)
-                    toolBarTitle = page.title
-                    toolBarVisible = page.showToolBar
+            if (maxWidth >= 600.dp) {
+                val widthPx = maxWidth.value.roundToInt()
+                val count = if (widthPx in 650..800) 2 else widthPx / 400
+                Row {
+                    repeat(count) {
+                        VerticalDivider()
+                        Demo(modifier = Modifier.weight(1f))
+                    }
                 }
-            }
-            MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(primary = primaryColor)) {
-                Scaffold(
-                    modifier = Modifier.widthIn(max = 600.dp),
-                    topBar = {
-                        if (toolBarVisible) {
-                            AppToolBar(title = toolBarTitle, navController)
-                        }
-                    },
-                    snackbarHost = {
-                        SnackbarHost(hostState = snackbarHostState)
-                    },
-                    content = {
-                        AppNavHost(
-                            modifier = Modifier.padding(it),
-                            navController = navController,
-                            showSnack = { message ->
-                                coroutineScope.launch {
-                                    snackbarHostState.showSnackbar(message)
-                                }
-                            },
-                        )
-                    },
-                )
+            } else {
+                Demo(modifier = Modifier.fillMaxSize())
             }
         }
     }
@@ -78,23 +62,84 @@ fun App() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AppToolBar(title: String, navController: NavHostController) {
-    TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(),
-        title = { Text(text = title) },
-        navigationIcon = navIcon@{
-            val destination = navController.currentBackStackEntry?.destination
-            val page = Page.valueOf(destination?.route ?: return@navIcon)
-            if (page == Page.List) {
-                Unit
-            } else {
-                NavigationIcon {
-                    navController.popBackStack()
+private fun Demo(modifier: Modifier = Modifier) {
+    var toolBarTitle by remember { mutableStateOf("") }
+    var toolBarVisible by remember { mutableStateOf(true) }
+    var toolBarBackButtonVisible by remember { mutableStateOf(true) }
+    val navController = rememberNavController()
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { backStackEntry ->
+            val page = Page.valueOf(backStackEntry.destination.route ?: return@collect)
+            toolBarTitle = page.title
+            toolBarVisible = page.showToolBar
+            toolBarBackButtonVisible = page != Page.List
+        }
+    }
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            if (toolBarVisible) {
+                Column {
+                    ExampleToolbar(
+                        title = toolBarTitle,
+                        colors = if (isMobile()) blueToolbar else whiteToolbar,
+                        navigationIcon = navIcon@{
+                            if (toolBarBackButtonVisible) {
+                                NavigationIcon(
+                                    tint = if (isMobile()) Color.White else Color.Black,
+                                ) {
+                                    navController.popBackStack()
+                                }
+                            }
+                        },
+                    )
+                    // Add divider to separate the white toolbar.
+                    if (!isMobile()) {
+                        HorizontalDivider()
+                    }
                 }
             }
         },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
+        content = {
+            AppNavHost(
+                modifier = Modifier
+                    .padding(it),
+                navController = navController,
+                showSnack = { message ->
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(message)
+                    }
+                },
+            )
+        },
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ExampleToolbar(
+    title: String,
+    colors: TopAppBarColors = blueToolbar,
+    modifier: Modifier = Modifier,
+    navigationIcon: @Composable () -> Unit = {},
+) = TopAppBar(
+    modifier = modifier.height(64.dp),
+    colors = colors,
+    title = {
+        Box(Modifier.fillMaxHeight()) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = title,
+            )
+        }
+    },
+    navigationIcon = navigationIcon,
+)
 
 @Composable
 private fun AppNavHost(
@@ -120,7 +165,7 @@ private fun AppNavHost(
                 },
             )
         }
-        verticallyAnimatedComposable(Page.Example3.name) { Example3Page() }
+        verticallyAnimatedComposable(Page.Example3.name) { Example3Page { navController.popBackStack() } }
         horizontallyAnimatedComposable(Page.Example4.name) { Example4Page() }
         horizontallyAnimatedComposable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
         horizontallyAnimatedComposable(Page.Example6.name) { Example6Page() }
@@ -128,3 +173,21 @@ private fun AppNavHost(
         horizontallyAnimatedComposable(Page.Example9.name) { Example9Page() }
     }
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+private val blueToolbar
+    @Composable
+    get() = TopAppBarDefaults.topAppBarColors(
+        containerColor = Colors.primary,
+        titleContentColor = Color.White,
+    )
+
+@OptIn(ExperimentalMaterial3Api::class)
+private val whiteToolbar
+    @Composable
+    get() = TopAppBarDefaults.topAppBarColors(
+        containerColor = Color.White,
+        titleContentColor = Color.Black,
+    )
+

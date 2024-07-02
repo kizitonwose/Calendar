@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
@@ -63,7 +67,7 @@ private val selectedItemColor: Color = Colors.example5TextGrey
 private val inActiveTextColor: Color = Colors.example5TextGreyLight
 
 @Composable
-fun Example3Page() {
+fun Example3Page(close: () -> Unit = {}) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
@@ -142,6 +146,16 @@ fun Example3Page() {
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = flightsInSelectedDate.value) { flight ->
                     FlightInformation(flight)
+                }
+            }
+            if (!isMobile()) {
+                Spacer(Modifier.height(28.dp))
+                Button(
+                    onClick = close,
+                    colors = ButtonDefaults.buttonColors().copy(containerColor = toolbarColor),
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                ) {
+                    Text("Close")
                 }
             }
         }

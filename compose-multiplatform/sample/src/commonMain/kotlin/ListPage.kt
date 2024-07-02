@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 
 enum class Page(val title: String, val subtitle: String, val showToolBar: Boolean) {
     List(
-        title = "Calendar Compose Sample",
+        title = "Calendar Library",
         subtitle = "",
         showToolBar = true,
     ),
