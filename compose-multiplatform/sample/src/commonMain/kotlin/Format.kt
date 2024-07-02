@@ -11,12 +11,12 @@ fun YearMonth.displayText(short: Boolean = false): String {
 }
 
 fun Month.displayText(short: Boolean = true): String {
-    return getDisplayName(short, EnLocale)
+    return getDisplayName(short, enLocale)
 }
 
 fun DayOfWeek.displayText(uppercase: Boolean = false): String {
-    return getShortDisplayName(EnLocale).let { value ->
-        if (uppercase) value.toUpperCase(EnLocale) else value
+    return getShortDisplayName(enLocale).let { value ->
+        if (uppercase) value.toUpperCase(enLocale) else value
     }
 }
 
@@ -24,7 +24,7 @@ expect fun Month.getDisplayName(short: Boolean, locale: Locale): String
 
 expect fun DayOfWeek.getShortDisplayName(locale: Locale): String
 
-private val EnLocale = Locale("en-US")
+private val enLocale = Locale("en-US")
 
 fun getWeekPageTitle(week: Week): String {
     val firstDate = week.days.first().date

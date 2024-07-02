@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
@@ -51,7 +52,11 @@ fun Modifier.clickable(
 }
 
 @Composable
-fun NavigationIcon(onBackClick: () -> Unit) {
+fun NavigationIcon(
+    tint: Color = Color.White,
+    imageVector: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
+    onBackClick: () -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxHeight()
@@ -61,9 +66,9 @@ fun NavigationIcon(onBackClick: () -> Unit) {
             .clickable(role = Role.Button, onClick = onBackClick),
     ) {
         Icon(
-            tint = Color.White,
+            tint = tint,
             modifier = Modifier.align(Alignment.Center),
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            imageVector = imageVector,
             contentDescription = "Back",
         )
     }
