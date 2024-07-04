@@ -10,4 +10,4 @@ import kotlinx.datetime.LocalDate
  * @param position the [WeekDayPosition] for this day.
  */
 @Immutable
-data class WeekDay(val date: LocalDate, val position: WeekDayPosition) : JvmSerializable
+data class WeekDay(val date: LocalDate, val position: WeekDayPosition)
