@@ -1,6 +1,7 @@
 
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Versions
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -41,4 +42,8 @@ dependencies {
     implementation(libs.compose.runtime)
 
     testImplementation(libs.test.junit)
+}
+
+mavenPublishing {
+    coordinates(version = Versions.core)
 }

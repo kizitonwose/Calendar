@@ -1,4 +1,5 @@
 import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Versions
 
 plugins {
     alias(libs.plugins.kotlinJvm)
@@ -19,4 +20,8 @@ kotlin {
 
 dependencies {
     implementation(libs.compose.runtime) // Only needed for @Immutable annotation.
+}
+
+mavenPublishing {
+    coordinates(version = Versions.core)
 }

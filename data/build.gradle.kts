@@ -1,5 +1,6 @@
 
 import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Versions
 
 plugins {
     alias(libs.plugins.kotlinJvm)
@@ -23,4 +24,8 @@ dependencies {
     implementation(libs.kotlin.stdlib)
 
     testImplementation(libs.test.junit)
+}
+
+mavenPublishing {
+    coordinates(version = Versions.core)
 }
