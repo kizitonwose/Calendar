@@ -10,4 +10,4 @@ import kotlinx.datetime.LocalDate
  * @param position the [DayPosition] for this day.
  */
 @Immutable
-data class CalendarDay(val date: LocalDate, val position: DayPosition) : JvmSerializable
+data class CalendarDay(val date: LocalDate, val position: DayPosition)

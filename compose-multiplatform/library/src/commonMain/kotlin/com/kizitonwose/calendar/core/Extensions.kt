@@ -72,7 +72,6 @@ internal fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeU
 internal fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
 
 internal fun YearMonth.lengthOfMonth(): Int {
-    DateTimeUnit.YEAR.months
     val thisMonthStart = atStartOfMonth()
     val nextMonthStart = thisMonthStart.plusMonths(1)
     return thisMonthStart.daysUntil(nextMonthStart)

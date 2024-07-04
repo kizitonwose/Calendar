@@ -3,7 +3,6 @@ package com.kizitonwose.calendar.compose.heatmapcalendar
 import androidx.compose.runtime.Immutable
 import com.kizitonwose.calendar.compose.HeatMapCalendar
 import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.JvmSerializable
 
 /**
  * Represents a week on the heatmap calendar.
@@ -16,4 +15,4 @@ import com.kizitonwose.calendar.core.JvmSerializable
  * @param days the days in this week.
  */
 @Immutable
-data class HeatMapWeek(val days: List<CalendarDay>) : JvmSerializable
+data class HeatMapWeek(val days: List<CalendarDay>)

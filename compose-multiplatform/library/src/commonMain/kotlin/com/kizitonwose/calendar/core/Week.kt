@@ -8,7 +8,7 @@ import androidx.compose.runtime.Immutable
  * @param days the days in this week.
  */
 @Immutable
-data class Week internal constructor(val days: List<WeekDay>) : JvmSerializable {
+data class Week internal constructor(val days: List<WeekDay>) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false

@@ -15,6 +15,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.kizitonwose.calendar.core.JvmSerializableLocalDate
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.YearMonth
@@ -22,6 +23,8 @@ import com.kizitonwose.calendar.core.atEndOfMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.now
+import com.kizitonwose.calendar.core.toJvmSerializableLocalDate
+import com.kizitonwose.calendar.core.toLocalDate
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
@@ -265,9 +268,9 @@ class WeekCalendarState internal constructor(
         val Saver: Saver<WeekCalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startDate,
-                    it.endDate,
-                    it.firstVisibleWeek.days.first().date,
+                    it.startDate.toJvmSerializableLocalDate(),
+                    it.endDate.toJvmSerializableLocalDate(),
+                    it.firstVisibleWeek.days.first().date.toJvmSerializableLocalDate(),
                     it.firstDayOfWeek,
                     it.listState.firstVisibleItemIndex,
                     it.listState.firstVisibleItemScrollOffset,
@@ -275,9 +278,9 @@ class WeekCalendarState internal constructor(
             },
             restore = {
                 WeekCalendarState(
-                    startDate = it[0] as LocalDate,
-                    endDate = it[1] as LocalDate,
-                    firstVisibleWeekDate = it[2] as LocalDate,
+                    startDate = (it[0] as JvmSerializableLocalDate).toLocalDate(),
+                    endDate = (it[1] as JvmSerializableLocalDate).toLocalDate(),
+                    firstVisibleWeekDate = (it[2] as JvmSerializableLocalDate).toLocalDate(),
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = VisibleItemState(
                         firstVisibleItemIndex = it[4] as Int,

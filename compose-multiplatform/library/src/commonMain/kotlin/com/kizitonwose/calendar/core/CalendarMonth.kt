@@ -12,7 +12,7 @@ import androidx.compose.runtime.Immutable
 data class CalendarMonth internal constructor(
     val yearMonth: YearMonth,
     val weekDays: List<List<CalendarDay>>,
-) : JvmSerializable {
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
