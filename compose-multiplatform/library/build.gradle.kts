@@ -1,5 +1,6 @@
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Versions
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
@@ -108,4 +109,8 @@ android {
     dependencies {
         debugImplementation(compose.uiTooling)
     }
+}
+
+mavenPublishing {
+    coordinates(version = Versions.multiplatfrom)
 }
