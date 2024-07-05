@@ -12,7 +12,7 @@ object Config {
 }
 
 object Versions {
-    val core = "2.6.0-SNAPSHOT"
+    val core = "2.6.0-alpha01"
     val multiplatfrom = "2.6.0-alpha01"
 }
 

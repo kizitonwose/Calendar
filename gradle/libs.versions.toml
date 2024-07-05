@@ -34,7 +34,7 @@ compose-navigation = { module = "androidx.navigation:navigation-compose", versio
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 
-jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.7.0-alpha07" }
+jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha02" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -48,4 +48,4 @@ versionCheck = { id = "com.github.ben-manes.versions", version = "0.51.0" }
 
 # KMM
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.6.10" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version = "1.7.0-alpha01" }
