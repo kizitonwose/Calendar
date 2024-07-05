@@ -67,7 +67,8 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(project(":compose-multiplatform:library"))
+            implementation("com.kizitonwose.calendar:compose-multiplatform:2.6.0-alpha01")
+//            implementation(project(":compose-multiplatform:library"))
             implementation(libs.jetbrains.compose.navigation)
         }
         val nonJvmMain by creating {
@@ -77,7 +78,9 @@ kotlin {
             dependencies {}
         }
         desktopMain.dependsOn(jvmMain)
-        desktopMain.dependencies {}
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+        }
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
@@ -130,7 +133,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "Calendar Sample"
+        mainClass = "MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
