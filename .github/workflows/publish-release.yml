@@ -8,7 +8,7 @@ on:
 jobs:
   publish-release:
     name: Publish Release
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     if: github.repository == 'kizitonwose/Calendar'
     steps:
       - name: Checkout Repository
