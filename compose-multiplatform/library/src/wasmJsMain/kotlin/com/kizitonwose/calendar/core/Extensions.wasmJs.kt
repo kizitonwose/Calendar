@@ -10,7 +10,8 @@ actual fun firstDayOfWeekFromLocale(locale: Locale): DayOfWeek {
     return try {
         val firstDay = jsFirstDayFromTag(locale.toLanguageTag())
         daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY)[firstDay - 1]
-    } catch (e: Exception) { // Unavailable on Firefox
+        // Unavailable on Firefox
+    } catch (e: Exception) {
         firstDayFromMap(locale)
     }
 }
