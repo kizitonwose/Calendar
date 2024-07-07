@@ -318,18 +318,6 @@ private fun AirportInformation(airport: Flight.Airport, isDeparture: Boolean) {
     }
 }
 
-// The default dark them ripple is too bright so we tone it down.
-//private val Example3RippleConfiguration = RippleConfiguration(
-//    color = Color.Gray,
-//    // Copied from RippleTheme#DarkThemeRippleAlpha
-//    rippleAlpha = RippleAlpha(
-//        pressedAlpha = 0.10f,
-//        focusedAlpha = 0.12f,
-//        draggedAlpha = 0.08f,
-//        hoveredAlpha = 0.04f,
-//    ),
-//)
-
 @Preview
 @Composable
 private fun Example3Preview() {

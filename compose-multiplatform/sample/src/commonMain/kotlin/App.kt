@@ -174,7 +174,6 @@ private fun AppNavHost(
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 private val blueToolbar
     @Composable
@@ -190,4 +189,3 @@ private val whiteToolbar
         containerColor = Color.White,
         titleContentColor = Color.Black,
     )
-

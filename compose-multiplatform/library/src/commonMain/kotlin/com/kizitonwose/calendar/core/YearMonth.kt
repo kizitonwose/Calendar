@@ -6,7 +6,6 @@ import kotlinx.datetime.number
 
 @Immutable
 data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, JvmSerializable {
-
     constructor(year: Int, monthNumber: Int) :
         this(year = year, month = Month(monthNumber))
 
