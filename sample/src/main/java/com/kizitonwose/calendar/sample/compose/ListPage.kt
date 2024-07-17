@@ -80,7 +80,7 @@ fun ListPage(click: (Page) -> Unit) {
             .fillMaxSize()
             .background(Color.White),
     ) {
-        items(Page.values().drop(1)) { item ->
+        items(Page.entries.drop(1)) { item ->
             Column(
                 modifier = Modifier
                     .fillParentMaxWidth()

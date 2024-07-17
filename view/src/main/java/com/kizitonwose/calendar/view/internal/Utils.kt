@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.view.internal
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -75,13 +74,8 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
         root.layoutParams = MarginLayoutParams(width, height).apply {
             bottomMargin = itemMargins.bottom
             topMargin = itemMargins.top
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                marginStart = itemMargins.start
-                marginEnd = itemMargins.end
-            } else {
-                leftMargin = itemMargins.start
-                rightMargin = itemMargins.end
-            }
+            marginStart = itemMargins.start
+            marginEnd = itemMargins.end
         }
     }
 
