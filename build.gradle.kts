@@ -9,10 +9,17 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.jetbrainsCompose) apply false
     alias(libs.plugins.versionCheck)
+    alias(libs.plugins.bcv)
 }
 
 allprojects {
     apply(plugin = rootProject.libs.plugins.kotlinter.get().pluginId)
+}
+
+apiValidation {
+    ignoredProjects += listOf(
+        "sample",
+    )
 }
 
 // tasks.register<Delete>("clean").configure {
