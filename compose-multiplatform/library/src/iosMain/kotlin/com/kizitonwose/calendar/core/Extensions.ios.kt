@@ -8,7 +8,7 @@ import platform.Foundation.NSLocale
 /**
  * Returns the first day of the week from the provided locale.
  */
-actual fun firstDayOfWeekFromLocale(locale: Locale): DayOfWeek {
+public actual fun firstDayOfWeekFromLocale(locale: Locale): DayOfWeek {
     val firstWeekday = NSCalendar.currentCalendar.let {
         it.setLocale(NSLocale(locale.toLanguageTag()))
         // https://developer.apple.com/documentation/foundation/calendar/2293656-firstweekday

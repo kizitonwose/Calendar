@@ -12,14 +12,14 @@ import com.kizitonwose.calendar.core.Week
  *
  * @see LazyListLayoutInfo
  */
-class WeekCalendarLayoutInfo(
+public class WeekCalendarLayoutInfo(
     info: LazyListLayoutInfo,
     private val getIndexData: (Int) -> Week,
 ) : LazyListLayoutInfo by info {
     /**
      * The list of [WeekCalendarItemInfo] representing all the currently visible weeks.
      */
-    val visibleWeeksInfo: List<WeekCalendarItemInfo>
+    public val visibleWeeksInfo: List<WeekCalendarItemInfo>
         get() = visibleItemsInfo.map { info ->
             WeekCalendarItemInfo(info, getIndexData(info.index))
         }
@@ -33,5 +33,5 @@ class WeekCalendarLayoutInfo(
  * @see WeekCalendarLayoutInfo
  * @see LazyListItemInfo
  */
-class WeekCalendarItemInfo(info: LazyListItemInfo, val week: Week) :
+public class WeekCalendarItemInfo(info: LazyListItemInfo, public val week: Week) :
     LazyListItemInfo by info

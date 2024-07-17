@@ -6,7 +6,7 @@ import kotlinx.datetime.DayOfWeek
 /**
  * Returns the first day of the week from the provided locale.
  */
-actual fun firstDayOfWeekFromLocale(locale: Locale): DayOfWeek {
+public actual fun firstDayOfWeekFromLocale(locale: Locale): DayOfWeek {
     return try {
         val firstDay = jsFirstDayFromTag(locale.toLanguageTag())
         daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY)[firstDay - 1]

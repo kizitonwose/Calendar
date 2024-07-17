@@ -5,8 +5,8 @@ import kotlinx.datetime.Month
 import kotlinx.datetime.number
 
 @Immutable
-data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, JvmSerializable {
-    constructor(year: Int, monthNumber: Int) :
+public data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, JvmSerializable {
+    public constructor(year: Int, monthNumber: Int) :
         this(year = year, month = Month(monthNumber))
 
     init {
@@ -28,5 +28,5 @@ data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, J
         return cmp
     }
 
-    companion object
+    public companion object
 }

@@ -11,12 +11,12 @@ import com.kizitonwose.calendar.core.CalendarMonth
  * Use [CalendarState.layoutInfo] to retrieve this.
  * @see LazyListLayoutInfo
  */
-class CalendarLayoutInfo(info: LazyListLayoutInfo, private val month: (Int) -> CalendarMonth) :
+public class CalendarLayoutInfo(info: LazyListLayoutInfo, private val month: (Int) -> CalendarMonth) :
     LazyListLayoutInfo by info {
     /**
      * The list of [CalendarItemInfo] representing all the currently visible months.
      */
-    val visibleMonthsInfo: List<CalendarItemInfo>
+    public val visibleMonthsInfo: List<CalendarItemInfo>
         get() = visibleItemsInfo.map {
             CalendarItemInfo(it, month(it.index))
         }
@@ -30,4 +30,4 @@ class CalendarLayoutInfo(info: LazyListLayoutInfo, private val month: (Int) -> C
  * @see CalendarLayoutInfo
  * @see LazyListItemInfo
  */
-class CalendarItemInfo(info: LazyListItemInfo, val month: CalendarMonth) : LazyListItemInfo by info
+public class CalendarItemInfo(info: LazyListItemInfo, public val month: CalendarMonth) : LazyListItemInfo by info

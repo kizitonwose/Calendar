@@ -43,7 +43,7 @@ import kotlinx.datetime.LocalDate
  * @param firstVisibleWeekDate the date which will have its week visible initially.
  */
 @Composable
-fun rememberWeekCalendarState(
+public fun rememberWeekCalendarState(
     startDate: LocalDate = YearMonth.now().atStartOfMonth(),
     endDate: LocalDate = YearMonth.now().atEndOfMonth(),
     firstVisibleWeekDate: LocalDate = LocalDate.now(),
@@ -83,7 +83,7 @@ fun rememberWeekCalendarState(
  * @param firstVisibleWeekDate the date which will have its week visible initially.
  */
 @Stable
-class WeekCalendarState internal constructor(
+public class WeekCalendarState internal constructor(
     startDate: LocalDate,
     endDate: LocalDate,
     firstVisibleWeekDate: LocalDate,
@@ -110,7 +110,7 @@ class WeekCalendarState internal constructor(
      * in the week to which this date belongs, depending on the provided [firstDayOfWeek].
      * Such days will have their [WeekDayPosition] set to [WeekDayPosition.InDate]
      */
-    var startDate: LocalDate
+    public var startDate: LocalDate
         get() = _startDate
         set(value) {
             if (value != _startDate) {
@@ -127,7 +127,7 @@ class WeekCalendarState internal constructor(
      * in the week to which this date belongs. Such days will have their [WeekDayPosition]
      * set to [WeekDayPosition.OutDate]
      */
-    var endDate: LocalDate
+    public var endDate: LocalDate
         get() = _endDate
         set(value) {
             if (value != _endDate) {
@@ -140,7 +140,7 @@ class WeekCalendarState internal constructor(
     private var _firstDayOfWeek by mutableStateOf(firstDayOfWeek)
 
     /** The first day of week on the calendar. */
-    var firstDayOfWeek: DayOfWeek
+    public var firstDayOfWeek: DayOfWeek
         get() = _firstDayOfWeek
         set(value) {
             if (value != _firstDayOfWeek) {
@@ -152,14 +152,14 @@ class WeekCalendarState internal constructor(
     /**
      * The first week that is visible.
      */
-    val firstVisibleWeek: Week by derivedStateOf {
+    public val firstVisibleWeek: Week by derivedStateOf {
         store[listState.firstVisibleItemIndex]
     }
 
     /**
      * The last week that is visible.
      */
-    val lastVisibleWeek: Week by derivedStateOf {
+    public val lastVisibleWeek: Week by derivedStateOf {
         store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0]
     }
 
@@ -179,7 +179,7 @@ class WeekCalendarState internal constructor(
      * If you want to run some side effects like sending an analytics event or updating a state
      * based on this value consider using "snapshotFlow".
      */
-    val layoutInfo: WeekCalendarLayoutInfo
+    public val layoutInfo: WeekCalendarLayoutInfo
         get() = WeekCalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
     internal val store = DataStore { offset ->
@@ -222,7 +222,7 @@ class WeekCalendarState internal constructor(
      *
      * @see [animateScrollToWeek]
      */
-    suspend fun scrollToWeek(date: LocalDate) {
+    public suspend fun scrollToWeek(date: LocalDate) {
         listState.scrollToItem(getScrollIndex(date) ?: return)
     }
 
@@ -231,7 +231,7 @@ class WeekCalendarState internal constructor(
      *
      * @param date the week to which to scroll.
      */
-    suspend fun animateScrollToWeek(date: LocalDate) {
+    public suspend fun animateScrollToWeek(date: LocalDate) {
         listState.animateScrollToItem(getScrollIndex(date) ?: return)
     }
 
@@ -240,7 +240,7 @@ class WeekCalendarState internal constructor(
      * calendar is being dragged. If you want to know whether the fling (or animated scroll) is in
      * progress, use [isScrollInProgress].
      */
-    val interactionSource: InteractionSource
+    public val interactionSource: InteractionSource
         get() = listState.interactionSource
 
     /**
@@ -254,7 +254,7 @@ class WeekCalendarState internal constructor(
     override suspend fun scroll(
         scrollPriority: MutatePriority,
         block: suspend ScrollScope.() -> Unit,
-    ) = listState.scroll(scrollPriority, block)
+    ): Unit = listState.scroll(scrollPriority, block)
 
     private fun getScrollIndex(date: LocalDate): Int? {
         if (date !in startDateAdjusted..endDateAdjusted) {
@@ -264,8 +264,8 @@ class WeekCalendarState internal constructor(
         return getWeekIndex(startDateAdjusted, date)
     }
 
-    companion object {
-        val Saver: Saver<WeekCalendarState, Any> = listSaver(
+    public companion object {
+        public val Saver: Saver<WeekCalendarState, Any> = listSaver(
             save = {
                 listOf(
                     it.startDate.toJvmSerializableLocalDate(),
