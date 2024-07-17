@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,11 +48,6 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.minusMonths
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.now
-import com.kizitonwose.calendar.core.plusMonths
-import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -107,12 +101,12 @@ fun Example3Page(close: () -> Unit = {}) {
                 currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
                     coroutineScope.launch {
-                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
+                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previous)
                     }
                 },
                 goToNext = {
                     coroutineScope.launch {
-                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.nextMonth)
+                        state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.next)
                     }
                 },
             )

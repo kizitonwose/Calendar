@@ -6,12 +6,10 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.daysUntil
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
-import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.plus
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
 import kotlinx.datetime.until
 
 /**
@@ -32,32 +30,25 @@ public fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): L
  */
 public expect fun firstDayOfWeekFromLocale(locale: Locale = Locale.current): DayOfWeek
 
-public fun YearMonth.atStartOfMonth(): LocalDate = atDay(1)
+/**
+ * Obtains the current [LocalDate] from the specified [clock] and [timeZone].
+ *
+ * Using this method allows the use of an alternate clock or timezone for testing.
+ */
+public fun LocalDate.Companion.now(
+    clock: Clock = Clock.System,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
+): LocalDate = clock.todayIn(timeZone)
 
-public fun YearMonth.atEndOfMonth(): LocalDate = atDay(lengthOfMonth())
-
-public fun YearMonth.atDay(day: Int): LocalDate = LocalDate(year, month, day)
-
-public val YearMonth.nextMonth: YearMonth
-    get() = this.plusMonths(1)
-
-public val YearMonth.previousMonth: YearMonth
-    get() = this.minusMonths(1)
-
-public fun LocalDate.Companion.now(): LocalDate = Clock.System.now()
-    .toLocalDateTime(TimeZone.currentSystemDefault())
-    .date
-
-public fun YearMonth.Companion.now(): YearMonth = LocalDate.now().yearMonth
-
-public fun YearMonth.plusMonths(value: Int): YearMonth =
-    atStartOfMonth().plusMonths(value).yearMonth
-
-public fun YearMonth.minusMonths(value: Int): YearMonth =
-    atStartOfMonth().minusMonths(value).yearMonth
-
+/**
+ * Returns the [YearMonth] value for this date.
+ */
 public val LocalDate.yearMonth: YearMonth
     get() = YearMonth(year, month)
+
+internal fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
+
+internal fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
 
 internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
 
@@ -70,15 +61,6 @@ internal fun LocalDate.minusWeeks(value: Int): LocalDate = minus(value, DateTime
 internal fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeUnit.MONTH)
 
 internal fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
-
-internal fun YearMonth.lengthOfMonth(): Int {
-    val thisMonthStart = atStartOfMonth()
-    val nextMonthStart = thisMonthStart.plusMonths(1)
-    return thisMonthStart.daysUntil(nextMonthStart)
-}
-
-internal fun YearMonth.monthsUntil(other: YearMonth): Int =
-    atStartOfMonth().monthsUntil(other.atStartOfMonth())
 
 internal fun LocalDate.weeksUntil(other: LocalDate): Int =
     until(other, DateTimeUnit.WEEK)

@@ -1,9 +1,7 @@
 import androidx.compose.ui.graphics.Color
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.atDay
-import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
-import com.kizitonwose.calendar.core.plusMonths
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.atTime
 import kotlinx.datetime.format.DayOfWeekNames

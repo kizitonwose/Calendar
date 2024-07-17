@@ -1,7 +1,5 @@
 import com.kizitonwose.calendar.core.atEndOfMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
@@ -48,7 +46,7 @@ object ContinuousSelectionHelper {
     ): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (inDate.yearMonth == startDate.yearMonth) return true
-        val firstDateInThisMonth = inDate.yearMonth.nextMonth.atStartOfMonth()
+        val firstDateInThisMonth = inDate.yearMonth.next.atStartOfMonth()
         return firstDateInThisMonth in startDate..endDate && startDate != firstDateInThisMonth
     }
 
@@ -59,7 +57,7 @@ object ContinuousSelectionHelper {
     ): Boolean {
         if (startDate.yearMonth == endDate.yearMonth) return false
         if (outDate.yearMonth == endDate.yearMonth) return true
-        val lastDateInThisMonth = outDate.yearMonth.previousMonth.atEndOfMonth()
+        val lastDateInThisMonth = outDate.yearMonth.previous.atEndOfMonth()
         return lastDateInThisMonth in startDate..endDate && endDate != lastDateInThisMonth
     }
 }

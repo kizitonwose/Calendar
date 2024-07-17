@@ -28,9 +28,7 @@ import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.atEndOfMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
-import com.kizitonwose.calendar.core.plusMonths
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate

@@ -9,11 +9,10 @@ import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysUntil
 import com.kizitonwose.calendar.core.lengthOfMonth
 import com.kizitonwose.calendar.core.minusDays
+import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.monthsUntil
-import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.plusDays
 import com.kizitonwose.calendar.core.plusMonths
-import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.datetime.DayOfWeek
 
@@ -28,9 +27,9 @@ internal data class MonthData internal constructor(
 
     private val rows = (0 until totalDays).chunked(7)
 
-    private val previousMonth = month.previousMonth
+    private val previousMonth = month.minusMonths(1)
 
-    private val nextMonth = month.nextMonth
+    private val nextMonth = month.plusMonths(1)
 
     val calendarMonth = CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
 

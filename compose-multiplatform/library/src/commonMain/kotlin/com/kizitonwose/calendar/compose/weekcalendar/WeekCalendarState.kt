@@ -265,7 +265,7 @@ public class WeekCalendarState internal constructor(
     }
 
     public companion object {
-        public val Saver: Saver<WeekCalendarState, Any> = listSaver(
+        internal val Saver: Saver<WeekCalendarState, Any> = listSaver(
             save = {
                 listOf(
                     it.startDate.toJvmSerializableLocalDate(),

@@ -173,7 +173,6 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 }
 
 public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState$Companion {
-	public final fun getSaver ()Landroidx/compose/runtime/saveable/Saver;
 }
 
 public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarStateKt {

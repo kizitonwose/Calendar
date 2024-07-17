@@ -27,6 +27,9 @@ import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.Week
+import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.core.minus
+import com.kizitonwose.calendar.core.plus
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.datetime.DateTimeUnit
@@ -179,5 +182,10 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
 }
 
 internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
-
 internal fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
+internal fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
+internal fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
+internal val YearMonth.next: YearMonth
+    get() = this.minusMonths(1)
+internal val YearMonth.previous: YearMonth
+    get() = this.minusMonths(1)
