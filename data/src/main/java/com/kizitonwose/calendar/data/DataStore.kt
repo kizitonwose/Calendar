@@ -4,7 +4,7 @@ package com.kizitonwose.calendar.data
  * Basically [MutableMap.getOrPut] but allows us read the map
  * in multiple places without calling `getOrPut` everywhere.
  */
-class DataStore<V>(
+public class DataStore<V>(
     private val store: MutableMap<Int, V> = HashMap(),
     private val create: (offset: Int) -> V,
 ) : MutableMap<Int, V> by store {

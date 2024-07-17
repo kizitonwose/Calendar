@@ -1,3 +1,3 @@
 package com.kizitonwose.calendar.core
 
-actual typealias JvmSerializable = java.io.Serializable
+public actual typealias JvmSerializable = java.io.Serializable

@@ -9,7 +9,7 @@ import java.io.Serializable
  * @param days the days in this week.
  */
 @Immutable
-data class Week(val days: List<WeekDay>) : Serializable {
+public data class Week(val days: List<WeekDay>) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

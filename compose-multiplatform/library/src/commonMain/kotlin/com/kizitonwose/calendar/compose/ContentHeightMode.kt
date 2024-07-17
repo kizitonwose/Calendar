@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 /**
  * Determines how the height of the day content is calculated.
  */
-enum class ContentHeightMode {
+public enum class ContentHeightMode {
     /**
      * The day container will wrap its height. This allows you to
      * use [Modifier.aspectRatio] if you want square day content

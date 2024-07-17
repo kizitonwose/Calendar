@@ -2,7 +2,7 @@ package com.kizitonwose.calendar.view
 
 import androidx.annotation.Px
 
-data class MarginValues(
+public data class MarginValues(
     @Px val start: Int = 0,
     @Px val top: Int = 0,
     @Px val end: Int = 0,

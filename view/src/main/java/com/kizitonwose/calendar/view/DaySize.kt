@@ -5,7 +5,7 @@ import android.view.ViewGroup
 /**
  * Determines how the size of each day on the calendar is calculated.
  */
-enum class DaySize {
+public enum class DaySize {
     /**
      * Each day will have both width and height matching
      * the width of the calendar divided by 7.

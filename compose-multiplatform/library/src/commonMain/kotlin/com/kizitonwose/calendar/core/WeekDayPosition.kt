@@ -3,7 +3,7 @@ package com.kizitonwose.calendar.core
 /**
  * Describes the position of a [WeekDay] on the calendar.
  */
-enum class WeekDayPosition {
+public enum class WeekDayPosition {
     /**
      * The day is positioned at the start of the calendar to
      * ensure proper alignment of the first day of the week.

@@ -1,3 +1,3 @@
 package com.kizitonwose.calendar.core
 
-expect interface JvmSerializable
+public expect interface JvmSerializable

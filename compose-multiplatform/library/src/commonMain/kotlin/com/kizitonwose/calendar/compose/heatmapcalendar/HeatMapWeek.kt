@@ -15,4 +15,4 @@ import com.kizitonwose.calendar.core.CalendarDay
  * @param days the days in this week.
  */
 @Immutable
-data class HeatMapWeek(val days: List<CalendarDay>)
+public data class HeatMapWeek(val days: List<CalendarDay>)

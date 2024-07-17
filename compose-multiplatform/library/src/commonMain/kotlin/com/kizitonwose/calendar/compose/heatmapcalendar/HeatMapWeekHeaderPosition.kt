@@ -6,7 +6,7 @@ import com.kizitonwose.calendar.compose.HeatMapCalendar
  * Determines the position of the week header
  * composable (Mon, Tue, Wed...) in the [HeatMapCalendar]
  */
-enum class HeatMapWeekHeaderPosition {
+public enum class HeatMapWeekHeaderPosition {
     /**
      * The header is positioned at the start of the calendar.
      */

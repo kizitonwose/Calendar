@@ -37,7 +37,7 @@ import java.time.YearMonth
  * @param firstVisibleMonth the initial value for [HeatMapCalendarState.firstVisibleMonth]
  */
 @Composable
-fun rememberHeatMapCalendarState(
+public fun rememberHeatMapCalendarState(
     startMonth: YearMonth = YearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
@@ -73,7 +73,7 @@ fun rememberHeatMapCalendarState(
  * @param firstVisibleMonth the initial value for [HeatMapCalendarState.firstVisibleMonth]
  */
 @Stable
-class HeatMapCalendarState internal constructor(
+public class HeatMapCalendarState internal constructor(
     startMonth: YearMonth,
     endMonth: YearMonth,
     firstVisibleMonth: YearMonth,
@@ -84,7 +84,7 @@ class HeatMapCalendarState internal constructor(
     private var _startMonth by mutableStateOf(startMonth)
 
     /** The first month on the calendar. */
-    var startMonth: YearMonth
+    public var startMonth: YearMonth
         get() = _startMonth
         set(value) {
             if (value != startMonth) {
@@ -97,7 +97,7 @@ class HeatMapCalendarState internal constructor(
     private var _endMonth by mutableStateOf(endMonth)
 
     /** The last month on the calendar. */
-    var endMonth: YearMonth
+    public var endMonth: YearMonth
         get() = _endMonth
         set(value) {
             if (value != endMonth) {
@@ -110,7 +110,7 @@ class HeatMapCalendarState internal constructor(
     private var _firstDayOfWeek by mutableStateOf(firstDayOfWeek)
 
     /** The first day of week on the calendar. */
-    var firstDayOfWeek: DayOfWeek
+    public var firstDayOfWeek: DayOfWeek
         get() = _firstDayOfWeek
         set(value) {
             if (value != firstDayOfWeek) {
@@ -124,7 +124,7 @@ class HeatMapCalendarState internal constructor(
      *
      * @see [lastVisibleMonth]
      */
-    val firstVisibleMonth: CalendarMonth by derivedStateOf {
+    public val firstVisibleMonth: CalendarMonth by derivedStateOf {
         store[listState.firstVisibleItemIndex]
     }
 
@@ -133,7 +133,7 @@ class HeatMapCalendarState internal constructor(
      *
      * @see [firstVisibleMonth]
      */
-    val lastVisibleMonth: CalendarMonth by derivedStateOf {
+    public val lastVisibleMonth: CalendarMonth by derivedStateOf {
         store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0]
     }
 
@@ -153,7 +153,7 @@ class HeatMapCalendarState internal constructor(
      * If you want to run some side effects like sending an analytics event or updating a state
      * based on this value consider using "snapshotFlow".
      */
-    val layoutInfo: CalendarLayoutInfo
+    public val layoutInfo: CalendarLayoutInfo
         get() = CalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
     /**
@@ -161,7 +161,7 @@ class HeatMapCalendarState internal constructor(
      * calendar is being dragged. If you want to know whether the fling (or animated scroll) is in
      * progress, use [isScrollInProgress].
      */
-    val interactionSource: InteractionSource
+    public val interactionSource: InteractionSource
         get() = listState.interactionSource
 
     internal val listState = LazyListState(
@@ -201,7 +201,7 @@ class HeatMapCalendarState internal constructor(
      *
      * @see [animateScrollToMonth]
      */
-    suspend fun scrollToMonth(month: YearMonth) {
+    public suspend fun scrollToMonth(month: YearMonth) {
         listState.scrollToItem(getScrollIndex(month) ?: return)
     }
 
@@ -211,7 +211,7 @@ class HeatMapCalendarState internal constructor(
      * @param month the month to which to scroll. Must be within the
      * range of [startMonth] and [endMonth].
      */
-    suspend fun animateScrollToMonth(month: YearMonth) {
+    public suspend fun animateScrollToMonth(month: YearMonth) {
         listState.animateScrollToItem(getScrollIndex(month) ?: return)
     }
 
@@ -234,9 +234,9 @@ class HeatMapCalendarState internal constructor(
     override suspend fun scroll(
         scrollPriority: MutatePriority,
         block: suspend ScrollScope.() -> Unit,
-    ) = listState.scroll(scrollPriority, block)
+    ): Unit = listState.scroll(scrollPriority, block)
 
-    companion object {
+    public companion object {
         internal val Saver: Saver<HeatMapCalendarState, Any> = listSaver(
             save = {
                 listOf(

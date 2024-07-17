@@ -4,7 +4,7 @@ package com.kizitonwose.calendar.core
  * Determines how [DayPosition.OutDate] are
  * generated for each month on the calendar.
  */
-enum class OutDateStyle {
+public enum class OutDateStyle {
     /**
      * The calendar will generate outDates until it reaches
      * the end of the month row. This means that if a month

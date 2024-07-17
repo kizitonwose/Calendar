@@ -14,12 +14,12 @@ import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarLayoutMan
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-open class WeekCalendarView : RecyclerView {
+public open class WeekCalendarView : RecyclerView {
     /**
      * The [WeekDayBinder] instance used for managing day
      * cell view creation and reuse.
      */
-    var dayBinder: WeekDayBinder<*>? = null
+    public var dayBinder: WeekDayBinder<*>? = null
         set(value) {
             field = value
             invalidateViewHolders()
@@ -29,7 +29,7 @@ open class WeekCalendarView : RecyclerView {
      * The [WeekHeaderFooterBinder] instance used for managing header views.
      * The header view is shown above each week on the Calendar.
      */
-    var weekHeaderBinder: WeekHeaderFooterBinder<*>? = null
+    public var weekHeaderBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
             field = value
             invalidateViewHolders()
@@ -39,7 +39,7 @@ open class WeekCalendarView : RecyclerView {
      * The [WeekHeaderFooterBinder] instance used for managing footer views.
      * The footer view is shown below each week on the Calendar.
      */
-    var weekFooterBinder: WeekHeaderFooterBinder<*>? = null
+    public var weekFooterBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
             field = value
             invalidateViewHolders()
@@ -49,13 +49,13 @@ open class WeekCalendarView : RecyclerView {
      * Called when the calendar scrolls to a new week.
      * Mostly beneficial if [scrollPaged] is `true`.
      */
-    var weekScrollListener: WeekScrollListener? = null
+    public var weekScrollListener: WeekScrollListener? = null
 
     /**
      * The xml resource that is inflated and used as the day cell view.
      * This must be provided.
      */
-    var dayViewResource = 0
+    public var dayViewResource: Int = 0
         set(value) {
             if (field != value) {
                 check(value != 0) { "Invalid 'dayViewResource' value." }
@@ -68,7 +68,7 @@ open class WeekCalendarView : RecyclerView {
      * The xml resource that is inflated and used as a header for every week.
      * Set zero to disable.
      */
-    var weekHeaderResource = 0
+    public var weekHeaderResource: Int = 0
         set(value) {
             if (field != value) {
                 field = value
@@ -80,7 +80,7 @@ open class WeekCalendarView : RecyclerView {
      * The xml resource that is inflated and used as a footer for every week.
      * Set zero to disable.
      */
-    var weekFooterResource = 0
+    public var weekFooterResource: Int = 0
         set(value) {
             if (field != value) {
                 field = value
@@ -95,7 +95,7 @@ open class WeekCalendarView : RecyclerView {
      * **You should exclude the name and constructor of this class from code
      * obfuscation if enabled**.
      */
-    var weekViewClass: String? = null
+    public var weekViewClass: String? = null
         set(value) {
             if (field != value) {
                 field = value
@@ -108,7 +108,7 @@ open class WeekCalendarView : RecyclerView {
      * snap to the nearest week after a scroll or swipe action.
      * If `false`, the calendar scrolls normally.
      */
-    var scrollPaged = true
+    public var scrollPaged: Boolean = true
         set(value) {
             if (field != value) {
                 field = value
@@ -120,7 +120,7 @@ open class WeekCalendarView : RecyclerView {
      * Determines how the size of each day on the calendar is calculated.
      * Can be [DaySize.Square], [DaySize.SeventhWidth] or [DaySize.FreeForm].
      */
-    var daySize: DaySize = DaySize.Square
+    public var daySize: DaySize = DaySize.Square
         set(value) {
             if (field != value) {
                 field = value
@@ -132,7 +132,7 @@ open class WeekCalendarView : RecyclerView {
      * The margins, in pixels to be applied each week view.
      * this can be used to add a space between two weeks.
      */
-    var weekMargins = MarginValues()
+    public var weekMargins: MarginValues = MarginValues()
         set(value) {
             if (field != value) {
                 field = value
@@ -155,13 +155,13 @@ open class WeekCalendarView : RecyclerView {
     private var endDate: LocalDate? = null
     private var firstDayOfWeek: DayOfWeek? = null
 
-    constructor(context: Context) : super(context)
+    public constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+    public constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         init(attrs, 0, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
+    public constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) :
         super(context, attrs, defStyleAttr) {
         init(attrs, defStyleAttr, defStyleAttr)
     }
@@ -224,7 +224,7 @@ open class WeekCalendarView : RecyclerView {
      * This instantly shows the view for the week without any animations.
      * For a smooth scrolling effect, use [smoothScrollToWeek]
      */
-    fun scrollToWeek(date: LocalDate) {
+    public fun scrollToWeek(date: LocalDate) {
         calendarLayoutManager.scrollToIndex(date)
     }
 
@@ -233,7 +233,7 @@ open class WeekCalendarView : RecyclerView {
      * using a smooth scrolling animation.
      * Just like [scrollToWeek], but with a smooth scrolling animation.
      */
-    fun smoothScrollToWeek(date: LocalDate) {
+    public fun smoothScrollToWeek(date: LocalDate) {
         calendarLayoutManager.smoothScrollToIndex(date)
     }
 
@@ -243,7 +243,7 @@ open class WeekCalendarView : RecyclerView {
      * No animation is performed.
      * For a smooth scrolling effect, use [smoothScrollToDate].
      */
-    fun scrollToDate(date: LocalDate) {
+    public fun scrollToDate(date: LocalDate) {
         calendarLayoutManager.scrollToDay(date)
     }
 
@@ -251,7 +251,7 @@ open class WeekCalendarView : RecyclerView {
      * Scroll to a specific date using a smooth scrolling animation.
      * Just like [scrollToDate], but with a smooth scrolling animation.
      */
-    fun smoothScrollToDate(date: LocalDate) {
+    public fun smoothScrollToDate(date: LocalDate) {
         calendarLayoutManager.smoothScrollToDay(date)
     }
 
@@ -260,7 +260,7 @@ open class WeekCalendarView : RecyclerView {
      * This instantly shows the view for the week without any animations.
      * For a smooth scrolling effect, use [smoothScrollToWeek]
      */
-    fun scrollToWeek(day: WeekDay) {
+    public fun scrollToWeek(day: WeekDay) {
         scrollToWeek(day.date)
     }
 
@@ -269,7 +269,7 @@ open class WeekCalendarView : RecyclerView {
      * using a smooth scrolling animation.
      * Just like [scrollToWeek], but with a smooth scrolling animation.
      */
-    fun smoothScrollToWeek(day: WeekDay) {
+    public fun smoothScrollToWeek(day: WeekDay) {
         smoothScrollToWeek(day.date)
     }
 
@@ -279,7 +279,7 @@ open class WeekCalendarView : RecyclerView {
      * No animation is performed.
      * For a smooth scrolling effect, use [smoothScrollToDay].
      */
-    fun scrollToDay(day: WeekDay) {
+    public fun scrollToDay(day: WeekDay) {
         scrollToDate(day.date)
     }
 
@@ -287,7 +287,7 @@ open class WeekCalendarView : RecyclerView {
      * Scroll to a specific [WeekDay] using a smooth scrolling animation.
      * Just like [scrollToDay], but with a smooth scrolling animation.
      */
-    fun smoothScrollToDay(day: WeekDay) {
+    public fun smoothScrollToDay(day: WeekDay) {
         smoothScrollToDate(day.date)
     }
 
@@ -296,7 +296,7 @@ open class WeekCalendarView : RecyclerView {
      * This causes [WeekDayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
-    fun notifyDateChanged(date: LocalDate) {
+    public fun notifyDateChanged(date: LocalDate) {
         calendarAdapter.reloadDay(date)
     }
 
@@ -305,7 +305,7 @@ open class WeekCalendarView : RecyclerView {
      * This causes [WeekDayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
-    fun notifyDayChanged(day: WeekDay) {
+    public fun notifyDayChanged(day: WeekDay) {
         notifyDateChanged(day.date)
     }
 
@@ -316,7 +316,7 @@ open class WeekCalendarView : RecyclerView {
      * [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
      * [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
      */
-    fun notifyWeekChanged(date: LocalDate) {
+    public fun notifyWeekChanged(date: LocalDate) {
         calendarAdapter.reloadWeek(date)
     }
 
@@ -327,7 +327,7 @@ open class WeekCalendarView : RecyclerView {
      * [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
      * [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
      */
-    fun notifyWeekChanged(day: WeekDay) {
+    public fun notifyWeekChanged(day: WeekDay) {
         notifyWeekChanged(day.date)
     }
 
@@ -336,7 +336,7 @@ open class WeekCalendarView : RecyclerView {
      *
      * @see [notifyWeekChanged]
      */
-    fun notifyCalendarChanged() {
+    public fun notifyCalendarChanged() {
         calendarAdapter.reloadCalendar()
     }
 
@@ -345,7 +345,7 @@ open class WeekCalendarView : RecyclerView {
      *
      * @return The first visible week or null if not found.
      */
-    fun findFirstVisibleWeek(): Week? {
+    public fun findFirstVisibleWeek(): Week? {
         return calendarAdapter.findFirstVisibleWeek()
     }
 
@@ -354,7 +354,7 @@ open class WeekCalendarView : RecyclerView {
      *
      * @return The last visible week or null if not found.
      */
-    fun findLastVisibleWeek(): Week? {
+    public fun findLastVisibleWeek(): Week? {
         return calendarAdapter.findLastVisibleWeek()
     }
 
@@ -364,7 +364,7 @@ open class WeekCalendarView : RecyclerView {
      *
      * @return The first visible day or null if not found.
      */
-    fun findFirstVisibleDay(): WeekDay? {
+    public fun findFirstVisibleDay(): WeekDay? {
         return calendarAdapter.findFirstVisibleDay()
     }
 
@@ -374,7 +374,7 @@ open class WeekCalendarView : RecyclerView {
      *
      * @return The last visible day or null if not found.
      */
-    fun findLastVisibleDay(): WeekDay? {
+    public fun findLastVisibleDay(): WeekDay? {
         return calendarAdapter.findLastVisibleDay()
     }
 
@@ -386,7 +386,7 @@ open class WeekCalendarView : RecyclerView {
      * @param endDate A date in the last week on the calendar.
      * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
      */
-    fun setup(startDate: LocalDate, endDate: LocalDate, firstDayOfWeek: DayOfWeek) {
+    public fun setup(startDate: LocalDate, endDate: LocalDate, firstDayOfWeek: DayOfWeek) {
         checkDateRange(startDate = startDate, endDate = endDate)
         this.startDate = startDate
         this.endDate = endDate
@@ -411,7 +411,7 @@ open class WeekCalendarView : RecyclerView {
      * the calendar with a large date range instead of updating the range frequently.
      */
     @JvmOverloads
-    fun updateWeekData(
+    public fun updateWeekData(
         startDate: LocalDate = requireStartDate(),
         endDate: LocalDate = requireEndDate(),
         firstDayOfWeek: DayOfWeek = requireFirstDayOfWeek(),

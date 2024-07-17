@@ -1,3 +1,3 @@
 package com.kizitonwose.calendar.core
 
-actual interface JvmSerializable
+public actual interface JvmSerializable

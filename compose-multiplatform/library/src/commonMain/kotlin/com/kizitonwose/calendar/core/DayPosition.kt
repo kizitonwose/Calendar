@@ -3,7 +3,7 @@ package com.kizitonwose.calendar.core
 /**
  * Describes the position of a [CalendarDay] in the month.
  */
-enum class DayPosition {
+public enum class DayPosition {
     /**
      * The day is positioned at the start of the month to
      * ensure proper alignment of the first day of the week.

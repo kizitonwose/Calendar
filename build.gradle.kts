@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
+
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.androidLibrary) apply false
@@ -14,6 +17,14 @@ plugins {
 
 allprojects {
     apply(plugin = rootProject.libs.plugins.kotlinter.get().pluginId)
+
+    plugins.withType<KotlinBasePlugin>().configureEach {
+        extensions.configure<KotlinProjectExtension> {
+            if ("sample" !in project.name) {
+                explicitApi()
+            }
+        }
+    }
 }
 
 apiValidation {

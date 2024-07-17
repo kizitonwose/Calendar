@@ -58,7 +58,7 @@ import kotlinx.datetime.DayOfWeek
  * customisations are rendered.
  */
 @Composable
-fun HorizontalCalendar(
+public fun HorizontalCalendar(
     modifier: Modifier = Modifier,
     state: CalendarState = rememberCalendarState(),
     calendarScrollPaged: Boolean = true,
@@ -71,7 +71,7 @@ fun HorizontalCalendar(
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
-) = Calendar(
+): Unit = Calendar(
     modifier = modifier,
     state = state,
     calendarScrollPaged = calendarScrollPaged,
@@ -121,7 +121,7 @@ fun HorizontalCalendar(
  * customisations are rendered.
  */
 @Composable
-fun VerticalCalendar(
+public fun VerticalCalendar(
     modifier: Modifier = Modifier,
     state: CalendarState = rememberCalendarState(),
     calendarScrollPaged: Boolean = false,
@@ -134,7 +134,7 @@ fun VerticalCalendar(
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
-) = Calendar(
+): Unit = Calendar(
     modifier = modifier,
     state = state,
     calendarScrollPaged = calendarScrollPaged,
@@ -232,7 +232,7 @@ private fun Calendar(
  * placed below each week on the calendar.
  */
 @Composable
-fun WeekCalendar(
+public fun WeekCalendar(
     modifier: Modifier = Modifier,
     state: WeekCalendarState = rememberWeekCalendarState(),
     calendarScrollPaged: Boolean = true,
@@ -242,7 +242,7 @@ fun WeekCalendar(
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
     weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
     weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
-) = WeekCalendarImpl(
+): Unit = WeekCalendarImpl(
     modifier = modifier,
     state = state,
     calendarScrollPaged = calendarScrollPaged,
@@ -274,7 +274,7 @@ fun WeekCalendar(
  * placed above each month on the calendar.
  */
 @Composable
-fun HeatMapCalendar(
+public fun HeatMapCalendar(
     modifier: Modifier = Modifier,
     state: HeatMapCalendarState = rememberHeatMapCalendarState(),
     weekHeaderPosition: HeatMapWeekHeaderPosition = HeatMapWeekHeaderPosition.Start,
@@ -283,7 +283,7 @@ fun HeatMapCalendar(
     dayContent: @Composable ColumnScope.(day: CalendarDay, week: HeatMapWeek) -> Unit,
     weekHeader: (@Composable ColumnScope.(DayOfWeek) -> Unit)? = null,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
-) = HeatMapCalendarImpl(
+): Unit = HeatMapCalendarImpl(
     modifier = modifier,
     state = state,
     weekHeaderPosition = weekHeaderPosition,

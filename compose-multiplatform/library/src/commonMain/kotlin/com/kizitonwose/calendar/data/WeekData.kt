@@ -11,12 +11,12 @@ import com.kizitonwose.calendar.core.weeksUntil
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 
-data class WeekDateRange(
+public data class WeekDateRange(
     val startDateAdjusted: LocalDate,
     val endDateAdjusted: LocalDate,
 )
 
-fun getWeekCalendarAdjustedRange(
+public fun getWeekCalendarAdjustedRange(
     startDate: LocalDate,
     endDate: LocalDate,
     firstDayOfWeek: DayOfWeek,
@@ -28,7 +28,7 @@ fun getWeekCalendarAdjustedRange(
     return WeekDateRange(startDateAdjusted = startDateAdjusted, endDateAdjusted = endDateAdjusted)
 }
 
-fun getWeekCalendarData(
+public fun getWeekCalendarData(
     startDateAdjusted: LocalDate,
     offset: Int,
     desiredStartDate: LocalDate,
@@ -38,12 +38,12 @@ fun getWeekCalendarData(
     return WeekData(firstDayInWeek, desiredStartDate, desiredEndDate)
 }
 
-data class WeekData internal constructor(
+public data class WeekData internal constructor(
     private val firstDayInWeek: LocalDate,
     private val desiredStartDate: LocalDate,
     private val desiredEndDate: LocalDate,
 ) {
-    val week = Week((0 until 7).map { dayOffset -> getDay(dayOffset) })
+    val week: Week = Week((0 until 7).map { dayOffset -> getDay(dayOffset) })
 
     private fun getDay(dayOffset: Int): WeekDay {
         val date = firstDayInWeek.plusDays(dayOffset)
@@ -56,11 +56,11 @@ data class WeekData internal constructor(
     }
 }
 
-fun getWeekIndex(startDateAdjusted: LocalDate, date: LocalDate): Int {
+public fun getWeekIndex(startDateAdjusted: LocalDate, date: LocalDate): Int {
     return startDateAdjusted.weeksUntil(date)
 }
 
-fun getWeekIndicesCount(startDateAdjusted: LocalDate, endDateAdjusted: LocalDate): Int {
+public fun getWeekIndicesCount(startDateAdjusted: LocalDate, endDateAdjusted: LocalDate): Int {
     // Add one to include the start week itself!
     return getWeekIndex(startDateAdjusted, endDateAdjusted) + 1
 }

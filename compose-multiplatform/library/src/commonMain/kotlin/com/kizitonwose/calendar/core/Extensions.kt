@@ -20,7 +20,7 @@ import kotlinx.datetime.until
  *
  * @see [firstDayOfWeekFromLocale]
  */
-fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
+public fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
     val pivot = 7 - firstDayOfWeek.ordinal
     val daysOfWeek = DayOfWeek.entries
     // Order `daysOfWeek` array so that firstDayOfWeek is at the start position.
@@ -30,33 +30,33 @@ fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<Day
 /**
  * Returns the first day of the week from the provided locale.
  */
-expect fun firstDayOfWeekFromLocale(locale: Locale = Locale.current): DayOfWeek
+public expect fun firstDayOfWeekFromLocale(locale: Locale = Locale.current): DayOfWeek
 
-fun YearMonth.atStartOfMonth(): LocalDate = atDay(1)
+public fun YearMonth.atStartOfMonth(): LocalDate = atDay(1)
 
-fun YearMonth.atEndOfMonth(): LocalDate = atDay(lengthOfMonth())
+public fun YearMonth.atEndOfMonth(): LocalDate = atDay(lengthOfMonth())
 
-fun YearMonth.atDay(day: Int): LocalDate = LocalDate(year, month, day)
+public fun YearMonth.atDay(day: Int): LocalDate = LocalDate(year, month, day)
 
-val YearMonth.nextMonth: YearMonth
+public val YearMonth.nextMonth: YearMonth
     get() = this.plusMonths(1)
 
-val YearMonth.previousMonth: YearMonth
+public val YearMonth.previousMonth: YearMonth
     get() = this.minusMonths(1)
 
-fun LocalDate.Companion.now(): LocalDate = Clock.System.now()
+public fun LocalDate.Companion.now(): LocalDate = Clock.System.now()
     .toLocalDateTime(TimeZone.currentSystemDefault())
     .date
 
-fun YearMonth.Companion.now(): YearMonth = LocalDate.now().yearMonth
+public fun YearMonth.Companion.now(): YearMonth = LocalDate.now().yearMonth
 
-fun YearMonth.plusMonths(value: Int): YearMonth =
+public fun YearMonth.plusMonths(value: Int): YearMonth =
     atStartOfMonth().plusMonths(value).yearMonth
 
-fun YearMonth.minusMonths(value: Int): YearMonth =
+public fun YearMonth.minusMonths(value: Int): YearMonth =
     atStartOfMonth().minusMonths(value).yearMonth
 
-val LocalDate.yearMonth: YearMonth
+public val LocalDate.yearMonth: YearMonth
     get() = YearMonth(year, month)
 
 internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
