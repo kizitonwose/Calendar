@@ -37,7 +37,7 @@ class CalendarViewActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            android.R.id.home -> onBackPressed().let { true }
+            android.R.id.home -> onBackPressedDispatcher.onBackPressed().let { true }
             else -> super.onOptionsItemSelected(item)
         }
     }
