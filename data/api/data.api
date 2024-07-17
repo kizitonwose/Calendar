@@ -1,0 +1,79 @@
+public final class com/kizitonwose/calendar/data/DataStore : java/util/Map, kotlin/jvm/internal/markers/KMutableMap {
+	public fun <init> (Ljava/util/Map;Lkotlin/jvm/functions/Function1;)V
+	public synthetic fun <init> (Ljava/util/Map;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun clear ()V
+	public fun containsKey (I)Z
+	public final fun containsKey (Ljava/lang/Object;)Z
+	public fun containsValue (Ljava/lang/Object;)Z
+	public final fun entrySet ()Ljava/util/Set;
+	public fun get (I)Ljava/lang/Object;
+	public final fun get (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun getEntries ()Ljava/util/Set;
+	public fun getKeys ()Ljava/util/Set;
+	public fun getSize ()I
+	public fun getValues ()Ljava/util/Collection;
+	public fun isEmpty ()Z
+	public final fun keySet ()Ljava/util/Set;
+	public fun put (ILjava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun put (Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun putAll (Ljava/util/Map;)V
+	public fun remove (I)Ljava/lang/Object;
+	public final fun remove (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun size ()I
+	public final fun values ()Ljava/util/Collection;
+}
+
+public final class com/kizitonwose/calendar/data/ExtensionsKt {
+	public static final fun daysUntil (Ljava/time/DayOfWeek;Ljava/time/DayOfWeek;)I
+}
+
+public final class com/kizitonwose/calendar/data/MonthData {
+	public final fun copy (Ljava/time/YearMonth;II)Lcom/kizitonwose/calendar/data/MonthData;
+	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/data/MonthData;Ljava/time/YearMonth;IIILjava/lang/Object;)Lcom/kizitonwose/calendar/data/MonthData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCalendarMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/kizitonwose/calendar/data/MonthDataKt {
+	public static final fun getCalendarMonthData (Ljava/time/YearMonth;ILjava/time/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;)Lcom/kizitonwose/calendar/data/MonthData;
+	public static final fun getHeatMapCalendarMonthData (Ljava/time/YearMonth;ILjava/time/DayOfWeek;)Lcom/kizitonwose/calendar/data/MonthData;
+	public static final fun getMonthIndex (Ljava/time/YearMonth;Ljava/time/YearMonth;)I
+	public static final fun getMonthIndicesCount (Ljava/time/YearMonth;Ljava/time/YearMonth;)I
+}
+
+public final class com/kizitonwose/calendar/data/UtilsKt {
+	public static final fun checkDateRange (Ljava/time/LocalDate;Ljava/time/LocalDate;)V
+	public static final fun checkDateRange (Ljava/time/YearMonth;Ljava/time/YearMonth;)V
+}
+
+public final class com/kizitonwose/calendar/data/WeekData {
+	public final fun copy (Ljava/time/LocalDate;Ljava/time/LocalDate;Ljava/time/LocalDate;)Lcom/kizitonwose/calendar/data/WeekData;
+	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/data/WeekData;Ljava/time/LocalDate;Ljava/time/LocalDate;Ljava/time/LocalDate;ILjava/lang/Object;)Lcom/kizitonwose/calendar/data/WeekData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getWeek ()Lcom/kizitonwose/calendar/core/Week;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/kizitonwose/calendar/data/WeekDataKt {
+	public static final fun getWeekCalendarAdjustedRange (Ljava/time/LocalDate;Ljava/time/LocalDate;Ljava/time/DayOfWeek;)Lcom/kizitonwose/calendar/data/WeekDateRange;
+	public static final fun getWeekCalendarData (Ljava/time/LocalDate;ILjava/time/LocalDate;Ljava/time/LocalDate;)Lcom/kizitonwose/calendar/data/WeekData;
+	public static final fun getWeekIndex (Ljava/time/LocalDate;Ljava/time/LocalDate;)I
+	public static final fun getWeekIndicesCount (Ljava/time/LocalDate;Ljava/time/LocalDate;)I
+}
+
+public final class com/kizitonwose/calendar/data/WeekDateRange {
+	public fun <init> (Ljava/time/LocalDate;Ljava/time/LocalDate;)V
+	public final fun component1 ()Ljava/time/LocalDate;
+	public final fun component2 ()Ljava/time/LocalDate;
+	public final fun copy (Ljava/time/LocalDate;Ljava/time/LocalDate;)Lcom/kizitonwose/calendar/data/WeekDateRange;
+	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/data/WeekDateRange;Ljava/time/LocalDate;Ljava/time/LocalDate;ILjava/lang/Object;)Lcom/kizitonwose/calendar/data/WeekDateRange;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEndDateAdjusted ()Ljava/time/LocalDate;
+	public final fun getStartDateAdjusted ()Ljava/time/LocalDate;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
