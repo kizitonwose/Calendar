@@ -6,6 +6,7 @@ on:
       - '*.*.*'
 
 jobs:
+  # Use macOS so iOS artifacts are published
   publish-release:
     name: Publish Release
     runs-on: macos-latest

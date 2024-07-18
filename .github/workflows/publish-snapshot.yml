@@ -7,6 +7,7 @@ on:
       - main
 
 jobs:
+  # Use macOS so iOS artifacts are published
   publish-snapshot:
     name: Publish Snapshot
     runs-on: macos-latest
