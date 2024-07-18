@@ -7,7 +7,7 @@ pluginManagement {
 }
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -18,3 +18,5 @@ include(":data")
 include(":view")
 include(":compose")
 include(":sample")
+include(":compose-multiplatform:library")
+include(":compose-multiplatform:sample")

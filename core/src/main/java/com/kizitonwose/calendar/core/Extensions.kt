@@ -13,31 +13,31 @@ import java.util.Locale
  * @see [firstDayOfWeekFromLocale]
  */
 @JvmOverloads
-fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
+public fun daysOfWeek(firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale()): List<DayOfWeek> {
     val pivot = 7 - firstDayOfWeek.ordinal
     val daysOfWeek = DayOfWeek.entries
     // Order `daysOfWeek` array so that firstDayOfWeek is at the start position.
-    return (daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot))
+    return daysOfWeek.takeLast(pivot) + daysOfWeek.dropLast(pivot)
 }
 
 /**
  * Returns the first day of the week from the provided locale.
  */
 @JvmOverloads
-fun firstDayOfWeekFromLocale(locale: Locale = Locale.getDefault()): DayOfWeek = WeekFields.of(locale).firstDayOfWeek
+public fun firstDayOfWeekFromLocale(locale: Locale = Locale.getDefault()): DayOfWeek = WeekFields.of(locale).firstDayOfWeek
 
 /**
  * Returns a [LocalDate] at the start of the month.
  *
  * Complements [YearMonth.atEndOfMonth].
  */
-fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
+public fun YearMonth.atStartOfMonth(): LocalDate = this.atDay(1)
 
-val LocalDate.yearMonth: YearMonth
+public val LocalDate.yearMonth: YearMonth
     get() = YearMonth.of(year, month)
 
-val YearMonth.nextMonth: YearMonth
+public val YearMonth.nextMonth: YearMonth
     get() = this.plusMonths(1)
 
-val YearMonth.previousMonth: YearMonth
+public val YearMonth.previousMonth: YearMonth
     get() = this.minusMonths(1)

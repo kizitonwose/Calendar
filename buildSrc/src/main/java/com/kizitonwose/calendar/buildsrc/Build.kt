@@ -11,6 +11,11 @@ object Config {
     val compatibleJavaLanguageVersion = JavaLanguageVersion.of(compatibleJavaVersion.majorVersion.toInt())
 }
 
+object Versions {
+    val core = "2.6.0-SNAPSHOT"
+    val multiplatfrom = "2.6.0-SNAPSHOT"
+}
+
 object Android {
     const val minSdkViewLibrary = 19
     const val minSdkComposeLibrary = 21

@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.androidx.cardview)
     implementation(libs.material.view)
 
-    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.ui)
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.runtime)

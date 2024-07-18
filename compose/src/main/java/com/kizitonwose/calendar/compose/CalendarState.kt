@@ -37,7 +37,7 @@ import java.time.YearMonth
  * @param outDateStyle the initial value for [CalendarState.outDateStyle]
  */
 @Composable
-fun rememberCalendarState(
+public fun rememberCalendarState(
     startMonth: YearMonth = YearMonth.now(),
     endMonth: YearMonth = startMonth,
     firstVisibleMonth: YearMonth = startMonth,
@@ -77,7 +77,7 @@ fun rememberCalendarState(
  * @param outDateStyle the preferred style for out date generation.
  */
 @Stable
-class CalendarState internal constructor(
+public class CalendarState internal constructor(
     startMonth: YearMonth,
     endMonth: YearMonth,
     firstDayOfWeek: DayOfWeek,
@@ -89,7 +89,7 @@ class CalendarState internal constructor(
     private var _startMonth by mutableStateOf(startMonth)
 
     /** The first month on the calendar. */
-    var startMonth: YearMonth
+    public var startMonth: YearMonth
         get() = _startMonth
         set(value) {
             if (value != startMonth) {
@@ -102,7 +102,7 @@ class CalendarState internal constructor(
     private var _endMonth by mutableStateOf(endMonth)
 
     /** The last month on the calendar. */
-    var endMonth: YearMonth
+    public var endMonth: YearMonth
         get() = _endMonth
         set(value) {
             if (value != endMonth) {
@@ -115,7 +115,7 @@ class CalendarState internal constructor(
     private var _firstDayOfWeek by mutableStateOf(firstDayOfWeek)
 
     /** The first day of week on the calendar. */
-    var firstDayOfWeek: DayOfWeek
+    public var firstDayOfWeek: DayOfWeek
         get() = _firstDayOfWeek
         set(value) {
             if (value != firstDayOfWeek) {
@@ -128,7 +128,7 @@ class CalendarState internal constructor(
     private var _outDateStyle by mutableStateOf(outDateStyle)
 
     /** The preferred style for out date generation. */
-    var outDateStyle: OutDateStyle
+    public var outDateStyle: OutDateStyle
         get() = _outDateStyle
         set(value) {
             if (value != outDateStyle) {
@@ -142,7 +142,7 @@ class CalendarState internal constructor(
      *
      * @see [lastVisibleMonth]
      */
-    val firstVisibleMonth: CalendarMonth by derivedStateOf {
+    public val firstVisibleMonth: CalendarMonth by derivedStateOf {
         store[listState.firstVisibleItemIndex]
     }
 
@@ -151,7 +151,7 @@ class CalendarState internal constructor(
      *
      * @see [firstVisibleMonth]
      */
-    val lastVisibleMonth: CalendarMonth by derivedStateOf {
+    public val lastVisibleMonth: CalendarMonth by derivedStateOf {
         store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0]
     }
 
@@ -173,7 +173,7 @@ class CalendarState internal constructor(
      *
      * see [LazyListLayoutInfo]
      */
-    val layoutInfo: CalendarLayoutInfo
+    public val layoutInfo: CalendarLayoutInfo
         get() = CalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
     /**
@@ -181,7 +181,7 @@ class CalendarState internal constructor(
      * calendar is being dragged. If you want to know whether the fling (or animated scroll) is in
      * progress, use [isScrollInProgress].
      */
-    val interactionSource: InteractionSource
+    public val interactionSource: InteractionSource
         get() = listState.interactionSource
 
     internal val listState = LazyListState(
@@ -228,7 +228,7 @@ class CalendarState internal constructor(
      *
      * @see [animateScrollToMonth]
      */
-    suspend fun scrollToMonth(month: YearMonth) {
+    public suspend fun scrollToMonth(month: YearMonth) {
         listState.scrollToItem(getScrollIndex(month) ?: return)
     }
 
@@ -238,7 +238,7 @@ class CalendarState internal constructor(
      * @param month the month to which to scroll. Must be within the
      * range of [startMonth] and [endMonth].
      */
-    suspend fun animateScrollToMonth(month: YearMonth) {
+    public suspend fun animateScrollToMonth(month: YearMonth) {
         listState.animateScrollToItem(getScrollIndex(month) ?: return)
     }
 
@@ -261,22 +261,19 @@ class CalendarState internal constructor(
     override suspend fun scroll(
         scrollPriority: MutatePriority,
         block: suspend ScrollScope.() -> Unit,
-    ) = listState.scroll(scrollPriority, block)
+    ): Unit = listState.scroll(scrollPriority, block)
 
-    companion object {
+    public companion object {
         internal val Saver: Saver<CalendarState, Any> = listSaver(
             save = {
-                val visibleItemState = VisibleItemState(
-                    firstVisibleItemIndex = it.listState.firstVisibleItemIndex,
-                    firstVisibleItemScrollOffset = it.listState.firstVisibleItemScrollOffset,
-                )
                 listOf(
                     it.startMonth,
                     it.endMonth,
                     it.firstVisibleMonth.yearMonth,
                     it.firstDayOfWeek,
                     it.outDateStyle,
-                    visibleItemState,
+                    it.listState.firstVisibleItemIndex,
+                    it.listState.firstVisibleItemScrollOffset,
                 )
             },
             restore = {
@@ -286,7 +283,10 @@ class CalendarState internal constructor(
                     firstVisibleMonth = it[2] as YearMonth,
                     firstDayOfWeek = it[3] as DayOfWeek,
                     outDateStyle = it[4] as OutDateStyle,
-                    visibleItemState = it[5] as VisibleItemState,
+                    visibleItemState = VisibleItemState(
+                        firstVisibleItemIndex = it[5] as Int,
+                        firstVisibleItemScrollOffset = it[6] as Int,
+                    ),
                 )
             },
         )

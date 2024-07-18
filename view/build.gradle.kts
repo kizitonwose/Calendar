@@ -1,5 +1,6 @@
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
+import com.kizitonwose.calendar.buildsrc.Versions
 
 plugins {
     alias(libs.plugins.androidLibrary)
@@ -33,4 +34,8 @@ dependencies {
 
     // Expose RecyclerView which is CalendarView"s superclass.
     api(libs.androidx.recyclerview)
+}
+
+mavenPublishing {
+    coordinates(version = Versions.core)
 }

@@ -12,7 +12,7 @@ import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 
-data class MonthData internal constructor(
+public data class MonthData internal constructor(
     private val month: YearMonth,
     private val inDays: Int,
     private val outDays: Int,
@@ -27,7 +27,7 @@ data class MonthData internal constructor(
 
     private val nextMonth = month.nextMonth
 
-    val calendarMonth =
+    val calendarMonth: CalendarMonth =
         CalendarMonth(month, rows.map { week -> week.map { dayOffset -> getDay(dayOffset) } })
 
     private fun getDay(dayOffset: Int): CalendarDay {
@@ -42,7 +42,7 @@ data class MonthData internal constructor(
     }
 }
 
-fun getCalendarMonthData(
+public fun getCalendarMonthData(
     startMonth: YearMonth,
     offset: Int,
     firstDayOfWeek: DayOfWeek,
@@ -64,7 +64,7 @@ fun getCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-fun getHeatMapCalendarMonthData(
+public fun getHeatMapCalendarMonthData(
     startMonth: YearMonth,
     offset: Int,
     firstDayOfWeek: DayOfWeek,
@@ -82,11 +82,11 @@ fun getHeatMapCalendarMonthData(
     return MonthData(month, inDays, outDays)
 }
 
-fun getMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Int {
+public fun getMonthIndex(startMonth: YearMonth, targetMonth: YearMonth): Int {
     return ChronoUnit.MONTHS.between(startMonth, targetMonth).toInt()
 }
 
-fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
+public fun getMonthIndicesCount(startMonth: YearMonth, endMonth: YearMonth): Int {
     // Add one to include the start month itself!
     return getMonthIndex(startMonth, endMonth) + 1
 }

@@ -6,7 +6,7 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 
-open class ViewContainer(val view: View)
+public open class ViewContainer(public val view: View)
 
 /**
  * Responsible for managing a view for a given [Data].
@@ -14,19 +14,19 @@ open class ViewContainer(val view: View)
  * be called whenever the view needs to be used to
  * bind an instance of the associated [Data].
  */
-interface Binder<Data, Container : ViewContainer> {
-    fun create(view: View): Container
-    fun bind(container: Container, data: Data)
+public interface Binder<Data, Container : ViewContainer> {
+    public fun create(view: View): Container
+    public fun bind(container: Container, data: Data)
 }
 
-interface WeekDayBinder<Container : ViewContainer> : Binder<WeekDay, Container>
+public interface WeekDayBinder<Container : ViewContainer> : Binder<WeekDay, Container>
 
-interface WeekHeaderFooterBinder<Container : ViewContainer> : Binder<Week, Container>
+public interface WeekHeaderFooterBinder<Container : ViewContainer> : Binder<Week, Container>
 
-interface MonthDayBinder<Container : ViewContainer> : Binder<CalendarDay, Container>
+public interface MonthDayBinder<Container : ViewContainer> : Binder<CalendarDay, Container>
 
-interface MonthHeaderFooterBinder<Container : ViewContainer> : Binder<CalendarMonth, Container>
+public interface MonthHeaderFooterBinder<Container : ViewContainer> : Binder<CalendarMonth, Container>
 
-typealias MonthScrollListener = (CalendarMonth) -> Unit
+public typealias MonthScrollListener = (CalendarMonth) -> Unit
 
-typealias WeekScrollListener = (Week) -> Unit
+public typealias WeekScrollListener = (Week) -> Unit

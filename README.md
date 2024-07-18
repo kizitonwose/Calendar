@@ -1,10 +1,11 @@
 # Calendar
 
-A highly customizable calendar library for Android, backed by RecyclerView for the view system, and LazyRow/LazyColumn for compose.
+A highly customizable calendar library for Android and Compose Multiplatform, backed by RecyclerView for the view system, and LazyRow/LazyColumn for compose.
 
 [![Tests](https://github.com/kizitonwose/Calendar/workflows/Check/badge.svg?branch=main)](https://github.com/kizitonwose/Calendar/actions)
-[![Maven Central](https://img.shields.io/badge/dynamic/xml.svg?label=Maven%20Central&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27-%27))][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
-[![Maven Central Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Maven%20Central%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
+[![Android Library](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27-%27))][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
+[![Android Library Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
+[![Multiplatform Library Alpha](https://img.shields.io/badge/dynamic/xml.svg?label=Multiplatform%20Library%20Alpha&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/compose-multiplatform/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27alpha%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
 [![License](https://img.shields.io/badge/License-MIT-0097A7.svg)](https://github.com/kizitonwose/Calendar/blob/main/LICENSE.md)
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
 
@@ -39,17 +40,25 @@ A highly customizable calendar library for Android, backed by RecyclerView for t
 It's important to check out the sample app. There are lots of examples provided for both view and compose implementations. 
 Most techniques that you would want to implement are already done in the examples.
 
-Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
+Download the Android sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
 
-View the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
+View the Android sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
+
+View the multiplatform sample project online at https://calendar.kizitonwose.dev
+
+View the multiplatform sample project's source code [here](https://github.com/kizitonwose/Calendar/tree/main/compose-multiplatform/sample)
 
 ## Setup
 
+The library provides two compose artifacts: `com.kizitonwose.calendar:compose` which uses the [java.time](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html) APIs for pure Android projects and `com.kizitonwose.calendar:compose-multiplatform` which uses the [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) library for Compose Multiplatform projects. 
+
+The Android view library artifact `com.kizitonwose.calendar:view` also uses the `java.time` APIs and can exist alongside the Android compose artifact in an Android project if needed.
+
 #### Step 1
 
-**This step is required ONLY if your app's `minSdkVersion` is below 26. Jump to [step 2](#step-2) if this does not apply to you.**
+**This step is required ONLY if your Android app's `minSdkVersion` is below 26. Jump to [step 2](#step-2) if this does not apply to you.**
 
-Apps with `minSdkVersion` below 26 have to enable [Java 8+ API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for backward compatibility since `java.time` classes were added in Java 8 which is supported natively starting from Android SDK 26. To set up your project for desugaring, you need to first ensure that you are using [Android Gradle plugin](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) 4.0.0 or higher.
+Android apps with `minSdkVersion` below 26 have to enable [Java 8+ API desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) for backward compatibility since `java.time` classes were added in Java 8 which is supported natively starting from Android SDK 26. To set up your project for desugaring, you need to first ensure that you are using [Android Gradle plugin](https://developer.android.com/studio/releases/gradle-plugin#updating-plugin) 4.0.0 or higher.
 
 Then include the following in your app's `build.gradle` file:
 
@@ -81,17 +90,27 @@ dependencies {
 
 You can find the latest version of `desugar_jdk_libs` [here](https://mvnrepository.com/artifact/com.android.tools/desugar_jdk_libs).
 
-#### Step 2
+#### Step 2A - For pure Android projects without multiplatform setup
 
-Add the desired calendar library (view or compose) to your app `build.gradle`:
+Add the desired calendar library (view or compose) to your app's `build.gradle.kts`:
 
-```groovy
+```kotlin
 dependencies {
-  // The view calendar library
-  implementation 'com.kizitonwose.calendar:view:<latest-version>'
+  // The view calendar library for Android
+  implementation("com.kizitonwose.calendar:view:<latest-version>")
 
-  // The compose calendar library
-  implementation 'com.kizitonwose.calendar:compose:<latest-version>'
+  // The compose calendar library for Android
+  implementation("com.kizitonwose.calendar:compose:<latest-version>")
+}
+```
+
+#### Step 2B - For Compose Multiplatform projects
+
+Add the multiplatform calendar library to your project's `build.gradle.kts`:
+
+```kotlin
+commonMain.dependencies {
+  implementation("com.kizitonwose.calendar:compose-multiplatform:<latest-version>")
 }
 ```
 
@@ -99,18 +118,18 @@ You can find the latest version of the library on the maven central badge above.
 
 Snapshots of the development version are available in [Sonatype’s snapshots repository](https://s01.oss.sonatype.org/content/repositories/snapshots/com/kizitonwose/calendar/).
 
-If you're upgrading from version 1.x.x to 2.x.x, see the [migration guide](https://github.com/kizitonwose/calendar/blob/main/docs/MigrationGuide.md).
+#### Compose UI version compatibility
 
 For the compose calendar library, ensure that you are using the library version that matches the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency.
 
-| Compose UI | Calendar Library |
-|:----------:|:----------------:|
-|   1.2.x    |      2.0.x       |
-|   1.3.x    |  2.1.x - 2.2.x   |
-|   1.4.x    |      2.3.x       |
-|   1.5.x    |      2.4.x       |
-|   1.6.x    |      2.5.x       |
-|   1.7.x    |      2.6.x       |
+| Compose UI | Android Calendar Library | Multiplatform Calendar Library |
+|:----------:|:------------------------:|:------------------------------:|
+|   1.2.x    |           2.0.x          |                 -              |
+|   1.3.x    |       2.1.x - 2.2.x      |                 -              |
+|   1.4.x    |           2.3.x          |                 -              |
+|   1.5.x    |           2.4.x          |                 -              |
+|   1.6.x    |           2.5.x          |                 -              |
+|   1.7.x    |           2.6.x          |               2.6.x            |
 
 ## Usage
 
@@ -118,6 +137,10 @@ You can find the relevant documentation for the library in the links below.
 
 |[View-based documentation](https://github.com/kizitonwose/Calendar/blob/main/docs/View.md)|[Compose documentation](https://github.com/kizitonwose/Calendar/blob/main/docs/Compose.md)|
 |:-:|:-:|
+
+## Migration
+
+If you're upgrading from calendar library version 1.x.x to 2.x.x, see the [migration guide](https://github.com/kizitonwose/calendar/blob/main/docs/MigrationGuide.md).
 
 ## Share your creations
 

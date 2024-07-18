@@ -6,9 +6,10 @@ on:
       - '*.*.*'
 
 jobs:
+  # Use macOS so iOS artifacts are published
   publish-release:
     name: Publish Release
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     if: github.repository == 'kizitonwose/Calendar'
     steps:
       - name: Checkout Repository
@@ -35,7 +36,7 @@ jobs:
 
       - name: Deploy Release to Maven
         run: ./gradlew publish
-        if: "!endsWith(env.VERSION_NAME, '-SNAPSHOT')"
+        #        if: "!endsWith(env.VERSION_NAME, '-SNAPSHOT')"
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
