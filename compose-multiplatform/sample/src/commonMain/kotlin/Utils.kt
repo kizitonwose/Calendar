@@ -185,7 +185,3 @@ internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUni
 internal fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
 internal fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
 internal fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
-internal val YearMonth.next: YearMonth
-    get() = this.minusMonths(1)
-internal val YearMonth.previous: YearMonth
-    get() = this.minusMonths(1)

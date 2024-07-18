@@ -27,6 +27,8 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.next
+import com.kizitonwose.calendar.core.previous
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import org.jetbrains.compose.ui.tooling.preview.Preview

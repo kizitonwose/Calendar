@@ -302,6 +302,8 @@ public final class com/kizitonwose/calendar/core/YearMonthKt {
 	public static final fun atDay (Lcom/kizitonwose/calendar/core/YearMonth;I)Lkotlinx/datetime/LocalDate;
 	public static final fun atEndOfMonth (Lcom/kizitonwose/calendar/core/YearMonth;)Lkotlinx/datetime/LocalDate;
 	public static final fun atStartOfMonth (Lcom/kizitonwose/calendar/core/YearMonth;)Lkotlinx/datetime/LocalDate;
+	public static final fun getNext (Lcom/kizitonwose/calendar/core/YearMonth;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun getPrevious (Lcom/kizitonwose/calendar/core/YearMonth;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public static final fun lengthOfMonth (Lcom/kizitonwose/calendar/core/YearMonth;)I
 	public static final fun minus (Lcom/kizitonwose/calendar/core/YearMonth;ILkotlinx/datetime/DateTimeUnit$MonthBased;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public static final fun monthsUntil (Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;)I
