@@ -3,8 +3,8 @@
 ## Table of Contents
 
 - [Quick links](#quick-links)
-- [Compose Multiplatform Information](#compose-multipletform-information)
-- [Compose versions](#compose-versions)
+- [Compose Multiplatform Information](#compose-multiplatform-information)
+- [Compose UI version compatibility](#compose-ui-versions)
 - [Calendar Composables](#calendar-composables)
 - [Usage](#usage)
   * [Calendar state](#usage)
@@ -51,7 +51,7 @@ fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
 fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
 ```
 
-## Compose UI versions
+## Compose UI version compatibility
 
 Ensure that you are using the library version that matches the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency. See the compatibility table [here](https://github.com/kizitonwose/Calendar#compose-ui-version-compatibility).
 
