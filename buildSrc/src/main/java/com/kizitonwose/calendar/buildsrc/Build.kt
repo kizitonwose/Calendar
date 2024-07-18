@@ -12,8 +12,8 @@ object Config {
 }
 
 object Versions {
-    val core = "2.6.0-alpha03"
-    val multiplatfrom = "2.6.0-alpha03"
+    val core = "2.6.0-SNAPSHOT"
+    val multiplatfrom = "2.6.0-SNAPSHOT"
 }
 
 object Android {
