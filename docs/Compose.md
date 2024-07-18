@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Quick links](#quick-links)
+- [Compose Multiplatform Information](#compose-multipletform-information)
 - [Compose versions](#compose-versions)
 - [Calendar Composables](#calendar-composables)
 - [Usage](#usage)
@@ -23,25 +24,36 @@
 
 Check out the sample app if you have not yet done so. Most techniques that you would want to implement are already done in the examples.
 
-Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
+Download the Android sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
 
-Read the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
+Read the Android sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
+
+View the multiplatform sample project online at https://calendar.kizitonwose.dev
+
+Read the multiplatform sample project's source code [here](https://github.com/kizitonwose/Calendar/tree/main/compose-multiplatform/sample)
 
 Add the library to your project [here](https://github.com/kizitonwose/Calendar#setup)
 
 **If you are looking for the view-based documentation, you can find it [here](https://github.com/kizitonwose/Calendar/blob/main/docs/View.md)**
 
-## Compose versions
+## Compose Multiplatform Information
 
-Ensure that you are using the library version that matches with the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency.
+The APIs for the compose libraries for Android and Multiplatform projects have been designed such that you can copy examples across both projects and they would work without code changes as the classes have the same names and package declarations. The only difference in some cases would be that the code for the Android calendar library needs to import classes such as `LocalDate` and `YearMonth` from the `java.time` package while the multiplaform calendar library needs to import such classes from the [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) library. 
 
-| Compose UI | Calendar Library |
-|:----------:|:----------------:|
-|   1.2.x    |      2.0.x       |
-|   1.3.x    |  2.1.x - 2.2.x   |
-|   1.4.x    |      2.3.x       |
-|   1.5.x    |      2.4.x       |
-|   1.6.x    |      2.5.x       |
+Note that the `YearMonth` class does not yet exist in the `kotlinx-datetime` library, therefore the multiplatfrom calendar library includes a minimal `YearMonth` class implementation to bridge this gap until the class [is hopefully added](https://github.com/Kotlin/kotlinx-datetime/issues/168) to the `kotlinx-datetime` library.
+
+The functions `plusMonths`, `minusMonths`, `plusDays` and `minusDays` used in the examples are provided out of the box by the `java.time` library, but can be easily added for multiplatform projects using the `kotlinx-datetime` library if needed:
+
+```kotlin
+fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
+fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
+fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
+fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
+```
+
+## Compose UI versions
+
+Ensure that you are using the library version that matches the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency. See the compatibility table [here](https://github.com/kizitonwose/Calendar#compose-ui-version-compatibility).
 
 ## Calendar Composables
 
