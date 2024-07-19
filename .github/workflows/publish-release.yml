@@ -12,42 +12,20 @@ jobs:
     runs-on: macos-latest
     if: github.repository == 'kizitonwose/Calendar'
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches/
-            ~/.gradle/wrapper/
-          key: cache-gradle-${{ hashFiles('**/*.gradle', '**/gradle-wrapper.properties') }}
-          restore-keys: cache-gradle-
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
-
-      - name: Retrieve Version
-        run: |
-          echo "VERSION_NAME=$(cat gradle.properties | grep -w "VERSION_NAME" | cut -d'=' -f2)" >> $GITHUB_ENV
-
-      - name: Deploy Release to Maven
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-home-cache-cleanup: true
+      - name: Deploy to Maven
         run: ./gradlew publish
-        #        if: "!endsWith(env.VERSION_NAME, '-SNAPSHOT')"
-        env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_ID }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_PASSWORD }}
-
-      # => MANUALLY RELEASE VIA SONATYPE UI FOR NOW <=
-      # - name: Publish Release to Maven
-      #   run: ./gradlew closeAndReleaseRepository
-      #   if: "!endsWith(env.VERSION_NAME, '-SNAPSHOT')"
-      #   env:
-      #     ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
-      #     ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+        with:
+          mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+          mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+          signingInMemoryKey: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY }}
+          signingInMemoryKeyId: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_ID }}
+          signingInMemoryKeyPassword: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_PASSWORD }}
