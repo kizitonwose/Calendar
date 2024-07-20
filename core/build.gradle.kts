@@ -1,5 +1,5 @@
 import com.kizitonwose.calendar.buildsrc.Config
-import com.kizitonwose.calendar.buildsrc.Versions
+import com.kizitonwose.calendar.buildsrc.Version
 
 plugins {
     alias(libs.plugins.kotlinJvm)
@@ -23,5 +23,5 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates(version = Versions.core)
+    coordinates(version = Version.android)
 }

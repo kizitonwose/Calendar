@@ -1,3 +1,7 @@
+import com.kizitonwose.calendar.buildsrc.Version
+import com.kizitonwose.calendar.buildsrc.Version.isNoPublish
+import com.kizitonwose.calendar.buildsrc.androidProjects
+import com.kizitonwose.calendar.buildsrc.multiplatformProjects
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 
@@ -29,6 +33,23 @@ allprojects {
     tasks.withType<Test>().configureEach {
         // https://docs.gradle.org/8.8/userguide/performance.html#execute_tests_in_parallel
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+    }
+    afterEvaluate {
+        // Android and Multiplatform libraries are published separately
+        // See https://github.com/kizitonwose/Calendar/pull/561
+        disableMavenPublicationsIfNeeded(multiplatformProjects, Version.multiplatfrom)
+        disableMavenPublicationsIfNeeded(androidProjects, Version.android)
+    }
+}
+
+fun Project.disableMavenPublicationsIfNeeded(
+    projects: List<String>,
+    version: String,
+) {
+    if (version.isNoPublish() && project.name in projects) {
+        tasks.withType<AbstractPublishToMaven> {
+            enabled = false
+        }
     }
 }
 
