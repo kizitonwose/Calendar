@@ -11,10 +11,14 @@ object Config {
     val compatibleJavaLanguageVersion = JavaLanguageVersion.of(compatibleJavaVersion.majorVersion.toInt())
 }
 
-object Versions {
-    val core = "2.6.0-SNAPSHOT"
+object Version {
+    val android = "2.6.0-SNAPSHOT"
     val multiplatfrom = "2.6.0-SNAPSHOT"
+
+    fun String.isNoPublish() = this == VERSION_NO_PUBLISH
 }
+
+private val VERSION_NO_PUBLISH = "NO_PUBLISH"
 
 object Android {
     const val minSdkViewLibrary = 19
@@ -23,3 +27,6 @@ object Android {
     const val targetSdk = 34
     const val compileSdk = 34
 }
+
+val multiplatformProjects = listOf("library")
+val androidProjects = listOf("core", "data", "view", "compose")
