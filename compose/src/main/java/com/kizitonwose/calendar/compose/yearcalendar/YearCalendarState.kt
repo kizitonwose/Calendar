@@ -1,10 +1,11 @@
-package com.kizitonwose.calendar.compose.heatmapcalendar
+package com.kizitonwose.calendar.compose.yearcalendar
 
 import android.util.Log
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -17,46 +18,54 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
+import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.VisibleItemState
-import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarYear
+import com.kizitonwose.calendar.core.ExperimentalCalendarApi
+import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.checkRange
-import com.kizitonwose.calendar.data.getHeatMapCalendarMonthData
-import com.kizitonwose.calendar.data.getMonthIndex
-import com.kizitonwose.calendar.data.getMonthIndicesCount
+import com.kizitonwose.calendar.data.getCalendarYearData
+import com.kizitonwose.calendar.data.getYearIndex
+import com.kizitonwose.calendar.data.getYearIndicesCount
 import java.time.DayOfWeek
-import java.time.YearMonth
+import java.time.Year
 
 /**
- * Creates a [HeatMapCalendarState] that is remembered across compositions.
+ * Creates a [CalendarState] that is remembered across compositions.
  *
- * @param startMonth the initial value for [HeatMapCalendarState.startMonth]
- * @param endMonth the initial value for [HeatMapCalendarState.endMonth]
- * @param firstDayOfWeek the initial value for [HeatMapCalendarState.firstDayOfWeek]
- * @param firstVisibleMonth the initial value for [HeatMapCalendarState.firstVisibleMonth]
+ * @param startMonth the initial value for [CalendarState.startMonth]
+ * @param endMonth the initial value for [CalendarState.endMonth]
+ * @param firstDayOfWeek the initial value for [CalendarState.firstDayOfWeek]
+ * @param firstVisibleMonth the initial value for [CalendarState.firstVisibleMonth]
+ * @param outDateStyle the initial value for [CalendarState.outDateStyle]
  */
+@ExperimentalCalendarApi
 @Composable
-public fun rememberHeatMapCalendarState(
-    startMonth: YearMonth = YearMonth.now(),
-    endMonth: YearMonth = startMonth,
-    firstVisibleMonth: YearMonth = startMonth,
+public fun rememberYearCalendarState(
+    startMonth: Year = Year.now(),
+    endMonth: Year = startMonth,
+    firstVisibleMonth: Year = startMonth,
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
-): HeatMapCalendarState {
+    outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
+): YearCalendarState {
     return rememberSaveable(
         inputs = arrayOf(
             startMonth,
             endMonth,
             firstVisibleMonth,
             firstDayOfWeek,
+            outDateStyle,
         ),
-        saver = HeatMapCalendarState.Saver,
+        saver = YearCalendarState.Saver,
     ) {
-        HeatMapCalendarState(
+        YearCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
             firstDayOfWeek = firstDayOfWeek,
             firstVisibleMonth = firstVisibleMonth,
+            outDateStyle = outDateStyle,
             visibleItemState = null,
         )
     }
@@ -65,26 +74,29 @@ public fun rememberHeatMapCalendarState(
 /**
  * A state object that can be hoisted to control and observe calendar properties.
  *
- * This should be created via [rememberHeatMapCalendarState].
+ * This should be created via [rememberCalendarState].
  *
  * @param startMonth the first month on the calendar.
  * @param endMonth the last month on the calendar.
  * @param firstDayOfWeek the first day of week on the calendar.
- * @param firstVisibleMonth the initial value for [HeatMapCalendarState.firstVisibleMonth]
+ * @param firstVisibleMonth the initial value for [CalendarState.firstVisibleMonth]
+ * @param outDateStyle the preferred style for out date generation.
  */
+@ExperimentalCalendarApi
 @Stable
-public class HeatMapCalendarState internal constructor(
-    startMonth: YearMonth,
-    endMonth: YearMonth,
-    firstVisibleMonth: YearMonth,
+public class YearCalendarState internal constructor(
+    startMonth: Year,
+    endMonth: Year,
     firstDayOfWeek: DayOfWeek,
+    firstVisibleMonth: Year,
+    outDateStyle: OutDateStyle,
     visibleItemState: VisibleItemState?,
 ) : ScrollableState {
     /** Backing state for [startMonth] */
     private var _startMonth by mutableStateOf(startMonth)
 
     /** The first month on the calendar. */
-    public var startMonth: YearMonth
+    public var startMonth: Year
         get() = _startMonth
         set(value) {
             if (value != startMonth) {
@@ -97,7 +109,7 @@ public class HeatMapCalendarState internal constructor(
     private var _endMonth by mutableStateOf(endMonth)
 
     /** The last month on the calendar. */
-    public var endMonth: YearMonth
+    public var endMonth: Year
         get() = _endMonth
         set(value) {
             if (value != endMonth) {
@@ -119,12 +131,25 @@ public class HeatMapCalendarState internal constructor(
             }
         }
 
+    /** Backing state for [outDateStyle] */
+    private var _outDateStyle by mutableStateOf(outDateStyle)
+
+    /** The preferred style for out date generation. */
+    public var outDateStyle: OutDateStyle
+        get() = _outDateStyle
+        set(value) {
+            if (value != outDateStyle) {
+                _outDateStyle = value
+                monthDataChanged()
+            }
+        }
+
     /**
      * The first month that is visible.
      *
      * @see [lastVisibleMonth]
      */
-    public val firstVisibleMonth: CalendarMonth by derivedStateOf {
+    public val firstVisibleMonth: CalendarYear by derivedStateOf {
         store[listState.firstVisibleItemIndex]
     }
 
@@ -133,7 +158,7 @@ public class HeatMapCalendarState internal constructor(
      *
      * @see [firstVisibleMonth]
      */
-    public val lastVisibleMonth: CalendarMonth by derivedStateOf {
+    public val lastVisibleMonth: CalendarYear by derivedStateOf {
         store[listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0]
     }
 
@@ -152,9 +177,11 @@ public class HeatMapCalendarState internal constructor(
      *
      * If you want to run some side effects like sending an analytics event or updating a state
      * based on this value consider using "snapshotFlow".
+     *
+     * see [LazyListLayoutInfo]
      */
-    public val layoutInfo: CalendarLayoutInfo
-        get() = CalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
+    public val layoutInfo: YearCalendarLayoutInfo
+        get() = YearCalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
     /**
      * [InteractionSource] that will be used to dispatch drag events when this
@@ -173,11 +200,12 @@ public class HeatMapCalendarState internal constructor(
     internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
     internal val store = DataStore { offset ->
-        getHeatMapCalendarMonthData(
-            startMonth = this.startMonth,
+        getCalendarYearData(
+            startYear = this.startMonth,
             offset = offset,
             firstDayOfWeek = this.firstDayOfWeek,
-        ).calendarMonth
+            outDateStyle = this.outDateStyle,
+        )
     }
 
     init {
@@ -187,9 +215,15 @@ public class HeatMapCalendarState internal constructor(
     private fun monthDataChanged() {
         store.clear()
         checkRange(startMonth, endMonth)
+        // Read the firstDayOfWeek and outDateStyle properties to ensure recomposition
+        // even though they are unused in the CalendarInfo. Alternatively, we could use
+        // mutableStateMapOf() as the backing store for DataStore() to ensure recomposition
+        // but not sure how compose handles recomposition of a lazy list that reads from
+        // such map when an entry unrelated to the visible indices changes.
         calendarInfo = CalendarInfo(
-            indexCount = getMonthIndicesCount(startMonth, endMonth),
+            indexCount = getYearIndicesCount(startMonth, endMonth),
             firstDayOfWeek = firstDayOfWeek,
+            outDateStyle = outDateStyle,
         )
     }
 
@@ -201,7 +235,7 @@ public class HeatMapCalendarState internal constructor(
      *
      * @see [animateScrollToMonth]
      */
-    public suspend fun scrollToMonth(month: YearMonth) {
+    public suspend fun scrollToMonth(month: Year) {
         listState.scrollToItem(getScrollIndex(month) ?: return)
     }
 
@@ -211,16 +245,16 @@ public class HeatMapCalendarState internal constructor(
      * @param month the month to which to scroll. Must be within the
      * range of [startMonth] and [endMonth].
      */
-    public suspend fun animateScrollToMonth(month: YearMonth) {
+    public suspend fun animateScrollToMonth(month: Year) {
         listState.animateScrollToItem(getScrollIndex(month) ?: return)
     }
 
-    private fun getScrollIndex(month: YearMonth): Int? {
+    private fun getScrollIndex(month: Year): Int? {
         if (month !in startMonth..endMonth) {
             Log.d("CalendarState", "Attempting to scroll out of range: $month")
             return null
         }
-        return getMonthIndex(startMonth, month)
+        return getYearIndex(startMonth, month)
     }
 
     /**
@@ -237,26 +271,28 @@ public class HeatMapCalendarState internal constructor(
     ): Unit = listState.scroll(scrollPriority, block)
 
     public companion object {
-        internal val Saver: Saver<HeatMapCalendarState, Any> = listSaver(
+        internal val Saver: Saver<YearCalendarState, Any> = listSaver(
             save = {
                 listOf(
                     it.startMonth,
                     it.endMonth,
-                    it.firstVisibleMonth.yearMonth,
+                    it.firstVisibleMonth.year,
                     it.firstDayOfWeek,
+                    it.outDateStyle,
                     it.listState.firstVisibleItemIndex,
                     it.listState.firstVisibleItemScrollOffset,
                 )
             },
             restore = {
-                HeatMapCalendarState(
-                    startMonth = it[0] as YearMonth,
-                    endMonth = it[1] as YearMonth,
-                    firstVisibleMonth = it[2] as YearMonth,
+                YearCalendarState(
+                    startMonth = it[0] as Year,
+                    endMonth = it[1] as Year,
+                    firstVisibleMonth = it[2] as Year,
                     firstDayOfWeek = it[3] as DayOfWeek,
+                    outDateStyle = it[4] as OutDateStyle,
                     visibleItemState = VisibleItemState(
-                        firstVisibleItemIndex = it[4] as Int,
-                        firstVisibleItemScrollOffset = it[5] as Int,
+                        firstVisibleItemIndex = it[5] as Int,
+                        firstVisibleItemScrollOffset = it[6] as Int,
                     ),
                 )
             },

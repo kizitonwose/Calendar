@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.compose
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
@@ -18,8 +20,14 @@ import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarS
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarImpl
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
+import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarMonths
+import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
+import com.kizitonwose.calendar.compose.yearcalendar.YearContentHeightMode
+import com.kizitonwose.calendar.compose.yearcalendar.rememberYearCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarYear
+import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import java.time.DayOfWeek
@@ -293,3 +301,188 @@ public fun HeatMapCalendar(
     monthHeader = monthHeader,
     contentPadding = contentPadding,
 )
+
+@ExperimentalCalendarApi
+@Composable
+public fun HorizontalYearCalendar(
+    modifier: Modifier = Modifier,
+    state: YearCalendarState = rememberYearCalendarState(),
+    columns: Int = 3,
+    calendarScrollPaged: Boolean = true,
+    userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
+    monthVerticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    monthHorizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    yearBodyContentPadding: PaddingValues = PaddingValues(0.dp),
+    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthContainer: (@Composable BoxScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
+    yearHeader: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)? = null,
+    yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)? = null,
+): Unit = YearCalendar(
+    modifier = modifier,
+    state = state,
+    columns = columns,
+    calendarScrollPaged = calendarScrollPaged,
+    userScrollEnabled = userScrollEnabled,
+    isHorizontal = true,
+    reverseLayout = reverseLayout,
+    contentHeightMode = contentHeightMode,
+    isMonthVisible = isMonthVisible,
+    monthVerticalArrangement = monthVerticalArrangement,
+    monthHorizontalArrangement = monthHorizontalArrangement,
+    yearBodyContentPadding = yearBodyContentPadding,
+    dayContent = dayContent,
+    monthHeader = monthHeader,
+    monthBody = monthBody,
+    monthFooter = monthFooter,
+    monthContainer = monthContainer,
+    yearHeader = yearHeader,
+    yearBody = yearBody,
+    yearFooter = yearFooter,
+    yearContainer = yearContainer,
+    contentPadding = contentPadding,
+)
+
+@ExperimentalCalendarApi
+@Composable
+public fun VerticalYearCalendar(
+    modifier: Modifier = Modifier,
+    state: YearCalendarState = rememberYearCalendarState(),
+    columns: Int = 3,
+    calendarScrollPaged: Boolean = true,
+    userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
+    monthVerticalArrangement: Arrangement.Vertical = Arrangement.Top,
+    monthHorizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    yearBodyContentPadding: PaddingValues = PaddingValues(0.dp),
+    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthContainer: (@Composable BoxScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
+    yearHeader: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)? = null,
+    yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)? = null,
+): Unit = YearCalendar(
+    modifier = modifier,
+    state = state,
+    columns = columns,
+    calendarScrollPaged = calendarScrollPaged,
+    userScrollEnabled = userScrollEnabled,
+    isHorizontal = false,
+    reverseLayout = reverseLayout,
+    contentHeightMode = contentHeightMode,
+    monthVerticalArrangement = monthVerticalArrangement,
+    monthHorizontalArrangement = monthHorizontalArrangement,
+    yearBodyContentPadding = yearBodyContentPadding,
+    isMonthVisible = isMonthVisible,
+    dayContent = dayContent,
+    monthHeader = monthHeader,
+    monthBody = monthBody,
+    monthFooter = monthFooter,
+    monthContainer = monthContainer,
+    yearHeader = yearHeader,
+    yearBody = yearBody,
+    yearFooter = yearFooter,
+    yearContainer = yearContainer,
+    contentPadding = contentPadding,
+)
+
+@ExperimentalCalendarApi
+@Composable
+private fun YearCalendar(
+    modifier: Modifier,
+    state: YearCalendarState,
+    columns: Int,
+    calendarScrollPaged: Boolean,
+    userScrollEnabled: Boolean,
+    isHorizontal: Boolean,
+    reverseLayout: Boolean,
+    contentPadding: PaddingValues,
+    contentHeightMode: YearContentHeightMode,
+    monthVerticalArrangement: Arrangement.Vertical,
+    monthHorizontalArrangement: Arrangement.Horizontal,
+    yearBodyContentPadding: PaddingValues,
+    isMonthVisible: (month: CalendarMonth) -> Boolean,
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthContainer: (@Composable BoxScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
+    yearHeader: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
+    yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)?,
+    yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
+    yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)?,
+) {
+    if (isHorizontal) {
+        LazyRow(
+            modifier = modifier,
+            state = state.listState,
+            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
+            userScrollEnabled = userScrollEnabled,
+            reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
+        ) {
+            YearCalendarMonths(
+                yearCount = state.calendarInfo.indexCount,
+                yearData = { offset -> state.store[offset] },
+                columns = columns,
+                contentHeightMode = contentHeightMode,
+                monthVerticalArrangement = monthVerticalArrangement,
+                monthHorizontalArrangement = monthHorizontalArrangement,
+                yearBodyContentPadding = yearBodyContentPadding,
+                isMonthVisible = isMonthVisible,
+                dayContent = dayContent,
+                monthHeader = monthHeader,
+                monthBody = monthBody,
+                monthFooter = monthFooter,
+                monthContainer = monthContainer,
+                yearHeader = yearHeader,
+                yearBody = yearBody,
+                yearFooter = yearFooter,
+                yearContainer = yearContainer,
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier,
+            state = state.listState,
+            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
+            userScrollEnabled = userScrollEnabled,
+            reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
+        ) {
+            YearCalendarMonths(
+                yearCount = state.calendarInfo.indexCount,
+                yearData = { offset -> state.store[offset] },
+                columns = columns,
+                contentHeightMode = contentHeightMode,
+                monthVerticalArrangement = monthVerticalArrangement,
+                monthHorizontalArrangement = monthHorizontalArrangement,
+                yearBodyContentPadding = yearBodyContentPadding,
+                isMonthVisible = isMonthVisible,
+                dayContent = dayContent,
+                monthHeader = monthHeader,
+                monthBody = monthBody,
+                monthFooter = monthFooter,
+                monthContainer = monthContainer,
+                yearHeader = yearHeader,
+                yearBody = yearBody,
+                yearFooter = yearFooter,
+                yearContainer = yearContainer,
+            )
+        }
+    }
+}

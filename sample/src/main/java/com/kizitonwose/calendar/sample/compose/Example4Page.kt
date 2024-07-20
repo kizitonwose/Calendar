@@ -120,7 +120,7 @@ private fun MonthHeader(calendarMonth: CalendarMonth) {
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                     fontSize = 15.sp,
-                    text = dayOfWeek.name.first().toString(),
+                    text = dayOfWeek.displayText(uppercase = true, narrow = true),
                     fontWeight = FontWeight.Medium,
                 )
             }

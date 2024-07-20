@@ -20,8 +20,9 @@ fun Month.displayText(short: Boolean = true): String {
     return getDisplayName(style, Locale.ENGLISH)
 }
 
-fun DayOfWeek.displayText(uppercase: Boolean = false): String {
-    return getDisplayName(TextStyle.SHORT, Locale.ENGLISH).let { value ->
+fun DayOfWeek.displayText(uppercase: Boolean = false, narrow: Boolean = false): String {
+    val style = if (narrow) TextStyle.NARROW else TextStyle.SHORT
+    return getDisplayName(style, Locale.ENGLISH).let { value ->
         if (uppercase) value.uppercase(Locale.ENGLISH) else value
     }
 }
