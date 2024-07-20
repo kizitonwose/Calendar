@@ -266,9 +266,9 @@ class CalendarViewTests {
 
     @Test
     fun findVisibleDaysAndMonthsWorksOnHorizontalOrientation() {
-        openExampleAt(5)
+        openExampleAt(0)
 
-        val calendarView = getView<CalendarView>(R.id.exSixCalendar)
+        val calendarView = getView<CalendarView>(R.id.exOneCalendar)
 
         runOnMain {
             // Scroll to a random date
