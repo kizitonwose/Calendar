@@ -25,7 +25,7 @@ import com.kizitonwose.calendar.core.WeekDay
 import kotlinx.datetime.DayOfWeek
 
 /**
- * A horizontally scrolling calendar.
+ * A horizontally scrolling month calendar.
  *
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
@@ -39,7 +39,7 @@ import kotlinx.datetime.DayOfWeek
  * @param contentPadding a padding around the whole calendar. This will add padding for the
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
- * between each month use the [monthContainer] composable.
+ * between each month, use the [monthContainer] composable.
  * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
@@ -88,7 +88,7 @@ public fun HorizontalCalendar(
 )
 
 /**
- * A vertically scrolling calendar.
+ * A vertically scrolling month calendar.
  *
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
@@ -102,7 +102,7 @@ public fun HorizontalCalendar(
  * @param contentPadding a padding around the whole calendar. This will add padding for the
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
- * between each month use the [monthContainer] composable.
+ * between each month, use the [monthContainer] composable.
  * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is

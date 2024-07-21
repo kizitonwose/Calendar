@@ -202,7 +202,7 @@ public class CalendarState internal constructor(
     }
 
     init {
-        monthDataChanged() // Update monthIndexCount initially.
+        monthDataChanged() // Update indexCount initially.
     }
 
     private fun monthDataChanged() {

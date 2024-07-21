@@ -173,7 +173,7 @@ fun rememberFirstMostVisibleYear(
     state: YearCalendarState,
     viewportPercent: Float = 50f,
 ): CalendarYear {
-    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleYear) }
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.firstMostVisibleYear(viewportPercent) }
             .filterNotNull()
@@ -190,11 +190,11 @@ fun rememberFirstMostVisibleYear(
 @OptIn(ExperimentalCalendarApi::class)
 @Composable
 fun rememberFirstVisibleYearAfterScroll(state: YearCalendarState): CalendarYear {
-    val visibleYear = remember(state) { mutableStateOf(state.firstVisibleMonth) }
+    val visibleYear = remember(state) { mutableStateOf(state.firstVisibleYear) }
     LaunchedEffect(state) {
         snapshotFlow { state.isScrollInProgress }
             .filter { scrolling -> !scrolling }
-            .collect { visibleYear.value = state.firstVisibleMonth }
+            .collect { visibleYear.value = state.firstVisibleYear }
     }
     return visibleYear.value
 }
@@ -234,17 +234,17 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
 }
 
 private fun YearCalendarLayoutInfo.firstMostVisibleYear(viewportPercent: Float = 50f): CalendarYear? {
-    return if (visibleWeeksInfo.isEmpty()) {
+    return if (visibleYearsInfo.isEmpty()) {
         null
     } else {
         val viewportSize = (viewportEndOffset + viewportStartOffset) * viewportPercent / 100f
-        visibleWeeksInfo.firstOrNull { itemInfo ->
+        visibleYearsInfo.firstOrNull { itemInfo ->
             if (itemInfo.offset < 0) {
                 itemInfo.offset + itemInfo.size >= viewportSize
             } else {
                 itemInfo.size - itemInfo.offset >= viewportSize
             }
-        }?.week
+        }?.year
     }
 }
 

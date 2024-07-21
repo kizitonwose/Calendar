@@ -6,7 +6,7 @@ import com.kizitonwose.calendar.core.CalendarYear
 
 /**
  * Contains useful information about the currently displayed layout state of the calendar.
- * For example you can get the list of currently displayed months.
+ * For example you can get the list of currently displayed years.
  *
  * Use [YearCalendarState.layoutInfo] to retrieve this.
  *
@@ -17,21 +17,21 @@ public class YearCalendarLayoutInfo(
     private val getIndexData: (Int) -> CalendarYear,
 ) : LazyListLayoutInfo by info {
     /**
-     * The list of [YearCalendarItemInfo] representing all the currently visible weeks.
+     * The list of [YearCalendarItemInfo] representing all the currently visible years.
      */
-    public val visibleWeeksInfo: List<YearCalendarItemInfo>
+    public val visibleYearsInfo: List<YearCalendarItemInfo>
         get() = visibleItemsInfo.map { info ->
             YearCalendarItemInfo(info, getIndexData(info.index))
         }
 }
 
 /**
- * Contains useful information about an individual week on the calendar.
+ * Contains useful information about an individual year on the calendar.
  *
- * @param week The week in the list.
+ * @param year The year in the list.
 
  * @see YearCalendarLayoutInfo
  * @see LazyListItemInfo
  */
-public class YearCalendarItemInfo(info: LazyListItemInfo, public val week: CalendarYear) :
+public class YearCalendarItemInfo(info: LazyListItemInfo, public val year: CalendarYear) :
     LazyListItemInfo by info

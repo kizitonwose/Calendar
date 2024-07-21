@@ -33,7 +33,7 @@ import com.kizitonwose.calendar.core.WeekDay
 import java.time.DayOfWeek
 
 /**
- * A horizontally scrolling calendar.
+ * A horizontally scrolling month calendar.
  *
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
@@ -47,7 +47,7 @@ import java.time.DayOfWeek
  * @param contentPadding a padding around the whole calendar. This will add padding for the
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
- * between each month use the [monthContainer] composable.
+ * between each month, use the [monthContainer] composable.
  * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
@@ -96,7 +96,7 @@ public fun HorizontalCalendar(
 )
 
 /**
- * A vertically scrolling calendar.
+ * A vertically scrolling month calendar.
  *
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
@@ -110,7 +110,7 @@ public fun HorizontalCalendar(
  * @param contentPadding a padding around the whole calendar. This will add padding for the
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
- * between each month use the [monthContainer] composable.
+ * between each month, use the [monthContainer] composable.
  * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
@@ -302,6 +302,62 @@ public fun HeatMapCalendar(
     contentPadding = contentPadding,
 )
 
+/**
+ * A horizontally scrolling year calendar.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startYear`, `endYear`, `firstDayOfWeek`, `firstVisibleYear`, `outDateStyle`.
+ * @param columns the number of months columns in each year on the calendar.
+ * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
+ * snap to the nearest year after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param reverseLayout reverse the direction of scrolling and layout. When `true`, years will be
+ * composed from the end to the start and [YearCalendarState.startYear] will be located at the end.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first year or after the last one. If you want to add a spacing
+ * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
+ * @param contentHeightMode Determines how the height of the month and day content is calculated.
+ * @param monthVerticalArrangement the vertical arrangement of the month rows. Use [Arrangement.spacedBy]
+ * to add a space between each row.
+ * @param monthHorizontalArrangement the horizontal arrangement of the month columns. Use [Arrangement.spacedBy]
+ * to add a space between each column.
+ * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
+ * also provide a [yearBody] with the desired padding to achieve the same result.
+ * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
+ * use this to hide all past months.
+ * @param dayContent a composable block which describes the day content.
+ * @param monthHeader a composable block which describes the month header content. The header is
+ * placed above each month on the calendar.
+ * @param monthBody a composable block which describes the month body content. This is the container
+ * where all the month days are placed, excluding the header and footer. This is useful if you
+ * want to customize the day container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param monthFooter a composable block which describes the month footer content. The footer is
+ * placed below each month on the calendar.
+ * @param monthContainer a composable block which describes the entire month content. This is the
+ * container where all the month contents are placed (header => days => footer). This is useful if
+ * you want to customize the month container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearHeader a composable block which describes the year header content. The header is
+ * placed above each year on the calendar.
+ * @param yearBody a composable block which describes the year body content. This is the container
+ * where all the months in the year are placed, excluding the year header and footer. This is useful
+ * if you want to customize the month container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearFooter a composable block which describes the year footer content. The footer is
+ * placed below each year on the calendar.
+ * @param yearContainer a composable block which describes the entire year content. This is the
+ * container where all the year contents are placed (header => months => footer). This is useful if
+ * you want to customize the year container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ */
 @ExperimentalCalendarApi
 @Composable
 public fun HorizontalYearCalendar(
@@ -351,6 +407,62 @@ public fun HorizontalYearCalendar(
     contentPadding = contentPadding,
 )
 
+/**
+ * A vertically scrolling year calendar.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startYear`, `endYear`, `firstDayOfWeek`, `firstVisibleYear`, `outDateStyle`.
+ * @param columns the number of months columns in each year on the calendar.
+ * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
+ * snap to the nearest year after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param reverseLayout reverse the direction of scrolling and layout. When `true`, years will be
+ * composed from the end to the start and [YearCalendarState.startYear] will be located at the end.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first year or after the last one. If you want to add a spacing
+ * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
+ * @param contentHeightMode Determines how the height of the month and day content is calculated.
+ * @param monthVerticalArrangement the vertical arrangement of the month rows. Use [Arrangement.spacedBy]
+ * to add a space between each row.
+ * @param monthHorizontalArrangement the horizontal arrangement of the month columns. Use [Arrangement.spacedBy]
+ * to add a space between each column.
+ * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
+ * also provide a [yearBody] with the desired padding to achieve the same result.
+ * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
+ * use this to hide all past months.
+ * @param dayContent a composable block which describes the day content.
+ * @param monthHeader a composable block which describes the month header content. The header is
+ * placed above each month on the calendar.
+ * @param monthBody a composable block which describes the month body content. This is the container
+ * where all the month days are placed, excluding the header and footer. This is useful if you
+ * want to customize the day container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param monthFooter a composable block which describes the month footer content. The footer is
+ * placed below each month on the calendar.
+ * @param monthContainer a composable block which describes the entire month content. This is the
+ * container where all the month contents are placed (header => days => footer). This is useful if
+ * you want to customize the month container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearHeader a composable block which describes the year header content. The header is
+ * placed above each year on the calendar.
+ * @param yearBody a composable block which describes the year body content. This is the container
+ * where all the months in the year are placed, excluding the year header and footer. This is useful
+ * if you want to customize the month container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearFooter a composable block which describes the year footer content. The footer is
+ * placed below each year on the calendar.
+ * @param yearContainer a composable block which describes the entire year content. This is the
+ * container where all the year contents are placed (header => months => footer). This is useful if
+ * you want to customize the year container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ */
 @ExperimentalCalendarApi
 @Composable
 public fun VerticalYearCalendar(

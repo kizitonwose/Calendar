@@ -60,9 +60,9 @@ fun Example11Page(adjacentMonths: Long = 50) {
             .background(Color.White),
     ) {
         val state = rememberYearCalendarState(
-            startMonth = currentYear,
-            endMonth = endYear,
-            firstVisibleMonth = currentYear,
+            startYear = currentYear,
+            endYear = endYear,
+            firstVisibleYear = currentYear,
             firstDayOfWeek = daysOfWeek.first(),
         )
         VerticalYearCalendar(
@@ -166,7 +166,7 @@ private fun Day(
             .padding(if (isTablet) 2.dp else 0.dp)
             .clip(CircleShape)
             .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)
-//             Disable clicks on inDates/outDates
+            // Disable clicks on inDates/outDates
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 showRipple = !isSelected,
@@ -181,7 +181,6 @@ private fun Day(
                 color = if (isSelected) Color.White else Color.Unspecified,
             )
         }
-
     }
 }
 

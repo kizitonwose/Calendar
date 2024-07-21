@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.checkDateRange
@@ -202,7 +201,7 @@ public class CalendarState internal constructor(
     }
 
     init {
-        monthDataChanged() // Update monthIndexCount initially.
+        monthDataChanged() // Update indexCount initially.
     }
 
     private fun monthDataChanged() {

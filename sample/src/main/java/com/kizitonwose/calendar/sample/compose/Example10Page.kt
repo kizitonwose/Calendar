@@ -76,9 +76,9 @@ fun Example10Page(adjacentYears: Long = 50) {
     ) {
         val scope = rememberCoroutineScope()
         val state = rememberYearCalendarState(
-            startMonth = startYear,
-            endMonth = endYear,
-            firstVisibleMonth = currentYear,
+            startYear = startYear,
+            endYear = endYear,
+            firstVisibleYear = currentYear,
             firstDayOfWeek = daysOfWeek.first(),
         )
         val visibleYearAfterScroll = rememberFirstVisibleYearAfterScroll(state).year
@@ -99,15 +99,15 @@ fun Example10Page(adjacentYears: Long = 50) {
             visibleYear = targetYear
             scope.launch {
                 if (abs(ChronoUnit.YEARS.between(visibleYear, targetYear)) <= 8) {
-                    state.animateScrollToMonth(targetYear)
+                    state.animateScrollToYear(targetYear)
                 } else {
                     val nearbyYear = if (targetYear > visibleYear) {
                         targetYear.minusYears(5)
                     } else {
                         targetYear.plusYears(5)
                     }
-                    state.scrollToMonth(nearbyYear)
-                    state.animateScrollToMonth(targetYear)
+                    state.scrollToYear(nearbyYear)
+                    state.animateScrollToYear(targetYear)
                 }
             }
         }
@@ -116,7 +116,11 @@ fun Example10Page(adjacentYears: Long = 50) {
                 .fillMaxSize()
                 .testTag("Calendar"),
             state = state,
-            columns = if (isPortrait) 3 else if (isTablet) 4 else 6,
+            columns = if (isPortrait) {
+                3
+            } else {
+                if (isTablet) 4 else 6
+            },
             dayContent = { day ->
                 Day(
                     day = day,
@@ -131,7 +135,13 @@ fun Example10Page(adjacentYears: Long = 50) {
                 }
             },
             contentHeightMode = YearContentHeightMode.Fill,
-            monthHorizontalArrangement = Arrangement.spacedBy(if (isTablet) if (isPortrait) 52.dp else 92.dp else 10.dp),
+            monthHorizontalArrangement = Arrangement.spacedBy(
+                if (isTablet) {
+                    if (isPortrait) 52.dp else 92.dp
+                } else {
+                    10.dp
+                },
+            ),
             monthVerticalArrangement = Arrangement.spacedBy(if (isTablet) 20.dp else 4.dp),
             yearBodyContentPadding = if (isTablet) {
                 PaddingValues(horizontal = if (isPortrait) 52.dp else 92.dp, vertical = 20.dp)
@@ -275,5 +285,8 @@ private fun Example10Preview() {
 }
 
 private val headerBackground = Color(0xFFF1F1F1)
-private fun simpleTextColor(isSelected: Boolean) = if (isSelected) darkColors().onSurface else lightColors().onSurface
-private fun simpleTextBackground(isSelected: Boolean) = if (isSelected) darkColors().surface else lightColors().surface
+private fun simpleTextColor(isSelected: Boolean) =
+    if (isSelected) darkColors().onSurface else lightColors().onSurface
+
+private fun simpleTextBackground(isSelected: Boolean) =
+    if (isSelected) darkColors().surface else lightColors().surface
