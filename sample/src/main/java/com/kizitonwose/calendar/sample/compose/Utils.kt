@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material.darkColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -272,6 +270,3 @@ suspend fun LazyListState.animateScrollAndCenterItem(index: Int) {
         animateScrollIfVisible()
     }
 }
-
-fun simpleTextColor(isSelected: Boolean) = if (isSelected) darkColors().onSurface else lightColors().onSurface
-fun simpleTextBackground(isSelected: Boolean) = if (isSelected) darkColors().surface else lightColors().surface

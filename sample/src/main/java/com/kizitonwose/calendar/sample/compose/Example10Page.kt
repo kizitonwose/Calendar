@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -21,18 +19,25 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.darkColors
+import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices.PIXEL_7
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -61,6 +66,9 @@ fun Example10Page(adjacentYears: Long = 50) {
     val endYear = remember { currentYear.plusYears(adjacentYears) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
+    val config = LocalConfiguration.current
+    val isTablet = config.smallestScreenWidthDp >= 600
+    val isPortrait = config.screenHeightDp > config.screenWidthDp
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,42 +81,48 @@ fun Example10Page(adjacentYears: Long = 50) {
             firstVisibleMonth = currentYear,
             firstDayOfWeek = daysOfWeek.first(),
         )
-        val visibleYear = rememberFirstVisibleYearAfterScroll(state)
+        val visibleYearAfterScroll = rememberFirstVisibleYearAfterScroll(state).year
+        var visibleYear by remember(visibleYearAfterScroll) { mutableStateOf(visibleYearAfterScroll) }
         val headerState = rememberLazyListState()
         LaunchedEffect(visibleYear) {
-            val index = ChronoUnit.YEARS.between(startYear, visibleYear.year).toInt()
+            val index = ChronoUnit.YEARS.between(startYear, visibleYear).toInt()
             headerState.animateScrollAndCenterItem(index)
         }
         YearHeader(
             startYear = startYear,
             endYear = endYear,
-            visibleYear = visibleYear.year,
+            visibleYear = visibleYear,
             headerState = headerState,
-        ) click@{ target ->
-            val visible = visibleYear.year
-            if (target == visible) return@click
+            isTablet = isTablet,
+        ) click@{ targetYear ->
+            if (targetYear == visibleYear) return@click
+            visibleYear = targetYear
             scope.launch {
-                if (abs(ChronoUnit.YEARS.between(visible, target)) <= 10) {
-                    state.animateScrollToMonth(target)
+                if (abs(ChronoUnit.YEARS.between(visibleYear, targetYear)) <= 8) {
+                    state.animateScrollToMonth(targetYear)
                 } else {
-                    val nearbyYear = if (target > visible) {
-                        target.minusYears(8)
+                    val nearbyYear = if (targetYear > visibleYear) {
+                        targetYear.minusYears(5)
                     } else {
-                        target.plusYears(8)
+                        targetYear.plusYears(5)
                     }
                     state.scrollToMonth(nearbyYear)
-                    state.animateScrollToMonth(target)
+                    state.animateScrollToMonth(targetYear)
                 }
             }
         }
-        Spacer(modifier = Modifier.size(12.dp))
         HorizontalYearCalendar(
             modifier = Modifier
                 .fillMaxSize()
                 .testTag("Calendar"),
             state = state,
+            columns = if (isPortrait) 3 else if (isTablet) 4 else 6,
             dayContent = { day ->
-                Day(day, isSelected = selections.contains(day)) { clicked ->
+                Day(
+                    day = day,
+                    isSelected = selections.contains(day),
+                    isTablet = isTablet,
+                ) { clicked ->
                     if (selections.contains(clicked)) {
                         selections.remove(clicked)
                     } else {
@@ -117,43 +131,20 @@ fun Example10Page(adjacentYears: Long = 50) {
                 }
             },
             contentHeightMode = YearContentHeightMode.Fill,
-            monthHorizontalArrangement = Arrangement.spacedBy(40.dp),
-            monthVerticalArrangement = Arrangement.spacedBy(20.dp),
-            yearBodyContentPadding = PaddingValues(start = 40.dp, end = 40.dp, bottom = 40.dp),
+            monthHorizontalArrangement = Arrangement.spacedBy(if (isTablet) if (isPortrait) 52.dp else 92.dp else 10.dp),
+            monthVerticalArrangement = Arrangement.spacedBy(if (isTablet) 20.dp else 4.dp),
+            yearBodyContentPadding = if (isTablet) {
+                PaddingValues(horizontal = if (isPortrait) 52.dp else 92.dp, vertical = 20.dp)
+            } else {
+                PaddingValues(all = 10.dp)
+            },
             monthHeader = {
-                MonthHeader(it)
+                MonthHeader(
+                    calendarMonth = it,
+                    isTablet = isTablet,
+                )
             },
         )
-    }
-}
-
-@Composable
-private fun MonthHeader(calendarMonth: CalendarMonth) {
-    val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
-    Column(
-        modifier = Modifier
-            .wrapContentHeight()
-            .padding(top = 6.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = calendarMonth.yearMonth.month.displayText(short = false),
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium,
-        )
-        Row(modifier = Modifier.fillMaxWidth()) {
-            for (dayOfWeek in daysOfWeek) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center,
-                    fontSize = 11.sp,
-                    text = dayOfWeek.displayText(uppercase = true, narrow = true),
-                    fontWeight = FontWeight.Medium,
-                )
-            }
-        }
     }
 }
 
@@ -163,16 +154,18 @@ private fun YearHeader(
     endYear: Year,
     visibleYear: Year,
     headerState: LazyListState,
+    isTablet: Boolean,
+    modifier: Modifier = Modifier,
     onClick: (Year) -> Unit,
 ) {
     LazyRow(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .background(headerBackground),
         state = headerState,
         flingBehavior = rememberSnapFlingBehavior(lazyListState = headerState, SnapPosition.Center),
-        contentPadding = PaddingValues(horizontal = 40.dp),
+        contentPadding = PaddingValues(horizontal = if (isTablet) 40.dp else 10.dp),
     ) {
         items(count = ChronoUnit.YEARS.between(startYear, endYear).toInt()) { index ->
             val year = startYear.plusYears(index.toLong())
@@ -190,13 +183,16 @@ private fun YearHeader(
                         },
                     )
                     .clickable(onClick = { onClick(year) })
-                    .padding(horizontal = 60.dp, vertical = 10.dp),
+                    .padding(
+                        horizontal = if (isTablet) 60.dp else 28.dp,
+                        vertical = if (isTablet) 10.dp else 6.dp,
+                    ),
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
                     text = year.value.toString(),
                     textAlign = TextAlign.Center,
-                    fontSize = 24.sp,
+                    fontSize = if (isTablet) 24.sp else 18.sp,
                     color = simpleTextColor(isSelected),
                     fontWeight = if (isSelected) FontWeight.Black else FontWeight.Light,
                 )
@@ -206,12 +202,49 @@ private fun YearHeader(
 }
 
 @Composable
-private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
+private fun MonthHeader(
+    calendarMonth: CalendarMonth,
+    isTablet: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val daysOfWeek = calendarMonth.weekDays.first().map { it.date.dayOfWeek }
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(if (isTablet) 12.dp else 8.dp),
+    ) {
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = calendarMonth.yearMonth.month.displayText(short = false),
+            fontSize = if (isTablet) 16.sp else 12.sp,
+            textAlign = TextAlign.Center,
+            fontWeight = FontWeight.Medium,
+        )
+        Row(modifier = Modifier.fillMaxWidth()) {
+            for (dayOfWeek in daysOfWeek) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    fontSize = if (isTablet) 11.sp else 9.sp,
+                    text = dayOfWeek.displayText(uppercase = true, narrow = true),
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun Day(
+    day: CalendarDay,
+    isSelected: Boolean,
+    isTablet: Boolean,
+    onClick: (CalendarDay) -> Unit,
+) {
     Box(
         modifier = Modifier
             .aspectRatio(1f) // This is important for square-sizing!
             .testTag("MonthDay")
-            .padding(2.dp)
+            .padding(if (isTablet) 2.dp else 0.dp)
             .clip(CircleShape)
             .background(simpleTextBackground(isSelected))
             // Disable clicks on inDates/outDates
@@ -225,7 +258,7 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
         if (day.position == DayPosition.MonthDate) {
             Text(
                 text = day.date.dayOfMonth.toString(),
-                fontSize = 10.sp,
+                fontSize = if (isTablet) 11.sp else 9.sp,
                 color = simpleTextColor(isSelected),
             )
         }
@@ -233,9 +266,14 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
 }
 
 @Preview(showBackground = true, heightDp = 1280, widthDp = 800, device = PIXEL_TABLET)
+@Preview(showBackground = true, heightDp = 800, widthDp = 1280, device = PIXEL_TABLET)
+@Preview(showBackground = true, heightDp = 891, widthDp = 411, device = PIXEL_7)
+@Preview(showBackground = true, heightDp = 411, widthDp = 891, device = PIXEL_7)
 @Composable
 private fun Example10Preview() {
     Example10Page()
 }
 
 private val headerBackground = Color(0xFFF1F1F1)
+private fun simpleTextColor(isSelected: Boolean) = if (isSelected) darkColors().onSurface else lightColors().onSurface
+private fun simpleTextBackground(isSelected: Boolean) = if (isSelected) darkColors().surface else lightColors().surface

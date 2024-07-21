@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices.PIXEL_7
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +52,8 @@ fun Example11Page(adjacentMonths: Long = 50) {
     val endYear = remember { currentYear.plusYears(adjacentMonths) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
+    val config = LocalConfiguration.current
+    val isTablet = config.smallestScreenWidthDp >= 600
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +71,11 @@ fun Example11Page(adjacentMonths: Long = 50) {
                 .testTag("Calendar"),
             state = state,
             dayContent = { day ->
-                Day(day, isSelected = selections.contains(day)) { clicked ->
+                Day(
+                    day = day,
+                    isSelected = selections.contains(day),
+                    isTablet = isTablet,
+                ) { clicked ->
                     if (selections.contains(clicked)) {
                         selections.remove(clicked)
                     } else {
@@ -78,8 +86,8 @@ fun Example11Page(adjacentMonths: Long = 50) {
             calendarScrollPaged = false,
             contentHeightMode = YearContentHeightMode.Wrap,
             monthVerticalArrangement = Arrangement.spacedBy(20.dp),
-            monthHorizontalArrangement = Arrangement.spacedBy(20.dp),
-            contentPadding = PaddingValues(horizontal = 20.dp),
+            monthHorizontalArrangement = Arrangement.spacedBy(if (isTablet) 52.dp else 10.dp),
+            contentPadding = PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
             isMonthVisible = {
                 it.yearMonth >= currentMonth
             },
@@ -126,9 +134,11 @@ private fun MonthHeader(calendarMonth: CalendarMonth) {
 
 @Composable
 private fun YearHeader(year: Year) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+    ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,15 +153,20 @@ private fun YearHeader(year: Year) {
 }
 
 @Composable
-private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) -> Unit) {
+private fun Day(
+    day: CalendarDay,
+    isSelected: Boolean,
+    isTablet: Boolean,
+    onClick: (CalendarDay) -> Unit,
+) {
     Box(
         modifier = Modifier
             .aspectRatio(1f) // This is important for square-sizing!
             .testTag("MonthDay")
-            .padding(2.dp)
+            .padding(if (isTablet) 2.dp else 0.dp)
             .clip(CircleShape)
             .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)
-            // Disable clicks on inDates/outDates
+//             Disable clicks on inDates/outDates
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 showRipple = !isSelected,
@@ -162,7 +177,8 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
         if (day.position == DayPosition.MonthDate) {
             Text(
                 text = day.date.dayOfMonth.toString(),
-                fontSize = 10.sp,
+                fontSize = if (isTablet) 10.sp else 9.sp,
+                color = if (isSelected) Color.White else Color.Unspecified,
             )
         }
 
@@ -170,6 +186,7 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
 }
 
 @Preview(showBackground = true, heightDp = 1280, widthDp = 800, device = PIXEL_TABLET)
+@Preview(showBackground = true, heightDp = 891, widthDp = 411, device = PIXEL_7)
 @Composable
 private fun Example11Preview() {
     Example11Page()
