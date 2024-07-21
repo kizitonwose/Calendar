@@ -23,12 +23,9 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,8 +78,7 @@ fun Example10Page(adjacentYears: Long = 50) {
             firstVisibleYear = currentYear,
             firstDayOfWeek = daysOfWeek.first(),
         )
-        val visibleYearAfterScroll = rememberFirstVisibleYearAfterScroll(state).year
-        var visibleYear by remember(visibleYearAfterScroll) { mutableStateOf(visibleYearAfterScroll) }
+        val visibleYear = rememberFirstVisibleYearAfterScroll(state).year
         val headerState = rememberLazyListState()
         LaunchedEffect(visibleYear) {
             val index = ChronoUnit.YEARS.between(startYear, visibleYear).toInt()
@@ -96,7 +92,6 @@ fun Example10Page(adjacentYears: Long = 50) {
             isTablet = isTablet,
         ) click@{ targetYear ->
             if (targetYear == visibleYear) return@click
-            visibleYear = targetYear
             scope.launch {
                 if (abs(ChronoUnit.YEARS.between(visibleYear, targetYear)) <= 8) {
                     state.animateScrollToYear(targetYear)

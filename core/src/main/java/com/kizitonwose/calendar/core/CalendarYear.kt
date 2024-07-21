@@ -5,10 +5,10 @@ import java.io.Serializable
 import java.time.Year
 
 /**
- * Represents a month on the calendar.
+ * Represents a year on the calendar.
  *
- * @param yearMonth the calendar month value.
- * @param weekDays the weeks in this month.
+ * @param year the calendar year value.
+ * @param months the months in this year.
  */
 @Immutable
 public data class CalendarYear(
