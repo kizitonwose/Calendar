@@ -130,14 +130,12 @@ fun Example10Page(adjacentYears: Long = 50) {
                 }
             },
             contentHeightMode = YearContentHeightMode.Fill,
-            monthHorizontalArrangement = Arrangement.spacedBy(
-                if (isTablet) {
-                    if (isPortrait) 52.dp else 92.dp
-                } else {
-                    10.dp
-                },
-            ),
-            monthVerticalArrangement = Arrangement.spacedBy(if (isTablet) 20.dp else 4.dp),
+            monthHorizontalSpacing = if (isTablet) {
+                if (isPortrait) 52.dp else 92.dp
+            } else {
+                10.dp
+            },
+            monthVerticalSpacing = if (isTablet) 20.dp else 4.dp,
             yearBodyContentPadding = if (isTablet) {
                 PaddingValues(horizontal = if (isPortrait) 52.dp else 92.dp, vertical = 20.dp)
             } else {

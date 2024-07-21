@@ -85,8 +85,8 @@ fun Example11Page(adjacentMonths: Long = 50) {
             },
             calendarScrollPaged = false,
             contentHeightMode = YearContentHeightMode.Wrap,
-            monthVerticalArrangement = Arrangement.spacedBy(20.dp),
-            monthHorizontalArrangement = Arrangement.spacedBy(if (isTablet) 52.dp else 10.dp),
+            monthVerticalSpacing = 20.dp,
+            monthHorizontalSpacing = if (isTablet) 52.dp else 10.dp,
             contentPadding = PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
             isMonthVisible = {
                 it.yearMonth >= currentMonth

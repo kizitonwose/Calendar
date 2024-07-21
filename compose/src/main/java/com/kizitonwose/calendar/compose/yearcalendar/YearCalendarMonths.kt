@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.unit.Dp
 import com.kizitonwose.calendar.compose.or
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -26,10 +27,10 @@ internal fun LazyListScope.YearCalendarMonths(
     yearCount: Int,
     yearData: (offset: Int) -> CalendarYear,
     columns: Int,
-    contentHeightMode: YearContentHeightMode,
-    monthVerticalArrangement: Arrangement.Vertical,
-    monthHorizontalArrangement: Arrangement.Horizontal,
+    monthVerticalSpacing: Dp,
+    monthHorizontalSpacing: Dp,
     yearBodyContentPadding: PaddingValues,
+    contentHeightMode: YearContentHeightMode,
     isMonthVisible: (month: CalendarMonth) -> Boolean,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
@@ -76,8 +77,8 @@ internal fun LazyListScope.YearCalendarMonths(
                         columns = columns,
                         itemCount = months.count(),
                         fillHeight = fillHeight,
-                        monthVerticalArrangement = monthVerticalArrangement,
-                        monthHorizontalArrangement = monthHorizontalArrangement,
+                        monthVerticalSpacing = monthVerticalSpacing,
+                        monthHorizontalSpacing = monthHorizontalSpacing,
                     ) { monthOffset ->
                         val month = months[monthOffset]
                         val hasContainer = monthContainer != null
@@ -140,15 +141,15 @@ internal fun LazyListScope.YearCalendarMonths(
 private fun CalendarGrid(
     columns: Int,
     fillHeight: Boolean,
-    monthVerticalArrangement: Arrangement.Vertical,
-    monthHorizontalArrangement: Arrangement.Horizontal,
+    monthVerticalSpacing: Dp,
+    monthHorizontalSpacing: Dp,
     itemCount: Int,
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.(Int) -> Unit,
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = monthVerticalArrangement,
+        verticalArrangement = Arrangement.spacedBy(monthVerticalSpacing),
     ) {
         var rows = (itemCount / columns)
         if (itemCount.mod(columns) > 0) {
@@ -162,7 +163,7 @@ private fun CalendarGrid(
                 modifier = Modifier.then(
                     if (fillHeight) Modifier.weight(1f) else Modifier,
                 ),
-                horizontalArrangement = monthHorizontalArrangement,
+                horizontalArrangement = Arrangement.spacedBy(monthHorizontalSpacing),
             ) {
                 for (columnId in 0 until columns) {
                     val index = firstIndex + columnId

@@ -1,6 +1,5 @@
 package com.kizitonwose.calendar.compose
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarImpl
@@ -319,13 +319,11 @@ public fun HeatMapCalendar(
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first year or after the last one. If you want to add a spacing
  * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
- * @param contentHeightMode Determines how the height of the month and day content is calculated.
- * @param monthVerticalArrangement the vertical arrangement of the month rows. Use [Arrangement.spacedBy]
- * to add a space between each row.
- * @param monthHorizontalArrangement the horizontal arrangement of the month columns. Use [Arrangement.spacedBy]
- * to add a space between each column.
  * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
  * also provide a [yearBody] with the desired padding to achieve the same result.
+ * @param monthVerticalSpacing the vertical spacing between month rows.
+ * @param monthHorizontalSpacing the horizontal spacing between month columns.
+ * @param contentHeightMode Determines how the height of the month and day content is calculated.
  * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
  * use this to hide all past months.
  * @param dayContent a composable block which describes the day content.
@@ -368,10 +366,10 @@ public fun HorizontalYearCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
-    monthVerticalArrangement: Arrangement.Vertical = Arrangement.Top,
-    monthHorizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     yearBodyContentPadding: PaddingValues = PaddingValues(0.dp),
+    monthVerticalSpacing: Dp = 0.dp,
+    monthHorizontalSpacing: Dp = 0.dp,
+    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
     isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
@@ -390,11 +388,12 @@ public fun HorizontalYearCalendar(
     userScrollEnabled = userScrollEnabled,
     isHorizontal = true,
     reverseLayout = reverseLayout,
+    contentPadding = contentPadding,
+    yearBodyContentPadding = yearBodyContentPadding,
+    monthVerticalSpacing = monthVerticalSpacing,
+    monthHorizontalSpacing = monthHorizontalSpacing,
     contentHeightMode = contentHeightMode,
     isMonthVisible = isMonthVisible,
-    monthVerticalArrangement = monthVerticalArrangement,
-    monthHorizontalArrangement = monthHorizontalArrangement,
-    yearBodyContentPadding = yearBodyContentPadding,
     dayContent = dayContent,
     monthHeader = monthHeader,
     monthBody = monthBody,
@@ -404,7 +403,6 @@ public fun HorizontalYearCalendar(
     yearBody = yearBody,
     yearFooter = yearFooter,
     yearContainer = yearContainer,
-    contentPadding = contentPadding,
 )
 
 /**
@@ -424,13 +422,11 @@ public fun HorizontalYearCalendar(
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first year or after the last one. If you want to add a spacing
  * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
- * @param contentHeightMode Determines how the height of the month and day content is calculated.
- * @param monthVerticalArrangement the vertical arrangement of the month rows. Use [Arrangement.spacedBy]
- * to add a space between each row.
- * @param monthHorizontalArrangement the horizontal arrangement of the month columns. Use [Arrangement.spacedBy]
- * to add a space between each column.
  * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
  * also provide a [yearBody] with the desired padding to achieve the same result.
+ * @param monthVerticalSpacing the vertical spacing between month rows.
+ * @param monthHorizontalSpacing the horizontal spacing between month columns.
+ * @param contentHeightMode Determines how the height of the month and day content is calculated.
  * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
  * use this to hide all past months.
  * @param dayContent a composable block which describes the day content.
@@ -473,10 +469,10 @@ public fun VerticalYearCalendar(
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
-    monthVerticalArrangement: Arrangement.Vertical = Arrangement.Top,
-    monthHorizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     yearBodyContentPadding: PaddingValues = PaddingValues(0.dp),
+    monthVerticalSpacing: Dp = 0.dp,
+    monthHorizontalSpacing: Dp = 0.dp,
+    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
     isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
@@ -495,10 +491,11 @@ public fun VerticalYearCalendar(
     userScrollEnabled = userScrollEnabled,
     isHorizontal = false,
     reverseLayout = reverseLayout,
-    contentHeightMode = contentHeightMode,
-    monthVerticalArrangement = monthVerticalArrangement,
-    monthHorizontalArrangement = monthHorizontalArrangement,
+    contentPadding = contentPadding,
     yearBodyContentPadding = yearBodyContentPadding,
+    monthVerticalSpacing = monthVerticalSpacing,
+    monthHorizontalSpacing = monthHorizontalSpacing,
+    contentHeightMode = contentHeightMode,
     isMonthVisible = isMonthVisible,
     dayContent = dayContent,
     monthHeader = monthHeader,
@@ -509,7 +506,6 @@ public fun VerticalYearCalendar(
     yearBody = yearBody,
     yearFooter = yearFooter,
     yearContainer = yearContainer,
-    contentPadding = contentPadding,
 )
 
 @ExperimentalCalendarApi
@@ -524,8 +520,8 @@ private fun YearCalendar(
     reverseLayout: Boolean,
     contentPadding: PaddingValues,
     contentHeightMode: YearContentHeightMode,
-    monthVerticalArrangement: Arrangement.Vertical,
-    monthHorizontalArrangement: Arrangement.Horizontal,
+    monthVerticalSpacing: Dp,
+    monthHorizontalSpacing: Dp,
     yearBodyContentPadding: PaddingValues,
     isMonthVisible: (month: CalendarMonth) -> Boolean,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
@@ -551,10 +547,10 @@ private fun YearCalendar(
                 yearCount = state.calendarInfo.indexCount,
                 yearData = { offset -> state.store[offset] },
                 columns = columns,
-                contentHeightMode = contentHeightMode,
-                monthVerticalArrangement = monthVerticalArrangement,
-                monthHorizontalArrangement = monthHorizontalArrangement,
+                monthVerticalSpacing = monthVerticalSpacing,
+                monthHorizontalSpacing = monthHorizontalSpacing,
                 yearBodyContentPadding = yearBodyContentPadding,
+                contentHeightMode = contentHeightMode,
                 isMonthVisible = isMonthVisible,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
@@ -580,10 +576,10 @@ private fun YearCalendar(
                 yearCount = state.calendarInfo.indexCount,
                 yearData = { offset -> state.store[offset] },
                 columns = columns,
-                contentHeightMode = contentHeightMode,
-                monthVerticalArrangement = monthVerticalArrangement,
-                monthHorizontalArrangement = monthHorizontalArrangement,
+                monthVerticalSpacing = monthVerticalSpacing,
+                monthHorizontalSpacing = monthHorizontalSpacing,
                 yearBodyContentPadding = yearBodyContentPadding,
+                contentHeightMode = contentHeightMode,
                 isMonthVisible = isMonthVisible,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
