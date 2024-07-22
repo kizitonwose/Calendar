@@ -508,7 +508,6 @@ public fun VerticalYearCalendar(
     yearContainer = yearContainer,
 )
 
-@ExperimentalCalendarApi
 @Composable
 private fun YearCalendar(
     modifier: Modifier,

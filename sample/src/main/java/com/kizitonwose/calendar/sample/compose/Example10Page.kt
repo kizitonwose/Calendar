@@ -50,15 +50,13 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.sample.shared.displayText
 import kotlinx.coroutines.launch
 import java.time.Year
-import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 import kotlin.math.abs
 
 @OptIn(ExperimentalCalendarApi::class)
 @Composable
 fun Example10Page(adjacentYears: Long = 50) {
-    val currentMonth = remember { YearMonth.now() }
-    val currentYear = remember { Year.of(currentMonth.year) }
+    val currentYear = remember { Year.now() }
     val startYear = remember { currentYear.minusYears(adjacentYears) }
     val endYear = remember { currentYear.plusYears(adjacentYears) }
     val selections = remember { mutableStateListOf<CalendarDay>() }

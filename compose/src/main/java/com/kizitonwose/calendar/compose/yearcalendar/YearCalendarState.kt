@@ -81,7 +81,6 @@ public fun rememberYearCalendarState(
  * @param firstVisibleYear the initial value for [YearCalendarState.firstVisibleYear]
  * @param outDateStyle the preferred style for out date generation.
  */
-@ExperimentalCalendarApi
 @Stable
 public class YearCalendarState internal constructor(
     startYear: Year,

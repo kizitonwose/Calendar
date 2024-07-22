@@ -5,11 +5,13 @@ import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.listSaver
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
+import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
 import com.kizitonwose.calendar.core.OutDateStyle
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.Year
 import java.time.YearMonth
 
 /**
@@ -22,12 +24,13 @@ class StateSaverTests {
     @Test
     fun `month calendar state can be restored`() {
         val now = YearMonth.now()
-        val firstDayOfWeek = DayOfWeek.values().random()
+        val firstDayOfWeek = DayOfWeek.entries.random()
+        val outDateStyle = OutDateStyle.entries.random()
         val state = CalendarState(
             startMonth = now,
             endMonth = now,
             firstVisibleMonth = now,
-            outDateStyle = OutDateStyle.EndOfRow,
+            outDateStyle = outDateStyle,
             firstDayOfWeek = firstDayOfWeek,
             visibleItemState = VisibleItemState(),
         )
@@ -42,7 +45,7 @@ class StateSaverTests {
     @Test
     fun `week calendar state can be restored`() {
         val now = LocalDate.now()
-        val firstDayOfWeek = DayOfWeek.values().random()
+        val firstDayOfWeek = DayOfWeek.entries.random()
         val state = WeekCalendarState(
             startDate = now,
             endDate = now,
@@ -60,7 +63,7 @@ class StateSaverTests {
     @Test
     fun `heatmap calendar state can be restored`() {
         val now = YearMonth.now()
-        val firstDayOfWeek = DayOfWeek.values().random()
+        val firstDayOfWeek = DayOfWeek.entries.random()
         val state = HeatMapCalendarState(
             startMonth = now,
             endMonth = now,
@@ -72,6 +75,26 @@ class StateSaverTests {
         assertEquals(state.startMonth, restored.startMonth)
         assertEquals(state.endMonth, restored.endMonth)
         assertEquals(state.firstVisibleMonth, restored.firstVisibleMonth)
+        assertEquals(state.firstDayOfWeek, restored.firstDayOfWeek)
+    }
+
+    @Test
+    fun `year calendar state can be restored`() {
+        val now = Year.now()
+        val firstDayOfWeek = DayOfWeek.entries.random()
+        val outDateStyle = OutDateStyle.entries.random()
+        val state = YearCalendarState(
+            startYear = now,
+            endYear = now,
+            firstVisibleYear = now,
+            firstDayOfWeek = firstDayOfWeek,
+            outDateStyle = outDateStyle,
+            visibleItemState = VisibleItemState(),
+        )
+        val restored = restore(state, YearCalendarState.Saver)
+        assertEquals(state.startYear, restored.startYear)
+        assertEquals(state.endYear, restored.endYear)
+        assertEquals(state.firstVisibleYear, restored.firstVisibleYear)
         assertEquals(state.firstDayOfWeek, restored.firstDayOfWeek)
     }
 

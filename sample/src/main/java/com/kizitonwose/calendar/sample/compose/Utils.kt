@@ -36,7 +36,6 @@ import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarLayoutInfo
 import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
-import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
 import com.kizitonwose.calendar.sample.shared.findActivity
@@ -167,7 +166,6 @@ fun rememberFirstMostVisibleMonth(
  *
  * @see [rememberFirstVisibleYearAfterScroll]
  */
-@OptIn(ExperimentalCalendarApi::class)
 @Composable
 fun rememberFirstMostVisibleYear(
     state: YearCalendarState,
@@ -187,7 +185,6 @@ fun rememberFirstMostVisibleYear(
  *
  * @see [rememberFirstMostVisibleYear]
  */
-@OptIn(ExperimentalCalendarApi::class)
 @Composable
 fun rememberFirstVisibleYearAfterScroll(state: YearCalendarState): CalendarYear {
     val visibleYear = remember(state) { mutableStateOf(state.firstVisibleYear) }
