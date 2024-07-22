@@ -1,8 +1,8 @@
 package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.daysOfWeek
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 
 class DayOfWeekTests {

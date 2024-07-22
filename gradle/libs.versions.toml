@@ -3,6 +3,7 @@ agp = "8.5.1"
 kotlin = "2.0.0"
 compose = "1.7.0-beta05"
 espresso = "3.6.1"
+junit5 = "5.10.3"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -21,7 +22,10 @@ androidx-test-espresso-contrib = { module = "androidx.test.espresso:espresso-con
 androidx-test-runner = { module = "androidx.test:runner", version = "1.6.1" }
 androidx-test-rules = { module = "androidx.test:rules", version = "1.6.1" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
-test-junit = { module = "junit:junit", version = "4.13.2" }
+test-junit4 = { module = "junit:junit", version = "4.13.2" }
+test-junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+test-junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
+test-junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5" }
 
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }

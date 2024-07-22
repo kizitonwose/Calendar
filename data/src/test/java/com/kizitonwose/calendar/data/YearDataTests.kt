@@ -2,8 +2,8 @@ package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.Month.JANUARY

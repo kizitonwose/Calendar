@@ -2,9 +2,9 @@ package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month.APRIL

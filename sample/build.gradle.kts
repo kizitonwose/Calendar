@@ -63,7 +63,7 @@ dependencies {
     implementation(libs.compose.activity)
     implementation(libs.compose.navigation)
 
-    testImplementation(libs.test.junit)
+    testImplementation(libs.test.junit4)
 
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.espresso.contrib) // RecyclerView actions.
