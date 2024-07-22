@@ -4,7 +4,7 @@
 
 - [Quick links](#quick-links)
 - [Compose Multiplatform Information](#compose-multiplatform-information)
-- [Compose UI version compatibility](#compose-ui-versions)
+- [Compose UI version compatibility](#compose-ui-version-compatibility)
 - [Calendar Composables](#calendar-composables)
 - [Usage](#usage)
   * [Calendar state](#usage)
@@ -19,6 +19,7 @@
   * [Disabling dates](#disabling-dates)
 - [Week calendar](#week-calendar)
 - [HeatMap calendar](#heatmap-calendar)
+- [Year calendar](#year-calendar)
 
 ## Quick links
 
@@ -57,7 +58,7 @@ Ensure that you are using the library version that matches the Compose UI versio
 
 ## Calendar Composables
 
-The library can be used via four composables:
+The library can be used via six composables:
 
 `HorizontalCalendar()`: Horizontally scrolling month-based calendar.
 
@@ -67,9 +68,21 @@ The library can be used via four composables:
 
 `HeatMapCalendar()`: Horizontally scrolling heatmap calendar, useful for showing how data changes over time. A popular example is the user contribution chart on GitHub.
 
+`HorizontalYearCalendar()`: Horizontally scrolling year-based calendar.
+
+`VerticalYearCalendar()`: Vertically scrolling year-based calendar.
+
 All composables are based on LazyRow/LazyColumn for efficiency.
 
-In the examples below, we will mostly use the month-based `HorizontalCalendar` and `VerticalCalendar` composables since all the calendar composables share the same basic concept. If you want a week-based calendar, use the `WeekCalendar` composable instead. Most state properties/methods with the name prefix/suffix `month` (e.g `firstVisibleMonth`) in the month-base calendar will have an equivalent with the name prefix/suffix `week` (e.g `firstVisibleWeek`) in the week-based calendar.
+In the examples below, we will mostly use the month-based `HorizontalCalendar`
+and `VerticalCalendar` composables since all the calendar composables share the same basic concept.
+If you need a week-based calendar, use the `WeekCalendar` composable instead. If you need a
+year-based calendar, use the `HorizontalYearCalendar` and `VerticalYearCalendar` composables.
+
+Most state properties/methods with the name prefix/suffix `month` (e.g `firstVisibleMonth`) in the
+month-base calendar will have an equivalent with the name prefix/suffix `week` (
+e.g `firstVisibleWeek`) in the week-based calendar and `year` (e.g `firstVisibleYear`) in the
+year-based calendar.
 
 ## Usage
 
@@ -508,7 +521,9 @@ See the sample project for some complex implementations.
 
 ## Week calendar
 
-As discussed previously, the library provides `HorizontalCalendar`, `VerticalCalendar`, and `WeekCalendar` composables. The `WeekCalendar` is a week-based calendar. Almost all topics covered above for the month calendar will apply to the week calendar. The main difference is that state properties/methods will have a slightly different name, typically with a `week` prefix/suffix instead of `month`. 
+The `WeekCalendar` is a week-based calendar. Almost all topics covered above for the month calendar
+will apply to the week calendar. The main difference is that state properties/methods will have a
+slightly different name, typically with a `week` prefix/suffix instead of `month`.
 
 For example: `firstVisibleMonth` => `firstVisibleWeek`, `scrollToMonth()` => `scrollToWeek()` and many others, but you get the idea.
 
@@ -572,6 +587,95 @@ fun MainScreen() {
 ```
 
 Please see the `HeatMapCalendar` composable for the full documentation. There are also examples in the sample app.
+
+## Year calendar
+
+The year-based calendar is best suited for large screens and can be used via
+the `HorizontalYearCalendar` and `VerticalYearCalendar` composables. All topics covered above for
+the month calendar will apply to the year calendar. The main difference is that state
+properties/methods will have a slightly different name, typically with a `year` prefix/suffix
+instead of `month`.
+
+For example: `firstVisibleMonth` => `firstVisibleYear`, `scrollToMonth()` => `scrollToYear()` and
+many others, but you get the idea.
+
+The `monthHeader` and `monthFooter` parameters are available in both the month and year calendars
+and serve the same purpose in both cases. The year calendar additionally provides the `yearHeader`
+and `yearFooter` parameters to add a header or footer to each year on the calendar.
+
+Basic year calendar usage:
+
+```kotlin
+@Composable
+fun MainScreen() {
+    val currentYear = remember { Year.now() }
+    val startYear = remember { currentYear.minusYears(100) } // Adjust as needed
+    val endYear = remember { currentYear.plusYears(100) } // Adjust as needed
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
+
+    val state = rememberYearCalendarState(
+        startYear = startYear,
+        endYear = endYear,
+        firstVisibleYear = currentYear,
+        firstDayOfWeek = firstDayOfWeek,
+    )
+    HorizontalYearCalendar(
+        state = state,
+        dayContent = { Day(it) },
+        yearHeader = { YearHeader(it) },
+        monthHeader = { MonthHeader(it) },
+    )
+
+//    If you need a vertical year calendar.
+//    VerticalYearCalendar(
+//        state = state,
+//        dayContent = { Day(it) }
+//    )
+}
+```
+
+There is an additional `outDateStyle` parameter that can be provided when creating the state
+via `rememberYearCalendarState`. This determines how the out-dates are generated. See
+the [properties](#state-properties) section to understand this parameter.
+
+A year calendar implementation from the sample app:
+
+<img src="https://github.com/user-attachments/assets/b2fcae94-341c-4f35-a997-e8d95a23efb4" alt="Year calendar" width="500">
+
+The year calendar composables also provide a parameter `isMonthVisible` which determines if a month
+is added to the calendar year grid. For example, if you want a calendar that starts in the year 2024
+and ends in the year 2054, but only shows months from from July 2024, the logic would look like
+this:
+
+```kotlin
+@Composable
+fun MainScreen() {
+    val july2024 = remember { YearMonth.of(2024, Month.JULY) }
+    val startYear = remember { Year.of(2024) }
+    val endYear = remember { Year.of(2054) }
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } 
+
+    val state = rememberYearCalendarState(
+        startYear = startYear,
+        endYear = endYear,
+        firstVisibleYear = startYear,
+        firstDayOfWeek = firstDayOfWeek,
+    )
+    HorizontalYearCalendar(
+        state = state,
+        dayContent = { Day(it) },
+        yearHeader = { YearHeader(it) },
+        monthHeader = { MonthHeader(it) },
+        isMonthVisible = { month ->
+            month.yearMonth >= july2024
+        }
+    )
+}
+```
+
+The logic above will produce this result:
+
+<img src="https://github.com/user-attachments/assets/80ff60c0-91c3-4d6f-89d5-c719d1981c0d" alt="Year calendar" width="500">
 
 Remember that all the screenshots shown so far are just examples of what you can achieve with the library and you can absolutely build your calendar to look however you want.
 
