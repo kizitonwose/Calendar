@@ -20,7 +20,7 @@ class DayOfWeekTests {
 
     @Test
     fun `first day of the week works as expected`() {
-        DayOfWeek.values().forEach { dayOfWeek ->
+        DayOfWeek.entries.forEach { dayOfWeek ->
             assertEquals(dayOfWeek, daysOfWeek(firstDayOfWeek = dayOfWeek).first())
         }
     }
