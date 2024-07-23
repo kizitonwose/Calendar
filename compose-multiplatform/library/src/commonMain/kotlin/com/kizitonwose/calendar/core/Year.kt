@@ -60,13 +60,13 @@ public fun Year.isLeap(): Boolean = Year.isLeap(year)
 
 public fun Year.length(): Int = if (isLeap()) 366 else 365
 
-public fun Year.atMonthDay(month: Int, day: Int): LocalDate = LocalDate(year, month, day)
+public fun Year.atMonthDay(monthNumber: Int, day: Int): LocalDate = LocalDate(year, monthNumber, day)
 
 public fun Year.atMonthDay(month: Month, day: Int): LocalDate = LocalDate(year, month, day)
 
 public fun Year.atMonth(month: Month): YearMonth = YearMonth(year, month)
 
-public fun Year.atMonth(month: Int): YearMonth = YearMonth(year, month)
+public fun Year.atMonth(monthNumber: Int): YearMonth = YearMonth(year, monthNumber)
 
 /**
  * Returns the number of whole months between two year-month values.

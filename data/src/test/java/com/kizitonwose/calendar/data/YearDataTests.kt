@@ -69,21 +69,27 @@ class YearDataTests {
     @Test
     fun `generated year is at the correct offset`() {
         val yearData = getCalendarYearData(Year.of(2020), 6, DayOfWeek.SUNDAY, OutDateStyle.EndOfGrid)
+        val yearData2 = getCalendarYearData(Year.of(2021), 0, DayOfWeek.SUNDAY, OutDateStyle.EndOfRow)
 
         assertEquals(yearData.year, Year.of(2026))
+        assertEquals(yearData2.year, Year.of(2021))
     }
 
     @Test
     fun `year index calculation works as expected`() {
         val index = getYearIndex(startYear = Year.of(2020), targetYear = Year.of(2030))
+        val index2 = getYearIndex(startYear = Year.of(2052), targetYear = Year.of(2052))
 
         assertEquals(10, index)
+        assertEquals(0, index2)
     }
 
     @Test
-    fun `index indices count calculation works as expected`() {
+    fun `year indices count calculation works as expected`() {
         val count = getYearIndicesCount(startYear = Year.of(2020), endYear = Year.of(2040))
+        val count2 = getYearIndicesCount(startYear = Year.of(2052), endYear = Year.of(2052))
 
         assertEquals(21, count)
+        assertEquals(1, count2)
     }
 }

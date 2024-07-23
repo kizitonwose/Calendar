@@ -81,14 +81,14 @@ class YearMonthTest {
     @Test
     fun monthsUntil() {
         val values = listOf(
-            YearMonth(2024, Month.JANUARY) to YearMonth(2024, Month.NOVEMBER) toResult 10,
-            YearMonth(2024, Month.JANUARY) to YearMonth(2024, Month.DECEMBER) toResult 11,
-            YearMonth(2026, Month.MARCH) to YearMonth(2028, Month.FEBRUARY) toResult 23,
-            YearMonth(2047, Month.OCTOBER) to YearMonth(2051, Month.APRIL) toResult 42,
-            YearMonth(2065, Month.JUNE) to YearMonth(2071, Month.JUNE) toResult 72,
-            YearMonth(2020, Month.MAY) to YearMonth(2023, Month.JULY) toResult 38,
-            YearMonth(2022, Month.AUGUST) to YearMonth(2022, Month.AUGUST) toResult 0,
-            YearMonth(2022, Month.AUGUST) to YearMonth(2022, Month.SEPTEMBER) toResult 1,
+            YearMonth(2024, Month.JANUARY) to YearMonth(2024, Month.NOVEMBER) toTriple 10,
+            YearMonth(2024, Month.JANUARY) to YearMonth(2024, Month.DECEMBER) toTriple 11,
+            YearMonth(2026, Month.MARCH) to YearMonth(2028, Month.FEBRUARY) toTriple 23,
+            YearMonth(2047, Month.OCTOBER) to YearMonth(2051, Month.APRIL) toTriple 42,
+            YearMonth(2065, Month.JUNE) to YearMonth(2071, Month.JUNE) toTriple 72,
+            YearMonth(2020, Month.MAY) to YearMonth(2023, Month.JULY) toTriple 38,
+            YearMonth(2022, Month.AUGUST) to YearMonth(2022, Month.AUGUST) toTriple 0,
+            YearMonth(2022, Month.AUGUST) to YearMonth(2022, Month.SEPTEMBER) toTriple 1,
         )
 
         for ((start, end, result) in values) {
@@ -100,16 +100,16 @@ class YearMonthTest {
     @Test
     fun plus() {
         val plusMonth = listOf(
-            YearMonth(2024, Month.JANUARY) to 10 toResult YearMonth(2024, Month.NOVEMBER),
-            YearMonth(2020, Month.MAY) to 38 toResult YearMonth(2023, Month.JULY),
-            YearMonth(2022, Month.AUGUST) to 0 toResult YearMonth(2022, Month.AUGUST),
-            YearMonth(2022, Month.AUGUST) to 1 toResult YearMonth(2022, Month.SEPTEMBER),
+            YearMonth(2024, Month.JANUARY) to 10 toTriple YearMonth(2024, Month.NOVEMBER),
+            YearMonth(2020, Month.MAY) to 38 toTriple YearMonth(2023, Month.JULY),
+            YearMonth(2022, Month.AUGUST) to 0 toTriple YearMonth(2022, Month.AUGUST),
+            YearMonth(2022, Month.AUGUST) to 1 toTriple YearMonth(2022, Month.SEPTEMBER),
         )
         val plusYear = listOf(
-            YearMonth(2024, Month.JANUARY) to 10 toResult YearMonth(2034, Month.JANUARY),
-            YearMonth(2020, Month.MAY) to 38 toResult YearMonth(2058, Month.MAY),
-            YearMonth(2022, Month.AUGUST) to 0 toResult YearMonth(2022, Month.AUGUST),
-            YearMonth(2022, Month.SEPTEMBER) to 1 toResult YearMonth(2023, Month.SEPTEMBER),
+            YearMonth(2024, Month.JANUARY) to 10 toTriple YearMonth(2034, Month.JANUARY),
+            YearMonth(2020, Month.MAY) to 38 toTriple YearMonth(2058, Month.MAY),
+            YearMonth(2022, Month.AUGUST) to 0 toTriple YearMonth(2022, Month.AUGUST),
+            YearMonth(2022, Month.SEPTEMBER) to 1 toTriple YearMonth(2023, Month.SEPTEMBER),
         )
 
         for ((start, value, result) in plusMonth) {
@@ -126,16 +126,16 @@ class YearMonthTest {
     @Test
     fun minus() {
         val minusMonth = listOf(
-            YearMonth(2024, Month.JANUARY) to 10 toResult YearMonth(2023, Month.MARCH),
-            YearMonth(2020, Month.MAY) to 38 toResult YearMonth(2017, Month.MARCH),
-            YearMonth(2022, Month.AUGUST) to 0 toResult YearMonth(2022, Month.AUGUST),
-            YearMonth(2022, Month.AUGUST) to 1 toResult YearMonth(2022, Month.JULY),
+            YearMonth(2024, Month.JANUARY) to 10 toTriple YearMonth(2023, Month.MARCH),
+            YearMonth(2020, Month.MAY) to 38 toTriple YearMonth(2017, Month.MARCH),
+            YearMonth(2022, Month.AUGUST) to 0 toTriple YearMonth(2022, Month.AUGUST),
+            YearMonth(2022, Month.AUGUST) to 1 toTriple YearMonth(2022, Month.JULY),
         )
         val minusYear = listOf(
-            YearMonth(2024, Month.JANUARY) to 10 toResult YearMonth(2014, Month.JANUARY),
-            YearMonth(2020, Month.MAY) to 38 toResult YearMonth(1982, Month.MAY),
-            YearMonth(2022, Month.AUGUST) to 0 toResult YearMonth(2022, Month.AUGUST),
-            YearMonth(2022, Month.SEPTEMBER) to 1 toResult YearMonth(2021, Month.SEPTEMBER),
+            YearMonth(2024, Month.JANUARY) to 10 toTriple YearMonth(2014, Month.JANUARY),
+            YearMonth(2020, Month.MAY) to 38 toTriple YearMonth(1982, Month.MAY),
+            YearMonth(2022, Month.AUGUST) to 0 toTriple YearMonth(2022, Month.AUGUST),
+            YearMonth(2022, Month.SEPTEMBER) to 1 toTriple YearMonth(2021, Month.SEPTEMBER),
         )
 
         for ((start, value, result) in minusMonth) {
