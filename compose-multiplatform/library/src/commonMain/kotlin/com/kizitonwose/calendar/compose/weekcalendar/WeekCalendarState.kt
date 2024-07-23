@@ -21,9 +21,6 @@ import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.atEndOfMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.core.internal.JvmSerializableLocalDate
-import com.kizitonwose.calendar.core.internal.toJvmSerializableLocalDate
-import com.kizitonwose.calendar.core.internal.toLocalDate
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
@@ -270,9 +267,9 @@ public class WeekCalendarState internal constructor(
         internal val Saver: Saver<WeekCalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startDate.toJvmSerializableLocalDate(),
-                    it.endDate.toJvmSerializableLocalDate(),
-                    it.firstVisibleWeek.days.first().date.toJvmSerializableLocalDate(),
+                    it.startDate.toString(),
+                    it.endDate.toString(),
+                    it.firstVisibleWeek.days.first().date.toString(),
                     it.firstDayOfWeek,
                     it.listState.firstVisibleItemIndex,
                     it.listState.firstVisibleItemScrollOffset,
@@ -280,9 +277,9 @@ public class WeekCalendarState internal constructor(
             },
             restore = {
                 WeekCalendarState(
-                    startDate = (it[0] as JvmSerializableLocalDate).toLocalDate(),
-                    endDate = (it[1] as JvmSerializableLocalDate).toLocalDate(),
-                    firstVisibleWeekDate = (it[2] as JvmSerializableLocalDate).toLocalDate(),
+                    startDate = LocalDate.parse((it[0] as String)),
+                    endDate = LocalDate.parse((it[1] as String)),
+                    firstVisibleWeekDate = LocalDate.parse((it[2] as String)),
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = VisibleItemState(
                         firstVisibleItemIndex = it[4] as Int,
