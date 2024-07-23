@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.format.toIso8601String
 
 @Suppress("FunctionName")
 internal fun LazyListScope.CalendarMonths(
@@ -28,7 +29,7 @@ internal fun LazyListScope.CalendarMonths(
 ) {
     items(
         count = monthCount,
-        key = { offset -> monthData(offset).yearMonth },
+        key = { offset -> monthData(offset).yearMonth.toIso8601String() },
     ) { offset ->
         val month = monthData(offset)
         val fillHeight = when (contentHeightMode) {

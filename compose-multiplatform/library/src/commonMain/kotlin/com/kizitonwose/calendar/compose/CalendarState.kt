@@ -18,6 +18,8 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.core.format.fromIso8601YearMonth
+import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.checkRange
@@ -266,9 +268,9 @@ public class CalendarState internal constructor(
         internal val Saver: Saver<CalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startMonth,
-                    it.endMonth,
-                    it.firstVisibleMonth.yearMonth,
+                    it.startMonth.toIso8601String(),
+                    it.endMonth.toIso8601String(),
+                    it.firstVisibleMonth.yearMonth.toIso8601String(),
                     it.firstDayOfWeek,
                     it.outDateStyle,
                     it.listState.firstVisibleItemIndex,
@@ -277,9 +279,9 @@ public class CalendarState internal constructor(
             },
             restore = {
                 CalendarState(
-                    startMonth = it[0] as YearMonth,
-                    endMonth = it[1] as YearMonth,
-                    firstVisibleMonth = it[2] as YearMonth,
+                    startMonth = (it[0] as String).fromIso8601YearMonth(),
+                    endMonth = (it[1] as String).fromIso8601YearMonth(),
+                    firstVisibleMonth = (it[2] as String).fromIso8601YearMonth(),
                     firstDayOfWeek = it[3] as DayOfWeek,
                     outDateStyle = it[4] as OutDateStyle,
                     visibleItemState = VisibleItemState(

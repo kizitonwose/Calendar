@@ -21,6 +21,8 @@ import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.atEndOfMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.core.format.fromIso8601LocalDate
+import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
@@ -267,9 +269,9 @@ public class WeekCalendarState internal constructor(
         internal val Saver: Saver<WeekCalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startDate.toString(),
-                    it.endDate.toString(),
-                    it.firstVisibleWeek.days.first().date.toString(),
+                    it.startDate.toIso8601String(),
+                    it.endDate.toIso8601String(),
+                    it.firstVisibleWeek.days.first().date.toIso8601String(),
                     it.firstDayOfWeek,
                     it.listState.firstVisibleItemIndex,
                     it.listState.firstVisibleItemScrollOffset,
@@ -277,9 +279,9 @@ public class WeekCalendarState internal constructor(
             },
             restore = {
                 WeekCalendarState(
-                    startDate = LocalDate.parse((it[0] as String)),
-                    endDate = LocalDate.parse((it[1] as String)),
-                    firstVisibleWeekDate = LocalDate.parse((it[2] as String)),
+                    startDate = (it[0] as String).fromIso8601LocalDate(),
+                    endDate = (it[1] as String).fromIso8601LocalDate(),
+                    firstVisibleWeekDate = (it[2] as String).fromIso8601LocalDate(),
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = VisibleItemState(
                         firstVisibleItemIndex = it[4] as Int,

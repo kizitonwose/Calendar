@@ -19,6 +19,8 @@ import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.core.format.fromIso8601YearMonth
+import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.checkRange
@@ -239,9 +241,9 @@ public class HeatMapCalendarState internal constructor(
         internal val Saver: Saver<HeatMapCalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startMonth,
-                    it.endMonth,
-                    it.firstVisibleMonth.yearMonth,
+                    it.startMonth.toIso8601String(),
+                    it.endMonth.toIso8601String(),
+                    it.firstVisibleMonth.yearMonth.toIso8601String(),
                     it.firstDayOfWeek,
                     it.listState.firstVisibleItemIndex,
                     it.listState.firstVisibleItemScrollOffset,
@@ -249,9 +251,9 @@ public class HeatMapCalendarState internal constructor(
             },
             restore = {
                 HeatMapCalendarState(
-                    startMonth = it[0] as YearMonth,
-                    endMonth = it[1] as YearMonth,
-                    firstVisibleMonth = it[2] as YearMonth,
+                    startMonth = (it[0] as String).fromIso8601YearMonth(),
+                    endMonth = (it[1] as String).fromIso8601YearMonth(),
+                    firstVisibleMonth = (it[2] as String).fromIso8601YearMonth(),
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = VisibleItemState(
                         firstVisibleItemIndex = it[4] as Int,
