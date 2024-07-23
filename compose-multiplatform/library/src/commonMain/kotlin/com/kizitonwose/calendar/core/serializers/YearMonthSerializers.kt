@@ -1,9 +1,8 @@
 package com.kizitonwose.calendar.core.serializers
 
 import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.core.format.fromIso8601YearMonth
 import com.kizitonwose.calendar.core.format.toIso8601String
-import com.kizitonwose.calendar.core.yearMonth
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.MissingFieldException
@@ -32,7 +31,7 @@ public object YearMonthIso8601Serializer : KSerializer<YearMonth> {
         PrimitiveSerialDescriptor("com.kizitonwose.calendar.core.YearMonth", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): YearMonth =
-        LocalDate.parse("${decoder.decodeString()}-01", LocalDate.Formats.ISO).yearMonth
+        decoder.decodeString().fromIso8601YearMonth()
 
     override fun serialize(encoder: Encoder, value: YearMonth) {
         encoder.encodeString(value.toIso8601String())
