@@ -201,4 +201,18 @@ class YearTest {
             assertEquals(Year(start), Year(result).minusYears(-value))
         }
     }
+
+    @Test
+    fun toIso8601String() {
+        val values = listOf(
+            2024 to "2024",
+            -1999 to "-1999",
+            1 to "0001",
+            0 to "0000",
+        )
+
+        for ((value, result) in values) {
+            assertEquals(result, Year(value).toString())
+        }
+    }
 }

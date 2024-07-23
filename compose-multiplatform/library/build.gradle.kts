@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.mavenPublish)
 }
 
@@ -58,6 +59,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            compileOnly(libs.kotlinx.serialization.core)
             api(libs.kotlinx.datetime)
         }
         val nonJvmMain by creating {
@@ -72,6 +74,7 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.serialization.json)
         }
     }
     @OptIn(ExperimentalKotlinGradlePluginApi::class)

@@ -1,5 +1,6 @@
-package com.kizitonwose.calendar.core
+package com.kizitonwose.calendar.core.internal
 
+import com.kizitonwose.calendar.core.JvmSerializable
 import kotlinx.datetime.LocalDate
 
 internal data class JvmSerializableLocalDate(

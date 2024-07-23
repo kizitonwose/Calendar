@@ -172,4 +172,30 @@ class YearMonthTest {
             assertEquals(previous, start.previous)
         }
     }
+
+    @Test
+    fun monthNumber() {
+        val values = listOf(
+            YearMonth(2025, Month.JANUARY) to 1,
+            YearMonth(1999, Month.JUNE) to 6,
+        )
+
+        for ((value, result) in values) {
+            assertEquals(result, value.monthNumber)
+        }
+    }
+
+    @Test
+    fun toIso8601String() {
+        val values = listOf(
+            YearMonth(2025, Month.JANUARY) to "2025-01",
+            YearMonth(-1999, Month.JUNE) to "-1999-06",
+            YearMonth(1, Month.AUGUST) to "0001-08",
+            YearMonth(0, Month.MARCH) to "0000-03",
+        )
+
+        for ((value, result) in values) {
+            assertEquals(result, value.toString())
+        }
+    }
 }

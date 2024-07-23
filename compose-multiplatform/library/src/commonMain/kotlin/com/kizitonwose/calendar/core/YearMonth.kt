@@ -1,6 +1,8 @@
 package com.kizitonwose.calendar.core
 
 import androidx.compose.runtime.Immutable
+import com.kizitonwose.calendar.core.format.toIso8601String
+import com.kizitonwose.calendar.core.serializers.YearMonthIso8601Serializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeArithmeticException
 import kotlinx.datetime.DateTimeUnit
@@ -11,11 +13,20 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.number
 import kotlinx.datetime.plus
+import kotlinx.serialization.Serializable
 
 @Immutable
+@Serializable(with = YearMonthIso8601Serializer::class)
 public data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, JvmSerializable {
     public constructor(year: Int, monthNumber: Int) :
         this(year = year, month = Month(monthNumber))
+
+    /**
+     * Returns the number-of-the-month (1..12) component of the year-month.
+     *
+     * Shortcut for `month.number`.
+     */
+    public val monthNumber: Int get() = month.number
 
     init {
         try {
@@ -47,6 +58,11 @@ public data class YearMonth(val year: Int, val month: Month) : Comparable<YearMo
             timeZone: TimeZone = TimeZone.currentSystemDefault(),
         ): YearMonth = LocalDate.now(clock, timeZone).yearMonth
     }
+
+    /**
+     * Converts this year-month to the ISO 8601 string representation.
+     */
+    override fun toString(): String = toIso8601String()
 }
 
 /**

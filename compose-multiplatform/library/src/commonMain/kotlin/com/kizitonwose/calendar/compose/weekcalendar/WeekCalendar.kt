@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clipToBounds
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.core.toJvmSerializableLocalDate
+import com.kizitonwose.calendar.core.internal.toJvmSerializableLocalDate
 
 @Composable
 internal fun WeekCalendarImpl(

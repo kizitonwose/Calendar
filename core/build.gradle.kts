@@ -19,7 +19,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.compose.runtime) // Only needed for @Immutable annotation.
+    compileOnly(libs.compose.runtime) // Only needed for @Immutable annotation.
 }
 
 mavenPublishing {

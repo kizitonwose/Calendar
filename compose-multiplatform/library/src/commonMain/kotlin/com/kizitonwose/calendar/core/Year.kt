@@ -1,12 +1,16 @@
 package com.kizitonwose.calendar.core
 
 import androidx.compose.runtime.Immutable
+import com.kizitonwose.calendar.core.format.toIso8601String
+import com.kizitonwose.calendar.core.serializers.YearIso8601Serializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.serialization.Serializable
 
 @Immutable
+@Serializable(with = YearIso8601Serializer::class)
 public data class Year(val value: Int) : Comparable<Year>, JvmSerializable {
     internal val year = value
 
@@ -24,6 +28,11 @@ public data class Year(val value: Int) : Comparable<Year>, JvmSerializable {
     override fun compareTo(other: Year): Int {
         return value - other.value
     }
+
+    /**
+     * Converts this year to the ISO 8601 string representation.
+     */
+    override fun toString(): String = toIso8601String()
 
     public companion object {
         /**
@@ -91,7 +100,7 @@ public fun Year.length(): Int = if (isLeap()) 366 else 365
 public fun Year.atDay(dayOfYear: Int): LocalDate {
     require(
         dayOfYear >= 1 &&
-            (dayOfYear <= 365 || isLeap() && dayOfYear <= 365),
+            (dayOfYear <= 365 || isLeap() && dayOfYear <= 366),
     ) {
         "Invalid dayOfYear value '$dayOfYear' for year '$year"
     }
