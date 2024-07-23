@@ -7,7 +7,6 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.number
@@ -75,9 +74,16 @@ public fun YearMonth.atDay(day: Int): LocalDate = LocalDate(year, month, day)
  * For example, a date in February would return 29 in a leap year and 28 otherwise.
  */
 public fun YearMonth.lengthOfMonth(): Int {
-    val thisMonthStart = atStartOfMonth()
-    val nextMonthStart = thisMonthStart.plusMonths(1)
-    return thisMonthStart.daysUntil(nextMonthStart)
+    return when (month) {
+        Month.FEBRUARY -> if (Year.isLeap(year)) 29 else 28
+        Month.APRIL,
+        Month.JUNE,
+        Month.SEPTEMBER,
+        Month.NOVEMBER,
+        -> 30
+
+        else -> 31
+    }
 }
 
 /**
