@@ -9,8 +9,8 @@ import kotlin.test.assertEquals
 class YearMonthTest {
     @Test
     fun lengthOfMonth() {
-        val leapYearValues = Month.entries.map { it.atYear(2024) }
-        val nonLeapYearValues = Month.entries.map { it.atYear(2023) }
+        val leapYearValues = Month.entries.map { Year(2024).atMonth(it) }
+        val nonLeapYearValues = Month.entries.map { Year(2023).atMonth(it) }
 
         for (value in leapYearValues) {
             val expectedLength = when (value.month) {
@@ -69,7 +69,7 @@ class YearMonthTest {
 
     @Test
     fun atDay() {
-        val yearMonthValues = Month.entries.map { it.atYear(2024) }
+        val yearMonthValues = Month.entries.map { Year(2024).atMonth(it) }
 
         for (yearMonth in yearMonthValues) {
             for (day in 1..yearMonth.lengthOfMonth()) {

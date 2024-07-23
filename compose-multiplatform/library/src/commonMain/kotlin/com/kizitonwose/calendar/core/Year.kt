@@ -2,11 +2,9 @@ package com.kizitonwose.calendar.core
 
 import androidx.compose.runtime.Immutable
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeArithmeticException
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.monthsUntil
 
 @Immutable
 public data class Year(val value: Int) : Comparable<Year>, JvmSerializable {
@@ -38,6 +36,20 @@ public data class Year(val value: Int) : Comparable<Year>, JvmSerializable {
             timeZone: TimeZone = TimeZone.currentSystemDefault(),
         ): Year = Year(LocalDate.now(clock, timeZone).year)
 
+        /**
+         * Checks if the year is a leap year, according to the ISO proleptic calendar system rules.
+         *
+         * This method applies the current rules for leap years across the whole time-line.
+         * In general, a year is a leap year if it is divisible by four without remainder.
+         * However, years divisible by 100, are not leap years, with the exception of years
+         * divisible by 400 which are.
+         *
+         * For example, 1904 was a leap year it is divisible by 4. 1900 was not a leap year
+         * as it is divisible by 100, however 2000 was a leap year as it is divisible by 400.
+         *
+         * The calculation is proleptic - applying the same rules into the far future and far past.
+         * This is historically inaccurate, but is correct for the ISO-8601 standard.
+         */
         public fun isLeap(year: Int): Boolean {
             val prolepticYear: Long = year.toLong()
             return prolepticYear and 3 == 0L && (prolepticYear % 100 != 0L || prolepticYear % 400 == 0L)
@@ -45,8 +57,44 @@ public data class Year(val value: Int) : Comparable<Year>, JvmSerializable {
     }
 }
 
+/**
+ * Checks if the year is a leap year, according to the ISO proleptic calendar system rules.
+ *
+ * This method applies the current rules for leap years across the whole time-line.
+ * In general, a year is a leap year if it is divisible by four without remainder.
+ * However, years divisible by 100, are not leap years, with the exception of years
+ * divisible by 400 which are.
+ *
+ * For example, 1904 was a leap year it is divisible by 4. 1900 was not a leap year
+ * as it is divisible by 100, however 2000 was a leap year as it is divisible by 400.
+ *
+ * The calculation is proleptic - applying the same rules into the far future and far past.
+ * This is historically inaccurate, but is correct for the ISO-8601 standard.
+ */
+public fun Year.isLeap(): Boolean = Year.isLeap(year)
 
+/**
+ * Returns the number of days in this year.
+ *
+ * The result is 366 if this is a leap year and 365 otherwise.
+ */
+public fun Year.length(): Int = if (isLeap()) 366 else 365
+
+
+/**
+ * Returns the [LocalDate] at the specified [dayOfYear] in this year.
+ *
+ * The day-of-year value 366 is only valid in a leap year
+ *
+ * @throws IllegalArgumentException if [dayOfYear] value is invalid in this year.
+ */
 public fun Year.atDay(dayOfYear: Int): LocalDate {
+    require(
+        dayOfYear >= 1 &&
+            (dayOfYear <= 365 || isLeap() && dayOfYear <= 365),
+    ) {
+        "Invalid dayOfYear value '$dayOfYear' for year '$year"
+    }
     for (month in Month.entries) {
         val yearMonth = atMonth(month)
         if (yearMonth.atEndOfMonth().dayOfYear >= dayOfYear) {
@@ -56,50 +104,44 @@ public fun Year.atDay(dayOfYear: Int): LocalDate {
     throw IllegalArgumentException("Invalid dayOfYear value '$dayOfYear' for year '$year")
 }
 
-public fun Year.isLeap(): Boolean = Year.isLeap(year)
-
-public fun Year.length(): Int = if (isLeap()) 366 else 365
-
+/**
+ * Returns the [LocalDate] at the specified [monthNumber] and [day] in this year.
+ *
+ * @throws IllegalArgumentException if either [monthNumber] is invalid or the [day] value
+ * is invalid in the resolved calendar [Month].
+ */
 public fun Year.atMonthDay(monthNumber: Int, day: Int): LocalDate = LocalDate(year, monthNumber, day)
 
+/**
+ * Returns the [LocalDate] at the specified [month] and [day] in this year.
+ *
+ * @throws IllegalArgumentException if the [day] value is invalid in the resolved calendar [Month].
+ */
 public fun Year.atMonthDay(month: Month, day: Int): LocalDate = LocalDate(year, month, day)
 
+/**
+ * Returns the [YearMonth] at the specified [month] in this year.
+ */
 public fun Year.atMonth(month: Month): YearMonth = YearMonth(year, month)
 
+/**
+ * Returns the [YearMonth] at the specified [monthNumber] in this year.
+ *
+ * @throws IllegalArgumentException if either [monthNumber] is invalid.
+ */
 public fun Year.atMonth(monthNumber: Int): YearMonth = YearMonth(year, monthNumber)
 
 /**
- * Returns the number of whole months between two year-month values.
- *
- * The value is rounded toward zero.
- *
- * If the result does not fit in [Int], returns [Int.MAX_VALUE] for a
- * positive result or [Int.MIN_VALUE] for a negative result.
- *
- * @see LocalDate.monthsUntil
+ * Returns the number of whole years between two year values.
  */
 public fun Year.yearsUntil(other: Year): Int = other.year - year
 
 /**
- * Returns a [Year] that results from adding the [value] number of the
- * specified [unit] to this year-month.
- *
- * If the [value] is positive, the returned year-month is later than this year-month.
- * If the [value] is negative, the returned year-month is earlier than this year-month.
- *
- * @throws DateTimeArithmeticException if the result exceeds the boundaries
- * of [Year] which is essentially the [LocalDate] boundaries.
+ * Returns a [Year] that results from adding the [value] number of years to this year.
  */
 public fun Year.plusYears(value: Int): Year = Year(year + value)
 
 /**
- * Returns a [Year] that results from subtracting the [value] number of the
- * specified [unit] from this year-month.
- *
- * If the [value] is positive, the returned year-month is earlier than this year-month.
- * If the [value] is negative, the returned year-month is later than this year-month.
- *
- * @throws DateTimeArithmeticException if the result exceeds the boundaries
- * of [Year] which is essentially the [LocalDate] boundaries.
+ * Returns a [Year] that results from subtracting the [value] number of years to this year.
  */
 public fun Year.minusYears(value: Int): Year = Year(year - value)

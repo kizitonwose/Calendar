@@ -5,7 +5,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.minus
@@ -46,10 +45,6 @@ public fun LocalDate.Companion.now(
  */
 public val LocalDate.yearMonth: YearMonth
     get() = YearMonth(year, month)
-
-public fun Month.atYear(year: Year): YearMonth = YearMonth(year.value, this)
-
-public fun Month.atYear(year: Int): YearMonth = YearMonth(year, this)
 
 internal fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
 

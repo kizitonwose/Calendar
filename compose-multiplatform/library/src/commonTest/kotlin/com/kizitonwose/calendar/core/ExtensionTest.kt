@@ -10,14 +10,6 @@ class ExtensionTest {
     @Test
     fun generalExtensions() {
         assertEquals(
-            YearMonth(2024, Month.JUNE),
-            Month.JUNE.atYear(2024),
-        )
-        assertEquals(
-            YearMonth(2024, Month.JUNE),
-            Month.JUNE.atYear(Year(2024)),
-        )
-        assertEquals(
             YearMonth(2024, Month.JULY),
             YearMonth(2024, Month.JUNE).plusMonths(1),
         )
