@@ -27,6 +27,7 @@ import com.kizitonwose.calendar.core.toJvmSerializableLocalDate
 import com.kizitonwose.calendar.core.toLocalDate
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
+import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
 import com.kizitonwose.calendar.data.getWeekCalendarData
 import com.kizitonwose.calendar.data.getWeekIndex
@@ -208,6 +209,7 @@ public class WeekCalendarState internal constructor(
     }
 
     private fun adjustDateRange() {
+        checkRange(startDate, endDate)
         val data = getWeekCalendarAdjustedRange(startDate, endDate, firstDayOfWeek)
         startDateAdjusted = data.startDateAdjusted
         endDateAdjusted = data.endDateAdjusted
