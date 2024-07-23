@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 
 @Immutable
 @Serializable(with = YearMonthIso8601Serializer::class)
-public data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth>, JvmSerializable {
+public data class YearMonth(val year: Int, val month: Month) : Comparable<YearMonth> {
     public constructor(year: Int, monthNumber: Int) :
         this(year = year, month = Month(monthNumber))
 

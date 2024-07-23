@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 
 @Immutable
 @Serializable(with = YearIso8601Serializer::class)
-public data class Year(val value: Int) : Comparable<Year>, JvmSerializable {
+public data class Year(val value: Int) : Comparable<Year> {
     internal val year = value
 
     init {
