@@ -10,12 +10,14 @@ import com.kizitonwose.calendar.core.plusMonths
 import com.kizitonwose.calendar.data.VisibleItemState
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CalendarStateTests {
     @Test
-    fun startMonthUpdateIsReflectedInTheState() {
+    @JsName("test1")
+    fun `start month update is reflected in the state`() {
         val now = YearMonth.now()
         val updatedStartMonth = now.minusMonths(4)
         val state = createState(
@@ -31,7 +33,8 @@ class CalendarStateTests {
     }
 
     @Test
-    fun endMonthUpdateIsReflectedInTheState() {
+    @JsName("test2")
+    fun `end month update is reflected in the state`() {
         val now = YearMonth.now()
         val updatedEndMonth = now.plusMonths(4)
         val state = createState(
@@ -47,7 +50,8 @@ class CalendarStateTests {
     }
 
     @Test
-    fun firstDayOfTheWeekUpdateIsReflectedInTheState() {
+    @JsName("test3")
+    fun `first day of the week update is reflected in the state`() {
         val firstDayOfWeek = LocalDate.now().dayOfWeek
 
         val state = createState(firstDayOfWeek = firstDayOfWeek)
@@ -67,7 +71,8 @@ class CalendarStateTests {
     }
 
     @Test
-    fun outDateStyleUpdateIsReflectedInTheState() {
+    @JsName("test4")
+    fun `out date style update is reflected in the state`() {
         val outDateStyle = OutDateStyle.EndOfRow
         // Nov 2022 has 5 weeks when Sun is the first day.
         val startMonth = YearMonth(2022, 11)

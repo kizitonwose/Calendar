@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.core
 
+import com.kizitonwose.calendar.utils.toTriple
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.number

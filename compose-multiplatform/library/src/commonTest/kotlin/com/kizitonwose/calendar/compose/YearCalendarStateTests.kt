@@ -12,12 +12,14 @@ import com.kizitonwose.calendar.data.VisibleItemState
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class YearCalendarStateTests {
     @Test
-    fun startYearUpdateIsReflectedInTheState() {
+    @JsName("test1")
+    fun `start year update is reflected in the state`() {
         val now = Year.now()
         val updatedStartYear = now.minusYears(8)
         val state = createState(
@@ -33,7 +35,8 @@ class YearCalendarStateTests {
     }
 
     @Test
-    fun endYearUpdateIsReflectedInTheState() {
+    @JsName("test2")
+    fun `end year update is reflected in the state`() {
         val now = Year.now()
         val updatedEndMonth = now.plusYears(8)
         val state = createState(
@@ -49,7 +52,8 @@ class YearCalendarStateTests {
     }
 
     @Test
-    fun firstDayOfTheWeekUpdateIsReflectedInTheState() {
+    @JsName("test3")
+    fun `first day of the week update is reflected in the state`() {
         val firstDayOfWeek = LocalDate.now().dayOfWeek
 
         val state = createState(firstDayOfWeek = firstDayOfWeek)
@@ -72,7 +76,8 @@ class YearCalendarStateTests {
     }
 
     @Test
-    fun outDateStyleUpdateIsReflectedInTheState() {
+    @JsName("test4")
+    fun `out date style update is reflected in the state`() {
         val outDateStyle = OutDateStyle.EndOfRow
         // Nov 2022 has 5 weeks when Sun is the first day.
         val startYear = Year(2022)

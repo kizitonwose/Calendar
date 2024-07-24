@@ -8,13 +8,15 @@ import com.kizitonwose.calendar.core.plusDays
 import com.kizitonwose.calendar.data.VisibleItemState
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class WeekCalendarStateTests {
     @Test
-    fun startDateUpdateIsReflectedInTheState() {
+    @JsName("test1")
+    fun `start date update is reflected in the state`() {
         val now = LocalDate.now()
         val updatedStartDate = now.minusDays(7)
         val state = createState(
@@ -30,7 +32,8 @@ class WeekCalendarStateTests {
     }
 
     @Test
-    fun endDateUpdateIsReflectedInTheState() {
+    @JsName("test2")
+    fun `end date update is reflected in the state`() {
         val now = LocalDate.now()
         val updatedEndDate = now.plusDays(7)
         val state = createState(
@@ -46,7 +49,8 @@ class WeekCalendarStateTests {
     }
 
     @Test
-    fun firstDayOfTheWeekUpdateIsReflectedInTheState() {
+    @JsName("test3")
+    fun `first day of the week update is reflected in the state`() {
         val firstDayOfWeek = LocalDate.now().dayOfWeek
 
         val state = createState(firstDayOfWeek = firstDayOfWeek)

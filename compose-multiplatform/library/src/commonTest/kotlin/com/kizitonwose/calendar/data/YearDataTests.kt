@@ -2,18 +2,21 @@ package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
-import java.time.DayOfWeek
-import java.time.Month
-import java.time.Year
-import java.time.YearMonth
+import com.kizitonwose.calendar.core.Year
+import com.kizitonwose.calendar.core.YearMonth
+import com.kizitonwose.calendar.utils.weeksInMonth
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.Month
+import kotlin.js.JsName
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class YearDataTests {
 
     @Test
+    @JsName("test1")
     fun `year data is accurate with non-leap year`() {
-        val year = Year.of(2019)
+        val year = Year(2019)
         val firstDayOfWeek = DayOfWeek.MONDAY
         val outDateStyle = OutDateStyle.EndOfRow
         val yearData = getCalendarYearData(year, 0, firstDayOfWeek, outDateStyle)
@@ -21,7 +24,7 @@ class YearDataTests {
         val days = yearData.months.flatMap { it.weekDays }.flatten()
         yearData.months.forEachIndexed { index, month ->
             val monthData = getCalendarMonthData(
-                startMonth = YearMonth.of(year.value, Month.JANUARY),
+                startMonth = YearMonth(year.value, Month.JANUARY),
                 offset = month.yearMonth.month.ordinal,
                 firstDayOfWeek = firstDayOfWeek,
                 outDateStyle = outDateStyle,
@@ -38,8 +41,9 @@ class YearDataTests {
     }
 
     @Test
+    @JsName("test2")
     fun `year data is accurate with leap year`() {
-        val year = Year.of(2020)
+        val year = Year(2020)
         val firstDayOfWeek = DayOfWeek.SUNDAY
         val outDateStyle = OutDateStyle.EndOfGrid
         val yearData = getCalendarYearData(year, 0, firstDayOfWeek, outDateStyle)
@@ -47,7 +51,7 @@ class YearDataTests {
         val days = yearData.months.flatMap { it.weekDays }.flatten()
         yearData.months.forEachIndexed { index, month ->
             val monthData = getCalendarMonthData(
-                startMonth = YearMonth.of(year.value, Month.JANUARY),
+                startMonth = YearMonth(year.value, Month.JANUARY),
                 offset = month.yearMonth.month.ordinal,
                 firstDayOfWeek = firstDayOfWeek,
                 outDateStyle = outDateStyle,
@@ -66,27 +70,30 @@ class YearDataTests {
     }
 
     @Test
+    @JsName("test3")
     fun `generated year is at the correct offset`() {
-        val yearData = getCalendarYearData(Year.of(2020), 6, DayOfWeek.SUNDAY, OutDateStyle.EndOfGrid)
-        val yearData2 = getCalendarYearData(Year.of(2021), 0, DayOfWeek.SUNDAY, OutDateStyle.EndOfRow)
+        val yearData = getCalendarYearData(Year(2020), 6, DayOfWeek.SUNDAY, OutDateStyle.EndOfGrid)
+        val yearData2 = getCalendarYearData(Year(2021), 0, DayOfWeek.SUNDAY, OutDateStyle.EndOfRow)
 
-        assertEquals(yearData.year, Year.of(2026))
-        assertEquals(yearData2.year, Year.of(2021))
+        assertEquals(yearData.year, Year(2026))
+        assertEquals(yearData2.year, Year(2021))
     }
 
     @Test
+    @JsName("test4")
     fun `year index calculation works as expected`() {
-        val index = getYearIndex(startYear = Year.of(2020), targetYear = Year.of(2030))
-        val index2 = getYearIndex(startYear = Year.of(2052), targetYear = Year.of(2052))
+        val index = getYearIndex(startYear = Year(2020), targetYear = Year(2030))
+        val index2 = getYearIndex(startYear = Year(2052), targetYear = Year(2052))
 
         assertEquals(10, index)
         assertEquals(0, index2)
     }
 
     @Test
+    @JsName("test5")
     fun `year indices count calculation works as expected`() {
-        val count = getYearIndicesCount(startYear = Year.of(2020), endYear = Year.of(2040))
-        val count2 = getYearIndicesCount(startYear = Year.of(2052), endYear = Year.of(2052))
+        val count = getYearIndicesCount(startYear = Year(2020), endYear = Year(2040))
+        val count2 = getYearIndicesCount(startYear = Year(2052), endYear = Year(2052))
 
         assertEquals(21, count)
         assertEquals(1, count2)

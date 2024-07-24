@@ -13,6 +13,7 @@ import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.VisibleItemState
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -24,7 +25,8 @@ import kotlin.test.assertEquals
  */
 class StateSaverTests {
     @Test
-    fun monthCalendarStateCanBeRestored() {
+    @JsName("test1")
+    fun `month calendar state can be restored`() {
         val now = YearMonth.now()
         val firstDayOfWeek = DayOfWeek.entries.random()
         val outDateStyle = OutDateStyle.entries.random()
@@ -45,7 +47,8 @@ class StateSaverTests {
     }
 
     @Test
-    fun weekCalendarStateCanBeRestored() {
+    @JsName("test2")
+    fun `week calendar state can be restored`() {
         val now = LocalDate.now()
         val firstDayOfWeek = DayOfWeek.entries.random()
         val state = WeekCalendarState(
@@ -63,7 +66,8 @@ class StateSaverTests {
     }
 
     @Test
-    fun heatmapCalendarStateCanBeRestored() {
+    @JsName("test3")
+    fun `heatmap calendar state can be restored`() {
         val now = YearMonth.now()
         val firstDayOfWeek = DayOfWeek.entries.random()
         val state = HeatMapCalendarState(
@@ -81,7 +85,8 @@ class StateSaverTests {
     }
 
     @Test
-    fun yearCalendarStateCanBeRestored() {
+    @JsName("test4")
+    fun `year calendar state can be restored`() {
         val now = Year.now()
         val firstDayOfWeek = DayOfWeek.entries.random()
         val outDateStyle = OutDateStyle.entries.random()

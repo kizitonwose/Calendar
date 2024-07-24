@@ -2,20 +2,21 @@ package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
+import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
-import java.time.DayOfWeek
-import java.time.Month
-import java.time.YearMonth
+import com.kizitonwose.calendar.utils.nextMonth
+import com.kizitonwose.calendar.utils.previousMonth
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.Month
+import kotlin.js.JsName
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class MonthDataTests {
-    private val may2019 = YearMonth.of(2019, Month.MAY)
-    private val november2019 = YearMonth.of(2019, Month.NOVEMBER)
+    private val may2019 = YearMonth(2019, Month.MAY)
+    private val november2019 = YearMonth(2019, Month.NOVEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** May and November 2019 with Monday as the first day of week.
@@ -37,6 +38,7 @@ class MonthDataTests {
      **/
 
     @Test
+    @JsName("test1")
     fun `number of day positions are accurate with EndOfRow OutDateStyle`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
         val days = monthData.calendarMonth.weekDays.flatten()
@@ -51,6 +53,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test2")
     fun `number of day positions are accurate with EndOfGrid OutDateStyle`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfGrid)
         val days = monthData.calendarMonth.weekDays.flatten()
@@ -65,6 +68,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test3")
     fun `dates are in the correct positions with EndOfRow OutDateStyle`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
         val days = monthData.calendarMonth.weekDays.flatten()
@@ -79,6 +83,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test14")
     fun `dates are in the correct positions with EndOfGrid OutDateStyle`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfGrid)
         val days = monthData.calendarMonth.weekDays.flatten()
@@ -93,6 +98,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test5")
     fun `dates have the correct month values`() {
         val previousMonth = may2019.previousMonth
         val nextMonth = may2019.nextMonth
@@ -109,6 +115,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test6")
     fun `end of row out date style does not add a new row`() {
         val endOfRowMonthData =
             getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
@@ -117,6 +124,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test7")
     fun `end of grid out date style adds a new row`() {
         val endOfGridMonthData =
             getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfGrid)
@@ -129,6 +137,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test8")
     fun `days are in the appropriate week columns`() {
         val monthData = getCalendarMonthData(may2019, 0, firstDayOfWeek, OutDateStyle.EndOfRow)
         val daysOfWeek = daysOfWeek(firstDayOfWeek)
@@ -141,6 +150,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test9")
     fun `generated month is at the correct offset`() {
         val monthData = getCalendarMonthData(may2019, 6, firstDayOfWeek, OutDateStyle.EndOfRow)
 
@@ -148,6 +158,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test10")
     fun `month index calculation works as expected`() {
         val index = getMonthIndex(startMonth = may2019, targetMonth = november2019)
 
@@ -155,6 +166,7 @@ class MonthDataTests {
     }
 
     @Test
+    @JsName("test11")
     fun `month indices count calculation works as expected`() {
         val count = getMonthIndicesCount(startMonth = may2019, endMonth = november2019)
 
