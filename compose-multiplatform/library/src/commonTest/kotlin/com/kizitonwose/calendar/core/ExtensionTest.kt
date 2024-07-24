@@ -80,6 +80,18 @@ class ExtensionTest {
     }
 
     @Test
+    fun plusDays() {
+        assertEquals(DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY.plusDays(5))
+        assertEquals(DayOfWeek.THURSDAY, DayOfWeek.TUESDAY.plusDays(2))
+        assertEquals(DayOfWeek.SUNDAY, DayOfWeek.SUNDAY.plusDays(0))
+        assertEquals(DayOfWeek.TUESDAY, DayOfWeek.SATURDAY.plusDays(3))
+        assertEquals(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY.plusDays(5))
+        assertEquals(DayOfWeek.FRIDAY, DayOfWeek.THURSDAY.plusDays(1))
+        assertEquals(DayOfWeek.SUNDAY, DayOfWeek.MONDAY.plusDays(6))
+        assertEquals(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY.plusDays(6))
+    }
+
+    @Test
     fun daysOfWeek() {
         DayOfWeek.entries.forEach { dayOfWeek ->
             assertEquals(dayOfWeek, daysOfWeek(firstDayOfWeek = dayOfWeek).first())
