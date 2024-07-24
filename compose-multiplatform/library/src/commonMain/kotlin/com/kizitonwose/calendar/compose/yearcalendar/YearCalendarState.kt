@@ -1,6 +1,5 @@
 package com.kizitonwose.calendar.compose.yearcalendar
 
-import android.util.Log
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
@@ -18,18 +17,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
-import com.kizitonwose.calendar.compose.VisibleItemState
 import com.kizitonwose.calendar.core.CalendarYear
-import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.OutDateStyle
+import com.kizitonwose.calendar.core.Year
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
+import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getCalendarYearData
 import com.kizitonwose.calendar.data.getYearIndex
 import com.kizitonwose.calendar.data.getYearIndicesCount
-import java.time.DayOfWeek
-import java.time.Year
+import kotlinx.datetime.DayOfWeek
 
 /**
  * Creates a [YearCalendarState] that is remembered across compositions.
@@ -40,7 +38,6 @@ import java.time.Year
  * @param firstVisibleYear the initial value for [YearCalendarState.firstVisibleYear]
  * @param outDateStyle the initial value for [YearCalendarState.outDateStyle]
  */
-@ExperimentalCalendarApi
 @Composable
 public fun rememberYearCalendarState(
     startYear: Year = Year.now(),
@@ -249,7 +246,7 @@ public class YearCalendarState internal constructor(
 
     private fun getScrollIndex(year: Year): Int? {
         if (year !in startYear..endYear) {
-            Log.d("YearCalendarState", "Attempting to scroll out of range: $year")
+            println("YearCalendarState - Attempting to scroll out of range: $year")
             return null
         }
         return getYearIndex(startYear, year)
@@ -272,25 +269,25 @@ public class YearCalendarState internal constructor(
         internal val Saver: Saver<YearCalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startYear,
-                    it.endYear,
-                    it.firstVisibleYear.year,
-                    it.firstDayOfWeek,
-                    it.outDateStyle,
+                    it.startYear.value,
+                    it.endYear.value,
+                    it.firstVisibleYear.year.value,
+                    it.firstDayOfWeek.ordinal,
+                    it.outDateStyle.ordinal,
                     it.listState.firstVisibleItemIndex,
                     it.listState.firstVisibleItemScrollOffset,
                 )
             },
             restore = {
                 YearCalendarState(
-                    startYear = it[0] as Year,
-                    endYear = it[1] as Year,
-                    firstVisibleYear = it[2] as Year,
-                    firstDayOfWeek = it[3] as DayOfWeek,
-                    outDateStyle = it[4] as OutDateStyle,
+                    startYear = Year(it[0]),
+                    endYear = Year(it[1]),
+                    firstVisibleYear = Year(it[2]),
+                    firstDayOfWeek = DayOfWeek.entries[it[3]],
+                    outDateStyle = OutDateStyle.entries[it[4]],
                     visibleItemState = VisibleItemState(
-                        firstVisibleItemIndex = it[5] as Int,
-                        firstVisibleItemScrollOffset = it[6] as Int,
+                        firstVisibleItemIndex = it[5],
+                        firstVisibleItemScrollOffset = it[6],
                     ),
                 )
             },

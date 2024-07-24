@@ -67,7 +67,7 @@ public object YearComponentSerializer : KSerializer<Year> {
 
     override fun serialize(encoder: Encoder, value: Year) {
         encoder.encodeStructure(descriptor) {
-            encodeIntElement(descriptor, 0, value.year)
+            encodeIntElement(descriptor, 0, value.value)
         }
     }
 }

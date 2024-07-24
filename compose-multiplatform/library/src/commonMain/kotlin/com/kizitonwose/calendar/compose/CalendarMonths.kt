@@ -87,4 +87,4 @@ private val defaultMonthContainer: (@Composable LazyItemScope.(CalendarMonth, co
 private val defaultMonthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit) =
     { _, content -> content() }
 
-private fun <T> T?.or(default: T) = this ?: default
+internal fun <T> T?.or(default: T) = this ?: default
