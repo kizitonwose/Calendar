@@ -57,6 +57,11 @@ apiValidation {
     ignoredProjects += listOf(
         "sample",
     )
+
+    @OptIn(kotlinx.validation.ExperimentalBCVApi::class)
+    klib {
+        enabled = true
+    }
 }
 
 // tasks.register<Delete>("clean").configure {
