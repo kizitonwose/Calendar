@@ -1,0 +1,582 @@
+// Klib ABI Dump
+// Targets: [iosArm64, iosSimulatorArm64, iosX64, wasmJs]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <Calendar.compose-multiplatform:library>
+open annotation class com.kizitonwose.calendar.core/ExperimentalCalendarApi : kotlin/Annotation { // com.kizitonwose.calendar.core/ExperimentalCalendarApi|null[0]
+    constructor <init>() // com.kizitonwose.calendar.core/ExperimentalCalendarApi.<init>|<init>(){}[0]
+}
+
+final enum class com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition : kotlin/Enum<com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition> { // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition|null[0]
+    enum entry End // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition.End|null[0]
+    enum entry Start // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition.Start|null[0]
+
+    final val entries // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition> // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition> // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition.values|values#static(){}[0]
+}
+
+final enum class com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode : kotlin/Enum<com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode> { // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode|null[0]
+    enum entry Fill // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode.Fill|null[0]
+    enum entry Stretch // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode.Stretch|null[0]
+    enum entry Wrap // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode.Wrap|null[0]
+
+    final val entries // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode> // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode> // com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode.values|values#static(){}[0]
+}
+
+final enum class com.kizitonwose.calendar.compose/ContentHeightMode : kotlin/Enum<com.kizitonwose.calendar.compose/ContentHeightMode> { // com.kizitonwose.calendar.compose/ContentHeightMode|null[0]
+    enum entry Fill // com.kizitonwose.calendar.compose/ContentHeightMode.Fill|null[0]
+    enum entry Wrap // com.kizitonwose.calendar.compose/ContentHeightMode.Wrap|null[0]
+
+    final val entries // com.kizitonwose.calendar.compose/ContentHeightMode.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.kizitonwose.calendar.compose/ContentHeightMode> // com.kizitonwose.calendar.compose/ContentHeightMode.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.kizitonwose.calendar.compose/ContentHeightMode // com.kizitonwose.calendar.compose/ContentHeightMode.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.kizitonwose.calendar.compose/ContentHeightMode> // com.kizitonwose.calendar.compose/ContentHeightMode.values|values#static(){}[0]
+}
+
+final enum class com.kizitonwose.calendar.core/DayPosition : kotlin/Enum<com.kizitonwose.calendar.core/DayPosition> { // com.kizitonwose.calendar.core/DayPosition|null[0]
+    enum entry InDate // com.kizitonwose.calendar.core/DayPosition.InDate|null[0]
+    enum entry MonthDate // com.kizitonwose.calendar.core/DayPosition.MonthDate|null[0]
+    enum entry OutDate // com.kizitonwose.calendar.core/DayPosition.OutDate|null[0]
+
+    final val entries // com.kizitonwose.calendar.core/DayPosition.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.kizitonwose.calendar.core/DayPosition> // com.kizitonwose.calendar.core/DayPosition.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.kizitonwose.calendar.core/DayPosition // com.kizitonwose.calendar.core/DayPosition.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.kizitonwose.calendar.core/DayPosition> // com.kizitonwose.calendar.core/DayPosition.values|values#static(){}[0]
+}
+
+final enum class com.kizitonwose.calendar.core/OutDateStyle : kotlin/Enum<com.kizitonwose.calendar.core/OutDateStyle> { // com.kizitonwose.calendar.core/OutDateStyle|null[0]
+    enum entry EndOfGrid // com.kizitonwose.calendar.core/OutDateStyle.EndOfGrid|null[0]
+    enum entry EndOfRow // com.kizitonwose.calendar.core/OutDateStyle.EndOfRow|null[0]
+
+    final val entries // com.kizitonwose.calendar.core/OutDateStyle.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.kizitonwose.calendar.core/OutDateStyle> // com.kizitonwose.calendar.core/OutDateStyle.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.kizitonwose.calendar.core/OutDateStyle // com.kizitonwose.calendar.core/OutDateStyle.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.kizitonwose.calendar.core/OutDateStyle> // com.kizitonwose.calendar.core/OutDateStyle.values|values#static(){}[0]
+}
+
+final enum class com.kizitonwose.calendar.core/WeekDayPosition : kotlin/Enum<com.kizitonwose.calendar.core/WeekDayPosition> { // com.kizitonwose.calendar.core/WeekDayPosition|null[0]
+    enum entry InDate // com.kizitonwose.calendar.core/WeekDayPosition.InDate|null[0]
+    enum entry OutDate // com.kizitonwose.calendar.core/WeekDayPosition.OutDate|null[0]
+    enum entry RangeDate // com.kizitonwose.calendar.core/WeekDayPosition.RangeDate|null[0]
+
+    final val entries // com.kizitonwose.calendar.core/WeekDayPosition.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.kizitonwose.calendar.core/WeekDayPosition> // com.kizitonwose.calendar.core/WeekDayPosition.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.kizitonwose.calendar.core/WeekDayPosition // com.kizitonwose.calendar.core/WeekDayPosition.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.kizitonwose.calendar.core/WeekDayPosition> // com.kizitonwose.calendar.core/WeekDayPosition.values|values#static(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState : androidx.compose.foundation.gestures/ScrollableState { // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState|null[0]
+    final val firstVisibleMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.firstVisibleMonth|{}firstVisibleMonth[0]
+        final fun <get-firstVisibleMonth>(): com.kizitonwose.calendar.core/CalendarMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.firstVisibleMonth.<get-firstVisibleMonth>|<get-firstVisibleMonth>(){}[0]
+    final val interactionSource // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.interactionSource|{}interactionSource[0]
+        final fun <get-interactionSource>(): androidx.compose.foundation.interaction/InteractionSource // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.interactionSource.<get-interactionSource>|<get-interactionSource>(){}[0]
+    final val isScrollInProgress // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.isScrollInProgress|{}isScrollInProgress[0]
+        final fun <get-isScrollInProgress>(): kotlin/Boolean // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.isScrollInProgress.<get-isScrollInProgress>|<get-isScrollInProgress>(){}[0]
+    final val lastVisibleMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.lastVisibleMonth|{}lastVisibleMonth[0]
+        final fun <get-lastVisibleMonth>(): com.kizitonwose.calendar.core/CalendarMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.lastVisibleMonth.<get-lastVisibleMonth>|<get-lastVisibleMonth>(){}[0]
+    final val layoutInfo // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.layoutInfo|{}layoutInfo[0]
+        final fun <get-layoutInfo>(): com.kizitonwose.calendar.compose/CalendarLayoutInfo // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.layoutInfo.<get-layoutInfo>|<get-layoutInfo>(){}[0]
+
+    final var endMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.endMonth|{}endMonth[0]
+        final fun <get-endMonth>(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.endMonth.<get-endMonth>|<get-endMonth>(){}[0]
+        final fun <set-endMonth>(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.endMonth.<set-endMonth>|<set-endMonth>(com.kizitonwose.calendar.core.YearMonth){}[0]
+    final var firstDayOfWeek // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.firstDayOfWeek|{}firstDayOfWeek[0]
+        final fun <get-firstDayOfWeek>(): kotlinx.datetime/DayOfWeek // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.firstDayOfWeek.<get-firstDayOfWeek>|<get-firstDayOfWeek>(){}[0]
+        final fun <set-firstDayOfWeek>(kotlinx.datetime/DayOfWeek) // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.firstDayOfWeek.<set-firstDayOfWeek>|<set-firstDayOfWeek>(kotlinx.datetime.DayOfWeek){}[0]
+    final var startMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.startMonth|{}startMonth[0]
+        final fun <get-startMonth>(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.startMonth.<get-startMonth>|<get-startMonth>(){}[0]
+        final fun <set-startMonth>(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.startMonth.<set-startMonth>|<set-startMonth>(com.kizitonwose.calendar.core.YearMonth){}[0]
+
+    final fun dispatchRawDelta(kotlin/Float): kotlin/Float // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.dispatchRawDelta|dispatchRawDelta(kotlin.Float){}[0]
+    final suspend fun animateScrollToMonth(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.animateScrollToMonth|animateScrollToMonth(com.kizitonwose.calendar.core.YearMonth){}[0]
+    final suspend fun scroll(androidx.compose.foundation/MutatePriority, kotlin.coroutines/SuspendFunction1<androidx.compose.foundation.gestures/ScrollScope, kotlin/Unit>) // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.scroll|scroll(androidx.compose.foundation.MutatePriority;kotlin.coroutines.SuspendFunction1<androidx.compose.foundation.gestures.ScrollScope,kotlin.Unit>){}[0]
+    final suspend fun scrollToMonth(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.scrollToMonth|scrollToMonth(com.kizitonwose.calendar.core.YearMonth){}[0]
+
+    final object Companion // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState.Companion|null[0]
+}
+
+final class com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek { // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek|null[0]
+    constructor <init>(kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay>) // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.<init>|<init>(kotlin.collections.List<com.kizitonwose.calendar.core.CalendarDay>){}[0]
+
+    final val days // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.days|{}days[0]
+        final fun <get-days>(): kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay> // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.days.<get-days>|<get-days>(){}[0]
+
+    final fun component1(): kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay> // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.component1|component1(){}[0]
+    final fun copy(kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay> = ...): com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.copy|copy(kotlin.collections.List<com.kizitonwose.calendar.core.CalendarDay>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek.toString|toString(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo : androidx.compose.foundation.lazy/LazyListItemInfo { // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo|null[0]
+    constructor <init>(androidx.compose.foundation.lazy/LazyListItemInfo, com.kizitonwose.calendar.core/Week) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.<init>|<init>(androidx.compose.foundation.lazy.LazyListItemInfo;com.kizitonwose.calendar.core.Week){}[0]
+
+    final val contentType // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.contentType|{}contentType[0]
+        final fun <get-contentType>(): kotlin/Any? // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.contentType.<get-contentType>|<get-contentType>(){}[0]
+    final val index // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.index|{}index[0]
+        final fun <get-index>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.index.<get-index>|<get-index>(){}[0]
+    final val key // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.key|{}key[0]
+        final fun <get-key>(): kotlin/Any // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.key.<get-key>|<get-key>(){}[0]
+    final val offset // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.offset|{}offset[0]
+        final fun <get-offset>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.offset.<get-offset>|<get-offset>(){}[0]
+    final val size // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.size|{}size[0]
+        final fun <get-size>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.size.<get-size>|<get-size>(){}[0]
+    final val week // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.week|{}week[0]
+        final fun <get-week>(): com.kizitonwose.calendar.core/Week // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo.week.<get-week>|<get-week>(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo : androidx.compose.foundation.lazy/LazyListLayoutInfo { // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo|null[0]
+    constructor <init>(androidx.compose.foundation.lazy/LazyListLayoutInfo, kotlin/Function1<kotlin/Int, com.kizitonwose.calendar.core/Week>) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.<init>|<init>(androidx.compose.foundation.lazy.LazyListLayoutInfo;kotlin.Function1<kotlin.Int,com.kizitonwose.calendar.core.Week>){}[0]
+
+    final val afterContentPadding // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.afterContentPadding|{}afterContentPadding[0]
+        final fun <get-afterContentPadding>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.afterContentPadding.<get-afterContentPadding>|<get-afterContentPadding>(){}[0]
+    final val beforeContentPadding // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.beforeContentPadding|{}beforeContentPadding[0]
+        final fun <get-beforeContentPadding>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.beforeContentPadding.<get-beforeContentPadding>|<get-beforeContentPadding>(){}[0]
+    final val mainAxisItemSpacing // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.mainAxisItemSpacing|{}mainAxisItemSpacing[0]
+        final fun <get-mainAxisItemSpacing>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.mainAxisItemSpacing.<get-mainAxisItemSpacing>|<get-mainAxisItemSpacing>(){}[0]
+    final val orientation // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.orientation|{}orientation[0]
+        final fun <get-orientation>(): androidx.compose.foundation.gestures/Orientation // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.orientation.<get-orientation>|<get-orientation>(){}[0]
+    final val reverseLayout // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.reverseLayout|{}reverseLayout[0]
+        final fun <get-reverseLayout>(): kotlin/Boolean // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.reverseLayout.<get-reverseLayout>|<get-reverseLayout>(){}[0]
+    final val totalItemsCount // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.totalItemsCount|{}totalItemsCount[0]
+        final fun <get-totalItemsCount>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.totalItemsCount.<get-totalItemsCount>|<get-totalItemsCount>(){}[0]
+    final val viewportEndOffset // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.viewportEndOffset|{}viewportEndOffset[0]
+        final fun <get-viewportEndOffset>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.viewportEndOffset.<get-viewportEndOffset>|<get-viewportEndOffset>(){}[0]
+    final val viewportSize // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.viewportSize|{}viewportSize[0]
+        final fun <get-viewportSize>(): androidx.compose.ui.unit/IntSize // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.viewportSize.<get-viewportSize>|<get-viewportSize>(){}[0]
+    final val viewportStartOffset // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.viewportStartOffset|{}viewportStartOffset[0]
+        final fun <get-viewportStartOffset>(): kotlin/Int // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.viewportStartOffset.<get-viewportStartOffset>|<get-viewportStartOffset>(){}[0]
+    final val visibleItemsInfo // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.visibleItemsInfo|{}visibleItemsInfo[0]
+        final fun <get-visibleItemsInfo>(): kotlin.collections/List<androidx.compose.foundation.lazy/LazyListItemInfo> // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.visibleItemsInfo.<get-visibleItemsInfo>|<get-visibleItemsInfo>(){}[0]
+    final val visibleWeeksInfo // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.visibleWeeksInfo|{}visibleWeeksInfo[0]
+        final fun <get-visibleWeeksInfo>(): kotlin.collections/List<com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarItemInfo> // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo.visibleWeeksInfo.<get-visibleWeeksInfo>|<get-visibleWeeksInfo>(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState : androidx.compose.foundation.gestures/ScrollableState { // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState|null[0]
+    final val firstVisibleWeek // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.firstVisibleWeek|{}firstVisibleWeek[0]
+        final fun <get-firstVisibleWeek>(): com.kizitonwose.calendar.core/Week // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.firstVisibleWeek.<get-firstVisibleWeek>|<get-firstVisibleWeek>(){}[0]
+    final val interactionSource // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.interactionSource|{}interactionSource[0]
+        final fun <get-interactionSource>(): androidx.compose.foundation.interaction/InteractionSource // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.interactionSource.<get-interactionSource>|<get-interactionSource>(){}[0]
+    final val isScrollInProgress // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.isScrollInProgress|{}isScrollInProgress[0]
+        final fun <get-isScrollInProgress>(): kotlin/Boolean // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.isScrollInProgress.<get-isScrollInProgress>|<get-isScrollInProgress>(){}[0]
+    final val lastVisibleWeek // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.lastVisibleWeek|{}lastVisibleWeek[0]
+        final fun <get-lastVisibleWeek>(): com.kizitonwose.calendar.core/Week // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.lastVisibleWeek.<get-lastVisibleWeek>|<get-lastVisibleWeek>(){}[0]
+    final val layoutInfo // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.layoutInfo|{}layoutInfo[0]
+        final fun <get-layoutInfo>(): com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarLayoutInfo // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.layoutInfo.<get-layoutInfo>|<get-layoutInfo>(){}[0]
+
+    final var endDate // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.endDate|{}endDate[0]
+        final fun <get-endDate>(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.endDate.<get-endDate>|<get-endDate>(){}[0]
+        final fun <set-endDate>(kotlinx.datetime/LocalDate) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.endDate.<set-endDate>|<set-endDate>(kotlinx.datetime.LocalDate){}[0]
+    final var firstDayOfWeek // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.firstDayOfWeek|{}firstDayOfWeek[0]
+        final fun <get-firstDayOfWeek>(): kotlinx.datetime/DayOfWeek // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.firstDayOfWeek.<get-firstDayOfWeek>|<get-firstDayOfWeek>(){}[0]
+        final fun <set-firstDayOfWeek>(kotlinx.datetime/DayOfWeek) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.firstDayOfWeek.<set-firstDayOfWeek>|<set-firstDayOfWeek>(kotlinx.datetime.DayOfWeek){}[0]
+    final var startDate // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.startDate|{}startDate[0]
+        final fun <get-startDate>(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.startDate.<get-startDate>|<get-startDate>(){}[0]
+        final fun <set-startDate>(kotlinx.datetime/LocalDate) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.startDate.<set-startDate>|<set-startDate>(kotlinx.datetime.LocalDate){}[0]
+
+    final fun dispatchRawDelta(kotlin/Float): kotlin/Float // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.dispatchRawDelta|dispatchRawDelta(kotlin.Float){}[0]
+    final suspend fun animateScrollToWeek(kotlinx.datetime/LocalDate) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.animateScrollToWeek|animateScrollToWeek(kotlinx.datetime.LocalDate){}[0]
+    final suspend fun scroll(androidx.compose.foundation/MutatePriority, kotlin.coroutines/SuspendFunction1<androidx.compose.foundation.gestures/ScrollScope, kotlin/Unit>) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.scroll|scroll(androidx.compose.foundation.MutatePriority;kotlin.coroutines.SuspendFunction1<androidx.compose.foundation.gestures.ScrollScope,kotlin.Unit>){}[0]
+    final suspend fun scrollToWeek(kotlinx.datetime/LocalDate) // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.scrollToWeek|scrollToWeek(kotlinx.datetime.LocalDate){}[0]
+
+    final object Companion // com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState.Companion|null[0]
+}
+
+final class com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo : androidx.compose.foundation.lazy/LazyListItemInfo { // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo|null[0]
+    constructor <init>(androidx.compose.foundation.lazy/LazyListItemInfo, com.kizitonwose.calendar.core/CalendarYear) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.<init>|<init>(androidx.compose.foundation.lazy.LazyListItemInfo;com.kizitonwose.calendar.core.CalendarYear){}[0]
+
+    final val contentType // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.contentType|{}contentType[0]
+        final fun <get-contentType>(): kotlin/Any? // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.contentType.<get-contentType>|<get-contentType>(){}[0]
+    final val index // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.index|{}index[0]
+        final fun <get-index>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.index.<get-index>|<get-index>(){}[0]
+    final val key // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.key|{}key[0]
+        final fun <get-key>(): kotlin/Any // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.key.<get-key>|<get-key>(){}[0]
+    final val offset // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.offset|{}offset[0]
+        final fun <get-offset>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.offset.<get-offset>|<get-offset>(){}[0]
+    final val size // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.size|{}size[0]
+        final fun <get-size>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.size.<get-size>|<get-size>(){}[0]
+    final val year // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.year|{}year[0]
+        final fun <get-year>(): com.kizitonwose.calendar.core/CalendarYear // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo.year.<get-year>|<get-year>(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo : androidx.compose.foundation.lazy/LazyListLayoutInfo { // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo|null[0]
+    constructor <init>(androidx.compose.foundation.lazy/LazyListLayoutInfo, kotlin/Function1<kotlin/Int, com.kizitonwose.calendar.core/CalendarYear>) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.<init>|<init>(androidx.compose.foundation.lazy.LazyListLayoutInfo;kotlin.Function1<kotlin.Int,com.kizitonwose.calendar.core.CalendarYear>){}[0]
+
+    final val afterContentPadding // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.afterContentPadding|{}afterContentPadding[0]
+        final fun <get-afterContentPadding>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.afterContentPadding.<get-afterContentPadding>|<get-afterContentPadding>(){}[0]
+    final val beforeContentPadding // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.beforeContentPadding|{}beforeContentPadding[0]
+        final fun <get-beforeContentPadding>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.beforeContentPadding.<get-beforeContentPadding>|<get-beforeContentPadding>(){}[0]
+    final val mainAxisItemSpacing // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.mainAxisItemSpacing|{}mainAxisItemSpacing[0]
+        final fun <get-mainAxisItemSpacing>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.mainAxisItemSpacing.<get-mainAxisItemSpacing>|<get-mainAxisItemSpacing>(){}[0]
+    final val orientation // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.orientation|{}orientation[0]
+        final fun <get-orientation>(): androidx.compose.foundation.gestures/Orientation // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.orientation.<get-orientation>|<get-orientation>(){}[0]
+    final val reverseLayout // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.reverseLayout|{}reverseLayout[0]
+        final fun <get-reverseLayout>(): kotlin/Boolean // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.reverseLayout.<get-reverseLayout>|<get-reverseLayout>(){}[0]
+    final val totalItemsCount // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.totalItemsCount|{}totalItemsCount[0]
+        final fun <get-totalItemsCount>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.totalItemsCount.<get-totalItemsCount>|<get-totalItemsCount>(){}[0]
+    final val viewportEndOffset // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.viewportEndOffset|{}viewportEndOffset[0]
+        final fun <get-viewportEndOffset>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.viewportEndOffset.<get-viewportEndOffset>|<get-viewportEndOffset>(){}[0]
+    final val viewportSize // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.viewportSize|{}viewportSize[0]
+        final fun <get-viewportSize>(): androidx.compose.ui.unit/IntSize // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.viewportSize.<get-viewportSize>|<get-viewportSize>(){}[0]
+    final val viewportStartOffset // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.viewportStartOffset|{}viewportStartOffset[0]
+        final fun <get-viewportStartOffset>(): kotlin/Int // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.viewportStartOffset.<get-viewportStartOffset>|<get-viewportStartOffset>(){}[0]
+    final val visibleItemsInfo // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.visibleItemsInfo|{}visibleItemsInfo[0]
+        final fun <get-visibleItemsInfo>(): kotlin.collections/List<androidx.compose.foundation.lazy/LazyListItemInfo> // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.visibleItemsInfo.<get-visibleItemsInfo>|<get-visibleItemsInfo>(){}[0]
+    final val visibleYearsInfo // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.visibleYearsInfo|{}visibleYearsInfo[0]
+        final fun <get-visibleYearsInfo>(): kotlin.collections/List<com.kizitonwose.calendar.compose.yearcalendar/YearCalendarItemInfo> // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo.visibleYearsInfo.<get-visibleYearsInfo>|<get-visibleYearsInfo>(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState : androidx.compose.foundation.gestures/ScrollableState { // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState|null[0]
+    final val firstVisibleYear // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.firstVisibleYear|{}firstVisibleYear[0]
+        final fun <get-firstVisibleYear>(): com.kizitonwose.calendar.core/CalendarYear // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.firstVisibleYear.<get-firstVisibleYear>|<get-firstVisibleYear>(){}[0]
+    final val interactionSource // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.interactionSource|{}interactionSource[0]
+        final fun <get-interactionSource>(): androidx.compose.foundation.interaction/InteractionSource // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.interactionSource.<get-interactionSource>|<get-interactionSource>(){}[0]
+    final val isScrollInProgress // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.isScrollInProgress|{}isScrollInProgress[0]
+        final fun <get-isScrollInProgress>(): kotlin/Boolean // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.isScrollInProgress.<get-isScrollInProgress>|<get-isScrollInProgress>(){}[0]
+    final val lastVisibleYear // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.lastVisibleYear|{}lastVisibleYear[0]
+        final fun <get-lastVisibleYear>(): com.kizitonwose.calendar.core/CalendarYear // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.lastVisibleYear.<get-lastVisibleYear>|<get-lastVisibleYear>(){}[0]
+    final val layoutInfo // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.layoutInfo|{}layoutInfo[0]
+        final fun <get-layoutInfo>(): com.kizitonwose.calendar.compose.yearcalendar/YearCalendarLayoutInfo // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.layoutInfo.<get-layoutInfo>|<get-layoutInfo>(){}[0]
+
+    final var endYear // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.endYear|{}endYear[0]
+        final fun <get-endYear>(): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.endYear.<get-endYear>|<get-endYear>(){}[0]
+        final fun <set-endYear>(com.kizitonwose.calendar.core/Year) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.endYear.<set-endYear>|<set-endYear>(com.kizitonwose.calendar.core.Year){}[0]
+    final var firstDayOfWeek // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.firstDayOfWeek|{}firstDayOfWeek[0]
+        final fun <get-firstDayOfWeek>(): kotlinx.datetime/DayOfWeek // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.firstDayOfWeek.<get-firstDayOfWeek>|<get-firstDayOfWeek>(){}[0]
+        final fun <set-firstDayOfWeek>(kotlinx.datetime/DayOfWeek) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.firstDayOfWeek.<set-firstDayOfWeek>|<set-firstDayOfWeek>(kotlinx.datetime.DayOfWeek){}[0]
+    final var outDateStyle // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.outDateStyle|{}outDateStyle[0]
+        final fun <get-outDateStyle>(): com.kizitonwose.calendar.core/OutDateStyle // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.outDateStyle.<get-outDateStyle>|<get-outDateStyle>(){}[0]
+        final fun <set-outDateStyle>(com.kizitonwose.calendar.core/OutDateStyle) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.outDateStyle.<set-outDateStyle>|<set-outDateStyle>(com.kizitonwose.calendar.core.OutDateStyle){}[0]
+    final var startYear // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.startYear|{}startYear[0]
+        final fun <get-startYear>(): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.startYear.<get-startYear>|<get-startYear>(){}[0]
+        final fun <set-startYear>(com.kizitonwose.calendar.core/Year) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.startYear.<set-startYear>|<set-startYear>(com.kizitonwose.calendar.core.Year){}[0]
+
+    final fun dispatchRawDelta(kotlin/Float): kotlin/Float // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.dispatchRawDelta|dispatchRawDelta(kotlin.Float){}[0]
+    final suspend fun animateScrollToYear(com.kizitonwose.calendar.core/Year) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.animateScrollToYear|animateScrollToYear(com.kizitonwose.calendar.core.Year){}[0]
+    final suspend fun scroll(androidx.compose.foundation/MutatePriority, kotlin.coroutines/SuspendFunction1<androidx.compose.foundation.gestures/ScrollScope, kotlin/Unit>) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.scroll|scroll(androidx.compose.foundation.MutatePriority;kotlin.coroutines.SuspendFunction1<androidx.compose.foundation.gestures.ScrollScope,kotlin.Unit>){}[0]
+    final suspend fun scrollToYear(com.kizitonwose.calendar.core/Year) // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.scrollToYear|scrollToYear(com.kizitonwose.calendar.core.Year){}[0]
+
+    final object Companion // com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState.Companion|null[0]
+}
+
+final class com.kizitonwose.calendar.compose/CalendarItemInfo : androidx.compose.foundation.lazy/LazyListItemInfo { // com.kizitonwose.calendar.compose/CalendarItemInfo|null[0]
+    constructor <init>(androidx.compose.foundation.lazy/LazyListItemInfo, com.kizitonwose.calendar.core/CalendarMonth) // com.kizitonwose.calendar.compose/CalendarItemInfo.<init>|<init>(androidx.compose.foundation.lazy.LazyListItemInfo;com.kizitonwose.calendar.core.CalendarMonth){}[0]
+
+    final val contentType // com.kizitonwose.calendar.compose/CalendarItemInfo.contentType|{}contentType[0]
+        final fun <get-contentType>(): kotlin/Any? // com.kizitonwose.calendar.compose/CalendarItemInfo.contentType.<get-contentType>|<get-contentType>(){}[0]
+    final val index // com.kizitonwose.calendar.compose/CalendarItemInfo.index|{}index[0]
+        final fun <get-index>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarItemInfo.index.<get-index>|<get-index>(){}[0]
+    final val key // com.kizitonwose.calendar.compose/CalendarItemInfo.key|{}key[0]
+        final fun <get-key>(): kotlin/Any // com.kizitonwose.calendar.compose/CalendarItemInfo.key.<get-key>|<get-key>(){}[0]
+    final val month // com.kizitonwose.calendar.compose/CalendarItemInfo.month|{}month[0]
+        final fun <get-month>(): com.kizitonwose.calendar.core/CalendarMonth // com.kizitonwose.calendar.compose/CalendarItemInfo.month.<get-month>|<get-month>(){}[0]
+    final val offset // com.kizitonwose.calendar.compose/CalendarItemInfo.offset|{}offset[0]
+        final fun <get-offset>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarItemInfo.offset.<get-offset>|<get-offset>(){}[0]
+    final val size // com.kizitonwose.calendar.compose/CalendarItemInfo.size|{}size[0]
+        final fun <get-size>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarItemInfo.size.<get-size>|<get-size>(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose/CalendarLayoutInfo : androidx.compose.foundation.lazy/LazyListLayoutInfo { // com.kizitonwose.calendar.compose/CalendarLayoutInfo|null[0]
+    constructor <init>(androidx.compose.foundation.lazy/LazyListLayoutInfo, kotlin/Function1<kotlin/Int, com.kizitonwose.calendar.core/CalendarMonth>) // com.kizitonwose.calendar.compose/CalendarLayoutInfo.<init>|<init>(androidx.compose.foundation.lazy.LazyListLayoutInfo;kotlin.Function1<kotlin.Int,com.kizitonwose.calendar.core.CalendarMonth>){}[0]
+
+    final val afterContentPadding // com.kizitonwose.calendar.compose/CalendarLayoutInfo.afterContentPadding|{}afterContentPadding[0]
+        final fun <get-afterContentPadding>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarLayoutInfo.afterContentPadding.<get-afterContentPadding>|<get-afterContentPadding>(){}[0]
+    final val beforeContentPadding // com.kizitonwose.calendar.compose/CalendarLayoutInfo.beforeContentPadding|{}beforeContentPadding[0]
+        final fun <get-beforeContentPadding>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarLayoutInfo.beforeContentPadding.<get-beforeContentPadding>|<get-beforeContentPadding>(){}[0]
+    final val mainAxisItemSpacing // com.kizitonwose.calendar.compose/CalendarLayoutInfo.mainAxisItemSpacing|{}mainAxisItemSpacing[0]
+        final fun <get-mainAxisItemSpacing>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarLayoutInfo.mainAxisItemSpacing.<get-mainAxisItemSpacing>|<get-mainAxisItemSpacing>(){}[0]
+    final val orientation // com.kizitonwose.calendar.compose/CalendarLayoutInfo.orientation|{}orientation[0]
+        final fun <get-orientation>(): androidx.compose.foundation.gestures/Orientation // com.kizitonwose.calendar.compose/CalendarLayoutInfo.orientation.<get-orientation>|<get-orientation>(){}[0]
+    final val reverseLayout // com.kizitonwose.calendar.compose/CalendarLayoutInfo.reverseLayout|{}reverseLayout[0]
+        final fun <get-reverseLayout>(): kotlin/Boolean // com.kizitonwose.calendar.compose/CalendarLayoutInfo.reverseLayout.<get-reverseLayout>|<get-reverseLayout>(){}[0]
+    final val totalItemsCount // com.kizitonwose.calendar.compose/CalendarLayoutInfo.totalItemsCount|{}totalItemsCount[0]
+        final fun <get-totalItemsCount>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarLayoutInfo.totalItemsCount.<get-totalItemsCount>|<get-totalItemsCount>(){}[0]
+    final val viewportEndOffset // com.kizitonwose.calendar.compose/CalendarLayoutInfo.viewportEndOffset|{}viewportEndOffset[0]
+        final fun <get-viewportEndOffset>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarLayoutInfo.viewportEndOffset.<get-viewportEndOffset>|<get-viewportEndOffset>(){}[0]
+    final val viewportSize // com.kizitonwose.calendar.compose/CalendarLayoutInfo.viewportSize|{}viewportSize[0]
+        final fun <get-viewportSize>(): androidx.compose.ui.unit/IntSize // com.kizitonwose.calendar.compose/CalendarLayoutInfo.viewportSize.<get-viewportSize>|<get-viewportSize>(){}[0]
+    final val viewportStartOffset // com.kizitonwose.calendar.compose/CalendarLayoutInfo.viewportStartOffset|{}viewportStartOffset[0]
+        final fun <get-viewportStartOffset>(): kotlin/Int // com.kizitonwose.calendar.compose/CalendarLayoutInfo.viewportStartOffset.<get-viewportStartOffset>|<get-viewportStartOffset>(){}[0]
+    final val visibleItemsInfo // com.kizitonwose.calendar.compose/CalendarLayoutInfo.visibleItemsInfo|{}visibleItemsInfo[0]
+        final fun <get-visibleItemsInfo>(): kotlin.collections/List<androidx.compose.foundation.lazy/LazyListItemInfo> // com.kizitonwose.calendar.compose/CalendarLayoutInfo.visibleItemsInfo.<get-visibleItemsInfo>|<get-visibleItemsInfo>(){}[0]
+    final val visibleMonthsInfo // com.kizitonwose.calendar.compose/CalendarLayoutInfo.visibleMonthsInfo|{}visibleMonthsInfo[0]
+        final fun <get-visibleMonthsInfo>(): kotlin.collections/List<com.kizitonwose.calendar.compose/CalendarItemInfo> // com.kizitonwose.calendar.compose/CalendarLayoutInfo.visibleMonthsInfo.<get-visibleMonthsInfo>|<get-visibleMonthsInfo>(){}[0]
+}
+
+final class com.kizitonwose.calendar.compose/CalendarState : androidx.compose.foundation.gestures/ScrollableState { // com.kizitonwose.calendar.compose/CalendarState|null[0]
+    final val firstVisibleMonth // com.kizitonwose.calendar.compose/CalendarState.firstVisibleMonth|{}firstVisibleMonth[0]
+        final fun <get-firstVisibleMonth>(): com.kizitonwose.calendar.core/CalendarMonth // com.kizitonwose.calendar.compose/CalendarState.firstVisibleMonth.<get-firstVisibleMonth>|<get-firstVisibleMonth>(){}[0]
+    final val interactionSource // com.kizitonwose.calendar.compose/CalendarState.interactionSource|{}interactionSource[0]
+        final fun <get-interactionSource>(): androidx.compose.foundation.interaction/InteractionSource // com.kizitonwose.calendar.compose/CalendarState.interactionSource.<get-interactionSource>|<get-interactionSource>(){}[0]
+    final val isScrollInProgress // com.kizitonwose.calendar.compose/CalendarState.isScrollInProgress|{}isScrollInProgress[0]
+        final fun <get-isScrollInProgress>(): kotlin/Boolean // com.kizitonwose.calendar.compose/CalendarState.isScrollInProgress.<get-isScrollInProgress>|<get-isScrollInProgress>(){}[0]
+    final val lastVisibleMonth // com.kizitonwose.calendar.compose/CalendarState.lastVisibleMonth|{}lastVisibleMonth[0]
+        final fun <get-lastVisibleMonth>(): com.kizitonwose.calendar.core/CalendarMonth // com.kizitonwose.calendar.compose/CalendarState.lastVisibleMonth.<get-lastVisibleMonth>|<get-lastVisibleMonth>(){}[0]
+    final val layoutInfo // com.kizitonwose.calendar.compose/CalendarState.layoutInfo|{}layoutInfo[0]
+        final fun <get-layoutInfo>(): com.kizitonwose.calendar.compose/CalendarLayoutInfo // com.kizitonwose.calendar.compose/CalendarState.layoutInfo.<get-layoutInfo>|<get-layoutInfo>(){}[0]
+
+    final var endMonth // com.kizitonwose.calendar.compose/CalendarState.endMonth|{}endMonth[0]
+        final fun <get-endMonth>(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.compose/CalendarState.endMonth.<get-endMonth>|<get-endMonth>(){}[0]
+        final fun <set-endMonth>(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose/CalendarState.endMonth.<set-endMonth>|<set-endMonth>(com.kizitonwose.calendar.core.YearMonth){}[0]
+    final var firstDayOfWeek // com.kizitonwose.calendar.compose/CalendarState.firstDayOfWeek|{}firstDayOfWeek[0]
+        final fun <get-firstDayOfWeek>(): kotlinx.datetime/DayOfWeek // com.kizitonwose.calendar.compose/CalendarState.firstDayOfWeek.<get-firstDayOfWeek>|<get-firstDayOfWeek>(){}[0]
+        final fun <set-firstDayOfWeek>(kotlinx.datetime/DayOfWeek) // com.kizitonwose.calendar.compose/CalendarState.firstDayOfWeek.<set-firstDayOfWeek>|<set-firstDayOfWeek>(kotlinx.datetime.DayOfWeek){}[0]
+    final var outDateStyle // com.kizitonwose.calendar.compose/CalendarState.outDateStyle|{}outDateStyle[0]
+        final fun <get-outDateStyle>(): com.kizitonwose.calendar.core/OutDateStyle // com.kizitonwose.calendar.compose/CalendarState.outDateStyle.<get-outDateStyle>|<get-outDateStyle>(){}[0]
+        final fun <set-outDateStyle>(com.kizitonwose.calendar.core/OutDateStyle) // com.kizitonwose.calendar.compose/CalendarState.outDateStyle.<set-outDateStyle>|<set-outDateStyle>(com.kizitonwose.calendar.core.OutDateStyle){}[0]
+    final var startMonth // com.kizitonwose.calendar.compose/CalendarState.startMonth|{}startMonth[0]
+        final fun <get-startMonth>(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.compose/CalendarState.startMonth.<get-startMonth>|<get-startMonth>(){}[0]
+        final fun <set-startMonth>(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose/CalendarState.startMonth.<set-startMonth>|<set-startMonth>(com.kizitonwose.calendar.core.YearMonth){}[0]
+
+    final fun dispatchRawDelta(kotlin/Float): kotlin/Float // com.kizitonwose.calendar.compose/CalendarState.dispatchRawDelta|dispatchRawDelta(kotlin.Float){}[0]
+    final suspend fun animateScrollToMonth(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose/CalendarState.animateScrollToMonth|animateScrollToMonth(com.kizitonwose.calendar.core.YearMonth){}[0]
+    final suspend fun scroll(androidx.compose.foundation/MutatePriority, kotlin.coroutines/SuspendFunction1<androidx.compose.foundation.gestures/ScrollScope, kotlin/Unit>) // com.kizitonwose.calendar.compose/CalendarState.scroll|scroll(androidx.compose.foundation.MutatePriority;kotlin.coroutines.SuspendFunction1<androidx.compose.foundation.gestures.ScrollScope,kotlin.Unit>){}[0]
+    final suspend fun scrollToMonth(com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.compose/CalendarState.scrollToMonth|scrollToMonth(com.kizitonwose.calendar.core.YearMonth){}[0]
+
+    final object Companion // com.kizitonwose.calendar.compose/CalendarState.Companion|null[0]
+}
+
+final class com.kizitonwose.calendar.core/CalendarDay { // com.kizitonwose.calendar.core/CalendarDay|null[0]
+    constructor <init>(kotlinx.datetime/LocalDate, com.kizitonwose.calendar.core/DayPosition) // com.kizitonwose.calendar.core/CalendarDay.<init>|<init>(kotlinx.datetime.LocalDate;com.kizitonwose.calendar.core.DayPosition){}[0]
+
+    final val date // com.kizitonwose.calendar.core/CalendarDay.date|{}date[0]
+        final fun <get-date>(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/CalendarDay.date.<get-date>|<get-date>(){}[0]
+    final val position // com.kizitonwose.calendar.core/CalendarDay.position|{}position[0]
+        final fun <get-position>(): com.kizitonwose.calendar.core/DayPosition // com.kizitonwose.calendar.core/CalendarDay.position.<get-position>|<get-position>(){}[0]
+
+    final fun component1(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/CalendarDay.component1|component1(){}[0]
+    final fun component2(): com.kizitonwose.calendar.core/DayPosition // com.kizitonwose.calendar.core/CalendarDay.component2|component2(){}[0]
+    final fun copy(kotlinx.datetime/LocalDate = ..., com.kizitonwose.calendar.core/DayPosition = ...): com.kizitonwose.calendar.core/CalendarDay // com.kizitonwose.calendar.core/CalendarDay.copy|copy(kotlinx.datetime.LocalDate;com.kizitonwose.calendar.core.DayPosition){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/CalendarDay.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/CalendarDay.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.core/CalendarDay.toString|toString(){}[0]
+}
+
+final class com.kizitonwose.calendar.core/CalendarMonth { // com.kizitonwose.calendar.core/CalendarMonth|null[0]
+    final val weekDays // com.kizitonwose.calendar.core/CalendarMonth.weekDays|{}weekDays[0]
+        final fun <get-weekDays>(): kotlin.collections/List<kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay>> // com.kizitonwose.calendar.core/CalendarMonth.weekDays.<get-weekDays>|<get-weekDays>(){}[0]
+    final val yearMonth // com.kizitonwose.calendar.core/CalendarMonth.yearMonth|{}yearMonth[0]
+        final fun <get-yearMonth>(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/CalendarMonth.yearMonth.<get-yearMonth>|<get-yearMonth>(){}[0]
+
+    final fun component1(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/CalendarMonth.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay>> // com.kizitonwose.calendar.core/CalendarMonth.component2|component2(){}[0]
+    final fun copy(com.kizitonwose.calendar.core/YearMonth = ..., kotlin.collections/List<kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay>> = ...): com.kizitonwose.calendar.core/CalendarMonth // com.kizitonwose.calendar.core/CalendarMonth.copy|copy(com.kizitonwose.calendar.core.YearMonth;kotlin.collections.List<kotlin.collections.List<com.kizitonwose.calendar.core.CalendarDay>>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/CalendarMonth.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/CalendarMonth.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.core/CalendarMonth.toString|toString(){}[0]
+}
+
+final class com.kizitonwose.calendar.core/CalendarYear { // com.kizitonwose.calendar.core/CalendarYear|null[0]
+    constructor <init>(com.kizitonwose.calendar.core/Year, kotlin.collections/List<com.kizitonwose.calendar.core/CalendarMonth>) // com.kizitonwose.calendar.core/CalendarYear.<init>|<init>(com.kizitonwose.calendar.core.Year;kotlin.collections.List<com.kizitonwose.calendar.core.CalendarMonth>){}[0]
+
+    final val months // com.kizitonwose.calendar.core/CalendarYear.months|{}months[0]
+        final fun <get-months>(): kotlin.collections/List<com.kizitonwose.calendar.core/CalendarMonth> // com.kizitonwose.calendar.core/CalendarYear.months.<get-months>|<get-months>(){}[0]
+    final val year // com.kizitonwose.calendar.core/CalendarYear.year|{}year[0]
+        final fun <get-year>(): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/CalendarYear.year.<get-year>|<get-year>(){}[0]
+
+    final fun component1(): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/CalendarYear.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<com.kizitonwose.calendar.core/CalendarMonth> // com.kizitonwose.calendar.core/CalendarYear.component2|component2(){}[0]
+    final fun copy(com.kizitonwose.calendar.core/Year = ..., kotlin.collections/List<com.kizitonwose.calendar.core/CalendarMonth> = ...): com.kizitonwose.calendar.core/CalendarYear // com.kizitonwose.calendar.core/CalendarYear.copy|copy(com.kizitonwose.calendar.core.Year;kotlin.collections.List<com.kizitonwose.calendar.core.CalendarMonth>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/CalendarYear.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/CalendarYear.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.core/CalendarYear.toString|toString(){}[0]
+}
+
+final class com.kizitonwose.calendar.core/Week { // com.kizitonwose.calendar.core/Week|null[0]
+    final val days // com.kizitonwose.calendar.core/Week.days|{}days[0]
+        final fun <get-days>(): kotlin.collections/List<com.kizitonwose.calendar.core/WeekDay> // com.kizitonwose.calendar.core/Week.days.<get-days>|<get-days>(){}[0]
+
+    final fun component1(): kotlin.collections/List<com.kizitonwose.calendar.core/WeekDay> // com.kizitonwose.calendar.core/Week.component1|component1(){}[0]
+    final fun copy(kotlin.collections/List<com.kizitonwose.calendar.core/WeekDay> = ...): com.kizitonwose.calendar.core/Week // com.kizitonwose.calendar.core/Week.copy|copy(kotlin.collections.List<com.kizitonwose.calendar.core.WeekDay>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/Week.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/Week.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.core/Week.toString|toString(){}[0]
+}
+
+final class com.kizitonwose.calendar.core/WeekDay { // com.kizitonwose.calendar.core/WeekDay|null[0]
+    constructor <init>(kotlinx.datetime/LocalDate, com.kizitonwose.calendar.core/WeekDayPosition) // com.kizitonwose.calendar.core/WeekDay.<init>|<init>(kotlinx.datetime.LocalDate;com.kizitonwose.calendar.core.WeekDayPosition){}[0]
+
+    final val date // com.kizitonwose.calendar.core/WeekDay.date|{}date[0]
+        final fun <get-date>(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/WeekDay.date.<get-date>|<get-date>(){}[0]
+    final val position // com.kizitonwose.calendar.core/WeekDay.position|{}position[0]
+        final fun <get-position>(): com.kizitonwose.calendar.core/WeekDayPosition // com.kizitonwose.calendar.core/WeekDay.position.<get-position>|<get-position>(){}[0]
+
+    final fun component1(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/WeekDay.component1|component1(){}[0]
+    final fun component2(): com.kizitonwose.calendar.core/WeekDayPosition // com.kizitonwose.calendar.core/WeekDay.component2|component2(){}[0]
+    final fun copy(kotlinx.datetime/LocalDate = ..., com.kizitonwose.calendar.core/WeekDayPosition = ...): com.kizitonwose.calendar.core/WeekDay // com.kizitonwose.calendar.core/WeekDay.copy|copy(kotlinx.datetime.LocalDate;com.kizitonwose.calendar.core.WeekDayPosition){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/WeekDay.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/WeekDay.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.core/WeekDay.toString|toString(){}[0]
+}
+
+final class com.kizitonwose.calendar.core/Year : kotlin/Comparable<com.kizitonwose.calendar.core/Year> { // com.kizitonwose.calendar.core/Year|null[0]
+    constructor <init>(kotlin/Int) // com.kizitonwose.calendar.core/Year.<init>|<init>(kotlin.Int){}[0]
+
+    final val value // com.kizitonwose.calendar.core/Year.value|{}value[0]
+        final fun <get-value>(): kotlin/Int // com.kizitonwose.calendar.core/Year.value.<get-value>|<get-value>(){}[0]
+
+    final fun compareTo(com.kizitonwose.calendar.core/Year): kotlin/Int // com.kizitonwose.calendar.core/Year.compareTo|compareTo(com.kizitonwose.calendar.core.Year){}[0]
+    final fun component1(): kotlin/Int // com.kizitonwose.calendar.core/Year.component1|component1(){}[0]
+    final fun copy(kotlin/Int = ...): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/Year.copy|copy(kotlin.Int){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/Year.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/Year.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.core/Year.toString|toString(){}[0]
+
+    final object Companion { // com.kizitonwose.calendar.core/Year.Companion|null[0]
+        final fun isLeap(kotlin/Int): kotlin/Boolean // com.kizitonwose.calendar.core/Year.Companion.isLeap|isLeap(kotlin.Int){}[0]
+        final fun now(kotlinx.datetime/Clock = ..., kotlinx.datetime/TimeZone = ...): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/Year.Companion.now|now(kotlinx.datetime.Clock;kotlinx.datetime.TimeZone){}[0]
+        final fun parseIso8601(kotlin/String): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/Year.Companion.parseIso8601|parseIso8601(kotlin.String){}[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/Year> // com.kizitonwose.calendar.core/Year.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final class com.kizitonwose.calendar.core/YearMonth : kotlin/Comparable<com.kizitonwose.calendar.core/YearMonth> { // com.kizitonwose.calendar.core/YearMonth|null[0]
+    constructor <init>(kotlin/Int, kotlin/Int) // com.kizitonwose.calendar.core/YearMonth.<init>|<init>(kotlin.Int;kotlin.Int){}[0]
+    constructor <init>(kotlin/Int, kotlinx.datetime/Month) // com.kizitonwose.calendar.core/YearMonth.<init>|<init>(kotlin.Int;kotlinx.datetime.Month){}[0]
+
+    final val month // com.kizitonwose.calendar.core/YearMonth.month|{}month[0]
+        final fun <get-month>(): kotlinx.datetime/Month // com.kizitonwose.calendar.core/YearMonth.month.<get-month>|<get-month>(){}[0]
+    final val monthNumber // com.kizitonwose.calendar.core/YearMonth.monthNumber|{}monthNumber[0]
+        final fun <get-monthNumber>(): kotlin/Int // com.kizitonwose.calendar.core/YearMonth.monthNumber.<get-monthNumber>|<get-monthNumber>(){}[0]
+    final val year // com.kizitonwose.calendar.core/YearMonth.year|{}year[0]
+        final fun <get-year>(): kotlin/Int // com.kizitonwose.calendar.core/YearMonth.year.<get-year>|<get-year>(){}[0]
+
+    final fun compareTo(com.kizitonwose.calendar.core/YearMonth): kotlin/Int // com.kizitonwose.calendar.core/YearMonth.compareTo|compareTo(com.kizitonwose.calendar.core.YearMonth){}[0]
+    final fun component1(): kotlin/Int // com.kizitonwose.calendar.core/YearMonth.component1|component1(){}[0]
+    final fun component2(): kotlinx.datetime/Month // com.kizitonwose.calendar.core/YearMonth.component2|component2(){}[0]
+    final fun copy(kotlin/Int = ..., kotlinx.datetime/Month = ...): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/YearMonth.copy|copy(kotlin.Int;kotlinx.datetime.Month){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/YearMonth.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/YearMonth.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.kizitonwose.calendar.core/YearMonth.toString|toString(){}[0]
+
+    final object Companion { // com.kizitonwose.calendar.core/YearMonth.Companion|null[0]
+        final fun now(kotlinx.datetime/Clock = ..., kotlinx.datetime/TimeZone = ...): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/YearMonth.Companion.now|now(kotlinx.datetime.Clock;kotlinx.datetime.TimeZone){}[0]
+        final fun parseIso8601(kotlin/String): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/YearMonth.Companion.parseIso8601|parseIso8601(kotlin.String){}[0]
+        final fun serializer(): kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/YearMonth> // com.kizitonwose.calendar.core/YearMonth.Companion.serializer|serializer(){}[0]
+    }
+}
+
+final object com.kizitonwose.calendar.core.serializers/YearComponentSerializer : kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/Year> { // com.kizitonwose.calendar.core.serializers/YearComponentSerializer|null[0]
+    final val descriptor // com.kizitonwose.calendar.core.serializers/YearComponentSerializer.descriptor|{}descriptor[0]
+        final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // com.kizitonwose.calendar.core.serializers/YearComponentSerializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+    final fun deserialize(kotlinx.serialization.encoding/Decoder): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core.serializers/YearComponentSerializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+    final fun serialize(kotlinx.serialization.encoding/Encoder, com.kizitonwose.calendar.core/Year) // com.kizitonwose.calendar.core.serializers/YearComponentSerializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;com.kizitonwose.calendar.core.Year){}[0]
+}
+
+final object com.kizitonwose.calendar.core.serializers/YearIso8601Serializer : kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/Year> { // com.kizitonwose.calendar.core.serializers/YearIso8601Serializer|null[0]
+    final val descriptor // com.kizitonwose.calendar.core.serializers/YearIso8601Serializer.descriptor|{}descriptor[0]
+        final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // com.kizitonwose.calendar.core.serializers/YearIso8601Serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+    final fun deserialize(kotlinx.serialization.encoding/Decoder): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core.serializers/YearIso8601Serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+    final fun serialize(kotlinx.serialization.encoding/Encoder, com.kizitonwose.calendar.core/Year) // com.kizitonwose.calendar.core.serializers/YearIso8601Serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;com.kizitonwose.calendar.core.Year){}[0]
+}
+
+final object com.kizitonwose.calendar.core.serializers/YearMonthComponentSerializer : kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/YearMonth> { // com.kizitonwose.calendar.core.serializers/YearMonthComponentSerializer|null[0]
+    final val descriptor // com.kizitonwose.calendar.core.serializers/YearMonthComponentSerializer.descriptor|{}descriptor[0]
+        final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // com.kizitonwose.calendar.core.serializers/YearMonthComponentSerializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+    final fun deserialize(kotlinx.serialization.encoding/Decoder): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core.serializers/YearMonthComponentSerializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+    final fun serialize(kotlinx.serialization.encoding/Encoder, com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.core.serializers/YearMonthComponentSerializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;com.kizitonwose.calendar.core.YearMonth){}[0]
+}
+
+final object com.kizitonwose.calendar.core.serializers/YearMonthIso8601Serializer : kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/YearMonth> { // com.kizitonwose.calendar.core.serializers/YearMonthIso8601Serializer|null[0]
+    final val descriptor // com.kizitonwose.calendar.core.serializers/YearMonthIso8601Serializer.descriptor|{}descriptor[0]
+        final fun <get-descriptor>(): kotlinx.serialization.descriptors/SerialDescriptor // com.kizitonwose.calendar.core.serializers/YearMonthIso8601Serializer.descriptor.<get-descriptor>|<get-descriptor>(){}[0]
+
+    final fun deserialize(kotlinx.serialization.encoding/Decoder): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core.serializers/YearMonthIso8601Serializer.deserialize|deserialize(kotlinx.serialization.encoding.Decoder){}[0]
+    final fun serialize(kotlinx.serialization.encoding/Encoder, com.kizitonwose.calendar.core/YearMonth) // com.kizitonwose.calendar.core.serializers/YearMonthIso8601Serializer.serialize|serialize(kotlinx.serialization.encoding.Encoder;com.kizitonwose.calendar.core.YearMonth){}[0]
+}
+
+final val calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res$stableprop // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res$stableprop|#static{}calendar_compose_multiplatform_library_generated_resources_Res$stableprop[0]
+final val calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_array$stableprop // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_array$stableprop|#static{}calendar_compose_multiplatform_library_generated_resources_Res_array$stableprop[0]
+final val calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_drawable$stableprop // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_drawable$stableprop|#static{}calendar_compose_multiplatform_library_generated_resources_Res_drawable$stableprop[0]
+final val calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_font$stableprop // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_font$stableprop|#static{}calendar_compose_multiplatform_library_generated_resources_Res_font$stableprop[0]
+final val calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_plurals$stableprop // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_plurals$stableprop|#static{}calendar_compose_multiplatform_library_generated_resources_Res_plurals$stableprop[0]
+final val calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_string$stableprop // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_string$stableprop|#static{}calendar_compose_multiplatform_library_generated_resources_Res_string$stableprop[0]
+final val com.kizitonwose.calendar.compose.heatmapcalendar/com_kizitonwose_calendar_compose_heatmapcalendar_HeatMapCalendarState$stableprop // com.kizitonwose.calendar.compose.heatmapcalendar/com_kizitonwose_calendar_compose_heatmapcalendar_HeatMapCalendarState$stableprop|#static{}com_kizitonwose_calendar_compose_heatmapcalendar_HeatMapCalendarState$stableprop[0]
+final val com.kizitonwose.calendar.compose.heatmapcalendar/com_kizitonwose_calendar_compose_heatmapcalendar_HeatMapWeek$stableprop // com.kizitonwose.calendar.compose.heatmapcalendar/com_kizitonwose_calendar_compose_heatmapcalendar_HeatMapWeek$stableprop|#static{}com_kizitonwose_calendar_compose_heatmapcalendar_HeatMapWeek$stableprop[0]
+final val com.kizitonwose.calendar.compose.weekcalendar/com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarItemInfo$stableprop // com.kizitonwose.calendar.compose.weekcalendar/com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarItemInfo$stableprop|#static{}com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarItemInfo$stableprop[0]
+final val com.kizitonwose.calendar.compose.weekcalendar/com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarLayoutInfo$stableprop // com.kizitonwose.calendar.compose.weekcalendar/com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarLayoutInfo$stableprop|#static{}com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarLayoutInfo$stableprop[0]
+final val com.kizitonwose.calendar.compose.weekcalendar/com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarState$stableprop // com.kizitonwose.calendar.compose.weekcalendar/com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarState$stableprop|#static{}com_kizitonwose_calendar_compose_weekcalendar_WeekCalendarState$stableprop[0]
+final val com.kizitonwose.calendar.compose.yearcalendar/com_kizitonwose_calendar_compose_yearcalendar_YearCalendarItemInfo$stableprop // com.kizitonwose.calendar.compose.yearcalendar/com_kizitonwose_calendar_compose_yearcalendar_YearCalendarItemInfo$stableprop|#static{}com_kizitonwose_calendar_compose_yearcalendar_YearCalendarItemInfo$stableprop[0]
+final val com.kizitonwose.calendar.compose.yearcalendar/com_kizitonwose_calendar_compose_yearcalendar_YearCalendarLayoutInfo$stableprop // com.kizitonwose.calendar.compose.yearcalendar/com_kizitonwose_calendar_compose_yearcalendar_YearCalendarLayoutInfo$stableprop|#static{}com_kizitonwose_calendar_compose_yearcalendar_YearCalendarLayoutInfo$stableprop[0]
+final val com.kizitonwose.calendar.compose.yearcalendar/com_kizitonwose_calendar_compose_yearcalendar_YearCalendarState$stableprop // com.kizitonwose.calendar.compose.yearcalendar/com_kizitonwose_calendar_compose_yearcalendar_YearCalendarState$stableprop|#static{}com_kizitonwose_calendar_compose_yearcalendar_YearCalendarState$stableprop[0]
+final val com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarDefaults$stableprop // com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarDefaults$stableprop|#static{}com_kizitonwose_calendar_compose_CalendarDefaults$stableprop[0]
+final val com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarInfo$stableprop // com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarInfo$stableprop|#static{}com_kizitonwose_calendar_compose_CalendarInfo$stableprop[0]
+final val com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarItemInfo$stableprop // com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarItemInfo$stableprop|#static{}com_kizitonwose_calendar_compose_CalendarItemInfo$stableprop[0]
+final val com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarLayoutInfo$stableprop // com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarLayoutInfo$stableprop|#static{}com_kizitonwose_calendar_compose_CalendarLayoutInfo$stableprop[0]
+final val com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarState$stableprop // com.kizitonwose.calendar.compose/com_kizitonwose_calendar_compose_CalendarState$stableprop|#static{}com_kizitonwose_calendar_compose_CalendarState$stableprop[0]
+final val com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearComponentSerializer$stableprop // com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearComponentSerializer$stableprop|#static{}com_kizitonwose_calendar_core_serializers_YearComponentSerializer$stableprop[0]
+final val com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearIso8601Serializer$stableprop // com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearIso8601Serializer$stableprop|#static{}com_kizitonwose_calendar_core_serializers_YearIso8601Serializer$stableprop[0]
+final val com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearMonthComponentSerializer$stableprop // com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearMonthComponentSerializer$stableprop|#static{}com_kizitonwose_calendar_core_serializers_YearMonthComponentSerializer$stableprop[0]
+final val com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearMonthIso8601Serializer$stableprop // com.kizitonwose.calendar.core.serializers/com_kizitonwose_calendar_core_serializers_YearMonthIso8601Serializer$stableprop|#static{}com_kizitonwose_calendar_core_serializers_YearMonthIso8601Serializer$stableprop[0]
+final val com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_CalendarDay$stableprop // com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_CalendarDay$stableprop|#static{}com_kizitonwose_calendar_core_CalendarDay$stableprop[0]
+final val com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_CalendarMonth$stableprop // com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_CalendarMonth$stableprop|#static{}com_kizitonwose_calendar_core_CalendarMonth$stableprop[0]
+final val com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_CalendarYear$stableprop // com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_CalendarYear$stableprop|#static{}com_kizitonwose_calendar_core_CalendarYear$stableprop[0]
+final val com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_Week$stableprop // com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_Week$stableprop|#static{}com_kizitonwose_calendar_core_Week$stableprop[0]
+final val com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_WeekDay$stableprop // com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_WeekDay$stableprop|#static{}com_kizitonwose_calendar_core_WeekDay$stableprop[0]
+final val com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_Year$stableprop // com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_Year$stableprop|#static{}com_kizitonwose_calendar_core_Year$stableprop[0]
+final val com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_YearMonth$stableprop // com.kizitonwose.calendar.core/com_kizitonwose_calendar_core_YearMonth$stableprop|#static{}com_kizitonwose_calendar_core_YearMonth$stableprop[0]
+final val com.kizitonwose.calendar.core/yearMonth // com.kizitonwose.calendar.core/yearMonth|@kotlinx.datetime.LocalDate{}yearMonth[0]
+    final fun (kotlinx.datetime/LocalDate).<get-yearMonth>(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/yearMonth.<get-yearMonth>|<get-yearMonth>@kotlinx.datetime.LocalDate(){}[0]
+final val com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_DataStore$stableprop // com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_DataStore$stableprop|#static{}com_kizitonwose_calendar_data_DataStore$stableprop[0]
+final val com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_MonthData$stableprop // com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_MonthData$stableprop|#static{}com_kizitonwose_calendar_data_MonthData$stableprop[0]
+final val com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_VisibleItemState$stableprop // com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_VisibleItemState$stableprop|#static{}com_kizitonwose_calendar_data_VisibleItemState$stableprop[0]
+final val com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_WeekData$stableprop // com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_WeekData$stableprop|#static{}com_kizitonwose_calendar_data_WeekData$stableprop[0]
+final val com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_WeekDateRange$stableprop // com.kizitonwose.calendar.data/com_kizitonwose_calendar_data_WeekDateRange$stableprop|#static{}com_kizitonwose_calendar_data_WeekDateRange$stableprop[0]
+
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/atDay(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/atDay|atDay@com.kizitonwose.calendar.core.Year(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/atMonth(kotlin/Int): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/atMonth|atMonth@com.kizitonwose.calendar.core.Year(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/atMonth(kotlinx.datetime/Month): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/atMonth|atMonth@com.kizitonwose.calendar.core.Year(kotlinx.datetime.Month){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/atMonthDay(kotlin/Int, kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/atMonthDay|atMonthDay@com.kizitonwose.calendar.core.Year(kotlin.Int;kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/atMonthDay(kotlinx.datetime/Month, kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/atMonthDay|atMonthDay@com.kizitonwose.calendar.core.Year(kotlinx.datetime.Month;kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/isLeap(): kotlin/Boolean // com.kizitonwose.calendar.core/isLeap|isLeap@com.kizitonwose.calendar.core.Year(){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/length(): kotlin/Int // com.kizitonwose.calendar.core/length|length@com.kizitonwose.calendar.core.Year(){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/minusYears(kotlin/Int): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/minusYears|minusYears@com.kizitonwose.calendar.core.Year(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/plusYears(kotlin/Int): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/plusYears|plusYears@com.kizitonwose.calendar.core.Year(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/Year).com.kizitonwose.calendar.core/yearsUntil(com.kizitonwose.calendar.core/Year): kotlin/Int // com.kizitonwose.calendar.core/yearsUntil|yearsUntil@com.kizitonwose.calendar.core.Year(com.kizitonwose.calendar.core.Year){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/atDay(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/atDay|atDay@com.kizitonwose.calendar.core.YearMonth(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/atEndOfMonth(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/atEndOfMonth|atEndOfMonth@com.kizitonwose.calendar.core.YearMonth(){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/atStartOfMonth(): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/atStartOfMonth|atStartOfMonth@com.kizitonwose.calendar.core.YearMonth(){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/lengthOfMonth(): kotlin/Int // com.kizitonwose.calendar.core/lengthOfMonth|lengthOfMonth@com.kizitonwose.calendar.core.YearMonth(){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/minus(kotlin/Int, kotlinx.datetime/DateTimeUnit.MonthBased): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/minus|minus@com.kizitonwose.calendar.core.YearMonth(kotlin.Int;kotlinx.datetime.DateTimeUnit.MonthBased){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/minusMonths(kotlin/Int): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/minusMonths|minusMonths@com.kizitonwose.calendar.core.YearMonth(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/minusYears(kotlin/Int): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/minusYears|minusYears@com.kizitonwose.calendar.core.YearMonth(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/monthsUntil(com.kizitonwose.calendar.core/YearMonth): kotlin/Int // com.kizitonwose.calendar.core/monthsUntil|monthsUntil@com.kizitonwose.calendar.core.YearMonth(com.kizitonwose.calendar.core.YearMonth){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/plus(kotlin/Int, kotlinx.datetime/DateTimeUnit.MonthBased): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/plus|plus@com.kizitonwose.calendar.core.YearMonth(kotlin.Int;kotlinx.datetime.DateTimeUnit.MonthBased){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/plusMonths(kotlin/Int): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/plusMonths|plusMonths@com.kizitonwose.calendar.core.YearMonth(kotlin.Int){}[0]
+final fun (com.kizitonwose.calendar.core/YearMonth).com.kizitonwose.calendar.core/plusYears(kotlin/Int): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/plusYears|plusYears@com.kizitonwose.calendar.core.YearMonth(kotlin.Int){}[0]
+final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/minusDays(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/minusDays|minusDays@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
+final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/minusMonths(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/minusMonths|minusMonths@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
+final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/minusYears(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/minusYears|minusYears@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
+final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/plusDays(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/plusDays|plusDays@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
+final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/plusMonths(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/plusMonths|plusMonths@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
+final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/plusYears(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/plusYears|plusYears@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
+final fun (kotlinx.datetime/LocalDate.Companion).com.kizitonwose.calendar.core/now(kotlinx.datetime/Clock = ..., kotlinx.datetime/TimeZone = ...): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/now|now@kotlinx.datetime.LocalDate.Companion(kotlinx.datetime.Clock;kotlinx.datetime.TimeZone){}[0]
+final fun com.kizitonwose.calendar.compose.heatmapcalendar/rememberHeatMapCalendarState(com.kizitonwose.calendar.core/YearMonth?, com.kizitonwose.calendar.core/YearMonth?, com.kizitonwose.calendar.core/YearMonth?, kotlinx.datetime/DayOfWeek?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState // com.kizitonwose.calendar.compose.heatmapcalendar/rememberHeatMapCalendarState|rememberHeatMapCalendarState(com.kizitonwose.calendar.core.YearMonth?;com.kizitonwose.calendar.core.YearMonth?;com.kizitonwose.calendar.core.YearMonth?;kotlinx.datetime.DayOfWeek?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose.weekcalendar/rememberWeekCalendarState(kotlinx.datetime/LocalDate?, kotlinx.datetime/LocalDate?, kotlinx.datetime/LocalDate?, kotlinx.datetime/DayOfWeek?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState // com.kizitonwose.calendar.compose.weekcalendar/rememberWeekCalendarState|rememberWeekCalendarState(kotlinx.datetime.LocalDate?;kotlinx.datetime.LocalDate?;kotlinx.datetime.LocalDate?;kotlinx.datetime.DayOfWeek?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose.yearcalendar/rememberYearCalendarState(com.kizitonwose.calendar.core/Year?, com.kizitonwose.calendar.core/Year?, com.kizitonwose.calendar.core/Year?, kotlinx.datetime/DayOfWeek?, com.kizitonwose.calendar.core/OutDateStyle?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState // com.kizitonwose.calendar.compose.yearcalendar/rememberYearCalendarState|rememberYearCalendarState(com.kizitonwose.calendar.core.Year?;com.kizitonwose.calendar.core.Year?;com.kizitonwose.calendar.core.Year?;kotlinx.datetime.DayOfWeek?;com.kizitonwose.calendar.core.OutDateStyle?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose/HeatMapCalendar(androidx.compose.ui/Modifier?, com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapCalendarState?, com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeekHeaderPosition?, kotlin/Boolean, androidx.compose.foundation.layout/PaddingValues?, kotlin/Function5<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarDay, com.kizitonwose.calendar.compose.heatmapcalendar/HeatMapWeek, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, kotlinx.datetime/DayOfWeek, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // com.kizitonwose.calendar.compose/HeatMapCalendar|HeatMapCalendar(androidx.compose.ui.Modifier?;com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState?;com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeekHeaderPosition?;kotlin.Boolean;androidx.compose.foundation.layout.PaddingValues?;kotlin.Function5<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarDay,com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapWeek,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,kotlinx.datetime.DayOfWeek,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose/HorizontalCalendar(androidx.compose.ui/Modifier?, com.kizitonwose.calendar.compose/CalendarState?, kotlin/Boolean, kotlin/Boolean, kotlin/Boolean, androidx.compose.foundation.layout/PaddingValues?, com.kizitonwose.calendar.compose/ContentHeightMode?, kotlin/Function4<androidx.compose.foundation.layout/BoxScope, com.kizitonwose.calendar.core/CalendarDay, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.lazy/LazyItemScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int, kotlin/Int) // com.kizitonwose.calendar.compose/HorizontalCalendar|HorizontalCalendar(androidx.compose.ui.Modifier?;com.kizitonwose.calendar.compose.CalendarState?;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;androidx.compose.foundation.layout.PaddingValues?;com.kizitonwose.calendar.compose.ContentHeightMode?;kotlin.Function4<androidx.compose.foundation.layout.BoxScope,com.kizitonwose.calendar.core.CalendarDay,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.lazy.LazyItemScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose/HorizontalYearCalendar(androidx.compose.ui/Modifier?, com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState?, kotlin/Int, kotlin/Boolean, kotlin/Boolean, kotlin/Boolean, androidx.compose.foundation.layout/PaddingValues?, androidx.compose.foundation.layout/PaddingValues?, androidx.compose.ui.unit/Dp, androidx.compose.ui.unit/Dp, com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode?, kotlin/Function1<com.kizitonwose.calendar.core/CalendarMonth, kotlin/Boolean>?, kotlin/Function4<androidx.compose.foundation.layout/BoxScope, com.kizitonwose.calendar.core/CalendarDay, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/BoxScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarYear, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarYear, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarYear, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.lazy/LazyItemScope, com.kizitonwose.calendar.core/CalendarYear, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int, kotlin/Int, kotlin/Int) // com.kizitonwose.calendar.compose/HorizontalYearCalendar|HorizontalYearCalendar(androidx.compose.ui.Modifier?;com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState?;kotlin.Int;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;androidx.compose.foundation.layout.PaddingValues?;androidx.compose.foundation.layout.PaddingValues?;androidx.compose.ui.unit.Dp;androidx.compose.ui.unit.Dp;com.kizitonwose.calendar.compose.yearcalendar.YearContentHeightMode?;kotlin.Function1<com.kizitonwose.calendar.core.CalendarMonth,kotlin.Boolean>?;kotlin.Function4<androidx.compose.foundation.layout.BoxScope,com.kizitonwose.calendar.core.CalendarDay,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.BoxScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarYear,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarYear,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarYear,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.lazy.LazyItemScope,com.kizitonwose.calendar.core.CalendarYear,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose/VerticalCalendar(androidx.compose.ui/Modifier?, com.kizitonwose.calendar.compose/CalendarState?, kotlin/Boolean, kotlin/Boolean, kotlin/Boolean, androidx.compose.foundation.layout/PaddingValues?, com.kizitonwose.calendar.compose/ContentHeightMode?, kotlin/Function4<androidx.compose.foundation.layout/BoxScope, com.kizitonwose.calendar.core/CalendarDay, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.lazy/LazyItemScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int, kotlin/Int) // com.kizitonwose.calendar.compose/VerticalCalendar|VerticalCalendar(androidx.compose.ui.Modifier?;com.kizitonwose.calendar.compose.CalendarState?;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;androidx.compose.foundation.layout.PaddingValues?;com.kizitonwose.calendar.compose.ContentHeightMode?;kotlin.Function4<androidx.compose.foundation.layout.BoxScope,com.kizitonwose.calendar.core.CalendarDay,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.lazy.LazyItemScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose/VerticalYearCalendar(androidx.compose.ui/Modifier?, com.kizitonwose.calendar.compose.yearcalendar/YearCalendarState?, kotlin/Int, kotlin/Boolean, kotlin/Boolean, kotlin/Boolean, androidx.compose.foundation.layout/PaddingValues?, androidx.compose.foundation.layout/PaddingValues?, androidx.compose.ui.unit/Dp, androidx.compose.ui.unit/Dp, com.kizitonwose.calendar.compose.yearcalendar/YearContentHeightMode?, kotlin/Function1<com.kizitonwose.calendar.core/CalendarMonth, kotlin/Boolean>?, kotlin/Function4<androidx.compose.foundation.layout/BoxScope, com.kizitonwose.calendar.core/CalendarDay, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarMonth, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/BoxScope, com.kizitonwose.calendar.core/CalendarMonth, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarYear, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarYear, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/CalendarYear, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function5<androidx.compose.foundation.lazy/LazyItemScope, com.kizitonwose.calendar.core/CalendarYear, kotlin/Function2<androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int, kotlin/Int, kotlin/Int) // com.kizitonwose.calendar.compose/VerticalYearCalendar|VerticalYearCalendar(androidx.compose.ui.Modifier?;com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState?;kotlin.Int;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;androidx.compose.foundation.layout.PaddingValues?;androidx.compose.foundation.layout.PaddingValues?;androidx.compose.ui.unit.Dp;androidx.compose.ui.unit.Dp;com.kizitonwose.calendar.compose.yearcalendar.YearContentHeightMode?;kotlin.Function1<com.kizitonwose.calendar.core.CalendarMonth,kotlin.Boolean>?;kotlin.Function4<androidx.compose.foundation.layout.BoxScope,com.kizitonwose.calendar.core.CalendarDay,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarMonth,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.BoxScope,com.kizitonwose.calendar.core.CalendarMonth,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarYear,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarYear,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.CalendarYear,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function5<androidx.compose.foundation.lazy.LazyItemScope,com.kizitonwose.calendar.core.CalendarYear,kotlin.Function2<androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose/WeekCalendar(androidx.compose.ui/Modifier?, com.kizitonwose.calendar.compose.weekcalendar/WeekCalendarState?, kotlin/Boolean, kotlin/Boolean, kotlin/Boolean, androidx.compose.foundation.layout/PaddingValues?, kotlin/Function4<androidx.compose.foundation.layout/BoxScope, com.kizitonwose.calendar.core/WeekDay, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/Week, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, kotlin/Function4<androidx.compose.foundation.layout/ColumnScope, com.kizitonwose.calendar.core/Week, androidx.compose.runtime/Composer, kotlin/Int, kotlin/Unit>?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int) // com.kizitonwose.calendar.compose/WeekCalendar|WeekCalendar(androidx.compose.ui.Modifier?;com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState?;kotlin.Boolean;kotlin.Boolean;kotlin.Boolean;androidx.compose.foundation.layout.PaddingValues?;kotlin.Function4<androidx.compose.foundation.layout.BoxScope,com.kizitonwose.calendar.core.WeekDay,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.Week,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;kotlin.Function4<androidx.compose.foundation.layout.ColumnScope,com.kizitonwose.calendar.core.Week,androidx.compose.runtime.Composer,kotlin.Int,kotlin.Unit>?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.compose/rememberCalendarState(com.kizitonwose.calendar.core/YearMonth?, com.kizitonwose.calendar.core/YearMonth?, com.kizitonwose.calendar.core/YearMonth?, kotlinx.datetime/DayOfWeek?, com.kizitonwose.calendar.core/OutDateStyle?, androidx.compose.runtime/Composer?, kotlin/Int, kotlin/Int): com.kizitonwose.calendar.compose/CalendarState // com.kizitonwose.calendar.compose/rememberCalendarState|rememberCalendarState(com.kizitonwose.calendar.core.YearMonth?;com.kizitonwose.calendar.core.YearMonth?;com.kizitonwose.calendar.core.YearMonth?;kotlinx.datetime.DayOfWeek?;com.kizitonwose.calendar.core.OutDateStyle?;androidx.compose.runtime.Composer?;kotlin.Int;kotlin.Int){}[0]
+final fun com.kizitonwose.calendar.core/daysOfWeek(kotlinx.datetime/DayOfWeek = ...): kotlin.collections/List<kotlinx.datetime/DayOfWeek> // com.kizitonwose.calendar.core/daysOfWeek|daysOfWeek(kotlinx.datetime.DayOfWeek){}[0]
+final fun com.kizitonwose.calendar.core/firstDayOfWeekFromLocale(androidx.compose.ui.text.intl/Locale = ...): kotlinx.datetime/DayOfWeek // com.kizitonwose.calendar.core/firstDayOfWeekFromLocale|firstDayOfWeekFromLocale(androidx.compose.ui.text.intl.Locale){}[0]
