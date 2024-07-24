@@ -1,6 +1,7 @@
 package com.kizitonwose.calendar.core
 
 import androidx.compose.runtime.Immutable
+import com.kizitonwose.calendar.core.format.fromIso8601Year
 import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.core.serializers.YearIso8601Serializer
 import kotlinx.datetime.Clock
@@ -62,6 +63,23 @@ public data class Year(val value: Int) : Comparable<Year> {
         public fun isLeap(year: Int): Boolean {
             val prolepticYear: Long = year.toLong()
             return prolepticYear and 3 == 0L && (prolepticYear % 100 != 0L || prolepticYear % 400 == 0L)
+        }
+
+        /**
+         * Obtains an instance of [Year] from a text string such as `2020`.
+         *
+         * The string format must be `yyyy`, ideally obtained from calling [Year.toString].
+         *
+         * @throws IllegalArgumentException if the text cannot be parsed or the boundaries of [Year] are exceeded.
+         *
+         * @see Year.toString
+         */
+        public fun parseIso8601(string: String): Year {
+            return try {
+                string.fromIso8601Year()
+            } catch (e: IllegalArgumentException) {
+                throw IllegalArgumentException("Invalid Year value $string", e)
+            }
         }
     }
 }

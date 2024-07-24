@@ -5,6 +5,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class YearMonthTest {
     @Test
@@ -196,6 +197,24 @@ class YearMonthTest {
 
         for ((value, result) in values) {
             assertEquals(result, value.toString())
+        }
+    }
+
+    @Test
+    fun parseIso8601() {
+        for ((value, result) in listOf(
+            "2025-01" to YearMonth(2025, Month.JANUARY),
+            "-1999-06" to YearMonth(-1999, Month.JUNE),
+            "0001-08" to YearMonth(1, Month.AUGUST),
+            "0000-03" to YearMonth(0, Month.MARCH),
+        )) {
+            assertEquals(result, YearMonth.parseIso8601(value))
+        }
+
+        for (value in listOf("20-01", "06")) {
+            assertFailsWith(IllegalArgumentException::class) {
+                YearMonth.parseIso8601(value)
+            }
         }
     }
 }

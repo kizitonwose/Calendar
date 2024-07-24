@@ -1,6 +1,7 @@
 package com.kizitonwose.calendar.core
 
 import androidx.compose.runtime.Immutable
+import com.kizitonwose.calendar.core.format.fromIso8601YearMonth
 import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.core.serializers.YearMonthIso8601Serializer
 import kotlinx.datetime.Clock
@@ -57,10 +58,29 @@ public data class YearMonth(val year: Int, val month: Month) : Comparable<YearMo
             clock: Clock = Clock.System,
             timeZone: TimeZone = TimeZone.currentSystemDefault(),
         ): YearMonth = LocalDate.now(clock, timeZone).yearMonth
+
+        /**
+         * Obtains an instance of [YearMonth] from a text string such as `2020-01`.
+         *
+         * The string format must be `yyyy-MM`, ideally obtained from calling [YearMonth.toString].
+         *
+         * @throws IllegalArgumentException if the text cannot be parsed or the boundaries of [YearMonth] are exceeded.
+         *
+         * @see YearMonth.toString
+         */
+        public fun parseIso8601(string: String): YearMonth {
+            return try {
+                string.fromIso8601YearMonth()
+            } catch (e: IllegalArgumentException) {
+                throw IllegalArgumentException("Invalid YearMonth value $string", e)
+            }
+        }
     }
 
     /**
      * Converts this year-month to the ISO 8601 string representation.
+     *
+     * Example: `2020-01`
      */
     override fun toString(): String = toIso8601String()
 }
