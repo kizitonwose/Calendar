@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -33,9 +34,6 @@ import com.kizitonwose.calendar.core.plus
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
 
 fun Modifier.clickable(
     enabled: Boolean = true,
@@ -181,7 +179,5 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
     }
 }
 
-internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
-internal fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
-internal fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
-internal fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
+val YearMonth.next: YearMonth get() = this.plus(1, DateTimeUnit.MONTH)
+val YearMonth.previous: YearMonth get() = this.minus(1, DateTimeUnit.MONTH)

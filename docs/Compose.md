@@ -43,15 +43,6 @@ The APIs for the compose libraries for Android and Multiplatform projects have b
 
 Note that the `YearMonth` class does not yet exist in the `kotlinx-datetime` library, therefore the multiplatfrom calendar library includes a minimal `YearMonth` class implementation to bridge this gap until the class [is hopefully added](https://github.com/Kotlin/kotlinx-datetime/issues/168) to the `kotlinx-datetime` library.
 
-The functions `plusMonths`, `minusMonths`, `plusDays` and `minusDays` used in the examples are provided out of the box by the `java.time` library, but can be easily added for multiplatform projects using the `kotlinx-datetime` library if needed:
-
-```kotlin
-fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
-fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
-fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
-fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
-```
-
 ## Compose UI version compatibility
 
 Ensure that you are using the library version that matches the Compose UI version in your project. If you use a version of the library that has a higher version of Compose UI than the one in your project, gradle will upgrade the Compose UI version in your project via transitive dependency. See the compatibility table [here](https://github.com/kizitonwose/Calendar#compose-ui-version-compatibility).

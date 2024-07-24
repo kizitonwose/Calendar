@@ -18,6 +18,14 @@ class ExtensionTest {
             YearMonth(2024, Month.JUNE).minusMonths(1),
         )
         assertEquals(
+            YearMonth(2025, Month.JUNE),
+            YearMonth(2024, Month.JUNE).plusYears(1),
+        )
+        assertEquals(
+            YearMonth(2023, Month.MAY),
+            YearMonth(2024, Month.MAY).minusYears(1),
+        )
+        assertEquals(
             LocalDate(2024, Month.MAY, 2),
             LocalDate(2024, Month.MAY, 1).plusDays(1),
         )
@@ -32,6 +40,14 @@ class ExtensionTest {
         assertEquals(
             LocalDate(2024, Month.FEBRUARY, 29),
             LocalDate(2024, Month.MARCH, 30).minusMonths(1),
+        )
+        assertEquals(
+            LocalDate(2026, Month.JUNE, 2),
+            LocalDate(2025, Month.JUNE, 2).plusYears(1),
+        )
+        assertEquals(
+            LocalDate(2023, Month.FEBRUARY, 28),
+            LocalDate(2024, Month.FEBRUARY, 29).minusYears(1),
         )
         assertEquals(
             LocalDate(2024, Month.MAY, 9),

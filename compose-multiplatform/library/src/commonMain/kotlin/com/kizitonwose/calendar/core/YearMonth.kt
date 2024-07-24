@@ -162,23 +162,49 @@ public fun YearMonth.minus(value: Int, unit: DateTimeUnit.MonthBased): YearMonth
     atStartOfMonth().minus(value, unit).yearMonth
 
 /**
- * Returns a [YearMonth] that results from adding the 1 month this year-month.
+ * Returns a [YearMonth] that results from adding the [value] number of months
+ * to this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
  *
  * @throws DateTimeArithmeticException if the result exceeds the boundaries
  * of [YearMonth] which is essentially the [LocalDate] boundaries.
- *
- * @see YearMonth.plus
  */
-public val YearMonth.next: YearMonth
-    get() = this.plus(1, DateTimeUnit.MONTH)
+public fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
 
 /**
- * Returns a [YearMonth] that results from subtracting the 1 month this year-month.
+ * Returns a [YearMonth] that results from subtracting the [value] number of months
+ * from this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
  *
  * @throws DateTimeArithmeticException if the result exceeds the boundaries
  * of [YearMonth] which is essentially the [LocalDate] boundaries.
- *
- * @see YearMonth.minus
  */
-public val YearMonth.previous: YearMonth
-    get() = this.minus(1, DateTimeUnit.MONTH)
+public fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
+
+/**
+ * Returns a [YearMonth] that results from adding the [value] number of years
+ * to this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries
+ * of [YearMonth] which is essentially the [LocalDate] boundaries.
+ */
+public fun YearMonth.plusYears(value: Int): YearMonth = plus(value, DateTimeUnit.YEAR)
+
+/**
+ * Returns a [YearMonth] that results from subtracting the [value] number of years
+ * from this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries
+ * of [YearMonth] which is essentially the [LocalDate] boundaries.
+ */
+public fun YearMonth.minusYears(value: Int): YearMonth = minus(value, DateTimeUnit.YEAR)

@@ -2,6 +2,7 @@ package com.kizitonwose.calendar.core
 
 import androidx.compose.ui.text.intl.Locale
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeArithmeticException
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -46,24 +47,77 @@ public fun LocalDate.Companion.now(
 public val LocalDate.yearMonth: YearMonth
     get() = YearMonth(year, month)
 
-internal fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
+/**
+ * Returns a [LocalDate] that results from adding the [value] number of
+ * days to this date.
+ *
+ * If the [value] is positive, the returned date is later than this date.
+ * If the [value] is negative, the returned date is earlier than this date.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries of [LocalDate].
+ */
+public fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
 
-internal fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
+/**
+ * Returns a [LocalDate] that results from subtracting the [value] number of
+ * days from this date.
+ *
+ * If the [value] is positive, the returned date is later than this date.
+ * If the [value] is negative, the returned date is earlier than this date.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries of [LocalDate].
+ */
+public fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
 
-internal fun LocalDate.plusDays(value: Int): LocalDate = plus(value, DateTimeUnit.DAY)
+/**
+ * Returns a [LocalDate] that results from adding the [value] number of
+ * months to this date.
+ *
+ * If the [value] is positive, the returned date is later than this date.
+ * If the [value] is negative, the returned date is earlier than this date.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries of [LocalDate].
+ */
+public fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeUnit.MONTH)
 
-internal fun LocalDate.minusDays(value: Int): LocalDate = minus(value, DateTimeUnit.DAY)
+/**
+ * Returns a [LocalDate] that results from subtracting the [value] number of
+ * months from this date.
+ *
+ * If the [value] is positive, the returned date is later than this date.
+ * If the [value] is negative, the returned date is earlier than this date.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries of [LocalDate].
+ */
+public fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
+
+/**
+ * Returns a [LocalDate] that results from adding the [value] number of
+ * years to this date.
+ *
+ * If the [value] is positive, the returned date is later than this date.
+ * If the [value] is negative, the returned date is earlier than this date.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries of [LocalDate].
+ */
+public fun LocalDate.plusYears(value: Int): LocalDate = plus(value, DateTimeUnit.YEAR)
+
+/**
+ * Returns a [LocalDate] that results from subtracting the [value] number of
+ * years from this date.
+ *
+ * If the [value] is positive, the returned date is later than this date.
+ * If the [value] is negative, the returned date is earlier than this date.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries of [LocalDate].
+ */
+public fun LocalDate.minusYears(value: Int): LocalDate = minus(value, DateTimeUnit.YEAR)
 
 internal fun LocalDate.plusWeeks(value: Int): LocalDate = plus(value, DateTimeUnit.WEEK)
 
 internal fun LocalDate.minusWeeks(value: Int): LocalDate = minus(value, DateTimeUnit.WEEK)
 
-internal fun LocalDate.plusMonths(value: Int): LocalDate = plus(value, DateTimeUnit.MONTH)
-
-internal fun LocalDate.minusMonths(value: Int): LocalDate = minus(value, DateTimeUnit.MONTH)
-
-internal fun LocalDate.weeksUntil(other: LocalDate): Int =
-    until(other, DateTimeUnit.WEEK)
+internal fun LocalDate.weeksUntil(other: LocalDate): Int = until(other, DateTimeUnit.WEEK)
 
 // E.g DayOfWeek.SATURDAY.daysUntil(DayOfWeek.TUESDAY) = 3
 internal fun DayOfWeek.daysUntil(other: DayOfWeek) = (7 + (other.isoDayNumber - isoDayNumber)) % 7

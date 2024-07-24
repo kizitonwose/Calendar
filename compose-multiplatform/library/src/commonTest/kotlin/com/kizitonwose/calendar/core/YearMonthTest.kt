@@ -151,30 +151,6 @@ class YearMonthTest {
     }
 
     @Test
-    fun next() {
-        val values = listOf(
-            YearMonth(2024, Month.DECEMBER) to YearMonth(2025, Month.JANUARY),
-            YearMonth(2020, Month.MAY) to YearMonth(2020, Month.JUNE),
-        )
-
-        for ((start, next) in values) {
-            assertEquals(next, start.next)
-        }
-    }
-
-    @Test
-    fun previous() {
-        val values = listOf(
-            YearMonth(2025, Month.JANUARY) to YearMonth(2024, Month.DECEMBER),
-            YearMonth(2020, Month.JUNE) to YearMonth(2020, Month.MAY),
-        )
-
-        for ((start, previous) in values) {
-            assertEquals(previous, start.previous)
-        }
-    }
-
-    @Test
     fun monthNumber() {
         val values = listOf(
             YearMonth(2025, Month.JANUARY) to 1,
