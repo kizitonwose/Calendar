@@ -44,35 +44,29 @@ class YearMonthTest {
 
     @Test
     fun atStartOfMonth() {
-        val values = listOf(
+        for ((yearMonth, firstDay) in listOf(
             YearMonth(2025, Month.JANUARY) to LocalDate(2025, Month.JANUARY, 1),
             YearMonth(2020, Month.JUNE) to LocalDate(2020, Month.JUNE, 1),
-        )
-
-        for ((yearMonth, firstDay) in values) {
+        )) {
             assertEquals(yearMonth.atStartOfMonth(), firstDay)
         }
     }
 
     @Test
     fun atEndOfMonth() {
-        val values = listOf(
+        for ((yearMonth, lastDay) in listOf(
             YearMonth(2025, Month.JANUARY) to LocalDate(2025, Month.JANUARY, 31),
             YearMonth(2024, Month.JUNE) to LocalDate(2024, Month.JUNE, 30),
             YearMonth(2025, Month.FEBRUARY) to LocalDate(2025, Month.FEBRUARY, 28),
             YearMonth(2024, Month.FEBRUARY) to LocalDate(2024, Month.FEBRUARY, 29),
-        )
-
-        for ((yearMonth, lastDay) in values) {
+        )) {
             assertEquals(yearMonth.atEndOfMonth(), lastDay)
         }
     }
 
     @Test
     fun atDay() {
-        val yearMonthValues = Month.entries.map { Year(2024).atMonth(it) }
-
-        for (yearMonth in yearMonthValues) {
+        for (yearMonth in Month.entries.map { Year(2024).atMonth(it) }) {
             for (day in 1..yearMonth.lengthOfMonth()) {
                 assertEquals(LocalDate(yearMonth.year, yearMonth.month, day), yearMonth.atDay(day))
             }
@@ -81,7 +75,7 @@ class YearMonthTest {
 
     @Test
     fun monthsUntil() {
-        val values = listOf(
+        for ((start, end, result) in listOf(
             YearMonth(2024, Month.JANUARY) to YearMonth(2024, Month.NOVEMBER) toTriple 10,
             YearMonth(2024, Month.JANUARY) to YearMonth(2024, Month.DECEMBER) toTriple 11,
             YearMonth(2026, Month.MARCH) to YearMonth(2028, Month.FEBRUARY) toTriple 23,
@@ -90,9 +84,7 @@ class YearMonthTest {
             YearMonth(2020, Month.MAY) to YearMonth(2023, Month.JULY) toTriple 38,
             YearMonth(2022, Month.AUGUST) to YearMonth(2022, Month.AUGUST) toTriple 0,
             YearMonth(2022, Month.AUGUST) to YearMonth(2022, Month.SEPTEMBER) toTriple 1,
-        )
-
-        for ((start, end, result) in values) {
+        )) {
             assertEquals(result, start.monthsUntil(end))
             assertEquals(-result, end.monthsUntil(start))
         }
@@ -152,26 +144,22 @@ class YearMonthTest {
 
     @Test
     fun monthNumber() {
-        val values = listOf(
+        for ((value, result) in listOf(
             YearMonth(2025, Month.JANUARY) to 1,
             YearMonth(1999, Month.JUNE) to 6,
-        )
-
-        for ((value, result) in values) {
+        )) {
             assertEquals(result, value.monthNumber)
         }
     }
 
     @Test
     fun toIso8601String() {
-        val values = listOf(
+        for ((value, result) in listOf(
             YearMonth(2025, Month.JANUARY) to "2025-01",
             YearMonth(-1999, Month.JUNE) to "-1999-06",
             YearMonth(1, Month.AUGUST) to "0001-08",
             YearMonth(0, Month.MARCH) to "0000-03",
-        )
-
-        for ((value, result) in values) {
+        )) {
             assertEquals(result, value.toString())
         }
     }

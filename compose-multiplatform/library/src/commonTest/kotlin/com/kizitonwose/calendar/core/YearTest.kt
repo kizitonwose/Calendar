@@ -59,9 +59,7 @@ class YearTest {
 
     @Test
     fun atMonth() {
-        val years = listOf(0, -400, 2024, 1, 1999)
-
-        for (year in years) {
+        for (year in listOf(0, -400, 2024, 1, 1999)) {
             for (month in Month.entries) {
                 assertEquals(YearMonth(year, month), Year(year).atMonth(month))
             }
@@ -70,9 +68,7 @@ class YearTest {
 
     @Test
     fun atMonthNumber() {
-        val years = listOf(0, -400, 2024, 1, 1999)
-
-        for (year in years) {
+        for (year in listOf(0, -400, 2024, 1, 1999)) {
             for (month in Month.entries) {
                 assertEquals(YearMonth(year, month.number), Year(year).atMonth(month))
             }
@@ -159,14 +155,12 @@ class YearTest {
 
     @Test
     fun yearsUntil() {
-        val values = listOf(
+        for ((start, end, result) in listOf(
             2020 to 2024 toTriple 4,
             2024 to 2030 toTriple 6,
             1999 to 2028 toTriple 29,
             1300 to 1365 toTriple 65,
-        )
-
-        for ((start, end, result) in values) {
+        )) {
             assertEquals(result, Year(start).yearsUntil(Year(end)))
             assertEquals(-result, Year(end).yearsUntil(Year(start)))
         }
@@ -174,14 +168,12 @@ class YearTest {
 
     @Test
     fun plus() {
-        val values = listOf(
+        for ((start, value, result) in listOf(
             2020 to 4 toTriple 2024,
             2024 to 6 toTriple 2030,
             1999 to 29 toTriple 2028,
             1300 to 65 toTriple 1365,
-        )
-
-        for ((start, value, result) in values) {
+        )) {
             assertEquals(Year(result), Year(start).plusYears(value))
             assertEquals(Year(start), Year(result).plusYears(-value))
         }
@@ -189,14 +181,12 @@ class YearTest {
 
     @Test
     fun minus() {
-        val values = listOf(
+        for ((start, value, result) in listOf(
             2020 to 4 toTriple 2016,
             2024 to 6 toTriple 2018,
             1999 to 29 toTriple 1970,
             1300 to 65 toTriple 1235,
-        )
-
-        for ((start, value, result) in values) {
+        )) {
             assertEquals(Year(result), Year(start).minusYears(value))
             assertEquals(Year(start), Year(result).minusYears(-value))
         }
@@ -204,14 +194,12 @@ class YearTest {
 
     @Test
     fun toIso8601String() {
-        val values = listOf(
+        for ((value, result) in listOf(
             2024 to "2024",
             -1999 to "-1999",
             1 to "0001",
             0 to "0000",
-        )
-
-        for ((value, result) in values) {
+        )) {
             assertEquals(result, Year(value).toString())
         }
     }
