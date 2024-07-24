@@ -66,7 +66,9 @@ kotlin {
             dependsOn(commonMain)
             nativeMain.dependsOn(this)
             wasmJsMain.dependsOn(this)
-            dependencies {}
+            dependencies {
+                api(libs.kotlinx.serialization.core)
+            }
         }
         desktopMain.dependsOn(jvmMain)
         desktopMain.dependencies {
