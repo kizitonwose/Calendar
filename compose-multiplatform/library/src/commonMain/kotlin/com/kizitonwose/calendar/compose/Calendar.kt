@@ -356,8 +356,8 @@ public fun HeatMapCalendar(
  * The actual container content is provided in the block and must be called after your desired
  * customisations are rendered.
  */
-@Composable
 @ExperimentalCalendarApi
+@Composable
 public fun HorizontalYearCalendar(
     modifier: Modifier = Modifier,
     state: YearCalendarState = rememberYearCalendarState(),

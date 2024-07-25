@@ -39,8 +39,8 @@ import kotlinx.datetime.DayOfWeek
  * @param firstVisibleYear the initial value for [YearCalendarState.firstVisibleYear]
  * @param outDateStyle the initial value for [YearCalendarState.outDateStyle]
  */
-@Composable
 @ExperimentalCalendarApi
+@Composable
 public fun rememberYearCalendarState(
     startYear: Year = Year.now(),
     endYear: Year = startYear,
