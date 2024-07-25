@@ -1,8 +1,7 @@
-package com.kizitonwose.calendar.sample.compose
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -21,14 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices.PIXEL_7
-import androidx.compose.ui.tooling.preview.Devices.PIXEL_TABLET
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.VerticalYearCalendar
@@ -38,66 +32,69 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.ExperimentalCalendarApi
+import com.kizitonwose.calendar.core.Year
+import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.sample.R
-import com.kizitonwose.calendar.sample.shared.displayText
-import java.time.Year
-import java.time.YearMonth
+import com.kizitonwose.calendar.core.plusYears
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalCalendarApi::class)
 @Composable
-fun Example11Page(adjacentYears: Long = 50) {
+fun Example11Page(adjacentYears: Int = 50) {
     val currentMonth = remember { YearMonth.now() }
-    val currentYear = remember { Year.of(currentMonth.year) }
+    val currentYear = remember { Year(currentMonth.year) }
     val endYear = remember { currentYear.plusYears(adjacentYears) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
-    val config = LocalConfiguration.current
-    val isTablet = config.smallestScreenWidthDp >= 600
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        val state = rememberYearCalendarState(
-            startYear = currentYear,
-            endYear = endYear,
-            firstVisibleYear = currentYear,
-            firstDayOfWeek = daysOfWeek.first(),
-        )
-        VerticalYearCalendar(
+        val isTablet = maxWidth >= 600.dp
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("Calendar"),
-            state = state,
-            dayContent = { day ->
-                Day(
-                    day = day,
-                    isSelected = selections.contains(day),
-                    isTablet = isTablet,
-                ) { clicked ->
-                    if (selections.contains(clicked)) {
-                        selections.remove(clicked)
-                    } else {
-                        selections.add(clicked)
+                .background(Color.White),
+        ) {
+            val state = rememberYearCalendarState(
+                startYear = currentYear,
+                endYear = endYear,
+                firstVisibleYear = currentYear,
+                firstDayOfWeek = daysOfWeek.first(),
+            )
+            VerticalYearCalendar(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag("Calendar"),
+                state = state,
+                dayContent = { day ->
+                    Day(
+                        day = day,
+                        isSelected = selections.contains(day),
+                        isTablet = isTablet,
+                    ) { clicked ->
+                        if (selections.contains(clicked)) {
+                            selections.remove(clicked)
+                        } else {
+                            selections.add(clicked)
+                        }
                     }
-                }
-            },
-            calendarScrollPaged = false,
-            contentHeightMode = YearContentHeightMode.Wrap,
-            monthVerticalSpacing = 20.dp,
-            monthHorizontalSpacing = if (isTablet) 52.dp else 10.dp,
-            contentPadding = PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
-            isMonthVisible = {
-                it.yearMonth >= currentMonth
-            },
-            yearHeader = {
-                YearHeader(it.year)
-            },
-            monthHeader = {
-                MonthHeader(it)
-            },
-        )
+                },
+                calendarScrollPaged = false,
+                contentHeightMode = YearContentHeightMode.Wrap,
+                monthVerticalSpacing = 20.dp,
+                monthHorizontalSpacing = if (isTablet) 52.dp else 10.dp,
+                contentPadding = PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
+                isMonthVisible = {
+                    it.yearMonth >= currentMonth
+                },
+                yearHeader = {
+                    YearHeader(it.year)
+                },
+                monthHeader = {
+                    MonthHeader(it)
+                },
+            )
+        }
     }
 }
 
@@ -165,7 +162,7 @@ private fun Day(
             .testTag("MonthDay")
             .padding(if (isTablet) 2.dp else 0.dp)
             .clip(CircleShape)
-            .background(color = if (isSelected) colorResource(R.color.example_1_selection_color) else Color.Transparent)
+            .background(color = if (isSelected) Colors.example1Selection else Color.Transparent)
             // Disable clicks on inDates/outDates
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
@@ -184,8 +181,7 @@ private fun Day(
     }
 }
 
-@Preview(showBackground = true, heightDp = 1280, widthDp = 800, device = PIXEL_TABLET)
-@Preview(showBackground = true, heightDp = 891, widthDp = 411, device = PIXEL_7)
+@Preview
 @Composable
 private fun Example11Preview() {
     Example11Page()
