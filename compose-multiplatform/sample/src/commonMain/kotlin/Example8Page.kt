@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,8 +22,8 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -70,7 +71,7 @@ fun Example8Page(close: () -> Unit = {}) {
     ) {
         // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
-            var selectedIndex by remember { mutableStateOf(0) }
+            var selectedIndex by remember { mutableIntStateOf(0) }
             PageOptions(selectedIndex, close = close) { selectedIndex = it }
             val state = rememberCalendarState(
                 startMonth = startMonth,
