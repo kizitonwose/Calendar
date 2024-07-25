@@ -19,11 +19,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +69,7 @@ fun Example2Page(
     var selection by remember { mutableStateOf(DateSelection()) }
     val daysOfWeek = remember { daysOfWeek() }
     StatusBarColorUpdateEffect(Color.White)
-    MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
+    MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(primary = primaryColor)) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -247,7 +247,7 @@ private fun CalendarTop(
                 }
             }
         }
-        Divider()
+        HorizontalDivider()
     }
 }
 
@@ -258,7 +258,7 @@ private fun CalendarBottom(
     save: () -> Unit,
 ) {
     Column(modifier.fillMaxWidth()) {
-        Divider()
+        HorizontalDivider()
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,

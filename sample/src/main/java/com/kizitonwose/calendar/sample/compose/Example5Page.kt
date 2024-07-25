@@ -10,8 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +34,7 @@ import com.kizitonwose.calendar.sample.shared.getWeekPageTitle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Example5Page(close: () -> Unit = {}) {
     val currentDate = remember { LocalDate.now() }
@@ -51,7 +53,6 @@ fun Example5Page(close: () -> Unit = {}) {
         )
         val visibleWeek = rememberFirstVisibleWeekAfterScroll(state)
         TopAppBar(
-            elevation = 0.dp,
             title = { Text(text = getWeekPageTitle(visibleWeek)) },
             navigationIcon = { NavigationIcon(onBackClick = close) },
         )
