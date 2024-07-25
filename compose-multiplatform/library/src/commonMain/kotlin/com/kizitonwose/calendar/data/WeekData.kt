@@ -38,7 +38,7 @@ internal fun getWeekCalendarData(
     return WeekData(firstDayInWeek, desiredStartDate, desiredEndDate)
 }
 
-internal data class WeekData internal constructor(
+internal data class WeekData(
     private val firstDayInWeek: LocalDate,
     private val desiredStartDate: LocalDate,
     private val desiredEndDate: LocalDate,
