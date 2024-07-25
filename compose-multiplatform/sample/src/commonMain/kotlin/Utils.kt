@@ -1,11 +1,13 @@
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -26,7 +28,10 @@ import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
+import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarLayoutInfo
+import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.minus
@@ -145,6 +150,42 @@ fun rememberFirstMostVisibleMonth(
     return visibleMonth.value
 }
 
+/**
+ * Find the first year on the calendar visible up to the given [viewportPercent] size.
+ *
+ * @see [rememberFirstVisibleYearAfterScroll]
+ */
+@Composable
+fun rememberFirstMostVisibleYear(
+    state: YearCalendarState,
+    viewportPercent: Float = 50f,
+): CalendarYear {
+    val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleYear) }
+    LaunchedEffect(state) {
+        snapshotFlow { state.layoutInfo.firstMostVisibleYear(viewportPercent) }
+            .filterNotNull()
+            .collect { month -> visibleMonth.value = month }
+    }
+    return visibleMonth.value
+}
+
+/**
+ * Returns the first visible year in a paged calendar **after** scrolling stops.
+ *
+ * @see [rememberFirstMostVisibleYear]
+ */
+@Composable
+fun rememberFirstVisibleYearAfterScroll(state: YearCalendarState): CalendarYear {
+    val visibleYear = remember(state) { mutableStateOf(state.firstVisibleYear) }
+    LaunchedEffect(state) {
+        snapshotFlow { state.isScrollInProgress }
+            .filter { scrolling -> !scrolling }
+            .collect { visibleYear.value = state.firstVisibleYear }
+    }
+    return visibleYear.value
+}
+
+
 private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
     get() {
         val visibleItemsInfo = this.visibleMonthsInfo.toMutableList()
@@ -178,6 +219,45 @@ private fun CalendarLayoutInfo.firstMostVisibleMonth(viewportPercent: Float = 50
         }?.month
     }
 }
+
+private fun YearCalendarLayoutInfo.firstMostVisibleYear(viewportPercent: Float = 50f): CalendarYear? {
+    return if (visibleYearsInfo.isEmpty()) {
+        null
+    } else {
+        val viewportSize = (viewportEndOffset + viewportStartOffset) * viewportPercent / 100f
+        visibleYearsInfo.firstOrNull { itemInfo ->
+            if (itemInfo.offset < 0) {
+                itemInfo.offset + itemInfo.size >= viewportSize
+            } else {
+                itemInfo.size - itemInfo.offset >= viewportSize
+            }
+        }?.year
+    }
+}
+
+suspend fun LazyListState.animateScrollAndCenterItem(index: Int) {
+    suspend fun animateScrollIfVisible(): Boolean {
+        val layoutInfo = layoutInfo
+        val containerSize = layoutInfo.viewportSize.width - layoutInfo.beforeContentPadding - layoutInfo.afterContentPadding
+        val target = layoutInfo.visibleItemsInfo.firstOrNull { it.index == index } ?: return false
+        val targetOffset = containerSize / 2f - target.size / 2f
+        animateScrollBy(target.offset - targetOffset)
+        return true
+    }
+    if (!animateScrollIfVisible()) {
+        val visibleItemsInfo = layoutInfo.visibleItemsInfo
+        val currentIndex = visibleItemsInfo.getOrNull(visibleItemsInfo.size / 2)?.index ?: -1
+        scrollToItem(
+            if (index > currentIndex) {
+                (index - visibleItemsInfo.size + 1)
+            } else {
+                index
+            }.coerceIn(0, layoutInfo.totalItemsCount),
+        )
+        animateScrollIfVisible()
+    }
+}
+
 
 val YearMonth.next: YearMonth get() = this.plus(1, DateTimeUnit.MONTH)
 val YearMonth.previous: YearMonth get() = this.minus(1, DateTimeUnit.MONTH)

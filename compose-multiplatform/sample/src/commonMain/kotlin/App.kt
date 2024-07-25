@@ -41,8 +41,7 @@ import kotlin.math.roundToInt
 fun App() {
     MaterialTheme(MaterialTheme.colorScheme.copy(primary = Colors.primary)) {
         BoxWithConstraints(
-            Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopCenter,
+            modifier = Modifier.fillMaxSize(),
         ) {
             if (maxWidth >= 600.dp) {
                 val widthPx = maxWidth.value.roundToInt()
@@ -170,8 +169,9 @@ private fun AppNavHost(
         horizontallyAnimatedComposable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
         horizontallyAnimatedComposable(Page.Example6.name) { Example6Page() }
         horizontallyAnimatedComposable(Page.Example7.name) { Example7Page() }
-        horizontallyAnimatedComposable(Page.Example8.name) { Example8Page() { navController.popBackStack() } }
+        horizontallyAnimatedComposable(Page.Example8.name) { Example8Page { navController.popBackStack() } }
         horizontallyAnimatedComposable(Page.Example9.name) { Example9Page() }
+        horizontallyAnimatedComposable(Page.Example10.name) { Example10Page() }
     }
 }
 

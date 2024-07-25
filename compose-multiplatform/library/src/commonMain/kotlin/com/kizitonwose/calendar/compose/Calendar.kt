@@ -27,6 +27,7 @@ import com.kizitonwose.calendar.compose.yearcalendar.rememberYearCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
+import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import kotlinx.datetime.DayOfWeek
@@ -356,6 +357,7 @@ public fun HeatMapCalendar(
  * customisations are rendered.
  */
 @Composable
+@ExperimentalCalendarApi
 public fun HorizontalYearCalendar(
     modifier: Modifier = Modifier,
     state: YearCalendarState = rememberYearCalendarState(),
@@ -457,6 +459,7 @@ public fun HorizontalYearCalendar(
  * The actual container content is provided in the block and must be called after your desired
  * customisations are rendered.
  */
+@ExperimentalCalendarApi
 @Composable
 public fun VerticalYearCalendar(
     modifier: Modifier = Modifier,

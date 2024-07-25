@@ -9,8 +9,8 @@ actual fun Month.getDisplayName(short: Boolean, locale: Locale): String {
     return if (short) name.take(3) else name
 }
 
-actual fun DayOfWeek.getShortDisplayName(locale: Locale): String {
-    return name.toLowerCase(enLocale).capitalize(enLocale).take(3)
+actual fun DayOfWeek.getDisplayName(narrow: Boolean, locale: Locale): String {
+    return name.toLowerCase(enLocale).capitalize(enLocale).take(if (narrow) 1 else 3)
 }
 
 private val enLocale = Locale("en-US")

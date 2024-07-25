@@ -11,10 +11,15 @@ actual fun Month.getDisplayName(short: Boolean, locale: Locale): String =
         it.monthSymbols[Month.entries.indexOf(this)] as String
     }
 
-actual fun DayOfWeek.getShortDisplayName(locale: Locale): String =
+actual fun DayOfWeek.getDisplayName(narrow: Boolean, locale: Locale): String =
     NSCalendar.currentCalendar.let {
         it.setLocale(NSLocale(locale.toLanguageTag()))
-        it.shortWeekdaySymbols[sundayBasedWeek.indexOf(this)] as String
+        val values = if (narrow) {
+            it.veryShortWeekdaySymbols
+        } else {
+            it.shortWeekdaySymbols
+        }
+        values[sundayBasedWeek.indexOf(this)] as String
     }
 
 private val sundayBasedWeek = daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY)

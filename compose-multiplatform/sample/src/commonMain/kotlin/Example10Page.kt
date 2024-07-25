@@ -1,10 +1,11 @@
-package com.kizitonwose.calendar.sample.compose
-
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
+import androidx.compose.foundation.gestures.snapping.SnapPositionInLayout
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,13 +31,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices.PIXEL_7
-import androidx.compose.ui.tooling.preview.Devices.PIXEL_TABLET
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.HorizontalYearCalendar
@@ -46,109 +43,115 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.ExperimentalCalendarApi
+import com.kizitonwose.calendar.core.Year
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.sample.shared.displayText
-import com.kizitonwose.calendar.sample.shared.yearsUntil
+import com.kizitonwose.calendar.core.minusYears
+import com.kizitonwose.calendar.core.plusYears
+import com.kizitonwose.calendar.core.yearsUntil
 import kotlinx.coroutines.launch
-import java.time.Year
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.abs
 
 @OptIn(ExperimentalCalendarApi::class)
 @Composable
-fun Example10Page(adjacentYears: Long = 50) {
+fun Example10Page(adjacentYears: Int = 50) {
     val currentYear = remember { Year.now() }
     val startYear = remember { currentYear.minusYears(adjacentYears) }
     val endYear = remember { currentYear.plusYears(adjacentYears) }
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
-    val config = LocalConfiguration.current
-    val isTablet = config.smallestScreenWidthDp >= 600
-    val isPortrait = config.screenHeightDp > config.screenWidthDp
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        val scope = rememberCoroutineScope()
-        val state = rememberYearCalendarState(
-            startYear = startYear,
-            endYear = endYear,
-            firstVisibleYear = currentYear,
-            firstDayOfWeek = daysOfWeek.first(),
-        )
-        val visibleYear = rememberFirstVisibleYearAfterScroll(state).year
-        val headerState = rememberLazyListState()
-        LaunchedEffect(visibleYear) {
-            val index = startYear.yearsUntil(visibleYear).toInt()
-            headerState.animateScrollAndCenterItem(index)
-        }
-        YearHeader(
-            startYear = startYear,
-            endYear = endYear,
-            visibleYear = visibleYear,
-            headerState = headerState,
-            isTablet = isTablet,
-        ) click@{ targetYear ->
-            if (targetYear == visibleYear) return@click
-            scope.launch {
-                if (abs(visibleYear.yearsUntil(targetYear)) <= 8) {
-                    state.animateScrollToYear(targetYear)
-                } else {
-                    val nearbyYear = if (targetYear > visibleYear) {
-                        targetYear.minusYears(5)
-                    } else {
-                        targetYear.plusYears(5)
-                    }
-                    state.scrollToYear(nearbyYear)
-                    state.animateScrollToYear(targetYear)
-                }
-            }
-        }
-        HorizontalYearCalendar(
+        val isTablet = maxWidth >= 600.dp
+        val isPortrait = maxHeight > maxWidth
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("Calendar"),
-            state = state,
-            columns = if (isPortrait) {
-                3
-            } else {
-                if (isTablet) 4 else 6
-            },
-            dayContent = { day ->
-                Day(
-                    day = day,
-                    isSelected = selections.contains(day),
-                    isTablet = isTablet,
-                ) { clicked ->
-                    if (selections.contains(clicked)) {
-                        selections.remove(clicked)
+                .background(Color.White),
+        ) {
+            val scope = rememberCoroutineScope()
+            val state = rememberYearCalendarState(
+                startYear = startYear,
+                endYear = endYear,
+                firstVisibleYear = currentYear,
+                firstDayOfWeek = daysOfWeek.first(),
+            )
+            val visibleYear = rememberFirstVisibleYearAfterScroll(state).year
+            val headerState = rememberLazyListState()
+            LaunchedEffect(visibleYear) {
+                val index = startYear.yearsUntil(visibleYear)
+                headerState.animateScrollAndCenterItem(index)
+            }
+            YearHeader(
+                startYear = startYear,
+                endYear = endYear,
+                visibleYear = visibleYear,
+                headerState = headerState,
+                isTablet = isTablet,
+            ) click@{ targetYear ->
+                if (targetYear == visibleYear) return@click
+                scope.launch {
+                    if (abs(visibleYear.yearsUntil(targetYear)) <= 8) {
+                        state.animateScrollToYear(targetYear)
                     } else {
-                        selections.add(clicked)
+                        val nearbyYear = if (targetYear > visibleYear) {
+                            targetYear.minusYears(5)
+                        } else {
+                            targetYear.plusYears(5)
+                        }
+                        state.scrollToYear(nearbyYear)
+                        state.animateScrollToYear(targetYear)
                     }
                 }
-            },
-            contentHeightMode = YearContentHeightMode.Fill,
-            monthHorizontalSpacing = if (isTablet) {
-                if (isPortrait) 52.dp else 92.dp
-            } else {
-                10.dp
-            },
-            monthVerticalSpacing = if (isTablet) 20.dp else 4.dp,
-            yearBodyContentPadding = if (isTablet) {
-                PaddingValues(horizontal = if (isPortrait) 52.dp else 92.dp, vertical = 20.dp)
-            } else {
-                PaddingValues(all = 10.dp)
-            },
-            monthHeader = {
-                MonthHeader(
-                    calendarMonth = it,
-                    isTablet = isTablet,
-                )
-            },
-        )
+            }
+            HorizontalYearCalendar(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag("Calendar"),
+                state = state,
+                columns = if (isPortrait) {
+                    3
+                } else {
+                    if (isTablet) 4 else 6
+                },
+                dayContent = { day ->
+                    Day(
+                        day = day,
+                        isSelected = selections.contains(day),
+                        isTablet = isTablet,
+                    ) { clicked ->
+                        if (selections.contains(clicked)) {
+                            selections.remove(clicked)
+                        } else {
+                            selections.add(clicked)
+                        }
+                    }
+                },
+                contentHeightMode = YearContentHeightMode.Fill,
+                monthHorizontalSpacing = if (isTablet) {
+                    if (isPortrait) 52.dp else 92.dp
+                } else {
+                    10.dp
+                },
+                monthVerticalSpacing = if (isTablet) 20.dp else 4.dp,
+                yearBodyContentPadding = if (isTablet) {
+                    PaddingValues(horizontal = if (isPortrait) 52.dp else 92.dp, vertical = 20.dp)
+                } else {
+                    PaddingValues(all = 10.dp)
+                },
+                monthHeader = {
+                    MonthHeader(
+                        calendarMonth = it,
+                        isTablet = isTablet,
+                    )
+                },
+            )
+        }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun YearHeader(
     startYear: Year,
@@ -165,11 +168,11 @@ private fun YearHeader(
             .wrapContentHeight()
             .background(headerBackground),
         state = headerState,
-        flingBehavior = rememberSnapFlingBehavior(lazyListState = headerState, SnapPosition.Center),
+        flingBehavior = rememberSnapFlingBehavior(SnapLayoutInfoProvider(headerState, SnapPositionInLayout.CenterToCenter)),
         contentPadding = PaddingValues(horizontal = if (isTablet) 40.dp else 10.dp),
     ) {
-        items(count = startYear.yearsUntil(endYear).toInt()) { index ->
-            val year = startYear.plusYears(index.toLong())
+        items(count = startYear.yearsUntil(endYear)) { index ->
+            val year = startYear.plusYears(index)
             val isSelected = visibleYear == year
             Box(
                 modifier = Modifier
@@ -266,10 +269,7 @@ private fun Day(
     }
 }
 
-@Preview(showBackground = true, heightDp = 1280, widthDp = 800, device = PIXEL_TABLET)
-@Preview(showBackground = true, heightDp = 800, widthDp = 1280, device = PIXEL_TABLET)
-@Preview(showBackground = true, heightDp = 891, widthDp = 411, device = PIXEL_7)
-@Preview(showBackground = true, heightDp = 411, widthDp = 891, device = PIXEL_7)
+@Preview
 @Composable
 private fun Example10Preview() {
     Example10Page()

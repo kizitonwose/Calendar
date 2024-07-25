@@ -14,15 +14,15 @@ fun Month.displayText(short: Boolean = true): String {
     return getDisplayName(short, enLocale)
 }
 
-fun DayOfWeek.displayText(uppercase: Boolean = false): String {
-    return getShortDisplayName(enLocale).let { value ->
+fun DayOfWeek.displayText(uppercase: Boolean = false, narrow: Boolean = false): String {
+    return getDisplayName(narrow, enLocale).let { value ->
         if (uppercase) value.toUpperCase(enLocale) else value
     }
 }
 
 expect fun Month.getDisplayName(short: Boolean, locale: Locale): String
 
-expect fun DayOfWeek.getShortDisplayName(locale: Locale): String
+expect fun DayOfWeek.getDisplayName(narrow: Boolean = false, locale: Locale): String
 
 private val enLocale = Locale("en-US")
 

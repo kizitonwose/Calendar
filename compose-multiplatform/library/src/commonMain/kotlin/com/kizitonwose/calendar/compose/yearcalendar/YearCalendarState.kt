@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.core.CalendarYear
+import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.Year
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
@@ -39,6 +40,7 @@ import kotlinx.datetime.DayOfWeek
  * @param outDateStyle the initial value for [YearCalendarState.outDateStyle]
  */
 @Composable
+@ExperimentalCalendarApi
 public fun rememberYearCalendarState(
     startYear: Year = Year.now(),
     endYear: Year = startYear,
