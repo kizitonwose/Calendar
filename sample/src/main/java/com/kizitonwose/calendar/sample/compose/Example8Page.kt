@@ -15,7 +15,6 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -83,7 +82,7 @@ fun Example8Page(horizontal: Boolean? = null) {
         val coroutineScope = rememberCoroutineScope()
         val visibleMonth = rememberFirstVisibleMonthAfterScroll(state)
         // Draw light content on dark background.
-        CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
             SimpleCalendarTitle(
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
                 currentMonth = visibleMonth.yearMonth,

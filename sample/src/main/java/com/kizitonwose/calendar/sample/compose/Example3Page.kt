@@ -26,7 +26,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.RippleConfiguration
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -107,7 +106,7 @@ fun Example3Page() {
         }
 
         // Draw light content on dark background.
-        CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
             SimpleCalendarTitle(
                 modifier = Modifier
                     .background(toolbarColor)

@@ -18,7 +18,6 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -70,7 +69,7 @@ fun Example8Page(close: () -> Unit = {}) {
             .padding(top = 20.dp),
     ) {
         // Draw light content on dark background.
-        CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
             var selectedIndex by remember { mutableIntStateOf(0) }
             PageOptions(selectedIndex, close = close) { selectedIndex = it }
             val state = rememberCalendarState(

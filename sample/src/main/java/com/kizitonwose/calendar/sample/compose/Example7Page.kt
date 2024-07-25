@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -54,7 +53,7 @@ fun Example7Page() {
             firstVisibleWeekDate = currentDate,
         )
         // Draw light content on dark background.
-        CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
             WeekCalendar(
                 modifier = Modifier.padding(vertical = 4.dp),
                 state = state,

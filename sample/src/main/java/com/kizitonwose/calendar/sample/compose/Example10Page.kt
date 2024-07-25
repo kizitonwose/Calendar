@@ -19,8 +19,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -277,7 +275,7 @@ private fun Example10Preview() {
 
 private val headerBackground = Color(0xFFF1F1F1)
 private fun simpleTextColor(isSelected: Boolean) =
-    if (isSelected) darkColorScheme().onSurface else lightColorScheme().onSurface
+    if (isSelected) Color.White else Color.Black
 
 private fun simpleTextBackground(isSelected: Boolean) =
-    if (isSelected) darkColorScheme().surface else lightColorScheme().surface
+    if (isSelected) Color.Black else Color.White
