@@ -1,4 +1,5 @@
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -8,14 +9,23 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +55,7 @@ import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun Example8Page(horizontal: Boolean = true) {
+fun Example8Page(close: () -> Unit = {}) {
     val today = remember { LocalDate.now() }
     val currentMonth = remember(today) { today.yearMonth }
     val startMonth = remember { currentMonth.minusMonths(500) }
@@ -58,19 +68,22 @@ fun Example8Page(horizontal: Boolean = true) {
             .background(Colors.example1BgLight)
             .padding(top = 20.dp),
     ) {
-        val state = rememberCalendarState(
-            startMonth = startMonth,
-            endMonth = endMonth,
-            firstVisibleMonth = currentMonth,
-            firstDayOfWeek = daysOfWeek.first(),
-            outDateStyle = OutDateStyle.EndOfGrid,
-        )
-        val coroutineScope = rememberCoroutineScope()
-        val visibleMonth = rememberFirstVisibleMonthAfterScroll(state)
         // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
+            var selectedIndex by remember { mutableStateOf(0) }
+            PageOptions(selectedIndex, close = close) { selectedIndex = it }
+            val state = rememberCalendarState(
+                startMonth = startMonth,
+                endMonth = endMonth,
+                firstVisibleMonth = currentMonth,
+                firstDayOfWeek = daysOfWeek.first(),
+                outDateStyle = OutDateStyle.EndOfGrid,
+            )
+            val coroutineScope = rememberCoroutineScope()
+            val visibleMonth = rememberFirstVisibleMonthAfterScroll(state)
             SimpleCalendarTitle(
-                modifier = Modifier.padding(bottom = 14.dp, start = 8.dp, end = 8.dp),
+                modifier = Modifier.padding(bottom = 14.dp, top = 4.dp, start = 8.dp, end = 8.dp),
+                isHorizontal = selectedIndex == 0,
                 currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
                     coroutineScope.launch {
@@ -89,7 +102,7 @@ fun Example8Page(horizontal: Boolean = true) {
                     .background(Colors.example1Bg)
                     .testTag("Calendar"),
                 state = state,
-                horizontal = horizontal,
+                horizontal = selectedIndex == 0,
                 dayContent = { day ->
                     Day(
                         day = day,
@@ -161,6 +174,42 @@ private fun FullScreenCalendar(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PageOptions(selectedIndex: Int, close: () -> Unit = {}, onSelect: (Int) -> Unit) {
+    Row(
+        modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        if (!isMobile()) {
+            Button(
+                onClick = close,
+                colors = ButtonDefaults.buttonColors().copy(containerColor = Colors.example1Bg),
+            ) {
+                Text("Close")
+            }
+        }
+        val options = listOf("Horizontal", "Vertical")
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.weight(1f)) {
+            options.forEachIndexed { index, label ->
+                SegmentedButton(
+                    colors = SegmentedButtonDefaults.colors().copy(
+                        activeContainerColor = Colors.example1Bg,
+                        activeContentColor = Color.White,
+                        inactiveContainerColor = Color.Transparent,
+                        inactiveContentColor = Color.White,
+                    ),
+                    shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                    onClick = { onSelect(index) },
+                    selected = index == selectedIndex,
+                ) {
+                    Text(label)
+                }
+            }
+        }
+    }
+}
+
 @Composable
 private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
     Row(
@@ -191,12 +240,10 @@ private fun MonthFooter(selectionCount: Int) {
             .padding(vertical = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
-        val text = if (selectionCount == 0) {
-            "No selections in this month"
-        } else if (selectionCount == 1) {
-            "$selectionCount selection in this month"
-        } else {
-            "$selectionCount selections in this month"
+        val text = when (selectionCount) {
+            0 -> "No selections in this month"
+            1 -> "$selectionCount selection in this month"
+            else -> "$selectionCount selections in this month"
         }
         Text(text = text)
     }

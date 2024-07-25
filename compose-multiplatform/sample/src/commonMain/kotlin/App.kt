@@ -170,7 +170,7 @@ private fun AppNavHost(
         horizontallyAnimatedComposable(Page.Example5.name) { Example5Page { navController.popBackStack() } }
         horizontallyAnimatedComposable(Page.Example6.name) { Example6Page() }
         horizontallyAnimatedComposable(Page.Example7.name) { Example7Page() }
-        horizontallyAnimatedComposable(Page.Example8.name) { Example8Page() }
+        horizontallyAnimatedComposable(Page.Example8.name) { Example8Page() { navController.popBackStack() } }
         horizontallyAnimatedComposable(Page.Example9.name) { Example9Page() }
     }
 }
