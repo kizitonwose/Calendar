@@ -11,7 +11,7 @@ import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class YearDataTests {
+class YearDataTest {
 
     @Test
     @JsName("test1")

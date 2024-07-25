@@ -14,7 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class MonthDataTests {
+class MonthDataTest {
     private val may2019 = YearMonth(2019, Month.MAY)
     private val november2019 = YearMonth(2019, Month.NOVEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY

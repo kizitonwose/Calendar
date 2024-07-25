@@ -10,7 +10,7 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.Year
 
-class YearCalendarStateTests {
+class YearCalendarStateTest {
     @Test
     fun `start year update is reflected in the state`() {
         val now = Year.now()

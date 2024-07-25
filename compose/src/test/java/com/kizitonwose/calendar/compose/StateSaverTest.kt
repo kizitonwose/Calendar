@@ -7,15 +7,12 @@ import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.Year
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.now
-import com.kizitonwose.calendar.data.VisibleItemState
-import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.LocalDate
-import kotlin.js.JsName
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.Year
+import java.time.YearMonth
 
 /**
  * The states use the [listSaver] type so these tests should catch when we move
@@ -23,9 +20,8 @@ import kotlin.test.assertEquals
  * being saved. Such issues are typically not caught during development since
  * state restoration (e.g via rotation) will likely not happen often.
  */
-class StateSaverTests {
+class StateSaverTest {
     @Test
-    @JsName("test1")
     fun `month calendar state can be restored`() {
         val now = YearMonth.now()
         val firstDayOfWeek = DayOfWeek.entries.random()
@@ -47,7 +43,6 @@ class StateSaverTests {
     }
 
     @Test
-    @JsName("test2")
     fun `week calendar state can be restored`() {
         val now = LocalDate.now()
         val firstDayOfWeek = DayOfWeek.entries.random()
@@ -66,7 +61,6 @@ class StateSaverTests {
     }
 
     @Test
-    @JsName("test3")
     fun `heatmap calendar state can be restored`() {
         val now = YearMonth.now()
         val firstDayOfWeek = DayOfWeek.entries.random()
@@ -85,7 +79,6 @@ class StateSaverTests {
     }
 
     @Test
-    @JsName("test4")
     fun `year calendar state can be restored`() {
         val now = Year.now()
         val firstDayOfWeek = DayOfWeek.entries.random()

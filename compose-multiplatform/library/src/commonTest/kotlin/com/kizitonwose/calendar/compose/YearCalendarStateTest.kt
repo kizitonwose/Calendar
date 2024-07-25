@@ -16,7 +16,7 @@ import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class YearCalendarStateTests {
+class YearCalendarStateTest {
     @Test
     @JsName("test1")
     fun `start year update is reflected in the state`() {

@@ -8,7 +8,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
-class CalendarStateTests {
+class CalendarStateTest {
     @Test
     fun `start month update is reflected in the state`() {
         val now = YearMonth.now()

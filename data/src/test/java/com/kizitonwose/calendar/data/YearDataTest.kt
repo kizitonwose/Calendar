@@ -9,7 +9,7 @@ import java.time.Month
 import java.time.Year
 import java.time.YearMonth
 
-class YearDataTests {
+class YearDataTest {
 
     @Test
     fun `year data is accurate with non-leap year`() {

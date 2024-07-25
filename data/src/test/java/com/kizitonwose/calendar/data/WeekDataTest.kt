@@ -1,20 +1,18 @@
 package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.WeekDayPosition
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.atDay
 import com.kizitonwose.calendar.core.daysOfWeek
-import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.Month
-import kotlin.js.JsName
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.Month
+import java.time.YearMonth
 
-class WeekDataTests {
-    private val may2019 = YearMonth(2019, Month.MAY)
-    private val november2019 = YearMonth(2019, Month.NOVEMBER)
+class WeekDataTest {
+    private val may2019 = YearMonth.of(2019, Month.MAY)
+    private val november2019 = YearMonth.of(2019, Month.NOVEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** May and November 2019 with Monday as the first day of week.
@@ -36,30 +34,27 @@ class WeekDataTests {
      **/
 
     @Test
-    @JsName("test1")
     fun `date range adjustment works as expected`() {
         val may01 = may2019.atDay(1)
         val nov01 = november2019.atDay(1)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, nov01, firstDayOfWeek)
 
-        assertEquals(LocalDate(2019, Month.APRIL, 29), adjustedWeekRange.startDateAdjusted)
-        assertEquals(LocalDate(2019, Month.NOVEMBER, 3), adjustedWeekRange.endDateAdjusted)
+        assertEquals(LocalDate.of(2019, Month.APRIL, 29), adjustedWeekRange.startDateAdjusted)
+        assertEquals(LocalDate.of(2019, Month.NOVEMBER, 3), adjustedWeekRange.endDateAdjusted)
     }
 
     @Test
-    @JsName("test2")
     fun `week data generation works as expected`() {
         val may01 = may2019.atDay(1)
         val nov01 = november2019.atDay(1)
         val adjustedWeekRange = getWeekCalendarAdjustedRange(may01, nov01, firstDayOfWeek)
         val week = getWeekCalendarData(adjustedWeekRange.startDateAdjusted, 0, may01, nov01).week
 
-        assertEquals(LocalDate(2019, Month.APRIL, 29), week.days.first().date)
-        assertEquals(LocalDate(2019, Month.MAY, 5), week.days.last().date)
+        assertEquals(LocalDate.of(2019, Month.APRIL, 29), week.days.first().date)
+        assertEquals(LocalDate.of(2019, Month.MAY, 5), week.days.last().date)
     }
 
     @Test
-    @JsName("test3")
     fun `week in date generation works as expected`() {
         val may01 = may2019.atDay(1)
         val nov01 = november2019.atDay(1)
@@ -74,7 +69,6 @@ class WeekDataTests {
     }
 
     @Test
-    @JsName("test4")
     fun `week out date generation works as expected`() {
         val may01 = may2019.atDay(1)
         val may31 = may2019.atDay(31)
@@ -89,7 +83,6 @@ class WeekDataTests {
     }
 
     @Test
-    @JsName("test5")
     fun `days are in the appropriate week columns`() {
         val may01 = may2019.atDay(2)
         val may31 = may2019.atDay(31)
@@ -103,7 +96,6 @@ class WeekDataTests {
     }
 
     @Test
-    @JsName("test6")
     fun `generated week is at the correct offset`() {
         val may01 = may2019.atDay(2)
         val may31 = may2019.atDay(31)
@@ -115,7 +107,6 @@ class WeekDataTests {
     }
 
     @Test
-    @JsName("test7")
     fun `week index calculation works as expected`() {
         val may01 = may2019.atDay(2)
         val may31 = may2019.atDay(31)
@@ -126,7 +117,6 @@ class WeekDataTests {
     }
 
     @Test
-    @JsName("test8")
     fun `week indices count calculation works as expected`() {
         val may01 = may2019.atDay(2)
         val may31 = may2019.atDay(31)

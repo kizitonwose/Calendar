@@ -13,7 +13,7 @@ import java.time.DayOfWeek
 import java.time.Month
 import java.time.YearMonth
 
-class MonthDataTests {
+class MonthDataTest {
     private val may2019 = YearMonth.of(2019, Month.MAY)
     private val november2019 = YearMonth.of(2019, Month.NOVEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY

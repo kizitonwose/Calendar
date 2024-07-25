@@ -44,7 +44,7 @@ import java.time.temporal.WeekFields
  */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class CalendarComposeTests {
+class CalendarComposeTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 

@@ -1,22 +1,21 @@
 package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
 import com.kizitonwose.calendar.core.yearMonth
-import com.kizitonwose.calendar.utils.nextMonth
-import com.kizitonwose.calendar.utils.previousMonth
-import kotlinx.datetime.DayOfWeek
-import kotlinx.datetime.Month
-import kotlin.js.JsName
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import java.time.DayOfWeek
+import java.time.Month
+import java.time.YearMonth
 
-class HeatMapDataTests {
-    private val october2022 = YearMonth(2022, Month.OCTOBER)
-    private val november2022 = YearMonth(2022, Month.NOVEMBER)
-    private val december2022 = YearMonth(2022, Month.DECEMBER)
+class HeatMapDataTest {
+    private val october2022 = YearMonth.of(2022, Month.OCTOBER)
+    private val november2022 = YearMonth.of(2022, Month.NOVEMBER)
+    private val december2022 = YearMonth.of(2022, Month.DECEMBER)
     private val firstDayOfWeek = DayOfWeek.MONDAY
 
     /** October, November and December 2022
@@ -42,7 +41,6 @@ class HeatMapDataTests {
      **/
 
     @Test
-    @JsName("test1")
     fun `number of day positions are accurate`() {
         val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
         val days = monthData.calendarMonth.weekDays.flatten()
@@ -58,7 +56,6 @@ class HeatMapDataTests {
     }
 
     @Test
-    @JsName("test2")
     fun `first date in the following month is accurate`() {
         val novemberMonthData = getHeatMapCalendarMonthData(october2022, 1, firstDayOfWeek)
         val days = novemberMonthData.calendarMonth.weekDays.flatten()
@@ -69,7 +66,6 @@ class HeatMapDataTests {
     }
 
     @Test
-    @JsName("test3")
     fun `dates in the following month are in the correct positions`() {
         val novemberMonthData = getHeatMapCalendarMonthData(october2022, 1, firstDayOfWeek)
         val days = novemberMonthData.calendarMonth.weekDays.flatten()
@@ -83,7 +79,6 @@ class HeatMapDataTests {
     }
 
     @Test
-    @JsName("test4")
     fun `dates in the following month have the correct month values`() {
         val november2022 = october2022.nextMonth
         val december2022 = november2022.nextMonth
@@ -98,7 +93,6 @@ class HeatMapDataTests {
     }
 
     @Test
-    @JsName("test5")
     fun `dates in the first month are in the correct positions`() {
         val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
         val days = monthData.calendarMonth.weekDays.flatten()
@@ -113,7 +107,6 @@ class HeatMapDataTests {
     }
 
     @Test
-    @JsName("test6")
     fun `dates in the first month have the correct month values`() {
         val previousMonth = october2022.previousMonth
         val nextMonth = october2022.nextMonth
@@ -130,7 +123,6 @@ class HeatMapDataTests {
     }
 
     @Test
-    @JsName("test7")
     fun `days are in the appropriate week columns`() {
         val monthData = getHeatMapCalendarMonthData(october2022, 0, firstDayOfWeek)
         val daysOfWeek = daysOfWeek(firstDayOfWeek)
@@ -143,7 +135,6 @@ class HeatMapDataTests {
     }
 
     @Test
-    @JsName("test8")
     fun `generated month is at the correct offset`() {
         val novemberMonthData = getHeatMapCalendarMonthData(october2022, 1, firstDayOfWeek)
         val decemberMonthData = getHeatMapCalendarMonthData(october2022, 2, firstDayOfWeek)

@@ -13,7 +13,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class WeekCalendarStateTests {
+class WeekCalendarStateTest {
     @Test
     @JsName("test1")
     fun `start date update is reflected in the state`() {

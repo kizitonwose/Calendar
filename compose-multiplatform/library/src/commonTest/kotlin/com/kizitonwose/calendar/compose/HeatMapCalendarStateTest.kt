@@ -14,7 +14,7 @@ import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class HeatMapCalendarStateTests {
+class HeatMapCalendarStateTest {
     @Test
     @JsName("test1")
     fun `start month update is reflected in the state`() {
