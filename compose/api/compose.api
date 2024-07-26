@@ -12,7 +12,9 @@ public final class com/kizitonwose/calendar/compose/CalendarItemInfo : androidx/
 public final class com/kizitonwose/calendar/compose/CalendarKt {
 	public static final fun HeatMapCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalendarState;Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapWeekHeaderPosition;ZLandroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun HorizontalCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/CalendarState;ZZZLandroidx/compose/foundation/layout/PaddingValues;Lcom/kizitonwose/calendar/compose/ContentHeightMode;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;III)V
+	public static final fun HorizontalYearCalendar-Y3kUhCI (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;IZZZLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/layout/PaddingValues;FFLcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;IIII)V
 	public static final fun VerticalCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/CalendarState;ZZZLandroidx/compose/foundation/layout/PaddingValues;Lcom/kizitonwose/calendar/compose/ContentHeightMode;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;III)V
+	public static final fun VerticalYearCalendar-Y3kUhCI (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;IZZZLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/layout/PaddingValues;FFLcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;IIII)V
 	public static final fun WeekCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState;ZZZLandroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 }
 
@@ -177,5 +179,83 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 
 public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarStateKt {
 	public static final fun rememberWeekCalendarState (Ljava/time/LocalDate;Ljava/time/LocalDate;Ljava/time/LocalDate;Ljava/time/DayOfWeek;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt {
+	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function5;
+	public static field lambda-2 Lkotlin/jvm/functions/Function5;
+	public static field lambda-3 Lkotlin/jvm/functions/Function5;
+	public static field lambda-4 Lkotlin/jvm/functions/Function5;
+	public fun <init> ()V
+	public final fun getLambda-1$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda-2$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda-3$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda-4$compose_release ()Lkotlin/jvm/functions/Function5;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarItemInfo : androidx/compose/foundation/lazy/LazyListItemInfo {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/foundation/lazy/LazyListItemInfo;Lcom/kizitonwose/calendar/core/CalendarYear;)V
+	public fun getContentType ()Ljava/lang/Object;
+	public fun getIndex ()I
+	public fun getKey ()Ljava/lang/Object;
+	public fun getOffset ()I
+	public fun getSize ()I
+	public final fun getYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarLayoutInfo : androidx/compose/foundation/lazy/LazyListLayoutInfo {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/foundation/lazy/LazyListLayoutInfo;Lkotlin/jvm/functions/Function1;)V
+	public fun getAfterContentPadding ()I
+	public fun getBeforeContentPadding ()I
+	public fun getMainAxisItemSpacing ()I
+	public fun getOrientation ()Landroidx/compose/foundation/gestures/Orientation;
+	public fun getReverseLayout ()Z
+	public fun getTotalItemsCount ()I
+	public fun getViewportEndOffset ()I
+	public fun getViewportSize-YbymL2g ()J
+	public fun getViewportStartOffset ()I
+	public fun getVisibleItemsInfo ()Ljava/util/List;
+	public final fun getVisibleYearsInfo ()Ljava/util/List;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarState : androidx/compose/foundation/gestures/ScrollableState {
+	public static final field $stable I
+	public static final field Companion Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState$Companion;
+	public final fun animateScrollToYear (Ljava/time/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun dispatchRawDelta (F)F
+	public final fun getEndYear ()Ljava/time/Year;
+	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
+	public final fun getFirstVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public final fun getLastVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarLayoutInfo;
+	public final fun getOutDateStyle ()Lcom/kizitonwose/calendar/core/OutDateStyle;
+	public final fun getStartYear ()Ljava/time/Year;
+	public fun isScrollInProgress ()Z
+	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToYear (Ljava/time/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setEndYear (Ljava/time/Year;)V
+	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
+	public final fun setOutDateStyle (Lcom/kizitonwose/calendar/core/OutDateStyle;)V
+	public final fun setStartYear (Ljava/time/Year;)V
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarState$Companion {
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarStateKt {
+	public static final fun rememberYearCalendarState (Ljava/time/Year;Ljava/time/Year;Ljava/time/Year;Ljava/time/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode : java/lang/Enum {
+	public static final field Fill Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static final field Stretch Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static final field Wrap Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static fun values ()[Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
 }
 
