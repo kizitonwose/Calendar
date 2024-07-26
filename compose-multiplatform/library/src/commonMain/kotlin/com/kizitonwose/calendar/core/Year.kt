@@ -107,7 +107,6 @@ public fun Year.isLeap(): Boolean = Year.isLeap(year)
  */
 public fun Year.length(): Int = if (isLeap()) 366 else 365
 
-
 /**
  * Returns the [LocalDate] at the specified [dayOfYear] in this year.
  *

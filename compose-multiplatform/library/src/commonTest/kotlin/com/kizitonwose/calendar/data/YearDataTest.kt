@@ -12,7 +12,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class YearDataTest {
-
     @Test
     @JsName("test1")
     fun `year data is accurate with non-leap year`() {

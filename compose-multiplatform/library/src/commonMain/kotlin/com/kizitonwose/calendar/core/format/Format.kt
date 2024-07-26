@@ -9,7 +9,11 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format.char
 
 private val ISO_YEAR_MONTH by lazy {
-    LocalDate.Format { year(); char('-'); monthNumber() }
+    LocalDate.Format {
+        year()
+        char('-')
+        monthNumber()
+    }
 }
 
 private val ISO_YEAR by lazy {

@@ -185,7 +185,6 @@ fun rememberFirstVisibleYearAfterScroll(state: YearCalendarState): CalendarYear 
     return visibleYear.value
 }
 
-
 private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
     get() {
         val visibleItemsInfo = this.visibleMonthsInfo.toMutableList()
@@ -257,7 +256,6 @@ suspend fun LazyListState.animateScrollAndCenterItem(index: Int) {
         animateScrollIfVisible()
     }
 }
-
 
 val YearMonth.next: YearMonth get() = this.plus(1, DateTimeUnit.MONTH)
 val YearMonth.previous: YearMonth get() = this.minus(1, DateTimeUnit.MONTH)

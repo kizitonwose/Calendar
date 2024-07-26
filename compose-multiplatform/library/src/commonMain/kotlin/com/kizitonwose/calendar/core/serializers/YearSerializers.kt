@@ -26,7 +26,6 @@ import kotlinx.serialization.encoding.encodeStructure
  * @see Year.toString
  */
 public object YearIso8601Serializer : KSerializer<Year> {
-
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("com.kizitonwose.calendar.core.Year", PrimitiveKind.STRING)
 
@@ -44,7 +43,6 @@ public object YearIso8601Serializer : KSerializer<Year> {
  * JSON example: `{"year":2020}`
  */
 public object YearComponentSerializer : KSerializer<Year> {
-
     override val descriptor: SerialDescriptor =
         buildClassSerialDescriptor("com.kizitonwose.calendar.core.Year") {
             element<Int>("year")

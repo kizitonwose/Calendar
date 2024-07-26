@@ -10,7 +10,6 @@ import java.time.Year
 import java.time.YearMonth
 
 class YearDataTest {
-
     @Test
     fun `year data is accurate with non-leap year`() {
         val year = Year.of(2019)
