@@ -15,9 +15,9 @@ A highly customizable calendar library for Android and Compose Multiplatform, ba
 
 ## Features
 
-- [x] Single, multiple or range selection - Total flexibility to implement the date selection
+- [x] Week, month, or year modes - Show a week-based calendar, or the typical month calendar, or a year-based calendar.
+- [x] Single, multiple, or range selection - Total flexibility to implement the date selection
   whichever way you like.
-- [x] Week or month mode - Show a week-based calendar, or the typical month calendar.
 - [x] Disable desired dates - Prevent selection of some dates by disabling them.
 - [x] Boundary dates - Limit the calendar date range.
 - [x] Custom date view/composable - Make your day cells look however you want, with any
@@ -28,8 +28,8 @@ A highly customizable calendar library for Android and Compose Multiplatform, ba
 - [x] Horizontal or vertical scrolling calendar.
 - [x] HeatMap calendar - Suitable for showing how data changes over time, like GitHub's contribution
   chart.
-- [x] Month/Week headers and footers - Add headers/footers of any kind on each month/week.
-- [x] Easily scroll to any date/week/month on the calendar via swipe actions or programmatically.
+- [x] Year/Month/Week headers and footers - Add headers/footers of any kind on each year/month/week.
+- [x] Easily scroll to any date/week/month/year on the calendar via swipe actions or programmatically.
 - [x] Use all RecyclerView/LazyRow/LazyColumn customizations since the calendar extends from
   RecyclerView for the view system and uses LazyRow/LazyColumn for compose.
 - [x] Design your calendar [however you want.](https://github.com/kizitonwose/Calendar/issues/1) The
@@ -124,12 +124,12 @@ For the compose calendar library, ensure that you are using the library version 
 
 | Compose UI | Android Calendar Library | Multiplatform Calendar Library |
 |:----------:|:------------------------:|:------------------------------:|
-|   1.2.x    |           2.0.x          |                 -              |
-|   1.3.x    |       2.1.x - 2.2.x      |                 -              |
-|   1.4.x    |           2.3.x          |                 -              |
-|   1.5.x    |           2.4.x          |                 -              |
-|   1.6.x    |           2.5.x          |                 -              |
-|   1.7.x    |           2.6.x          |               2.6.x            |
+|   1.2.x    |           2.0.x          |               -                |
+|   1.3.x    |       2.1.x - 2.2.x      |               -                |
+|   1.4.x    |           2.3.x          |               -                |
+|   1.5.x    |           2.4.x          |               -                |
+|   1.6.x    |           2.5.x          |             2.5.x              |
+|   1.7.x    |           2.6.x          |             2.6.x              |
 
 ## Usage
 
