@@ -284,7 +284,7 @@ object Example9PageSharedComponents {
             val textColor = when {
                 isSelected -> Color.White
                 isSelectable -> Color.Unspecified
-                else -> Colors.inactiveText
+                else -> Colors.example4GrayPast
             }
             Text(
                 text = day.dayOfMonth.toString(),

@@ -21,12 +21,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.shared.dateRangeDisplayText
 import kotlinx.coroutines.launch
 
@@ -34,7 +32,6 @@ class CalendarComposeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val primaryColor = colorResource(id = R.color.colorPrimary)
             var toolBarTitle by remember { mutableStateOf("") }
             var toolBarVisible by remember { mutableStateOf(true) }
             val snackbarHostState = remember { SnackbarHostState() }
@@ -47,7 +44,7 @@ class CalendarComposeActivity : AppCompatActivity() {
                     toolBarVisible = page.showToolBar
                 }
             }
-            MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(primary = primaryColor)) {
+            MaterialTheme(colorScheme = SampleColorScheme) {
                 Scaffold(
                     topBar = {
                         if (toolBarVisible) {

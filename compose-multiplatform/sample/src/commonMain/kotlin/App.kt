@@ -39,7 +39,7 @@ import kotlin.math.roundToInt
 @Composable
 @Preview
 fun App() {
-    MaterialTheme(MaterialTheme.colorScheme.copy(primary = Colors.primary)) {
+    MaterialTheme(SampleColorScheme) {
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize(),
         ) {

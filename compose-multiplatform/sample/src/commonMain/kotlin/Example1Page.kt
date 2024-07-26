@@ -125,7 +125,7 @@ private fun Day(day: CalendarDay, isSelected: Boolean, onClick: (CalendarDay) ->
         val textColor = when (day.position) {
             // Color.Unspecified will use the default text color from the current theme
             DayPosition.MonthDate -> if (isSelected) Color.White else Color.Unspecified
-            DayPosition.InDate, DayPosition.OutDate -> Colors.inactiveText
+            DayPosition.InDate, DayPosition.OutDate -> Colors.example4GrayPast
         }
         Text(
             text = day.date.dayOfMonth.toString(),

@@ -54,7 +54,7 @@ fun Modifier.backgroundHighlight(
         DayPosition.MonthDate -> {
             when {
                 day.date < today -> {
-                    textColor(Colors.inactiveText)
+                    textColor(Colors.example4GrayPast)
                     this
                 }
 
@@ -98,7 +98,7 @@ fun Modifier.backgroundHighlight(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = Colors.inactiveText,
+                            color = Colors.example4GrayPast,
                         )
                 }
 
@@ -152,7 +152,7 @@ fun Modifier.backgroundHighlightLegacy(
         DayPosition.MonthDate -> {
             when {
                 day.date < today -> {
-                    textColor(Colors.inactiveText)
+                    textColor(Colors.example4GrayPast)
                     this
                 }
 
@@ -195,7 +195,7 @@ fun Modifier.backgroundHighlightLegacy(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = Colors.inactiveText,
+                            color = Colors.example4GrayPast,
                         )
                 }
 
