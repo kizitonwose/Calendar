@@ -23,14 +23,14 @@ plugins {
 allprojects {
     apply(plugin = rootProject.libs.plugins.kotlinter.get().pluginId)
 
-    plugins.withType<KotlinBasePlugin>().configureEach {
+    plugins.withType<KotlinBasePlugin> {
         extensions.configure<KotlinProjectExtension> {
             if ("sample" !in project.name) {
                 explicitApi()
             }
         }
     }
-    tasks.withType<Test>().configureEach {
+    tasks.withType<Test> {
         useJUnitPlatform()
         // https://docs.gradle.org/8.8/userguide/performance.html#execute_tests_in_parallel
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)

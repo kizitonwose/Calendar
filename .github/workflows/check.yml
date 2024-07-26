@@ -52,7 +52,7 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
       - name: Unit tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew test
 
   instrumentation-tests:
     name: Instrumentation tests
