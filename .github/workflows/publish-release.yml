@@ -13,7 +13,6 @@ jobs:
     if: github.repository == 'kizitonwose/Calendar'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -23,9 +22,9 @@ jobs:
           gradle-home-cache-cleanup: true
       - name: Deploy to Maven
         run: ./gradlew publish
-        with:
-          mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
-          mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
-          signingInMemoryKey: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY }}
-          signingInMemoryKeyId: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_ID }}
-          signingInMemoryKeyPassword: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_PASSWORD }}
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SONATYPE_NEXUS_SIGNING_KEY_PASSWORD }}
