@@ -89,7 +89,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.kizitonwose.calendar.compose.multiplatform"
+    namespace = "com.kizitonwose.calendar.compose.multiplatform.sample"
     compileSdk = Android.compileSdk
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -97,7 +97,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "com.kizitonwose.calendar.compose.multiplatform"
+        applicationId = "com.kizitonwose.calendar.compose.multiplatform.sample"
         minSdk = Android.minSdkSampleApp
         targetSdk = Android.targetSdk
         versionCode = 1
