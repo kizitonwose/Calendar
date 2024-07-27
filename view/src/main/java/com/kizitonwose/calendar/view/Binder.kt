@@ -3,6 +3,7 @@ package com.kizitonwose.calendar.view
 import android.view.View
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 
@@ -19,14 +20,18 @@ public interface Binder<Data, Container : ViewContainer> {
     public fun bind(container: Container, data: Data)
 }
 
-public interface WeekDayBinder<Container : ViewContainer> : Binder<WeekDay, Container>
+public interface YearHeaderFooterBinder<Container : ViewContainer> : Binder<CalendarYear, Container>
 
-public interface WeekHeaderFooterBinder<Container : ViewContainer> : Binder<Week, Container>
-
-public interface MonthDayBinder<Container : ViewContainer> : Binder<CalendarDay, Container>
+public typealias YearScrollListener = (CalendarYear) -> Unit
 
 public interface MonthHeaderFooterBinder<Container : ViewContainer> : Binder<CalendarMonth, Container>
 
+public interface MonthDayBinder<Container : ViewContainer> : Binder<CalendarDay, Container>
+
 public typealias MonthScrollListener = (CalendarMonth) -> Unit
+
+public interface WeekHeaderFooterBinder<Container : ViewContainer> : Binder<Week, Container>
+
+public interface WeekDayBinder<Container : ViewContainer> : Binder<WeekDay, Container>
 
 public typealias WeekScrollListener = (Week) -> Unit

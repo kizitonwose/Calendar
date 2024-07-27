@@ -80,4 +80,39 @@
         <attr name="cv_scrollPaged" />
         <attr name="cv_daySize" />
     </declare-styleable>
+
+    <declare-styleable name="YearCalendarView">
+        <attr name="cv_dayViewResource" />
+
+        <!-- The xml resource that is inflated and used as a header for every month. -->
+        <attr name="cv_monthHeaderResource" format="reference" />
+
+        <!-- The xml resource that is inflated and used as a footer for every month. -->
+        <attr name="cv_monthFooterResource" format="reference" />
+
+        <!-- Determines how outDates are generated for each month on the calendar. -->
+        <attr name="cv_outDateStyle" format="enum">
+            <!-- The calendar will generate outDates until it reaches the end
+            of the month row. This means that if a month has 5 rows, it will
+            display 5 rows and if a month has 6 rows, it will display 6 rows. -->
+            <enum name="endOfRow" value="0" />
+            <!-- The calendar will generate outDates until it reaches the end
+            of a 6 x 7 grid on each month. This means that all months will have 6 rows. -->
+            <enum name="endOfGrid" value="1" />
+        </attr>
+
+        <!-- A ViewGroup which is instantiated and used as the container for each month.
+         This class must have a constructor which takes only a Context. You should
+         exclude the name and constructor of this class from code obfuscation if enabled. -->
+        <attr name="cv_monthViewClass" format="string" />
+
+        <!--This determines the scroll direction of the the calendar. -->
+        <attr name="cv_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+
+        <attr name="cv_scrollPaged" />
+        <attr name="cv_daySize" />
+    </declare-styleable>
 </resources>

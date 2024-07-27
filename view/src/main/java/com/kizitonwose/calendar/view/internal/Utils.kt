@@ -110,5 +110,5 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
 }
 
 internal fun dayTag(date: LocalDate): Int = date.hashCode()
-private const val EXAMPLE_CUSTOM_CLASS_URL =
+internal const val EXAMPLE_CUSTOM_CLASS_URL =
     "https://github.com/kizitonwose/Calendar/blob/3dfb2d2e91d5e443b540ff411113a05268e4b8d2/sample/src/main/java/com/kizitonwose/calendar/sample/view/Example6Fragment.kt#L29"

@@ -81,6 +81,7 @@ private fun findDate(day: Any?): LocalDate {
 @Suppress("FunctionName")
 internal fun DayLinearLayoutParams(layoutParams: ViewGroup.LayoutParams): LinearLayout.LayoutParams =
     if (layoutParams is ViewGroup.MarginLayoutParams) {
+        // Ensure we call the correct constructor.
         LinearLayout.LayoutParams(layoutParams)
     } else {
         LinearLayout.LayoutParams(layoutParams)
