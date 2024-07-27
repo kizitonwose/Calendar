@@ -635,13 +635,13 @@ A year calendar implementation from the sample app:
 
 The year calendar composables also provide a parameter `isMonthVisible` which determines if a month
 is added to the calendar year grid. For example, if you want a calendar that starts in the year 2024
-and ends in the year 2054, but only shows months from from July 2024, the logic would look like
+and ends in the year 2054, but only shows months from October 2024, the logic would look like
 this:
 
 ```kotlin
 @Composable
 fun MainScreen() {
-    val july2024 = remember { YearMonth.of(2024, Month.JULY) }
+    val october2024 = remember { YearMonth.of(2024, Month.OCTOBER) }
     val startYear = remember { Year.of(2024) }
     val endYear = remember { Year.of(2054) }
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } 
@@ -657,8 +657,8 @@ fun MainScreen() {
         dayContent = { Day(it) },
         yearHeader = { YearHeader(it) },
         monthHeader = { MonthHeader(it) },
-        isMonthVisible = { month ->
-            month.yearMonth >= july2024
+        isMonthVisible = { data ->
+            data.yearMonth >= october2024
         }
     )
 }
