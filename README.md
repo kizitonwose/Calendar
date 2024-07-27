@@ -3,11 +3,13 @@
 A highly customizable calendar library for Android and Compose Multiplatform, backed by RecyclerView for the view system, and LazyRow/LazyColumn for compose.
 
 [![Tests](https://github.com/kizitonwose/Calendar/workflows/Check/badge.svg?branch=main)](https://github.com/kizitonwose/Calendar/actions)
-[![Android Library](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27-%27))][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
-[![Android Library Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
-[![Multiplatform Library Alpha](https://img.shields.io/badge/dynamic/xml.svg?label=Multiplatform%20Library%20Alpha&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/compose-multiplatform/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27alpha%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
 [![License](https://img.shields.io/badge/License-MIT-0097A7.svg)](https://github.com/kizitonwose/Calendar/blob/main/LICENSE.md)
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
+
+[![Android Library](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27-%27))][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
+[![Android Library Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
+[![Multiplatform Library](https://img.shields.io/badge/dynamic/xml.svg?label=Multiplatform%20Library&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/compose-multiplatform/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27-%27))][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
+[![Multiplatform Library Alpha](https://img.shields.io/badge/dynamic/xml.svg?label=Multiplatform%20Library%20Alpha&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/compose-multiplatform/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27alpha%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
 
 **With this library, your calendar will look however you want it to.**
 
