@@ -2,9 +2,12 @@ import androidx.compose.ui.graphics.Color
 
 object Colors {
     val example1Selection = Color(0xFFFCCA3E)
-    val inactiveText = Color(0xFFBEBEBE)
-    val example4Gray = Color(0xFF474747)
+    val example1Bg = Color(0xFF3A284C)
+    val example1BgLight = Color(0xFF433254)
+    val example1BgSecondary = Color(0xFF51356E)
+    val example1WhiteLight = Color(0x4DFFFFFF)
     val example4GrayPast = Color(0xFFBEBEBE)
+    val example4Gray = Color(0xFF474747)
     val example5PageBgColor = Color(0xFF0E0E0E)
     val example5ItemViewBgColor = Color(0xFF1B1B1B)
     val example5ToolbarColor = Color(0xFF282828)

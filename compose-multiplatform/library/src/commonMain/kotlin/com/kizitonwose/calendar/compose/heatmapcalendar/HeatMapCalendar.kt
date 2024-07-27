@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.format.toIso8601String
 import kotlinx.datetime.DayOfWeek
 
 @Composable
@@ -46,7 +47,7 @@ internal fun HeatMapCalendarImpl(
         ) {
             items(
                 count = state.calendarInfo.indexCount,
-                key = { offset -> state.store[offset].yearMonth },
+                key = { offset -> state.store[offset].yearMonth.toIso8601String() },
             ) { offset ->
                 val calendarMonth = state.store[offset]
                 Column(modifier = Modifier.width(IntrinsicSize.Max)) {

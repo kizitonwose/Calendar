@@ -20,7 +20,7 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
-import com.kizitonwose.calendar.data.checkDateRange
+import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
@@ -202,12 +202,12 @@ public class CalendarState internal constructor(
     }
 
     init {
-        monthDataChanged() // Update monthIndexCount initially.
+        monthDataChanged() // Update indexCount initially.
     }
 
     private fun monthDataChanged() {
         store.clear()
-        checkDateRange(startMonth, endMonth)
+        checkRange(startMonth, endMonth)
         // Read the firstDayOfWeek and outDateStyle properties to ensure recomposition
         // even though they are unused in the CalendarInfo. Alternatively, we could use
         // mutableStateMapOf() as the backing store for DataStore() to ensure recomposition

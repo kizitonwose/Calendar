@@ -10,7 +10,7 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.data.checkDateRange
+import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelperLegacy
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarAdapter
@@ -434,7 +434,7 @@ public open class CalendarView : RecyclerView {
      * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
      */
     public fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
-        checkDateRange(startMonth = startMonth, endMonth = endMonth)
+        checkRange(start = startMonth, end = endMonth)
         this.startMonth = startMonth
         this.endMonth = endMonth
         this.firstDayOfWeek = firstDayOfWeek
@@ -464,7 +464,7 @@ public open class CalendarView : RecyclerView {
         endMonth: YearMonth = requireEndMonth(),
         firstDayOfWeek: DayOfWeek = requireFirstDayOfWeek(),
     ) {
-        checkDateRange(startMonth = startMonth, endMonth = endMonth)
+        checkRange(start = startMonth, end = endMonth)
         this.startMonth = startMonth
         this.endMonth = endMonth
         this.firstDayOfWeek = firstDayOfWeek

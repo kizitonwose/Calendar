@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -29,7 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
+import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.now
+import com.kizitonwose.calendar.core.plusDays
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format.Padding
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -51,7 +52,7 @@ fun Example7Page() {
             firstVisibleWeekDate = currentDate,
         )
         // Draw light content on dark background.
-        CompositionLocalProvider(LocalContentColor provides darkColorScheme().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
             WeekCalendar(
                 modifier = Modifier.padding(vertical = 4.dp),
                 state = state,

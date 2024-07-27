@@ -7,7 +7,7 @@ import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.data.checkDateRange
+import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelperLegacy
 import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarAdapter
 import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarLayoutManager
@@ -387,7 +387,7 @@ public open class WeekCalendarView : RecyclerView {
      * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
      */
     public fun setup(startDate: LocalDate, endDate: LocalDate, firstDayOfWeek: DayOfWeek) {
-        checkDateRange(startDate = startDate, endDate = endDate)
+        checkRange(start = startDate, end = endDate)
         this.startDate = startDate
         this.endDate = endDate
         this.firstDayOfWeek = firstDayOfWeek
@@ -416,7 +416,7 @@ public open class WeekCalendarView : RecyclerView {
         endDate: LocalDate = requireEndDate(),
         firstDayOfWeek: DayOfWeek = requireFirstDayOfWeek(),
     ) {
-        checkDateRange(startDate = startDate, endDate = endDate)
+        checkRange(start = startDate, end = endDate)
         this.startDate = startDate
         this.endDate = endDate
         this.firstDayOfWeek = firstDayOfWeek

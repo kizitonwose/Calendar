@@ -19,14 +19,13 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.LocalRippleConfiguration
-import androidx.compose.material.RippleConfiguration
-import androidx.compose.material.Text
-import androidx.compose.material.darkColors
 import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.RippleConfiguration
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -107,7 +106,7 @@ fun Example3Page() {
         }
 
         // Draw light content on dark background.
-        CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
             SimpleCalendarTitle(
                 modifier = Modifier
                     .background(toolbarColor)
@@ -128,7 +127,7 @@ fun Example3Page() {
                 modifier = Modifier.wrapContentWidth(),
                 state = state,
                 dayContent = { day ->
-                    @OptIn(ExperimentalMaterialApi::class)
+                    @OptIn(ExperimentalMaterial3Api::class)
                     CompositionLocalProvider(LocalRippleConfiguration provides Example3RippleConfiguration) {
                         val colors = if (day.position == DayPosition.MonthDate) {
                             flights[day.date].orEmpty().map { colorResource(it.color) }
@@ -151,7 +150,7 @@ fun Example3Page() {
                     )
                 },
             )
-            Divider(color = pageBackgroundColor)
+            HorizontalDivider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = flightsInSelectedDate.value) { flight ->
                     FlightInformation(flight)
@@ -272,7 +271,7 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
             AirportInformation(flight.destination, isDeparture = false)
         }
     }
-    Divider(color = pageBackgroundColor, thickness = 2.dp)
+    HorizontalDivider(thickness = 2.dp, color = pageBackgroundColor)
 }
 
 @Composable
@@ -322,7 +321,7 @@ private fun AirportInformation(airport: Airport, isDeparture: Boolean) {
 }
 
 // The default dark them ripple is too bright so we tone it down.
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 private val Example3RippleConfiguration = RippleConfiguration(
     color = Color.Gray,
     // Copied from RippleTheme#DarkThemeRippleAlpha

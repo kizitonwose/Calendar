@@ -10,14 +10,19 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
-import androidx.compose.material.darkColors
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,7 +56,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 @Composable
-fun Example8Page(horizontal: Boolean = true) {
+fun Example8Page(horizontal: Boolean? = null) {
     val today = remember { LocalDate.now() }
     val currentMonth = remember(today) { today.yearMonth }
     val startMonth = remember { currentMonth.minusMonths(500) }
@@ -65,6 +70,8 @@ fun Example8Page(horizontal: Boolean = true) {
             .background(colorResource(id = R.color.example_1_bg_light))
             .padding(top = 20.dp),
     ) {
+        var selectedIndex by remember { mutableIntStateOf(0) }
+        PageOptions(selectedIndex) { selectedIndex = it }
         val state = rememberCalendarState(
             startMonth = startMonth,
             endMonth = endMonth,
@@ -75,10 +82,11 @@ fun Example8Page(horizontal: Boolean = true) {
         val coroutineScope = rememberCoroutineScope()
         val visibleMonth = rememberFirstVisibleMonthAfterScroll(state)
         // Draw light content on dark background.
-        CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides Color.White) {
             SimpleCalendarTitle(
                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
                 currentMonth = visibleMonth.yearMonth,
+                isHorizontal = selectedIndex == 0,
                 goToPrevious = {
                     coroutineScope.launch {
                         state.animateScrollToMonth(state.firstVisibleMonth.yearMonth.previousMonth)
@@ -96,7 +104,7 @@ fun Example8Page(horizontal: Boolean = true) {
                     .background(colorResource(id = R.color.example_1_bg))
                     .testTag("Calendar"),
                 state = state,
-                horizontal = horizontal,
+                horizontal = horizontal ?: (selectedIndex == 0),
                 dayContent = { day ->
                     Day(
                         day = day,
@@ -165,6 +173,32 @@ private fun FullScreenCalendar(
             monthHeader = monthHeader,
             monthFooter = monthFooter,
         )
+    }
+}
+
+@Composable
+private fun PageOptions(selectedIndex: Int, onSelect: (Int) -> Unit) {
+    val options = listOf("Horizontal", "Vertical")
+    SingleChoiceSegmentedButtonRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp, horizontal = 16.dp),
+    ) {
+        options.forEachIndexed { index, label ->
+            SegmentedButton(
+                colors = SegmentedButtonDefaults.colors().copy(
+                    activeContainerColor = colorResource(R.color.example_1_bg),
+                    activeContentColor = Color.White,
+                    inactiveContainerColor = Color.Transparent,
+                    inactiveContentColor = Color.White,
+                ),
+                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+                onClick = { onSelect(index) },
+                selected = index == selectedIndex,
+            ) {
+                Text(label)
+            }
+        }
     }
 }
 

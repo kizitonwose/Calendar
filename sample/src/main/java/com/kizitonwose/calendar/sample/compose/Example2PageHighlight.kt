@@ -109,7 +109,8 @@ fun Modifier.backgroundHighlight(
         }
         DayPosition.InDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isInDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
@@ -120,7 +121,8 @@ fun Modifier.backgroundHighlight(
         }
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isOutDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
@@ -198,7 +200,8 @@ fun Modifier.backgroundHighlightLegacy(
         }
         DayPosition.InDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isInDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
@@ -209,7 +212,8 @@ fun Modifier.backgroundHighlightLegacy(
         }
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isOutDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)

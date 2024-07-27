@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,12 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kizitonwose.calendar.sample.R
 import com.kizitonwose.calendar.sample.shared.dateRangeDisplayText
 import kotlinx.coroutines.launch
 
@@ -30,12 +32,11 @@ class CalendarComposeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val primaryColor = colorResource(id = R.color.colorPrimary)
             var toolBarTitle by remember { mutableStateOf("") }
             var toolBarVisible by remember { mutableStateOf(true) }
+            val snackbarHostState = remember { SnackbarHostState() }
             val navController = rememberNavController()
             val coroutineScope = rememberCoroutineScope()
-            val scaffoldState = rememberScaffoldState()
             LaunchedEffect(navController) {
                 navController.currentBackStackEntryFlow.collect { backStackEntry ->
                     val page = Page.valueOf(backStackEntry.destination.route ?: return@collect)
@@ -43,13 +44,15 @@ class CalendarComposeActivity : AppCompatActivity() {
                     toolBarVisible = page.showToolBar
                 }
             }
-            MaterialTheme(colors = MaterialTheme.colors.copy(primary = primaryColor)) {
+            MaterialTheme(colorScheme = SampleColorScheme) {
                 Scaffold(
-                    scaffoldState = scaffoldState,
                     topBar = {
                         if (toolBarVisible) {
                             AppToolBar(title = toolBarTitle, navController)
                         }
+                    },
+                    snackbarHost = {
+                        SnackbarHost(hostState = snackbarHostState)
                     },
                     content = {
                         AppNavHost(
@@ -57,7 +60,7 @@ class CalendarComposeActivity : AppCompatActivity() {
                             navController = navController,
                             showSnack = { message ->
                                 coroutineScope.launch {
-                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                    snackbarHostState.showSnackbar(message)
                                 }
                             },
                         )
@@ -67,10 +70,15 @@ class CalendarComposeActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun AppToolBar(title: String, navController: NavHostController) {
         TopAppBar(
             title = { Text(text = title) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = Color.White,
+            ),
             navigationIcon = {
                 NavigationIcon icon@{
                     val destination =
@@ -117,6 +125,8 @@ class CalendarComposeActivity : AppCompatActivity() {
             horizontallyAnimatedComposable(Page.Example7.name) { Example7Page() }
             verticallyAnimatedComposable(Page.Example8.name) { Example8Page() }
             horizontallyAnimatedComposable(Page.Example9.name) { Example9Page() }
+            horizontallyAnimatedComposable(Page.Example10.name) { Example10Page() }
+            horizontallyAnimatedComposable(Page.Example11.name) { Example11Page() }
         }
     }
 }

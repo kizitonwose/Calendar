@@ -16,7 +16,7 @@ import com.kizitonwose.calendar.core.plusMonths
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.datetime.DayOfWeek
 
-internal data class MonthData internal constructor(
+internal data class MonthData(
     private val month: YearMonth,
     private val inDays: Int,
     private val outDays: Int,

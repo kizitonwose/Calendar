@@ -15,18 +15,18 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.kizitonwose.calendar.core.JvmSerializableLocalDate
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.atEndOfMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
+import com.kizitonwose.calendar.core.format.fromIso8601LocalDate
+import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.core.now
-import com.kizitonwose.calendar.core.toJvmSerializableLocalDate
-import com.kizitonwose.calendar.core.toLocalDate
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
+import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
 import com.kizitonwose.calendar.data.getWeekCalendarData
 import com.kizitonwose.calendar.data.getWeekIndex
@@ -208,6 +208,7 @@ public class WeekCalendarState internal constructor(
     }
 
     private fun adjustDateRange() {
+        checkRange(startDate, endDate)
         val data = getWeekCalendarAdjustedRange(startDate, endDate, firstDayOfWeek)
         startDateAdjusted = data.startDateAdjusted
         endDateAdjusted = data.endDateAdjusted
@@ -268,9 +269,9 @@ public class WeekCalendarState internal constructor(
         internal val Saver: Saver<WeekCalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startDate.toJvmSerializableLocalDate(),
-                    it.endDate.toJvmSerializableLocalDate(),
-                    it.firstVisibleWeek.days.first().date.toJvmSerializableLocalDate(),
+                    it.startDate.toIso8601String(),
+                    it.endDate.toIso8601String(),
+                    it.firstVisibleWeek.days.first().date.toIso8601String(),
                     it.firstDayOfWeek,
                     it.listState.firstVisibleItemIndex,
                     it.listState.firstVisibleItemScrollOffset,
@@ -278,9 +279,9 @@ public class WeekCalendarState internal constructor(
             },
             restore = {
                 WeekCalendarState(
-                    startDate = (it[0] as JvmSerializableLocalDate).toLocalDate(),
-                    endDate = (it[1] as JvmSerializableLocalDate).toLocalDate(),
-                    firstVisibleWeekDate = (it[2] as JvmSerializableLocalDate).toLocalDate(),
+                    startDate = (it[0] as String).fromIso8601LocalDate(),
+                    endDate = (it[1] as String).fromIso8601LocalDate(),
+                    firstVisibleWeekDate = (it[2] as String).fromIso8601LocalDate(),
                     firstDayOfWeek = it[3] as DayOfWeek,
                     visibleItemState = VisibleItemState(
                         firstVisibleItemIndex = it[4] as Int,

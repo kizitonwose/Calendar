@@ -57,15 +57,24 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
         subtitle = "Week Calendar - Continuous scroll, custom day content width, single selection.",
         showToolBar = true,
     ),
-
-    //    Example8(
-//        title = "Example 8",
-//        subtitle = "Fullscreen Horizontal Calendar - Month header and footer, paged horizontal scrolling. Shows the \"Fill\" option of ContentHeightMode property.",
-//        showToolBar = false,
-//    ),
-    Example9(
+    Example8(
         title = "Example 8",
+        subtitle = "Fullscreen Horizontal Calendar - Month header and footer, paged horizontal scrolling. Shows the \"Fill\" option of ContentHeightMode property.",
+        showToolBar = false,
+    ),
+    Example9(
+        title = "Example 9",
         subtitle = "Month and week calendar toggle with animations.",
+        showToolBar = true,
+    ),
+    Example10(
+        title = "Example 10",
+        subtitle = "Horizontal year calendar - Year header and paged scrolling. Best suited for large screens.",
+        showToolBar = true,
+    ),
+    Example11(
+        title = "Example 11",
+        subtitle = "Vertical year calendar - Hidden past months with continuous scroll. Best suited for large screens.",
         showToolBar = true,
     ),
 }

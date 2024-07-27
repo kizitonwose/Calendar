@@ -23,7 +23,8 @@ dependencies {
     implementation(project(":core"))
     implementation(libs.kotlin.stdlib)
 
-    testImplementation(libs.test.junit)
+    testImplementation(libs.test.junit5.api)
+    testRuntimeOnly(libs.test.junit5.engine)
 }
 
 mavenPublishing {

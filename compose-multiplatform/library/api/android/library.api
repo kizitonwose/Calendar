@@ -12,7 +12,9 @@ public final class com/kizitonwose/calendar/compose/CalendarItemInfo : androidx/
 public final class com/kizitonwose/calendar/compose/CalendarKt {
 	public static final fun HeatMapCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalendarState;Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapWeekHeaderPosition;ZLandroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 	public static final fun HorizontalCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/CalendarState;ZZZLandroidx/compose/foundation/layout/PaddingValues;Lcom/kizitonwose/calendar/compose/ContentHeightMode;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;III)V
+	public static final fun HorizontalYearCalendar-Y3kUhCI (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;IZZZLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/layout/PaddingValues;FFLcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;IIII)V
 	public static final fun VerticalCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/CalendarState;ZZZLandroidx/compose/foundation/layout/PaddingValues;Lcom/kizitonwose/calendar/compose/ContentHeightMode;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;III)V
+	public static final fun VerticalYearCalendar-Y3kUhCI (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;IZZZLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/layout/PaddingValues;FFLcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function5;Landroidx/compose/runtime/Composer;IIII)V
 	public static final fun WeekCalendar (Landroidx/compose/ui/Modifier;Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState;ZZZLandroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function4;Landroidx/compose/runtime/Composer;II)V
 }
 
@@ -179,6 +181,84 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 	public static final fun rememberWeekCalendarState (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/time/DayOfWeek;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState;
 }
 
+public final class com/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt {
+	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt;
+	public static field lambda-1 Lkotlin/jvm/functions/Function5;
+	public static field lambda-2 Lkotlin/jvm/functions/Function5;
+	public static field lambda-3 Lkotlin/jvm/functions/Function5;
+	public static field lambda-4 Lkotlin/jvm/functions/Function5;
+	public fun <init> ()V
+	public final fun getLambda-1$library_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda-2$library_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda-3$library_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda-4$library_release ()Lkotlin/jvm/functions/Function5;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarItemInfo : androidx/compose/foundation/lazy/LazyListItemInfo {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/foundation/lazy/LazyListItemInfo;Lcom/kizitonwose/calendar/core/CalendarYear;)V
+	public fun getContentType ()Ljava/lang/Object;
+	public fun getIndex ()I
+	public fun getKey ()Ljava/lang/Object;
+	public fun getOffset ()I
+	public fun getSize ()I
+	public final fun getYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarLayoutInfo : androidx/compose/foundation/lazy/LazyListLayoutInfo {
+	public static final field $stable I
+	public fun <init> (Landroidx/compose/foundation/lazy/LazyListLayoutInfo;Lkotlin/jvm/functions/Function1;)V
+	public fun getAfterContentPadding ()I
+	public fun getBeforeContentPadding ()I
+	public fun getMainAxisItemSpacing ()I
+	public fun getOrientation ()Landroidx/compose/foundation/gestures/Orientation;
+	public fun getReverseLayout ()Z
+	public fun getTotalItemsCount ()I
+	public fun getViewportEndOffset ()I
+	public fun getViewportSize-YbymL2g ()J
+	public fun getViewportStartOffset ()I
+	public fun getVisibleItemsInfo ()Ljava/util/List;
+	public final fun getVisibleYearsInfo ()Ljava/util/List;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarState : androidx/compose/foundation/gestures/ScrollableState {
+	public static final field $stable I
+	public static final field Companion Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState$Companion;
+	public final fun animateScrollToYear (Lcom/kizitonwose/calendar/core/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun dispatchRawDelta (F)F
+	public final fun getEndYear ()Lcom/kizitonwose/calendar/core/Year;
+	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
+	public final fun getFirstVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public final fun getLastVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarLayoutInfo;
+	public final fun getOutDateStyle ()Lcom/kizitonwose/calendar/core/OutDateStyle;
+	public final fun getStartYear ()Lcom/kizitonwose/calendar/core/Year;
+	public fun isScrollInProgress ()Z
+	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToYear (Lcom/kizitonwose/calendar/core/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setEndYear (Lcom/kizitonwose/calendar/core/Year;)V
+	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
+	public final fun setOutDateStyle (Lcom/kizitonwose/calendar/core/OutDateStyle;)V
+	public final fun setStartYear (Lcom/kizitonwose/calendar/core/Year;)V
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarState$Companion {
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarStateKt {
+	public static final fun rememberYearCalendarState (Lcom/kizitonwose/calendar/core/Year;Lcom/kizitonwose/calendar/core/Year;Lcom/kizitonwose/calendar/core/Year;Ljava/time/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;
+}
+
+public final class com/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode : java/lang/Enum {
+	public static final field Fill Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static final field Stretch Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static final field Wrap Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+	public static fun values ()[Lcom/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode;
+}
+
 public final class com/kizitonwose/calendar/core/CalendarDay {
 	public static final field $stable I
 	public fun <init> (Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;)V
@@ -206,8 +286,24 @@ public final class com/kizitonwose/calendar/core/CalendarMonth {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/kizitonwose/calendar/core/CalendarYear {
+	public static final field $stable I
+	public fun <init> (Lcom/kizitonwose/calendar/core/Year;Ljava/util/List;)V
+	public final fun component1 ()Lcom/kizitonwose/calendar/core/Year;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Lcom/kizitonwose/calendar/core/Year;Ljava/util/List;)Lcom/kizitonwose/calendar/core/CalendarYear;
+	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/core/CalendarYear;Lcom/kizitonwose/calendar/core/Year;Ljava/util/List;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/CalendarYear;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMonths ()Ljava/util/List;
+	public final fun getYear ()Lcom/kizitonwose/calendar/core/Year;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class com/kizitonwose/calendar/core/ConvertersKt {
+	public static final fun toJavaYear (Lcom/kizitonwose/calendar/core/Year;)Ljava/time/Year;
 	public static final fun toJavaYearMonth (Lcom/kizitonwose/calendar/core/YearMonth;)Ljava/time/YearMonth;
+	public static final fun toKotlinYear (Ljava/time/Year;)Lcom/kizitonwose/calendar/core/Year;
 	public static final fun toKotlinYearMonth (Ljava/time/YearMonth;)Lcom/kizitonwose/calendar/core/YearMonth;
 }
 
@@ -220,12 +316,21 @@ public final class com/kizitonwose/calendar/core/DayPosition : java/lang/Enum {
 	public static fun values ()[Lcom/kizitonwose/calendar/core/DayPosition;
 }
 
+public abstract interface annotation class com/kizitonwose/calendar/core/ExperimentalCalendarApi : java/lang/annotation/Annotation {
+}
+
 public final class com/kizitonwose/calendar/core/ExtensionsKt {
 	public static final fun daysOfWeek (Ljava/time/DayOfWeek;)Ljava/util/List;
 	public static synthetic fun daysOfWeek$default (Ljava/time/DayOfWeek;ILjava/lang/Object;)Ljava/util/List;
 	public static final fun getYearMonth (Lkotlinx/datetime/LocalDate;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun minusDays (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
+	public static final fun minusMonths (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
+	public static final fun minusYears (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
 	public static final fun now (Lkotlinx/datetime/LocalDate$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;)Lkotlinx/datetime/LocalDate;
 	public static synthetic fun now$default (Lkotlinx/datetime/LocalDate$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lkotlinx/datetime/LocalDate;
+	public static final fun plusDays (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
+	public static final fun plusMonths (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
+	public static final fun plusYears (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
 }
 
 public final class com/kizitonwose/calendar/core/Extensions_jvmKt {
@@ -275,7 +380,43 @@ public final class com/kizitonwose/calendar/core/WeekDayPosition : java/lang/Enu
 	public static fun values ()[Lcom/kizitonwose/calendar/core/WeekDayPosition;
 }
 
-public final class com/kizitonwose/calendar/core/YearMonth : java/io/Serializable, java/lang/Comparable {
+public final class com/kizitonwose/calendar/core/Year : java/lang/Comparable {
+	public static final field $stable I
+	public static final field Companion Lcom/kizitonwose/calendar/core/Year$Companion;
+	public fun <init> (I)V
+	public fun compareTo (Lcom/kizitonwose/calendar/core/Year;)I
+	public synthetic fun compareTo (Ljava/lang/Object;)I
+	public final fun component1 ()I
+	public final fun copy (I)Lcom/kizitonwose/calendar/core/Year;
+	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/core/Year;IILjava/lang/Object;)Lcom/kizitonwose/calendar/core/Year;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/kizitonwose/calendar/core/Year$Companion {
+	public final fun isLeap (I)Z
+	public final fun now (Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;)Lcom/kizitonwose/calendar/core/Year;
+	public static synthetic fun now$default (Lcom/kizitonwose/calendar/core/Year$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/Year;
+	public final fun parseIso8601 (Ljava/lang/String;)Lcom/kizitonwose/calendar/core/Year;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/kizitonwose/calendar/core/YearKt {
+	public static final fun atDay (Lcom/kizitonwose/calendar/core/Year;I)Lkotlinx/datetime/LocalDate;
+	public static final fun atMonth (Lcom/kizitonwose/calendar/core/Year;I)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun atMonth (Lcom/kizitonwose/calendar/core/Year;Ljava/time/Month;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun atMonthDay (Lcom/kizitonwose/calendar/core/Year;II)Lkotlinx/datetime/LocalDate;
+	public static final fun atMonthDay (Lcom/kizitonwose/calendar/core/Year;Ljava/time/Month;I)Lkotlinx/datetime/LocalDate;
+	public static final fun isLeap (Lcom/kizitonwose/calendar/core/Year;)Z
+	public static final fun length (Lcom/kizitonwose/calendar/core/Year;)I
+	public static final fun minusYears (Lcom/kizitonwose/calendar/core/Year;I)Lcom/kizitonwose/calendar/core/Year;
+	public static final fun plusYears (Lcom/kizitonwose/calendar/core/Year;I)Lcom/kizitonwose/calendar/core/Year;
+	public static final fun yearsUntil (Lcom/kizitonwose/calendar/core/Year;Lcom/kizitonwose/calendar/core/Year;)I
+}
+
+public final class com/kizitonwose/calendar/core/YearMonth : java/lang/Comparable {
 	public static final field $stable I
 	public static final field Companion Lcom/kizitonwose/calendar/core/YearMonth$Companion;
 	public fun <init> (II)V
@@ -288,6 +429,7 @@ public final class com/kizitonwose/calendar/core/YearMonth : java/io/Serializabl
 	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/core/YearMonth;ILjava/time/Month;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getMonth ()Ljava/time/Month;
+	public final fun getMonthNumber ()I
 	public final fun getYear ()I
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
@@ -296,48 +438,61 @@ public final class com/kizitonwose/calendar/core/YearMonth : java/io/Serializabl
 public final class com/kizitonwose/calendar/core/YearMonth$Companion {
 	public final fun now (Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public static synthetic fun now$default (Lcom/kizitonwose/calendar/core/YearMonth$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public final fun parseIso8601 (Ljava/lang/String;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
 public final class com/kizitonwose/calendar/core/YearMonthKt {
 	public static final fun atDay (Lcom/kizitonwose/calendar/core/YearMonth;I)Lkotlinx/datetime/LocalDate;
 	public static final fun atEndOfMonth (Lcom/kizitonwose/calendar/core/YearMonth;)Lkotlinx/datetime/LocalDate;
 	public static final fun atStartOfMonth (Lcom/kizitonwose/calendar/core/YearMonth;)Lkotlinx/datetime/LocalDate;
-	public static final fun getNext (Lcom/kizitonwose/calendar/core/YearMonth;)Lcom/kizitonwose/calendar/core/YearMonth;
-	public static final fun getPrevious (Lcom/kizitonwose/calendar/core/YearMonth;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public static final fun lengthOfMonth (Lcom/kizitonwose/calendar/core/YearMonth;)I
 	public static final fun minus (Lcom/kizitonwose/calendar/core/YearMonth;ILkotlinx/datetime/DateTimeUnit$MonthBased;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun minusMonths (Lcom/kizitonwose/calendar/core/YearMonth;I)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun minusYears (Lcom/kizitonwose/calendar/core/YearMonth;I)Lcom/kizitonwose/calendar/core/YearMonth;
 	public static final fun monthsUntil (Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;)I
 	public static final fun plus (Lcom/kizitonwose/calendar/core/YearMonth;ILkotlinx/datetime/DateTimeUnit$MonthBased;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun plusMonths (Lcom/kizitonwose/calendar/core/YearMonth;I)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun plusYears (Lcom/kizitonwose/calendar/core/YearMonth;I)Lcom/kizitonwose/calendar/core/YearMonth;
 }
 
-public final class com/kizitonwose/calendar/data/WeekData {
+public final class com/kizitonwose/calendar/core/serializers/YearComponentSerializer : kotlinx/serialization/KSerializer {
 	public static final field $stable I
-	public final fun copy (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;)Lcom/kizitonwose/calendar/data/WeekData;
-	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/data/WeekData;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;ILjava/lang/Object;)Lcom/kizitonwose/calendar/data/WeekData;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getWeek ()Lcom/kizitonwose/calendar/core/Week;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+	public static final field INSTANCE Lcom/kizitonwose/calendar/core/serializers/YearComponentSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/kizitonwose/calendar/core/Year;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/kizitonwose/calendar/core/Year;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 }
 
-public final class com/kizitonwose/calendar/data/WeekDataKt {
-	public static final fun getWeekCalendarAdjustedRange (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/time/DayOfWeek;)Lcom/kizitonwose/calendar/data/WeekDateRange;
-	public static final fun getWeekCalendarData (Lkotlinx/datetime/LocalDate;ILkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;)Lcom/kizitonwose/calendar/data/WeekData;
-	public static final fun getWeekIndex (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;)I
-	public static final fun getWeekIndicesCount (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;)I
-}
-
-public final class com/kizitonwose/calendar/data/WeekDateRange {
+public final class com/kizitonwose/calendar/core/serializers/YearIso8601Serializer : kotlinx/serialization/KSerializer {
 	public static final field $stable I
-	public fun <init> (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;)V
-	public final fun component1 ()Lkotlinx/datetime/LocalDate;
-	public final fun component2 ()Lkotlinx/datetime/LocalDate;
-	public final fun copy (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;)Lcom/kizitonwose/calendar/data/WeekDateRange;
-	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/data/WeekDateRange;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;ILjava/lang/Object;)Lcom/kizitonwose/calendar/data/WeekDateRange;
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getEndDateAdjusted ()Lkotlinx/datetime/LocalDate;
-	public final fun getStartDateAdjusted ()Lkotlinx/datetime/LocalDate;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+	public static final field INSTANCE Lcom/kizitonwose/calendar/core/serializers/YearIso8601Serializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/kizitonwose/calendar/core/Year;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/kizitonwose/calendar/core/Year;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class com/kizitonwose/calendar/core/serializers/YearMonthComponentSerializer : kotlinx/serialization/KSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/kizitonwose/calendar/core/serializers/YearMonthComponentSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/kizitonwose/calendar/core/YearMonth;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class com/kizitonwose/calendar/core/serializers/YearMonthIso8601Serializer : kotlinx/serialization/KSerializer {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/kizitonwose/calendar/core/serializers/YearMonthIso8601Serializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/kizitonwose/calendar/core/YearMonth;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
 }
 

@@ -7,7 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarImpl
@@ -18,14 +20,20 @@ import com.kizitonwose.calendar.compose.heatmapcalendar.rememberHeatMapCalendarS
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarImpl
 import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
+import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarMonths
+import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
+import com.kizitonwose.calendar.compose.yearcalendar.YearContentHeightMode
+import com.kizitonwose.calendar.compose.yearcalendar.rememberYearCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarYear
+import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import java.time.DayOfWeek
 
 /**
- * A horizontally scrolling calendar.
+ * A horizontally scrolling month calendar.
  *
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
@@ -39,7 +47,7 @@ import java.time.DayOfWeek
  * @param contentPadding a padding around the whole calendar. This will add padding for the
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
- * between each month use the [monthContainer] composable.
+ * between each month, use the [monthContainer] composable.
  * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
@@ -88,7 +96,7 @@ public fun HorizontalCalendar(
 )
 
 /**
- * A vertically scrolling calendar.
+ * A vertically scrolling month calendar.
  *
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
@@ -102,7 +110,7 @@ public fun HorizontalCalendar(
  * @param contentPadding a padding around the whole calendar. This will add padding for the
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first month or after the last one. If you want to add a spacing
- * between each month use the [monthContainer] composable.
+ * between each month, use the [monthContainer] composable.
  * @param contentHeightMode Determines how the height of the day content is calculated.
  * @param dayContent a composable block which describes the day content.
  * @param monthHeader a composable block which describes the month header content. The header is
@@ -293,3 +301,295 @@ public fun HeatMapCalendar(
     monthHeader = monthHeader,
     contentPadding = contentPadding,
 )
+
+/**
+ * A horizontally scrolling year calendar.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startYear`, `endYear`, `firstDayOfWeek`, `firstVisibleYear`, `outDateStyle`.
+ * @param columns the number of months columns in each year on the calendar.
+ * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
+ * snap to the nearest year after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param reverseLayout reverse the direction of scrolling and layout. When `true`, years will be
+ * composed from the end to the start and [YearCalendarState.startYear] will be located at the end.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first year or after the last one. If you want to add a spacing
+ * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
+ * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
+ * also provide a [yearBody] with the desired padding to achieve the same result.
+ * @param monthVerticalSpacing the vertical spacing between month rows.
+ * @param monthHorizontalSpacing the horizontal spacing between month columns.
+ * @param contentHeightMode Determines how the height of the month and day content is calculated.
+ * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
+ * use this to hide all past months.
+ * @param dayContent a composable block which describes the day content.
+ * @param monthHeader a composable block which describes the month header content. The header is
+ * placed above each month on the calendar.
+ * @param monthBody a composable block which describes the month body content. This is the container
+ * where all the month days are placed, excluding the header and footer. This is useful if you
+ * want to customize the day container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param monthFooter a composable block which describes the month footer content. The footer is
+ * placed below each month on the calendar.
+ * @param monthContainer a composable block which describes the entire month content. This is the
+ * container where all the month contents are placed (header => days => footer). This is useful if
+ * you want to customize the month container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearHeader a composable block which describes the year header content. The header is
+ * placed above each year on the calendar.
+ * @param yearBody a composable block which describes the year body content. This is the container
+ * where all the months in the year are placed, excluding the year header and footer. This is useful
+ * if you want to customize the month container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearFooter a composable block which describes the year footer content. The footer is
+ * placed below each year on the calendar.
+ * @param yearContainer a composable block which describes the entire year content. This is the
+ * container where all the year contents are placed (header => months => footer). This is useful if
+ * you want to customize the year container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ */
+@ExperimentalCalendarApi
+@Composable
+public fun HorizontalYearCalendar(
+    modifier: Modifier = Modifier,
+    state: YearCalendarState = rememberYearCalendarState(),
+    columns: Int = 3,
+    calendarScrollPaged: Boolean = true,
+    userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    yearBodyContentPadding: PaddingValues = PaddingValues(0.dp),
+    monthVerticalSpacing: Dp = 0.dp,
+    monthHorizontalSpacing: Dp = 0.dp,
+    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
+    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthContainer: (@Composable BoxScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
+    yearHeader: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)? = null,
+    yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)? = null,
+): Unit = YearCalendar(
+    modifier = modifier,
+    state = state,
+    columns = columns,
+    calendarScrollPaged = calendarScrollPaged,
+    userScrollEnabled = userScrollEnabled,
+    isHorizontal = true,
+    reverseLayout = reverseLayout,
+    contentPadding = contentPadding,
+    yearBodyContentPadding = yearBodyContentPadding,
+    monthVerticalSpacing = monthVerticalSpacing,
+    monthHorizontalSpacing = monthHorizontalSpacing,
+    contentHeightMode = contentHeightMode,
+    isMonthVisible = isMonthVisible,
+    dayContent = dayContent,
+    monthHeader = monthHeader,
+    monthBody = monthBody,
+    monthFooter = monthFooter,
+    monthContainer = monthContainer,
+    yearHeader = yearHeader,
+    yearBody = yearBody,
+    yearFooter = yearFooter,
+    yearContainer = yearContainer,
+)
+
+/**
+ * A vertically scrolling year calendar.
+ *
+ * @param modifier the modifier to apply to this calendar.
+ * @param state the state object to be used to control or observe the calendar's properties.
+ * Examples: `startYear`, `endYear`, `firstDayOfWeek`, `firstVisibleYear`, `outDateStyle`.
+ * @param columns the number of months columns in each year on the calendar.
+ * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
+ * snap to the nearest year after a scroll or swipe action. When `false`, the calendar scrolls normally.
+ * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
+ * is allowed. You can still scroll programmatically using the state even when it is disabled.
+ * @param reverseLayout reverse the direction of scrolling and layout. When `true`, years will be
+ * composed from the end to the start and [YearCalendarState.startYear] will be located at the end.
+ * @param contentPadding a padding around the whole calendar. This will add padding for the
+ * content after it has been clipped, which is not possible via [modifier] param. You can use it
+ * to add a padding before the first year or after the last one. If you want to add a spacing
+ * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
+ * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
+ * also provide a [yearBody] with the desired padding to achieve the same result.
+ * @param monthVerticalSpacing the vertical spacing between month rows.
+ * @param monthHorizontalSpacing the horizontal spacing between month columns.
+ * @param contentHeightMode Determines how the height of the month and day content is calculated.
+ * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
+ * use this to hide all past months.
+ * @param dayContent a composable block which describes the day content.
+ * @param monthHeader a composable block which describes the month header content. The header is
+ * placed above each month on the calendar.
+ * @param monthBody a composable block which describes the month body content. This is the container
+ * where all the month days are placed, excluding the header and footer. This is useful if you
+ * want to customize the day container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param monthFooter a composable block which describes the month footer content. The footer is
+ * placed below each month on the calendar.
+ * @param monthContainer a composable block which describes the entire month content. This is the
+ * container where all the month contents are placed (header => days => footer). This is useful if
+ * you want to customize the month container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearHeader a composable block which describes the year header content. The header is
+ * placed above each year on the calendar.
+ * @param yearBody a composable block which describes the year body content. This is the container
+ * where all the months in the year are placed, excluding the year header and footer. This is useful
+ * if you want to customize the month container, for example, with a background color or other effects.
+ * The actual body content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ * @param yearFooter a composable block which describes the year footer content. The footer is
+ * placed below each year on the calendar.
+ * @param yearContainer a composable block which describes the entire year content. This is the
+ * container where all the year contents are placed (header => months => footer). This is useful if
+ * you want to customize the year container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
+ */
+@ExperimentalCalendarApi
+@Composable
+public fun VerticalYearCalendar(
+    modifier: Modifier = Modifier,
+    state: YearCalendarState = rememberYearCalendarState(),
+    columns: Int = 3,
+    calendarScrollPaged: Boolean = true,
+    userScrollEnabled: Boolean = true,
+    reverseLayout: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    yearBodyContentPadding: PaddingValues = PaddingValues(0.dp),
+    monthVerticalSpacing: Dp = 0.dp,
+    monthHorizontalSpacing: Dp = 0.dp,
+    contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
+    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
+    monthContainer: (@Composable BoxScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)? = null,
+    yearHeader: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)? = null,
+    yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)? = null,
+    yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)? = null,
+): Unit = YearCalendar(
+    modifier = modifier,
+    state = state,
+    columns = columns,
+    calendarScrollPaged = calendarScrollPaged,
+    userScrollEnabled = userScrollEnabled,
+    isHorizontal = false,
+    reverseLayout = reverseLayout,
+    contentPadding = contentPadding,
+    yearBodyContentPadding = yearBodyContentPadding,
+    monthVerticalSpacing = monthVerticalSpacing,
+    monthHorizontalSpacing = monthHorizontalSpacing,
+    contentHeightMode = contentHeightMode,
+    isMonthVisible = isMonthVisible,
+    dayContent = dayContent,
+    monthHeader = monthHeader,
+    monthBody = monthBody,
+    monthFooter = monthFooter,
+    monthContainer = monthContainer,
+    yearHeader = yearHeader,
+    yearBody = yearBody,
+    yearFooter = yearFooter,
+    yearContainer = yearContainer,
+)
+
+@Composable
+private fun YearCalendar(
+    modifier: Modifier,
+    state: YearCalendarState,
+    columns: Int,
+    calendarScrollPaged: Boolean,
+    userScrollEnabled: Boolean,
+    isHorizontal: Boolean,
+    reverseLayout: Boolean,
+    contentPadding: PaddingValues,
+    contentHeightMode: YearContentHeightMode,
+    monthVerticalSpacing: Dp,
+    monthHorizontalSpacing: Dp,
+    yearBodyContentPadding: PaddingValues,
+    isMonthVisible: (month: CalendarMonth) -> Boolean,
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
+    monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
+    monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
+    monthContainer: (@Composable BoxScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
+    yearHeader: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
+    yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)?,
+    yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
+    yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)?,
+) {
+    if (isHorizontal) {
+        LazyRow(
+            modifier = modifier,
+            state = state.listState,
+            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
+            userScrollEnabled = userScrollEnabled,
+            reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
+        ) {
+            YearCalendarMonths(
+                yearCount = state.calendarInfo.indexCount,
+                yearData = { offset -> state.store[offset] },
+                columns = columns,
+                monthVerticalSpacing = monthVerticalSpacing,
+                monthHorizontalSpacing = monthHorizontalSpacing,
+                yearBodyContentPadding = yearBodyContentPadding,
+                contentHeightMode = contentHeightMode,
+                isMonthVisible = isMonthVisible,
+                dayContent = dayContent,
+                monthHeader = monthHeader,
+                monthBody = monthBody,
+                monthFooter = monthFooter,
+                monthContainer = monthContainer,
+                yearHeader = yearHeader,
+                yearBody = yearBody,
+                yearFooter = yearFooter,
+                yearContainer = yearContainer,
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier,
+            state = state.listState,
+            flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
+            userScrollEnabled = userScrollEnabled,
+            reverseLayout = reverseLayout,
+            contentPadding = contentPadding,
+        ) {
+            YearCalendarMonths(
+                yearCount = state.calendarInfo.indexCount,
+                yearData = { offset -> state.store[offset] },
+                columns = columns,
+                monthVerticalSpacing = monthVerticalSpacing,
+                monthHorizontalSpacing = monthHorizontalSpacing,
+                yearBodyContentPadding = yearBodyContentPadding,
+                contentHeightMode = contentHeightMode,
+                isMonthVisible = isMonthVisible,
+                dayContent = dayContent,
+                monthHeader = monthHeader,
+                monthBody = monthBody,
+                monthFooter = monthFooter,
+                monthContainer = monthContainer,
+                yearHeader = yearHeader,
+                yearBody = yearBody,
+                yearFooter = yearFooter,
+                yearContainer = yearContainer,
+            )
+        }
+    }
+}

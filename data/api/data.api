@@ -44,8 +44,7 @@ public final class com/kizitonwose/calendar/data/MonthDataKt {
 }
 
 public final class com/kizitonwose/calendar/data/UtilsKt {
-	public static final fun checkDateRange (Ljava/time/LocalDate;Ljava/time/LocalDate;)V
-	public static final fun checkDateRange (Ljava/time/YearMonth;Ljava/time/YearMonth;)V
+	public static final fun checkRange (Ljava/lang/Comparable;Ljava/lang/Comparable;)V
 }
 
 public final class com/kizitonwose/calendar/data/WeekData {
@@ -75,5 +74,11 @@ public final class com/kizitonwose/calendar/data/WeekDateRange {
 	public final fun getStartDateAdjusted ()Ljava/time/LocalDate;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/kizitonwose/calendar/data/YearDataKt {
+	public static final fun getCalendarYearData (Ljava/time/Year;ILjava/time/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;)Lcom/kizitonwose/calendar/core/CalendarYear;
+	public static final fun getYearIndex (Ljava/time/Year;Ljava/time/Year;)I
+	public static final fun getYearIndicesCount (Ljava/time/Year;Ljava/time/Year;)I
 }
 

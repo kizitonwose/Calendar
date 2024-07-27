@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clipToBounds
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.core.toJvmSerializableLocalDate
+import com.kizitonwose.calendar.core.format.toIso8601String
 
 @Composable
 internal fun WeekCalendarImpl(
@@ -39,7 +39,7 @@ internal fun WeekCalendarImpl(
     ) {
         items(
             count = state.weekIndexCount,
-            key = { offset -> state.store[offset].days.first().date.toJvmSerializableLocalDate() },
+            key = { offset -> state.store[offset].days.first().date.toIso8601String() },
         ) { offset ->
             val week = state.store[offset]
             Column(

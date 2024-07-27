@@ -41,6 +41,7 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.now
+import com.kizitonwose.calendar.core.plusDays
 import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -273,8 +274,10 @@ private fun getMonthWithYear(
             val firstItem = visibleItemsInfo.first()
             val daySizePx = with(density) { daySize.toPx() }
             if (
-                firstItem.size < daySizePx * 3 || // Ensure the Month + Year text can fit.
-                firstItem.offset < layoutInfo.viewportStartOffset && // Ensure the week row size - 1 is visible.
+                // Ensure the Month + Year text can fit.
+                firstItem.size < daySizePx * 3 ||
+                // Ensure the week row size - 1 is visible.
+                firstItem.offset < layoutInfo.viewportStartOffset &&
                 (layoutInfo.viewportStartOffset - firstItem.offset > daySizePx)
             ) {
                 visibleItemsInfo[1].month.yearMonth

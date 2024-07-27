@@ -1,0 +1,43 @@
+package com.kizitonwose.calendar.sample.compose
+
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.graphics.Color
+
+val SampleColorScheme = lightColorScheme(
+    primary = Color(0xFF3F51B5),
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFF3F51B5),
+    onPrimaryContainer = Color.White,
+    inversePrimary = Color.Black,
+    secondary = Color(0xFF3F51B5),
+    onSecondary = Color.White,
+    secondaryContainer = Color(0xFF3F51B5),
+    onSecondaryContainer = Color.White,
+    tertiary = Color(0xFF3F51B5),
+    onTertiary = Color.White,
+    tertiaryContainer = Color(0xFF3F51B5),
+    onTertiaryContainer = Color.White,
+    background = Color.White,
+    onBackground = Color.Black,
+    surface = Color.White,
+    onSurface = Color.Black,
+    surfaceVariant = Color.White,
+    onSurfaceVariant = Color.Black,
+    surfaceTint = Color.White,
+    inverseSurface = Color(0xFF121212),
+    inverseOnSurface = Color.White,
+    error = Color(0xFFB00020),
+    onError = Color.White,
+    errorContainer = Color(0xFFB00020),
+    onErrorContainer = Color.White,
+    outline = Color(0xFFAFAFAF),
+    outlineVariant = Color(0xFFCCCCCC),
+    scrim = Color.Black,
+    surfaceBright = Color.White,
+    surfaceContainer = Color.White,
+    surfaceContainerHigh = Color.White,
+    surfaceContainerHighest = Color.White,
+    surfaceContainerLow = Color.White,
+    surfaceContainerLowest = Color.White,
+    surfaceDim = Color.White,
+)

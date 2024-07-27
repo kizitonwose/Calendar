@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -275,8 +275,10 @@ private fun getMonthWithYear(
             val firstItem = visibleItemsInfo.first()
             val daySizePx = with(density) { daySize.toPx() }
             if (
-                firstItem.size < daySizePx * 3 || // Ensure the Month + Year text can fit.
-                firstItem.offset < layoutInfo.viewportStartOffset && // Ensure the week row size - 1 is visible.
+                // Ensure the Month + Year text can fit.
+                firstItem.size < daySizePx * 3 ||
+                // Ensure the week row size - 1 is visible.
+                firstItem.offset < layoutInfo.viewportStartOffset &&
                 (layoutInfo.viewportStartOffset - firstItem.offset > daySizePx)
             ) {
                 visibleItemsInfo[1].month.yearMonth

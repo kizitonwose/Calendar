@@ -224,13 +224,15 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                     // Make the coloured selection background continuous on the
                     // invisible in and out dates across various months.
                     DayPosition.InDate ->
-                        if (startDate != null && endDate != null &&
+                        if (startDate != null &&
+                            endDate != null &&
                             isInDateBetweenSelection(data.date, startDate, endDate)
                         ) {
                             continuousBgView.applyBackground(rangeMiddleBackground)
                         }
                     DayPosition.OutDate ->
-                        if (startDate != null && endDate != null &&
+                        if (startDate != null &&
+                            endDate != null &&
                             isOutDateBetweenSelection(data.date, startDate, endDate)
                         ) {
                             continuousBgView.applyBackground(rangeMiddleBackground)

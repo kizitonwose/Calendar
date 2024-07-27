@@ -18,10 +18,11 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.core.now
+import com.kizitonwose.calendar.core.format.fromIso8601YearMonth
+import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
-import com.kizitonwose.calendar.data.checkDateRange
+import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
@@ -202,12 +203,12 @@ public class CalendarState internal constructor(
     }
 
     init {
-        monthDataChanged() // Update monthIndexCount initially.
+        monthDataChanged() // Update indexCount initially.
     }
 
     private fun monthDataChanged() {
         store.clear()
-        checkDateRange(startMonth, endMonth)
+        checkRange(startMonth, endMonth)
         // Read the firstDayOfWeek and outDateStyle properties to ensure recomposition
         // even though they are unused in the CalendarInfo. Alternatively, we could use
         // mutableStateMapOf() as the backing store for DataStore() to ensure recomposition
@@ -267,9 +268,9 @@ public class CalendarState internal constructor(
         internal val Saver: Saver<CalendarState, Any> = listSaver(
             save = {
                 listOf(
-                    it.startMonth,
-                    it.endMonth,
-                    it.firstVisibleMonth.yearMonth,
+                    it.startMonth.toIso8601String(),
+                    it.endMonth.toIso8601String(),
+                    it.firstVisibleMonth.yearMonth.toIso8601String(),
                     it.firstDayOfWeek,
                     it.outDateStyle,
                     it.listState.firstVisibleItemIndex,
@@ -278,9 +279,9 @@ public class CalendarState internal constructor(
             },
             restore = {
                 CalendarState(
-                    startMonth = it[0] as YearMonth,
-                    endMonth = it[1] as YearMonth,
-                    firstVisibleMonth = it[2] as YearMonth,
+                    startMonth = (it[0] as String).fromIso8601YearMonth(),
+                    endMonth = (it[1] as String).fromIso8601YearMonth(),
+                    firstVisibleMonth = (it[2] as String).fromIso8601YearMonth(),
                     firstDayOfWeek = it[3] as DayOfWeek,
                     outDateStyle = it[4] as OutDateStyle,
                     visibleItemState = VisibleItemState(

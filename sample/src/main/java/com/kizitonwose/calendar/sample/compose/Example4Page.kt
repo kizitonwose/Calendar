@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -120,12 +120,12 @@ private fun MonthHeader(calendarMonth: CalendarMonth) {
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
                     fontSize = 15.sp,
-                    text = dayOfWeek.name.first().toString(),
+                    text = dayOfWeek.displayText(uppercase = true, narrow = true),
                     fontWeight = FontWeight.Medium,
                 )
             }
         }
-        Divider(color = Color.Black)
+        HorizontalDivider(color = Color.Black)
     }
 }
 

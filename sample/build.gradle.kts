@@ -59,11 +59,11 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.runtime)
-    implementation(libs.compose.material)
+    implementation(libs.compose.material3)
     implementation(libs.compose.activity)
     implementation(libs.compose.navigation)
 
-    testImplementation(libs.test.junit)
+    testImplementation(libs.test.junit4)
 
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.espresso.contrib) // RecyclerView actions.

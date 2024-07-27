@@ -8,16 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 enum class Page(val title: String, val subtitle: String, val showToolBar: Boolean) {
     List(
@@ -71,6 +69,16 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
         subtitle = "Month and week calendar toggle with animations.",
         showToolBar = true,
     ),
+    Example10(
+        title = "Example 10",
+        subtitle = "Horizontal year calendar - Year header and paged scrolling. Best suited for large screens.",
+        showToolBar = true,
+    ),
+    Example11(
+        title = "Example 11",
+        subtitle = "Vertical year calendar - Hidden past months with continuous scroll. Best suited for large screens.",
+        showToolBar = true,
+    ),
 }
 
 @Composable
@@ -88,25 +96,19 @@ fun ListPage(click: (Page) -> Unit) {
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                val titleStyle = MaterialTheme.typography.subtitle1
+                val titleStyle = MaterialTheme.typography.titleMedium
                 Text(
                     text = item.title,
                     fontWeight = FontWeight.Medium,
-                    style = titleStyle.copy(
-                        fontSize = 20.sp,
-                        color = titleStyle.color.copy(alpha = ContentAlpha.high),
-                    ),
+                    style = titleStyle,
                 )
-                val subtitleStyle = MaterialTheme.typography.body2
+                val subtitleStyle = MaterialTheme.typography.bodyMedium
                 Text(
                     text = item.subtitle,
-                    style = subtitleStyle.copy(
-                        fontSize = 16.sp,
-                        color = subtitleStyle.color.copy(alpha = ContentAlpha.medium),
-                    ),
+                    style = subtitleStyle,
                 )
             }
-            Divider()
+            HorizontalDivider()
         }
     }
 }

@@ -54,7 +54,7 @@ fun Modifier.backgroundHighlight(
         DayPosition.MonthDate -> {
             when {
                 day.date < today -> {
-                    textColor(Colors.inactiveText)
+                    textColor(Colors.example4GrayPast)
                     this
                 }
 
@@ -98,7 +98,7 @@ fun Modifier.backgroundHighlight(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = Colors.inactiveText,
+                            color = Colors.example4GrayPast,
                         )
                 }
 
@@ -111,7 +111,8 @@ fun Modifier.backgroundHighlight(
 
         DayPosition.InDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isInDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
@@ -123,7 +124,8 @@ fun Modifier.backgroundHighlight(
 
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isOutDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
@@ -152,7 +154,7 @@ fun Modifier.backgroundHighlightLegacy(
         DayPosition.MonthDate -> {
             when {
                 day.date < today -> {
-                    textColor(Colors.inactiveText)
+                    textColor(Colors.example4GrayPast)
                     this
                 }
 
@@ -195,7 +197,7 @@ fun Modifier.backgroundHighlightLegacy(
                         .border(
                             width = 1.dp,
                             shape = CircleShape,
-                            color = Colors.inactiveText,
+                            color = Colors.example4GrayPast,
                         )
                 }
 
@@ -208,7 +210,8 @@ fun Modifier.backgroundHighlightLegacy(
 
         DayPosition.InDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isInDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)
@@ -220,7 +223,8 @@ fun Modifier.backgroundHighlightLegacy(
 
         DayPosition.OutDate -> {
             textColor(Color.Transparent)
-            if (startDate != null && endDate != null &&
+            if (startDate != null &&
+                endDate != null &&
                 isOutDateBetweenSelection(day.date, startDate, endDate)
             ) {
                 padding(vertical = padding)

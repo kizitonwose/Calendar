@@ -21,7 +21,7 @@ import com.kizitonwose.calendar.compose.VisibleItemState
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
-import com.kizitonwose.calendar.data.checkDateRange
+import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getHeatMapCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
@@ -181,12 +181,12 @@ public class HeatMapCalendarState internal constructor(
     }
 
     init {
-        monthDataChanged() // Update monthIndexCount initially.
+        monthDataChanged() // Update indexCount initially.
     }
 
     private fun monthDataChanged() {
         store.clear()
-        checkDateRange(startMonth, endMonth)
+        checkRange(startMonth, endMonth)
         calendarInfo = CalendarInfo(
             indexCount = getMonthIndicesCount(startMonth, endMonth),
             firstDayOfWeek = firstDayOfWeek,

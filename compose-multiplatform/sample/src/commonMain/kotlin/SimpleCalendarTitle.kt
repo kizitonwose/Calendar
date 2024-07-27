@@ -1,4 +1,4 @@
-
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -14,9 +14,11 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -30,6 +32,7 @@ import com.kizitonwose.calendar.core.YearMonth
 fun SimpleCalendarTitle(
     modifier: Modifier,
     currentMonth: YearMonth,
+    isHorizontal: Boolean = true,
     goToPrevious: () -> Unit,
     goToNext: () -> Unit,
 ) {
@@ -41,6 +44,7 @@ fun SimpleCalendarTitle(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             contentDescription = "Previous",
             onClick = goToPrevious,
+            isHorizontal = isHorizontal,
         )
         Text(
             modifier = Modifier
@@ -55,6 +59,7 @@ fun SimpleCalendarTitle(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Next",
             onClick = goToNext,
+            isHorizontal = isHorizontal,
         )
     }
 }
@@ -63,6 +68,7 @@ fun SimpleCalendarTitle(
 private fun CalendarNavigationIcon(
     imageVector: ImageVector,
     contentDescription: String,
+    isHorizontal: Boolean = true,
     onClick: () -> Unit,
 ) = Box(
     modifier = Modifier
@@ -71,11 +77,13 @@ private fun CalendarNavigationIcon(
         .clip(shape = CircleShape)
         .clickable(role = Role.Button, onClick = onClick),
 ) {
+    val rotation by animateFloatAsState(if (isHorizontal) 0f else 90f)
     Icon(
         modifier = Modifier
             .fillMaxSize()
             .padding(4.dp)
-            .align(Alignment.Center),
+            .align(Alignment.Center)
+            .rotate(rotation),
         imageVector = imageVector,
         contentDescription = contentDescription,
     )

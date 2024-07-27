@@ -9,6 +9,7 @@ actual fun Month.getDisplayName(short: Boolean, locale: Locale): String {
     return getDisplayName(style, JavaLocale.forLanguageTag(locale.toLanguageTag()))
 }
 
-actual fun DayOfWeek.getShortDisplayName(locale: Locale): String {
-    return getDisplayName(TextStyle.SHORT, JavaLocale.forLanguageTag(locale.toLanguageTag()))
+actual fun DayOfWeek.getDisplayName(narrow: Boolean, locale: Locale): String {
+    val style = if (narrow) TextStyle.NARROW else TextStyle.SHORT
+    return getDisplayName(style, JavaLocale.forLanguageTag(locale.toLanguageTag()))
 }
