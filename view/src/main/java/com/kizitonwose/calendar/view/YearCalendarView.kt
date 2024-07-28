@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelperLegacy
-import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarAdapter
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarLayoutManager
 import com.kizitonwose.calendar.view.internal.yearcalendar.YearCalendarAdapter
 import com.kizitonwose.calendar.view.internal.yearcalendar.YearCalendarLayoutManager
@@ -239,7 +239,7 @@ public open class YearCalendarView : RecyclerView {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             if (newState == SCROLL_STATE_IDLE) {
-                calendarAdapter.notifyMonthScrollListenerIfNeeded()
+                calendarAdapter.notifyYearScrollListenerIfNeeded()
             }
         }
     }
@@ -285,6 +285,14 @@ public open class YearCalendarView : RecyclerView {
                 R.styleable.YearCalendarView_cv_monthFooterResource,
                 monthFooterResource,
             )
+            yearHeaderResource = getResourceId(
+                R.styleable.YearCalendarView_cv_yearHeaderResource,
+                yearHeaderResource,
+            )
+            yearFooterResource = getResourceId(
+                R.styleable.YearCalendarView_cv_yearFooterResource,
+                yearFooterResource,
+            )
             orientation = getInt(R.styleable.YearCalendarView_cv_orientation, orientation)
             // Enable paged scrolling by default only for the horizontal calendar.
             scrollPaged = getBoolean(
@@ -298,6 +306,8 @@ public open class YearCalendarView : RecyclerView {
                 getInt(R.styleable.YearCalendarView_cv_outDateStyle, outDateStyle.ordinal),
             ]
             monthViewClass = getString(R.styleable.YearCalendarView_cv_monthViewClass)
+            // TODO - YEAR class
+            // monthViewClass = getString(R.styleable.YearCalendarView_cv_monthViewClass)
         }
         check(dayViewResource != 0) { "No value set for `cv_dayViewResource` attribute." }
     }
@@ -340,12 +350,29 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
+     * Scroll to a specific year on the calendar. This instantly
+     * shows the view for the year without any animations.
+     * For a smooth scrolling effect, use [smoothScrollToMonth]
+     */
+    public fun scrollToYear(year: Year) {
+        calendarLayoutManager.scrollToIndex(year)
+    }
+
+    /**
+     * Scroll to a specific year on the calendar using a smooth scrolling animation.
+     * Just like [scrollToMonth], but with a smooth scrolling animation.
+     */
+    public fun smoothScrollToYear(year: Year) {
+        calendarLayoutManager.smoothScrollToIndex(year)
+    }
+
+    /**
      * Scroll to a specific month on the calendar. This instantly
      * shows the view for the month without any animations.
      * For a smooth scrolling effect, use [smoothScrollToMonth]
      */
     public fun scrollToMonth(month: YearMonth) {
-        calendarLayoutManager.scrollToIndex(month)
+        calendarLayoutManager.scrollToMonth(month)
     }
 
     /**
@@ -353,7 +380,7 @@ public open class YearCalendarView : RecyclerView {
      * Just like [scrollToMonth], but with a smooth scrolling animation.
      */
     public fun smoothScrollToMonth(month: YearMonth) {
-        calendarLayoutManager.smoothScrollToIndex(month)
+        calendarLayoutManager.smoothScrollToMonth(month)
     }
 
     /**
@@ -442,6 +469,17 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
+     * Notify the CalendarView to reload the view for this [YearMonth]
+     * This causes the following sequence of events:
+     * [MonthDayBinder.bind] will be called for all dates in this month.
+     * [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
+     * [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
+     */
+    public fun notifyYearChanged(year: Year) {
+        calendarAdapter.reloadYear(year)
+    }
+
+    /**
      * Notify the CalendarView to reload all months.
      * @see [notifyMonthChanged].
      */
@@ -465,6 +503,24 @@ public open class YearCalendarView : RecyclerView {
      */
     public fun findLastVisibleMonth(): CalendarMonth? {
         return calendarAdapter.findLastVisibleMonth()
+    }
+
+    /**
+     * Find the first visible year on the CalendarView.
+     *
+     * @return The first visible year or null if not found.
+     */
+    public fun findFirstVisibleYear(): CalendarYear? {
+        return calendarAdapter.findFirstVisibleYear()
+    }
+
+    /**
+     * Find the last visible year on the CalendarView.
+     *
+     * @return The last visible year or null if not found.
+     */
+    public fun findLastVisibleYear(): CalendarYear? {
+        return calendarAdapter.findLastVisibleYear()
     }
 
     /**

@@ -54,10 +54,10 @@ internal fun setupYearItemRoot(
     } else {
         null
     }
-    val rows = (itemCount / columns) + min(1, itemCount.mod(columns))
+    val rows = (itemCount / columns) + min(1, itemCount.rem(columns))
     val monthHolders = List(rows) {
         val rowLayout = LinearLayout(context).apply {
-            orientation = LinearLayout.VERTICAL
+            orientation = LinearLayout.HORIZONTAL
         }
         // TODO - YEAR optimize size ignore unused index after filter
         val row = List(columns) {
@@ -77,12 +77,12 @@ internal fun setupYearItemRoot(
             val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
             rowLayout.addView(
                 monthHolder.inflateMonthView(rowLayout),
-                LinearLayout.LayoutParams(width, height, 1f),
+                LinearLayout.LayoutParams(0, height, 1f),
             )
         }
         // todo weight
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
-        val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
+        val height = if (daySize.parentDecidesHeight) 0 else WRAP_CONTENT
         val weight = if (daySize.parentDecidesHeight) 1f else 0f
         rootLayout.addView(
             rowLayout,
@@ -117,7 +117,7 @@ internal fun setupYearItemRoot(
                 .newInstance(rootLayout.context) as ViewGroup
         }.onFailure {
             Log.e(
-                "CalendarView",
+                "YearCalendarView",
                 "Failure loading custom class $yearItemViewClass, " +
                     "check that $yearItemViewClass is a ViewGroup and the " +
                     "single argument context constructor is available. " +

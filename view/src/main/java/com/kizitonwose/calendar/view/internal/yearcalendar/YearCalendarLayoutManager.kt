@@ -6,6 +6,7 @@ import com.kizitonwose.calendar.view.YearCalendarView
 import com.kizitonwose.calendar.view.internal.CalendarLayoutManager
 import com.kizitonwose.calendar.view.internal.dayTag
 import java.time.Year
+import java.time.YearMonth
 
 internal class YearCalendarLayoutManager(private val calView: YearCalendarView) :
     CalendarLayoutManager<Year, CalendarDay>(calView, calView.orientation) {
@@ -18,4 +19,11 @@ internal class YearCalendarLayoutManager(private val calView: YearCalendarView) 
     override fun getItemMargins(): MarginValues = calView.yearMargins
     override fun scrollPaged(): Boolean = calView.scrollPaged
     override fun notifyScrollListenerIfNeeded() = adapter.notifyYearScrollListenerIfNeeded()
+    fun smoothScrollToMonth(month: YearMonth) {
+        // TODO - YEAR
+    }
+
+    fun scrollToMonth(month: YearMonth) {
+        // TODO - YEAR
+    }
 }

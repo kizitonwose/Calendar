@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
@@ -25,6 +26,7 @@ import com.kizitonwose.calendar.view.internal.NO_INDEX
 import java.time.DayOfWeek
 import java.time.Month
 import java.time.Year
+import java.time.YearMonth
 
 internal class YearCalendarAdapter(
     private val calView: YearCalendarView,
@@ -109,7 +111,19 @@ internal class YearCalendarAdapter(
         }
     }
 
-    fun reloadMonth(month: Year) {
+    fun reloadMonth(month: YearMonth) {
+        // TODO - YEAR
+    }
+
+    fun findFirstVisibleMonth(): CalendarMonth? {
+        TODO("Not yet implemented")
+    }
+
+    fun findLastVisibleMonth(): CalendarMonth? {
+        TODO("Not yet implemented")
+    }
+
+    fun reloadYear(month: Year) {
         notifyItemChanged(getAdapterPosition(month))
     }
 
