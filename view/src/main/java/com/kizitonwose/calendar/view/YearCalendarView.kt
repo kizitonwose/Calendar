@@ -201,6 +201,14 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
+    public var isMonthVisible: (month: CalendarMonth) -> Boolean = { true }
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidateViewHolders()
+            }
+        }
+
     /**
      * The [RecyclerView.Orientation] used for the layout manager.
      * This determines the scroll direction of the calendar.

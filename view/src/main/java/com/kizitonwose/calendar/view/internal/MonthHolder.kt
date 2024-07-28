@@ -3,6 +3,7 @@ package com.kizitonwose.calendar.view.internal
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -74,7 +75,7 @@ internal class MonthHolder(
     }
 
     fun bindMonthView(month: CalendarMonth) {
-        monthContainer.itemView.isGone = false
+        monthContainer.itemView.isVisible = true
         // The last week row can be empty if out date style is not `EndOfGrid`
         this.month = month
         monthContainer.headerView?.let { view ->
@@ -94,7 +95,11 @@ internal class MonthHolder(
         }
     }
 
-    fun hide() {
+    fun makeInvisible() {
+        monthContainer.itemView.isInvisible = true
+    }
+
+    fun makeGone() {
         monthContainer.itemView.isGone = true
     }
 

@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.YearHeaderFooterBinder
@@ -17,6 +18,7 @@ internal class YearViewHolder(
     private val monthHolders: List<List<MonthHolder>>,
     private val yearHeaderBinder: YearHeaderFooterBinder<ViewContainer>?,
     private val yearFooterBinder: YearHeaderFooterBinder<ViewContainer>?,
+    private val isMonthVisible: (month: CalendarMonth) -> Boolean,
 ) : RecyclerView.ViewHolder(rootLayout) {
     private var yearHeaderContainer: ViewContainer? = null
     private var yearFooterContainer: ViewContainer? = null
@@ -31,12 +33,17 @@ internal class YearViewHolder(
             }
             yearHeaderBinder?.bind(headerContainer, year)
         }
-        val months = year.months.filter { true }
-        monthHolders.flatten().forEachIndexed { index, month ->
+        val months = year.months.filter(isMonthVisible)
+        for ((index, month) in monthHolders.flatten().withIndex()) {
             if (months.size > index) {
                 month.bindMonthView(months[index])
             } else {
-                month.hide()
+                month.makeInvisible()
+            }
+        }
+        for (row in monthHolders) {
+            if (row.none(MonthHolder::isShown)) {
+                row.forEach(MonthHolder::makeGone)
             }
         }
         footerView?.let { view ->

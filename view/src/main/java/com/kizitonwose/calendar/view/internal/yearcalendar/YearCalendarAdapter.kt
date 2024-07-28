@@ -84,6 +84,7 @@ internal class YearCalendarAdapter(
             headerView = content.headerView,
             footerView = content.footerView,
             monthHolders = content.monthHolders,
+            isMonthVisible = calView.isMonthVisible,
             yearHeaderBinder = calView.yearHeaderBinder as YearHeaderFooterBinder<ViewContainer>?,
             yearFooterBinder = calView.yearFooterBinder as YearHeaderFooterBinder<ViewContainer>?,
         )

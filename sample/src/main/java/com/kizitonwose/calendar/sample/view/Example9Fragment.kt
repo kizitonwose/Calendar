@@ -25,6 +25,7 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.YearHeaderFooterBinder
 import java.time.LocalDate
 import java.time.Year
+import java.time.YearMonth
 
 class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, HasBackButton {
     override val toolbar: Toolbar
@@ -35,7 +36,6 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
     private lateinit var binding: Example9FragmentBinding
 
     private var selectedDate: LocalDate? = null
-    private val today = LocalDate.now()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,14 +47,18 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
         configureBinders(isTablet)
 
         binding.exNineCalendar.apply {
+            val currentMonth = YearMonth.now()
             monthVerticalSpacing = dpToPx(20, requireContext())
             monthHorizontalSpacing = dpToPx(if (isTablet) 52 else 10, requireContext())
             yearMargins = MarginValues(
                 horizontal = dpToPx(if (isTablet) 52 else 14, requireContext()),
             )
+            isMonthVisible = {
+                it.yearMonth >= currentMonth
+            }
             setup(
-                Year.now(),
-                Year.now().plusYears(50),
+                Year.of(currentMonth.year),
+                Year.of(currentMonth.year).plusYears(50),
                 firstDayOfWeekFromLocale(),
             )
         }
