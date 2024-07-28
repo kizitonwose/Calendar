@@ -31,7 +31,6 @@ internal class MonthHolder(
 
     fun inflateMonthView(parent: LinearLayout): View {
         return setupItemRoot(
-            // TODO - YEAR
             itemMargins = MarginValues(),
             daySize = daySize,
             context = parent.context,
@@ -39,39 +38,9 @@ internal class MonthHolder(
             itemHeaderResource = monthHeaderResource,
             itemFooterResource = monthFooterResource,
             weekSize = 6,
-            // TODO - YEAR
-            itemViewClass = null,
+            itemViewClass = monthViewClass,
             dayBinder = dayBinder as MonthDayBinder,
         ).also { monthContainer = it }.itemView
-
-//        return LinearLayout(parent.context).apply {
-//            monthContainer = this
-//            // TODO - YEAR
-////            val width = if (daySize.parentDecidesWidth) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
-////            val height = if (daySize.parentDecidesHeight) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
-////            val weight = if (daySize.parentDecidesHeight) 1f else 0f
-//            layoutParams = GridLayout.LayoutParams(
-//                GridLayout.spec(
-//                    /* start = */ GridLayout.UNDEFINED,
-//                    /* size = */ 1,
-//                    /* alignment = */ GridLayout.FILL,
-//                ),
-//                GridLayout.spec(
-//                    /* start = */ GridLayout.UNDEFINED,
-//                    /* size = */ 1,
-//                    /* alignment = */
-//                    if (daySize.parentDecidesHeight) {
-//                        GridLayout.FILL
-//                    } else {
-//                        GridLayout.TOP
-//                    },
-//                ),
-//            )
-//            orientation = LinearLayout.VERTICAL
-//            for (holder in weekHolders) {
-//                addView(holder.inflateWeekView(this))
-//            }
-//        }
     }
 
     fun bindMonthView(month: CalendarMonth) {
@@ -106,8 +75,8 @@ internal class MonthHolder(
     fun isShown(): Boolean = monthContainer.itemView.isVisible
 
     fun reloadMonth(yearMonth: YearMonth): Boolean {
-        return if (yearMonth == this.month.yearMonth) {
-            bindMonthView(this.month)
+        return if (yearMonth == month.yearMonth) {
+            bindMonthView(month)
             true
         } else {
             false

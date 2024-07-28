@@ -95,7 +95,11 @@ internal class YearCalendarAdapter(
             super.onBindViewHolder(holder, position, payloads)
         } else {
             payloads.forEach {
-                holder.reloadDay(it as CalendarDay)
+                when (it) {
+                    is CalendarDay -> holder.reloadDay(it)
+                    is YearMonth -> holder.reloadMonth(it)
+                    else -> {}
+                }
             }
         }
     }
@@ -114,15 +118,10 @@ internal class YearCalendarAdapter(
     }
 
     fun reloadMonth(month: YearMonth) {
-        // TODO - YEAR
-    }
-
-    fun findFirstVisibleMonth(): CalendarMonth? {
-        TODO("Not yet implemented")
-    }
-
-    fun findLastVisibleMonth(): CalendarMonth? {
-        TODO("Not yet implemented")
+        val position = getAdapterPosition(Year.of(month.year))
+        if (position != NO_INDEX) {
+            notifyItemChanged(position, month)
+        }
     }
 
     fun reloadYear(month: Year) {
@@ -199,17 +198,49 @@ internal class YearCalendarAdapter(
         return if (index == NO_INDEX) null else dataStore[index]
     }
 
-    fun findFirstVisibleDay(): CalendarDay? = findVisibleDay(true)
+    fun findFirstVisibleMonth(): CalendarMonth? = findVisibleMonth(isFirst = true)
 
-    fun findLastVisibleDay(): CalendarDay? = findVisibleDay(false)
+    fun findLastVisibleMonth(): CalendarMonth? = findVisibleMonth(isFirst = false)
+
+    fun findFirstVisibleDay(): CalendarDay? = findVisibleDay(isFirst = true)
+
+    fun findLastVisibleDay(): CalendarDay? = findVisibleDay(isFirst = false)
 
     private fun findFirstVisibleYearPosition(): Int = layoutManager.findFirstVisibleItemPosition()
 
     private fun findLastVisibleYearPosition(): Int = layoutManager.findLastVisibleItemPosition()
 
     private fun findVisibleDay(isFirst: Boolean): CalendarDay? {
-        val visibleIndex =
-            if (isFirst) findFirstVisibleYearPosition() else findLastVisibleYearPosition()
+        val visibleIndex = if (isFirst) {
+            findFirstVisibleYearPosition()
+        } else {
+            findLastVisibleYearPosition()
+        }
+        if (visibleIndex == NO_INDEX) return null
+
+        val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null
+        val monthRect = Rect()
+        visibleItemView.getGlobalVisibleRect(monthRect)
+        // TODO - YEAR
+
+//        val dayRect = Rect()
+//        return dataStore[visibleIndex].weekDays.flatten()
+//            .run { if (isFirst) this else reversed() }
+//            .firstOrNull {
+//                val dayView = visibleItemView.findViewWithTag<View>(dayTag(it.date))
+//                    ?: return@firstOrNull false
+//                dayView.getGlobalVisibleRect(dayRect)
+//                dayRect.intersect(monthRect)
+//            }
+        return null
+    }
+
+    private fun findVisibleMonth(isFirst: Boolean): CalendarMonth? {
+        val visibleIndex = if (isFirst) {
+            findFirstVisibleYearPosition()
+        } else {
+            findLastVisibleYearPosition()
+        }
         if (visibleIndex == NO_INDEX) return null
 
         val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null

@@ -128,6 +128,9 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
             }
             val legendLayout = bind.legendLayout.root
         }
+
+        val legendTypeface = Typeface.medium(requireContext())
+
         calendarView.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
@@ -137,13 +140,12 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
                     if (container.legendLayout.tag == null) {
                         container.legendLayout.tag = true
                         val daysOfWeek = data.weekDays.first().map { it.date.dayOfWeek }
-                        val typeface = Typeface.medium(requireContext())
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 tv.text = daysOfWeek[index].displayText(uppercase = true, narrow = true)
                                 tv.setTextColorRes(R.color.example_3_black)
                                 tv.textSize = if (isTablet) 14f else 11f
-                                tv.setTypeface(typeface)
+                                tv.setTypeface(legendTypeface)
                             }
                     }
                 }

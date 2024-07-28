@@ -357,8 +357,7 @@ public open class YearCalendarView : RecyclerView {
                 monthVerticalSpacing,
             )
             monthViewClass = getString(R.styleable.YearCalendarView_cv_monthViewClass)
-            // TODO - YEAR class
-            // monthViewClass = getString(R.styleable.YearCalendarView_cv_monthViewClass)
+            yearViewClass = getString(R.styleable.YearCalendarView_cv_yearViewClass)
         }
         check(dayViewResource != 0) { "No value set for `cv_dayViewResource` attribute." }
     }
