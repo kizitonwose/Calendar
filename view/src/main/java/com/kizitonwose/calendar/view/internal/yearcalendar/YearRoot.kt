@@ -15,7 +15,6 @@ import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
-import com.kizitonwose.calendar.view.internal.MonthHolder
 import com.kizitonwose.calendar.view.internal.customViewOrRoot
 import com.kizitonwose.calendar.view.internal.inflate
 import kotlin.math.min
@@ -24,7 +23,7 @@ internal data class YearItemContent(
     val itemView: ViewGroup,
     val headerView: View?,
     val footerView: View?,
-    val monthRowHolders: List<Pair<LinearLayout, List<MonthHolder>>>,
+    val monthRowHolders: List<Pair<LinearLayout, List<YearMonthHolder>>>,
 )
 
 internal fun setupYearItemRoot(
@@ -72,7 +71,7 @@ internal fun setupYearItemRoot(
             axisSpacing = monthHorizontalSpacing,
         )
         val row = List(monthColumns) {
-            MonthHolder(
+            YearMonthHolder(
                 daySize = daySize,
                 dayViewResource = dayViewResource,
                 dayBinder = dayBinder,

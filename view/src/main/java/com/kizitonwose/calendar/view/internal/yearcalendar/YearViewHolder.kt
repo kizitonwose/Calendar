@@ -10,14 +10,13 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.YearHeaderFooterBinder
-import com.kizitonwose.calendar.view.internal.MonthHolder
 import java.time.YearMonth
 
 internal class YearViewHolder(
     rootLayout: ViewGroup,
     private val headerView: View?,
     private val footerView: View?,
-    private val monthRowHolders: List<Pair<LinearLayout, List<MonthHolder>>>,
+    private val monthRowHolders: List<Pair<LinearLayout, List<YearMonthHolder>>>,
     private val yearHeaderBinder: YearHeaderFooterBinder<ViewContainer>?,
     private val yearFooterBinder: YearHeaderFooterBinder<ViewContainer>?,
     private val isMonthVisible: (month: CalendarMonth) -> Boolean,
@@ -46,7 +45,7 @@ internal class YearViewHolder(
                 }
                 index += 1
             }
-            rowLayout.isVisible = row.any(MonthHolder::isVisible)
+            rowLayout.isVisible = row.any(YearMonthHolder::isVisible)
         }
         footerView?.let { view ->
             val footerContainer = yearFooterContainer ?: yearFooterBinder!!.create(view).also {

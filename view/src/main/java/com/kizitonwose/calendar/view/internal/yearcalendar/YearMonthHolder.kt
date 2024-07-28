@@ -1,4 +1,4 @@
-package com.kizitonwose.calendar.view.internal
+package com.kizitonwose.calendar.view.internal.yearcalendar
 
 import android.view.View
 import android.widget.LinearLayout
@@ -11,9 +11,11 @@ import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendar.view.internal.ItemContent
+import com.kizitonwose.calendar.view.internal.setupItemRoot
 import java.time.YearMonth
 
-internal class MonthHolder(
+internal class YearMonthHolder(
     private val daySize: DaySize,
     private val dayViewResource: Int,
     private var dayBinder: MonthDayBinder<ViewContainer>?,
