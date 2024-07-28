@@ -1,7 +1,9 @@
 package com.kizitonwose.calendar.view.internal.yearcalendar
 
 import android.content.Context
-import android.util.Log
+import android.graphics.Color
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RectShape
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -13,10 +15,9 @@ import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
-import com.kizitonwose.calendar.view.internal.EXAMPLE_CUSTOM_CLASS_URL
 import com.kizitonwose.calendar.view.internal.MonthHolder
+import com.kizitonwose.calendar.view.internal.customViewOrRoot
 import com.kizitonwose.calendar.view.internal.inflate
-import java.time.LocalDate
 import kotlin.math.min
 
 internal data class YearItemContent(
@@ -27,8 +28,9 @@ internal data class YearItemContent(
 )
 
 internal fun setupYearItemRoot(
-    columns: Int,
-    itemCount: Int,
+    monthColumns: Int,
+    monthHorizontalSpacing: Int,
+    monthVerticalSpacing: Int,
     yearItemMargins: MarginValues,
     daySize: DaySize,
     context: Context,
@@ -46,6 +48,13 @@ internal fun setupYearItemRoot(
     val rootLayout = LinearLayout(context).apply {
         orientation = LinearLayout.VERTICAL
     }
+    // Put the months in a separate layout so we can have
+    // dividers that ignore the year headers and footers.
+    val monthsLayout = DividerLinearLayout(
+        context = context,
+        orientation = LinearLayout.VERTICAL,
+        axisSpacing = monthVerticalSpacing,
+    )
 
     val itemHeaderView = if (yearItemHeaderResource != 0) {
         rootLayout.inflate(yearItemHeaderResource).also { headerView ->
@@ -54,13 +63,15 @@ internal fun setupYearItemRoot(
     } else {
         null
     }
-    val rows = (itemCount / columns) + min(1, itemCount.rem(columns))
+    val monthCount = 12
+    val rows = (monthCount / monthColumns) + min(1, monthCount % monthColumns)
     val monthHolders = List(rows) {
-        val rowLayout = LinearLayout(context).apply {
-            orientation = LinearLayout.HORIZONTAL
-        }
-        // TODO - YEAR optimize size ignore unused index after filter
-        val row = List(columns) {
+        val rowLayout = DividerLinearLayout(
+            context = context,
+            orientation = LinearLayout.HORIZONTAL,
+            axisSpacing = monthHorizontalSpacing,
+        )
+        val row = List(monthColumns) {
             MonthHolder(
                 daySize = daySize,
                 dayViewResource = dayViewResource,
@@ -72,23 +83,30 @@ internal fun setupYearItemRoot(
                 monthFooterBinder = monthFooterBinder,
             )
         }.onEach { monthHolder ->
-            // todo weight
-            val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
             val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
             rowLayout.addView(
                 monthHolder.inflateMonthView(rowLayout),
                 LinearLayout.LayoutParams(0, height, 1f),
             )
         }
-        // todo weight
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
         val height = if (daySize.parentDecidesHeight) 0 else WRAP_CONTENT
         val weight = if (daySize.parentDecidesHeight) 1f else 0f
-        rootLayout.addView(
+        monthsLayout.addView(
             rowLayout,
             LinearLayout.LayoutParams(width, height, weight),
         )
         return@List row
+    }
+
+    run {
+        val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
+        val height = if (daySize.parentDecidesHeight) 0 else WRAP_CONTENT
+        val weight = if (daySize.parentDecidesHeight) 1f else 0f
+        rootLayout.addView(
+            monthsLayout,
+            LinearLayout.LayoutParams(width, height, weight),
+        )
     }
 
     val itemFooterView = if (yearItemFooterResource != 0) {
@@ -99,7 +117,10 @@ internal fun setupYearItemRoot(
         null
     }
 
-    fun setupRoot(root: ViewGroup) {
+    val itemView = customViewOrRoot(
+        customViewClass = yearItemViewClass,
+        rootLayout = rootLayout,
+    ) { root: ViewGroup ->
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
         val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
         root.layoutParams = MarginLayoutParams(width, height).apply {
@@ -110,28 +131,6 @@ internal fun setupYearItemRoot(
         }
     }
 
-    val itemView = yearItemViewClass?.let {
-        val customLayout = runCatching {
-            Class.forName(it)
-                .getDeclaredConstructor(Context::class.java)
-                .newInstance(rootLayout.context) as ViewGroup
-        }.onFailure {
-            Log.e(
-                "YearCalendarView",
-                "Failure loading custom class $yearItemViewClass, " +
-                    "check that $yearItemViewClass is a ViewGroup and the " +
-                    "single argument context constructor is available. " +
-                    "For an example on how to use a custom class, see: $EXAMPLE_CUSTOM_CLASS_URL",
-                it,
-            )
-        }.getOrNull()
-
-        customLayout?.apply {
-            setupRoot(this)
-            addView(rootLayout)
-        }
-    } ?: rootLayout.apply { setupRoot(this) }
-
     return YearItemContent(
         itemView = itemView,
         headerView = itemHeaderView,
@@ -140,4 +139,22 @@ internal fun setupYearItemRoot(
     )
 }
 
-internal fun dayTag(date: LocalDate): Int = date.hashCode()
+@Suppress("FunctionName")
+private fun DividerLinearLayout(
+    context: Context,
+    orientation: Int,
+    axisSpacing: Int,
+) = LinearLayout(context).apply {
+    this.orientation = orientation
+    if (axisSpacing > 0) {
+        showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+        dividerDrawable = ShapeDrawable(RectShape()).apply {
+            if (orientation == LinearLayout.VERTICAL) {
+                intrinsicHeight = axisSpacing
+            } else {
+                intrinsicWidth = axisSpacing
+            }
+            paint.color = Color.TRANSPARENT
+        }
+    }
+}

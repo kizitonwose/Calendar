@@ -103,6 +103,16 @@
         <attr name="cv_yearViewClass" format="string" />
 
         <attr name="cv_monthViewClass" />
+
+        <!-- TODO - doc-->
+        <attr name="cv_monthColumns" format="integer" />
+
+        <!-- TODO - doc-->
+        <attr name="cv_monthHorizontalSpacing" format="dimension" />
+
+        <!-- TODO - doc-->
+        <attr name="cv_monthVerticalSpacing" format="dimension" />
+
         <attr name="cv_orientation" />
         <attr name="cv_scrollPaged" />
         <attr name="cv_daySize" />

@@ -3,6 +3,8 @@ package com.kizitonwose.calendar.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
+import androidx.annotation.IntRange
+import androidx.annotation.Px
 import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -170,6 +172,35 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
+    // TODO - YEAR doc
+    @Px
+    public var monthVerticalSpacing: Int = 0
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidateViewHolders()
+            }
+        }
+
+    @Px
+    public var monthHorizontalSpacing: Int = 0
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidateViewHolders()
+            }
+        }
+
+    @IntRange(from = 1, to = 12)
+    public var monthColumns: Int = 3
+        set(value) {
+            if (field != value) {
+                require(value in 1..12) { "Month columns must be 1..12" }
+                field = value
+                invalidateViewHolders()
+            }
+        }
+
     /**
      * The [RecyclerView.Orientation] used for the layout manager.
      * This determines the scroll direction of the calendar.
@@ -305,6 +336,18 @@ public open class YearCalendarView : RecyclerView {
             outDateStyle = OutDateStyle.entries[
                 getInt(R.styleable.YearCalendarView_cv_outDateStyle, outDateStyle.ordinal),
             ]
+            monthColumns = getInt(
+                R.styleable.YearCalendarView_cv_monthColumns,
+                monthColumns,
+            )
+            monthHorizontalSpacing = getDimensionPixelSize(
+                R.styleable.YearCalendarView_cv_monthHorizontalSpacing,
+                monthHorizontalSpacing,
+            )
+            monthVerticalSpacing = getDimensionPixelSize(
+                R.styleable.YearCalendarView_cv_monthVerticalSpacing,
+                monthVerticalSpacing,
+            )
             monthViewClass = getString(R.styleable.YearCalendarView_cv_monthViewClass)
             // TODO - YEAR class
             // monthViewClass = getString(R.styleable.YearCalendarView_cv_monthViewClass)

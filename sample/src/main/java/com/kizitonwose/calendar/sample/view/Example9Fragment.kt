@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
+import androidx.core.view.updatePadding
+import androidx.core.view.updatePaddingRelative
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
@@ -16,6 +18,7 @@ import com.kizitonwose.calendar.sample.databinding.Example9CalendarMonthHeaderBi
 import com.kizitonwose.calendar.sample.databinding.Example9CalendarYearHeaderBinding
 import com.kizitonwose.calendar.sample.databinding.Example9FragmentBinding
 import com.kizitonwose.calendar.sample.shared.displayText
+import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
@@ -38,21 +41,34 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         binding = Example9FragmentBinding.bind(view)
-        configureBinders()
-        binding.exNineCalendar.setup(
-            Year.now(),
-            Year.now().plusYears(50),
-            firstDayOfWeekFromLocale(),
-        )
+        val config = requireContext().resources.configuration
+        val isTablet = config.smallestScreenWidthDp >= 600
+
+        configureBinders(isTablet)
+
+        binding.exNineCalendar.apply {
+            monthVerticalSpacing = dpToPx(20, requireContext())
+            monthHorizontalSpacing = dpToPx(if (isTablet) 52 else 10, requireContext())
+            yearMargins = MarginValues(
+                horizontal = dpToPx(if (isTablet) 52 else 14, requireContext()),
+            )
+            setup(
+                Year.now(),
+                Year.now().plusYears(50),
+                firstDayOfWeekFromLocale(),
+            )
+        }
     }
 
-    private fun configureBinders() {
+    private fun configureBinders(isTablet: Boolean) {
         val calendarView = binding.exNineCalendar
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
             lateinit var day: CalendarDay
-            val textView = Example9CalendarDayBinding.bind(view).exNineDayText
+            val textView = Example9CalendarDayBinding.bind(view).exNineDayText.apply {
+                textSize = if (isTablet) 10f else 9f
+            }
 
             init {
                 textView.setOnClickListener {
@@ -86,11 +102,6 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
                             textView.setBackgroundResource(R.drawable.example_2_selected_bg)
                         }
 
-                        today -> {
-                            textView.setTextColorRes(R.color.example_2_red)
-                            textView.background = null
-                        }
-
                         else -> {
                             textView.setTextColorRes(R.color.example_2_black)
                             textView.background = null
@@ -102,33 +113,43 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
             }
         }
 
+        val monthNameTypeFace = Typeface.semiBold(requireContext())
+
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val bind = Example9CalendarMonthHeaderBinding.bind(view)
-            val textView = bind.exNineMonthHeaderText
+            val textView = bind.exNineMonthHeaderText.apply {
+                setTypeface(monthNameTypeFace)
+                textSize = if (isTablet) 16f else 14f
+                updatePaddingRelative(start = dpToPx(if (isTablet) 10 else 6, requireContext()))
+            }
             val legendLayout = bind.legendLayout.root
         }
         calendarView.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
                 override fun bind(container: MonthViewContainer, data: CalendarMonth) {
-                    container.textView.text = data.yearMonth.displayText()
+                    container.textView.text = data.yearMonth.month.displayText(short = false)
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
                         container.legendLayout.tag = true
                         val daysOfWeek = data.weekDays.first().map { it.date.dayOfWeek }
+                        val typeface = Typeface.medium(requireContext())
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 tv.text = daysOfWeek[index].displayText(uppercase = true, narrow = true)
                                 tv.setTextColorRes(R.color.example_3_black)
-                                // TODO - YEAR set menium bold
-//                                tv.sty
+                                tv.textSize = if (isTablet) 14f else 11f
+                                tv.setTypeface(typeface)
                             }
                     }
                 }
             }
 
         class YearViewContainer(view: View) : ViewContainer(view) {
-            val textView = Example9CalendarYearHeaderBinding.bind(view).exNineYearHeaderText
+            val textView = Example9CalendarYearHeaderBinding.bind(view).exNineYearHeaderText.apply {
+                textSize = if (isTablet) 52f else 44f
+                updatePadding(bottom = dpToPx(if (isTablet) 16 else 10, requireContext()))
+            }
         }
         calendarView.yearHeaderBinder =
             object : YearHeaderFooterBinder<YearViewContainer> {

@@ -64,8 +64,9 @@ internal class YearCalendarAdapter(
             context = calView.context,
             dayViewResource = calView.dayViewResource,
             dayBinder = calView.dayBinder as MonthDayBinder<ViewContainer>,
-            columns = 3, // todo move to property
-            itemCount = itemCount,
+            monthColumns = calView.monthColumns,
+            monthHorizontalSpacing = calView.monthHorizontalSpacing,
+            monthVerticalSpacing = calView.monthVerticalSpacing,
             yearItemMargins = calView.yearMargins,
             monthHeaderResource = calView.monthHeaderResource,
             monthFooterResource = calView.monthFooterResource,
