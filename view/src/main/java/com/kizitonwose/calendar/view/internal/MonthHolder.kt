@@ -2,7 +2,6 @@ package com.kizitonwose.calendar.view.internal
 
 import android.view.View
 import android.widget.LinearLayout
-import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.kizitonwose.calendar.core.CalendarDay
@@ -68,11 +67,7 @@ internal class MonthHolder(
         monthContainer.itemView.isInvisible = true
     }
 
-    fun makeGone() {
-        monthContainer.itemView.isGone = true
-    }
-
-    fun isShown(): Boolean = monthContainer.itemView.isVisible
+    fun isVisible(): Boolean = monthContainer.itemView.isVisible
 
     fun reloadMonth(yearMonth: YearMonth): Boolean {
         return if (yearMonth == month.yearMonth) {
@@ -84,5 +79,4 @@ internal class MonthHolder(
     }
 
     fun reloadDay(day: CalendarDay): Boolean = monthContainer.weekHolders.any { it.reloadDay(day) }
-
 }

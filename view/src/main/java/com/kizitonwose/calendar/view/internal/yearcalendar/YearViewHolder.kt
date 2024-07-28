@@ -2,6 +2,8 @@ package com.kizitonwose.calendar.view.internal.yearcalendar
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -15,7 +17,7 @@ internal class YearViewHolder(
     rootLayout: ViewGroup,
     private val headerView: View?,
     private val footerView: View?,
-    private val monthHolders: List<List<MonthHolder>>,
+    private val monthRowHolders: List<Pair<LinearLayout, List<MonthHolder>>>,
     private val yearHeaderBinder: YearHeaderFooterBinder<ViewContainer>?,
     private val yearFooterBinder: YearHeaderFooterBinder<ViewContainer>?,
     private val isMonthVisible: (month: CalendarMonth) -> Boolean,
@@ -34,17 +36,17 @@ internal class YearViewHolder(
             yearHeaderBinder?.bind(headerContainer, year)
         }
         val months = year.months.filter(isMonthVisible)
-        for ((index, month) in monthHolders.flatten().withIndex()) {
-            if (months.size > index) {
-                month.bindMonthView(months[index])
-            } else {
-                month.makeInvisible()
+        var index = 0
+        for ((rowLayout, row) in monthRowHolders) {
+            for (monthHolder in row) {
+                if (months.size > index) {
+                    monthHolder.bindMonthView(months[index])
+                } else {
+                    monthHolder.makeInvisible()
+                }
+                index += 1
             }
-        }
-        for (row in monthHolders) {
-            if (row.none(MonthHolder::isShown)) {
-                row.forEach(MonthHolder::makeGone)
-            }
+            rowLayout.isVisible = row.any(MonthHolder::isVisible)
         }
         footerView?.let { view ->
             val footerContainer = yearFooterContainer ?: yearFooterBinder!!.create(view).also {
@@ -55,14 +57,19 @@ internal class YearViewHolder(
     }
 
     fun reloadMonth(yearMonth: YearMonth) {
-        monthHolders.flatten()
-            .filter { it.isShown() }
-            .firstOrNull { it.reloadMonth(yearMonth) }
+        visibleItems().firstOrNull {
+            it.reloadMonth(yearMonth)
+        }
     }
 
     fun reloadDay(day: CalendarDay) {
-        monthHolders.flatten()
-            .filter { it.isShown() }
-            .firstOrNull { it.reloadDay(day) }
+        visibleItems().firstOrNull {
+            it.reloadDay(day)
+        }
     }
+
+    private fun visibleItems() = monthRowHolders
+        .map { it.second }
+        .flatten()
+        .filter { it.isVisible() }
 }

@@ -24,7 +24,7 @@ internal data class YearItemContent(
     val itemView: ViewGroup,
     val headerView: View?,
     val footerView: View?,
-    val monthHolders: List<List<MonthHolder>>,
+    val monthRowHolders: List<Pair<LinearLayout, List<MonthHolder>>>,
 )
 
 internal fun setupYearItemRoot(
@@ -96,7 +96,7 @@ internal fun setupYearItemRoot(
             rowLayout,
             LinearLayout.LayoutParams(width, height, weight),
         )
-        return@List row
+        return@List rowLayout to row
     }
 
     run {
@@ -135,7 +135,7 @@ internal fun setupYearItemRoot(
         itemView = itemView,
         headerView = itemHeaderView,
         footerView = itemFooterView,
-        monthHolders = monthHolders,
+        monthRowHolders = monthHolders,
     )
 }
 
