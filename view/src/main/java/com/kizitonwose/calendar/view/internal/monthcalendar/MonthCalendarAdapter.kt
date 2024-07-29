@@ -195,8 +195,11 @@ internal class MonthCalendarAdapter(
     }
 
     private fun visibleDay(isFirst: Boolean, monthIncrement: Int = 0): CalendarDay? {
-        var visibleIndex =
-            if (isFirst) findFirstVisibleMonthPosition() else findLastVisibleMonthPosition()
+        var visibleIndex = if (isFirst) {
+            findFirstVisibleMonthPosition()
+        } else {
+            findLastVisibleMonthPosition()
+        }
         if (visibleIndex == NO_INDEX) return null
         visibleIndex += monthIncrement
 

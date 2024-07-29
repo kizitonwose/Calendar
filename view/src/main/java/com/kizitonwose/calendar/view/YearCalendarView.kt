@@ -274,6 +274,18 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The margins, in pixels to be applied on each year body view.
+     * TODO : IMPROVE with text from compose param to clarify that headers/footers are excluded.
+     */
+    public var yearBodyMargins: MarginValues = MarginValues.ZERO
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidateViewHolders()
+            }
+        }
+
     private val scrollListenerInternal = object : OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

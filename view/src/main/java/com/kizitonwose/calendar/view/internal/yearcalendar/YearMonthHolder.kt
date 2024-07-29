@@ -22,8 +22,8 @@ internal class YearMonthHolder(
     private val monthHeaderResource: Int,
     private val monthFooterResource: Int,
     private val monthViewClass: String?,
-    private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
-    private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?,
+    private val monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
+    private val monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?,
 ) {
     private lateinit var monthContainer: ItemContent<CalendarDay>
     private var headerContainer: ViewContainer? = null

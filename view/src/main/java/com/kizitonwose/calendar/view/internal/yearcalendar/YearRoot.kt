@@ -32,6 +32,7 @@ internal fun setupYearItemRoot(
     monthHorizontalSpacing: Int,
     monthVerticalSpacing: Int,
     yearItemMargins: MarginValues,
+    yearBodyMargins: MarginValues,
     daySize: DaySize,
     context: Context,
     dayViewResource: Int,
@@ -64,7 +65,7 @@ internal fun setupYearItemRoot(
         null
     }
     val monthCount = 12
-    val rows = (monthCount / monthColumns) + min(1, monthCount % monthColumns)
+    val rows = (monthCount / monthColumns) + min(monthCount % monthColumns, 1)
     val monthHolders = List(rows) {
         val rowLayout = DividerLinearLayout(
             context = context,
@@ -105,7 +106,12 @@ internal fun setupYearItemRoot(
         val weight = if (daySize.parentDecidesHeight) 1f else 0f
         rootLayout.addView(
             monthsLayout,
-            LinearLayout.LayoutParams(width, height, weight),
+            LinearLayout.LayoutParams(width, height, weight).apply {
+                bottomMargin = yearBodyMargins.bottom
+                topMargin = yearBodyMargins.top
+                marginStart = yearBodyMargins.start
+                marginEnd = yearBodyMargins.end
+            },
         )
     }
 

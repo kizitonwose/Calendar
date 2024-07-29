@@ -67,6 +67,7 @@ internal class YearCalendarAdapter(
             monthHorizontalSpacing = calView.monthHorizontalSpacing,
             monthVerticalSpacing = calView.monthVerticalSpacing,
             yearItemMargins = calView.yearMargins,
+            yearBodyMargins = calView.yearBodyMargins,
             monthHeaderResource = calView.monthHeaderResource,
             monthFooterResource = calView.monthFooterResource,
             monthViewClass = calView.monthViewClass,
