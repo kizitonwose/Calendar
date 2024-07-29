@@ -17,6 +17,7 @@ import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.internal.customViewOrRoot
 import com.kizitonwose.calendar.view.internal.inflate
+import java.time.YearMonth
 import kotlin.math.min
 
 internal data class YearItemContent(
@@ -157,3 +158,5 @@ private fun DividerLinearLayout(
         }
     }
 }
+
+internal fun monthTag(month: YearMonth): Int = month.hashCode()

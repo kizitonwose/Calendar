@@ -33,13 +33,16 @@ internal class DayHolder<Day>(private val config: DayConfig<Day>) {
                         width = MATCH_PARENT
                         height = MATCH_PARENT
                     }
+
                     DaySize.Rectangle -> {
                         width = MATCH_PARENT
                         height = MATCH_PARENT
                     }
+
                     DaySize.SeventhWidth -> {
                         width = MATCH_PARENT
                     }
+
                     DaySize.FreeForm -> {}
                 }
             }
@@ -51,12 +54,7 @@ internal class DayHolder<Day>(private val config: DayConfig<Day>) {
         if (!::viewContainer.isInitialized) {
             viewContainer = config.dayBinder.create(dayView)
         }
-
-        val dayTag = dayTag(findDate(currentDay))
-        if (dayView.tag != dayTag) {
-            dayView.tag = dayTag
-        }
-
+        dayView.tag = dayTag(findDate(currentDay))
         config.dayBinder.bind(viewContainer, currentDay)
     }
 

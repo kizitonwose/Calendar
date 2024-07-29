@@ -8,11 +8,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
-import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.getCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
@@ -23,6 +19,8 @@ import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.internal.NO_INDEX
 import com.kizitonwose.calendar.view.internal.dayTag
+import com.kizitonwose.calendar.view.internal.intersects
+import com.kizitonwose.calendar.view.internal.positionYearMonth
 import com.kizitonwose.calendar.view.internal.setupItemRoot
 import java.time.DayOfWeek
 import java.time.YearMonth
@@ -184,14 +182,27 @@ internal class MonthCalendarAdapter(
 
     private fun findLastVisibleMonthPosition(): Int = layoutManager.findLastVisibleItemPosition()
 
+    /**
+     * In a vertically scrolling calendar, month headers/footers can cause the visible
+     * day rect to not be found in the returned visible month index from a call to
+     * findFirstVisibleItemPosition/findLastVisibleItemPosition if only the header
+     * or footer of the month in that index is visible. So we check adjacent indices too.
+     */
     private fun findVisibleDay(isFirst: Boolean): CalendarDay? {
-        val visibleIndex =
+        return visibleDay(isFirst)
+            ?: visibleDay(isFirst, monthIncrement = -1)
+            ?: visibleDay(isFirst, monthIncrement = 1)
+    }
+
+    private fun visibleDay(isFirst: Boolean, monthIncrement: Int = 0): CalendarDay? {
+        var visibleIndex =
             if (isFirst) findFirstVisibleMonthPosition() else findLastVisibleMonthPosition()
         if (visibleIndex == NO_INDEX) return null
+        visibleIndex += monthIncrement
 
         val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null
         val monthRect = Rect()
-        visibleItemView.getGlobalVisibleRect(monthRect)
+        if (!visibleItemView.getGlobalVisibleRect(monthRect) || monthRect.isEmpty) return null
 
         val dayRect = Rect()
         return dataStore[visibleIndex].weekDays.flatten()
@@ -199,8 +210,8 @@ internal class MonthCalendarAdapter(
             .firstOrNull {
                 val dayView = visibleItemView.findViewWithTag<View>(dayTag(it.date))
                     ?: return@firstOrNull false
-                dayView.getGlobalVisibleRect(dayRect)
-                dayRect.intersect(monthRect)
+                dayView.getGlobalVisibleRect(dayRect) &&
+                    dayRect.intersects(monthRect)
             }
     }
 
@@ -220,11 +231,3 @@ internal class MonthCalendarAdapter(
         notifyDataSetChanged()
     }
 }
-
-// Find the actual month on the calendar where this date is shown.
-internal val CalendarDay.positionYearMonth: YearMonth
-    get() = when (position) {
-        DayPosition.InDate -> date.yearMonth.nextMonth
-        DayPosition.MonthDate -> date.yearMonth
-        DayPosition.OutDate -> date.yearMonth.previousMonth
-    }

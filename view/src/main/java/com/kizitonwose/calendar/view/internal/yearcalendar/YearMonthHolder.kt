@@ -45,9 +45,11 @@ internal class YearMonthHolder(
     }
 
     fun bindMonthView(month: CalendarMonth) {
-        monthContainer.itemView.isVisible = true
-        // The last week row can be empty if out date style is not `EndOfGrid`
         this.month = month
+        monthContainer.itemView.apply {
+            tag = monthTag(month.yearMonth)
+            isVisible = true
+        }
         monthContainer.headerView?.let { view ->
             val headerContainer = headerContainer ?: monthHeaderBinder!!.create(view).also {
                 headerContainer = it
@@ -66,7 +68,10 @@ internal class YearMonthHolder(
     }
 
     fun makeInvisible() {
-        monthContainer.itemView.isInvisible = true
+        monthContainer.itemView.apply {
+            tag = null
+            isInvisible = true
+        }
     }
 
     fun isVisible(): Boolean = monthContainer.itemView.isVisible

@@ -18,6 +18,7 @@ import com.kizitonwose.calendar.view.WeekDayBinder
 import com.kizitonwose.calendar.view.WeekHeaderFooterBinder
 import com.kizitonwose.calendar.view.internal.NO_INDEX
 import com.kizitonwose.calendar.view.internal.dayTag
+import com.kizitonwose.calendar.view.internal.intersects
 import com.kizitonwose.calendar.view.internal.setupItemRoot
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -161,7 +162,7 @@ internal class WeekCalendarAdapter(
 
         val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null
         val weekRect = Rect()
-        visibleItemView.getGlobalVisibleRect(weekRect)
+        if (!visibleItemView.getGlobalVisibleRect(weekRect) || weekRect.isEmpty) return null
 
         val dayRect = Rect()
         return dataStore[visibleIndex].days
@@ -169,8 +170,8 @@ internal class WeekCalendarAdapter(
             .firstOrNull {
                 val dayView = visibleItemView.findViewWithTag<View>(dayTag(it.date))
                     ?: return@firstOrNull false
-                dayView.getGlobalVisibleRect(dayRect)
-                dayRect.intersect(weekRect)
+                dayView.getGlobalVisibleRect(dayRect) &&
+                    dayRect.intersects(weekRect)
             }
     }
 

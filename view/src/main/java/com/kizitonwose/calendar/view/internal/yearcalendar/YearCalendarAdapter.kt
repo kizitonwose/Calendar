@@ -2,17 +2,14 @@ package com.kizitonwose.calendar.view.internal.yearcalendar
 
 import android.annotation.SuppressLint
 import android.graphics.Rect
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
-import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
-import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.getCalendarYearData
 import com.kizitonwose.calendar.data.getYearIndex
@@ -23,8 +20,10 @@ import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.YearCalendarView
 import com.kizitonwose.calendar.view.YearHeaderFooterBinder
 import com.kizitonwose.calendar.view.internal.NO_INDEX
+import com.kizitonwose.calendar.view.internal.dayTag
+import com.kizitonwose.calendar.view.internal.intersects
+import com.kizitonwose.calendar.view.internal.positionYearMonth
 import java.time.DayOfWeek
-import java.time.Month
 import java.time.Year
 import java.time.YearMonth
 
@@ -118,14 +117,14 @@ internal class YearCalendarAdapter(
     }
 
     fun reloadMonth(month: YearMonth) {
-        val position = getAdapterPosition(Year.of(month.year))
+        val position = getAdapterPosition(month)
         if (position != NO_INDEX) {
             notifyItemChanged(position, month)
         }
     }
 
-    fun reloadYear(month: Year) {
-        notifyItemChanged(getAdapterPosition(month))
+    fun reloadYear(year: Year) {
+        notifyItemChanged(getAdapterPosition(year))
     }
 
     fun reloadCalendar() {
@@ -156,17 +155,7 @@ internal class YearCalendarAdapter(
                 this.visibleYear = visibleYear
                 calView.yearScrollListener?.invoke(visibleYear)
 
-                // TODO - YEAR
-                // Fixes issue where the calendar does not resize its height when in horizontal, paged mode and
-                // the `outDateStyle` is not `endOfGrid` hence the last row of a 5-row visible month is empty.
-                // We set such week row's container visibility to GONE in the WeekHolder but it seems the
-                // RecyclerView accounts for the items in the immediate previous and next indices when
-                // calculating height and uses the tallest one of the three meaning that the current index's
-                // view will end up having a blank space at the bottom unless the immediate previous and next
-                // indices are also missing the last row. I think there should be a better way to fix this.
-                // New: Also fixes issue where the calendar does not wrap each month's height when in vertical,
-                // paged mode and just matches parent's height instead.
-                // Only happens when the CalendarView wraps its height.
+                // See reason in MonthCalendarAdapter
                 if (calView.scrollPaged && calView.layoutParams.height == WRAP_CONTENT) {
                     val visibleVH =
                         calView.findViewHolderForAdapterPosition(visibleItemPos) ?: return
@@ -181,8 +170,12 @@ internal class YearCalendarAdapter(
         return getYearIndex(startYear, year)
     }
 
+    internal fun getAdapterPosition(month: YearMonth): Int {
+        return getAdapterPosition(Year.of(month.year))
+    }
+
     internal fun getAdapterPosition(day: CalendarDay): Int {
-        return getAdapterPosition(day.positionYear)
+        return getAdapterPosition(day.positionYearMonth)
     }
 
     private val layoutManager: YearCalendarLayoutManager
@@ -210,54 +203,71 @@ internal class YearCalendarAdapter(
 
     private fun findLastVisibleYearPosition(): Int = layoutManager.findLastVisibleItemPosition()
 
+    /**
+     * In a vertically scrolling calendar, year and month headers/footers can cause the
+     * visible day rect to not be found in the returned visible year index from a call to
+     * findFirstVisibleItemPosition/findLastVisibleItemPosition if only the header or
+     * footer of the year or month in that index is visible. So we check adjacent indices too.
+     */
     private fun findVisibleDay(isFirst: Boolean): CalendarDay? {
-        val visibleIndex = if (isFirst) {
-            findFirstVisibleYearPosition()
-        } else {
-            findLastVisibleYearPosition()
-        }
-        if (visibleIndex == NO_INDEX) return null
-
-        val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null
-        val monthRect = Rect()
-        visibleItemView.getGlobalVisibleRect(monthRect)
-        // TODO - YEAR
-
-//        val dayRect = Rect()
-//        return dataStore[visibleIndex].weekDays.flatten()
-//            .run { if (isFirst) this else reversed() }
-//            .firstOrNull {
-//                val dayView = visibleItemView.findViewWithTag<View>(dayTag(it.date))
-//                    ?: return@firstOrNull false
-//                dayView.getGlobalVisibleRect(dayRect)
-//                dayRect.intersect(monthRect)
-//            }
-        return null
+        return visibleMonthInfo(isFirst = isFirst)?.visibleDay(isFirst)
+            ?: visibleMonthInfo(isFirst, yearIncrement = -1)?.visibleDay(isFirst)
+            ?: visibleMonthInfo(isFirst, yearIncrement = 1)?.visibleDay(isFirst)
     }
 
+    private fun Triple<CalendarMonth, View, Rect>.visibleDay(isFirst: Boolean): CalendarDay? {
+        val (visibleMonth, visibleMonthView, visibleMonthRect) = this
+        val dayRect = Rect()
+        return visibleMonth.weekDays.flatten()
+            .run { if (isFirst) this else reversed() }
+            .firstOrNull {
+                val dayView = visibleMonthView.findViewWithTag<View>(dayTag(it.date))
+                    ?: return@firstOrNull false
+                dayView.getGlobalVisibleRect(dayRect) &&
+                    dayRect.intersects(visibleMonthRect)
+            }
+    }
+
+    /**
+     * In a vertically scrolling calendar, year headers/footers can cause the
+     * visible month rect to not be found in the returned visible year index from a call to
+     * findFirstVisibleItemPosition/findLastVisibleItemPosition if only the header or footer
+     * of the year in that index is visible. So we check adjacent indices too.
+     */
     private fun findVisibleMonth(isFirst: Boolean): CalendarMonth? {
-        val visibleIndex = if (isFirst) {
+        return visibleMonthInfo(isFirst = isFirst)?.first
+            ?: visibleMonthInfo(isFirst, yearIncrement = -1)?.first
+            ?: visibleMonthInfo(isFirst, yearIncrement = 1)?.first
+    }
+
+    private fun visibleMonthInfo(isFirst: Boolean, yearIncrement: Int = 0): Triple<CalendarMonth, View, Rect>? {
+        var visibleIndex = if (isFirst) {
             findFirstVisibleYearPosition()
         } else {
             findLastVisibleYearPosition()
         }
         if (visibleIndex == NO_INDEX) return null
+        visibleIndex += yearIncrement
 
         val visibleItemView = layoutManager.findViewByPosition(visibleIndex) ?: return null
-        val monthRect = Rect()
-        visibleItemView.getGlobalVisibleRect(monthRect)
-        // TODO - YEAR
+        val yearRect = Rect()
+        if (!visibleItemView.getGlobalVisibleRect(yearRect) || yearRect.isEmpty) return null
 
-//        val dayRect = Rect()
-//        return dataStore[visibleIndex].weekDays.flatten()
-//            .run { if (isFirst) this else reversed() }
-//            .firstOrNull {
-//                val dayView = visibleItemView.findViewWithTag<View>(dayTag(it.date))
-//                    ?: return@firstOrNull false
-//                dayView.getGlobalVisibleRect(dayRect)
-//                dayRect.intersect(monthRect)
-//            }
-        return null
+        val monthRect = Rect()
+        return dataStore[visibleIndex].months
+            .run { if (isFirst) this else reversed() }
+            .firstNotNullOfOrNull {
+                val monthView = visibleItemView.findViewWithTag<View>(monthTag(it.yearMonth))
+                    ?: return@firstNotNullOfOrNull null
+                if (
+                    monthView.getGlobalVisibleRect(monthRect) &&
+                    monthRect.intersects(yearRect)
+                ) {
+                    Triple(it, monthView, monthRect)
+                } else {
+                    null
+                }
+            }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -276,21 +286,3 @@ internal class YearCalendarAdapter(
         notifyDataSetChanged()
     }
 }
-
-// Find the actual year on the calendar where this date is shown.
-internal val CalendarDay.positionYear: Year
-    get() = when (position) {
-        DayPosition.InDate -> if (date.month == Month.DECEMBER) {
-            date.yearMonth.nextMonth.year
-        } else {
-            date.yearMonth.year
-        }
-
-        DayPosition.MonthDate -> date.year
-        DayPosition.OutDate -> if (date.month == Month.JANUARY) {
-            date.yearMonth.previousMonth.year
-        } else {
-            date.yearMonth.year
-        }
-    }.let(Year::of)
-
