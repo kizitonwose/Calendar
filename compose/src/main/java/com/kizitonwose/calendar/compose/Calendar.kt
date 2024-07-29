@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.compose
 
+import androidx.annotation.IntRange
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -308,7 +309,7 @@ public fun HeatMapCalendar(
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
  * Examples: `startYear`, `endYear`, `firstDayOfWeek`, `firstVisibleYear`, `outDateStyle`.
- * @param columns the number of months columns in each year on the calendar.
+ * @param monthColumns the number of month columns in each year. Must be from 1 to 12.
  * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
  * snap to the nearest year after a scroll or swipe action. When `false`, the calendar scrolls normally.
  * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
@@ -319,10 +320,11 @@ public fun HeatMapCalendar(
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first year or after the last one. If you want to add a spacing
  * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
- * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
- * also provide a [yearBody] with the desired padding to achieve the same result.
- * @param monthVerticalSpacing the vertical spacing between month rows.
- * @param monthHorizontalSpacing the horizontal spacing between month columns.
+ * @param yearBodyContentPadding a padding around the year body content, this is the grid in which
+ * the months in each year are shown, excluding the year header and footer. Alternatively, you can
+ * provide a [yearBody] with the desired padding to achieve the same result.
+ * @param monthVerticalSpacing the vertical spacing between month rows in each year.
+ * @param monthHorizontalSpacing the horizontal spacing between month columns in each year.
  * @param contentHeightMode Determines how the height of the month and day content is calculated.
  * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
  * use this to hide all past months.
@@ -361,7 +363,7 @@ public fun HeatMapCalendar(
 public fun HorizontalYearCalendar(
     modifier: Modifier = Modifier,
     state: YearCalendarState = rememberYearCalendarState(),
-    columns: Int = 3,
+    @IntRange(from = 1, to = 12) monthColumns: Int = 3,
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
@@ -383,7 +385,7 @@ public fun HorizontalYearCalendar(
 ): Unit = YearCalendar(
     modifier = modifier,
     state = state,
-    columns = columns,
+    monthColumns = monthColumns,
     calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
     isHorizontal = true,
@@ -411,7 +413,7 @@ public fun HorizontalYearCalendar(
  * @param modifier the modifier to apply to this calendar.
  * @param state the state object to be used to control or observe the calendar's properties.
  * Examples: `startYear`, `endYear`, `firstDayOfWeek`, `firstVisibleYear`, `outDateStyle`.
- * @param columns the number of months columns in each year on the calendar.
+ * @param monthColumns the number of month columns in each year. Must be from 1 to 12.
  * @param calendarScrollPaged the scrolling behavior of the calendar. When `true`, the calendar will
  * snap to the nearest year after a scroll or swipe action. When `false`, the calendar scrolls normally.
  * @param userScrollEnabled whether the scrolling via the user gestures or accessibility actions
@@ -422,10 +424,11 @@ public fun HorizontalYearCalendar(
  * content after it has been clipped, which is not possible via [modifier] param. You can use it
  * to add a padding before the first year or after the last one. If you want to add a spacing
  * between each year, use the [yearContainer] composable or the [yearBodyContentPadding] parameter.
- * @param yearBodyContentPadding a padding around the year body content. Alternatively, you can
- * also provide a [yearBody] with the desired padding to achieve the same result.
- * @param monthVerticalSpacing the vertical spacing between month rows.
- * @param monthHorizontalSpacing the horizontal spacing between month columns.
+ * @param yearBodyContentPadding a padding around the year body content, this is the grid in which
+ * the months in each year are shown, excluding the year header and footer. Alternatively, you can
+ * provide a [yearBody] with the desired padding to achieve the same result.
+ * @param monthVerticalSpacing the vertical spacing between month rows in each year.
+ * @param monthHorizontalSpacing the horizontal spacing between month columns in each year.
  * @param contentHeightMode Determines how the height of the month and day content is calculated.
  * @param isMonthVisible Determines if a month is shown on the calendar grid. For example, you can
  * use this to hide all past months.
@@ -464,7 +467,7 @@ public fun HorizontalYearCalendar(
 public fun VerticalYearCalendar(
     modifier: Modifier = Modifier,
     state: YearCalendarState = rememberYearCalendarState(),
-    columns: Int = 3,
+    @IntRange(from = 1, to = 12) monthColumns: Int = 3,
     calendarScrollPaged: Boolean = true,
     userScrollEnabled: Boolean = true,
     reverseLayout: Boolean = false,
@@ -486,7 +489,7 @@ public fun VerticalYearCalendar(
 ): Unit = YearCalendar(
     modifier = modifier,
     state = state,
-    columns = columns,
+    monthColumns = monthColumns,
     calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
     isHorizontal = false,
@@ -512,7 +515,7 @@ public fun VerticalYearCalendar(
 private fun YearCalendar(
     modifier: Modifier,
     state: YearCalendarState,
-    columns: Int,
+    monthColumns: Int,
     calendarScrollPaged: Boolean,
     userScrollEnabled: Boolean,
     isHorizontal: Boolean,
@@ -533,6 +536,7 @@ private fun YearCalendar(
     yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
     yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)?,
 ) {
+    require(monthColumns in 1..12) { "Param `monthColumns` must be 1..12" }
     if (isHorizontal) {
         LazyRow(
             modifier = modifier,
@@ -545,7 +549,7 @@ private fun YearCalendar(
             YearCalendarMonths(
                 yearCount = state.calendarInfo.indexCount,
                 yearData = { offset -> state.store[offset] },
-                columns = columns,
+                monthColumns = monthColumns,
                 monthVerticalSpacing = monthVerticalSpacing,
                 monthHorizontalSpacing = monthHorizontalSpacing,
                 yearBodyContentPadding = yearBodyContentPadding,
@@ -574,7 +578,7 @@ private fun YearCalendar(
             YearCalendarMonths(
                 yearCount = state.calendarInfo.indexCount,
                 yearData = { offset -> state.store[offset] },
-                columns = columns,
+                monthColumns = monthColumns,
                 monthVerticalSpacing = monthVerticalSpacing,
                 monthHorizontalSpacing = monthHorizontalSpacing,
                 yearBodyContentPadding = yearBodyContentPadding,
