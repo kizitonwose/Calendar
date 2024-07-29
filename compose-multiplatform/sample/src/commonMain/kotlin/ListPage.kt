@@ -69,7 +69,7 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
     ),
     Example10(
         title = "Example 10",
-        subtitle = "Horizontal year calendar - Year header and paged scrolling. Best suited for large screens.",
+        subtitle = "Horizontal year calendar - Paged scrolling, shows the \"Fill\" implementation of YearContentHeightMode property. Best suited for large screens.",
         showToolBar = true,
     ),
     Example11(

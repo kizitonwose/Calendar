@@ -107,7 +107,7 @@ fun Example10Page(adjacentYears: Long = 50) {
                 .fillMaxSize()
                 .testTag("Calendar"),
             state = state,
-            columns = if (isPortrait) {
+            monthColumns = if (isPortrait) {
                 3
             } else {
                 if (isTablet) 4 else 6

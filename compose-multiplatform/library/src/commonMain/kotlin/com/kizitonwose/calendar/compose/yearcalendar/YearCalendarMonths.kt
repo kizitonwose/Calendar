@@ -21,12 +21,13 @@ import com.kizitonwose.calendar.compose.or
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
+import kotlin.math.min
 
 @Suppress("FunctionName")
 internal fun LazyListScope.YearCalendarMonths(
     yearCount: Int,
     yearData: (offset: Int) -> CalendarYear,
-    columns: Int,
+    monthColumns: Int,
     monthVerticalSpacing: Dp,
     monthHorizontalSpacing: Dp,
     yearBodyContentPadding: PaddingValues,
@@ -74,8 +75,8 @@ internal fun LazyListScope.YearCalendarMonths(
                             .fillMaxWidth()
                             .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight())
                             .padding(yearBodyContentPadding),
-                        columns = columns,
-                        itemCount = months.count(),
+                        monthColumns = monthColumns,
+                        monthCount = months.count(),
                         fillHeight = fillHeight,
                         monthVerticalSpacing = monthVerticalSpacing,
                         monthHorizontalSpacing = monthHorizontalSpacing,
@@ -139,11 +140,11 @@ internal fun LazyListScope.YearCalendarMonths(
 
 @Composable
 private fun CalendarGrid(
-    columns: Int,
+    monthColumns: Int,
     fillHeight: Boolean,
     monthVerticalSpacing: Dp,
     monthHorizontalSpacing: Dp,
-    itemCount: Int,
+    monthCount: Int,
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.(Int) -> Unit,
 ) {
@@ -151,13 +152,10 @@ private fun CalendarGrid(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(monthVerticalSpacing),
     ) {
-        var rows = (itemCount / columns)
-        if (itemCount.mod(columns) > 0) {
-            rows += 1
-        }
+        val rows = (monthCount / monthColumns) + min(monthCount % monthColumns, 1)
 
         for (rowId in 0 until rows) {
-            val firstIndex = rowId * columns
+            val firstIndex = rowId * monthColumns
 
             Row(
                 modifier = Modifier.then(
@@ -165,13 +163,13 @@ private fun CalendarGrid(
                 ),
                 horizontalArrangement = Arrangement.spacedBy(monthHorizontalSpacing),
             ) {
-                for (columnId in 0 until columns) {
+                for (columnId in 0 until monthColumns) {
                     val index = firstIndex + columnId
                     Box(
                         modifier = Modifier
                             .weight(1f),
                     ) {
-                        if (index < itemCount) {
+                        if (index < monthCount) {
                             content(index)
                         }
                     }
