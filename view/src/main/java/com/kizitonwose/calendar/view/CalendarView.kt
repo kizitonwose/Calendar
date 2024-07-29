@@ -165,7 +165,7 @@ public open class CalendarView : RecyclerView {
      * The margins, in pixels to be applied on each month view.
      * this can be used to add a space between two months.
      */
-    public var monthMargins: MarginValues = MarginValues()
+    public var monthMargins: MarginValues = MarginValues.ZERO
         set(value) {
             if (field != value) {
                 field = value

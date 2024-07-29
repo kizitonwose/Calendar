@@ -17,4 +17,8 @@ public data class MarginValues(
         end = horizontal,
         bottom = vertical,
     )
+
+    public companion object {
+        public val ZERO: MarginValues = MarginValues()
+    }
 }

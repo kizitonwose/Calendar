@@ -132,7 +132,7 @@ public open class WeekCalendarView : RecyclerView {
      * The margins, in pixels to be applied each week view.
      * this can be used to add a space between two weeks.
      */
-    public var weekMargins: MarginValues = MarginValues()
+    public var weekMargins: MarginValues = MarginValues.ZERO
         set(value) {
             if (field != value) {
                 field = value

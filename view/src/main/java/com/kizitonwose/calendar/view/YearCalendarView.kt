@@ -263,10 +263,10 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The margins, in pixels to be applied on each month view.
-     * this can be used to add a space between two months.
+     * The margins, in pixels to be applied on each year view.
+     * this can be used to add a space between two years.
      */
-    public var yearMargins: MarginValues = MarginValues()
+    public var yearMargins: MarginValues = MarginValues.ZERO
         set(value) {
             if (field != value) {
                 field = value

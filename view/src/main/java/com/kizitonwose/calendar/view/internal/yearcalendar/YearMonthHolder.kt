@@ -32,7 +32,7 @@ internal class YearMonthHolder(
 
     fun inflateMonthView(parent: LinearLayout): View {
         return setupItemRoot(
-            itemMargins = MarginValues(),
+            itemMargins = MarginValues.ZERO,
             daySize = daySize,
             context = parent.context,
             dayViewResource = dayViewResource,
