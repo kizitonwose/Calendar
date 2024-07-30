@@ -22,7 +22,7 @@ public enum class DaySize {
      */
     Rectangle,
 
-    /**
+    /** TODO DOC
      * Each day will have its width matching the width of
      * the calendar divided by 7. This day is allowed to
      * determine its height by setting a specific value

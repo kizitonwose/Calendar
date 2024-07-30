@@ -33,3 +33,5 @@ internal fun Rect.intersects(other: Rect): Boolean {
         Rect.intersects(this, other)
     }
 }
+
+internal fun missingField(field: String) = "`$field` is not set. Have you called `setup()`?"

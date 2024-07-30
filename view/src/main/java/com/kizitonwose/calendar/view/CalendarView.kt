@@ -10,9 +10,12 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelperLegacy
+import com.kizitonwose.calendar.view.internal.missingField
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarAdapter
 import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarLayoutManager
 import java.time.DayOfWeek
@@ -94,8 +97,9 @@ public open class CalendarView : RecyclerView {
         }
 
     /**
-     * A [ViewGroup] which is instantiated and used as the container for each month.
-     * This class must have a constructor which takes only a [Context].
+     * The fully qualified class name of a [ViewGroup] which is instantiated
+     * and used as the container for each month. This class must have a
+     * constructor which takes only a [Context].
      *
      * **You should exclude the name and constructor of this class from code
      * obfuscation if enabled**.
@@ -330,7 +334,7 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Notify the CalendarView to reload the cell for this [CalendarDay]
+     * Notify the calendar to reload the cell for this [CalendarDay]
      * This causes [MonthDayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
@@ -353,7 +357,7 @@ public open class CalendarView : RecyclerView {
     // May consider removing the other one at some point.
 
     /**
-     * Notify the CalendarView to reload the cells for this [LocalDate] in the
+     * Notify the calendar to reload the cells for this [LocalDate] in the
      * specified day positions. This causes [MonthDayBinder.bind] to be called
      * with the [ViewContainer] at the relevant [DayPosition] values.
      */
@@ -369,18 +373,19 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Notify the CalendarView to reload the view for this [YearMonth]
+     * Notify the calendar to reload the view for this [month].
+     *
      * This causes the following sequence of events:
-     * [MonthDayBinder.bind] will be called for all dates in this month.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
+     * - [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
+     * - [MonthDayBinder.bind] will be called for all dates in this month.
+     * - [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
      */
     public fun notifyMonthChanged(month: YearMonth) {
         calendarAdapter.reloadMonth(month)
     }
 
     /**
-     * Notify the CalendarView to reload all months.
+     * Notify the calendar to reload all months.
      * @see [notifyMonthChanged].
      */
     public fun notifyCalendarChanged() {
@@ -388,7 +393,7 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Find the first visible month on the CalendarView.
+     * Find the first visible month on the calendar.
      *
      * @return The first visible month or null if not found.
      */
@@ -397,7 +402,7 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible month on the CalendarView.
+     * Find the last visible month on the calendar.
      *
      * @return The last visible month or null if not found.
      */
@@ -406,7 +411,7 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Find the first visible day on the CalendarView.
+     * Find the first visible day on the calendar.
      * This is the day at the top-left corner of the calendar.
      *
      * @return The first visible day or null if not found.
@@ -416,7 +421,7 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible day on the CalendarView.
+     * Find the last visible day on the calendar.
      * This is the day at the bottom-right corner of the calendar.
      *
      * @return The last visible day or null if not found.
@@ -426,15 +431,19 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Setup the CalendarView.
+     * Setup the calendar.
      * See [updateMonthData] to update these values.
      *
      * @param startMonth The first month on the calendar.
      * @param endMonth The last month on the calendar.
      * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
+     *
+     * @see [daysOfWeek]
+     * @see [firstDayOfWeekFromLocale]
      */
     public fun setup(startMonth: YearMonth, endMonth: YearMonth, firstDayOfWeek: DayOfWeek) {
         checkRange(start = startMonth, end = endMonth)
+
         this.startMonth = startMonth
         this.endMonth = endMonth
         this.firstDayOfWeek = firstDayOfWeek
@@ -453,8 +462,8 @@ public open class CalendarView : RecyclerView {
     }
 
     /**
-     * Update the CalendarView's start month or end month or the first day of week.
-     * This can be called only if you have called [setup] in the past.
+     * Update the calendar's start month or end month or the first day of week.
+     * This can be called only if you have previously called [setup].
      * The calendar can handle really large date ranges so you may want to setup
      * the calendar with a large date range instead of updating the range frequently.
      */
@@ -480,13 +489,9 @@ public open class CalendarView : RecyclerView {
         )
     }
 
-    private fun requireStartMonth(): YearMonth = startMonth ?: throw getFieldException("startMonth")
+    private fun requireStartMonth(): YearMonth = checkNotNull(startMonth) { missingField("startMonth") }
 
-    private fun requireEndMonth(): YearMonth = endMonth ?: throw getFieldException("endMonth")
+    private fun requireEndMonth(): YearMonth = checkNotNull(endMonth) { missingField("endMonth") }
 
-    private fun requireFirstDayOfWeek(): DayOfWeek =
-        firstDayOfWeek ?: throw getFieldException("firstDayOfWeek")
-
-    private fun getFieldException(field: String) =
-        IllegalStateException("`$field` is not set. Have you called `setup()`?")
+    private fun requireFirstDayOfWeek(): DayOfWeek = checkNotNull(firstDayOfWeek) { missingField("firstDayOfWeek") }
 }

@@ -13,10 +13,12 @@ import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelper
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelperLegacy
-import com.kizitonwose.calendar.view.internal.monthcalendar.MonthCalendarLayoutManager
+import com.kizitonwose.calendar.view.internal.missingField
 import com.kizitonwose.calendar.view.internal.yearcalendar.YearCalendarAdapter
 import com.kizitonwose.calendar.view.internal.yearcalendar.YearCalendarLayoutManager
 import java.time.DayOfWeek
@@ -36,8 +38,8 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The [MonthHeaderFooterBinder] instance used for managing header views.
-     * The header view is shown above each month on the Calendar.
+     * The [MonthHeaderFooterBinder] instance used for managing the
+     * header views shown above each month on the Calendar.
      */
     public var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
@@ -46,8 +48,8 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The [MonthHeaderFooterBinder] instance used for managing footer views.
-     * The footer view is shown below each month on the Calendar.
+     * The [MonthHeaderFooterBinder] instance used for managing the
+     * footer views shown below each month on the Calendar.
      */
     public var monthFooterBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
@@ -56,8 +58,8 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The [YearHeaderFooterBinder] instance used for managing header views.
-     * The header view is shown above each year on the Calendar.
+     * The [YearHeaderFooterBinder] instance used for managing the
+     * header views shown above each year on the Calendar.
      */
     public var yearHeaderBinder: YearHeaderFooterBinder<*>? = null
         set(value) {
@@ -66,8 +68,8 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The [YearHeaderFooterBinder] instance used for managing footer views.
-     * The footer view is shown below each year on the Calendar.
+     * The [YearHeaderFooterBinder] instance used for managing the
+     * footer views shown below each year on the Calendar.
      */
     public var yearFooterBinder: YearHeaderFooterBinder<*>? = null
         set(value) {
@@ -76,7 +78,7 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * Called when the calendar scrolls to a new month.
+     * Called when the calendar scrolls to a new year.
      * Mostly beneficial if [scrollPaged] is `true`.
      */
     public var yearScrollListener: YearScrollListener? = null
@@ -88,7 +90,7 @@ public open class YearCalendarView : RecyclerView {
     public var dayViewResource: Int = 0
         set(value) {
             if (field != value) {
-                check(value != 0) { "Invalid 'dayViewResource' value." }
+                require(value != 0) { "Invalid 'dayViewResource' value." }
                 field = value
                 invalidateViewHolders()
             }
@@ -143,8 +145,9 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * A [ViewGroup] which is instantiated and used as the container for each year.
-     * This class must have a constructor which takes only a [Context].
+     * The fully qualified class name of a [ViewGroup] which is instantiated
+     * and used as the container for each month. This class must have a
+     * constructor which takes only a [Context].
      *
      * **You should exclude the name and constructor of this class from code
      * obfuscation if enabled**.
@@ -153,13 +156,15 @@ public open class YearCalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
+                this.javaClass.simpleName
                 invalidateViewHolders()
             }
         }
 
     /**
-     * A [ViewGroup] which is instantiated and used as the container for each year.
-     * This class must have a constructor which takes only a [Context].
+     * The fully qualified class name of a [ViewGroup] which is instantiated
+     * and used as the container for each year. This class must have a
+     * constructor which takes only a [Context].
      *
      * **You should exclude the name and constructor of this class from code
      * obfuscation if enabled**.
@@ -172,7 +177,9 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
-    // TODO - YEAR doc
+    /**
+     * The vertical spacing between month rows in each year.
+     */
     @Px
     public var monthVerticalSpacing: Int = 0
         set(value) {
@@ -182,6 +189,9 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The horizontal spacing between month columns in each year.
+     */
     @Px
     public var monthHorizontalSpacing: Int = 0
         set(value) {
@@ -191,6 +201,9 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
+    /**
+     * The number of month columns in each year. Must be from 1 to 12.
+     */
     @IntRange(from = 1, to = 12)
     public var monthColumns: Int = 3
         set(value) {
@@ -201,6 +214,10 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
+    /**
+     * Determines if a month is shown on the calendar grid. For example, you can
+     * use this to hide all past months.
+     */
     public var isMonthVisible: (month: CalendarMonth) -> Boolean = { true }
         set(value) {
             if (field != value) {
@@ -218,14 +235,14 @@ public open class YearCalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                (layoutManager as? MonthCalendarLayoutManager)?.orientation = value
+                (layoutManager as? YearCalendarLayoutManager)?.orientation = value
                 updateSnapHelper()
             }
         }
 
     /**
      * The scrolling behavior of the calendar. If `true`, the calendar will
-     * snap to the nearest month after a scroll or swipe action.
+     * snap to the nearest year after a scroll or swipe action.
      * If `false`, the calendar scrolls normally.
      */
     public var scrollPaged: Boolean = false
@@ -264,7 +281,8 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * The margins, in pixels to be applied on each year view.
-     * this can be used to add a space between two years.
+     * This is the container in which the year header, body and footer are placed.
+     * For example, this can be used to add a space between two years.
      */
     public var yearMargins: MarginValues = MarginValues.ZERO
         set(value) {
@@ -276,7 +294,8 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * The margins, in pixels to be applied on each year body view.
-     * TODO : IMPROVE with text from compose param to clarify that headers/footers are excluded.
+     * This is the grid in which the months in each year are shown,
+     * excluding the year header and footer.
      */
     public var yearBodyMargins: MarginValues = MarginValues.ZERO
         set(value) {
@@ -414,7 +433,7 @@ public open class YearCalendarView : RecyclerView {
     /**
      * Scroll to a specific year on the calendar. This instantly
      * shows the view for the year without any animations.
-     * For a smooth scrolling effect, use [smoothScrollToMonth]
+     * For a smooth scrolling effect, use [smoothScrollToYear]
      */
     public fun scrollToYear(year: Year) {
         calendarLayoutManager.scrollToIndex(year)
@@ -422,7 +441,7 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * Scroll to a specific year on the calendar using a smooth scrolling animation.
-     * Just like [scrollToMonth], but with a smooth scrolling animation.
+     * Just like [scrollToYear], but with a smooth scrolling animation.
      */
     public fun smoothScrollToYear(year: Year) {
         calendarLayoutManager.smoothScrollToIndex(year)
@@ -481,7 +500,7 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
-     * Notify the CalendarView to reload the cell for this [CalendarDay]
+     * Notify the calendar to reload the cell for this [CalendarDay]
      * This causes [MonthDayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
@@ -497,14 +516,8 @@ public open class YearCalendarView : RecyclerView {
         notifyDayChanged(CalendarDay(date, position))
     }
 
-    // This could replace the other `notifyDateChanged` with one DayPosition param if we add
-    // the `JvmOverloads` annotation but that would break compatibility in places where the
-    // method is called with named args: notifyDateChanged(date = *, position = DayPosition.*)
-    // because assigning single elements to varargs in named form is not allowed.
-    // May consider removing the other one at some point.
-
     /**
-     * Notify the CalendarView to reload the cells for this [LocalDate] in the
+     * Notify the calendar to reload the cells for this [LocalDate] in the
      * specified day positions. This causes [MonthDayBinder.bind] to be called
      * with the [ViewContainer] at the relevant [DayPosition] values.
      */
@@ -520,55 +533,41 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
-     * Notify the CalendarView to reload the view for this [YearMonth]
+     * Notify the calendar to reload the view for this [month].
+     *
      * This causes the following sequence of events:
-     * [MonthDayBinder.bind] will be called for all dates in this month.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
+     * - [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
+     * - [MonthDayBinder.bind] will be called for all dates in this month.
+     * - [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
      */
     public fun notifyMonthChanged(month: YearMonth) {
         calendarAdapter.reloadMonth(month)
     }
 
     /**
-     * Notify the CalendarView to reload the view for this [YearMonth]
+     * Notify the calendar to reload the view for this [year].
+     *
      * This causes the following sequence of events:
-     * [MonthDayBinder.bind] will be called for all dates in this month.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's header view if available.
-     * [MonthHeaderFooterBinder.bind] will be called for this month's footer view if available.
+     * - [YearHeaderFooterBinder.bind] will be called for this year's header view if available.
+     * - [MonthHeaderFooterBinder.bind] will be called for each month's header view in this year if available.
+     * - [MonthDayBinder.bind] will be called for all dates in this year.
+     * - [MonthHeaderFooterBinder.bind] will be called for each month's footer view if available.
+     * - [YearHeaderFooterBinder.bind] will be called for this year's footer view in this year if available.
      */
     public fun notifyYearChanged(year: Year) {
         calendarAdapter.reloadYear(year)
     }
 
     /**
-     * Notify the CalendarView to reload all months.
-     * @see [notifyMonthChanged].
+     * Notify the calendar to reload all years.
+     * @see [notifyYearChanged].
      */
     public fun notifyCalendarChanged() {
         calendarAdapter.reloadCalendar()
     }
 
     /**
-     * Find the first visible month on the CalendarView.
-     *
-     * @return The first visible month or null if not found.
-     */
-    public fun findFirstVisibleMonth(): CalendarMonth? {
-        return calendarAdapter.findFirstVisibleMonth()
-    }
-
-    /**
-     * Find the last visible month on the CalendarView.
-     *
-     * @return The last visible month or null if not found.
-     */
-    public fun findLastVisibleMonth(): CalendarMonth? {
-        return calendarAdapter.findLastVisibleMonth()
-    }
-
-    /**
-     * Find the first visible year on the CalendarView.
+     * Find the first visible year on the calendar.
      *
      * @return The first visible year or null if not found.
      */
@@ -577,7 +576,7 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible year on the CalendarView.
+     * Find the last visible year on the calendar.
      *
      * @return The last visible year or null if not found.
      */
@@ -586,7 +585,25 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
-     * Find the first visible day on the CalendarView.
+     * Find the first visible month on the calendar.
+     *
+     * @return The first visible month or null if not found.
+     */
+    public fun findFirstVisibleMonth(): CalendarMonth? {
+        return calendarAdapter.findFirstVisibleMonth()
+    }
+
+    /**
+     * Find the last visible month on the calendar.
+     *
+     * @return The last visible month or null if not found.
+     */
+    public fun findLastVisibleMonth(): CalendarMonth? {
+        return calendarAdapter.findLastVisibleMonth()
+    }
+
+    /**
+     * Find the first visible day on the calendar.
      * This is the day at the top-left corner of the calendar.
      *
      * @return The first visible day or null if not found.
@@ -596,7 +613,7 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible day on the CalendarView.
+     * Find the last visible day on the calendar.
      * This is the day at the bottom-right corner of the calendar.
      *
      * @return The last visible day or null if not found.
@@ -606,12 +623,15 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
-     * Setup the CalendarView.
-     * See [updateMonthData] to update these values.
+     * Setup the calendar.
+     * See [updateYearData] to update these values.
      *
-     * @param startMonth The first month on the calendar.
-     * @param endMonth The last month on the calendar.
+     * @param startYear The first year on the calendar.
+     * @param endYear The last year on the calendar.
      * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
+     *
+     * @see [daysOfWeek]
+     * @see [firstDayOfWeekFromLocale]
      */
     public fun setup(startYear: Year, endYear: Year, firstDayOfWeek: DayOfWeek) {
         checkRange(start = startYear, end = endYear)
@@ -633,13 +653,13 @@ public open class YearCalendarView : RecyclerView {
     }
 
     /**
-     * Update the CalendarView's start month or end month or the first day of week.
-     * This can be called only if you have called [setup] in the past.
+     * Update the calendar's start year or end year or the first day of week.
+     * This can be called only if you have previously called [setup].
      * The calendar can handle really large date ranges so you may want to setup
      * the calendar with a large date range instead of updating the range frequently.
      */
     @JvmOverloads
-    public fun updateMonthData(
+    public fun updateYearData(
         startYear: Year = requireStartYear(),
         endYear: Year = requireEndYear(),
         firstDayOfWeek: DayOfWeek = requireFirstDayOfWeek(),
@@ -660,13 +680,9 @@ public open class YearCalendarView : RecyclerView {
         )
     }
 
-    private fun requireStartYear(): Year = startYear ?: throw getFieldException("startYear")
+    private fun requireStartYear(): Year = checkNotNull(startYear) { missingField("startYear") }
 
-    private fun requireEndYear(): Year = endYear ?: throw getFieldException("endYear")
+    private fun requireEndYear(): Year = checkNotNull(endYear) { missingField("endYear") }
 
-    private fun requireFirstDayOfWeek(): DayOfWeek =
-        firstDayOfWeek ?: throw getFieldException("firstDayOfWeek")
-
-    private fun getFieldException(field: String) =
-        IllegalStateException("`$field` is not set. Have you called `setup()`?")
+    private fun requireFirstDayOfWeek(): DayOfWeek = checkNotNull(firstDayOfWeek) { missingField("firstDayOfWeek") }
 }
