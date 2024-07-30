@@ -269,9 +269,25 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * Determines how the size of each day on the calendar is calculated.
-     * Can be [DaySize.Square], [DaySize.SeventhWidth] or [DaySize.FreeForm].
+     * See the [DaySize] class documentation to understand each value.
+     *
+     * @see [monthHeight]
      */
     public var daySize: DaySize = DaySize.Square
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidateViewHolders()
+            }
+        }
+
+    /**
+     * Determines how the height of each month on the calendar is calculated.
+     * See the [MonthHeight] class documentation to understand each value.
+     *
+     * @see [daySize]
+     */
+    public var monthHeight: MonthHeight = MonthHeight.FollowDaySize
         set(value) {
             if (field != value) {
                 field = value
@@ -371,6 +387,9 @@ public open class YearCalendarView : RecyclerView {
             )
             daySize = DaySize.entries[
                 getInt(R.styleable.YearCalendarView_cv_daySize, daySize.ordinal),
+            ]
+            monthHeight = MonthHeight.entries[
+                getInt(R.styleable.YearCalendarView_cv_monthHeight, monthHeight.ordinal),
             ]
             outDateStyle = OutDateStyle.entries[
                 getInt(R.styleable.YearCalendarView_cv_outDateStyle, outDateStyle.ordinal),

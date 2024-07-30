@@ -59,8 +59,9 @@ internal class YearCalendarAdapter(
     @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YearViewHolder {
         val content = setupYearItemRoot(
-            daySize = calView.daySize,
             context = calView.context,
+            daySize = calView.daySize,
+            monthHeight = calView.monthHeight,
             dayViewResource = calView.dayViewResource,
             dayBinder = calView.dayBinder as MonthDayBinder<ViewContainer>,
             monthColumns = calView.monthColumns,

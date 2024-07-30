@@ -155,7 +155,7 @@ public open class CalendarView : RecyclerView {
 
     /**
      * Determines how the size of each day on the calendar is calculated.
-     * Can be [DaySize.Square], [DaySize.SeventhWidth] or [DaySize.FreeForm].
+     * See the [DaySize] class documentation to understand each value.
      */
     public var daySize: DaySize = DaySize.Square
         set(value) {

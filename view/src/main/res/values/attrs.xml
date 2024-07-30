@@ -113,6 +113,14 @@
         <!-- TODO - doc-->
         <attr name="cv_monthVerticalSpacing" format="dimension" />
 
+        <!-- TODO - doc-->
+        <!-- Determines how the size of each day on the calendar is calculated. -->
+        <attr name="cv_monthHeight" format="enum">
+
+            <enum name="followDaySize" value="0" />
+            <enum name="fill" value="1" />
+        </attr>
+
         <attr name="cv_orientation" />
         <attr name="cv_scrollPaged" />
         <attr name="cv_daySize" />

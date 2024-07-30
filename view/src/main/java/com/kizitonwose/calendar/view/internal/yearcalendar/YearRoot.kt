@@ -14,6 +14,7 @@ import com.kizitonwose.calendar.view.DaySize
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.kizitonwose.calendar.view.MonthHeight
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.internal.customViewOrRoot
 import com.kizitonwose.calendar.view.internal.inflate
@@ -34,6 +35,7 @@ internal fun setupYearItemRoot(
     yearItemMargins: MarginValues,
     yearBodyMargins: MarginValues,
     daySize: DaySize,
+    monthHeight: MonthHeight,
     context: Context,
     dayViewResource: Int,
     dayBinder: MonthDayBinder<ViewContainer>?,
@@ -90,30 +92,22 @@ internal fun setupYearItemRoot(
                 LinearLayout.LayoutParams(0, height, 1f),
             )
         }
-        val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
-        val height = if (daySize.parentDecidesHeight) 0 else WRAP_CONTENT
-        val weight = if (daySize.parentDecidesHeight) 1f else 0f
         monthsLayout.addView(
             rowLayout,
-            LinearLayout.LayoutParams(width, height, weight),
+            MonthLayoutParams(daySize, monthHeight),
         )
         return@List rowLayout to row
     }
 
-    run {
-        val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
-        val height = if (daySize.parentDecidesHeight) 0 else WRAP_CONTENT
-        val weight = if (daySize.parentDecidesHeight) 1f else 0f
-        rootLayout.addView(
-            monthsLayout,
-            LinearLayout.LayoutParams(width, height, weight).apply {
-                bottomMargin = yearBodyMargins.bottom
-                topMargin = yearBodyMargins.top
-                marginStart = yearBodyMargins.start
-                marginEnd = yearBodyMargins.end
-            },
-        )
-    }
+    rootLayout.addView(
+        monthsLayout,
+        MonthLayoutParams(daySize, monthHeight).apply {
+            bottomMargin = yearBodyMargins.bottom
+            topMargin = yearBodyMargins.top
+            marginStart = yearBodyMargins.start
+            marginEnd = yearBodyMargins.end
+        },
+    )
 
     val itemFooterView = if (yearItemFooterResource != 0) {
         rootLayout.inflate(yearItemFooterResource).also { footerView ->
@@ -128,7 +122,10 @@ internal fun setupYearItemRoot(
         rootLayout = rootLayout,
     ) { root: ViewGroup ->
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
-        val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
+        val height = when (monthHeight) {
+            MonthHeight.FollowDaySize -> if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
+            MonthHeight.Fill -> MATCH_PARENT
+        }
         root.layoutParams = MarginLayoutParams(width, height).apply {
             bottomMargin = yearItemMargins.bottom
             topMargin = yearItemMargins.top
@@ -161,6 +158,25 @@ private fun DividerLinearLayout(
                 intrinsicWidth = axisSpacing
             }
             paint.color = Color.TRANSPARENT
+        }
+    }
+}
+
+@Suppress("FunctionName")
+private fun MonthLayoutParams(
+    daySize: DaySize,
+    monthHeight: MonthHeight,
+): LinearLayout.LayoutParams {
+    val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
+    return when (monthHeight) {
+        MonthHeight.FollowDaySize -> {
+            val height = if (daySize.parentDecidesHeight) 0 else WRAP_CONTENT
+            val weight = if (daySize.parentDecidesHeight) 1f else 0f
+            LinearLayout.LayoutParams(width, height, weight)
+        }
+
+        MonthHeight.Fill -> {
+            LinearLayout.LayoutParams(width, 0, 1f)
         }
     }
 }
