@@ -1,70 +1,73 @@
 package com.kizitonwose.calendar.sample.view
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.children
-import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.sample.R
+import com.kizitonwose.calendar.sample.databinding.Example10FragmentBinding
 import com.kizitonwose.calendar.sample.databinding.Example9CalendarDayBinding
 import com.kizitonwose.calendar.sample.databinding.Example9CalendarMonthHeaderBinding
-import com.kizitonwose.calendar.sample.databinding.Example9CalendarYearHeaderBinding
-import com.kizitonwose.calendar.sample.databinding.Example9FragmentBinding
 import com.kizitonwose.calendar.sample.shared.displayText
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
-import com.kizitonwose.calendar.view.YearHeaderFooterBinder
 import java.time.LocalDate
 import java.time.Year
-import java.time.YearMonth
 
-class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, HasBackButton {
+class Example10Fragment : BaseFragment(R.layout.example_10_fragment), HasToolbar, HasBackButton {
     override val toolbar: Toolbar
-        get() = binding.exNineToolbar
+        get() = binding.exTenToolbar
 
-    override val titleRes: Int = R.string.example_9_title
+    override val titleRes: Int = R.string.example_10_title
 
-    private lateinit var binding: Example9FragmentBinding
+    private lateinit var binding: Example10FragmentBinding
 
     private var selectedDate: LocalDate? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = Example9FragmentBinding.bind(view)
+        setHasOptionsMenu(true)
+        binding = Example10FragmentBinding.bind(view)
         val config = requireContext().resources.configuration
         val isTablet = config.smallestScreenWidthDp >= 600
 
         configureBinders(isTablet)
 
-        binding.exNineCalendar.apply {
-            val currentMonth = YearMonth.now()
+        binding.exTenToolbar.updatePaddingRelative(end = dpToPx(if (isTablet) 42 else 6, requireContext()))
+
+        binding.exTenCalendar.apply {
+            val currentYear = Year.now()
             monthVerticalSpacing = dpToPx(20, requireContext())
             monthHorizontalSpacing = dpToPx(if (isTablet) 52 else 10, requireContext())
             yearMargins = MarginValues(
+                vertical = dpToPx(if (isTablet) 20 else 6, requireContext()),
                 horizontal = dpToPx(if (isTablet) 52 else 14, requireContext()),
             )
-            isMonthVisible = {
-                it.yearMonth >= currentMonth
+            yearScrollListener = { year ->
+                binding.exTenToolbar.title = year.year.value.toString()
             }
             setup(
-                Year.of(currentMonth.year),
-                Year.of(currentMonth.year).plusYears(50),
+                currentYear.minusYears(100),
+                currentYear.plusYears(100),
                 firstDayOfWeekFromLocale(),
             )
+            scrollToYear(currentYear)
         }
     }
 
     private fun configureBinders(isTablet: Boolean) {
-        val calendarView = binding.exNineCalendar
+        val calendarView = binding.exTenCalendar
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             // Will be set when this container is bound. See the dayBinder.
@@ -150,18 +153,27 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
                 }
             }
 
-        class YearViewContainer(view: View) : ViewContainer(view) {
-            val textView = Example9CalendarYearHeaderBinding.bind(view).exNineYearHeaderText.apply {
-                textSize = if (isTablet) 52f else 44f
-                updatePadding(bottom = dpToPx(if (isTablet) 16 else 10, requireContext()))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.example_10_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val visibleYear = binding.exTenCalendar.findFirstVisibleYear()?.year
+            ?: return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.menuItemPrevious -> {
+                binding.exTenCalendar.smoothScrollToYear(visibleYear.minusYears(1))
+                true
             }
+
+            R.id.menuItemNext -> {
+                binding.exTenCalendar.smoothScrollToYear(visibleYear.plusYears(1))
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
         }
-        calendarView.yearHeaderBinder =
-            object : YearHeaderFooterBinder<YearViewContainer> {
-                override fun create(view: View) = YearViewContainer(view)
-                override fun bind(container: YearViewContainer, data: CalendarYear) {
-                    container.textView.text = data.year.value.toString()
-                }
-            }
     }
 }
