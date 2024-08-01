@@ -26,6 +26,12 @@ import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
 
+/**
+ * A year-based calendar view.
+ *
+ * @see CalendarView
+ * @see WeekCalendarView
+ */
 public open class YearCalendarView : RecyclerView {
     /**
      * The [MonthDayBinder] instance used for managing day
@@ -39,7 +45,7 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * The [MonthHeaderFooterBinder] instance used for managing the
-     * header views shown above each month on the Calendar.
+     * header views shown above each month on the calendar.
      */
     public var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
@@ -49,7 +55,7 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * The [MonthHeaderFooterBinder] instance used for managing the
-     * footer views shown below each month on the Calendar.
+     * footer views shown below each month on the calendar.
      */
     public var monthFooterBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
@@ -59,7 +65,7 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * The [YearHeaderFooterBinder] instance used for managing the
-     * header views shown above each year on the Calendar.
+     * header views shown above each year on the calendar.
      */
     public var yearHeaderBinder: YearHeaderFooterBinder<*>? = null
         set(value) {
@@ -69,7 +75,7 @@ public open class YearCalendarView : RecyclerView {
 
     /**
      * The [YearHeaderFooterBinder] instance used for managing the
-     * footer views shown below each year on the Calendar.
+     * footer views shown below each year on the calendar.
      */
     public var yearFooterBinder: YearHeaderFooterBinder<*>? = null
         set(value) {
@@ -97,7 +103,7 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a header for every month.
+     * The xml resource that is inflated and used as a header for each month.
      * Set zero to disable.
      */
     public var monthHeaderResource: Int = 0
@@ -109,7 +115,7 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a footer for every month.
+     * The xml resource that is inflated and used as a footer for each month.
      * Set zero to disable.
      */
     public var monthFooterResource: Int = 0
@@ -121,7 +127,7 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a header for every year.
+     * The xml resource that is inflated and used as a header for each year.
      * Set zero to disable.
      */
     public var yearHeaderResource: Int = 0
@@ -133,7 +139,7 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a footer for every year.
+     * The xml resource that is inflated and used as a footer for each year.
      * Set zero to disable.
      */
     public var yearFooterResource: Int = 0
@@ -145,7 +151,7 @@ public open class YearCalendarView : RecyclerView {
         }
 
     /**
-     * The fully qualified class name of a [ViewGroup] which is instantiated
+     * The fully qualified class name of a [ViewGroup] that is instantiated
      * and used as the container for each month. This class must have a
      * constructor which takes only a [Context].
      *
@@ -156,13 +162,12 @@ public open class YearCalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 field = value
-                this.javaClass.simpleName
                 invalidateViewHolders()
             }
         }
 
     /**
-     * The fully qualified class name of a [ViewGroup] which is instantiated
+     * The fully qualified class name of a [ViewGroup] that is instantiated
      * and used as the container for each year. This class must have a
      * constructor which takes only a [Context].
      *

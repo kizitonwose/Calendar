@@ -22,6 +22,12 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
+/**
+ * A month-based calendar view.
+ *
+ * @see WeekCalendarView
+ * @see YearCalendarView
+ */
 public open class CalendarView : RecyclerView {
     /**
      * The [MonthDayBinder] instance used for managing day
@@ -34,8 +40,8 @@ public open class CalendarView : RecyclerView {
         }
 
     /**
-     * The [MonthHeaderFooterBinder] instance used for managing header views.
-     * The header view is shown above each month on the Calendar.
+     * The [MonthHeaderFooterBinder] instance used for managing the
+     * header views shown above each month on the calendar.
      */
     public var monthHeaderBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
@@ -44,8 +50,8 @@ public open class CalendarView : RecyclerView {
         }
 
     /**
-     * The [MonthHeaderFooterBinder] instance used for managing footer views.
-     * The footer view is shown below each month on the Calendar.
+     * The [MonthHeaderFooterBinder] instance used for managing the
+     * footer views shown below each month on the calendar.
      */
     public var monthFooterBinder: MonthHeaderFooterBinder<*>? = null
         set(value) {
@@ -73,7 +79,7 @@ public open class CalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a header for every month.
+     * The xml resource that is inflated and used as a header for each month.
      * Set zero to disable.
      */
     public var monthHeaderResource: Int = 0
@@ -85,7 +91,7 @@ public open class CalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a footer for every month.
+     * The xml resource that is inflated and used as a footer for each month.
      * Set zero to disable.
      */
     public var monthFooterResource: Int = 0
@@ -97,7 +103,7 @@ public open class CalendarView : RecyclerView {
         }
 
     /**
-     * The fully qualified class name of a [ViewGroup] which is instantiated
+     * The fully qualified class name of a [ViewGroup] that is instantiated
      * and used as the container for each month. This class must have a
      * constructor which takes only a [Context].
      *

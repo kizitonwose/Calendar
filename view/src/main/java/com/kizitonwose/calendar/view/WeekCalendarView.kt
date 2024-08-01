@@ -17,6 +17,12 @@ import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarLayoutMan
 import java.time.DayOfWeek
 import java.time.LocalDate
 
+/**
+ * A week-based calendar view.
+ *
+ * @see CalendarView
+ * @see YearCalendarView
+ */
 public open class WeekCalendarView : RecyclerView {
     /**
      * The [WeekDayBinder] instance used for managing day
@@ -29,8 +35,8 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The [WeekHeaderFooterBinder] instance used for managing header views.
-     * The header view is shown above each week on the Calendar.
+     * The [WeekHeaderFooterBinder] instance used for managing the
+     * header views shown above each week on the calendar.
      */
     public var weekHeaderBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
@@ -39,8 +45,8 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The [WeekHeaderFooterBinder] instance used for managing footer views.
-     * The footer view is shown below each week on the Calendar.
+     * The [WeekHeaderFooterBinder] instance used for managing the
+     * footer views shown below each week on the calendar.
      */
     public var weekFooterBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
@@ -68,7 +74,7 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a header for every week.
+     * The xml resource that is inflated and used as a header for each week.
      * Set zero to disable.
      */
     public var weekHeaderResource: Int = 0
@@ -80,7 +86,7 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a footer for every week.
+     * The xml resource that is inflated and used as a footer for each week.
      * Set zero to disable.
      */
     public var weekFooterResource: Int = 0
@@ -92,7 +98,7 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The fully qualified class name of a [ViewGroup] which is instantiated
+     * The fully qualified class name of a [ViewGroup] that is instantiated
      * and used as the container for each week. This class must have a
      * constructor which takes only a [Context].
      *
