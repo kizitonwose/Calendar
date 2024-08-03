@@ -30,5 +30,4 @@ public enum class MonthHeight {
      * the day content.
      */
     Fill,
-
 }
