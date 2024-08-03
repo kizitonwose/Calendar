@@ -25,7 +25,7 @@ android {
     }
     buildTypes {
         named("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
         }
     }
     java {

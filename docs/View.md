@@ -23,7 +23,7 @@
 
 Check out the sample app if you have not yet done so. Most techniques that you would want to implement are already done in the examples.
 
-Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.0.0/sample.apk)
+Download the sample app [here](https://github.com/kizitonwose/Calendar/releases/download/2.5.4/sample.apk)
 
 Read the sample app's source code [here](https://github.com/kizitonwose/Calendar/tree/main/sample)
 
