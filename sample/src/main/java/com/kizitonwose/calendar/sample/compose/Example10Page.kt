@@ -1,7 +1,9 @@
 package com.kizitonwose.calendar.sample.compose
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
+import androidx.compose.foundation.gestures.snapping.SnapPositionInLayout
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -147,6 +149,7 @@ fun Example10Page(adjacentYears: Long = 50) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun YearHeader(
     startYear: Year,
@@ -163,7 +166,7 @@ private fun YearHeader(
             .wrapContentHeight()
             .background(headerBackground),
         state = headerState,
-        flingBehavior = rememberSnapFlingBehavior(lazyListState = headerState, SnapPosition.Center),
+        flingBehavior = rememberSnapFlingBehavior(SnapLayoutInfoProvider(headerState, SnapPositionInLayout.CenterToCenter)),
         contentPadding = PaddingValues(horizontal = if (isTablet) 40.dp else 10.dp),
     ) {
         items(count = startYear.yearsUntil(endYear).toInt()) { index ->
