@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuProvider
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.CalendarDay
@@ -25,7 +26,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, HasBackButton {
+class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, HasBackButton, MenuProvider {
     override val toolbar: Toolbar
         get() = binding.exTwoToolbar
 
@@ -38,7 +39,6 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
         binding = Example2FragmentBinding.bind(view)
         val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children.forEachIndexed { index, child ->
@@ -57,21 +57,19 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
     }
 
     private lateinit var menuItem: MenuItem
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.example_2_menu, menu)
-        menuItem = menu.getItem(0)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menuItemDone) {
-            val date = selectedDate ?: return false
+        menuItem = menu.findItem(R.id.menuItemDone)
+        menuItem.setOnMenuItemClickListener click@{
+            val date = selectedDate ?: return@click true
             val text = "Selected: ${DateTimeFormatter.ofPattern("d MMMM yyyy").format(date)}"
             Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT).show()
             parentFragmentManager.popBackStack()
-            return true
+            return@click true
         }
-        return super.onOptionsItemSelected(item)
     }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean = true
 
     private fun configureBinders() {
         val calendarView = binding.exTwoCalendar
@@ -113,10 +111,12 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
                             textView.setTextColorRes(R.color.example_2_white)
                             textView.setBackgroundResource(R.drawable.example_2_selected_bg)
                         }
+
                         today -> {
                             textView.setTextColorRes(R.color.example_2_red)
                             textView.background = null
                         }
+
                         else -> {
                             textView.setTextColorRes(R.color.example_2_black)
                             textView.background = null

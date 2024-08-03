@@ -134,6 +134,35 @@ fun MainScreen() {
 }
 ```
 
+`HorizontalYearCalendar` and `VerticalYearCalendar`:
+
+```kotlin
+@Composable
+fun MainScreen() {
+    val currentYear = remember { Year.now() }
+    val startYear = remember { currentYear.minusYears(100) } // Adjust as needed
+    val endYear = remember { currentYear.plusYears(100) } // Adjust as needed
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() } // Available from the library
+
+    val state = rememberYearCalendarState(
+        startYear = startYear,
+        endYear = endYear,
+        firstVisibleYear = currentYear,
+        firstDayOfWeek = firstDayOfWeek,
+    )
+    HorizontalYearCalendar(
+        state = state,
+        dayContent = { Day(it) },
+    )
+
+//    If you need a vertical year calendar.
+//    VerticalYearCalendar(
+//        state = state,
+//        dayContent = { Day(it) }
+//    )
+}
+```
+
 Your `Day` composable in its simplest form would be:
 
 ```kotlin

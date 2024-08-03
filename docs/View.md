@@ -15,6 +15,7 @@
   * [Date Selection](#date-selection)
   * [Disabling dates](#disabling-dates)
 - [Week view](#week-view)
+- [Year view](#year-view)
 - [FAQ](#faq)
 - [Migration](#migration)
 
@@ -32,16 +33,19 @@ Add the library to your project [here](https://github.com/kizitonwose/Calendar#s
 
 ## Class information
 
-The library can be used via two classes: 
+The library can be used via three classes: 
 
 `CalendarView`: The typical month-based calendar.
 
 `WeekCalendarView`: The week-based calendar.
 
-Both classes extend from `RecyclerView` so you can use all `RecyclerView` customizations like decorators etc.
+`YearCalendarView`: The year-based calendar.
 
-In the examples below, we will mostly use the `CalendarView` class since the two classes share the same basic concept. If you want a week-based calendar, replace `CalendarView` in your xml/code with `WeekCalendarView`. 
-Most xml attributes and class properties/methods with the name prefix/suffix `month` (e.g `monthHeaderResource`) in the `CalendarView` will have an equivalent with the name prefix/suffix `week` (e.g `weekHeaderResource`) in the `WeekCalendarView`.
+These classes extend from `RecyclerView` so you can use all `RecyclerView` customizations like decorators etc.
+
+In the examples below, we will mostly use the `CalendarView` class since the three classes share the same basic concept. If you want a week-based calendar, replace `CalendarView` in your xml/code with `WeekCalendarView`. If you want a year-based calendar, replace `CalendarView` in your xml/code with `YearCalendarView`. 
+
+Most xml attributes and class properties/methods with the name prefix/suffix `month` (e.g `monthHeaderResource`) in the `CalendarView` will have an equivalent with the name prefix/suffix `week` (e.g `weekHeaderResource`) in the `WeekCalendarView` and the name prefix/suffix `year` (e.g `yearHeaderResource`) in the `YearCalendarView`.
 
 ## Usage
 
@@ -103,8 +107,8 @@ Setup the desired dates in your Fragment or Activity:
 **`CalendarView` setup:**
 ```kotlin
 val currentMonth = YearMonth.now()
-val startMonth = currentMonth.minusMonths(100)  // Adjust as needed
-val endMonth = currentMonth.plusMonths(100)  // Adjust as needed
+val startMonth = currentMonth.minusMonths(100) // Adjust as needed
+val endMonth = currentMonth.plusMonths(100) // Adjust as needed
 val firstDayOfWeek = firstDayOfWeekFromLocale() // Available from the library
 calendarView.setup(startMonth, endMonth, firstDayOfWeek)
 calendarView.scrollToMonth(currentMonth)
@@ -125,10 +129,30 @@ calendarView.scrollToMonth(currentMonth)
 val currentDate = LocalDate.now()
 val currentMonth = YearMonth.now()
 val startDate = currentMonth.minusMonths(100).atStartOfMonth() // Adjust as needed
-val endDate = currentMonth.plusMonths(100).atEndOfMonth()  // Adjust as needed
+val endDate = currentMonth.plusMonths(100).atEndOfMonth() // Adjust as needed
 val firstDayOfWeek = firstDayOfWeekFromLocale() // Available from the library
 weekCalendarView.setup(startDate, endDate, firstDayOfWeek)
 weekCalendarView.scrollToWeek(currentDate)
+```
+
+**`YearCalendarView` setup:**
+
+```diff
+- <com.kizitonwose.calendar.view.CalendarView
++ <com.kizitonwose.calendar.view.YearCalendarView
+    android:id="@+id/yearCalendarView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cv_dayViewResource="@layout/calendar_day_layout" />
+```
+
+```kotlin
+val currentYear = Year.now()
+val startYear = currentYear.minusYears(100) // Adjust as needed
+val endYear = currentYear.plusYears(100) // Adjust as needed
+val firstDayOfWeek = firstDayOfWeekFromLocale() // Available from the library
+yearCalendarView.setup(startYear, endYear, firstDayOfWeek)
+yearCalendarView.scrollToYear(currentYear)
 ```
 
 **And that's all you need for simple usage! But keep reading, there's more!**
@@ -300,7 +324,7 @@ You can do more than just use the day titles as the header. For example, you can
 
 #### XML (All prefixed `cv_` for clarity)
 
-**The following attributes are available for both `CalendarView` and `WeekCalendarView` classes:**
+**The following attributes are available for `CalendarView`, `WeekCalendarView` and `YearCalendarView` classes:**
 
 - **dayViewResource**: The xml resource that is inflated and used as the day cell view. This must be provided.
 
@@ -313,15 +337,15 @@ You can do more than just use the day titles as the header. For example, you can
     2. **seventhWidth**: Each day will have its width matching the width of the calendar divided by 7. The day is allowed to determine its height by setting a specific value or using `LayoutParams.WRAP_CONTENT`
     3. **freeForm**: This day is allowed to determine its width and height by setting specific values or using `LayoutParams.WRAP_CONTENT`.
 
-**The following attributes are available for ONLY `CalendarView` class:**
+**The following attributes are available for `CalendarView` and `YearCalendarView` classes:**
 
-- **monthHeaderResource**: The xml resource that is inflated and used as a header for every month.
+- **monthHeaderResource**: The xml resource that is inflated and used as a header for each month.
 
-- **monthFooterResource**: The xml resource that is inflated and used as a footer for every month.
+- **monthFooterResource**: The xml resource that is inflated and used as a footer for each month.
 
 - **orientation**: The calendar scroll direction, can be `horizontal` or `vertical`. Default is `horizontal`.
 
-- **monthViewClass**: A ViewGroup which is instantiated and used as the container for each month. This class must have a constructor which takes only a Context. You should exclude the name and constructor of this class from code obfuscation if enabled.
+- **monthViewClass**: A ViewGroup that is instantiated and used as the container for each month. This class must have a constructor which takes only a Context. You should exclude the name and constructor of this class from code obfuscation if enabled.
 
 - **outDateStyle**: This determines how outDates are generated for each month on the calendar. Can be one of two values:
     1. **endOfRow**: The calendar will generate `outDates` until it reaches the end of the month row. This means that if a month has 5 rows, it will display 5 rows and if a month has 6 rows, it will display 6 rows.
@@ -353,6 +377,28 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
 `monthDates` have their `position` property set to `DayPosition.MonthDate` as seen in the code snippet above.
 
+**The following attributes are available for ONLY `YearCalendarView` class:**
+
+- **yearHeaderResource**: The xml resource that is inflated and used as a header for each year.
+
+- **yearFooterResource**: The xml resource that is inflated and used as a footer for each year.
+
+- **yearViewClass**: A ViewGroup that is instantiated and used as the container for each year. This class must have a constructor which takes only a Context. You should exclude the name and constructor of this class from code obfuscation if enabled.
+
+- **monthColumns**: The number of month columns in each year. Must be from 1 to 12.
+
+- **monthHorizontalSpacing**: The horizontal spacing between month columns in each year.
+
+- **monthVerticalSpacing**: The vertical spacing between month rows in each year.
+
+- **monthHeight**: This determines how the height of each month row on the calendar is calculated. Can be one of two values:
+    1. **followDaySize**: Each month row height is determined by the `daySize` value set on the calendar. Effectively, this is `wrap-content` if the value is `Square`,
+    `SeventhWidth`, or `FreeForm`, and will be equal to the calendar height divided by the number of rows if the value is `Rectangle`. When used together with `Rectangle`, 
+    the calendar months and days will uniformly stretch to fill the parent's height.
+    2. **fill**: Each month row height will be the calender height divided by the number of rows on the calendar. This means that the calendar months will be distributed
+    uniformly to fill the parent's height. However, the day content height will independently determine its height. This allows you to spread the calendar months evenly across the screen while
+    a `daySize` value of `Square` if you want square day content or `SeventhWidth` if you want to set a specific height value for the day content.
+
 **The following attributes are available for ONLY `WeekCalendarView` class:**
 
 - **weekHeaderResource**: The xml resource that is inflated and used as a header for every week.
@@ -371,9 +417,9 @@ All the respective XML attributes listed above are also available as properties 
 
 - **dayBinder**: An instance of `MonthDayBinder` for managing day cell views.
 
-- **monthHeaderBinder**: An instance of `MonthHeaderFooterBinder` for managing header views. The header view is shown above each month on the Calendar.
+- **monthHeaderBinder**: An instance of `MonthHeaderFooterBinder` for managing header views. The header view is shown above each month on the calendar.
 
-- **monthFooterBinder**: An instance of `MonthHeaderFooterBinder` for managing footer views. The footer view is shown below each month on the Calendar.
+- **monthFooterBinder**: An instance of `MonthHeaderFooterBinder` for managing footer views. The footer view is shown below each month on the calendar.
 
 - **monthMargins**: The margins, in pixels to be applied on each month view. This can be used to add a space between two months.
 
@@ -383,11 +429,31 @@ All the respective XML attributes listed above are also available as properties 
 
 - **dayBinder**: An instance of `WeekDayBinder` for managing day cell views.
 
-- **weekHeaderBinder**: An instance of `WeekHeaderFooterBinder` for managing header views. The header view is shown above each week on the Calendar.
+- **weekHeaderBinder**: An instance of `WeekHeaderFooterBinder` for managing the header views shown above each week on the calendar.
 
-- **weekFooterBinder**: An instance of `WeekHeaderFooterBinder` for managing footer views. The footer view is shown below each week on the Calendar.
+- **weekFooterBinder**: An instance of `WeekHeaderFooterBinder` for managing the footer views shown below each week on the calendar.
 
 - **weekMargins**: The margins, in pixels to be applied on each week view. This can be used to add a space between two weeks.
+
+**`YearCalendarView` properties:**
+
+- **yearScrollListener**: Called when the calendar scrolls to a new year. Mostly beneficial if `scrollPaged` is `true`.
+
+- **dayBinder**: An instance of `MonthDayBinder` for managing day cell views.
+
+- **monthHeaderBinder**: An instance of `MonthHeaderFooterBinder` for managing the header views shown above each month on the calendar.
+
+- **monthFooterBinder**: An instance of `MonthHeaderFooterBinder` for managing the footer views shown below each month on the calendar.
+
+- **monthMargins**: The margins, in pixels to be applied on each month view. This can be used to add a space between two months.
+
+- **yearHeaderBinder**: An instance of `YearHeaderFooterBinder` for managing the header views shown above each year on the calendar.
+
+- **yearFooterBinder**: An instance of `YearHeaderFooterBinder` for managing the footer views shown below each year on the calendar.
+
+- **yearMargins**: The margins, in pixels to be applied on each year view. This is the container in which the year header, body and footer are placed. For example, this can be used to add a space between two years.
+
+- **yearBodyMargins**: The margins, in pixels to be applied on each year body view. This is the grid in which the months in each year are shown, excluding the year header and footer.
 
 ### Methods
 
@@ -403,11 +469,11 @@ All the respective XML attributes listed above are also available as properties 
 
 - **notifyCalendarChanged()**: Reload the entire calendar.
 
-- **findFirstVisibleMonth()** and **findLastVisibleMonth()**: Find the first and last visible months on the CalendarView respectively.
+- **findFirstVisibleMonth()** and **findLastVisibleMonth()**: Find the first and last visible months on the calendar respectively.
 
-- **findFirstVisibleDay()** and **findLastVisibleDay()**: Find the first and last visible days on the CalendarView respectively.
+- **findFirstVisibleDay()** and **findLastVisibleDay()**: Find the first and last visible days on the calendar respectively.
 
-- **updateMonthData()**: Update the CalendarView's start month or end month or the first day of week after the initial setup. The currently visible month is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
+- **updateMonthData()**: Update the calendar's start month or end month or the first day of week after the initial setup. The currently visible month is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
 
 **`WeekCalendarView` methods:**
 
@@ -425,11 +491,34 @@ All the respective XML attributes listed above are also available as properties 
 
 - **findFirstVisibleDay()** and **findLastVisibleDay()**: Find the first and last visible days on the calendar respectively.
 
-- **updateWeekData()**: Update the WeeCalendarView's start date or end date or the first day of week after the initial setup. The currently visible week is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
+- **updateWeekData()**: Update the calendar's start date or end date or the first day of week after the initial setup. The currently visible week is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
+
+**`YearCalendarView` methods:**
+
+- **scrollToDate(date: LocalDate)**: Scroll to a specific date on the calendar. Use `smoothScrollToDate()` to get a smooth scrolling animation. 
+
+- **scrollToMonth(month: YearMonth)**: Scroll to a month on the calendar. Use `smoothScrollToMonth()` to get a smooth scrolling animation.
+
+- **scrollToYear(year: Year)**: Scroll to a year on the calendar. Use `smoothScrollToYear()` to get a smooth scrolling animation.
+
+- **notifyDateChanged(date: LocalDate)**: Reload the view for the specified date.
+
+- **notifyMonthChanged(month: YearMonth)**: Reload the header, body and footer views for the specified month.
+
+- **notifyYearChanged(year: Year)**: Reload the header, body (all months in the year) and footer views for the specified year.
+
+- **notifyCalendarChanged()**: Reload the entire calendar.
+
+- **findFirstVisibleYear()** and **findLastVisibleYear()**: Find the first and last visible years on the calendar respectively.
+
+- **findFirstVisibleMonth()** and **findLastVisibleMonth()**: Find the first and last visible months on the calendar respectively.
+
+- **findFirstVisibleDay()** and **findLastVisibleDay()**: Find the first and last visible days on the calendar respectively.
+
+- **updateYearData()**: Update the calendar's start year or end year or the first day of week after the initial setup. The currently visible year is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
 
 There's no need to list all available methods or repeat the documentation here. Please see
-the [CalendarView](https://github.com/kizitonwose/Calendar/blob/main/view/src/main/java/com/kizitonwose/calendar/view/CalendarView.kt)
-and [WeekCalendarView](https://github.com/kizitonwose/Calendar/blob/main/view/src/main/java/com/kizitonwose/calendar/view/WeekCalendarView.kt)
+the [CalendarView](https://github.com/kizitonwose/Calendar/blob/main/view/src/main/java/com/kizitonwose/calendar/view/CalendarView.kt), [WeekCalendarView](https://github.com/kizitonwose/Calendar/blob/main/view/src/main/java/com/kizitonwose/calendar/view/WeekCalendarView.kt) and [YearCalendarView](https://github.com/kizitonwose/Calendar/blob/main/view/src/main/java/com/kizitonwose/calendar/view/YearCalendarView.kt)
 classes for all properties and methods available with proper documentation.
 
 ### Date clicks
@@ -490,7 +579,7 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
 The library has no inbuilt concept of selected/unselected dates, this gives you the freedom to choose how best you would like to implement this use case.
 
-Implementing date selection is as simple as showing a background on a specific date in the date binder. Remember that since CalendarView and WeekCalendarView extend from RecyclerView, you need to undo any special effects on dates where it is not needed. 
+Implementing date selection is as simple as showing a background on a specific date in the date binder. Remember that since CalendarView, WeekCalendarView and YearCalendarView all extend from RecyclerView, you need to undo any special effects on dates where it is not needed. 
 
 For this example, I want only the last clicked date to be selected on the calendar.
 
@@ -598,7 +687,7 @@ See the sample project for some complex implementations.
 
 ## Week view
 
-As discussed previously, the library provides two classes `CalendarView` and `WeekCalendarView`. The `WeekCalendarView` class is a week-based calendar implementation. Almost all topics covered above for the month calendar will apply to the week calendar. The main difference is that the xml attributes and class properties/methods will have a slightly different name, typically with a `week` prefix/suffix instead of `month`. 
+The `WeekCalendarView` class is a week-based calendar implementation. Almost all topics covered above for the month calendar will apply to the week calendar. The main difference is that the xml attributes and class properties/methods will have a slightly different name, typically with a `week` prefix/suffix instead of `month`. 
 
 For example: `monthHeaderResource` => `weekHeaderResource`, `scrollToMonth()` => `scrollToWeek()`, `findFirstVisibleMonth()` => `findFirstVisibleWeek()` and many others, but you get the idea.
 
@@ -624,6 +713,28 @@ A week calendar implementation from the sample app:
 
 <img src="https://user-images.githubusercontent.com/15170090/195638551-dfced7be-c18f-4611-b015-cfefab480cee.png" alt="Week calendar" width="250">
 
+## Year view
+
+The `YearCalendarView` class is a year-based calendar implementation. All topics covered above for the month calendar will apply to the year calendar. The year calendar also has additional xml attributes and class properties/methods, typically with a `year` prefix/suffix. 
+
+For example: `yearHeaderResource`, `scrollToYear()`, `findFirstVisibleYear()` and many others, but you get the idea.
+
+To show the year calendar in your layout, add the view:
+
+```xml
+<com.kizitonwose.calendar.view.YearCalendarView
+    android:id="@+id/yearCalendarView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cv_dayViewResource="@layout/calendar_day_layout" />
+```
+
+Then follow the setup instructions above to provide a day resource/binder etc as you would do for the month calendar.
+
+A year calendar implementation from the sample app:
+
+<img src="https://github.com/user-attachments/assets/b2fcae94-341c-4f35-a997-e8d95a23efb4" alt="Year calendar" width="500">
+
 Remember that all the screenshots shown so far are just examples of what you can achieve with the library and you can absolutely build your calendar to look however you want.
 
 **Made a cool calendar with this library? Share an image [here](https://github.com/kizitonwose/Calendar/issues/1).**
@@ -632,7 +743,7 @@ Remember that all the screenshots shown so far are just examples of what you can
 
 **Q**: How do I use this library in a Java project?
 
-**A**: It works out of the box, however, the `MonthScrollListener` is not an interface but a Kotlin function. To set the `MonthScrollListener` in a Java project see [this](https://github.com/kizitonwose/Calendar/issues/74).
+**A**: It works out of the box, however, the `MonthScrollListener`, `WeekScrollListener` and `YearScrollListener` are not interfaces but Kotlin functions. To set the listener in a Java project see [this](https://github.com/kizitonwose/Calendar/issues/74).
 
 **Q**: How do I disable user scrolling on the calendar so I can only scroll programmatically?
 

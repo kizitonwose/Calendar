@@ -7,13 +7,22 @@ import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.view.internal.CalendarPageSnapHelperLegacy
+import com.kizitonwose.calendar.view.internal.missingField
 import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarAdapter
 import com.kizitonwose.calendar.view.internal.weekcalendar.WeekCalendarLayoutManager
 import java.time.DayOfWeek
 import java.time.LocalDate
 
+/**
+ * A week-based calendar view.
+ *
+ * @see CalendarView
+ * @see YearCalendarView
+ */
 public open class WeekCalendarView : RecyclerView {
     /**
      * The [WeekDayBinder] instance used for managing day
@@ -26,8 +35,8 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The [WeekHeaderFooterBinder] instance used for managing header views.
-     * The header view is shown above each week on the Calendar.
+     * The [WeekHeaderFooterBinder] instance used for managing the
+     * header views shown above each week on the calendar.
      */
     public var weekHeaderBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
@@ -36,8 +45,8 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The [WeekHeaderFooterBinder] instance used for managing footer views.
-     * The footer view is shown below each week on the Calendar.
+     * The [WeekHeaderFooterBinder] instance used for managing the
+     * footer views shown below each week on the calendar.
      */
     public var weekFooterBinder: WeekHeaderFooterBinder<*>? = null
         set(value) {
@@ -65,7 +74,7 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a header for every week.
+     * The xml resource that is inflated and used as a header for each week.
      * Set zero to disable.
      */
     public var weekHeaderResource: Int = 0
@@ -77,7 +86,7 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * The xml resource that is inflated and used as a footer for every week.
+     * The xml resource that is inflated and used as a footer for each week.
      * Set zero to disable.
      */
     public var weekFooterResource: Int = 0
@@ -89,8 +98,9 @@ public open class WeekCalendarView : RecyclerView {
         }
 
     /**
-     * A [ViewGroup] which is instantiated and used as the container for each week.
-     * This class must have a constructor which takes only a [Context].
+     * The fully qualified class name of a [ViewGroup] that is instantiated
+     * and used as the container for each week. This class must have a
+     * constructor which takes only a [Context].
      *
      * **You should exclude the name and constructor of this class from code
      * obfuscation if enabled**.
@@ -118,7 +128,7 @@ public open class WeekCalendarView : RecyclerView {
 
     /**
      * Determines how the size of each day on the calendar is calculated.
-     * Can be [DaySize.Square], [DaySize.SeventhWidth] or [DaySize.FreeForm].
+     * See the [DaySize] class documentation to understand each value.
      */
     public var daySize: DaySize = DaySize.Square
         set(value) {
@@ -132,7 +142,7 @@ public open class WeekCalendarView : RecyclerView {
      * The margins, in pixels to be applied each week view.
      * this can be used to add a space between two weeks.
      */
-    public var weekMargins: MarginValues = MarginValues()
+    public var weekMargins: MarginValues = MarginValues.ZERO
         set(value) {
             if (field != value) {
                 field = value
@@ -292,7 +302,7 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Notify the WeekCalendarView to reload the cell for this [date].
+     * Notify the calendar to reload the cell for this [date].
      * This causes [WeekDayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
@@ -301,7 +311,7 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Notify the WeekCalendarView to reload the cell for this [WeekDay].
+     * Notify the calendar to reload the cell for this [WeekDay].
      * This causes [WeekDayBinder.bind] to be called with the [ViewContainer]
      * at this position. Use this to reload a date cell on the Calendar.
      */
@@ -310,29 +320,31 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Notify the WeekCalendarView to reload the view for the week containing
-     * this [date]. This causes the following sequence of events:
-     * [WeekDayBinder.bind] will be called for all dates in the week.
-     * [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
-     * [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
+     * Notify the calendar to reload the view for the week containing this [date].
+     *
+     * This causes the following sequence of events:
+     * - [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
+     * - [WeekDayBinder.bind] will be called for all dates in the week.
+     * - [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
      */
     public fun notifyWeekChanged(date: LocalDate) {
         calendarAdapter.reloadWeek(date)
     }
 
     /**
-     * Notify the WeekCalendarView to reload the view for the week containing
-     * this [WeekDay]. This causes the following sequence of events:
-     * [WeekDayBinder.bind] will be called for all dates in the week.
-     * [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
-     * [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
+     * Notify the calendar to reload the view for the week containing this [WeekDay].
+     *
+     * This causes the following sequence of events:
+     * - [WeekHeaderFooterBinder.bind] will be called for this week's header view if available.
+     * - [WeekDayBinder.bind] will be called for all dates in the week.
+     * - [WeekHeaderFooterBinder.bind] will be called for this week's footer view if available.
      */
     public fun notifyWeekChanged(day: WeekDay) {
         notifyWeekChanged(day.date)
     }
 
     /**
-     * Notify the WeekCalendarView to reload all weeks.
+     * Notify the calendar to reload all weeks.
      *
      * @see [notifyWeekChanged]
      */
@@ -341,7 +353,7 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Find the first visible week on the WeekCalendarView.
+     * Find the first visible week on the calendar.
      *
      * @return The first visible week or null if not found.
      */
@@ -350,7 +362,7 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible week on the WeekCalendarView.
+     * Find the last visible week on the calendar.
      *
      * @return The last visible week or null if not found.
      */
@@ -359,7 +371,7 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Find the first visible day on the WeekCalendarView.
+     * Find the first visible day on the calendar.
      * This is the day at the top-left corner of the calendar.
      *
      * @return The first visible day or null if not found.
@@ -369,7 +381,7 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Find the last visible day on the WeekCalendarView.
+     * Find the last visible day on the calendar.
      * This is the day at the bottom-right corner of the calendar.
      *
      * @return The last visible day or null if not found.
@@ -379,12 +391,15 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Setup the WeekCalendarView.
+     * Setup the calendar.
      * See [updateWeekData] to update these values.
      *
      * @param startDate A date in the first week on the calendar.
      * @param endDate A date in the last week on the calendar.
      * @param firstDayOfWeek A [DayOfWeek] to be the first day of week.
+     *
+     * @see [daysOfWeek]
+     * @see [firstDayOfWeekFromLocale]
      */
     public fun setup(startDate: LocalDate, endDate: LocalDate, firstDayOfWeek: DayOfWeek) {
         checkRange(start = startDate, end = endDate)
@@ -405,8 +420,8 @@ public open class WeekCalendarView : RecyclerView {
     }
 
     /**
-     * Update the WeekCalendarView's start date or end date or the first day of week.
-     * This can be called only if you have called [setup] in the past.
+     * Update the calendar's start date or end date or the first day of week.
+     * This can be called only if you have previously called [setup].
      * The calendar can handle really large date ranges so you may want to setup
      * the calendar with a large date range instead of updating the range frequently.
      */
@@ -431,13 +446,9 @@ public open class WeekCalendarView : RecyclerView {
         )
     }
 
-    private fun requireStartDate(): LocalDate = startDate ?: throw getFieldException("startDate")
+    private fun requireStartDate(): LocalDate = checkNotNull(startDate) { missingField("startDate") }
 
-    private fun requireEndDate(): LocalDate = endDate ?: throw getFieldException("endDate")
+    private fun requireEndDate(): LocalDate = checkNotNull(endDate) { missingField("endDate") }
 
-    private fun requireFirstDayOfWeek(): DayOfWeek =
-        firstDayOfWeek ?: throw getFieldException("firstDayOfWeek")
-
-    private fun getFieldException(field: String) =
-        IllegalStateException("`$field` is not set. Have you called `setup()`?")
+    private fun requireFirstDayOfWeek(): DayOfWeek = checkNotNull(firstDayOfWeek) { missingField("firstDayOfWeek") }
 }

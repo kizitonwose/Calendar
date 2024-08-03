@@ -236,11 +236,12 @@ class CalendarViewTest {
 
     @Test
     fun findVisibleDaysAndMonthsWorksOnVerticalOrientation() {
-        openExampleAt(1)
+        openExampleAt(7)
 
-        val calendarView = getView<CalendarView>(R.id.exTwoCalendar)
+        val calendarView = getView<CalendarView>(R.id.exEightCalendar)
 
         runOnMain {
+            calendarView.orientation = RecyclerView.VERTICAL
             // Scroll to a random date
             calendarView.scrollToDate(LocalDate.now().plusDays(120))
         }
@@ -266,11 +267,12 @@ class CalendarViewTest {
 
     @Test
     fun findVisibleDaysAndMonthsWorksOnHorizontalOrientation() {
-        openExampleAt(0)
+        openExampleAt(7)
 
-        val calendarView = getView<CalendarView>(R.id.exOneCalendar)
+        val calendarView = getView<CalendarView>(R.id.exEightCalendar)
 
         runOnMain {
+            calendarView.orientation = RecyclerView.HORIZONTAL
             // Scroll to a random date
             calendarView.scrollToDate(LocalDate.now().plusDays(120))
         }

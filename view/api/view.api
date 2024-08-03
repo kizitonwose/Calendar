@@ -73,9 +73,12 @@ public final class com/kizitonwose/calendar/view/DaySize : java/lang/Enum {
 }
 
 public final class com/kizitonwose/calendar/view/MarginValues {
+	public static final field Companion Lcom/kizitonwose/calendar/view/MarginValues$Companion;
 	public fun <init> ()V
+	public fun <init> (II)V
 	public fun <init> (IIII)V
 	public synthetic fun <init> (IIIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (IIILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()I
 	public final fun component2 ()I
 	public final fun component3 ()I
@@ -91,10 +94,22 @@ public final class com/kizitonwose/calendar/view/MarginValues {
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class com/kizitonwose/calendar/view/MarginValues$Companion {
+	public final fun getZERO ()Lcom/kizitonwose/calendar/view/MarginValues;
+}
+
 public abstract interface class com/kizitonwose/calendar/view/MonthDayBinder : com/kizitonwose/calendar/view/Binder {
 }
 
 public abstract interface class com/kizitonwose/calendar/view/MonthHeaderFooterBinder : com/kizitonwose/calendar/view/Binder {
+}
+
+public final class com/kizitonwose/calendar/view/MonthHeight : java/lang/Enum {
+	public static final field Fill Lcom/kizitonwose/calendar/view/MonthHeight;
+	public static final field FollowDaySize Lcom/kizitonwose/calendar/view/MonthHeight;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/kizitonwose/calendar/view/MonthHeight;
+	public static fun values ()[Lcom/kizitonwose/calendar/view/MonthHeight;
 }
 
 public class com/kizitonwose/calendar/view/ViewContainer {
@@ -157,5 +172,94 @@ public abstract interface class com/kizitonwose/calendar/view/WeekDayBinder : co
 }
 
 public abstract interface class com/kizitonwose/calendar/view/WeekHeaderFooterBinder : com/kizitonwose/calendar/view/Binder {
+}
+
+public class com/kizitonwose/calendar/view/YearCalendarView : androidx/recyclerview/widget/RecyclerView {
+	public fun <init> (Landroid/content/Context;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;I)V
+	public final fun findFirstVisibleDay ()Lcom/kizitonwose/calendar/core/CalendarDay;
+	public final fun findFirstVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
+	public final fun findFirstVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+	public final fun findLastVisibleDay ()Lcom/kizitonwose/calendar/core/CalendarDay;
+	public final fun findLastVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
+	public final fun findLastVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
+	public final fun getDayBinder ()Lcom/kizitonwose/calendar/view/MonthDayBinder;
+	public final fun getDaySize ()Lcom/kizitonwose/calendar/view/DaySize;
+	public final fun getDayViewResource ()I
+	public final fun getMonthColumns ()I
+	public final fun getMonthFooterBinder ()Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;
+	public final fun getMonthFooterResource ()I
+	public final fun getMonthHeaderBinder ()Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;
+	public final fun getMonthHeaderResource ()I
+	public final fun getMonthHeight ()Lcom/kizitonwose/calendar/view/MonthHeight;
+	public final fun getMonthHorizontalSpacing ()I
+	public final fun getMonthVerticalSpacing ()I
+	public final fun getMonthViewClass ()Ljava/lang/String;
+	public final fun getOrientation ()I
+	public final fun getOutDateStyle ()Lcom/kizitonwose/calendar/core/OutDateStyle;
+	public final fun getScrollPaged ()Z
+	public final fun getYearBodyMargins ()Lcom/kizitonwose/calendar/view/MarginValues;
+	public final fun getYearFooterBinder ()Lcom/kizitonwose/calendar/view/YearHeaderFooterBinder;
+	public final fun getYearFooterResource ()I
+	public final fun getYearHeaderBinder ()Lcom/kizitonwose/calendar/view/YearHeaderFooterBinder;
+	public final fun getYearHeaderResource ()I
+	public final fun getYearMargins ()Lcom/kizitonwose/calendar/view/MarginValues;
+	public final fun getYearScrollListener ()Lkotlin/jvm/functions/Function1;
+	public final fun getYearViewClass ()Ljava/lang/String;
+	public final fun isMonthVisible ()Lkotlin/jvm/functions/Function1;
+	public final fun notifyCalendarChanged ()V
+	public final fun notifyDateChanged (Ljava/time/LocalDate;)V
+	public final fun notifyDateChanged (Ljava/time/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;)V
+	public final fun notifyDateChanged (Ljava/time/LocalDate;[Lcom/kizitonwose/calendar/core/DayPosition;)V
+	public static synthetic fun notifyDateChanged$default (Lcom/kizitonwose/calendar/view/YearCalendarView;Ljava/time/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;ILjava/lang/Object;)V
+	public final fun notifyDayChanged (Lcom/kizitonwose/calendar/core/CalendarDay;)V
+	public final fun notifyMonthChanged (Ljava/time/YearMonth;)V
+	public final fun notifyYearChanged (Ljava/time/Year;)V
+	public final fun scrollToDate (Ljava/time/LocalDate;)V
+	public final fun scrollToDate (Ljava/time/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;)V
+	public static synthetic fun scrollToDate$default (Lcom/kizitonwose/calendar/view/YearCalendarView;Ljava/time/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;ILjava/lang/Object;)V
+	public final fun scrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;)V
+	public final fun scrollToMonth (Ljava/time/YearMonth;)V
+	public final fun scrollToYear (Ljava/time/Year;)V
+	public final fun setDayBinder (Lcom/kizitonwose/calendar/view/MonthDayBinder;)V
+	public final fun setDaySize (Lcom/kizitonwose/calendar/view/DaySize;)V
+	public final fun setDayViewResource (I)V
+	public final fun setMonthColumns (I)V
+	public final fun setMonthFooterBinder (Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;)V
+	public final fun setMonthFooterResource (I)V
+	public final fun setMonthHeaderBinder (Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;)V
+	public final fun setMonthHeaderResource (I)V
+	public final fun setMonthHeight (Lcom/kizitonwose/calendar/view/MonthHeight;)V
+	public final fun setMonthHorizontalSpacing (I)V
+	public final fun setMonthVerticalSpacing (I)V
+	public final fun setMonthViewClass (Ljava/lang/String;)V
+	public final fun setMonthVisible (Lkotlin/jvm/functions/Function1;)V
+	public final fun setOrientation (I)V
+	public final fun setOutDateStyle (Lcom/kizitonwose/calendar/core/OutDateStyle;)V
+	public final fun setScrollPaged (Z)V
+	public final fun setYearBodyMargins (Lcom/kizitonwose/calendar/view/MarginValues;)V
+	public final fun setYearFooterBinder (Lcom/kizitonwose/calendar/view/YearHeaderFooterBinder;)V
+	public final fun setYearFooterResource (I)V
+	public final fun setYearHeaderBinder (Lcom/kizitonwose/calendar/view/YearHeaderFooterBinder;)V
+	public final fun setYearHeaderResource (I)V
+	public final fun setYearMargins (Lcom/kizitonwose/calendar/view/MarginValues;)V
+	public final fun setYearScrollListener (Lkotlin/jvm/functions/Function1;)V
+	public final fun setYearViewClass (Ljava/lang/String;)V
+	public final fun setup (Ljava/time/Year;Ljava/time/Year;Ljava/time/DayOfWeek;)V
+	public final fun smoothScrollToDate (Ljava/time/LocalDate;)V
+	public final fun smoothScrollToDate (Ljava/time/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;)V
+	public static synthetic fun smoothScrollToDate$default (Lcom/kizitonwose/calendar/view/YearCalendarView;Ljava/time/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;ILjava/lang/Object;)V
+	public final fun smoothScrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;)V
+	public final fun smoothScrollToMonth (Ljava/time/YearMonth;)V
+	public final fun smoothScrollToYear (Ljava/time/Year;)V
+	public final fun updateYearData ()V
+	public final fun updateYearData (Ljava/time/Year;)V
+	public final fun updateYearData (Ljava/time/Year;Ljava/time/Year;)V
+	public final fun updateYearData (Ljava/time/Year;Ljava/time/Year;Ljava/time/DayOfWeek;)V
+	public static synthetic fun updateYearData$default (Lcom/kizitonwose/calendar/view/YearCalendarView;Ljava/time/Year;Ljava/time/Year;Ljava/time/DayOfWeek;ILjava/lang/Object;)V
+}
+
+public abstract interface class com/kizitonwose/calendar/view/YearHeaderFooterBinder : com/kizitonwose/calendar/view/Binder {
 }
 

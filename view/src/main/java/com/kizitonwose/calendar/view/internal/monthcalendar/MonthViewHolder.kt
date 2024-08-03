@@ -14,13 +14,12 @@ internal class MonthViewHolder(
     private val headerView: View?,
     private val footerView: View?,
     private val weekHolders: List<WeekHolder<CalendarDay>>,
-    private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
-    private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?,
+    private val monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
+    private val monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?,
 ) : RecyclerView.ViewHolder(rootLayout) {
     private var headerContainer: ViewContainer? = null
     private var footerContainer: ViewContainer? = null
-
-    lateinit var month: CalendarMonth
+    private lateinit var month: CalendarMonth
 
     fun bindMonth(month: CalendarMonth) {
         this.month = month

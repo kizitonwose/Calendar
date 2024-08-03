@@ -62,9 +62,12 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
         val rect = Rect()
         dayView.getDrawingRect(rect)
         (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)
-        val isVertical = orientation == VERTICAL
         val margins = getItemMargins()
-        return if (isVertical) rect.top + margins.top else rect.left + margins.start
+        return if (orientation == VERTICAL) {
+            rect.top + margins.top
+        } else {
+            rect.left + margins.start
+        }
     }
 
     private inner class CalendarSmoothScroller(position: Int, val day: DayData?) :

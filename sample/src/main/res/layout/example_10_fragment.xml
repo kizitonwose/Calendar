@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    tools:context=".view.Example10Fragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/exTenAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/exTenToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="@string/example_10_title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.kizitonwose.calendar.view.YearCalendarView
+        android:id="@+id/exTenCalendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cv_dayViewResource="@layout/example_9_calendar_day"
+        app:cv_monthHeaderResource="@layout/example_9_calendar_month_header"
+        app:cv_orientation="horizontal"
+        app:cv_scrollPaged="true"
+        app:cv_monthHeight="fill"
+        app:cv_daySize="square" />
+</LinearLayout>

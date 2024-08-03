@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.view.internal
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -68,7 +67,10 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
         null
     }
 
-    fun setupRoot(root: ViewGroup) {
+    val itemView = customViewOrRoot(
+        customViewClass = itemViewClass,
+        rootLayout = rootLayout,
+    ) { root: ViewGroup ->
         val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
         val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
         root.layoutParams = MarginLayoutParams(width, height).apply {
@@ -79,28 +81,6 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
         }
     }
 
-    val itemView = itemViewClass?.let {
-        val customLayout = runCatching {
-            Class.forName(it)
-                .getDeclaredConstructor(Context::class.java)
-                .newInstance(rootLayout.context) as ViewGroup
-        }.onFailure {
-            Log.e(
-                "CalendarView",
-                "Failure loading custom class $itemViewClass, " +
-                    "check that $itemViewClass is a ViewGroup and the " +
-                    "single argument context constructor is available. " +
-                    "For an example on how to use a custom class, see: $EXAMPLE_CUSTOM_CLASS_URL",
-                it,
-            )
-        }.getOrNull()
-
-        customLayout?.apply {
-            setupRoot(this)
-            addView(rootLayout)
-        }
-    } ?: rootLayout.apply { setupRoot(this) }
-
     return ItemContent(
         itemView = itemView,
         headerView = itemHeaderView,
@@ -110,5 +90,3 @@ internal fun <Day, Container : ViewContainer> setupItemRoot(
 }
 
 internal fun dayTag(date: LocalDate): Int = date.hashCode()
-private const val EXAMPLE_CUSTOM_CLASS_URL =
-    "https://github.com/kizitonwose/Calendar/blob/3dfb2d2e91d5e443b540ff411113a05268e4b8d2/sample/src/main/java/com/kizitonwose/calendar/sample/view/Example6Fragment.kt#L29"

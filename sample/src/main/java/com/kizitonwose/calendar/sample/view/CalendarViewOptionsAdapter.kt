@@ -78,6 +78,16 @@ class CalendarViewOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
             R.string.example_8_subtitle,
             horizontal,
         ) { Example8Fragment() },
+        ExampleItem(
+            R.string.example_9_title,
+            R.string.example_9_subtitle,
+            horizontal,
+        ) { Example9Fragment() },
+        ExampleItem(
+            R.string.example_10_title,
+            R.string.example_10_subtitle,
+            horizontal,
+        ) { Example10Fragment() },
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeOptionsViewHolder {

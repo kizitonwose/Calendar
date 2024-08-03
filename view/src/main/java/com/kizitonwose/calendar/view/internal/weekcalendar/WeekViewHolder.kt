@@ -14,8 +14,8 @@ internal class WeekViewHolder(
     private val headerView: View?,
     private val footerView: View?,
     private val weekHolder: WeekHolder<WeekDay>,
-    private var weekHeaderBinder: WeekHeaderFooterBinder<ViewContainer>?,
-    private var weekFooterBinder: WeekHeaderFooterBinder<ViewContainer>?,
+    private val weekHeaderBinder: WeekHeaderFooterBinder<ViewContainer>?,
+    private val weekFooterBinder: WeekHeaderFooterBinder<ViewContainer>?,
 ) : RecyclerView.ViewHolder(rootLayout) {
     private var headerContainer: ViewContainer? = null
     private var footerContainer: ViewContainer? = null

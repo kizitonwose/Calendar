@@ -17,6 +17,10 @@
     <string name="example_7_subtitle">Week calendar with single selection, paged scroll and visible item observation.</string>
     <string name="example_8_title">Example 8</string>
     <string name="example_8_subtitle">Fullscreen calendar, header and footer views, paged horizontal scrolling, shows the \"Rectangle\" DaySize option.</string>
+    <string name="example_9_title">Example 9</string>
+    <string name="example_9_subtitle">Vertical year calendar - Hidden past months with continuous scroll. Best suited for large screens.</string>
+    <string name="example_10_title">Example 10</string>
+    <string name="example_10_subtitle">Horizontal year calendar - Paged scrolling, shows the \"Fill\" implementation of MonthHeight property. Best suited for large screens.</string>
     <string name="save">Save</string>
     <string name="close">Close</string>
     <string name="example_3_input_dialog_title">Enter event title</string>
