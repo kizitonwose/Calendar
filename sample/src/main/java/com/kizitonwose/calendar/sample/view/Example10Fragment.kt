@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuProvider
 import androidx.core.view.children
 import androidx.core.view.updatePaddingRelative
 import com.kizitonwose.calendar.core.CalendarDay
@@ -25,7 +26,7 @@ import com.kizitonwose.calendar.view.ViewContainer
 import java.time.LocalDate
 import java.time.Year
 
-class Example10Fragment : BaseFragment(R.layout.example_10_fragment), HasToolbar, HasBackButton {
+class Example10Fragment : BaseFragment(R.layout.example_10_fragment), HasToolbar, HasBackButton, MenuProvider {
     override val toolbar: Toolbar
         get() = binding.exTenToolbar
 
@@ -37,7 +38,6 @@ class Example10Fragment : BaseFragment(R.layout.example_10_fragment), HasToolbar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
         binding = Example10FragmentBinding.bind(view)
         val config = requireContext().resources.configuration
         val isTablet = config.smallestScreenWidthDp >= 600
@@ -152,28 +152,29 @@ class Example10Fragment : BaseFragment(R.layout.example_10_fragment), HasToolbar
                     }
                 }
             }
-
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.example_10_menu, menu)
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.example_10_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val visibleYear = binding.exTenCalendar.findFirstVisibleYear()?.year
-            ?: return super.onOptionsItemSelected(item)
+    override fun onMenuItemSelected(item: MenuItem): Boolean = with(binding.exTenCalendar) {
         return when (item.itemId) {
             R.id.menuItemPrevious -> {
-                binding.exTenCalendar.smoothScrollToYear(visibleYear.minusYears(1))
+                findFirstVisibleYear()?.year?.let { visibleYear ->
+                    smoothScrollToYear(visibleYear.minusYears(1))
+                }
                 true
             }
 
             R.id.menuItemNext -> {
-                binding.exTenCalendar.smoothScrollToYear(visibleYear.plusYears(1))
+                findFirstVisibleYear()?.year?.let { visibleYear ->
+                    smoothScrollToYear(visibleYear.plusYears(1))
+                }
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> false
         }
     }
 }

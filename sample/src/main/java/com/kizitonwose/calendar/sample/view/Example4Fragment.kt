@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.core.view.MenuProvider
 import androidx.core.view.children
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.CalendarDay
@@ -35,7 +37,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, HasBackButton {
+class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, HasBackButton, MenuProvider {
     override val toolbar: Toolbar
         get() = binding.exFourToolbar
 
@@ -52,7 +54,6 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         addStatusBarColorUpdate(R.color.white)
-        setHasOptionsMenu(true)
         binding = Example4FragmentBinding.bind(view)
         // Set the First day of week depending on Locale
         val daysOfWeek = daysOfWeek()
@@ -109,7 +110,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         binding.exFourSaveButton.isEnabled = selection.daysBetween != null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.example_4_menu, menu)
         binding.exFourToolbar.post {
             // Configure menu text to match what is in the Airbnb app.
@@ -126,6 +127,8 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
             true
         }
     }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean = true
 
     override fun onStart() {
         super.onStart()
