@@ -377,6 +377,14 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
 `monthDates` have their `position` property set to `DayPosition.MonthDate` as seen in the code snippet above.
 
+**The following attributes are available for ONLY `WeekCalendarView` class:**
+
+- **weekHeaderResource**: The xml resource that is inflated and used as a header for every week.
+
+- **weekFooterResource**: The xml resource that is inflated and used as a footer for every week.
+
+- **weekViewClass**: A ViewGroup that is instantiated and used as the container for each week. This class must have a constructor which takes only a Context. You should exclude the name and constructor of this class from code obfuscation if enabled.
+
 **The following attributes are available for ONLY `YearCalendarView` class:**
 
 - **yearHeaderResource**: The xml resource that is inflated and used as a header for each year.
@@ -398,14 +406,6 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
     2. **fill**: Each month row height will be the calender height divided by the number of rows on the calendar. This means that the calendar months will be distributed
     uniformly to fill the parent's height. However, the day content height will independently determine its height. This allows you to spread the calendar months evenly across the screen while
     a `daySize` value of `Square` if you want square day content or `SeventhWidth` if you want to set a specific height value for the day content.
-
-**The following attributes are available for ONLY `WeekCalendarView` class:**
-
-- **weekHeaderResource**: The xml resource that is inflated and used as a header for every week.
-
-- **weekFooterResource**: The xml resource that is inflated and used as a footer for every week.
-
-- **weekViewClass**: A ViewGroup that is instantiated and used as the container for each week. This class must have a constructor which takes only a Context. You should exclude the name and constructor of this class from code obfuscation if enabled.
 
 ### Properties
 
