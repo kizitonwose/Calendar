@@ -47,54 +47,50 @@ fun Example11Page(adjacentYears: Int = 50) {
     val selections = remember { mutableStateListOf<CalendarDay>() }
     val daysOfWeek = remember { daysOfWeek() }
     BoxWithConstraints(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
     ) {
         val isTablet = maxWidth >= 600.dp
-        Column(
+        val state = rememberYearCalendarState(
+            startYear = currentYear,
+            endYear = endYear,
+            firstVisibleYear = currentYear,
+            firstDayOfWeek = daysOfWeek.first(),
+        )
+        VerticalYearCalendar(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
-        ) {
-            val state = rememberYearCalendarState(
-                startYear = currentYear,
-                endYear = endYear,
-                firstVisibleYear = currentYear,
-                firstDayOfWeek = daysOfWeek.first(),
-            )
-            VerticalYearCalendar(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .testTag("Calendar"),
-                state = state,
-                dayContent = { day ->
-                    Day(
-                        day = day,
-                        isSelected = selections.contains(day),
-                        isTablet = isTablet,
-                    ) { clicked ->
-                        if (selections.contains(clicked)) {
-                            selections.remove(clicked)
-                        } else {
-                            selections.add(clicked)
-                        }
+                .testTag("Calendar"),
+            state = state,
+            dayContent = { day ->
+                Day(
+                    day = day,
+                    isSelected = selections.contains(day),
+                    isTablet = isTablet,
+                ) { clicked ->
+                    if (selections.contains(clicked)) {
+                        selections.remove(clicked)
+                    } else {
+                        selections.add(clicked)
                     }
-                },
-                calendarScrollPaged = false,
-                contentHeightMode = YearContentHeightMode.Wrap,
-                monthVerticalSpacing = 20.dp,
-                monthHorizontalSpacing = if (isTablet) 52.dp else 10.dp,
-                contentPadding = PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
-                isMonthVisible = {
-                    it.yearMonth >= currentMonth
-                },
-                yearHeader = {
-                    YearHeader(it.year)
-                },
-                monthHeader = {
-                    MonthHeader(it)
-                },
-            )
-        }
+                }
+            },
+            calendarScrollPaged = false,
+            contentHeightMode = YearContentHeightMode.Wrap,
+            monthVerticalSpacing = 20.dp,
+            monthHorizontalSpacing = if (isTablet) 52.dp else 10.dp,
+            contentPadding = PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
+            isMonthVisible = {
+                it.yearMonth >= currentMonth
+            },
+            yearHeader = {
+                YearHeader(it.year)
+            },
+            monthHeader = {
+                MonthHeader(it)
+            },
+        )
     }
 }
 

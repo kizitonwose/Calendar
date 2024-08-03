@@ -128,7 +128,7 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
                     container.textView.text = data.yearMonth.displayText(short = true)
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
-                        container.legendLayout.tag = data.yearMonth
+                        container.legendLayout.tag = true
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 tv.text = daysOfWeek[index].name.first().toString()

@@ -192,7 +192,7 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                 override fun bind(container: MonthViewContainer, data: CalendarMonth) {
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
-                        container.legendLayout.tag = data.yearMonth
+                        container.legendLayout.tag = true
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 tv.text = daysOfWeek[index].displayText(uppercase = true)

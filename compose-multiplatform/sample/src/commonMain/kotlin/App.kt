@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -47,9 +48,11 @@ fun App() {
                 val widthPx = maxWidth.value.roundToInt()
                 val count = if (widthPx in 650..800) 2 else widthPx / 400
                 Row {
-                    repeat(count) {
-                        VerticalDivider()
+                    repeat(count) { index ->
                         Demo(modifier = Modifier.weight(1f))
+                        if (index < count - 1) {
+                            VerticalDivider()
+                        }
                     }
                 }
             } else {

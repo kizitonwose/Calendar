@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
@@ -105,7 +107,16 @@ fun Example10Page(adjacentYears: Int = 50) {
             }
             HorizontalYearCalendar(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .then(
+                        if (isMobile()) {
+                            Modifier.fillMaxHeight()
+                        } else {
+                            // Don't stretch vertically on very
+                            // large displays (web+desktop)
+                            Modifier.heightIn(max = 920.dp)
+                        },
+                    )
                     .testTag("Calendar"),
                 state = state,
                 monthColumns = if (isPortrait) {

@@ -54,7 +54,7 @@ fun Example11Page(adjacentYears: Long = 50) {
     val daysOfWeek = remember { daysOfWeek() }
     val config = LocalConfiguration.current
     val isTablet = config.smallestScreenWidthDp >= 600
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White),

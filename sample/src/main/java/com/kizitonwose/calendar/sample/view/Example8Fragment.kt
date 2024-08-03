@@ -73,8 +73,8 @@ class Example8Fragment : BaseFragment(R.layout.example_8_fragment), HasToolbar {
                 override fun create(view: View) = MonthHeaderViewContainer(view)
                 override fun bind(container: MonthHeaderViewContainer, data: CalendarMonth) {
                     // Setup each header day text if we have not done that already.
-                    if (container.binding.root.tag == null) {
-                        container.binding.root.tag = data.yearMonth
+                    if (container.binding.legendLayout.root.tag == null) {
+                        container.binding.legendLayout.root.tag = true
                         container.binding.legendLayout.root.children
                             .map { it as TextView }
                             .forEachIndexed { index, tv ->
