@@ -1,8 +1,7 @@
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
-import androidx.compose.foundation.gestures.snapping.SnapPositionInLayout
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -167,7 +166,7 @@ private fun YearHeader(
             .wrapContentHeight()
             .background(headerBackground),
         state = headerState,
-        flingBehavior = rememberSnapFlingBehavior(SnapLayoutInfoProvider(headerState, SnapPositionInLayout.CenterToCenter)),
+        flingBehavior = rememberSnapFlingBehavior(lazyListState = headerState, SnapPosition.Center),
         contentPadding = PaddingValues(horizontal = if (isTablet) 40.dp else 10.dp),
     ) {
         items(count = startYear.yearsUntil(endYear)) { index ->
