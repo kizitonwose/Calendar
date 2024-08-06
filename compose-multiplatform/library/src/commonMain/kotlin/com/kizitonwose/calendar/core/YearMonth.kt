@@ -68,7 +68,7 @@ public data class YearMonth(val year: Int, val month: Month) : Comparable<YearMo
          *
          * @see YearMonth.toString
          */
-        public fun parseIso8601(string: String): YearMonth {
+        public fun parse(string: String): YearMonth {
             return try {
                 string.fromIso8601YearMonth()
             } catch (e: IllegalArgumentException) {

@@ -213,12 +213,12 @@ class YearTest {
             "0001" to Year(1),
             "0000" to Year(0),
         )) {
-            assertEquals(result, Year.parseIso8601(value))
+            assertEquals(result, Year.parse(value))
         }
 
         for (value in listOf("20", "-6")) {
             assertFailsWith(IllegalArgumentException::class) {
-                YearMonth.parseIso8601(value)
+                YearMonth.parse(value)
             }
         }
     }

@@ -74,7 +74,7 @@ public data class Year(val value: Int) : Comparable<Year> {
          *
          * @see Year.toString
          */
-        public fun parseIso8601(string: String): Year {
+        public fun parse(string: String): Year {
             return try {
                 string.fromIso8601Year()
             } catch (e: IllegalArgumentException) {
