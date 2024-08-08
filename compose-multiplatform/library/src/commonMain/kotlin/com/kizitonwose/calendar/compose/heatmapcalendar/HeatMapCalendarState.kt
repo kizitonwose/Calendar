@@ -27,6 +27,7 @@ import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getHeatMapCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
+import com.kizitonwose.calendar.log.log
 import kotlinx.datetime.DayOfWeek
 
 /**
@@ -218,7 +219,7 @@ public class HeatMapCalendarState internal constructor(
 
     private fun getScrollIndex(month: YearMonth): Int? {
         if (month !in startMonth..endMonth) {
-            println("CalendarState - Attempting to scroll out of range: $month")
+            log("HeatMapCalendarState", "Attempting to scroll out of range: $month")
             return null
         }
         return getMonthIndex(startMonth, month)

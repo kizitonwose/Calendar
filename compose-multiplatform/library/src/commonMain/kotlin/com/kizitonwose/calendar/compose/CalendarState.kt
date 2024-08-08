@@ -26,6 +26,7 @@ import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
+import com.kizitonwose.calendar.log.log
 import kotlinx.datetime.DayOfWeek
 
 /**
@@ -245,7 +246,7 @@ public class CalendarState internal constructor(
 
     private fun getScrollIndex(month: YearMonth): Int? {
         if (month !in startMonth..endMonth) {
-            println("CalendarState - Attempting to scroll out of range: $month")
+            log("CalendarState", "Attempting to scroll out of range: $month")
             return null
         }
         return getMonthIndex(startMonth, month)

@@ -31,6 +31,7 @@ import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
 import com.kizitonwose.calendar.data.getWeekCalendarData
 import com.kizitonwose.calendar.data.getWeekIndex
 import com.kizitonwose.calendar.data.getWeekIndicesCount
+import com.kizitonwose.calendar.log.log
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 
@@ -259,7 +260,7 @@ public class WeekCalendarState internal constructor(
 
     private fun getScrollIndex(date: LocalDate): Int? {
         if (date !in startDateAdjusted..endDateAdjusted) {
-            println("WeekCalendarState - Attempting to scroll out of range; $date")
+            log("WeekCalendarState", "Attempting to scroll out of range: $date")
             return null
         }
         return getWeekIndex(startDateAdjusted, date)
