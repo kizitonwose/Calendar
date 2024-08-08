@@ -28,6 +28,7 @@ import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getCalendarYearData
 import com.kizitonwose.calendar.data.getYearIndex
 import com.kizitonwose.calendar.data.getYearIndicesCount
+import com.kizitonwose.calendar.log.log
 import kotlinx.datetime.DayOfWeek
 
 /**
@@ -248,7 +249,7 @@ public class YearCalendarState internal constructor(
 
     private fun getScrollIndex(year: Year): Int? {
         if (year !in startYear..endYear) {
-            println("YearCalendarState - Attempting to scroll out of range: $year")
+            log("YearCalendarState", "Attempting to scroll out of range: $year")
             return null
         }
         return getYearIndex(startYear, year)
