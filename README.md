@@ -52,7 +52,7 @@ View the multiplatform sample project's source code [here](https://github.com/ki
 
 ## Setup
 
-The library provides two compose artifacts: `com.kizitonwose.calendar:compose` which uses the [java.time](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html) APIs for pure Android projects and `com.kizitonwose.calendar:compose-multiplatform` which uses the [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) library for Compose Multiplatform projects. 
+The library provides two compose artifacts: `com.kizitonwose.calendar:compose` which uses the [java.time](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html) APIs for pure Android projects and `com.kizitonwose.calendar:compose-multiplatform` which uses the [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) library for Compose Multiplatform projects. The multiplatform library supports Android, iOS, WasmJs and Desktop platforms.
 
 The Android view library artifact `com.kizitonwose.calendar:view` also uses the `java.time` APIs and can exist alongside the Android compose artifact in an Android project if needed.
 
@@ -112,6 +112,8 @@ Add the multiplatform calendar library to your project's `build.gradle.kts`:
 
 ```kotlin
 commonMain.dependencies {
+  // The calendar library for compose multiplatform projects
+  // Supports Android, iOS, WasmJs and Desktop platforms
   implementation("com.kizitonwose.calendar:compose-multiplatform:<latest-version>")
 }
 ```
