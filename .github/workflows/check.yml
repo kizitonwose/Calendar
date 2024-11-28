@@ -18,9 +18,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+      - uses: gradle/actions/setup-gradle@v4
       - name: Run Ktlint
         run: ./gradlew lintKotlin
 
@@ -33,9 +31,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+      - uses: gradle/actions/setup-gradle@v4
       - run: ./gradlew apiCheck
 
   unit-tests:
@@ -48,9 +44,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+      - uses: gradle/actions/setup-gradle@v4
       - name: Unit tests
         run: ./gradlew test
 
@@ -75,9 +69,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+      - uses: gradle/actions/setup-gradle@v4
       # API 32+ emulators have no `default` system images.
       - name: Determine emulator target
         id: determine-target
@@ -136,9 +128,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-home-cache-cleanup: true
+      - uses: gradle/actions/setup-gradle@v4
       - name: Deploy to Maven
         run: ./gradlew publish
         env:
