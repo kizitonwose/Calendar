@@ -1,11 +1,11 @@
 [versions]
-agp = "8.5.2"
+agp = "8.7.3"
 kotlin = "2.0.20"
-composeAndroid = "1.7.2"
-composeMultiplatform = "1.7.0-beta02"
+composeAndroid = "1.7.5"
+composeMultiplatform = "1.7.1"
 espresso = "3.6.1"
-junit5 = "5.11.0"
-kotlinxSerialization = "1.7.1"
+junit5 = "5.11.3"
+kotlinxSerialization = "1.7.3"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -13,11 +13,11 @@ kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotl
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.0" }
-desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.1.2" }
+desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.1.3" }
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.13.1" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.0" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.3.2" }
 androidx-cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }
 material-view = { module = "com.google.android.material:material", version = "1.12.0" }
@@ -35,9 +35,9 @@ compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "composeAndro
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeAndroid" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeAndroid" }
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "composeAndroid" }
-compose-material3 = { module = "androidx.compose.material3:material3", version = "1.3.0" }
-compose-activity = { module = "androidx.activity:activity-compose", version = "1.9.2" }
-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.8.1" }
+compose-material3 = { module = "androidx.compose.material3:material3", version = "1.3.1" }
+compose-activity = { module = "androidx.activity:activity-compose", version = "1.9.3" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.8.4" }
 
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeAndroid" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeAndroid" }
