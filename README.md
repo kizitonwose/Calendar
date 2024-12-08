@@ -7,9 +7,7 @@ A highly customizable calendar library for Android and Compose Multiplatform, ba
 [![Twitter](https://img.shields.io/badge/Twitter-@kizitonwose-9C27B0.svg)](https://twitter.com/kizitonwose)
 
 [![Android Library](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27-%27))][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
-[![Android Library Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Android%20Library%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/core/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
 [![Multiplatform Library](https://img.shields.io/badge/dynamic/xml.svg?label=Multiplatform%20Library&color=blue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/compose-multiplatform/maven-metadata.xml&query=(//metadata/versioning/versions/version)[not(contains(text(),%27-%27))][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
-[![Multiplatform Library Beta](https://img.shields.io/badge/dynamic/xml.svg?label=Multiplatform%20Library%20Beta&color=slateblue&url=https://repo1.maven.org/maven2/com/kizitonwose/calendar/compose-multiplatform/maven-metadata.xml&query=(//metadata/versioning/versions/version)[contains(text(),%27beta%27)][last()])](https://central.sonatype.com/search?q=g:com.kizitonwose.calendar)
 
 **With this library, your calendar will look however you want it to.**
 
@@ -133,7 +131,7 @@ For the compose calendar library, ensure that you are using the library version 
 |   1.4.x    |           2.3.x          |               -                |
 |   1.5.x    |           2.4.x          |               -                |
 |   1.6.x    |           2.5.x          |             2.5.x              |
-|   1.7.x    |           2.6.x          |             2.6.x-beta         |
+|   1.7.x    |           2.6.x          |             2.6.x              |
 
 ## Usage
 
