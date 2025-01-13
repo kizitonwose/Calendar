@@ -47,11 +47,10 @@ internal class WeekHolder<Day>(
         return WidthDivisorLinearLayout(parent.context).apply {
             weekContainer = this
             val width = if (daySize.parentDecidesWidth) MATCH_PARENT else WRAP_CONTENT
-            val height = if (daySize.parentDecidesHeight) MATCH_PARENT else WRAP_CONTENT
+            val height = if (daySize.parentDecidesHeight) 0 else WRAP_CONTENT
             val weight = if (daySize.parentDecidesHeight) 1f else 0f
             layoutParams = LinearLayout.LayoutParams(width, height, weight)
             orientation = LinearLayout.HORIZONTAL
-            weightSum = dayHolders.count().toFloat()
             widthDivisorForHeight = if (daySize == DaySize.Square) dayHolders.count() else 0
             for (holder in dayHolders) {
                 addView(holder.inflateDayView(this))

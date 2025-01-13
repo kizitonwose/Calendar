@@ -142,22 +142,18 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
     }
 
     private fun configureBinders() {
-        val clipLevelHalf = 5000
-        val ctx = requireContext()
-        val rangeStartBackground =
-            ctx.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start).also {
-                it.level = clipLevelHalf // Used by ClipDrawable
-            }
-        val rangeEndBackground =
-            ctx.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end).also {
-                it.level = clipLevelHalf // Used by ClipDrawable
-            }
-        val rangeMiddleBackground =
-            ctx.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_middle)
-        val singleBackground = ctx.getDrawableCompat(R.drawable.example_4_single_selected_bg)
-        val todayBackground = ctx.getDrawableCompat(R.drawable.example_4_today_bg)
-
         class DayViewContainer(view: View) : ViewContainer(view) {
+            val clipLevelHalf = 5000
+            val rangeStartBackground = view.context.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_start).also {
+                it.level = clipLevelHalf // Used by ClipDrawable
+            }
+            val rangeEndBackground = view.context.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_end).also {
+                it.level = clipLevelHalf // Used by ClipDrawable
+            }
+            val rangeMiddleBackground = view.context.getDrawableCompat(R.drawable.example_4_continuous_selected_bg_middle)
+            val singleBackground = view.context.getDrawableCompat(R.drawable.example_4_single_selected_bg)
+            val todayBackground = view.context.getDrawableCompat(R.drawable.example_4_today_bg)
+
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val binding = Example4CalendarDayBinding.bind(view)
 
@@ -200,26 +196,31 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                             when {
                                 startDate == data.date && endDate == null -> {
                                     textView.setTextColorRes(R.color.white)
-                                    roundBgView.applyBackground(singleBackground)
+                                    roundBgView.applyBackground(container.singleBackground)
                                 }
+
                                 data.date == startDate -> {
                                     textView.setTextColorRes(R.color.white)
-                                    continuousBgView.applyBackground(rangeStartBackground)
-                                    roundBgView.applyBackground(singleBackground)
+                                    continuousBgView.applyBackground(container.rangeStartBackground)
+                                    roundBgView.applyBackground(container.singleBackground)
                                 }
+
                                 startDate != null && endDate != null && (data.date > startDate && data.date < endDate) -> {
                                     textView.setTextColorRes(R.color.example_4_grey)
-                                    continuousBgView.applyBackground(rangeMiddleBackground)
+                                    continuousBgView.applyBackground(container.rangeMiddleBackground)
                                 }
+
                                 data.date == endDate -> {
                                     textView.setTextColorRes(R.color.white)
-                                    continuousBgView.applyBackground(rangeEndBackground)
-                                    roundBgView.applyBackground(singleBackground)
+                                    continuousBgView.applyBackground(container.rangeEndBackground)
+                                    roundBgView.applyBackground(container.singleBackground)
                                 }
+
                                 data.date == today -> {
                                     textView.setTextColorRes(R.color.example_4_grey)
-                                    roundBgView.applyBackground(todayBackground)
+                                    roundBgView.applyBackground(container.todayBackground)
                                 }
+
                                 else -> textView.setTextColorRes(R.color.example_4_grey)
                             }
                         }
@@ -231,14 +232,15 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                             endDate != null &&
                             isInDateBetweenSelection(data.date, startDate, endDate)
                         ) {
-                            continuousBgView.applyBackground(rangeMiddleBackground)
+                            continuousBgView.applyBackground(container.rangeMiddleBackground)
                         }
+
                     DayPosition.OutDate ->
                         if (startDate != null &&
                             endDate != null &&
                             isOutDateBetweenSelection(data.date, startDate, endDate)
                         ) {
-                            continuousBgView.applyBackground(rangeMiddleBackground)
+                            continuousBgView.applyBackground(container.rangeMiddleBackground)
                         }
                 }
             }

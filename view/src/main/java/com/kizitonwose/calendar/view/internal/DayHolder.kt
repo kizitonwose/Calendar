@@ -27,23 +27,20 @@ internal class DayHolder<Day>(private val config: DayConfig<Day>) {
         return parent.inflate(config.dayViewRes).apply {
             dayView = this
             layoutParams = DayLinearLayoutParams(layoutParams).apply {
-                weight = 1f // The parent's wightSum is set to 7.
+                if (config.daySize.parentDecidesWidth) {
+                    width = 0
+                    weight = 1f
+                }
                 when (config.daySize) {
-                    DaySize.Square -> {
-                        width = MATCH_PARENT
+                    DaySize.Square,
+                    DaySize.Rectangle,
+                    -> {
                         height = MATCH_PARENT
                     }
 
-                    DaySize.Rectangle -> {
-                        width = MATCH_PARENT
-                        height = MATCH_PARENT
-                    }
-
-                    DaySize.SeventhWidth -> {
-                        width = MATCH_PARENT
-                    }
-
-                    DaySize.FreeForm -> {}
+                    DaySize.SeventhWidth,
+                    DaySize.FreeForm,
+                    -> Unit
                 }
             }
         }
