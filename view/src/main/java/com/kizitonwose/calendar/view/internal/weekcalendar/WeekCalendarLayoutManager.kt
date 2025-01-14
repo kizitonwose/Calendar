@@ -1,5 +1,6 @@
 package com.kizitonwose.calendar.view.internal.weekcalendar
 
+import com.kizitonwose.calendar.view.LayoutHelper
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.WeekCalendarView
 import com.kizitonwose.calendar.view.internal.CalendarLayoutManager
@@ -17,4 +18,5 @@ internal class WeekCalendarLayoutManager(private val calView: WeekCalendarView) 
     override fun getItemMargins(): MarginValues = calView.weekMargins
     override fun scrollPaged(): Boolean = calView.scrollPaged
     override fun notifyScrollListenerIfNeeded() = adapter.notifyWeekScrollListenerIfNeeded()
+    override fun getLayoutHelper(): LayoutHelper? = calView.layoutHelper
 }

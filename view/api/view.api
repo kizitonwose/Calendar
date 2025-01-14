@@ -14,6 +14,7 @@ public class com/kizitonwose/calendar/view/CalendarView : androidx/recyclerview/
 	public final fun getDayBinder ()Lcom/kizitonwose/calendar/view/MonthDayBinder;
 	public final fun getDaySize ()Lcom/kizitonwose/calendar/view/DaySize;
 	public final fun getDayViewResource ()I
+	public final fun getLayoutHelper ()Lcom/kizitonwose/calendar/view/LayoutHelper;
 	public final fun getMonthFooterBinder ()Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;
 	public final fun getMonthFooterResource ()I
 	public final fun getMonthHeaderBinder ()Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;
@@ -39,6 +40,7 @@ public class com/kizitonwose/calendar/view/CalendarView : androidx/recyclerview/
 	public final fun setDayBinder (Lcom/kizitonwose/calendar/view/MonthDayBinder;)V
 	public final fun setDaySize (Lcom/kizitonwose/calendar/view/DaySize;)V
 	public final fun setDayViewResource (I)V
+	public final fun setLayoutHelper (Lcom/kizitonwose/calendar/view/LayoutHelper;)V
 	public final fun setMonthFooterBinder (Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;)V
 	public final fun setMonthFooterResource (I)V
 	public final fun setMonthHeaderBinder (Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;)V
@@ -70,6 +72,14 @@ public final class com/kizitonwose/calendar/view/DaySize : java/lang/Enum {
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/kizitonwose/calendar/view/DaySize;
 	public static fun values ()[Lcom/kizitonwose/calendar/view/DaySize;
+}
+
+public abstract interface class com/kizitonwose/calendar/view/LayoutHelper {
+	public abstract fun calculateExtraLayoutSpace (Landroidx/recyclerview/widget/RecyclerView$State;[I)V
+}
+
+public final class com/kizitonwose/calendar/view/LayoutHelper$DefaultImpls {
+	public static fun calculateExtraLayoutSpace (Lcom/kizitonwose/calendar/view/LayoutHelper;Landroidx/recyclerview/widget/RecyclerView$State;[I)V
 }
 
 public final class com/kizitonwose/calendar/view/MarginValues {
@@ -128,6 +138,7 @@ public class com/kizitonwose/calendar/view/WeekCalendarView : androidx/recyclerv
 	public final fun getDayBinder ()Lcom/kizitonwose/calendar/view/WeekDayBinder;
 	public final fun getDaySize ()Lcom/kizitonwose/calendar/view/DaySize;
 	public final fun getDayViewResource ()I
+	public final fun getLayoutHelper ()Lcom/kizitonwose/calendar/view/LayoutHelper;
 	public final fun getScrollPaged ()Z
 	public final fun getWeekFooterBinder ()Lcom/kizitonwose/calendar/view/WeekHeaderFooterBinder;
 	public final fun getWeekFooterResource ()I
@@ -148,6 +159,7 @@ public class com/kizitonwose/calendar/view/WeekCalendarView : androidx/recyclerv
 	public final fun setDayBinder (Lcom/kizitonwose/calendar/view/WeekDayBinder;)V
 	public final fun setDaySize (Lcom/kizitonwose/calendar/view/DaySize;)V
 	public final fun setDayViewResource (I)V
+	public final fun setLayoutHelper (Lcom/kizitonwose/calendar/view/LayoutHelper;)V
 	public final fun setScrollPaged (Z)V
 	public final fun setWeekFooterBinder (Lcom/kizitonwose/calendar/view/WeekHeaderFooterBinder;)V
 	public final fun setWeekFooterResource (I)V
@@ -187,6 +199,7 @@ public class com/kizitonwose/calendar/view/YearCalendarView : androidx/recyclerv
 	public final fun getDayBinder ()Lcom/kizitonwose/calendar/view/MonthDayBinder;
 	public final fun getDaySize ()Lcom/kizitonwose/calendar/view/DaySize;
 	public final fun getDayViewResource ()I
+	public final fun getLayoutHelper ()Lcom/kizitonwose/calendar/view/LayoutHelper;
 	public final fun getMonthColumns ()I
 	public final fun getMonthFooterBinder ()Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;
 	public final fun getMonthFooterResource ()I
@@ -225,6 +238,7 @@ public class com/kizitonwose/calendar/view/YearCalendarView : androidx/recyclerv
 	public final fun setDayBinder (Lcom/kizitonwose/calendar/view/MonthDayBinder;)V
 	public final fun setDaySize (Lcom/kizitonwose/calendar/view/DaySize;)V
 	public final fun setDayViewResource (I)V
+	public final fun setLayoutHelper (Lcom/kizitonwose/calendar/view/LayoutHelper;)V
 	public final fun setMonthColumns (I)V
 	public final fun setMonthFooterBinder (Lcom/kizitonwose/calendar/view/MonthHeaderFooterBinder;)V
 	public final fun setMonthFooterResource (I)V

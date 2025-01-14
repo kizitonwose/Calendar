@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendar.view.LayoutHelper
 import com.kizitonwose.calendar.view.MarginValues
 
 internal abstract class CalendarLayoutManager<IndexData, DayData>(
@@ -18,6 +19,7 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
     abstract fun getItemMargins(): MarginValues
     abstract fun scrollPaged(): Boolean
     abstract fun notifyScrollListenerIfNeeded()
+    abstract fun getLayoutHelper(): LayoutHelper?
 
     fun scrollToIndex(indexData: IndexData) {
         val position = getaItemAdapterPosition(indexData)
@@ -67,6 +69,19 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
             rect.top + margins.top
         } else {
             rect.left + margins.start
+        }
+    }
+
+    override fun calculateExtraLayoutSpace(state: RecyclerView.State, extraLayoutSpace: IntArray) {
+        val layoutHelper = getLayoutHelper()
+        if (layoutHelper != null) {
+            layoutHelper.calculateExtraLayoutSpace(state, extraLayoutSpace)
+            // If the interface is provided but the method is not overridden.
+            if (extraLayoutSpace.isEmpty()) {
+                super.calculateExtraLayoutSpace(state, extraLayoutSpace)
+            }
+        } else {
+            super.calculateExtraLayoutSpace(state, extraLayoutSpace)
         }
     }
 
