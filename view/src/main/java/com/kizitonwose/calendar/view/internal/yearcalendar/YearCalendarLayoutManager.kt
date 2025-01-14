@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearSmoothScroller
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.view.LayoutHelper
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.YearCalendarView
 import com.kizitonwose.calendar.view.internal.CalendarLayoutManager
@@ -24,6 +25,8 @@ internal class YearCalendarLayoutManager(private val calView: YearCalendarView) 
     override fun getItemMargins(): MarginValues = calView.yearMargins
     override fun scrollPaged(): Boolean = calView.scrollPaged
     override fun notifyScrollListenerIfNeeded() = adapter.notifyYearScrollListenerIfNeeded()
+    override fun getLayoutHelper(): LayoutHelper? = calView.layoutHelper
+
     fun smoothScrollToMonth(month: YearMonth) {
         val indexPosition = adapter.getAdapterPosition(month)
         if (indexPosition == NO_INDEX) return
@@ -42,18 +45,18 @@ internal class YearCalendarLayoutManager(private val calView: YearCalendarView) 
             calView.post {
                 val itemView = calView.findViewHolderForAdapterPosition(indexPosition)?.itemView
                     ?: return@post
-                val offset = calculateDayViewOffsetInParent(month, itemView)
+                val offset = calculateMonthViewOffsetInParent(month, itemView)
                 scrollToPositionWithOffset(indexPosition, -offset)
                 calView.post { notifyScrollListenerIfNeeded() }
             }
         }
     }
 
-    private fun calculateDayViewOffsetInParent(month: YearMonth, itemView: View): Int {
-        val dayView = itemView.findViewWithTag<View>(monthTag(month)) ?: return 0
+    private fun calculateMonthViewOffsetInParent(month: YearMonth, itemView: View): Int {
+        val monthView = itemView.findViewWithTag<View>(monthTag(month)) ?: return 0
         val rect = Rect()
-        dayView.getDrawingRect(rect)
-        (itemView as ViewGroup).offsetDescendantRectToMyCoords(dayView, rect)
+        monthView.getDrawingRect(rect)
+        (itemView as ViewGroup).offsetDescendantRectToMyCoords(monthView, rect)
         return if (orientation == VERTICAL) rect.top else rect.left
     }
 
@@ -72,7 +75,7 @@ internal class YearCalendarLayoutManager(private val calView: YearCalendarView) 
             if (month == null) {
                 return dy
             }
-            val offset = calculateDayViewOffsetInParent(month, view)
+            val offset = calculateMonthViewOffsetInParent(month, view)
             return dy - offset
         }
 
@@ -81,7 +84,7 @@ internal class YearCalendarLayoutManager(private val calView: YearCalendarView) 
             if (month == null) {
                 return dx
             }
-            val offset = calculateDayViewOffsetInParent(month, view)
+            val offset = calculateMonthViewOffsetInParent(month, view)
             return dx - offset
         }
     }

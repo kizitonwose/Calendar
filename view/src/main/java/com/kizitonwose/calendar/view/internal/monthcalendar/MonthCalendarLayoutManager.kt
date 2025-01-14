@@ -2,6 +2,7 @@ package com.kizitonwose.calendar.view.internal.monthcalendar
 
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.view.CalendarView
+import com.kizitonwose.calendar.view.LayoutHelper
 import com.kizitonwose.calendar.view.MarginValues
 import com.kizitonwose.calendar.view.internal.CalendarLayoutManager
 import com.kizitonwose.calendar.view.internal.dayTag
@@ -18,4 +19,5 @@ internal class MonthCalendarLayoutManager(private val calView: CalendarView) :
     override fun getItemMargins(): MarginValues = calView.monthMargins
     override fun scrollPaged(): Boolean = calView.scrollPaged
     override fun notifyScrollListenerIfNeeded() = adapter.notifyMonthScrollListenerIfNeeded()
+    override fun getLayoutHelper(): LayoutHelper? = calView.layoutHelper
 }

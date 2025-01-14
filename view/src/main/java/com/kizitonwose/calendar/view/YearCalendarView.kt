@@ -326,6 +326,12 @@ public open class YearCalendarView : RecyclerView {
             }
         }
 
+    /**
+     * Interface with methods that can be overridden
+     * in the internal layout manager.
+     */
+    public var layoutHelper: LayoutHelper? = null
+
     private val scrollListenerInternal = object : OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
