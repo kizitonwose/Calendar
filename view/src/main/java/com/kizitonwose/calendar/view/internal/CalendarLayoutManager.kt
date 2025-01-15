@@ -73,13 +73,9 @@ internal abstract class CalendarLayoutManager<IndexData, DayData>(
     }
 
     override fun calculateExtraLayoutSpace(state: RecyclerView.State, extraLayoutSpace: IntArray) {
-        val layoutHelper = getLayoutHelper()
-        if (layoutHelper != null) {
-            layoutHelper.calculateExtraLayoutSpace(state, extraLayoutSpace)
-            // If the interface is provided but the method is not overridden.
-            if (extraLayoutSpace.isEmpty()) {
-                super.calculateExtraLayoutSpace(state, extraLayoutSpace)
-            }
+        val calculateExtraLayoutSpace = getLayoutHelper()?.calculateExtraLayoutSpace
+        if (calculateExtraLayoutSpace != null) {
+            calculateExtraLayoutSpace(state, extraLayoutSpace)
         } else {
             super.calculateExtraLayoutSpace(state, extraLayoutSpace)
         }

@@ -74,12 +74,9 @@ public final class com/kizitonwose/calendar/view/DaySize : java/lang/Enum {
 	public static fun values ()[Lcom/kizitonwose/calendar/view/DaySize;
 }
 
-public abstract interface class com/kizitonwose/calendar/view/LayoutHelper {
-	public abstract fun calculateExtraLayoutSpace (Landroidx/recyclerview/widget/RecyclerView$State;[I)V
-}
-
-public final class com/kizitonwose/calendar/view/LayoutHelper$DefaultImpls {
-	public static fun calculateExtraLayoutSpace (Lcom/kizitonwose/calendar/view/LayoutHelper;Landroidx/recyclerview/widget/RecyclerView$State;[I)V
+public abstract class com/kizitonwose/calendar/view/LayoutHelper {
+	public fun <init> ()V
+	public fun getCalculateExtraLayoutSpace ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/kizitonwose/calendar/view/MarginValues {

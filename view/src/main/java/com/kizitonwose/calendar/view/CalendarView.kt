@@ -184,7 +184,7 @@ public open class CalendarView : RecyclerView {
         }
 
     /**
-     * Interface with methods that can be overridden
+     * Helper class with methods that can be overridden
      * in the internal layout manager.
      */
     public var layoutHelper: LayoutHelper? = null

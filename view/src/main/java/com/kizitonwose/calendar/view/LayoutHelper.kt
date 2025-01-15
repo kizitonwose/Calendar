@@ -5,10 +5,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.view.internal.CalendarLayoutManager
 
 /**
- * An interface with methods that can be overridden
- * in the internal [LinearLayoutManager].
+ * Helper class with properties that match the methods that can
+ * be overridden in the internal [LinearLayoutManager]. This is
+ * an abstract class instead of an interface so we can have
+ * default values for properties as we need to call `super`
+ * for properties that are not provided (null).
  */
-public interface LayoutHelper {
+public abstract class LayoutHelper {
     /**
      * Calculates the amount of extra space (in pixels) that should be laid out by
      * [CalendarLayoutManager] and stores the result in [extraLayoutSpace].
@@ -18,5 +21,5 @@ public interface LayoutHelper {
      *
      * @see [LinearLayoutManager.calculateExtraLayoutSpace]
      */
-    public fun calculateExtraLayoutSpace(state: RecyclerView.State, extraLayoutSpace: IntArray) {}
+    public open val calculateExtraLayoutSpace: ((state: RecyclerView.State, extraLayoutSpace: IntArray) -> Unit)? = null
 }
