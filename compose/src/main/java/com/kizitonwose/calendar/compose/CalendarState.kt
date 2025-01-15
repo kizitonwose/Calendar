@@ -16,7 +16,11 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
@@ -24,8 +28,12 @@ import com.kizitonwose.calendar.data.checkRange
 import com.kizitonwose.calendar.data.getCalendarMonthData
 import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
+import com.kizitonwose.calendar.data.indexOfFirstOrNull
+import com.kizitonwose.calendar.data.positionYearMonth
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
+
 
 /**
  * Creates a [CalendarState] that is remembered across compositions.
@@ -190,6 +198,8 @@ public class CalendarState internal constructor(
         firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0,
     )
 
+    internal val size = SizeStore(bodyOffset = IntOffset.Zero, daySize = IntSize.Zero)
+
     internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
     internal val store = DataStore { offset ->
@@ -242,6 +252,36 @@ public class CalendarState internal constructor(
         listState.animateScrollToItem(getScrollIndex(month) ?: return)
     }
 
+    public suspend fun animateScrollToDate(
+        date: LocalDate,
+        position: DayPosition = DayPosition.MonthDate,
+    ): Unit = animateScrollToDay(CalendarDay(date, position))
+
+    public suspend fun animateScrollToDay(day: CalendarDay) {
+//        val month = day.positionYearMonth
+//        val index = getScrollIndex(month) ?: return
+//        val weekFields = WeekFields.of(firstDayOfWeek, 1)
+//        val dayOffset = when (day.position) {
+//            DayPosition.InDate -> 0
+//            DayPosition.MonthDate -> {
+//                day.date.get(weekFields.weekOfMonth()) - 1
+//            }
+//
+//            DayPosition.OutDate -> {
+//                month.atEndOfMonth().get(weekFields.weekOfMonth()) - 1 +
+//                    day.date.get(weekFields.weekOfMonth()) - 1
+//
+//            }
+//        }
+//        layoutInfo.orientation
+//        layoutInfo.reverseLayout
+        val monthIndex = getScrollIndex(day.positionYearMonth) ?: return
+        val dayIndex = store[monthIndex].weekDays.indexOfFirstOrNull { it.contains(day) } ?: return
+        val scrollOffset = size.bodyOffset.y + size.daySize.height * dayIndex
+        listState.animateScrollToItem(monthIndex, scrollOffset)
+    }
+
+
     private fun getScrollIndex(month: YearMonth): Int? {
         if (month !in startMonth..endMonth) {
             Log.d("CalendarState", "Attempting to scroll out of range: $month")
@@ -292,3 +332,8 @@ public class CalendarState internal constructor(
         )
     }
 }
+
+internal data class SizeStore(
+    var bodyOffset: IntOffset,
+    var daySize: IntSize,
+)

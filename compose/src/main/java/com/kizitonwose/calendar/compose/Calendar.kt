@@ -193,6 +193,7 @@ private fun Calendar(
                 monthBody = monthBody,
                 monthFooter = monthFooter,
                 monthContainer = monthContainer,
+                size = state.size
             )
         }
     } else {
@@ -213,6 +214,7 @@ private fun Calendar(
                 monthBody = monthBody,
                 monthFooter = monthFooter,
                 monthContainer = monthContainer,
+                size = state.size
             )
         }
     }

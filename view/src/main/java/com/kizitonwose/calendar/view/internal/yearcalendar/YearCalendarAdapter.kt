@@ -14,6 +14,7 @@ import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.getCalendarYearData
 import com.kizitonwose.calendar.data.getYearIndex
 import com.kizitonwose.calendar.data.getYearIndicesCount
+import com.kizitonwose.calendar.data.positionYearMonth
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
@@ -22,7 +23,6 @@ import com.kizitonwose.calendar.view.YearHeaderFooterBinder
 import com.kizitonwose.calendar.view.internal.NO_INDEX
 import com.kizitonwose.calendar.view.internal.dayTag
 import com.kizitonwose.calendar.view.internal.intersects
-import com.kizitonwose.calendar.view.internal.positionYearMonth
 import java.time.DayOfWeek
 import java.time.Year
 import java.time.YearMonth
