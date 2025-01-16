@@ -13,16 +13,14 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onPlaced
-import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.unit.round
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 
 @Suppress("FunctionName")
 internal fun LazyListScope.CalendarMonths(
     monthCount: Int,
-    size: SizeStore,
     monthData: (offset: Int) -> CalendarMonth,
     contentHeightMode: ContentHeightMode,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
@@ -30,6 +28,7 @@ internal fun LazyListScope.CalendarMonths(
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
+    onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
 ) {
     items(
         count = monthCount,
@@ -58,9 +57,6 @@ internal fun LazyListScope.CalendarMonths(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .onPlaced {
-                                size.bodyOffset = it.positionInParent().round()
-                            }
                             .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight()),
                     ) {
                         for (week in month.weekDays) {
@@ -72,19 +68,10 @@ internal fun LazyListScope.CalendarMonths(
                                 for (day in week) {
                                     Box(
                                         modifier = Modifier
-                                            .then(
-                                                if (day == month.weekDays.first().first()) {
-                                                    Modifier.onPlaced {
-                                                        size.daySize = it.size
-                                                    }
-                                                } else {
-                                                    Modifier
-                                                },
-                                            )
                                             .weight(1f)
-                                            .clipToBounds(),
-
-                                        ) {
+                                            .clipToBounds()
+                                            .onFirstDayPlaced(day, month, onFirstDayPlaced),
+                                    ) {
                                         dayContent(day)
                                     }
                                 }
@@ -98,10 +85,21 @@ internal fun LazyListScope.CalendarMonths(
     }
 }
 
+private inline fun Modifier.onFirstDayPlaced(
+    day: CalendarDay,
+    month: CalendarMonth,
+    noinline onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
+) = if (day == month.weekDays.first().first()) {
+    onPlaced(onFirstDayPlaced)
+} else {
+    this
+}
+
 private val defaultMonthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit) =
     { _, container -> container() }
 
 private val defaultMonthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit) =
     { _, content -> content() }
 
-internal fun <T> T?.or(default: T) = this ?: default
+@Suppress("NOTHING_TO_INLINE")
+internal inline fun <T> T?.or(default: T) = this ?: default

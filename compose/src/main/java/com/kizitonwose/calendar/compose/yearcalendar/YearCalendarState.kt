@@ -2,6 +2,7 @@ package com.kizitonwose.calendar.compose.yearcalendar
 
 import android.util.Log
 import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
@@ -19,17 +20,24 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.VisibleItemState
+import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarYear
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.checkRange
+import com.kizitonwose.calendar.data.daysUntil
 import com.kizitonwose.calendar.data.getCalendarYearData
 import com.kizitonwose.calendar.data.getYearIndex
 import com.kizitonwose.calendar.data.getYearIndicesCount
+import com.kizitonwose.calendar.data.indexOfFirstOrNull
+import com.kizitonwose.calendar.data.positionYearMonth
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.Year
+import java.time.YearMonth
 
 /**
  * Creates a [YearCalendarState] that is remembered across compositions.
@@ -195,6 +203,8 @@ public class YearCalendarState internal constructor(
         firstVisibleItemScrollOffset = visibleItemState?.firstVisibleItemScrollOffset ?: 0,
     )
 
+    internal val placementInfo = YearItemPlacementInfo()
+
     internal var calendarInfo by mutableStateOf(CalendarInfo(indexCount = 0))
 
     internal val store = DataStore { offset ->
@@ -242,9 +252,141 @@ public class YearCalendarState internal constructor(
      *
      * @param year the year to which to scroll. Must be within the
      * range of [startYear] and [endYear].
+     *
+     * @see [scrollToYear]
      */
     public suspend fun animateScrollToYear(year: Year) {
         listState.animateScrollToItem(getScrollIndex(year) ?: return)
+    }
+
+    /**
+     * Instantly brings the [month] to the top of the viewport.
+     *
+     * @param month the month to which to scroll. Must be within the
+     * range of [startYear] and [endYear].
+     *
+     * @see [animateScrollToMonth]
+     */
+    public suspend fun scrollToMonth(month: YearMonth): Unit =
+        scrollToMonth(month, animate = false)
+
+    /**
+     * Animate (smooth scroll) to the given [month].
+     *
+     * @param month the month to which to scroll. Must be within the
+     * range of [startYear] and [endYear].
+     *
+     * @see [scrollToMonth]
+     */
+    public suspend fun animateScrollToMonth(month: YearMonth): Unit =
+        scrollToMonth(month, animate = true)
+
+    /**
+     * Instantly brings the [date] to the top of the viewport.
+     *
+     * @param date the date to which to scroll. Must be within the
+     * range of [startYear] and [endYear].
+     * @param position the position of the date in the month.
+     *
+     * @see [animateScrollToDate]
+     */
+    public suspend fun scrollToDate(
+        date: LocalDate,
+        position: DayPosition = DayPosition.MonthDate,
+    ): Unit = scrollToDay(CalendarDay(date, position))
+
+    /**
+     * Animate (smooth scroll) to the given [date].
+     *
+     * @param date the date to which to scroll. Must be within the
+     * range of [startYear] and [endYear].
+     * @param position the position of the date in the month.
+     *
+     * @see [scrollToDate]
+     */
+    public suspend fun animateScrollToDate(
+        date: LocalDate,
+        position: DayPosition = DayPosition.MonthDate,
+    ): Unit = animateScrollToDay(CalendarDay(date, position))
+
+    /**
+     * Instantly brings the [day] to the top of the viewport.
+     *
+     * @param day the day to which to scroll. Must be within the
+     * range of [startYear] and [endYear].
+     *
+     * @see [animateScrollToDay]
+     */
+    public suspend fun scrollToDay(day: CalendarDay): Unit =
+        scrollToDay(day, animate = false)
+
+    /**
+     * Animate (smooth scroll) to the given [day].
+     *
+     * @param day the day to which to scroll. Must be within the
+     * range of [startYear] and [endYear].
+     *
+     * @see [scrollToDay]
+     */
+    public suspend fun animateScrollToDay(day: CalendarDay): Unit =
+        scrollToDay(day, animate = true)
+
+    private suspend fun scrollToDay(day: CalendarDay, animate: Boolean) {
+        val yearMonth = day.positionYearMonth
+        val yearIndex = getScrollIndex(Year.of(yearMonth.year)) ?: return
+        val year = store[yearIndex]
+        val monthsInYear = placementInfo.isMonthVisible.apply(year.months)
+        val monthIndex = monthsInYear.indexOfFirstOrNull { it.yearMonth == yearMonth } ?: return
+        val weeksOfMonth = monthsInYear[monthIndex].weekDays
+        val dayIndex = when (layoutInfo.orientation) {
+            Orientation.Vertical -> weeksOfMonth.indexOfFirstOrNull { it.contains(day) }
+            Orientation.Horizontal -> firstDayOfWeek.daysUntil(day.date.dayOfWeek)
+        } ?: return
+        val monthDayInfo = placementInfo.awaitFistMonthAndDayOffsetAndSize(layoutInfo.orientation) ?: return
+        val monthGridOffset = monthDayInfo.monthGridOffset(
+            monthIndex = monthIndex,
+            monthColumns = placementInfo.monthColumns,
+        )
+        val scrollOffset = monthGridOffset +
+            monthDayInfo.monthOffsetInContainer +
+            monthDayInfo.dayOffsetInMonth +
+            (monthDayInfo.daySize * dayIndex)
+        if (animate) {
+            listState.animateScrollToItem(yearIndex, scrollOffset)
+        } else {
+            listState.scrollToItem(yearIndex, scrollOffset)
+        }
+    }
+
+    private suspend fun scrollToMonth(yearMonth: YearMonth, animate: Boolean) {
+        val yearIndex = getScrollIndex(Year.of(yearMonth.year)) ?: return
+        val year = store[yearIndex]
+        val months = placementInfo.isMonthVisible.apply(year.months)
+        val monthIndex = months.indexOfFirstOrNull {
+            it.yearMonth == yearMonth
+        } ?: return
+        val monthDayInfo = placementInfo.awaitFistMonthAndDayOffsetAndSize(layoutInfo.orientation) ?: return
+        val monthGridOffset = monthDayInfo.monthGridOffset(
+            monthIndex = monthIndex,
+            monthColumns = placementInfo.monthColumns,
+        )
+        val scrollOffset = monthGridOffset + monthDayInfo.monthOffsetInContainer
+        if (animate) {
+            listState.animateScrollToItem(yearIndex, scrollOffset)
+        } else {
+            listState.scrollToItem(yearIndex, scrollOffset)
+        }
+    }
+
+    private fun YearItemPlacementInfo.OffsetSize.monthGridOffset(monthIndex: Int, monthColumns: Int): Int {
+        val (row, column) = rowColumn(monthIndex = monthIndex, monthColumns = monthColumns)
+        return when (layoutInfo.orientation) {
+            Orientation.Vertical -> (row * monthSize) +
+                (row * placementInfo.monthVerticalSpacingPx)
+
+            Orientation.Horizontal -> (column * monthSize) +
+                (column * placementInfo.monthHorizontalSpacingPx)
+        }
     }
 
     private fun getScrollIndex(year: Year): Int? {

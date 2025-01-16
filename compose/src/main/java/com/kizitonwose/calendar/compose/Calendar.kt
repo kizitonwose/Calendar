@@ -8,10 +8,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastRoundToInt
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarImpl
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
@@ -177,7 +180,7 @@ private fun Calendar(
 ) {
     if (isHorizontal) {
         LazyRow(
-            modifier = modifier,
+            modifier = modifier.onPlaced(state.placementInfo::onCalendarPlaced),
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
@@ -186,19 +189,19 @@ private fun Calendar(
         ) {
             CalendarMonths(
                 monthCount = state.calendarInfo.indexCount,
-                monthData = { offset -> state.store[offset] },
+                monthData = state.store::get,
                 contentHeightMode = contentHeightMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthBody = monthBody,
                 monthFooter = monthFooter,
                 monthContainer = monthContainer,
-                size = state.size
+                onFirstDayPlaced = state.placementInfo::onFirstDayPlaced,
             )
         }
     } else {
         LazyColumn(
-            modifier = modifier,
+            modifier = modifier.onPlaced(state.placementInfo::onCalendarPlaced),
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
@@ -207,14 +210,14 @@ private fun Calendar(
         ) {
             CalendarMonths(
                 monthCount = state.calendarInfo.indexCount,
-                monthData = { offset -> state.store[offset] },
+                monthData = state.store::get,
                 contentHeightMode = contentHeightMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
                 monthBody = monthBody,
                 monthFooter = monthFooter,
                 monthContainer = monthContainer,
-                size = state.size
+                onFirstDayPlaced = state.placementInfo::onFirstDayPlaced,
             )
         }
     }
@@ -254,7 +257,7 @@ public fun WeekCalendar(
     weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
     weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
 ): Unit = WeekCalendarImpl(
-    modifier = modifier,
+    modifier = modifier.onPlaced(state.placementInfo::onCalendarPlaced),
     state = state,
     calendarScrollPaged = calendarScrollPaged,
     userScrollEnabled = userScrollEnabled,
@@ -263,6 +266,7 @@ public fun WeekCalendar(
     weekHeader = weekHeader,
     weekFooter = weekFooter,
     contentPadding = contentPadding,
+    onFirstDayPlaced = state.placementInfo::onFirstDayPlaced,
 )
 
 /**
@@ -374,7 +378,7 @@ public fun HorizontalYearCalendar(
     monthVerticalSpacing: Dp = 0.dp,
     monthHorizontalSpacing: Dp = 0.dp,
     contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
-    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)? = null,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
@@ -478,7 +482,7 @@ public fun VerticalYearCalendar(
     monthVerticalSpacing: Dp = 0.dp,
     monthHorizontalSpacing: Dp = 0.dp,
     contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
-    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)? = null,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
@@ -527,7 +531,7 @@ private fun YearCalendar(
     monthVerticalSpacing: Dp,
     monthHorizontalSpacing: Dp,
     yearBodyContentPadding: PaddingValues,
-    isMonthVisible: (month: CalendarMonth) -> Boolean,
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)?,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
@@ -539,9 +543,20 @@ private fun YearCalendar(
     yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)?,
 ) {
     require(monthColumns in 1..12) { "Param `monthColumns` must be 1..12" }
+    state.placementInfo.isMonthVisible = isMonthVisible
+    val density = LocalDensity.current
+    // Intentionally not creating a coroutine scope with LaunchedEffect
+    DisposableEffect(monthVerticalSpacing, monthHorizontalSpacing, monthColumns) {
+        with(density) {
+            state.placementInfo.monthVerticalSpacingPx = monthVerticalSpacing.toPx().fastRoundToInt()
+            state.placementInfo.monthHorizontalSpacingPx = monthHorizontalSpacing.toPx().fastRoundToInt()
+            state.placementInfo.monthColumns = monthColumns
+        }
+        onDispose {}
+    }
     if (isHorizontal) {
         LazyRow(
-            modifier = modifier,
+            modifier = modifier.onPlaced(state.placementInfo::onCalendarPlaced),
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
@@ -550,7 +565,7 @@ private fun YearCalendar(
         ) {
             YearCalendarMonths(
                 yearCount = state.calendarInfo.indexCount,
-                yearData = { offset -> state.store[offset] },
+                yearData = state.store::get,
                 monthColumns = monthColumns,
                 monthVerticalSpacing = monthVerticalSpacing,
                 monthHorizontalSpacing = monthHorizontalSpacing,
@@ -566,11 +581,12 @@ private fun YearCalendar(
                 yearBody = yearBody,
                 yearFooter = yearFooter,
                 yearContainer = yearContainer,
+                onFirstMonthAndDayPlaced = state.placementInfo::onFirstMonthAndDayPlaced,
             )
         }
     } else {
         LazyColumn(
-            modifier = modifier,
+            modifier = modifier.onPlaced(state.placementInfo::onCalendarPlaced),
             state = state.listState,
             flingBehavior = flingBehavior(calendarScrollPaged, state.listState),
             userScrollEnabled = userScrollEnabled,
@@ -579,7 +595,7 @@ private fun YearCalendar(
         ) {
             YearCalendarMonths(
                 yearCount = state.calendarInfo.indexCount,
-                yearData = { offset -> state.store[offset] },
+                yearData = state.store::get,
                 monthColumns = monthColumns,
                 monthVerticalSpacing = monthVerticalSpacing,
                 monthHorizontalSpacing = monthHorizontalSpacing,
@@ -595,6 +611,7 @@ private fun YearCalendar(
                 yearBody = yearBody,
                 yearFooter = yearFooter,
                 yearContainer = yearContainer,
+                onFirstMonthAndDayPlaced = state.placementInfo::onFirstMonthAndDayPlaced,
             )
         }
     }

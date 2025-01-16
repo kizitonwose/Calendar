@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -185,7 +184,7 @@ private fun Calendar(
         ) {
             CalendarMonths(
                 monthCount = state.calendarInfo.indexCount,
-                monthData = { offset -> state.store[offset] },
+                monthData = state.store::get,
                 contentHeightMode = contentHeightMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
@@ -205,7 +204,7 @@ private fun Calendar(
         ) {
             CalendarMonths(
                 monthCount = state.calendarInfo.indexCount,
-                monthData = { offset -> state.store[offset] },
+                monthData = state.store::get,
                 contentHeightMode = contentHeightMode,
                 dayContent = dayContent,
                 monthHeader = monthHeader,
@@ -371,7 +370,7 @@ public fun HorizontalYearCalendar(
     monthVerticalSpacing: Dp = 0.dp,
     monthHorizontalSpacing: Dp = 0.dp,
     contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
-    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)? = null,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
@@ -475,7 +474,7 @@ public fun VerticalYearCalendar(
     monthVerticalSpacing: Dp = 0.dp,
     monthHorizontalSpacing: Dp = 0.dp,
     contentHeightMode: YearContentHeightMode = YearContentHeightMode.Wrap,
-    isMonthVisible: (month: CalendarMonth) -> Boolean = remember { { true } },
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)? = null,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)? = null,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)? = null,
@@ -524,7 +523,7 @@ private fun YearCalendar(
     monthVerticalSpacing: Dp,
     monthHorizontalSpacing: Dp,
     yearBodyContentPadding: PaddingValues,
-    isMonthVisible: (month: CalendarMonth) -> Boolean,
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)?,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
@@ -547,7 +546,7 @@ private fun YearCalendar(
         ) {
             YearCalendarMonths(
                 yearCount = state.calendarInfo.indexCount,
-                yearData = { offset -> state.store[offset] },
+                yearData = state.store::get,
                 monthColumns = monthColumns,
                 monthVerticalSpacing = monthVerticalSpacing,
                 monthHorizontalSpacing = monthHorizontalSpacing,
@@ -576,7 +575,7 @@ private fun YearCalendar(
         ) {
             YearCalendarMonths(
                 yearCount = state.calendarInfo.indexCount,
-                yearData = { offset -> state.store[offset] },
+                yearData = state.store::get,
                 monthColumns = monthColumns,
                 monthVerticalSpacing = monthVerticalSpacing,
                 monthHorizontalSpacing = monthHorizontalSpacing,
