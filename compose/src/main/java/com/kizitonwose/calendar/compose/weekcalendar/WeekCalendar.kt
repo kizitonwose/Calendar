@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onPlaced
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
@@ -27,6 +29,7 @@ internal fun WeekCalendarImpl(
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
     weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
     weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
+    onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
 ) {
     LazyRow(
         modifier = modifier,
@@ -53,13 +56,14 @@ internal fun WeekCalendarImpl(
             ) {
                 weekHeader?.invoke(this, week)
                 Row {
-                    for (date in week.days) {
+                    for (day in week.days) {
                         Box(
                             modifier = Modifier
                                 .then(if (calendarScrollPaged) Modifier.weight(1f) else Modifier)
-                                .clipToBounds(),
+                                .clipToBounds()
+                                .onFirstDayPlaced(day, week, onFirstDayPlaced),
                         ) {
-                            dayContent(date)
+                            dayContent(day)
                         }
                     }
                 }
@@ -67,4 +71,14 @@ internal fun WeekCalendarImpl(
             }
         }
     }
+}
+
+private inline fun Modifier.onFirstDayPlaced(
+    day: WeekDay,
+    week: Week,
+    noinline onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
+) = if (day == week.days.first()) {
+    onPlaced(onFirstDayPlaced)
+} else {
+    this
 }

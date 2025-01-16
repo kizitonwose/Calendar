@@ -14,8 +14,14 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.unit.Dp
 import com.kizitonwose.calendar.compose.or
 import com.kizitonwose.calendar.core.CalendarDay
@@ -32,7 +38,7 @@ internal fun LazyListScope.YearCalendarMonths(
     monthHorizontalSpacing: Dp,
     yearBodyContentPadding: PaddingValues,
     contentHeightMode: YearContentHeightMode,
-    isMonthVisible: (month: CalendarMonth) -> Boolean,
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)?,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
@@ -42,6 +48,7 @@ internal fun LazyListScope.YearCalendarMonths(
     yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)?,
     yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
     yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)?,
+    onFirstMonthAndDayPlaced: (month: LayoutCoordinates, day: LayoutCoordinates) -> Unit,
 ) {
     items(
         count = yearCount,
@@ -52,7 +59,7 @@ internal fun LazyListScope.YearCalendarMonths(
             YearContentHeightMode.Wrap -> false
             YearContentHeightMode.Fill,
             YearContentHeightMode.Stretch,
-            -> true
+                -> true
         }
         val hasYearContainer = yearContainer != null
         yearContainer.or(defaultYearContainer)(year) {
@@ -67,7 +74,19 @@ internal fun LazyListScope.YearCalendarMonths(
                         },
                     ),
             ) {
-                val months = year.months.filter(isMonthVisible)
+                val currentOnFirstMonthAndDayPlaced by rememberUpdatedState(onFirstMonthAndDayPlaced)
+                val monthCoordinates = remember { MonthDayCoordinates(currentOnFirstMonthAndDayPlaced) }
+                val onFirstMonthPlaced: (LayoutCoordinates) -> Unit = remember {
+                    {
+                        monthCoordinates.month = it
+                    }
+                }
+                val onFirstDayPlaced: (LayoutCoordinates) -> Unit = remember {
+                    {
+                        monthCoordinates.day = it
+                    }
+                }
+                val months = isMonthVisible.apply(year.months)
                 yearHeader?.invoke(this, year)
                 yearBody.or(defaultYearBody)(year) {
                     CalendarGrid(
@@ -80,6 +99,7 @@ internal fun LazyListScope.YearCalendarMonths(
                         fillHeight = fillHeight,
                         monthVerticalSpacing = monthVerticalSpacing,
                         monthHorizontalSpacing = monthHorizontalSpacing,
+                        onFirstMonthPlaced = onFirstMonthPlaced,
                     ) { monthOffset ->
                         val month = months[monthOffset]
                         val hasContainer = monthContainer != null
@@ -118,7 +138,8 @@ internal fun LazyListScope.YearCalendarMonths(
                                                     Box(
                                                         modifier = Modifier
                                                             .weight(1f)
-                                                            .clipToBounds(),
+                                                            .clipToBounds()
+                                                            .onFirstDayPlaced(day, month, monthOffset, onFirstDayPlaced),
                                                     ) {
                                                         dayContent(day)
                                                     }
@@ -139,14 +160,15 @@ internal fun LazyListScope.YearCalendarMonths(
 }
 
 @Composable
-private fun CalendarGrid(
+private inline fun CalendarGrid(
     monthColumns: Int,
     fillHeight: Boolean,
     monthVerticalSpacing: Dp,
     monthHorizontalSpacing: Dp,
     monthCount: Int,
     modifier: Modifier = Modifier,
-    content: @Composable BoxScope.(Int) -> Unit,
+    noinline onFirstMonthPlaced: (coordinates: LayoutCoordinates) -> Unit,
+    crossinline content: @Composable BoxScope.(Int) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -156,7 +178,6 @@ private fun CalendarGrid(
 
         for (rowId in 0 until rows) {
             val firstIndex = rowId * monthColumns
-
             Row(
                 modifier = Modifier.then(
                     if (fillHeight) Modifier.weight(1f) else Modifier,
@@ -167,7 +188,8 @@ private fun CalendarGrid(
                     val index = firstIndex + columnId
                     Box(
                         modifier = Modifier
-                            .weight(1f),
+                            .weight(1f)
+                            .onFirstMonthPlaced(index, onFirstMonthPlaced),
                     ) {
                         if (index < monthCount) {
                             content(index)
@@ -177,6 +199,66 @@ private fun CalendarGrid(
             }
         }
     }
+}
+
+@Stable
+private class MonthDayCoordinates(
+    private val onMonthAndDayPlaced: (month: LayoutCoordinates, day: LayoutCoordinates) -> Unit,
+) {
+    var month: LayoutCoordinates? = null
+        set(value) {
+            field = value
+            val day = day
+            if (value != null && day != null) {
+                onMonthAndDayPlaced(value, day)
+            }
+        }
+    var day: LayoutCoordinates? = null
+        set(value) {
+            field = value
+            val month = month
+            if (value != null && month != null) {
+                onMonthAndDayPlaced(month, value)
+            }
+        }
+}
+
+private inline fun Modifier.onFirstDayPlaced(
+    day: CalendarDay,
+    month: CalendarMonth,
+    monthIndex: Int,
+    noinline onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
+) = if (monthIndex == 0 && day == month.weekDays.first().first()) {
+    onPlaced(onFirstDayPlaced)
+} else {
+    this
+}
+
+private inline fun Modifier.onFirstMonthPlaced(
+    monthIndex: Int,
+    noinline onFirstMonthPlaced: (coordinates: LayoutCoordinates) -> Unit,
+) = if (monthIndex == 0) {
+    onPlaced(onFirstMonthPlaced)
+} else {
+    this
+}
+
+internal inline fun ((month: CalendarMonth) -> Boolean)?.apply(months: List<CalendarMonth>) = if (this != null) {
+    months.filter(this).also {
+        check(it.isNotEmpty()) {
+            "Cannot remove all the months in a year, " +
+                "use the startYear and endYear parameters to remove full years."
+        }
+    }
+} else {
+    months
+}
+
+internal fun rowColumn(monthIndex: Int, monthColumns: Int): Pair<Int, Int> {
+    val row = monthIndex / monthColumns
+    val column = monthIndex % monthColumns
+    // val index = row * monthColumns + column
+    return row to column
 }
 
 private val defaultYearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit) =

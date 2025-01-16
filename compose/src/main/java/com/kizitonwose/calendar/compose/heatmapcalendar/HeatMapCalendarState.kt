@@ -210,6 +210,8 @@ public class HeatMapCalendarState internal constructor(
      *
      * @param month the month to which to scroll. Must be within the
      * range of [startMonth] and [endMonth].
+     *
+     * @see [scrollToMonth]
      */
     public suspend fun animateScrollToMonth(month: YearMonth) {
         listState.animateScrollToItem(getScrollIndex(month) ?: return)

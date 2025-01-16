@@ -32,7 +32,7 @@ internal fun LazyListScope.YearCalendarMonths(
     monthHorizontalSpacing: Dp,
     yearBodyContentPadding: PaddingValues,
     contentHeightMode: YearContentHeightMode,
-    isMonthVisible: (month: CalendarMonth) -> Boolean,
+    isMonthVisible: ((month: CalendarMonth) -> Boolean)?,
     dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
@@ -52,7 +52,7 @@ internal fun LazyListScope.YearCalendarMonths(
             YearContentHeightMode.Wrap -> false
             YearContentHeightMode.Fill,
             YearContentHeightMode.Stretch,
-            -> true
+                -> true
         }
         val hasYearContainer = yearContainer != null
         yearContainer.or(defaultYearContainer)(year) {
@@ -67,7 +67,7 @@ internal fun LazyListScope.YearCalendarMonths(
                         },
                     ),
             ) {
-                val months = year.months.filter(isMonthVisible)
+                val months = isMonthVisible.apply(year.months)
                 yearHeader?.invoke(this, year)
                 yearBody.or(defaultYearBody)(year) {
                     CalendarGrid(
@@ -190,3 +190,14 @@ private val defaultMonthContainer: (@Composable BoxScope.(CalendarMonth, contain
 
 private val defaultMonthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit) =
     { _, content -> content() }
+
+internal inline fun ((month: CalendarMonth) -> Boolean)?.apply(months: List<CalendarMonth>) = if (this != null) {
+    months.filter(this).also {
+        check(it.isNotEmpty()) {
+            "Cannot remove all the months in a year, " +
+                "use the startYear and endYear parameters to remove full years."
+        }
+    }
+} else {
+    months
+}
