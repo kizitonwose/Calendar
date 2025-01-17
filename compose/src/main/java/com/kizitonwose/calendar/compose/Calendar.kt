@@ -544,13 +544,14 @@ private fun YearCalendar(
 ) {
     require(monthColumns in 1..12) { "Param `monthColumns` must be 1..12" }
     state.placementInfo.isMonthVisible = isMonthVisible
+    state.placementInfo.monthColumns = monthColumns
+    state.placementInfo.contentHeightMode = contentHeightMode
     val density = LocalDensity.current
     // Intentionally not creating a coroutine scope with LaunchedEffect
-    DisposableEffect(monthVerticalSpacing, monthHorizontalSpacing, monthColumns) {
+    DisposableEffect(monthVerticalSpacing, monthHorizontalSpacing) {
         with(density) {
             state.placementInfo.monthVerticalSpacingPx = monthVerticalSpacing.toPx().fastRoundToInt()
             state.placementInfo.monthHorizontalSpacingPx = monthHorizontalSpacing.toPx().fastRoundToInt()
-            state.placementInfo.monthColumns = monthColumns
         }
         onDispose {}
     }

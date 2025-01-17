@@ -48,7 +48,7 @@ internal fun LazyListScope.YearCalendarMonths(
     yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)?,
     yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
     yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)?,
-    onFirstMonthAndDayPlaced: (month: LayoutCoordinates, day: LayoutCoordinates) -> Unit,
+    onFirstMonthAndDayPlaced: (month: CalendarMonth, monthCoordinates: LayoutCoordinates, dayCoordinates: LayoutCoordinates) -> Unit,
 ) {
     items(
         count = yearCount,
@@ -74,19 +74,21 @@ internal fun LazyListScope.YearCalendarMonths(
                         },
                     ),
             ) {
+                val months = isMonthVisible.apply(year.months)
                 val currentOnFirstMonthAndDayPlaced by rememberUpdatedState(onFirstMonthAndDayPlaced)
-                val monthCoordinates = remember { MonthDayCoordinates(currentOnFirstMonthAndDayPlaced) }
+                val monthDayCoordinates = remember(months.first().yearMonth) {
+                    MonthDayCoordinates(months.first(), currentOnFirstMonthAndDayPlaced)
+                }
                 val onFirstMonthPlaced: (LayoutCoordinates) -> Unit = remember {
                     {
-                        monthCoordinates.month = it
+                        monthDayCoordinates.monthCoordinates = it
                     }
                 }
                 val onFirstDayPlaced: (LayoutCoordinates) -> Unit = remember {
                     {
-                        monthCoordinates.day = it
+                        monthDayCoordinates.dayCoordinates = it
                     }
                 }
-                val months = isMonthVisible.apply(year.months)
                 yearHeader?.invoke(this, year)
                 yearBody.or(defaultYearBody)(year) {
                     CalendarGrid(
@@ -203,22 +205,27 @@ private inline fun CalendarGrid(
 
 @Stable
 private class MonthDayCoordinates(
-    private val onMonthAndDayPlaced: (month: LayoutCoordinates, day: LayoutCoordinates) -> Unit,
+    private val month: CalendarMonth,
+    private val onMonthAndDayPlaced: (
+        calendarMonth: CalendarMonth,
+        monthCoordinates: LayoutCoordinates,
+        dayCoordinates: LayoutCoordinates,
+    ) -> Unit,
 ) {
-    var month: LayoutCoordinates? = null
+    var monthCoordinates: LayoutCoordinates? = null
         set(value) {
             field = value
-            val day = day
-            if (value != null && day != null) {
-                onMonthAndDayPlaced(value, day)
+            val dayCoordinates = dayCoordinates
+            if (value != null && dayCoordinates != null) {
+                onMonthAndDayPlaced(month, value, dayCoordinates)
             }
         }
-    var day: LayoutCoordinates? = null
+    var dayCoordinates: LayoutCoordinates? = null
         set(value) {
             field = value
-            val month = month
-            if (value != null && month != null) {
-                onMonthAndDayPlaced(month, value)
+            val monthCoordinates = monthCoordinates
+            if (value != null && monthCoordinates != null) {
+                onMonthAndDayPlaced(month, monthCoordinates, value)
             }
         }
 }
