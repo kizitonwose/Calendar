@@ -21,6 +21,7 @@ import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.VisibleItemState
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.ExperimentalCalendarApi
@@ -335,17 +336,18 @@ public class YearCalendarState internal constructor(
         val yearMonth = day.positionYearMonth
         val yearIndex = getScrollIndex(Year.of(yearMonth.year)) ?: return
         val year = store[yearIndex]
-        val monthsInYear = placementInfo.isMonthVisible.apply(year.months)
-        val monthIndex = monthsInYear.indexOfFirstOrNull { it.yearMonth == yearMonth } ?: return
-        val weeksOfMonth = monthsInYear[monthIndex].weekDays
+        val visibleMonths = placementInfo.isMonthVisible.apply(year.months)
+        val monthIndex = visibleMonths.indexOfFirstOrNull { it.yearMonth == yearMonth } ?: return
+        val weeksOfMonth = visibleMonths[monthIndex].weekDays
         val dayIndex = when (layoutInfo.orientation) {
             Orientation.Vertical -> weeksOfMonth.indexOfFirstOrNull { it.contains(day) }
             Orientation.Horizontal -> firstDayOfWeek.daysUntil(day.date.dayOfWeek)
         } ?: return
-        val monthDayInfo = placementInfo.awaitFistMonthAndDayOffsetAndSize(layoutInfo.orientation) ?: return
+        val monthDayInfo = placementInfo.awaitFistMonthDayOffsetAndSize(layoutInfo.orientation) ?: return
         val monthGridOffset = monthDayInfo.monthGridOffset(
             monthIndex = monthIndex,
-            monthColumns = placementInfo.monthColumns,
+            columnCount = placementInfo.monthColumns,
+            visibleMonths = visibleMonths,
         )
         val scrollOffset = monthGridOffset +
             monthDayInfo.monthOffsetInContainer +
@@ -361,14 +363,15 @@ public class YearCalendarState internal constructor(
     private suspend fun scrollToMonth(yearMonth: YearMonth, animate: Boolean) {
         val yearIndex = getScrollIndex(Year.of(yearMonth.year)) ?: return
         val year = store[yearIndex]
-        val months = placementInfo.isMonthVisible.apply(year.months)
-        val monthIndex = months.indexOfFirstOrNull {
+        val visibleMonths = placementInfo.isMonthVisible.apply(year.months)
+        val monthIndex = visibleMonths.indexOfFirstOrNull {
             it.yearMonth == yearMonth
         } ?: return
-        val monthDayInfo = placementInfo.awaitFistMonthAndDayOffsetAndSize(layoutInfo.orientation) ?: return
+        val monthDayInfo = placementInfo.awaitFistMonthDayOffsetAndSize(layoutInfo.orientation) ?: return
         val monthGridOffset = monthDayInfo.monthGridOffset(
             monthIndex = monthIndex,
-            monthColumns = placementInfo.monthColumns,
+            columnCount = placementInfo.monthColumns,
+            visibleMonths = visibleMonths,
         )
         val scrollOffset = monthGridOffset + monthDayInfo.monthOffsetInContainer
         if (animate) {
@@ -378,14 +381,51 @@ public class YearCalendarState internal constructor(
         }
     }
 
-    private fun YearItemPlacementInfo.OffsetSize.monthGridOffset(monthIndex: Int, monthColumns: Int): Int {
-        val (row, column) = rowColumn(monthIndex = monthIndex, monthColumns = monthColumns)
-        return when (layoutInfo.orientation) {
-            Orientation.Vertical -> (row * monthSize) +
-                (row * placementInfo.monthVerticalSpacingPx)
+    private fun YearItemPlacementInfo.OffsetSize.monthGridOffset(
+        monthIndex: Int,
+        columnCount: Int,
+        visibleMonths: List<CalendarMonth>,
+    ): Int {
+        val (monthRow, monthColumn) = rowColumn(
+            monthIndex = monthIndex,
+            monthColumns = columnCount,
+        )
+        val orientation = layoutInfo.orientation
+        val isUniformOrientationGrid = when (orientation) {
+            Orientation.Vertical -> when (placementInfo.contentHeightMode) {
+                // Variable month height, we need to do some more work.
+                YearContentHeightMode.Wrap -> false
+                // Equal month height, we can multiply reliably.
+                YearContentHeightMode.Fill,
+                YearContentHeightMode.Stretch,
+                    -> true
+            }
 
-            Orientation.Horizontal -> (column * monthSize) +
-                (column * placementInfo.monthHorizontalSpacingPx)
+            // Equal month width, we can multiply reliably.
+            Orientation.Horizontal -> true
+        }
+        val spacingMultiplier = when (orientation) {
+            Orientation.Vertical -> monthRow
+            Orientation.Horizontal -> monthColumn
+        }
+        return if (isUniformOrientationGrid) {
+            spacingMultiplier * (monthSize + monthSpacing)
+        } else {
+            val offset = visibleMonths
+                .take(monthIndex + 1) // remove non relevant rows
+                .chunked(columnCount)
+                .dropLast(1) // remove the month row
+                .sumOf { row ->
+                    row.maxOf {
+                        // dayBodyCount * daySize is fine because this is only relevant
+                        // in vertical wrap mode so the extra space will be the month
+                        // decorations (header, week day name, footer) as the month
+                        // container is not stretched in this case.
+                        val monthSizeWithoutDays = monthSize - (dayBodyCount * daySize)
+                        monthSizeWithoutDays + (it.weekDays.count() * daySize)
+                    }
+                }
+            offset + (spacingMultiplier * monthSpacing)
         }
     }
 

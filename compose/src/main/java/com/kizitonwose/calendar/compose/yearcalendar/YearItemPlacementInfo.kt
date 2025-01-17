@@ -11,55 +11,57 @@ import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.coroutineContext
 
+private typealias FirstMonthDayCoordinates = Triple<CalendarMonth, LayoutCoordinates, LayoutCoordinates>
+
 @Stable
 internal class YearItemPlacementInfo {
     private var calendarCoordinates: LayoutCoordinates? = null
-    private var firstDayCoordinates: LayoutCoordinates? = null
-    private var firstMonthCoordinates: LayoutCoordinates? = null
+    private var firstMonthDayCoordinates: FirstMonthDayCoordinates? = null
 
     internal var isMonthVisible: ((month: CalendarMonth) -> Boolean)? = null
-    internal var monthVerticalSpacingPx: Int = 0
-    internal var monthHorizontalSpacingPx: Int = 0
-    internal var monthColumns: Int = 0
+    internal var monthVerticalSpacingPx = 0
+    internal var monthHorizontalSpacingPx = 0
+    internal var monthColumns = 0
+    internal var contentHeightMode = YearContentHeightMode.Wrap
 
     fun onCalendarPlaced(coordinates: LayoutCoordinates) {
         calendarCoordinates = coordinates
     }
 
-    fun onFirstMonthAndDayPlaced(month: LayoutCoordinates, day: LayoutCoordinates) {
-        firstMonthCoordinates = month
-        firstDayCoordinates = day
+    fun onFirstMonthAndDayPlaced(
+        month: CalendarMonth,
+        monthCoordinates: LayoutCoordinates,
+        dayCoordinates: LayoutCoordinates,
+    ) {
+        firstMonthDayCoordinates = Triple(
+            first = month,
+            second = monthCoordinates,
+            third = dayCoordinates,
+        )
     }
 
-    suspend fun awaitFistMonthAndDayOffsetAndSize(orientation: Orientation): OffsetSize? {
+    suspend fun awaitFistMonthDayOffsetAndSize(orientation: Orientation): OffsetSize? {
         var calendarCoord: LayoutCoordinates? = null
-        var firstDayCoord: LayoutCoordinates? = null
-        var firstMonthCoord: LayoutCoordinates? = null
+        var firstMonthDayCoord: FirstMonthDayCoordinates? = null
         while (coroutineContext.isActive &&
-            (calendarCoord == null ||
-                firstDayCoord == null ||
-                firstMonthCoord == null)
+            (calendarCoord == null || firstMonthDayCoord == null)
         ) {
             calendarCoord = calendarCoordinates
-            firstDayCoord = firstDayCoordinates
-            firstMonthCoord = firstMonthCoordinates
+            firstMonthDayCoord = firstMonthDayCoordinates
             // day and month coord are set at the same time but check anyway
-            if (calendarCoord == null ||
-                firstDayCoord == null ||
-                firstMonthCoord == null
-            ) {
+            if (calendarCoord == null || firstMonthDayCoord == null) {
                 awaitFrame()
             }
         }
         if (calendarCoord == null ||
-            firstDayCoord == null ||
-            firstMonthCoord == null ||
+            firstMonthDayCoord == null ||
             !calendarCoord.isAttached ||
-            !firstDayCoord.isAttached ||
-            !firstMonthCoord.isAttached
+            !firstMonthDayCoord.second.isAttached ||
+            !firstMonthDayCoord.third.isAttached
         ) {
             return null
         }
+        val (month, firstMonthCoord, firstDayCoord) = firstMonthDayCoord
         val itemViewCoord = findItemViewCoordinates(firstDayCoord, calendarCoord)
         val daySize = firstDayCoord.size
         val monthOffset = itemViewCoord.localPositionOf(firstMonthCoord, Offset.Zero).round()
@@ -69,16 +71,20 @@ internal class YearItemPlacementInfo {
             Orientation.Vertical -> OffsetSize(
                 monthOffsetInContainer = monthOffset.y,
                 monthSize = monthSize.height,
+                monthSpacing = monthVerticalSpacingPx,
                 dayOffsetInMonth = dayOffsetInMonth.y,
                 daySize = daySize.height,
+                dayBodyCount = month.weekDays.size
             )
 
             Orientation.Horizontal -> {
                 OffsetSize(
                     monthOffsetInContainer = monthOffset.x,
                     monthSize = monthSize.width,
+                    monthSpacing = monthHorizontalSpacingPx,
                     dayOffsetInMonth = dayOffsetInMonth.x,
                     daySize = daySize.width,
+                    dayBodyCount = month.weekDays.first().size
                 )
             }
         }
@@ -87,7 +93,9 @@ internal class YearItemPlacementInfo {
     internal data class OffsetSize(
         val monthSize: Int,
         val monthOffsetInContainer: Int,
+        val monthSpacing: Int,
         val dayOffsetInMonth: Int,
         val daySize: Int,
+        val dayBodyCount: Int,
     )
 }
