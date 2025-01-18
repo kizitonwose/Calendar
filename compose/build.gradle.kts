@@ -14,7 +14,7 @@ android {
     compileSdk = Android.compileSdk
     namespace = "com.kizitonwose.calendar.compose"
     defaultConfig {
-        minSdk = Android.minSdkComposeLibrary
+        minSdk = Android.minSdk
     }
     java {
         toolchain {

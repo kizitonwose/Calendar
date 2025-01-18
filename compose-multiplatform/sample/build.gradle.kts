@@ -98,7 +98,7 @@ android {
 
     defaultConfig {
         applicationId = "com.kizitonwose.calendar.compose.multiplatform.sample"
-        minSdk = Android.minSdkSampleApp
+        minSdk = Android.minSdk
         targetSdk = Android.targetSdk
         versionCode = 1
         versionName = "1.0"
