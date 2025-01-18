@@ -59,9 +59,11 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.androidx.annotation)
             compileOnly(libs.kotlinx.serialization.core)
             api(libs.kotlinx.datetime)
         }
+
         val nonJvmMain by creating {
             dependsOn(commonMain)
             nativeMain.dependsOn(this)

@@ -5,3 +5,7 @@ internal fun <T : Comparable<T>> checkRange(start: T, end: T) {
         "start: $start is greater than end: $end"
     }
 }
+
+internal fun <T> T.asUnit() = Unit
+
+internal expect fun log(tag: String, message: String)

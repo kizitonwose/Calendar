@@ -13,6 +13,9 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onPlaced
+import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.format.toIso8601String
 
@@ -21,11 +24,12 @@ internal fun LazyListScope.CalendarMonths(
     monthCount: Int,
     monthData: (offset: Int) -> CalendarMonth,
     contentHeightMode: ContentHeightMode,
-    dayContent: @Composable BoxScope.(com.kizitonwose.calendar.core.CalendarDay) -> Unit,
+    dayContent: @Composable BoxScope.(CalendarDay) -> Unit,
     monthHeader: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit)?,
     monthFooter: (@Composable ColumnScope.(CalendarMonth) -> Unit)?,
     monthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit)?,
+    onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
 ) {
     items(
         count = monthCount,
@@ -66,7 +70,8 @@ internal fun LazyListScope.CalendarMonths(
                                     Box(
                                         modifier = Modifier
                                             .weight(1f)
-                                            .clipToBounds(),
+                                            .clipToBounds()
+                                            .onFirstDayPlaced(day, month, onFirstDayPlaced),
                                     ) {
                                         dayContent(day)
                                     }
@@ -81,10 +86,20 @@ internal fun LazyListScope.CalendarMonths(
     }
 }
 
+private inline fun Modifier.onFirstDayPlaced(
+    day: CalendarDay,
+    month: CalendarMonth,
+    noinline onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
+) = if (day == month.weekDays.first().first()) {
+    onPlaced(onFirstDayPlaced)
+} else {
+    this
+}
+
 private val defaultMonthContainer: (@Composable LazyItemScope.(CalendarMonth, container: @Composable () -> Unit) -> Unit) =
     { _, container -> container() }
 
 private val defaultMonthBody: (@Composable ColumnScope.(CalendarMonth, content: @Composable () -> Unit) -> Unit) =
     { _, content -> content() }
 
-internal fun <T> T?.or(default: T) = this ?: default
+internal inline fun <T> T?.or(default: T) = this ?: default

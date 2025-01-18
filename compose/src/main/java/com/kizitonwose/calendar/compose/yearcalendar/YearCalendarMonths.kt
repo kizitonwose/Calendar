@@ -177,7 +177,6 @@ private inline fun CalendarGrid(
         verticalArrangement = Arrangement.spacedBy(monthVerticalSpacing),
     ) {
         val rows = (monthCount / monthColumns) + min(monthCount % monthColumns, 1)
-
         for (rowId in 0 until rows) {
             val firstIndex = rowId * monthColumns
             Row(

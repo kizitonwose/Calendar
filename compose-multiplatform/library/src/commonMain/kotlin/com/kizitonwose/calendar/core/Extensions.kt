@@ -117,12 +117,3 @@ internal fun LocalDate.plusWeeks(value: Int): LocalDate = plus(value, DateTimeUn
 internal fun LocalDate.minusWeeks(value: Int): LocalDate = minus(value, DateTimeUnit.WEEK)
 
 internal fun LocalDate.weeksUntil(other: LocalDate): Int = until(other, DateTimeUnit.WEEK)
-
-// E.g DayOfWeek.SATURDAY.daysUntil(DayOfWeek.TUESDAY) = 3
-internal fun DayOfWeek.daysUntil(other: DayOfWeek) = (7 + (other.ordinal - ordinal)) % 7
-
-// E.g DayOfWeek.SATURDAY.plusDays(3) = DayOfWeek.TUESDAY
-internal fun DayOfWeek.plusDays(days: Int): DayOfWeek {
-    val amount = (days % 7)
-    return DayOfWeek.entries[(ordinal + (amount + 7)) % 7]
-}
