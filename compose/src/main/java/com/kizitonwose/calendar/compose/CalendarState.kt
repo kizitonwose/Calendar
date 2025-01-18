@@ -34,7 +34,6 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
-
 /**
  * Creates a [CalendarState] that is remembered across compositions.
  *

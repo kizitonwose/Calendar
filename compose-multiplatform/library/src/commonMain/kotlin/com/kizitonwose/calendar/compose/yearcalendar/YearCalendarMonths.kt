@@ -59,7 +59,7 @@ internal fun LazyListScope.YearCalendarMonths(
             YearContentHeightMode.Wrap -> false
             YearContentHeightMode.Fill,
             YearContentHeightMode.Stretch,
-                -> true
+            -> true
         }
         val hasYearContainer = yearContainer != null
         yearContainer.or(defaultYearContainer)(year) {

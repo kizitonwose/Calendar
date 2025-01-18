@@ -398,7 +398,7 @@ public class YearCalendarState internal constructor(
                 // Equal month height, we can multiply reliably.
                 YearContentHeightMode.Fill,
                 YearContentHeightMode.Stretch,
-                    -> true
+                -> true
             }
 
             // Equal month width, we can multiply reliably.
