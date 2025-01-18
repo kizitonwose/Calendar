@@ -97,7 +97,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        minSdk = Android.minSdkComposeLibrary
+        minSdk = Android.minSdk
     }
     packaging {
         resources {

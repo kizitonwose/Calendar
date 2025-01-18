@@ -12,7 +12,7 @@ android {
     compileSdk = Android.compileSdk
     namespace = "com.kizitonwose.calendar.view"
     defaultConfig {
-        minSdk = Android.minSdkViewLibrary
+        minSdk = Android.minSdk
     }
     java {
         toolchain {

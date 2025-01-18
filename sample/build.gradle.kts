@@ -13,7 +13,7 @@ android {
     namespace = "com.kizitonwose.calendar.sample"
     defaultConfig {
         applicationId = "com.kizitonwose.calendar.sample"
-        minSdk = Android.minSdkSampleApp
+        minSdk = Android.minSdk
         targetSdk = Android.targetSdk
         versionCode = 1
         versionName = "1.0"
