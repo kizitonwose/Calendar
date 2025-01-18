@@ -72,7 +72,7 @@ internal fun findItemViewCoordinates(
 ): LayoutCoordinates {
     var itemViewCoord = firstDayCoord
     var parent = itemViewCoord.parentLayoutCoordinates
-    // Find the coordinates the match the index item layout
+    // Find the coordinates that match the index item layout
     while (parent != null &&
         parent.size != calendarCoord.size &&
         parent.positionInWindow() != calendarCoord.positionInWindow()
