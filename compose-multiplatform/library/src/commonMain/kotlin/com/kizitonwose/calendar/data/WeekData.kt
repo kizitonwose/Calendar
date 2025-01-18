@@ -3,7 +3,6 @@ package com.kizitonwose.calendar.data
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.WeekDayPosition
-import com.kizitonwose.calendar.core.daysUntil
 import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.plusDays
 import com.kizitonwose.calendar.core.plusWeeks

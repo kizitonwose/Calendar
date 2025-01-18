@@ -6,7 +6,6 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.atStartOfMonth
-import com.kizitonwose.calendar.core.daysUntil
 import com.kizitonwose.calendar.core.lengthOfMonth
 import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.minusMonths

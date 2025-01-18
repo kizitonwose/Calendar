@@ -5,9 +5,9 @@ import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
-import com.kizitonwose.calendar.core.plusDays
 import com.kizitonwose.calendar.core.plusMonths
 import com.kizitonwose.calendar.data.VisibleItemState
+import com.kizitonwose.calendar.data.plusDays
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlin.js.JsName

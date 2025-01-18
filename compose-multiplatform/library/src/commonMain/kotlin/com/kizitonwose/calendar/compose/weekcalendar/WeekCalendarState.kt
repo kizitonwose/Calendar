@@ -1,6 +1,7 @@
 package com.kizitonwose.calendar.compose.weekcalendar
 
 import androidx.compose.foundation.MutatePriority
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.interaction.InteractionSource
@@ -15,7 +16,9 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.kizitonwose.calendar.compose.ItemPlacementInfo
 import com.kizitonwose.calendar.core.Week
+import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.WeekDayPosition
 import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.atEndOfMonth
@@ -27,11 +30,12 @@ import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.checkRange
+import com.kizitonwose.calendar.data.daysUntil
 import com.kizitonwose.calendar.data.getWeekCalendarAdjustedRange
 import com.kizitonwose.calendar.data.getWeekCalendarData
 import com.kizitonwose.calendar.data.getWeekIndex
 import com.kizitonwose.calendar.data.getWeekIndicesCount
-import com.kizitonwose.calendar.log.log
+import com.kizitonwose.calendar.data.log
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 
@@ -183,6 +187,8 @@ public class WeekCalendarState internal constructor(
     public val layoutInfo: WeekCalendarLayoutInfo
         get() = WeekCalendarLayoutInfo(listState.layoutInfo) { index -> store[index] }
 
+    internal val placementInfo = ItemPlacementInfo()
+
     internal val store = DataStore { offset ->
         getWeekCalendarData(
             startDateAdjusted = this.startDateAdjusted,
@@ -232,9 +238,80 @@ public class WeekCalendarState internal constructor(
      * Animate (smooth scroll) to the week containing the given [date].
      *
      * @param date the week to which to scroll.
+     *
+     * @see [scrollToWeek]
      */
     public suspend fun animateScrollToWeek(date: LocalDate) {
         listState.animateScrollToItem(getScrollIndex(date) ?: return)
+    }
+
+    /**
+     * Instantly brings the week containing the given [day] to the top of the viewport.
+     *
+     * @param day the week to which to scroll.
+     *
+     * @see [animateScrollToWeek]]
+     */
+    public suspend fun scrollToWeek(day: WeekDay): Unit = scrollToWeek(day.date)
+
+    /**
+     * Animate (smooth scroll) to the week containing the given [day].
+     *
+     * @param day the week to which to scroll.
+     *
+     * @see [scrollToWeek]
+     */
+    public suspend fun animateScrollToWeek(day: WeekDay): Unit = animateScrollToWeek(day.date)
+
+    /**
+     * Instantly brings the [date] to the top of the viewport.
+     *
+     * @param date the date to which to scroll.
+     *
+     * @see [animateScrollToDate]
+     */
+    public suspend fun scrollToDate(date: LocalDate): Unit = scrollToDate(date, animate = false)
+
+    /**
+     * Animate (smooth scroll) to the given [date].
+     *
+     * @param date the date to which to scroll.
+     *
+     * @see [scrollToDate]
+     */
+    public suspend fun animateScrollToDate(date: LocalDate): Unit = scrollToDate(date, animate = true)
+
+    /**
+     * Instantly brings the [day] to the top of the viewport.
+     *
+     * @param day the day to which to scroll.
+     *
+     * @see [animateScrollToDay]
+     */
+    public suspend fun scrollToDay(day: WeekDay): Unit = scrollToDate(day.date)
+
+    /**
+     * Animate (smooth scroll) to the given [day].
+     *
+     * @param day the day to which to scroll.
+     *
+     * @see [scrollToDay]
+     */
+    public suspend fun animateScrollToDay(day: WeekDay): Unit = animateScrollToDate(day.date)
+
+    private suspend fun scrollToDate(date: LocalDate, animate: Boolean) {
+        val weekIndex = getScrollIndex(date) ?: return
+        val dayIndex = when (layoutInfo.orientation) {
+            Orientation.Vertical -> 0
+            Orientation.Horizontal -> firstDayOfWeek.daysUntil(date.dayOfWeek)
+        }
+        val dayInfo = placementInfo.awaitFistDayOffsetAndSize(layoutInfo.orientation) ?: return
+        val scrollOffset = dayInfo.offset + dayInfo.size * dayIndex
+        if (animate) {
+            listState.animateScrollToItem(weekIndex, scrollOffset)
+        } else {
+            listState.scrollToItem(weekIndex, scrollOffset)
+        }
     }
 
     /**
