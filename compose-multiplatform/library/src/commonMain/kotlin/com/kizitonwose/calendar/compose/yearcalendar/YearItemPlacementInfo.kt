@@ -74,7 +74,7 @@ internal class YearItemPlacementInfo {
                 monthSpacing = monthVerticalSpacingPx,
                 dayOffsetInMonth = dayOffsetInMonth.y,
                 daySize = daySize.height,
-                dayBodyCount = month.weekDays.size
+                dayBodyCount = month.weekDays.size,
             )
 
             Orientation.Horizontal -> {
@@ -84,7 +84,7 @@ internal class YearItemPlacementInfo {
                     monthSpacing = monthHorizontalSpacingPx,
                     dayOffsetInMonth = dayOffsetInMonth.x,
                     daySize = daySize.width,
-                    dayBodyCount = month.weekDays.first().size
+                    dayBodyCount = month.weekDays.first().size,
                 )
             }
         }
