@@ -10,11 +10,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onPlaced
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
+import com.kizitonwose.calendar.compose.ItemCoordinates
+import com.kizitonwose.calendar.compose.ItemCoordinatesStore
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.format.toIso8601String
@@ -30,7 +35,7 @@ internal fun WeekCalendarImpl(
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
     weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
     weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
-    onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
+    onItemPlaced: (itemCoordinates: ItemCoordinates) -> Unit,
 ) {
     LazyRow(
         modifier = modifier,
@@ -45,6 +50,10 @@ internal fun WeekCalendarImpl(
             key = { offset -> state.store[offset].days.first().date.toIso8601String() },
         ) { offset ->
             val week = state.store[offset]
+            val currentOnItemPlaced by rememberUpdatedState(onItemPlaced)
+            val itemCoordinatesStore = remember(week.days.first().date) {
+                ItemCoordinatesStore(currentOnItemPlaced)
+            }
             Column(
                 modifier = Modifier
                     .then(
@@ -53,16 +62,17 @@ internal fun WeekCalendarImpl(
                         } else {
                             Modifier.width(IntrinsicSize.Max)
                         },
-                    ),
+                    )
+                    .onPlaced(itemCoordinatesStore::onItemRootPlaced),
             ) {
                 weekHeader?.invoke(this, week)
                 Row {
-                    for (day in week.days) {
+                    for ((column, day) in week.days.withIndex()) {
                         Box(
                             modifier = Modifier
                                 .then(if (calendarScrollPaged) Modifier.weight(1f) else Modifier)
                                 .clipToBounds()
-                                .onFirstDayPlaced(day, week, onFirstDayPlaced),
+                                .onFirstDayPlaced(column, itemCoordinatesStore::onFirstDayPlaced),
                         ) {
                             dayContent(day)
                         }
@@ -75,10 +85,9 @@ internal fun WeekCalendarImpl(
 }
 
 private inline fun Modifier.onFirstDayPlaced(
-    day: WeekDay,
-    week: Week,
+    column: Int,
     noinline onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
-) = if (day == week.days.first()) {
+) = if (column == 0) {
     onPlaced(onFirstDayPlaced)
 } else {
     this
