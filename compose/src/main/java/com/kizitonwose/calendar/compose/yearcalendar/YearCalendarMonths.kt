@@ -48,7 +48,7 @@ internal fun LazyListScope.YearCalendarMonths(
     yearBody: (@Composable ColumnScope.(CalendarYear, content: @Composable () -> Unit) -> Unit)?,
     yearFooter: (@Composable ColumnScope.(CalendarYear) -> Unit)?,
     yearContainer: (@Composable LazyItemScope.(CalendarYear, container: @Composable () -> Unit) -> Unit)?,
-    onFirstMonthAndDayPlaced: (month: CalendarMonth, monthCoordinates: LayoutCoordinates, dayCoordinates: LayoutCoordinates) -> Unit,
+    onItemPlaced: (itemCoordinates: YearItemCoordinates) -> Unit,
 ) {
     items(
         count = yearCount,
@@ -61,101 +61,114 @@ internal fun LazyListScope.YearCalendarMonths(
             YearContentHeightMode.Stretch,
             -> true
         }
+        val months = isMonthVisible.apply(year.months)
         val hasYearContainer = yearContainer != null
-        yearContainer.or(defaultYearContainer)(year) {
-            Column(
-                modifier = Modifier
-                    .then(if (hasYearContainer) Modifier.fillMaxWidth() else Modifier.fillParentMaxWidth())
-                    .then(
-                        if (fillHeight) {
-                            if (hasYearContainer) Modifier.fillMaxHeight() else Modifier.fillParentMaxHeight()
-                        } else {
-                            Modifier.wrapContentHeight()
-                        },
-                    ),
-            ) {
-                val months = isMonthVisible.apply(year.months)
-                val currentOnFirstMonthAndDayPlaced by rememberUpdatedState(onFirstMonthAndDayPlaced)
-                val monthDayCoordinates = remember(months.first().yearMonth) {
-                    MonthDayCoordinates(months.first(), currentOnFirstMonthAndDayPlaced)
-                }
-                val onFirstMonthPlaced: (LayoutCoordinates) -> Unit = remember {
-                    {
-                        monthDayCoordinates.monthCoordinates = it
-                    }
-                }
-                val onFirstDayPlaced: (LayoutCoordinates) -> Unit = remember {
-                    {
-                        monthDayCoordinates.dayCoordinates = it
-                    }
-                }
-                yearHeader?.invoke(this, year)
-                yearBody.or(defaultYearBody)(year) {
-                    CalendarGrid(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight())
-                            .padding(yearBodyContentPadding),
-                        monthColumns = monthColumns,
-                        monthCount = months.count(),
-                        fillHeight = fillHeight,
-                        monthVerticalSpacing = monthVerticalSpacing,
-                        monthHorizontalSpacing = monthHorizontalSpacing,
-                        onFirstMonthPlaced = onFirstMonthPlaced,
-                    ) { monthOffset ->
-                        val month = months[monthOffset]
-                        val hasContainer = monthContainer != null
-                        monthContainer.or(defaultMonthContainer)(month) {
-                            Column(
-                                modifier = Modifier
-                                    .then(if (hasContainer) Modifier.fillMaxWidth() else Modifier)
-                                    .then(
-                                        if (fillHeight) {
-                                            if (hasContainer) Modifier.fillMaxHeight() else Modifier
-                                        } else {
-                                            Modifier.wrapContentHeight()
-                                        },
-                                    ),
-                            ) {
-                                monthHeader?.invoke(this, month)
-                                monthBody.or(defaultMonthBody)(month) {
-                                    Column(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight()),
-                                    ) {
-                                        for (week in month.weekDays) {
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .then(
-                                                        if (contentHeightMode == YearContentHeightMode.Stretch) {
-                                                            Modifier.weight(1f)
-                                                        } else {
-                                                            Modifier.wrapContentHeight()
-                                                        },
-                                                    ),
-                                            ) {
-                                                for (day in week) {
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .weight(1f)
-                                                            .clipToBounds()
-                                                            .onFirstDayPlaced(day, month, monthOffset, onFirstDayPlaced),
-                                                    ) {
-                                                        dayContent(day)
+        val currentOnItemPlaced by rememberUpdatedState(onItemPlaced)
+        val itemCoordinatesStore = remember(year.year) {
+            YearItemCoordinatesStore(months.first(), currentOnItemPlaced)
+        }
+        Box(Modifier.onPlaced(itemCoordinatesStore::onItemRootPlaced)) {
+            yearContainer.or(defaultYearContainer)(year) {
+                Column(
+                    modifier = Modifier
+                        .then(
+                            if (hasYearContainer) {
+                                Modifier.fillMaxWidth()
+                            } else {
+                                Modifier.fillParentMaxWidth()
+                            },
+                        )
+                        .then(
+                            if (fillHeight) {
+                                if (hasYearContainer) {
+                                    Modifier.fillMaxHeight()
+                                } else {
+                                    Modifier.fillParentMaxHeight()
+                                }
+                            } else {
+                                Modifier.wrapContentHeight()
+                            },
+                        ),
+                ) {
+                    yearHeader?.invoke(this, year)
+                    yearBody.or(defaultYearBody)(year) {
+                        CalendarGrid(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .then(if (fillHeight) Modifier.weight(1f) else Modifier.wrapContentHeight())
+                                .padding(yearBodyContentPadding),
+                            monthColumns = monthColumns,
+                            monthCount = months.count(),
+                            fillHeight = fillHeight,
+                            monthVerticalSpacing = monthVerticalSpacing,
+                            monthHorizontalSpacing = monthHorizontalSpacing,
+                            onFirstMonthPlaced = itemCoordinatesStore::onFirstMonthPlaced,
+                        ) { monthOffset ->
+                            val month = months[monthOffset]
+                            val hasMonthContainer = monthContainer != null
+                            monthContainer.or(defaultMonthContainer)(month) {
+                                Column(
+                                    modifier = Modifier
+                                        .then(if (hasMonthContainer) Modifier.fillMaxWidth() else Modifier)
+                                        .then(
+                                            if (fillHeight) {
+                                                if (hasMonthContainer) Modifier.fillMaxHeight() else Modifier
+                                            } else {
+                                                Modifier.wrapContentHeight()
+                                            },
+                                        ),
+                                ) {
+                                    monthHeader?.invoke(this, month)
+                                    monthBody.or(defaultMonthBody)(month) {
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .then(
+                                                    if (fillHeight) {
+                                                        Modifier.weight(1f)
+                                                    } else {
+                                                        Modifier.wrapContentHeight()
+                                                    },
+                                                ),
+                                        ) {
+                                            for ((row, week) in month.weekDays.withIndex()) {
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .then(
+                                                            if (contentHeightMode == YearContentHeightMode.Stretch) {
+                                                                Modifier.weight(1f)
+                                                            } else {
+                                                                Modifier.wrapContentHeight()
+                                                            },
+                                                        ),
+                                                ) {
+                                                    for ((column, day) in week.withIndex()) {
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .weight(1f)
+                                                                .clipToBounds()
+                                                                .onFirstDayPlaced(
+                                                                    monthIndex = monthOffset,
+                                                                    dateRow = row,
+                                                                    dateColumn = column,
+                                                                    onFirstDayPlaced = itemCoordinatesStore::onFirstDayPlaced,
+                                                                ),
+                                                        ) {
+                                                            dayContent(day)
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
                                     }
+                                    monthFooter?.invoke(this, month)
                                 }
-                                monthFooter?.invoke(this, month)
                             }
                         }
                     }
+                    yearFooter?.invoke(this, year)
                 }
-                yearFooter?.invoke(this, year)
             }
         }
     }
@@ -203,38 +216,49 @@ private inline fun CalendarGrid(
 }
 
 @Stable
-private class MonthDayCoordinates(
-    private val month: CalendarMonth,
-    private val onMonthAndDayPlaced: (
-        calendarMonth: CalendarMonth,
-        monthCoordinates: LayoutCoordinates,
-        dayCoordinates: LayoutCoordinates,
-    ) -> Unit,
+internal class YearItemCoordinatesStore(
+    private val firstMonth: CalendarMonth,
+    private val onItemPlaced: (itemCoordinates: YearItemCoordinates) -> Unit,
 ) {
-    var monthCoordinates: LayoutCoordinates? = null
-        set(value) {
-            field = value
-            val dayCoordinates = dayCoordinates
-            if (value != null && dayCoordinates != null) {
-                onMonthAndDayPlaced(month, value, dayCoordinates)
-            }
-        }
-    var dayCoordinates: LayoutCoordinates? = null
-        set(value) {
-            field = value
-            val monthCoordinates = monthCoordinates
-            if (value != null && monthCoordinates != null) {
-                onMonthAndDayPlaced(month, monthCoordinates, value)
-            }
-        }
+    private var itemRootCoordinates: LayoutCoordinates? = null
+    private var firstDayCoordinates: LayoutCoordinates? = null
+    private var firstMonthCoordinates: LayoutCoordinates? = null
+
+    fun onItemRootPlaced(coordinates: LayoutCoordinates) {
+        itemRootCoordinates = coordinates
+        check()
+    }
+
+    fun onFirstMonthPlaced(coordinates: LayoutCoordinates) {
+        firstMonthCoordinates = coordinates
+        check()
+    }
+
+    fun onFirstDayPlaced(coordinates: LayoutCoordinates) {
+        firstDayCoordinates = coordinates
+        check()
+    }
+
+    private fun check() {
+        val itemRootCoordinates = itemRootCoordinates ?: return
+        val firstMonthCoordinates = firstMonthCoordinates ?: return
+        val firstDayCoordinates = firstDayCoordinates ?: return
+        val itemCoordinates = YearItemCoordinates(
+            firstMonth = firstMonth,
+            itemRootCoordinates = itemRootCoordinates,
+            firstMonthCoordinates = firstMonthCoordinates,
+            firstDayCoordinates = firstDayCoordinates,
+        )
+        onItemPlaced(itemCoordinates)
+    }
 }
 
 private inline fun Modifier.onFirstDayPlaced(
-    day: CalendarDay,
-    month: CalendarMonth,
     monthIndex: Int,
+    dateRow: Int,
+    dateColumn: Int,
     noinline onFirstDayPlaced: (coordinates: LayoutCoordinates) -> Unit,
-) = if (monthIndex == 0 && day == month.weekDays.first().first()) {
+) = if (monthIndex == 0 && dateRow == 0 && dateColumn == 0) {
     onPlaced(onFirstDayPlaced)
 } else {
     this
