@@ -25,6 +25,8 @@ public final class com/kizitonwose/calendar/data/DataStore : java/util/Map, kotl
 
 public final class com/kizitonwose/calendar/data/ExtensionsKt {
 	public static final fun daysUntil (Ljava/time/DayOfWeek;Ljava/time/DayOfWeek;)I
+	public static final fun getPositionYearMonth (Lcom/kizitonwose/calendar/core/CalendarDay;)Ljava/time/YearMonth;
+	public static final fun indexOfFirstOrNull (Ljava/lang/Iterable;Lkotlin/jvm/functions/Function1;)Ljava/lang/Integer;
 }
 
 public final class com/kizitonwose/calendar/data/MonthData {

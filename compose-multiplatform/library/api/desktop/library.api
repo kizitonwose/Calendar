@@ -37,6 +37,9 @@ public final class com/kizitonwose/calendar/compose/CalendarLayoutInfo : android
 public final class com/kizitonwose/calendar/compose/CalendarState : androidx/compose/foundation/gestures/ScrollableState {
 	public static final field $stable I
 	public static final field Companion Lcom/kizitonwose/calendar/compose/CalendarState$Companion;
+	public final fun animateScrollToDate (Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun animateScrollToDate$default (Lcom/kizitonwose/calendar/compose/CalendarState;Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun animateScrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
 	public final fun getEndMonth ()Lcom/kizitonwose/calendar/core/YearMonth;
@@ -49,6 +52,9 @@ public final class com/kizitonwose/calendar/compose/CalendarState : androidx/com
 	public final fun getStartMonth ()Lcom/kizitonwose/calendar/core/YearMonth;
 	public fun isScrollInProgress ()Z
 	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToDate (Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun scrollToDate$default (Lcom/kizitonwose/calendar/compose/CalendarState;Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun scrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun setEndMonth (Lcom/kizitonwose/calendar/core/YearMonth;)V
 	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
@@ -65,8 +71,6 @@ public final class com/kizitonwose/calendar/compose/CalendarStateKt {
 
 public final class com/kizitonwose/calendar/compose/ComposableSingletons$CalendarMonthsKt {
 	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/ComposableSingletons$CalendarMonthsKt;
-	public static field lambda-1 Lkotlin/jvm/functions/Function5;
-	public static field lambda-2 Lkotlin/jvm/functions/Function5;
 	public fun <init> ()V
 	public final fun getLambda-1$library ()Lkotlin/jvm/functions/Function5;
 	public final fun getLambda-2$library ()Lkotlin/jvm/functions/Function5;
@@ -157,6 +161,9 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarLay
 public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState : androidx/compose/foundation/gestures/ScrollableState {
 	public static final field $stable I
 	public static final field Companion Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState$Companion;
+	public final fun animateScrollToDate (Lkotlinx/datetime/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun animateScrollToDay (Lcom/kizitonwose/calendar/core/WeekDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun animateScrollToWeek (Lcom/kizitonwose/calendar/core/WeekDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToWeek (Lkotlinx/datetime/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
 	public final fun getEndDate ()Lkotlinx/datetime/LocalDate;
@@ -168,6 +175,9 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 	public final fun getStartDate ()Lkotlinx/datetime/LocalDate;
 	public fun isScrollInProgress ()Z
 	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToDate (Lkotlinx/datetime/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToDay (Lcom/kizitonwose/calendar/core/WeekDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToWeek (Lcom/kizitonwose/calendar/core/WeekDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToWeek (Lkotlinx/datetime/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun setEndDate (Lkotlinx/datetime/LocalDate;)V
 	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
@@ -183,10 +193,6 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 
 public final class com/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt {
 	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt;
-	public static field lambda-1 Lkotlin/jvm/functions/Function5;
-	public static field lambda-2 Lkotlin/jvm/functions/Function5;
-	public static field lambda-3 Lkotlin/jvm/functions/Function5;
-	public static field lambda-4 Lkotlin/jvm/functions/Function5;
 	public fun <init> ()V
 	public final fun getLambda-1$library ()Lkotlin/jvm/functions/Function5;
 	public final fun getLambda-2$library ()Lkotlin/jvm/functions/Function5;
@@ -224,6 +230,10 @@ public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarLay
 public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarState : androidx/compose/foundation/gestures/ScrollableState {
 	public static final field $stable I
 	public static final field Companion Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState$Companion;
+	public final fun animateScrollToDate (Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun animateScrollToDate$default (Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun animateScrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun animateScrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToYear (Lcom/kizitonwose/calendar/core/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
 	public final fun getEndYear ()Lcom/kizitonwose/calendar/core/Year;
@@ -236,6 +246,10 @@ public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarSta
 	public final fun getStartYear ()Lcom/kizitonwose/calendar/core/Year;
 	public fun isScrollInProgress ()Z
 	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToDate (Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun scrollToDate$default (Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;Lkotlinx/datetime/LocalDate;Lcom/kizitonwose/calendar/core/DayPosition;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun scrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun scrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToYear (Lcom/kizitonwose/calendar/core/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun setEndYear (Lcom/kizitonwose/calendar/core/Year;)V
 	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
