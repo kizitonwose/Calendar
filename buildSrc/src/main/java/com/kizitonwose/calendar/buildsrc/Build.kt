@@ -24,8 +24,8 @@ object Android {
     const val minSdkViewLibrary = 19
     const val minSdkComposeLibrary = 21
     val minSdkSampleApp = max(minSdkViewLibrary, minSdkComposeLibrary)
-    const val targetSdk = 34
-    const val compileSdk = 34
+    const val targetSdk = 35
+    const val compileSdk = 35
 }
 
 val multiplatformProjects = listOf("library")
