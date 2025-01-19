@@ -411,7 +411,7 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
 
 All the respective XML attributes listed above are also available as properties of the CalendarView and WeekCalendarView classes so they can be set via code. So in addition to those, we have:
 
-**`CalendarView` properties:**
+**`CalendarView`**
 
 - **monthScrollListener**: Called when the calendar scrolls to a new month. Mostly beneficial if `scrollPaged` is `true`.
 
@@ -423,7 +423,7 @@ All the respective XML attributes listed above are also available as properties 
 
 - **monthMargins**: The margins, in pixels to be applied on each month view. This can be used to add a space between two months.
 
-**`WeekCalendarView` properties:**
+**`WeekCalendarView`**
 
 - **weekScrollListener**: Called when the calendar scrolls to a new week. Mostly beneficial if `scrollPaged` is `true`.
 
@@ -435,7 +435,7 @@ All the respective XML attributes listed above are also available as properties 
 
 - **weekMargins**: The margins, in pixels to be applied on each week view. This can be used to add a space between two weeks.
 
-**`YearCalendarView` properties:**
+**`YearCalendarView`**
 
 - **yearScrollListener**: Called when the calendar scrolls to a new year. Mostly beneficial if `scrollPaged` is `true`.
 
@@ -457,7 +457,7 @@ All the respective XML attributes listed above are also available as properties 
 
 ### Methods
 
-**`CalendarView` methods:**
+**`CalendarView`**
 
 - **scrollToDate(date: LocalDate)**: Scroll to a specific date on the calendar. Use `smoothScrollToDate()` to get a smooth scrolling animation. 
 
@@ -475,7 +475,7 @@ All the respective XML attributes listed above are also available as properties 
 
 - **updateMonthData()**: Update the calendar's start month or end month or the first day of week after the initial setup. The currently visible month is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
 
-**`WeekCalendarView` methods:**
+**`WeekCalendarView`**
 
 - **scrollToDate(date: LocalDate)**: Scroll to a specific date on the calendar. Use `smoothScrollToDate()` to get a smooth scrolling animation. 
 
@@ -493,7 +493,7 @@ All the respective XML attributes listed above are also available as properties 
 
 - **updateWeekData()**: Update the calendar's start date or end date or the first day of week after the initial setup. The currently visible week is preserved. The calendar can handle really large date ranges so you may want to setup the calendar with a large date range instead of updating the range frequently.
 
-**`YearCalendarView` methods:**
+**`YearCalendarView`**
 
 - **scrollToDate(date: LocalDate)**: Scroll to a specific date on the calendar. Use `smoothScrollToDate()` to get a smooth scrolling animation. 
 

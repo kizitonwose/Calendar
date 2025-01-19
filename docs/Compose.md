@@ -422,19 +422,52 @@ fun Day(day: CalendarDay) {
 
 - **isScrollInProgress**: Whether this calendar is currently scrolling by gesture, fling, or programmatically.
 
+**`YearCalendarState` properties for `HorizontalYearCalendar` and `VerticalYearCalendar`:**
+
+- **firstVisibleYear**: The first year that is visible on the calendar.
+
+- **lastVisibleYear**: The last year that is visible on the calendar.
+
+- **layoutInfo**: A subclass of `LazyListLayoutInfo` calculated during the last layout pass. For example, you can use it to calculate what items are currently visible.
+
+- **isScrollInProgress**: Whether this calendar is currently scrolling by gesture, fling, or programmatically.
+
+
 ### State methods
 
-**`CalendarState` methods:**
+**`CalendarState`**
 
-- **scrollToMonth(month: YearMonth)**: Instantly scroll to a specific month on the calendar without an animation.
+- **scrollToDate(date: LocalDate)**: Instantly scroll to a date on the calendar without an animation.
+
+- **animateScrollToDate(date: LocalDate)**: Scroll to a date on the calendar with smooth scrolling animation.
+
+- **scrollToMonth(month: YearMonth)**: Instantly scroll to a month on the calendar without an animation.
 
 - **animateScrollToMonth(month: YearMonth)**: Scroll to a month on the calendar with smooth scrolling animation.
 
-**`WeekCalendarState` methods:**
+**`WeekCalendarState`**
+
+- **scrollToDate(date: LocalDate)**: Instantly scroll to a date on the calendar without an animation.
+
+- **animateScrollToDate(date: LocalDate)**: Scroll to a date on the calendar with smooth scrolling animation.
 
 - **scrollToWeek(date: LocalDate)**: Instantly scroll to the week containing the given date on the calendar without an animation.
 
 - **animateScrollToWeek(date: LocalDate)**: Scroll to the week containing the given date on the calendar with smooth scrolling animation.
+
+**`YearCalendarState`**
+
+- **scrollToDate(date: LocalDate)**: Instantly scroll to a date on the calendar without an animation.
+
+- **animateScrollToDate(date: LocalDate)**: Scroll to a date on the calendar with smooth scrolling animation.
+
+- **scrollToMonth(month: YearMonth)**: Instantly scroll to a month on the calendar without an animation.
+
+- **animateScrollToMonth(month: YearMonth)**: Scroll to a month on the calendar with smooth scrolling animation.
+
+- **scrollToYear(year: Year)**: Instantly scroll to a year on the calendar without an animation.
+
+- **animateScrollToYear(year: Year)**: Scroll to a year on the calendar with smooth scrolling animation.
 
 There's no need to repeat the documentation here. Please see the relevant class for all properties and methods available with proper documentation.
 
