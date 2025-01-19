@@ -11,8 +11,8 @@ object Config {
 }
 
 object Version {
-    val android = "2.6.2-SNAPSHOT"
-    val multiplatfrom = "2.6.2-SNAPSHOT"
+    val android = "2.6.3-SNAPSHOT"
+    val multiplatfrom = "2.6.3-SNAPSHOT"
 
     fun String.isNoPublish() = this == VERSION_NO_PUBLISH
 }
