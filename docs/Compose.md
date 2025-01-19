@@ -432,7 +432,6 @@ fun Day(day: CalendarDay) {
 
 - **isScrollInProgress**: Whether this calendar is currently scrolling by gesture, fling, or programmatically.
 
-
 ### State methods
 
 **`CalendarState`**
