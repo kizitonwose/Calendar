@@ -10,7 +10,9 @@ A highly customizable calendar library for Android and Compose Multiplatform, ba
 
 **With this library, your calendar will look however you want it to.**
 
-![Preview](https://user-images.githubusercontent.com/15170090/197389318-b3925b65-aed9-4e1f-a778-ba73007cbdf7.png)
+![Preview Phone](https://user-images.githubusercontent.com/15170090/197389318-b3925b65-aed9-4e1f-a778-ba73007cbdf7.png)
+
+![Preview Web Tablet](https://github.com/user-attachments/assets/ad09c144-bc26-4a9b-aca5-2babd3a953ba)
 
 ## Features
 
