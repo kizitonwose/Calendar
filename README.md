@@ -12,7 +12,7 @@ A highly customizable calendar library for Android and Compose Multiplatform, ba
 
 ![Preview Phone](https://user-images.githubusercontent.com/15170090/197389318-b3925b65-aed9-4e1f-a778-ba73007cbdf7.png)
 
-![Preview Web Tablet](https://github.com/user-attachments/assets/289f093b-e7c7-47db-9715-34c09128a89a)
+![Preview Web Tablet](https://github.com/user-attachments/assets/912128d7-4e77-48dd-9ad1-8bf2b4aa67cd)
 
 ## Features
 
@@ -51,9 +51,13 @@ View the multiplatform sample project's source code [here](https://github.com/ki
 
 ## Setup
 
-The library provides two compose artifacts: `com.kizitonwose.calendar:compose` which uses the [java.time](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html) APIs for pure Android projects and `com.kizitonwose.calendar:compose-multiplatform` which uses the [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) library for Compose Multiplatform projects. The multiplatform library supports Android, iOS, WasmJs and Desktop platforms.
+The library provides the following artifacts: 
 
-The Android view library artifact `com.kizitonwose.calendar:view` also uses the `java.time` APIs and can exist alongside the Android compose artifact in an Android project if needed.
+`com.kizitonwose.calendar:compose`: The compose artifact for Android projects. This uses the [java.time](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html) APIs. 
+
+`com.kizitonwose.calendar:compose-multiplatform`: The compose artifact for Compose Multiplatform projects. This uses the [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) library and supports Android, iOS, WasmJs and Desktop platforms.
+
+`com.kizitonwose.calendar:view`: The view artifact for Android projects. This uses the [java.time](https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html) APIs and can exist alongside the Android compose artifact in an Android project if needed.
 
 #### Step 1
 
