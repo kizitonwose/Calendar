@@ -12,7 +12,7 @@ A highly customizable calendar library for Android and Compose Multiplatform, ba
 
 ![Preview Phone](https://user-images.githubusercontent.com/15170090/197389318-b3925b65-aed9-4e1f-a778-ba73007cbdf7.png)
 
-![Preview Web Tablet](https://github.com/user-attachments/assets/912128d7-4e77-48dd-9ad1-8bf2b4aa67cd)
+![Preview Web Tablet](https://github.com/user-attachments/assets/df7b11bb-23f8-423a-bbd4-9ade376a14be)
 
 ## Features
 
