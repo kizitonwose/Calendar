@@ -1,8 +1,8 @@
 [versions]
 agp = "8.8.0"
 kotlin = "2.1.0"
-composeAndroid = "1.7.6"
-composeMultiplatform = "1.7.1"
+composeAndroid = "1.8.1"
+composeMultiplatform = "1.8.0"
 espresso = "3.6.1"
 junit5 = "5.11.4"
 kotlinxSerialization = "1.8.0"
