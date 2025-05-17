@@ -30,8 +30,6 @@ public final class com/kizitonwose/calendar/data/ExtensionsKt {
 }
 
 public final class com/kizitonwose/calendar/data/MonthData {
-	public final fun copy (Ljava/time/YearMonth;II)Lcom/kizitonwose/calendar/data/MonthData;
-	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/data/MonthData;Ljava/time/YearMonth;IIILjava/lang/Object;)Lcom/kizitonwose/calendar/data/MonthData;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getCalendarMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public fun hashCode ()I
@@ -50,8 +48,6 @@ public final class com/kizitonwose/calendar/data/UtilsKt {
 }
 
 public final class com/kizitonwose/calendar/data/WeekData {
-	public final fun copy (Ljava/time/LocalDate;Ljava/time/LocalDate;Ljava/time/LocalDate;)Lcom/kizitonwose/calendar/data/WeekData;
-	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/data/WeekData;Ljava/time/LocalDate;Ljava/time/LocalDate;Ljava/time/LocalDate;ILjava/lang/Object;)Lcom/kizitonwose/calendar/data/WeekData;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getWeek ()Lcom/kizitonwose/calendar/core/Week;
 	public fun hashCode ()I
