@@ -35,6 +35,7 @@ public fun getWeekCalendarData(
     return WeekData(firstDayInWeek, desiredStartDate, desiredEndDate)
 }
 
+@ConsistentCopyVisibility
 public data class WeekData internal constructor(
     private val firstDayInWeek: LocalDate,
     private val desiredStartDate: LocalDate,

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Immutable
  * @param weekDays the weeks in this month.
  */
 @Immutable
+@ConsistentCopyVisibility
 public data class CalendarMonth internal constructor(
     val yearMonth: YearMonth,
     val weekDays: List<List<CalendarDay>>,

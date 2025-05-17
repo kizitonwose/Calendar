@@ -12,6 +12,7 @@ import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 
+@ConsistentCopyVisibility
 public data class MonthData internal constructor(
     private val month: YearMonth,
     private val inDays: Int,
