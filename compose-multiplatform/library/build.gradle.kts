@@ -17,7 +17,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "calendar"
+        outputModuleName = "calendar"
         browser {}
         binaries.library()
     }

@@ -44,7 +44,7 @@ public fun rememberHeatMapCalendarState(
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): HeatMapCalendarState {
     return rememberSaveable(
-        inputs = arrayOf(
+        inputs = arrayOf<Any>(
             startMonth,
             endMonth,
             firstVisibleMonth,

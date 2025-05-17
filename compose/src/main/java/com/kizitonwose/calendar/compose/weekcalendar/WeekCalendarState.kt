@@ -51,7 +51,7 @@ public fun rememberWeekCalendarState(
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): WeekCalendarState {
     return rememberSaveable(
-        inputs = arrayOf(
+        inputs = arrayOf<Any>(
             startDate,
             endDate,
             firstVisibleWeekDate,

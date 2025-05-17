@@ -1,9 +1,11 @@
+
 import com.kizitonwose.calendar.buildsrc.Version
 import com.kizitonwose.calendar.buildsrc.Version.isNoPublish
 import com.kizitonwose.calendar.buildsrc.androidProjects
 import com.kizitonwose.calendar.buildsrc.multiplatformProjects
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.androidApplication) apply false
@@ -23,6 +25,11 @@ plugins {
 allprojects {
     apply(plugin = rootProject.libs.plugins.kotlinter.get().pluginId)
 
+    tasks.withType<KotlinCompile> {
+        compilerOptions {
+            freeCompilerArgs.add("-Xsuppress-warning=NOTHING_TO_INLINE")
+        }
+    }
     plugins.withType<KotlinBasePlugin> {
         extensions.configure<KotlinProjectExtension> {
             if ("sample" !in project.name) {
