@@ -41,8 +41,10 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.compose.runtime)
 
+    testImplementation(platform(libs.test.junit5.bom))
     testImplementation(libs.test.junit5.api)
     testRuntimeOnly(libs.test.junit5.engine)
+    testRuntimeOnly(libs.test.junit.platform.launcher)
 }
 
 mavenPublishing {
