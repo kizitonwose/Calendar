@@ -72,8 +72,8 @@ public final class com/kizitonwose/calendar/compose/CalendarStateKt {
 public final class com/kizitonwose/calendar/compose/ComposableSingletons$CalendarMonthsKt {
 	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/ComposableSingletons$CalendarMonthsKt;
 	public fun <init> ()V
-	public final fun getLambda-1$compose_release ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-2$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-1282818314$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-2145794324$compose_release ()Lkotlin/jvm/functions/Function5;
 }
 
 public final class com/kizitonwose/calendar/compose/ContentHeightMode : java/lang/Enum {
@@ -194,10 +194,10 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 public final class com/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt {
 	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt;
 	public fun <init> ()V
-	public final fun getLambda-1$compose_release ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-2$compose_release ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-3$compose_release ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-4$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-1572176426$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-637039868$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$1563625812$compose_release ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$856265294$compose_release ()Lkotlin/jvm/functions/Function5;
 }
 
 public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarItemInfo : androidx/compose/foundation/lazy/LazyListItemInfo {

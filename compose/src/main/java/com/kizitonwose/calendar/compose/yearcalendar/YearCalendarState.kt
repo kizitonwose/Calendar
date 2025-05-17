@@ -59,7 +59,7 @@ public fun rememberYearCalendarState(
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
 ): YearCalendarState {
     return rememberSaveable(
-        inputs = arrayOf(
+        inputs = arrayOf<Any>(
             startYear,
             endYear,
             firstVisibleYear,

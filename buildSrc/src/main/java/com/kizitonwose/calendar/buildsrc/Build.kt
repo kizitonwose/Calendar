@@ -7,12 +7,12 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 object Config {
     val compatibleJavaVersion = JavaVersion.VERSION_17
-    val compatibleJavaLanguageVersion = JavaLanguageVersion.of(compatibleJavaVersion.majorVersion.toInt())
+    val compatibleJavaLanguageVersion = JavaLanguageVersion.of(compatibleJavaVersion.majorVersion)
 }
 
 object Version {
-    val android = "2.6.3-SNAPSHOT"
-    val multiplatfrom = "2.6.3-SNAPSHOT"
+    val android = "2.7.1-SNAPSHOT"
+    val multiplatfrom = "2.7.1-SNAPSHOT"
 
     fun String.isNoPublish() = this == VERSION_NO_PUBLISH
 }

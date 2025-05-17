@@ -131,12 +131,13 @@ For the compose calendar library, ensure that you are using the library version 
 
 | Compose UI | Android Calendar Library | Multiplatform Calendar Library |
 |:----------:|:------------------------:|:------------------------------:|
-|   1.2.x    |           2.0.x          |               -                |
-|   1.3.x    |       2.1.x - 2.2.x      |               -                |
-|   1.4.x    |           2.3.x          |               -                |
-|   1.5.x    |           2.4.x          |               -                |
-|   1.6.x    |           2.5.x          |             2.5.x              |
-|   1.7.x    |           2.6.x          |             2.6.x              |
+|   1.2.x    |          2.0.x           |               -                |
+|   1.3.x    |      2.1.x - 2.2.x       |               -                |
+|   1.4.x    |          2.3.x           |               -                |
+|   1.5.x    |          2.4.x           |               -                |
+|   1.6.x    |          2.5.x           |             2.5.x              |
+|   1.7.x    |          2.6.x           |             2.6.x              |
+|   1.8.x    |          2.7.x           |             2.7.x              |
 
 ## Usage
 

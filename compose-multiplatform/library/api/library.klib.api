@@ -390,7 +390,6 @@ final class com.kizitonwose.calendar.core/CalendarMonth { // com.kizitonwose.cal
 
     final fun component1(): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/CalendarMonth.component1|component1(){}[0]
     final fun component2(): kotlin.collections/List<kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay>> // com.kizitonwose.calendar.core/CalendarMonth.component2|component2(){}[0]
-    final fun copy(com.kizitonwose.calendar.core/YearMonth = ..., kotlin.collections/List<kotlin.collections/List<com.kizitonwose.calendar.core/CalendarDay>> = ...): com.kizitonwose.calendar.core/CalendarMonth // com.kizitonwose.calendar.core/CalendarMonth.copy|copy(com.kizitonwose.calendar.core.YearMonth;kotlin.collections.List<kotlin.collections.List<com.kizitonwose.calendar.core.CalendarDay>>){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/CalendarMonth.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/CalendarMonth.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // com.kizitonwose.calendar.core/CalendarMonth.toString|toString(){}[0]
@@ -417,7 +416,6 @@ final class com.kizitonwose.calendar.core/Week { // com.kizitonwose.calendar.cor
         final fun <get-days>(): kotlin.collections/List<com.kizitonwose.calendar.core/WeekDay> // com.kizitonwose.calendar.core/Week.days.<get-days>|<get-days>(){}[0]
 
     final fun component1(): kotlin.collections/List<com.kizitonwose.calendar.core/WeekDay> // com.kizitonwose.calendar.core/Week.component1|component1(){}[0]
-    final fun copy(kotlin.collections/List<com.kizitonwose.calendar.core/WeekDay> = ...): com.kizitonwose.calendar.core/Week // com.kizitonwose.calendar.core/Week.copy|copy(kotlin.collections.List<com.kizitonwose.calendar.core.WeekDay>){}[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // com.kizitonwose.calendar.core/Week.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // com.kizitonwose.calendar.core/Week.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // com.kizitonwose.calendar.core/Week.toString|toString(){}[0]

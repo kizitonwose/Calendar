@@ -52,7 +52,7 @@ public fun rememberCalendarState(
     outDateStyle: OutDateStyle = OutDateStyle.EndOfRow,
 ): CalendarState {
     return rememberSaveable(
-        inputs = arrayOf(
+        inputs = arrayOf<Any>(
             startMonth,
             endMonth,
             firstVisibleMonth,

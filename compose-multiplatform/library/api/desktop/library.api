@@ -72,8 +72,8 @@ public final class com/kizitonwose/calendar/compose/CalendarStateKt {
 public final class com/kizitonwose/calendar/compose/ComposableSingletons$CalendarMonthsKt {
 	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/ComposableSingletons$CalendarMonthsKt;
 	public fun <init> ()V
-	public final fun getLambda-1$library ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-2$library ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-1282818314$library ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-2145794324$library ()Lkotlin/jvm/functions/Function5;
 }
 
 public final class com/kizitonwose/calendar/compose/ContentHeightMode : java/lang/Enum {
@@ -194,10 +194,10 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 public final class com/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt {
 	public static final field INSTANCE Lcom/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt;
 	public fun <init> ()V
-	public final fun getLambda-1$library ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-2$library ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-3$library ()Lkotlin/jvm/functions/Function5;
-	public final fun getLambda-4$library ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-1572176426$library ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$-637039868$library ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$1563625812$library ()Lkotlin/jvm/functions/Function5;
+	public final fun getLambda$856265294$library ()Lkotlin/jvm/functions/Function5;
 }
 
 public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarItemInfo : androidx/compose/foundation/lazy/LazyListItemInfo {
@@ -291,8 +291,6 @@ public final class com/kizitonwose/calendar/core/CalendarMonth {
 	public static final field $stable I
 	public final fun component1 ()Lcom/kizitonwose/calendar/core/YearMonth;
 	public final fun component2 ()Ljava/util/List;
-	public final fun copy (Lcom/kizitonwose/calendar/core/YearMonth;Ljava/util/List;)Lcom/kizitonwose/calendar/core/CalendarMonth;
-	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/core/CalendarMonth;Lcom/kizitonwose/calendar/core/YearMonth;Ljava/util/List;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getWeekDays ()Ljava/util/List;
 	public final fun getYearMonth ()Lcom/kizitonwose/calendar/core/YearMonth;
@@ -363,8 +361,6 @@ public final class com/kizitonwose/calendar/core/OutDateStyle : java/lang/Enum {
 public final class com/kizitonwose/calendar/core/Week {
 	public static final field $stable I
 	public final fun component1 ()Ljava/util/List;
-	public final fun copy (Ljava/util/List;)Lcom/kizitonwose/calendar/core/Week;
-	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/core/Week;Ljava/util/List;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/Week;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDays ()Ljava/util/List;
 	public fun hashCode ()I

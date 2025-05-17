@@ -23,8 +23,10 @@ dependencies {
     implementation(project(":core"))
     implementation(libs.kotlin.stdlib)
 
+    testImplementation(platform(libs.test.junit5.bom))
     testImplementation(libs.test.junit5.api)
     testRuntimeOnly(libs.test.junit5.engine)
+    testRuntimeOnly(libs.test.junit.platform.launcher)
 }
 
 mavenPublishing {
