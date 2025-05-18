@@ -3,6 +3,9 @@ package com.kizitonwose.calendar.sample.view
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +30,7 @@ class CalendarViewActivity : AppCompatActivity() {
         binding = CalendarViewActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.activityToolbar)
+        applyInsets(binding)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.examplesRecyclerview.apply {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -39,6 +43,21 @@ class CalendarViewActivity : AppCompatActivity() {
         return when (item.itemId) {
             android.R.id.home -> onBackPressedDispatcher.onBackPressed().let { true }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun applyInsets(binding: CalendarViewActivityBinding) {
+        ViewCompat.setOnApplyWindowInsetsListener(
+            binding.root,
+        ) { _, windowInsets ->
+            val insets = windowInsets.getInsets(systemBars())
+            binding.activityAppBar.updatePadding(top = insets.top)
+            binding.examplesRecyclerview.updatePadding(
+                left = insets.left,
+                right = insets.right,
+                bottom = insets.bottom,
+            )
+            windowInsets
         }
     }
 }

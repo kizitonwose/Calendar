@@ -68,7 +68,9 @@ fun Example8Page(horizontal: Boolean? = null) {
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.example_1_bg_light))
-            .padding(top = 20.dp),
+            .padding(top = 20.dp)
+            .applyScaffoldHorizontalPaddings()
+            .applyScaffoldTopPadding(),
     ) {
         var selectedIndex by remember { mutableIntStateOf(0) }
         PageOptions(selectedIndex) { selectedIndex = it }
@@ -134,7 +136,10 @@ fun Example8Page(horizontal: Boolean? = null) {
                 monthFooter = { month ->
                     val count = month.weekDays.flatten()
                         .count { selections.contains(it) }
-                    MonthFooter(selectionCount = count)
+                    MonthFooter(
+                        modifier = Modifier.applyScaffoldBottomPadding(),
+                        selectionCount = count,
+                    )
                 },
             )
         }
@@ -223,13 +228,14 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 }
 
 @Composable
-private fun MonthFooter(selectionCount: Int) {
+private fun MonthFooter(selectionCount: Int, modifier: Modifier = Modifier) {
     Box(
         Modifier
             .fillMaxWidth()
             .testTag("MonthFooter")
             .background(colorResource(id = R.color.example_1_bg_secondary))
-            .padding(vertical = 10.dp),
+            .padding(vertical = 10.dp)
+            .then(modifier),
         contentAlignment = Alignment.Center,
     ) {
         val text = if (selectionCount == 0) {

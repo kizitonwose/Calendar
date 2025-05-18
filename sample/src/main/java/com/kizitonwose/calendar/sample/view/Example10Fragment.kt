@@ -8,7 +8,10 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
+import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -39,6 +42,7 @@ class Example10Fragment : BaseFragment(R.layout.example_10_fragment), HasToolbar
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example10FragmentBinding.bind(view)
+        applyInsets(binding)
         val config = requireContext().resources.configuration
         val isTablet = config.smallestScreenWidthDp >= 600
 
@@ -176,5 +180,21 @@ class Example10Fragment : BaseFragment(R.layout.example_10_fragment), HasToolbar
 
             else -> false
         }
+    }
+}
+
+private fun applyInsets(binding: Example10FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exTenAppBarLayout.updatePadding(top = insets.top)
+        binding.exTenCalendar.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        binding.exTenCalendar.clipToPadding = false
+        windowInsets
     }
 }

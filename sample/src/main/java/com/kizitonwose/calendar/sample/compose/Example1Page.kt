@@ -48,7 +48,8 @@ fun Example1Page(adjacentMonths: Long = 500) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(LocalScaffoldPaddingValues.current),
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,

@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +55,10 @@ fun Example5Page(close: () -> Unit = {}) {
         )
         val visibleWeek = rememberFirstVisibleWeekAfterScroll(state)
         TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = Color.White,
+            ),
             title = { Text(text = getWeekPageTitle(visibleWeek)) },
             navigationIcon = { NavigationIcon(onBackClick = close) },
         )

@@ -3,7 +3,10 @@ package com.kizitonwose.calendar.sample.view
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
@@ -33,6 +36,7 @@ class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example7FragmentBinding.bind(view)
+        applyInsets(binding)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = Example7CalendarDayBinding.bind(view)
@@ -80,5 +84,15 @@ class Example7Fragment : BaseFragment(R.layout.example_7_fragment), HasToolbar, 
             firstDayOfWeekFromLocale(),
         )
         binding.exSevenCalendar.scrollToDate(LocalDate.now())
+    }
+}
+
+private fun applyInsets(binding: Example7FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exSevenAppBarLayout.updatePadding(top = insets.top)
+        windowInsets
     }
 }

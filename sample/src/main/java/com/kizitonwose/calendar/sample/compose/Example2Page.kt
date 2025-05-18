@@ -73,7 +73,8 @@ fun Example2Page(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(Color.White)
+                .padding(LocalScaffoldPaddingValues.current),
         ) {
             Column {
                 val state = rememberCalendarState(

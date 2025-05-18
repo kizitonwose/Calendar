@@ -78,7 +78,9 @@ fun Example3Page(close: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(pageBackgroundColor),
+            .background(pageBackgroundColor)
+            .applyScaffoldHorizontalPaddings()
+            .applyScaffoldBottomPadding(),
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -99,7 +101,8 @@ fun Example3Page(close: () -> Unit = {}) {
             SimpleCalendarTitle(
                 modifier = Modifier
                     .background(toolbarColor)
-                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                    .padding(horizontal = 8.dp, vertical = 12.dp)
+                    .applyScaffoldTopPadding(),
                 currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
                     coroutineScope.launch {

@@ -45,7 +45,8 @@ fun Example4Page() {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(LocalScaffoldPaddingValues.current),
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,

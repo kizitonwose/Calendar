@@ -5,7 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -26,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -41,6 +45,17 @@ import com.kizitonwose.calendar.sample.shared.StatusBarColorLifecycleObserver
 import com.kizitonwose.calendar.sample.shared.findActivity
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
+
+@Composable
+operator fun PaddingValues.plus(other: PaddingValues): PaddingValues {
+    val ld = LocalLayoutDirection.current
+    return PaddingValues(
+        start = calculateStartPadding(ld) + other.calculateStartPadding(ld),
+        top = calculateTopPadding() + other.calculateTopPadding(),
+        end = calculateEndPadding(ld) + other.calculateEndPadding(ld),
+        bottom = calculateBottomPadding() + other.calculateBottomPadding(),
+    )
+}
 
 fun Modifier.clickable(
     enabled: Boolean = true,

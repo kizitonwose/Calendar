@@ -17,7 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
-enum class Page(val title: String, val subtitle: String, val showToolBar: Boolean) {
+enum class Page(
+    val title: String,
+    val subtitle: String,
+    val showToolBar: Boolean,
+) {
     List(
         title = "Calendar Compose Sample",
         subtitle = "",
@@ -84,6 +88,7 @@ enum class Page(val title: String, val subtitle: String, val showToolBar: Boolea
 @Composable
 fun ListPage(click: (Page) -> Unit) {
     LazyColumn(
+        contentPadding = LocalScaffoldPaddingValues.current,
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White),

@@ -85,7 +85,8 @@ fun Example6Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(LocalScaffoldPaddingValues.current),
     ) {
         val state = rememberHeatMapCalendarState(
             startMonth = startDate.yearMonth,

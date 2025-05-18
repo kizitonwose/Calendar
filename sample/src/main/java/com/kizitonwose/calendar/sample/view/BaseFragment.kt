@@ -2,12 +2,15 @@ package com.kizitonwose.calendar.sample.view
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuProvider
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import com.google.android.material.appbar.AppBarLayout
 import com.kizitonwose.calendar.sample.R
 
 interface HasToolbar {
@@ -19,8 +22,14 @@ interface HasBackButton
 abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
     abstract val titleRes: Int?
 
+    val activity: CalendarViewActivity
+        get() = requireActivity() as CalendarViewActivity
+
     val activityToolbar: Toolbar
-        get() = (requireActivity() as CalendarViewActivity).binding.activityToolbar
+        get() = activity.binding.activityToolbar
+
+    val activityAppBar: AppBarLayout
+        get() = activity.binding.activityAppBar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,11 +41,14 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
     override fun onStart() {
         super.onStart()
         if (this is HasToolbar) {
-            activityToolbar.makeGone()
-            (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+            // activityAppBar.makeGone() // Leaves blank space for some reason
+            activityAppBar.updateLayoutParams<MarginLayoutParams> {
+                height = 0
+            }
+            activity.setSupportActionBar(toolbar)
         }
 
-        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        val actionBar = activity.supportActionBar
         if (this is HasBackButton) {
             actionBar?.title = if (titleRes != null) context?.getString(titleRes!!) else ""
             actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -48,11 +60,14 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
     override fun onStop() {
         super.onStop()
         if (this is HasToolbar) {
-            activityToolbar.makeVisible()
-            (requireActivity() as AppCompatActivity).setSupportActionBar(activityToolbar)
+            // activityAppBar.makeVisible()
+            activityAppBar.updateLayoutParams<MarginLayoutParams> {
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+            activity.setSupportActionBar(activityToolbar)
         }
 
-        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        val actionBar = activity.supportActionBar
         if (this is HasBackButton) {
             actionBar?.title = context?.getString(R.string.activity_title_view)
         }

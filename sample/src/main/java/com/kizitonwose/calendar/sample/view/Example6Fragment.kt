@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.Keep
 import androidx.cardview.widget.CardView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -65,6 +68,7 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example6FragmentBinding.bind(view)
+        applyInsets(binding)
         binding.exSixCalendar.apply {
             // Add margins around our card view.
             val horizontalMargin = dpToPx(8, requireContext())
@@ -138,5 +142,20 @@ class Example6Fragment : BaseFragment(R.layout.example_6_fragment), HasBackButto
                     }
                 }
             }
+    }
+}
+
+private fun applyInsets(binding: Example6FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exSixCalendar.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        binding.exSixCalendar.clipToPadding = false
+        windowInsets
     }
 }

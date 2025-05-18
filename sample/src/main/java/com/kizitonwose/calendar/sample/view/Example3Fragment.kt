@@ -12,8 +12,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -126,8 +129,9 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addStatusBarColorUpdate(R.color.example_3_statusbar_color)
+        addStatusBarColorUpdate(R.color.example_3_toolbar_color)
         binding = Example3FragmentBinding.bind(view)
+        applyInsets(binding)
         binding.exThreeRv.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = eventsAdapter
@@ -202,16 +206,16 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
 
     override fun onStart() {
         super.onStart()
-        activityToolbar.setBackgroundColor(
-            requireContext().getColorCompat(R.color.example_3_toolbar_color),
-        )
+        val color = requireContext().getColorCompat(R.color.example_3_toolbar_color)
+        activityToolbar.setBackgroundColor(color)
+        activityAppBar.setBackgroundColor(color)
     }
 
     override fun onStop() {
         super.onStop()
-        activityToolbar.setBackgroundColor(
-            requireContext().getColorCompat(R.color.colorPrimary),
-        )
+        val color = requireContext().getColorCompat(R.color.colorPrimary)
+        activityToolbar.setBackgroundColor(color)
+        activityAppBar.setBackgroundColor(color)
     }
 
     private fun configureBinders(daysOfWeek: List<DayOfWeek>) {
@@ -282,5 +286,19 @@ class Example3Fragment : BaseFragment(R.layout.example_3_fragment), HasBackButto
                     }
                 }
             }
+    }
+}
+
+private fun applyInsets(binding: Example3FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.root.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        windowInsets
     }
 }
