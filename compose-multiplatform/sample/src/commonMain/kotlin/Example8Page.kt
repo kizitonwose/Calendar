@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,7 +65,9 @@ fun Example8Page(close: () -> Unit = {}) {
         modifier = Modifier
             .fillMaxSize()
             .background(Colors.example1BgLight)
-            .padding(top = 20.dp),
+            .padding(top = 20.dp)
+            .applyScaffoldHorizontalPaddings()
+            .applyScaffoldTopPadding(),
     ) {
         // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides Color.White) {
@@ -132,7 +133,10 @@ fun Example8Page(close: () -> Unit = {}) {
                 monthFooter = { month ->
                     val count = month.weekDays.flatten()
                         .count { selections.contains(it) }
-                    MonthFooter(selectionCount = count)
+                    MonthFooter(
+                        modifier = Modifier.applyScaffoldBottomPadding(),
+                        selectionCount = count,
+                    )
                 },
             )
         }
@@ -231,13 +235,14 @@ private fun MonthHeader(daysOfWeek: List<DayOfWeek>) {
 }
 
 @Composable
-private fun MonthFooter(selectionCount: Int) {
+private fun MonthFooter(selectionCount: Int, modifier: Modifier = Modifier) {
     Box(
         Modifier
             .fillMaxWidth()
             .testTag("MonthFooter")
             .background(Colors.example1BgSecondary)
-            .padding(vertical = 10.dp),
+            .padding(vertical = 10.dp)
+            .then(modifier),
         contentAlignment = Alignment.Center,
     ) {
         val text = when (selectionCount) {

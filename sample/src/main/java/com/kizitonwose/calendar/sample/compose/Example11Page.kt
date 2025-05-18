@@ -69,6 +69,8 @@ fun Example11Page(adjacentYears: Long = 50) {
             modifier = Modifier
                 .fillMaxSize()
                 .testTag("Calendar"),
+            contentPadding = LocalScaffoldPaddingValues.current +
+                PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
             state = state,
             dayContent = { day ->
                 Day(
@@ -87,7 +89,6 @@ fun Example11Page(adjacentYears: Long = 50) {
             contentHeightMode = YearContentHeightMode.Wrap,
             monthVerticalSpacing = 20.dp,
             monthHorizontalSpacing = if (isTablet) 52.dp else 10.dp,
-            contentPadding = PaddingValues(horizontal = if (isTablet) 52.dp else 10.dp),
             isMonthVisible = {
                 it.yearMonth >= currentMonth
             },

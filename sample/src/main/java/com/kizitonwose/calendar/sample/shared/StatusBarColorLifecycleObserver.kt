@@ -17,7 +17,7 @@ class StatusBarColorLifecycleObserver(
     @ColorInt private val color: Int,
 ) : DefaultLifecycleObserver {
     private val isLightColor = ColorUtils.calculateLuminance(color) > 0.5
-    private val defaultStatusBarColor = activity.getColorCompat(R.color.colorPrimaryDark)
+    private val defaultStatusBarColor = activity.getColorCompat(R.color.colorPrimary)
     private val activity = WeakReference(activity)
 
     override fun onStart(owner: LifecycleOwner) {

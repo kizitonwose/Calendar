@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendar.core.CalendarDay
@@ -82,6 +85,7 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
         super.onViewCreated(view, savedInstanceState)
         addStatusBarColorUpdate(R.color.example_5_toolbar_color)
         binding = Example5FragmentBinding.bind(view)
+        applyInsets(binding)
 
         binding.exFiveRv.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -203,5 +207,20 @@ class Example5Fragment : BaseFragment(R.layout.example_5_fragment), HasToolbar {
                     }
                 }
             }
+    }
+}
+
+private fun applyInsets(binding: Example5FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exFiveAppBarLayout.updatePadding(top = insets.top)
+        binding.root.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        windowInsets
     }
 }

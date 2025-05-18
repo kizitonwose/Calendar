@@ -45,7 +45,8 @@ fun Example7Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(LocalScaffoldPaddingValues.current),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,

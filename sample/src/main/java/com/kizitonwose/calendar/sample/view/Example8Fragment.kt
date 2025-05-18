@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
+import androidx.core.view.updatePadding
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -35,6 +38,7 @@ class Example8Fragment : BaseFragment(R.layout.example_8_fragment), HasToolbar {
         super.onViewCreated(view, savedInstanceState)
         addStatusBarColorUpdate(R.color.example_1_bg_light)
         binding = Example8FragmentBinding.bind(view)
+        applyInsets(binding)
         val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
@@ -142,5 +146,20 @@ class Example8Fragment : BaseFragment(R.layout.example_8_fragment), HasToolbar {
         val month = binding.exEightCalendar.findFirstVisibleMonth()?.yearMonth ?: return
         binding.exEightYearText.text = month.year.toString()
         binding.exEightMonthText.text = month.month.displayText(short = false)
+    }
+}
+
+private fun applyInsets(binding: Example8FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exEightAppBarLayout.updatePadding(top = insets.top)
+        binding.root.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        windowInsets
     }
 }

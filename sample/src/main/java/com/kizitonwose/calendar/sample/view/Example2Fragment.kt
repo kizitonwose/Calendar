@@ -8,7 +8,10 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
+import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -40,6 +43,7 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example2FragmentBinding.bind(view)
+        applyInsets(binding)
         val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children.forEachIndexed { index, child ->
             (child as TextView).apply {
@@ -138,5 +142,21 @@ class Example2Fragment : BaseFragment(R.layout.example_2_fragment), HasToolbar, 
                     container.textView.text = data.yearMonth.displayText()
                 }
             }
+    }
+}
+
+private fun applyInsets(binding: Example2FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exTwoAppBarLayout.updatePadding(top = insets.top)
+        binding.exTwoCalendar.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        binding.exTwoCalendar.clipToPadding = false
+        windowInsets
     }
 }

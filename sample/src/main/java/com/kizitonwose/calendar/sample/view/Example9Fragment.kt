@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
 import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
@@ -40,6 +42,7 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = Example9FragmentBinding.bind(view)
+        applyInsets(binding)
         val config = requireContext().resources.configuration
         val isTablet = config.smallestScreenWidthDp >= 600
 
@@ -163,5 +166,21 @@ class Example9Fragment : BaseFragment(R.layout.example_9_fragment), HasToolbar, 
                     container.textView.text = data.year.value.toString()
                 }
             }
+    }
+}
+
+private fun applyInsets(binding: Example9FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exNineAppBarLayout.updatePadding(top = insets.top)
+        binding.exNineCalendar.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        binding.exNineCalendar.clipToPadding = false
+        windowInsets
     }
 }

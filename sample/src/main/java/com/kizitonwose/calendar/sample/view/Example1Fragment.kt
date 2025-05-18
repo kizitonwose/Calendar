@@ -10,10 +10,13 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.WeekDay
@@ -51,6 +54,7 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
         super.onViewCreated(view, savedInstanceState)
         addStatusBarColorUpdate(R.color.example_1_bg_light)
         binding = Example1FragmentBinding.bind(view)
+        applyInsets(binding)
         val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children
             .map { it as TextView }
@@ -256,5 +260,20 @@ class Example1Fragment : BaseFragment(R.layout.example_1_fragment), HasToolbar {
             animator.duration = 250
             animator.start()
         }
+    }
+}
+
+private fun applyInsets(binding: Example1FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exOneAppBarLayout.updatePadding(top = insets.top)
+        binding.root.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        windowInsets
     }
 }

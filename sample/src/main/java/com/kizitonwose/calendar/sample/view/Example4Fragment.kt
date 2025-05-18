@@ -14,7 +14,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.core.view.children
+import androidx.core.view.updatePadding
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -55,6 +58,7 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
         super.onViewCreated(view, savedInstanceState)
         addStatusBarColorUpdate(R.color.white)
         binding = Example4FragmentBinding.bind(view)
+        applyInsets(binding)
         // Set the First day of week depending on Locale
         val daysOfWeek = daysOfWeek()
         binding.legendLayout.root.children.forEachIndexed { index, child ->
@@ -261,5 +265,20 @@ class Example4Fragment : BaseFragment(R.layout.example_4_fragment), HasToolbar, 
                     container.textView.text = data.yearMonth.displayText()
                 }
             }
+    }
+}
+
+private fun applyInsets(binding: Example4FragmentBinding) {
+    ViewCompat.setOnApplyWindowInsetsListener(
+        binding.root,
+    ) { _, windowInsets ->
+        val insets = windowInsets.getInsets(systemBars())
+        binding.exFourAppBarLayout.updatePadding(top = insets.top)
+        binding.root.updatePadding(
+            left = insets.left,
+            right = insets.right,
+            bottom = insets.bottom,
+        )
+        windowInsets
     }
 }

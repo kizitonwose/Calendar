@@ -44,7 +44,8 @@ fun Example7Page() {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(LocalScaffoldPaddingValues.current),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,

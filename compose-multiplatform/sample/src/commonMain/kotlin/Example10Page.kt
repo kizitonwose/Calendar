@@ -68,7 +68,8 @@ fun Example10Page(adjacentYears: Int = 50) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(Color.White)
+                .padding(LocalScaffoldPaddingValues.current),
         ) {
             val scope = rememberCoroutineScope()
             val state = rememberYearCalendarState(

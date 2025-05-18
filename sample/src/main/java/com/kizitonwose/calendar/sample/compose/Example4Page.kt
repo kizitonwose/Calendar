@@ -48,7 +48,8 @@ fun Example4Page() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .padding(LocalScaffoldPaddingValues.current),
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
