@@ -97,7 +97,7 @@ class CalendarComposeTest {
     }
 
     @Test
-    fun squareCalenderDaysWorkAsExpected() {
+    fun squareCalendarDaysWorkAsExpected() {
         composeTestRule.setContent {
             Example1Page()
         }
@@ -115,7 +115,7 @@ class CalendarComposeTest {
     }
 
     @Test
-    fun wrappedCalenderWorkAsExpected() {
+    fun wrappedCalendarWorkAsExpected() {
         val currentMonth = YearMonth.now()
         val weekOfMonthField = WeekFields.of(firstDayOfWeekFromLocale(), 1).weekOfMonth()
         val weeksInMonth = currentMonth.atEndOfMonth().get(weekOfMonthField)
@@ -143,16 +143,16 @@ class CalendarComposeTest {
     }
 
     @Test
-    fun filledHorizontalCalenderWithFooterWorksAsExpected() {
-        filledCalenderWithFooterWorksAsExpected(horizontal = true)
+    fun filledHorizontalCalendarWithFooterWorksAsExpected() {
+        filledCalendarWithFooterWorksAsExpected(horizontal = true)
     }
 
     @Test
-    fun filledVerticalCalenderWithFooterWorksAsExpected() {
-        filledCalenderWithFooterWorksAsExpected(horizontal = false)
+    fun filledVerticalCalendarWithFooterWorksAsExpected() {
+        filledCalendarWithFooterWorksAsExpected(horizontal = false)
     }
 
-    private fun filledCalenderWithFooterWorksAsExpected(horizontal: Boolean) {
+    private fun filledCalendarWithFooterWorksAsExpected(horizontal: Boolean) {
         composeTestRule.setContent {
             Example8Page(horizontal)
         }

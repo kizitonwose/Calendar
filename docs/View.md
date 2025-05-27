@@ -403,7 +403,7 @@ calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
     1. **followDaySize**: Each month row height is determined by the `daySize` value set on the calendar. Effectively, this is `wrap-content` if the value is `Square`,
     `SeventhWidth`, or `FreeForm`, and will be equal to the calendar height divided by the number of rows if the value is `Rectangle`. When used together with `Rectangle`, 
     the calendar months and days will uniformly stretch to fill the parent's height.
-    2. **fill**: Each month row height will be the calender height divided by the number of rows on the calendar. This means that the calendar months will be distributed
+    2. **fill**: Each month row height will be the calendar height divided by the number of rows on the calendar. This means that the calendar months will be distributed
     uniformly to fill the parent's height. However, the day content height will independently determine its height. This allows you to spread the calendar months evenly across the screen while
     a `daySize` value of `Square` if you want square day content or `SeventhWidth` if you want to set a specific height value for the day content.
 

@@ -19,7 +19,7 @@ public enum class MonthHeight {
     FollowDaySize,
 
     /**
-     * Each month row height will be the calender height divided by the number
+     * Each month row height will be the calendar height divided by the number
      * of rows on the calendar. This means that the calendar months will be distributed
      * uniformly to fill the parent's height. However, the day content height will
      * independently determine its height.
