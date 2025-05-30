@@ -123,7 +123,7 @@ commonMain.dependencies {
 
 You can find the latest version of the library on the maven central badge above.
 
-Snapshots of the development version are available in [Sonatype’s snapshots repository](https://s01.oss.sonatype.org/content/repositories/snapshots/com/kizitonwose/calendar/).
+Snapshots of the development version are available in [Central Portal Snapshots repository](https://central.sonatype.com/service/rest/repository/browse/maven-snapshots/com/kizitonwose/calendar/).
 
 #### Compose UI version compatibility
 
