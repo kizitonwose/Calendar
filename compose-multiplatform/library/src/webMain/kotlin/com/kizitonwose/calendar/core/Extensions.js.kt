@@ -15,6 +15,3 @@ public actual fun firstDayOfWeekFromLocale(locale: Locale): DayOfWeek {
         firstDayFromMap(locale)
     }
 }
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getWeekInfo#firstday
-private fun jsFirstDayFromTag(languageTag: String): Int = js("new Intl.Locale(languageTag).weekInfo?.firstDay")

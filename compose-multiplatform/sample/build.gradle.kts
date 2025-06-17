@@ -3,6 +3,7 @@ import com.kizitonwose.calendar.buildsrc.Config
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
@@ -30,6 +31,23 @@ kotlin {
         binaries.executable()
     }
 
+    js(IR) {
+        outputModuleName = "composeJsApp"
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeJsApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(project.projectDir.path)
+                    }
+                }
+            }
+            useCommonJs()
+        }
+        binaries.executable()
+    }
+
     androidTarget {}
 
     jvm("desktop")
@@ -49,6 +67,7 @@ kotlin {
 
     sourceSets {
         val commonMain by getting
+        val jsMain by getting
         val wasmJsMain by getting
         val nativeMain by getting
         val desktopMain by getting
@@ -70,11 +89,17 @@ kotlin {
 //            implementation("com.kizitonwose.calendar:compose-multiplatform:2.6.0-alpha02")
             implementation(project(":compose-multiplatform:library"))
             implementation(libs.jetbrains.compose.navigation)
+            implementation(libs.material.icons)
+        }
+        val webMain by creating {
+            dependsOn(commonMain)
+            jsMain.dependsOn(this)
+            wasmJsMain.dependsOn(this)
         }
         val nonJvmMain by creating {
             dependsOn(commonMain)
             nativeMain.dependsOn(this)
-            wasmJsMain.dependsOn(this)
+            webMain.dependsOn(this)
             dependencies {}
         }
         desktopMain.dependsOn(jvmMain)
