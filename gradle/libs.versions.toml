@@ -6,6 +6,7 @@ composeMultiplatform = "1.8.0"
 espresso = "3.6.1"
 junit5 = "5.12.2"
 kotlinxSerialization = "1.8.1"
+materialIconsVersion = "1.7.3"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -22,6 +23,7 @@ androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayo
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.4.0" }
 androidx-cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }
 material-view = { module = "com.google.android.material:material", version = "1.12.0" }
+material-icons = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsVersion" }
 
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 androidx-test-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
