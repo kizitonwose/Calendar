@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.kizitonwose.calendar.core.format.fromIso8601YearMonth
 import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.core.serializers.YearMonthIso8601Serializer
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeArithmeticException
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
@@ -15,6 +14,7 @@ import kotlinx.datetime.monthsUntil
 import kotlinx.datetime.number
 import kotlinx.datetime.plus
 import kotlinx.serialization.Serializable
+import kotlin.time.Clock
 
 @Immutable
 @Serializable(with = YearMonthIso8601Serializer::class)

@@ -42,10 +42,14 @@ public final class com/kizitonwose/calendar/compose/CalendarState : androidx/com
 	public final fun animateScrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndMonth ()Lcom/kizitonwose/calendar/core/YearMonth;
-	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
+	public final fun getFirstDayOfWeek ()Lkotlinx/datetime/DayOfWeek;
 	public final fun getFirstVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/CalendarLayoutInfo;
 	public final fun getOutDateStyle ()Lcom/kizitonwose/calendar/core/OutDateStyle;
@@ -57,7 +61,7 @@ public final class com/kizitonwose/calendar/compose/CalendarState : androidx/com
 	public final fun scrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun setEndMonth (Lcom/kizitonwose/calendar/core/YearMonth;)V
-	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
+	public final fun setFirstDayOfWeek (Lkotlinx/datetime/DayOfWeek;)V
 	public final fun setOutDateStyle (Lcom/kizitonwose/calendar/core/OutDateStyle;)V
 	public final fun setStartMonth (Lcom/kizitonwose/calendar/core/YearMonth;)V
 }
@@ -66,7 +70,7 @@ public final class com/kizitonwose/calendar/compose/CalendarState$Companion {
 }
 
 public final class com/kizitonwose/calendar/compose/CalendarStateKt {
-	public static final fun rememberCalendarState (Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Ljava/time/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/CalendarState;
+	public static final fun rememberCalendarState (Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Lkotlinx/datetime/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/CalendarState;
 }
 
 public final class com/kizitonwose/calendar/compose/ComposableSingletons$CalendarMonthsKt {
@@ -89,10 +93,14 @@ public final class com/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalen
 	public static final field Companion Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalendarState$Companion;
 	public final fun animateScrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndMonth ()Lcom/kizitonwose/calendar/core/YearMonth;
-	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
+	public final fun getFirstDayOfWeek ()Lkotlinx/datetime/DayOfWeek;
 	public final fun getFirstVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/CalendarLayoutInfo;
 	public final fun getStartMonth ()Lcom/kizitonwose/calendar/core/YearMonth;
@@ -100,7 +108,7 @@ public final class com/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalen
 	public fun scroll (Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun setEndMonth (Lcom/kizitonwose/calendar/core/YearMonth;)V
-	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
+	public final fun setFirstDayOfWeek (Lkotlinx/datetime/DayOfWeek;)V
 	public final fun setStartMonth (Lcom/kizitonwose/calendar/core/YearMonth;)V
 }
 
@@ -108,7 +116,7 @@ public final class com/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalen
 }
 
 public final class com/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalendarStateKt {
-	public static final fun rememberHeatMapCalendarState (Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Ljava/time/DayOfWeek;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalendarState;
+	public static final fun rememberHeatMapCalendarState (Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Lcom/kizitonwose/calendar/core/YearMonth;Lkotlinx/datetime/DayOfWeek;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalendarState;
 }
 
 public final class com/kizitonwose/calendar/compose/heatmapcalendar/HeatMapWeek {
@@ -166,10 +174,14 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 	public final fun animateScrollToWeek (Lcom/kizitonwose/calendar/core/WeekDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToWeek (Lkotlinx/datetime/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndDate ()Lkotlinx/datetime/LocalDate;
-	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
+	public final fun getFirstDayOfWeek ()Lkotlinx/datetime/DayOfWeek;
 	public final fun getFirstVisibleWeek ()Lcom/kizitonwose/calendar/core/Week;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleWeek ()Lcom/kizitonwose/calendar/core/Week;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarLayoutInfo;
 	public final fun getStartDate ()Lkotlinx/datetime/LocalDate;
@@ -180,7 +192,7 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 	public final fun scrollToWeek (Lcom/kizitonwose/calendar/core/WeekDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToWeek (Lkotlinx/datetime/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun setEndDate (Lkotlinx/datetime/LocalDate;)V
-	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
+	public final fun setFirstDayOfWeek (Lkotlinx/datetime/DayOfWeek;)V
 	public final fun setStartDate (Lkotlinx/datetime/LocalDate;)V
 }
 
@@ -188,7 +200,7 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 }
 
 public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarStateKt {
-	public static final fun rememberWeekCalendarState (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Ljava/time/DayOfWeek;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState;
+	public static final fun rememberWeekCalendarState (Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/LocalDate;Lkotlinx/datetime/DayOfWeek;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarState;
 }
 
 public final class com/kizitonwose/calendar/compose/yearcalendar/ComposableSingletons$YearCalendarMonthsKt {
@@ -236,10 +248,14 @@ public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarSta
 	public final fun animateScrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToYear (Lcom/kizitonwose/calendar/core/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndYear ()Lcom/kizitonwose/calendar/core/Year;
-	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
+	public final fun getFirstDayOfWeek ()Lkotlinx/datetime/DayOfWeek;
 	public final fun getFirstVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarLayoutInfo;
 	public final fun getOutDateStyle ()Lcom/kizitonwose/calendar/core/OutDateStyle;
@@ -252,7 +268,7 @@ public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarSta
 	public final fun scrollToMonth (Lcom/kizitonwose/calendar/core/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun scrollToYear (Lcom/kizitonwose/calendar/core/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun setEndYear (Lcom/kizitonwose/calendar/core/Year;)V
-	public final fun setFirstDayOfWeek (Ljava/time/DayOfWeek;)V
+	public final fun setFirstDayOfWeek (Lkotlinx/datetime/DayOfWeek;)V
 	public final fun setOutDateStyle (Lcom/kizitonwose/calendar/core/OutDateStyle;)V
 	public final fun setStartYear (Lcom/kizitonwose/calendar/core/Year;)V
 }
@@ -261,7 +277,7 @@ public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarSta
 }
 
 public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarStateKt {
-	public static final fun rememberYearCalendarState (Lcom/kizitonwose/calendar/core/Year;Lcom/kizitonwose/calendar/core/Year;Lcom/kizitonwose/calendar/core/Year;Ljava/time/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;
+	public static final fun rememberYearCalendarState (Lcom/kizitonwose/calendar/core/Year;Lcom/kizitonwose/calendar/core/Year;Lcom/kizitonwose/calendar/core/Year;Lkotlinx/datetime/DayOfWeek;Lcom/kizitonwose/calendar/core/OutDateStyle;Landroidx/compose/runtime/Composer;II)Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarState;
 }
 
 public final class com/kizitonwose/calendar/compose/yearcalendar/YearContentHeightMode : java/lang/Enum {
@@ -332,22 +348,22 @@ public abstract interface annotation class com/kizitonwose/calendar/core/Experim
 }
 
 public final class com/kizitonwose/calendar/core/ExtensionsKt {
-	public static final fun daysOfWeek (Ljava/time/DayOfWeek;)Ljava/util/List;
-	public static synthetic fun daysOfWeek$default (Ljava/time/DayOfWeek;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun daysOfWeek (Lkotlinx/datetime/DayOfWeek;)Ljava/util/List;
+	public static synthetic fun daysOfWeek$default (Lkotlinx/datetime/DayOfWeek;ILjava/lang/Object;)Ljava/util/List;
 	public static final fun getYearMonth (Lkotlinx/datetime/LocalDate;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public static final fun minusDays (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
 	public static final fun minusMonths (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
 	public static final fun minusYears (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
-	public static final fun now (Lkotlinx/datetime/LocalDate$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;)Lkotlinx/datetime/LocalDate;
-	public static synthetic fun now$default (Lkotlinx/datetime/LocalDate$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lkotlinx/datetime/LocalDate;
+	public static final fun now (Lkotlinx/datetime/LocalDate$Companion;Lkotlin/time/Clock;Lkotlinx/datetime/TimeZone;)Lkotlinx/datetime/LocalDate;
+	public static synthetic fun now$default (Lkotlinx/datetime/LocalDate$Companion;Lkotlin/time/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lkotlinx/datetime/LocalDate;
 	public static final fun plusDays (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
 	public static final fun plusMonths (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
 	public static final fun plusYears (Lkotlinx/datetime/LocalDate;I)Lkotlinx/datetime/LocalDate;
 }
 
 public final class com/kizitonwose/calendar/core/Extensions_jvmKt {
-	public static final fun firstDayOfWeekFromLocale (Landroidx/compose/ui/text/intl/Locale;)Ljava/time/DayOfWeek;
-	public static synthetic fun firstDayOfWeekFromLocale$default (Landroidx/compose/ui/text/intl/Locale;ILjava/lang/Object;)Ljava/time/DayOfWeek;
+	public static final fun firstDayOfWeekFromLocale (Landroidx/compose/ui/text/intl/Locale;)Lkotlinx/datetime/DayOfWeek;
+	public static synthetic fun firstDayOfWeekFromLocale$default (Landroidx/compose/ui/text/intl/Locale;ILjava/lang/Object;)Lkotlinx/datetime/DayOfWeek;
 }
 
 public final class com/kizitonwose/calendar/core/OutDateStyle : java/lang/Enum {
@@ -407,8 +423,8 @@ public final class com/kizitonwose/calendar/core/Year : java/lang/Comparable {
 
 public final class com/kizitonwose/calendar/core/Year$Companion {
 	public final fun isLeap (I)Z
-	public final fun now (Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;)Lcom/kizitonwose/calendar/core/Year;
-	public static synthetic fun now$default (Lcom/kizitonwose/calendar/core/Year$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/Year;
+	public final fun now (Lkotlin/time/Clock;Lkotlinx/datetime/TimeZone;)Lcom/kizitonwose/calendar/core/Year;
+	public static synthetic fun now$default (Lcom/kizitonwose/calendar/core/Year$Companion;Lkotlin/time/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/Year;
 	public final fun parseIso8601 (Ljava/lang/String;)Lcom/kizitonwose/calendar/core/Year;
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
@@ -416,9 +432,9 @@ public final class com/kizitonwose/calendar/core/Year$Companion {
 public final class com/kizitonwose/calendar/core/YearKt {
 	public static final fun atDay (Lcom/kizitonwose/calendar/core/Year;I)Lkotlinx/datetime/LocalDate;
 	public static final fun atMonth (Lcom/kizitonwose/calendar/core/Year;I)Lcom/kizitonwose/calendar/core/YearMonth;
-	public static final fun atMonth (Lcom/kizitonwose/calendar/core/Year;Ljava/time/Month;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static final fun atMonth (Lcom/kizitonwose/calendar/core/Year;Lkotlinx/datetime/Month;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public static final fun atMonthDay (Lcom/kizitonwose/calendar/core/Year;II)Lkotlinx/datetime/LocalDate;
-	public static final fun atMonthDay (Lcom/kizitonwose/calendar/core/Year;Ljava/time/Month;I)Lkotlinx/datetime/LocalDate;
+	public static final fun atMonthDay (Lcom/kizitonwose/calendar/core/Year;Lkotlinx/datetime/Month;I)Lkotlinx/datetime/LocalDate;
 	public static final fun isLeap (Lcom/kizitonwose/calendar/core/Year;)Z
 	public static final fun length (Lcom/kizitonwose/calendar/core/Year;)I
 	public static final fun minusYears (Lcom/kizitonwose/calendar/core/Year;I)Lcom/kizitonwose/calendar/core/Year;
@@ -430,15 +446,15 @@ public final class com/kizitonwose/calendar/core/YearMonth : java/lang/Comparabl
 	public static final field $stable I
 	public static final field Companion Lcom/kizitonwose/calendar/core/YearMonth$Companion;
 	public fun <init> (II)V
-	public fun <init> (ILjava/time/Month;)V
+	public fun <init> (ILkotlinx/datetime/Month;)V
 	public fun compareTo (Lcom/kizitonwose/calendar/core/YearMonth;)I
 	public synthetic fun compareTo (Ljava/lang/Object;)I
 	public final fun component1 ()I
-	public final fun component2 ()Ljava/time/Month;
-	public final fun copy (ILjava/time/Month;)Lcom/kizitonwose/calendar/core/YearMonth;
-	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/core/YearMonth;ILjava/time/Month;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public final fun component2 ()Lkotlinx/datetime/Month;
+	public final fun copy (ILkotlinx/datetime/Month;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static synthetic fun copy$default (Lcom/kizitonwose/calendar/core/YearMonth;ILkotlinx/datetime/Month;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMonth ()Ljava/time/Month;
+	public final fun getMonth ()Lkotlinx/datetime/Month;
 	public final fun getMonthNumber ()I
 	public final fun getYear ()I
 	public fun hashCode ()I
@@ -446,8 +462,8 @@ public final class com/kizitonwose/calendar/core/YearMonth : java/lang/Comparabl
 }
 
 public final class com/kizitonwose/calendar/core/YearMonth$Companion {
-	public final fun now (Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;)Lcom/kizitonwose/calendar/core/YearMonth;
-	public static synthetic fun now$default (Lcom/kizitonwose/calendar/core/YearMonth$Companion;Lkotlinx/datetime/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public final fun now (Lkotlin/time/Clock;Lkotlinx/datetime/TimeZone;)Lcom/kizitonwose/calendar/core/YearMonth;
+	public static synthetic fun now$default (Lcom/kizitonwose/calendar/core/YearMonth$Companion;Lkotlin/time/Clock;Lkotlinx/datetime/TimeZone;ILjava/lang/Object;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public final fun parseIso8601 (Ljava/lang/String;)Lcom/kizitonwose/calendar/core/YearMonth;
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }

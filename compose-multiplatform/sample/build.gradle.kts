@@ -1,9 +1,9 @@
+
 import com.kizitonwose.calendar.buildsrc.Android
 import com.kizitonwose.calendar.buildsrc.Config
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
@@ -89,7 +89,7 @@ kotlin {
 //            implementation("com.kizitonwose.calendar:compose-multiplatform:2.6.0-alpha02")
             implementation(project(":compose-multiplatform:library"))
             implementation(libs.jetbrains.compose.navigation)
-            implementation(libs.material.icons)
+            implementation(libs.jetbrains.material.icons)
         }
         val webMain by creating {
             dependsOn(commonMain)
@@ -110,6 +110,7 @@ kotlin {
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
+        optIn.add("kotlin.time.ExperimentalTime")
     }
 }
 

@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.core
 
 import androidx.compose.ui.text.intl.Locale
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeArithmeticException
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
@@ -11,6 +10,7 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.until
+import kotlin.time.Clock
 
 /**
  * Returns the days of week values such that the desired
@@ -116,4 +116,4 @@ internal fun LocalDate.plusWeeks(value: Int): LocalDate = plus(value, DateTimeUn
 
 internal fun LocalDate.minusWeeks(value: Int): LocalDate = minus(value, DateTimeUnit.WEEK)
 
-internal fun LocalDate.weeksUntil(other: LocalDate): Int = until(other, DateTimeUnit.WEEK)
+internal fun LocalDate.weeksUntil(other: LocalDate): Int = until(other, DateTimeUnit.WEEK).toInt()

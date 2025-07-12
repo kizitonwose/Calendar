@@ -452,7 +452,7 @@ final class com.kizitonwose.calendar.core/Year : kotlin/Comparable<com.kizitonwo
 
     final object Companion { // com.kizitonwose.calendar.core/Year.Companion|null[0]
         final fun isLeap(kotlin/Int): kotlin/Boolean // com.kizitonwose.calendar.core/Year.Companion.isLeap|isLeap(kotlin.Int){}[0]
-        final fun now(kotlinx.datetime/Clock = ..., kotlinx.datetime/TimeZone = ...): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/Year.Companion.now|now(kotlinx.datetime.Clock;kotlinx.datetime.TimeZone){}[0]
+        final fun now(kotlin.time/Clock = ..., kotlinx.datetime/TimeZone = ...): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/Year.Companion.now|now(kotlin.time.Clock;kotlinx.datetime.TimeZone){}[0]
         final fun parseIso8601(kotlin/String): com.kizitonwose.calendar.core/Year // com.kizitonwose.calendar.core/Year.Companion.parseIso8601|parseIso8601(kotlin.String){}[0]
         final fun serializer(): kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/Year> // com.kizitonwose.calendar.core/Year.Companion.serializer|serializer(){}[0]
     }
@@ -478,7 +478,7 @@ final class com.kizitonwose.calendar.core/YearMonth : kotlin/Comparable<com.kizi
     final fun toString(): kotlin/String // com.kizitonwose.calendar.core/YearMonth.toString|toString(){}[0]
 
     final object Companion { // com.kizitonwose.calendar.core/YearMonth.Companion|null[0]
-        final fun now(kotlinx.datetime/Clock = ..., kotlinx.datetime/TimeZone = ...): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/YearMonth.Companion.now|now(kotlinx.datetime.Clock;kotlinx.datetime.TimeZone){}[0]
+        final fun now(kotlin.time/Clock = ..., kotlinx.datetime/TimeZone = ...): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/YearMonth.Companion.now|now(kotlin.time.Clock;kotlinx.datetime.TimeZone){}[0]
         final fun parseIso8601(kotlin/String): com.kizitonwose.calendar.core/YearMonth // com.kizitonwose.calendar.core/YearMonth.Companion.parseIso8601|parseIso8601(kotlin.String){}[0]
         final fun serializer(): kotlinx.serialization/KSerializer<com.kizitonwose.calendar.core/YearMonth> // com.kizitonwose.calendar.core/YearMonth.Companion.serializer|serializer(){}[0]
     }
@@ -589,7 +589,7 @@ final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/minusYears(
 final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/plusDays(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/plusDays|plusDays@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
 final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/plusMonths(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/plusMonths|plusMonths@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
 final fun (kotlinx.datetime/LocalDate).com.kizitonwose.calendar.core/plusYears(kotlin/Int): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/plusYears|plusYears@kotlinx.datetime.LocalDate(kotlin.Int){}[0]
-final fun (kotlinx.datetime/LocalDate.Companion).com.kizitonwose.calendar.core/now(kotlinx.datetime/Clock = ..., kotlinx.datetime/TimeZone = ...): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/now|now@kotlinx.datetime.LocalDate.Companion(kotlinx.datetime.Clock;kotlinx.datetime.TimeZone){}[0]
+final fun (kotlinx.datetime/LocalDate.Companion).com.kizitonwose.calendar.core/now(kotlin.time/Clock = ..., kotlinx.datetime/TimeZone = ...): kotlinx.datetime/LocalDate // com.kizitonwose.calendar.core/now|now@kotlinx.datetime.LocalDate.Companion(kotlin.time.Clock;kotlinx.datetime.TimeZone){}[0]
 final fun calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res$stableprop_getter(): kotlin/Int // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res$stableprop_getter|calendar_compose_multiplatform_library_generated_resources_Res$stableprop_getter(){}[0]
 final fun calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_array$stableprop_getter(): kotlin/Int // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_array$stableprop_getter|calendar_compose_multiplatform_library_generated_resources_Res_array$stableprop_getter(){}[0]
 final fun calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_drawable$stableprop_getter(): kotlin/Int // calendar.compose_multiplatform.library.generated.resources/calendar_compose_multiplatform_library_generated_resources_Res_drawable$stableprop_getter|calendar_compose_multiplatform_library_generated_resources_Res_drawable$stableprop_getter(){}[0]
