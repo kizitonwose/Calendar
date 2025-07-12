@@ -4,11 +4,11 @@ import androidx.compose.runtime.Immutable
 import com.kizitonwose.calendar.core.format.fromIso8601Year
 import com.kizitonwose.calendar.core.format.toIso8601String
 import com.kizitonwose.calendar.core.serializers.YearIso8601Serializer
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.Serializable
+import kotlin.time.Clock
 
 @Immutable
 @Serializable(with = YearIso8601Serializer::class)

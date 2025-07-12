@@ -42,10 +42,14 @@ public final class com/kizitonwose/calendar/compose/CalendarState : androidx/com
 	public final fun animateScrollToDay (Lcom/kizitonwose/calendar/core/CalendarDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToMonth (Ljava/time/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndMonth ()Ljava/time/YearMonth;
 	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
 	public final fun getFirstVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/CalendarLayoutInfo;
 	public final fun getOutDateStyle ()Lcom/kizitonwose/calendar/core/OutDateStyle;
@@ -89,10 +93,14 @@ public final class com/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalen
 	public static final field Companion Lcom/kizitonwose/calendar/compose/heatmapcalendar/HeatMapCalendarState$Companion;
 	public final fun animateScrollToMonth (Ljava/time/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndMonth ()Ljava/time/YearMonth;
 	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
 	public final fun getFirstVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleMonth ()Lcom/kizitonwose/calendar/core/CalendarMonth;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/CalendarLayoutInfo;
 	public final fun getStartMonth ()Ljava/time/YearMonth;
@@ -166,10 +174,14 @@ public final class com/kizitonwose/calendar/compose/weekcalendar/WeekCalendarSta
 	public final fun animateScrollToWeek (Lcom/kizitonwose/calendar/core/WeekDay;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToWeek (Ljava/time/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndDate ()Ljava/time/LocalDate;
 	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
 	public final fun getFirstVisibleWeek ()Lcom/kizitonwose/calendar/core/Week;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleWeek ()Lcom/kizitonwose/calendar/core/Week;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/weekcalendar/WeekCalendarLayoutInfo;
 	public final fun getStartDate ()Ljava/time/LocalDate;
@@ -236,10 +248,14 @@ public final class com/kizitonwose/calendar/compose/yearcalendar/YearCalendarSta
 	public final fun animateScrollToMonth (Ljava/time/YearMonth;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun animateScrollToYear (Ljava/time/Year;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun dispatchRawDelta (F)F
+	public fun getCanScrollBackward ()Z
+	public fun getCanScrollForward ()Z
 	public final fun getEndYear ()Ljava/time/Year;
 	public final fun getFirstDayOfWeek ()Ljava/time/DayOfWeek;
 	public final fun getFirstVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
 	public final fun getInteractionSource ()Landroidx/compose/foundation/interaction/InteractionSource;
+	public fun getLastScrolledBackward ()Z
+	public fun getLastScrolledForward ()Z
 	public final fun getLastVisibleYear ()Lcom/kizitonwose/calendar/core/CalendarYear;
 	public final fun getLayoutInfo ()Lcom/kizitonwose/calendar/compose/yearcalendar/YearCalendarLayoutInfo;
 	public final fun getOutDateStyle ()Lcom/kizitonwose/calendar/core/OutDateStyle;

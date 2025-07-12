@@ -1,12 +1,16 @@
+@file:Suppress("NewApi")
+
 package com.kizitonwose.calendar.core
 
-import java.time.Year as jtYear
-import java.time.YearMonth as jtYearMonth
+import kotlinx.datetime.toJavaMonth
+import kotlinx.datetime.toKotlinMonth
+import java.time.Year as JavaYear
+import java.time.YearMonth as JavaYearMonth
 
-public fun YearMonth.toJavaYearMonth(): jtYearMonth = jtYearMonth.of(year, month)
+public fun YearMonth.toJavaYearMonth(): JavaYearMonth = JavaYearMonth.of(year, month.toJavaMonth())
 
-public fun jtYearMonth.toKotlinYearMonth(): YearMonth = YearMonth(year, month)
+public fun JavaYearMonth.toKotlinYearMonth(): YearMonth = YearMonth(year, month.toKotlinMonth())
 
-public fun Year.toJavaYear(): jtYear = jtYear.of(value)
+public fun Year.toJavaYear(): JavaYear = JavaYear.of(value)
 
-public fun jtYear.toKotlinYear(): Year = Year(value)
+public fun JavaYear.toKotlinYear(): Year = Year(value)

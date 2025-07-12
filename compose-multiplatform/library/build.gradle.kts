@@ -124,6 +124,9 @@ android {
         jvmToolchain {
             languageVersion.set(Config.compatibleJavaLanguageVersion)
         }
+        compilerOptions {
+            optIn.add("kotlin.time.ExperimentalTime")
+        }
     }
     buildFeatures {
         compose = true
