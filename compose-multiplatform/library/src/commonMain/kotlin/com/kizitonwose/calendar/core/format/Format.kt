@@ -1,7 +1,7 @@
 package com.kizitonwose.calendar.core.format
 
 import com.kizitonwose.calendar.core.Year
-import com.kizitonwose.calendar.core.atMonth
+import com.kizitonwose.calendar.core.onMonth
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.YearMonth
 
@@ -21,7 +21,7 @@ internal fun LocalDate.toIso8601String() = ISO_LOCAL_DATE.format(this)
 
 internal fun YearMonth.toIso8601String() = ISO_YEAR_MONTH.format(this)
 
-internal fun Year.toIso8601String() = ISO_YEAR.format(atMonth(1).firstDay)
+internal fun Year.toIso8601String() = ISO_YEAR.format(onMonth(1).firstDay)
 
 internal fun String.fromIso8601LocalDate(): LocalDate =
     LocalDate.parse(this, ISO_LOCAL_DATE)

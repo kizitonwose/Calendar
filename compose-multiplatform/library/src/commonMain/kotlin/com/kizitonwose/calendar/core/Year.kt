@@ -19,7 +19,7 @@ public data class Year(val value: Int) : Comparable<Year> {
 
     init {
         try {
-            atMonth(Month.JANUARY)
+            onMonth(Month.JANUARY)
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Year value $value is out of range", e)
         }
@@ -116,7 +116,7 @@ public fun Year.length(): Int = if (isLeap()) 366 else 365
  *
  * @throws IllegalArgumentException if [dayOfYear] value is invalid in this year.
  */
-public fun Year.atDay(dayOfYear: Int): LocalDate {
+public fun Year.onDay(dayOfYear: Int): LocalDate {
     require(
         dayOfYear >= 1 &&
             (dayOfYear <= 365 || isLeap() && dayOfYear <= 366),
@@ -124,7 +124,7 @@ public fun Year.atDay(dayOfYear: Int): LocalDate {
         "Invalid dayOfYear value '$dayOfYear' for year '$year"
     }
     for (month in Month.entries) {
-        val yearMonth = atMonth(month)
+        val yearMonth = onMonth(month)
         if (yearMonth.lastDay.dayOfYear >= dayOfYear) {
             return yearMonth.onDay((dayOfYear - yearMonth.firstDay.dayOfYear) + 1)
         }
@@ -138,26 +138,26 @@ public fun Year.atDay(dayOfYear: Int): LocalDate {
  * @throws IllegalArgumentException if either [monthNumber] is invalid or the [day] value
  * is invalid in the resolved calendar [Month].
  */
-public fun Year.atMonthDay(monthNumber: Int, day: Int): LocalDate = LocalDate(year, monthNumber, day)
+public fun Year.onMonthDay(monthNumber: Int, day: Int): LocalDate = LocalDate(year, monthNumber, day)
 
 /**
  * Returns the [LocalDate] at the specified [month] and [day] in this year.
  *
  * @throws IllegalArgumentException if the [day] value is invalid in the resolved calendar [Month].
  */
-public fun Year.atMonthDay(month: Month, day: Int): LocalDate = LocalDate(year, month, day)
+public fun Year.onMonthDay(month: Month, day: Int): LocalDate = LocalDate(year, month, day)
 
 /**
  * Returns the [YearMonth] at the specified [month] in this year.
  */
-public fun Year.atMonth(month: Month): YearMonth = YearMonth(year, month)
+public fun Year.onMonth(month: Month): YearMonth = YearMonth(year, month)
 
 /**
  * Returns the [YearMonth] at the specified [monthNumber] in this year.
  *
  * @throws IllegalArgumentException if either [monthNumber] is invalid.
  */
-public fun Year.atMonth(monthNumber: Int): YearMonth = YearMonth(year, monthNumber)
+public fun Year.onMonth(monthNumber: Int): YearMonth = YearMonth(year, monthNumber)
 
 /**
  * Returns the number of whole years between two year values.

@@ -63,7 +63,7 @@ class YearTest {
     fun atMonth() {
         for (year in listOf(0, -400, 2024, 1, 1999)) {
             for (month in Month.entries) {
-                assertEquals(YearMonth(year, month), Year(year).atMonth(month))
+                assertEquals(YearMonth(year, month), Year(year).onMonth(month))
             }
         }
     }
@@ -72,7 +72,7 @@ class YearTest {
     fun atMonthNumber() {
         for (year in listOf(0, -400, 2024, 1, 1999)) {
             for (month in Month.entries) {
-                assertEquals(YearMonth(year, month.number), Year(year).atMonth(month))
+                assertEquals(YearMonth(year, month.number), Year(year).onMonth(month))
             }
         }
     }
@@ -93,12 +93,12 @@ class YearTest {
         )
 
         for ((year, month, day) in validDays) {
-            assertEquals(LocalDate(year, month, day), Year(year).atMonthDay(month, day))
+            assertEquals(LocalDate(year, month, day), Year(year).onMonthDay(month, day))
         }
 
         for ((year, month, day) in invalidDays) {
             assertFailsWith(IllegalArgumentException::class) {
-                Year(year).atMonthDay(month, day)
+                Year(year).onMonthDay(month, day)
             }
         }
     }
@@ -119,12 +119,12 @@ class YearTest {
         )
 
         for ((year, monthNumber, day) in validDays) {
-            assertEquals(LocalDate(year, monthNumber, day), Year(year).atMonthDay(monthNumber, day))
+            assertEquals(LocalDate(year, monthNumber, day), Year(year).onMonthDay(monthNumber, day))
         }
 
         for ((year, monthNumber, day) in invalidDays) {
             assertFailsWith(IllegalArgumentException::class) {
-                Year(year).atMonthDay(monthNumber, day)
+                Year(year).onMonthDay(monthNumber, day)
             }
         }
     }
@@ -145,12 +145,12 @@ class YearTest {
         )
 
         for ((year, dayOfYear, date) in validDays) {
-            assertEquals(date, Year(year).atDay(dayOfYear))
+            assertEquals(date, Year(year).onDay(dayOfYear))
         }
 
         for ((year, dayOfYear) in invalidDays) {
             assertFailsWith(IllegalArgumentException::class) {
-                Year(year).atDay(dayOfYear)
+                Year(year).onDay(dayOfYear)
             }
         }
     }
