@@ -3,6 +3,7 @@ package com.kizitonwose.calendar.core
 import com.kizitonwose.calendar.utils.toTriple
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.YearMonth
 import kotlinx.datetime.number
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -218,7 +219,7 @@ class YearTest {
 
         for (value in listOf("20", "-6")) {
             assertFailsWith(IllegalArgumentException::class) {
-                YearMonth.parseIso8601(value)
+                Year.parseIso8601(value)
             }
         }
     }

@@ -7,6 +7,8 @@ import com.kizitonwose.calendar.core.serializers.YearIso8601Serializer
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.onDay
 import kotlinx.serialization.Serializable
 import kotlin.time.Clock
 
@@ -17,7 +19,7 @@ public data class Year(val value: Int) : Comparable<Year> {
 
     init {
         try {
-            atMonth(Month.JANUARY).atStartOfMonth()
+            atMonth(Month.JANUARY)
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Year value $value is out of range", e)
         }
@@ -123,8 +125,8 @@ public fun Year.atDay(dayOfYear: Int): LocalDate {
     }
     for (month in Month.entries) {
         val yearMonth = atMonth(month)
-        if (yearMonth.atEndOfMonth().dayOfYear >= dayOfYear) {
-            return yearMonth.atDay((dayOfYear - yearMonth.atStartOfMonth().dayOfYear) + 1)
+        if (yearMonth.lastDay.dayOfYear >= dayOfYear) {
+            return yearMonth.onDay((dayOfYear - yearMonth.firstDay.dayOfYear) + 1)
         }
     }
     throw IllegalArgumentException("Invalid dayOfYear value '$dayOfYear' for year '$year")

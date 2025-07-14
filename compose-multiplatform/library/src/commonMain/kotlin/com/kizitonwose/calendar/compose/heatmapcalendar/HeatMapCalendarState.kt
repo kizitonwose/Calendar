@@ -17,10 +17,10 @@ import androidx.compose.runtime.setValue
 import com.kizitonwose.calendar.compose.CalendarInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.format.fromIso8601YearMonth
 import com.kizitonwose.calendar.core.format.toIso8601String
+import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.checkRange
@@ -29,6 +29,7 @@ import com.kizitonwose.calendar.data.getMonthIndex
 import com.kizitonwose.calendar.data.getMonthIndicesCount
 import com.kizitonwose.calendar.data.log
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.YearMonth
 
 /**
  * Creates a [HeatMapCalendarState] that is remembered across compositions.
@@ -46,7 +47,7 @@ public fun rememberHeatMapCalendarState(
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): HeatMapCalendarState {
     return rememberSaveable(
-        inputs = arrayOf(
+        inputs = arrayOf<Any>(
             startMonth,
             endMonth,
             firstVisibleMonth,

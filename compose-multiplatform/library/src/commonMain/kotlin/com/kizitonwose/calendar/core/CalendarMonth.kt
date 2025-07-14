@@ -1,6 +1,7 @@
 package com.kizitonwose.calendar.core
 
 import androidx.compose.runtime.Immutable
+import kotlinx.datetime.YearMonth
 
 /**
  * Represents a month on the calendar.

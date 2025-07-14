@@ -41,7 +41,7 @@ Add the library to your project [here](https://github.com/kizitonwose/Calendar#s
 
 The APIs for the compose libraries for Android and Multiplatform projects have been designed such that you can copy examples across both projects and they would work without code changes as the classes have the same names and package declarations. The only difference in some cases would be that the code for the Android calendar library needs to import classes such as `LocalDate`, `YearMonth` and `Year` from the `java.time` package while the multiplaform calendar library needs to import such classes from the [kotlinx-datetime](https://github.com/Kotlin/kotlinx-datetime) library. 
 
-Note that the `YearMonth` and `Year` classes do not yet exist in the `kotlinx-datetime` library, therefore the multiplaform calendar library includes minimal `YearMonth` and `Year` class implementations to bridge this gap until these classes [are hopefully added](https://github.com/Kotlin/kotlinx-datetime/issues/168) to the `kotlinx-datetime` library.
+Note that the `Year` class does not yet exist in the `kotlinx-datetime` library, therefore the multiplatform calendar library includes a minimal `Year` class implementation to bridge this gap.
 
 ## Compose UI version compatibility
 

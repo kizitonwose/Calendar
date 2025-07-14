@@ -51,19 +51,17 @@ import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.WeekDayPosition
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.atEndOfMonth
-import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.core.plusDays
 import com.kizitonwose.calendar.core.plusMonths
-import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.yearMonth
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
@@ -95,8 +93,8 @@ fun Example9Page(adjacentMonths: Int = 500) {
             firstDayOfWeek = daysOfWeek.first(),
         )
         val weekState = rememberWeekCalendarState(
-            startDate = startMonth.atStartOfMonth(),
-            endDate = endMonth.atEndOfMonth(),
+            startDate = startMonth.firstDay,
+            endDate = endMonth.lastDay,
             firstVisibleWeekDate = currentDate,
             firstDayOfWeek = daysOfWeek.first(),
         )

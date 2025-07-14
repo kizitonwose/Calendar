@@ -47,10 +47,10 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.core.plusMonths
-import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.yearMonth
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

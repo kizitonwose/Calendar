@@ -37,12 +37,12 @@ import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.Week
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.minus
-import com.kizitonwose.calendar.core.plus
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 
 @Composable
 operator fun PaddingValues.plus(other: PaddingValues): PaddingValues {

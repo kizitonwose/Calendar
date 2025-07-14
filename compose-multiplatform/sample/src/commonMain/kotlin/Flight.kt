@@ -1,15 +1,16 @@
 
 import androidx.compose.ui.graphics.Color
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.atDay
 import com.kizitonwose.calendar.core.minusMonths
+import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.core.plusMonths
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.YearMonth
 import kotlinx.datetime.atTime
 import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
+import kotlinx.datetime.onDay
 
 private typealias Airport = Flight.Airport
 
@@ -25,7 +26,7 @@ data class Flight(
 fun generateFlights(): List<Flight> = buildList {
     val currentMonth = YearMonth.now()
 
-    currentMonth.atDay(17).also { date ->
+    currentMonth.onDay(17).also { date ->
         add(
             Flight(
                 date.atTime(14, 0),
@@ -44,7 +45,7 @@ fun generateFlights(): List<Flight> = buildList {
         )
     }
 
-    currentMonth.atDay(22).also { date ->
+    currentMonth.onDay(22).also { date ->
         add(
             Flight(
                 date.atTime(13, 20),
@@ -63,7 +64,7 @@ fun generateFlights(): List<Flight> = buildList {
         )
     }
 
-    currentMonth.atDay(3).also { date ->
+    currentMonth.onDay(3).also { date ->
         add(
             Flight(
                 date.atTime(20, 0),
@@ -74,7 +75,7 @@ fun generateFlights(): List<Flight> = buildList {
         )
     }
 
-    currentMonth.atDay(12).also { date ->
+    currentMonth.onDay(12).also { date ->
         add(
             Flight(
                 date.atTime(18, 15),
@@ -85,7 +86,7 @@ fun generateFlights(): List<Flight> = buildList {
         )
     }
 
-    currentMonth.plusMonths(1).atDay(13).also { date ->
+    currentMonth.plusMonths(1).onDay(13).also { date ->
         add(
             Flight(
                 date.atTime(7, 30),
@@ -104,7 +105,7 @@ fun generateFlights(): List<Flight> = buildList {
         )
     }
 
-    currentMonth.minusMonths(1).atDay(9).also { date ->
+    currentMonth.minusMonths(1).onDay(9).also { date ->
         add(
             Flight(
                 date.atTime(20, 15),

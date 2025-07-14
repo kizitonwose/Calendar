@@ -20,9 +20,6 @@ import com.kizitonwose.calendar.compose.ItemPlacementInfo
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.WeekDayPosition
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.atEndOfMonth
-import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.format.fromIso8601LocalDate
 import com.kizitonwose.calendar.core.format.toIso8601String
@@ -38,6 +35,7 @@ import com.kizitonwose.calendar.data.getWeekIndicesCount
 import com.kizitonwose.calendar.data.log
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.YearMonth
 
 /**
  * Creates a [WeekCalendarState] that is remembered across compositions.
@@ -49,13 +47,13 @@ import kotlinx.datetime.LocalDate
  */
 @Composable
 public fun rememberWeekCalendarState(
-    startDate: LocalDate = YearMonth.now().atStartOfMonth(),
-    endDate: LocalDate = YearMonth.now().atEndOfMonth(),
+    startDate: LocalDate = YearMonth.now().firstDay,
+    endDate: LocalDate = YearMonth.now().lastDay,
     firstVisibleWeekDate: LocalDate = LocalDate.now(),
     firstDayOfWeek: DayOfWeek = firstDayOfWeekFromLocale(),
 ): WeekCalendarState {
     return rememberSaveable(
-        inputs = arrayOf(
+        inputs = arrayOf<Any>(
             startDate,
             endDate,
             firstVisibleWeekDate,

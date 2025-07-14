@@ -25,7 +25,6 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.Year
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
 import com.kizitonwose.calendar.data.VisibleItemState
@@ -39,6 +38,7 @@ import com.kizitonwose.calendar.data.log
 import com.kizitonwose.calendar.data.positionYearMonth
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.YearMonth
 
 /**
  * Creates a [YearCalendarState] that is remembered across compositions.
