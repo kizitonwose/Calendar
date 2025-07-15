@@ -25,8 +25,8 @@ public fun YearMonth.atStartOfMonth(): LocalDate = firstDay
  */
 public fun YearMonth.atEndOfMonth(): LocalDate = lastDay
 
-//public fun YearMonth.lengthOfMonth(): Int = numberOfDays
-//public fun YearMonth.atDay(day: Int): LocalDate = onDay(day)
-//public fun Year.atDay(dayOfYear: Int): LocalDate = onDay(dayOfYear)
-//public fun Year.atMonth(month: Month): YearMonth = onMonth(month)
-//public fun Year.atMonthDay(month: Month, day: Int): LocalDate = onMonthDay(month, day)
+// public fun YearMonth.lengthOfMonth(): Int = numberOfDays
+// public fun YearMonth.atDay(day: Int): LocalDate = onDay(day)
+// public fun Year.atDay(dayOfYear: Int): LocalDate = onDay(dayOfYear)
+// public fun Year.atMonth(month: Month): YearMonth = onMonth(month)
+// public fun Year.atMonthDay(month: Month, day: Int): LocalDate = onMonthDay(month, day)
