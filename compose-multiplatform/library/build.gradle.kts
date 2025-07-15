@@ -137,5 +137,5 @@ android {
 }
 
 mavenPublishing {
-    coordinates(version = Version.multiplatfrom)
+    coordinates(version = Version.multiplatform)
 }
