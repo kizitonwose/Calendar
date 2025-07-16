@@ -4,25 +4,23 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.atStartOfMonth
-import com.kizitonwose.calendar.core.lengthOfMonth
 import com.kizitonwose.calendar.core.minusDays
 import com.kizitonwose.calendar.core.minusMonths
-import com.kizitonwose.calendar.core.monthsUntil
 import com.kizitonwose.calendar.core.plusDays
 import com.kizitonwose.calendar.core.plusMonths
-import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.monthsUntil
+import kotlinx.datetime.yearMonth
 
 internal data class MonthData(
     private val month: YearMonth,
     private val inDays: Int,
     private val outDays: Int,
 ) {
-    private val totalDays = inDays + month.lengthOfMonth() + outDays
+    private val totalDays = inDays + month.numberOfDays + outDays
 
-    private val firstDay = month.atStartOfMonth().minusDays(inDays)
+    private val firstDay = month.firstDay.minusDays(inDays)
 
     private val rows = (0 until totalDays).chunked(7)
 
@@ -51,9 +49,9 @@ internal fun getCalendarMonthData(
     outDateStyle: OutDateStyle,
 ): MonthData {
     val month = startMonth.plusMonths(offset)
-    val firstDay = month.atStartOfMonth()
+    val firstDay = month.firstDay
     val inDays = firstDayOfWeek.daysUntil(firstDay.dayOfWeek)
-    val outDays = (inDays + month.lengthOfMonth()).let { inAndMonthDays ->
+    val outDays = (inDays + month.numberOfDays).let { inAndMonthDays ->
         val endOfRowDays = if (inAndMonthDays % 7 != 0) 7 - (inAndMonthDays % 7) else 0
         val endOfGridDays = if (outDateStyle == OutDateStyle.EndOfRow) {
             0
@@ -72,13 +70,13 @@ internal fun getHeatMapCalendarMonthData(
     firstDayOfWeek: DayOfWeek,
 ): MonthData {
     val month = startMonth.plusMonths(offset)
-    val firstDay = month.atStartOfMonth()
+    val firstDay = month.firstDay
     val inDays = if (offset == 0) {
         firstDayOfWeek.daysUntil(firstDay.dayOfWeek)
     } else {
         -firstDay.dayOfWeek.daysUntil(firstDayOfWeek)
     }
-    val outDays = (inDays + month.lengthOfMonth()).let { inAndMonthDays ->
+    val outDays = (inDays + month.numberOfDays).let { inAndMonthDays ->
         if (inAndMonthDays % 7 != 0) 7 - (inAndMonthDays % 7) else 0
     }
     return MonthData(month, inDays, outDays)

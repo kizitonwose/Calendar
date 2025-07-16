@@ -45,7 +45,7 @@ allprojects {
     afterEvaluate {
         // Android and Multiplatform libraries are published separately
         // See https://github.com/kizitonwose/Calendar/pull/561
-        disableMavenPublicationsIfNeeded(multiplatformProjects, Version.multiplatfrom)
+        disableMavenPublicationsIfNeeded(multiplatformProjects, Version.multiplatform)
         disableMavenPublicationsIfNeeded(androidProjects, Version.android)
     }
 }

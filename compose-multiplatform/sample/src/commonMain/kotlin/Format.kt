@@ -1,10 +1,10 @@
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import com.kizitonwose.calendar.core.Week
-import com.kizitonwose.calendar.core.YearMonth
-import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Month
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.yearMonth
 
 fun YearMonth.displayText(short: Boolean = false): String {
     return "${month.displayText(short = short)} $year"

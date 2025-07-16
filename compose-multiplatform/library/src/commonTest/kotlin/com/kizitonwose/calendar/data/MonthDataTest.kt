@@ -2,13 +2,13 @@ package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.utils.nextMonth
 import com.kizitonwose.calendar.utils.previousMonth
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Month
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.yearMonth
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals

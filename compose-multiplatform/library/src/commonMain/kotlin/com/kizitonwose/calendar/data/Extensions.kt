@@ -2,11 +2,11 @@ package com.kizitonwose.calendar.data
 
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.plusMonths
-import com.kizitonwose.calendar.core.yearMonth
 import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.yearMonth
 
 // E.g DayOfWeek.SATURDAY.daysUntil(DayOfWeek.TUESDAY) = 3
 internal fun DayOfWeek.daysUntil(other: DayOfWeek) = (7 + (other.ordinal - ordinal)) % 7

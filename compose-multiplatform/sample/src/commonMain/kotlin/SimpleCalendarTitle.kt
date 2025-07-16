@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kizitonwose.calendar.core.YearMonth
+import kotlinx.datetime.YearMonth
 
 @Composable
 fun SimpleCalendarTitle(

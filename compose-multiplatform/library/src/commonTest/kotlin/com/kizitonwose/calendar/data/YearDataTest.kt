@@ -3,10 +3,10 @@ package com.kizitonwose.calendar.data
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.Year
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.utils.weeksInMonth
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Month
+import kotlinx.datetime.YearMonth
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals

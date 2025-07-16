@@ -1,7 +1,6 @@
 package com.kizitonwose.calendar.compose
 
 import com.kizitonwose.calendar.compose.heatmapcalendar.HeatMapCalendarState
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
@@ -10,6 +9,7 @@ import com.kizitonwose.calendar.data.VisibleItemState
 import com.kizitonwose.calendar.data.plusDays
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.YearMonth
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals

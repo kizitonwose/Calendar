@@ -8,11 +8,11 @@ import com.kizitonwose.calendar.compose.weekcalendar.WeekCalendarState
 import com.kizitonwose.calendar.compose.yearcalendar.YearCalendarState
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.Year
-import com.kizitonwose.calendar.core.YearMonth
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.data.VisibleItemState
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.YearMonth
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals

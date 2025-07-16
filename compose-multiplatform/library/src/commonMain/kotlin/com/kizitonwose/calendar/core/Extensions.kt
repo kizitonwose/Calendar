@@ -6,10 +6,12 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.YearMonth
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.until
+import kotlinx.datetime.yearMonth
 import kotlin.time.Clock
 
 /**
@@ -41,10 +43,14 @@ public fun LocalDate.Companion.now(
 ): LocalDate = clock.todayIn(timeZone)
 
 /**
- * Returns the [YearMonth] value for this date.
+ * Obtains the current [YearMonth] from the specified [clock] and [timeZone].
+ *
+ * Using this method allows the use of an alternate clock or timezone for testing.
  */
-public val LocalDate.yearMonth: YearMonth
-    get() = YearMonth(year, month)
+public fun YearMonth.Companion.now(
+    clock: Clock = Clock.System,
+    timeZone: TimeZone = TimeZone.currentSystemDefault(),
+): YearMonth = clock.todayIn(timeZone).yearMonth
 
 /**
  * Returns a [LocalDate] that results from adding the [value] number of
@@ -111,6 +117,54 @@ public fun LocalDate.plusYears(value: Int): LocalDate = plus(value, DateTimeUnit
  * @throws DateTimeArithmeticException if the result exceeds the boundaries of [LocalDate].
  */
 public fun LocalDate.minusYears(value: Int): LocalDate = minus(value, DateTimeUnit.YEAR)
+
+/**
+ * Returns a [YearMonth] that results from adding the [value] number of months
+ * to this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries
+ * of [YearMonth] which is essentially the [LocalDate] boundaries.
+ */
+public fun YearMonth.plusMonths(value: Int): YearMonth = plus(value, DateTimeUnit.MONTH)
+
+/**
+ * Returns a [YearMonth] that results from subtracting the [value] number of months
+ * from this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries
+ * of [YearMonth] which is essentially the [LocalDate] boundaries.
+ */
+public fun YearMonth.minusMonths(value: Int): YearMonth = minus(value, DateTimeUnit.MONTH)
+
+/**
+ * Returns a [YearMonth] that results from adding the [value] number of years
+ * to this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries
+ * of [YearMonth] which is essentially the [LocalDate] boundaries.
+ */
+public fun YearMonth.plusYears(value: Int): YearMonth = plus(value, DateTimeUnit.YEAR)
+
+/**
+ * Returns a [YearMonth] that results from subtracting the [value] number of years
+ * from this year-month.
+ *
+ * If the [value] is positive, the returned year-month is later than this year-month.
+ * If the [value] is negative, the returned year-month is earlier than this year-month.
+ *
+ * @throws DateTimeArithmeticException if the result exceeds the boundaries
+ * of [YearMonth] which is essentially the [LocalDate] boundaries.
+ */
+public fun YearMonth.minusYears(value: Int): YearMonth = minus(value, DateTimeUnit.YEAR)
 
 internal fun LocalDate.plusWeeks(value: Int): LocalDate = plus(value, DateTimeUnit.WEEK)
 

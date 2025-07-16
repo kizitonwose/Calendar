@@ -7,6 +7,8 @@ import com.kizitonwose.calendar.core.serializers.YearIso8601Serializer
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.onDay
 import kotlinx.serialization.Serializable
 import kotlin.time.Clock
 
@@ -17,7 +19,7 @@ public data class Year(val value: Int) : Comparable<Year> {
 
     init {
         try {
-            atMonth(Month.JANUARY).atStartOfMonth()
+            onMonth(Month.JANUARY)
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Year value $value is out of range", e)
         }
@@ -114,7 +116,7 @@ public fun Year.length(): Int = if (isLeap()) 366 else 365
  *
  * @throws IllegalArgumentException if [dayOfYear] value is invalid in this year.
  */
-public fun Year.atDay(dayOfYear: Int): LocalDate {
+public fun Year.onDay(dayOfYear: Int): LocalDate {
     require(
         dayOfYear >= 1 &&
             (dayOfYear <= 365 || isLeap() && dayOfYear <= 366),
@@ -122,9 +124,9 @@ public fun Year.atDay(dayOfYear: Int): LocalDate {
         "Invalid dayOfYear value '$dayOfYear' for year '$year"
     }
     for (month in Month.entries) {
-        val yearMonth = atMonth(month)
-        if (yearMonth.atEndOfMonth().dayOfYear >= dayOfYear) {
-            return yearMonth.atDay((dayOfYear - yearMonth.atStartOfMonth().dayOfYear) + 1)
+        val yearMonth = onMonth(month)
+        if (yearMonth.lastDay.dayOfYear >= dayOfYear) {
+            return yearMonth.onDay((dayOfYear - yearMonth.firstDay.dayOfYear) + 1)
         }
     }
     throw IllegalArgumentException("Invalid dayOfYear value '$dayOfYear' for year '$year")
@@ -136,26 +138,26 @@ public fun Year.atDay(dayOfYear: Int): LocalDate {
  * @throws IllegalArgumentException if either [monthNumber] is invalid or the [day] value
  * is invalid in the resolved calendar [Month].
  */
-public fun Year.atMonthDay(monthNumber: Int, day: Int): LocalDate = LocalDate(year, monthNumber, day)
+public fun Year.onMonthDay(monthNumber: Int, day: Int): LocalDate = LocalDate(year, monthNumber, day)
 
 /**
  * Returns the [LocalDate] at the specified [month] and [day] in this year.
  *
  * @throws IllegalArgumentException if the [day] value is invalid in the resolved calendar [Month].
  */
-public fun Year.atMonthDay(month: Month, day: Int): LocalDate = LocalDate(year, month, day)
+public fun Year.onMonthDay(month: Month, day: Int): LocalDate = LocalDate(year, month, day)
 
 /**
  * Returns the [YearMonth] at the specified [month] in this year.
  */
-public fun Year.atMonth(month: Month): YearMonth = YearMonth(year, month)
+public fun Year.onMonth(month: Month): YearMonth = YearMonth(year, month)
 
 /**
  * Returns the [YearMonth] at the specified [monthNumber] in this year.
  *
  * @throws IllegalArgumentException if either [monthNumber] is invalid.
  */
-public fun Year.atMonth(monthNumber: Int): YearMonth = YearMonth(year, monthNumber)
+public fun Year.onMonth(monthNumber: Int): YearMonth = YearMonth(year, monthNumber)
 
 /**
  * Returns the number of whole years between two year values.
