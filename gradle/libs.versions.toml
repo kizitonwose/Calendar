@@ -1,10 +1,10 @@
 [versions]
-agp = "8.11.1"
-kotlin = "2.2.0"
-composeAndroid = "1.8.3"
+agp = "8.12.0"
+kotlin = "2.2.10"
+composeAndroid = "1.9.0"
 composeMultiplatform = "1.8.2"
-espresso = "3.6.1"
-junit5 = "5.13.3"
+espresso = "3.7.0"
+junit5 = "5.13.4"
 kotlinxSerialization = "1.9.0"
 
 [libraries]
@@ -17,7 +17,7 @@ desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.1.5" }
 
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.9.1" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
-androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.16.0" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.17.0" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.1" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.4.0" }
 androidx-cardview = { module = "androidx.cardview:cardview", version = "1.0.0" }
@@ -25,9 +25,9 @@ material-view = { module = "com.google.android.material:material", version = "1.
 
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 androidx-test-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
-androidx-test-runner = { module = "androidx.test:runner", version = "1.6.2" }
-androidx-test-rules = { module = "androidx.test:rules", version = "1.6.1" }
-androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
+androidx-test-runner = { module = "androidx.test:runner", version = "1.7.0" }
+androidx-test-rules = { module = "androidx.test:rules", version = "1.7.0" }
+androidx-test-junit = { module = "androidx.test.ext:junit", version = "1.3.0" }
 test-junit4 = { module = "junit:junit", version = "4.13.2" }
 test-junit5-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit5" }
 test-junit5-api = { group = "org.junit.jupiter", name = "junit-jupiter-api" }
@@ -40,12 +40,12 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "composeAndroid" }
 compose-material3 = { module = "androidx.compose.material3:material3", version = "1.3.2" }
 compose-activity = { module = "androidx.activity:activity-compose", version = "1.10.1" }
-compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.9.1" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.9.3" }
 
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeAndroid" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeAndroid" }
 
-jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.9.0-beta03" }
+jetbrains-compose-navigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.9.0-beta05" }
 jetbrains-material-icons = { module = "org.jetbrains.compose.material:material-icons-core", version = "1.7.3" }
 
 [plugins]
@@ -54,8 +54,8 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlinter = { id = "org.jmailen.kotlinter", version = "5.1.1" }
-mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.33.0" }
+kotlinter = { id = "org.jmailen.kotlinter", version = "5.2.0" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.34.0" }
 versionCheck = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 bcv = "org.jetbrains.kotlinx.binary-compatibility-validator:0.18.1"
 
