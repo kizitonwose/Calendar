@@ -47,8 +47,7 @@ kotlin {
 
     sourceSets {
         val commonMain by getting
-        val jsMain by getting
-        val wasmJsMain by getting
+        val webMain by getting
         val nativeMain by getting
         val desktopMain by getting
         val androidMain by getting
@@ -66,14 +65,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.annotation)
-            compileOnly(libs.kotlinx.serialization.core)
+            implementation(libs.kotlinx.serialization.core)
             api(libs.kotlinx.datetime)
-        }
-
-        val webMain by creating {
-            dependsOn(commonMain)
-            jsMain.dependsOn(this)
-            wasmJsMain.dependsOn(this)
         }
 
         val nonJvmMain by creating {
