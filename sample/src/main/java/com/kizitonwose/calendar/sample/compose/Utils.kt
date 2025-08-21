@@ -220,11 +220,11 @@ private val CalendarLayoutInfo.completelyVisibleMonths: List<CalendarMonth>
             val lastItem = visibleItemsInfo.last()
             val viewportSize = this.viewportEndOffset + this.viewportStartOffset
             if (lastItem.offset + lastItem.size > viewportSize) {
-                visibleItemsInfo.removeLast()
+                visibleItemsInfo.removeAt(visibleItemsInfo.lastIndex)
             }
             val firstItem = visibleItemsInfo.firstOrNull()
             if (firstItem != null && firstItem.offset < this.viewportStartOffset) {
-                visibleItemsInfo.removeFirst()
+                visibleItemsInfo.removeAt(0)
             }
             visibleItemsInfo.map { it.month }
         }
