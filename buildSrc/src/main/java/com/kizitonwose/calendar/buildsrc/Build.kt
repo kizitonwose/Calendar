@@ -11,8 +11,8 @@ object Config {
 }
 
 object Version {
-    const val android = "2.9.0"
-    const val multiplatform = "2.9.0"
+    const val android = "2.9.1-SNAPSHOT"
+    const val multiplatform = "2.9.1-SNAPSHOT"
 
     fun String.isNoPublish() = this == VERSION_NO_PUBLISH
 }
