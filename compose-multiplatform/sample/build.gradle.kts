@@ -67,11 +67,10 @@ kotlin {
 
     sourceSets {
         val commonMain by getting
-        val jsMain by getting
-        val wasmJsMain by getting
         val nativeMain by getting
         val desktopMain by getting
         val androidMain by getting
+        val webMain by getting
         val jvmMain by creating {
             dependsOn(commonMain)
         }
@@ -90,11 +89,6 @@ kotlin {
             implementation(project(":compose-multiplatform:library"))
             implementation(libs.jetbrains.compose.navigation)
             implementation(libs.jetbrains.material.icons)
-        }
-        val webMain by creating {
-            dependsOn(commonMain)
-            jsMain.dependsOn(this)
-            wasmJsMain.dependsOn(this)
         }
         val nonJvmMain by creating {
             dependsOn(commonMain)

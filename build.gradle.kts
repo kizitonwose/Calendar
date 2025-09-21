@@ -1,8 +1,8 @@
 
 import com.kizitonwose.calendar.buildsrc.Version
 import com.kizitonwose.calendar.buildsrc.Version.isNoPublish
-import com.kizitonwose.calendar.buildsrc.androidProjects
-import com.kizitonwose.calendar.buildsrc.multiplatformProjects
+import com.kizitonwose.calendar.buildsrc.androidLibProjects
+import com.kizitonwose.calendar.buildsrc.multiplatformLibProjects
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -45,8 +45,8 @@ allprojects {
     afterEvaluate {
         // Android and Multiplatform libraries are published separately
         // See https://github.com/kizitonwose/Calendar/pull/561
-        disableMavenPublicationsIfNeeded(multiplatformProjects, Version.multiplatform)
-        disableMavenPublicationsIfNeeded(androidProjects, Version.android)
+        disableMavenPublicationsIfNeeded(multiplatformLibProjects, Version.multiplatform)
+        disableMavenPublicationsIfNeeded(androidLibProjects, Version.android)
     }
 }
 
