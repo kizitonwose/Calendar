@@ -57,7 +57,6 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinter = { id = "org.jmailen.kotlinter", version = "5.2.0" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.34.0" }
 versionCheck = { id = "com.github.ben-manes.versions", version = "0.52.0" }
-bcv = "org.jetbrains.kotlinx.binary-compatibility-validator:0.18.1"
 
 # KMP
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

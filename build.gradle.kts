@@ -1,9 +1,14 @@
-
 import com.kizitonwose.calendar.buildsrc.Version
 import com.kizitonwose.calendar.buildsrc.Version.isNoPublish
 import com.kizitonwose.calendar.buildsrc.androidLibProjects
 import com.kizitonwose.calendar.buildsrc.multiplatformLibProjects
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationExtension
+import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationMultiplatformExtension
+import org.jetbrains.kotlin.gradle.dsl.abi.AbiValidationVariantSpec
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -19,7 +24,6 @@ plugins {
     alias(libs.plugins.jetbrainsCompose) apply false
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.versionCheck)
-    alias(libs.plugins.bcv)
 }
 
 allprojects {
@@ -31,9 +35,23 @@ allprojects {
         }
     }
     plugins.withType<KotlinBasePlugin> {
+        @OptIn(ExperimentalAbiValidation::class)
         extensions.configure<KotlinProjectExtension> {
             if ("sample" !in project.name) {
-                explicitApi()
+                when (this) {
+                    is KotlinJvmProjectExtension -> extensions.configure<AbiValidationExtension> {
+                        enabled = true
+                        applyFilters()
+                        configureAbiTask()
+                    }
+
+                    is KotlinMultiplatformExtension -> extensions.configure<AbiValidationMultiplatformExtension> {
+                        enabled = true
+                        klib.enabled = true
+                        applyFilters()
+                        configureAbiTask()
+                    }
+                }
             }
         }
     }
@@ -50,7 +68,7 @@ allprojects {
     }
 }
 
-fun Project.disableMavenPublicationsIfNeeded(
+private fun Project.disableMavenPublicationsIfNeeded(
     projects: List<String>,
     version: String,
 ) {
@@ -61,14 +79,22 @@ fun Project.disableMavenPublicationsIfNeeded(
     }
 }
 
-apiValidation {
-    ignoredProjects += listOf(
-        "sample",
-    )
+@ExperimentalAbiValidation
+private fun AbiValidationVariantSpec.applyFilters() {
+    filters {
+        excluded {
+            annotatedWith.add("com.kizitonwose.calendar.core.ExperimentalCalendarApi")
+        }
+    }
+}
 
-    @OptIn(kotlinx.validation.ExperimentalBCVApi::class)
-    klib {
-        enabled = true
+private fun Project.configureAbiTask() {
+    // Retain previous task names from the old lib.
+    tasks.register("apiDump") {
+        dependsOn("updateLegacyAbi")
+    }
+    tasks.register("apiCheck") {
+        dependsOn("checkLegacyAbi")
     }
 }
 
