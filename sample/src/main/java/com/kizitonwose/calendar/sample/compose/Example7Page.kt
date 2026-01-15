@@ -64,6 +64,22 @@ fun Example7Page() {
                         selection = it
                     }
                 },
+                // Draw a thin border around each week.
+                weekContainer = { week, container ->
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 3.dp, top = 3.dp, bottom = 3.dp)
+                            .border(
+                                color = colorResource(R.color.colorPrimary),
+                                width = 2.dp,
+                                shape = RoundedCornerShape(8.dp),
+                            )
+                            .padding(3.dp)
+                            .clip(shape = RoundedCornerShape(8.dp)),
+                    ) {
+                        container()
+                    }
+                },
             )
         }
     }

@@ -242,6 +242,11 @@ private fun Calendar(
  * placed above each week on the calendar.
  * @param weekFooter a composable block which describes the week footer content. The footer is
  * placed below each week on the calendar.
+ * @param weekContainer a composable block which describes the entire week content. This is the
+ * container where all the week contents are placed (header => days => footer). This is useful if
+ * you want to customize the week container, for example, with a background color or other effects.
+ * The actual container content is provided in the block and must be called after your desired
+ * customisations are rendered.
  */
 @Composable
 public fun WeekCalendar(
@@ -254,6 +259,7 @@ public fun WeekCalendar(
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
     weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
     weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
+    weekContainer: (@Composable LazyItemScope.(Week, container: @Composable () -> Unit) -> Unit)? = null,
 ): Unit = WeekCalendarImpl(
     modifier = modifier,
     state = state,
@@ -263,6 +269,7 @@ public fun WeekCalendar(
     dayContent = dayContent,
     weekHeader = weekHeader,
     weekFooter = weekFooter,
+    weekContainer = weekContainer,
     contentPadding = contentPadding,
     onItemPlaced = state.placementInfo::onItemPlaced,
 )

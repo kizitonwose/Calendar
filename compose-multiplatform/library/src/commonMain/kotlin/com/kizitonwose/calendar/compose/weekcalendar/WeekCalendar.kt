@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import androidx.compose.ui.layout.onPlaced
 import com.kizitonwose.calendar.compose.CalendarDefaults.flingBehavior
 import com.kizitonwose.calendar.compose.ItemCoordinates
 import com.kizitonwose.calendar.compose.ItemCoordinatesStore
+import com.kizitonwose.calendar.compose.or
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.format.toIso8601String
@@ -35,6 +38,7 @@ internal fun WeekCalendarImpl(
     dayContent: @Composable BoxScope.(WeekDay) -> Unit,
     weekHeader: (@Composable ColumnScope.(Week) -> Unit)? = null,
     weekFooter: (@Composable ColumnScope.(Week) -> Unit)? = null,
+    weekContainer: (@Composable LazyItemScope.(Week, container: @Composable () -> Unit) -> Unit)? = null,
     onItemPlaced: (itemCoordinates: ItemCoordinates) -> Unit,
 ) {
     LazyRow(
@@ -54,31 +58,39 @@ internal fun WeekCalendarImpl(
             val itemCoordinatesStore = remember(week.days.first().date) {
                 ItemCoordinatesStore(currentOnItemPlaced)
             }
-            Column(
-                modifier = Modifier
-                    .then(
-                        if (calendarScrollPaged) {
-                            Modifier.fillParentMaxWidth()
-                        } else {
-                            Modifier.width(IntrinsicSize.Max)
-                        },
-                    )
-                    .onPlaced(itemCoordinatesStore::onItemRootPlaced),
-            ) {
-                weekHeader?.invoke(this, week)
-                Row {
-                    for ((column, day) in week.days.withIndex()) {
-                        Box(
-                            modifier = Modifier
-                                .then(if (calendarScrollPaged) Modifier.weight(1f) else Modifier)
-                                .clipToBounds()
-                                .onFirstDayPlaced(column, itemCoordinatesStore::onFirstDayPlaced),
-                        ) {
-                            dayContent(day)
+            val hasWeekContainer = weekContainer != null
+            Box(Modifier.onPlaced(itemCoordinatesStore::onItemRootPlaced)) {
+                weekContainer.or(defaultWeekContainer)(week) {
+                    Column(
+                        modifier = Modifier
+                            .then(
+                                if (calendarScrollPaged) {
+                                    if (hasWeekContainer) {
+                                        Modifier.fillMaxWidth()
+                                    } else {
+                                        Modifier.fillParentMaxWidth()
+                                    }
+                                } else {
+                                    Modifier.width(IntrinsicSize.Max)
+                                },
+                            ),
+                    ) {
+                        weekHeader?.invoke(this, week)
+                        Row {
+                            for ((column, day) in week.days.withIndex()) {
+                                Box(
+                                    modifier = Modifier
+                                        .then(if (calendarScrollPaged) Modifier.weight(1f) else Modifier)
+                                        .clipToBounds()
+                                        .onFirstDayPlaced(column, itemCoordinatesStore::onFirstDayPlaced),
+                                ) {
+                                    dayContent(day)
+                                }
+                            }
                         }
+                        weekFooter?.invoke(this, week)
                     }
                 }
-                weekFooter?.invoke(this, week)
             }
         }
     }
@@ -92,3 +104,6 @@ private inline fun Modifier.onFirstDayPlaced(
 } else {
     this
 }
+
+private val defaultWeekContainer: (@Composable LazyItemScope.(Week, container: @Composable () -> Unit) -> Unit) =
+    { _, container -> container() }
