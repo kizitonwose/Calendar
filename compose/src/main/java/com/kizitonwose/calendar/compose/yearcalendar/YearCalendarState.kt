@@ -24,7 +24,6 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.data.DataStore
@@ -49,7 +48,6 @@ import java.time.YearMonth
  * @param firstVisibleYear the initial value for [YearCalendarState.firstVisibleYear]
  * @param outDateStyle the initial value for [YearCalendarState.outDateStyle]
  */
-@ExperimentalCalendarApi
 @Composable
 public fun rememberYearCalendarState(
     startYear: Year = Year.now(),

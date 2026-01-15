@@ -1,4 +1,3 @@
-
 import Example9PageSharedComponents.CalendarHeader
 import Example9PageSharedComponents.Day
 import Example9PageSharedComponents.MonthAndWeekCalendarTitle
