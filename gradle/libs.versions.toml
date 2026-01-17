@@ -39,6 +39,7 @@ compose-foundation = { module = "androidx.compose.foundation:foundation", versio
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeAndroid" }
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "composeAndroid" }
 compose-material3 = { module = "androidx.compose.material3:material3", version = "1.4.0" }
+compose-material-icons = { module = "androidx.compose.material:material-icons-core", version = "1.7.8" }
 compose-activity = { module = "androidx.activity:activity-compose", version = "1.12.2" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.9.6" }
 
