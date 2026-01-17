@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy

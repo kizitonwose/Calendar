@@ -24,6 +24,8 @@ ktlint_standard_blank-line-before-declaration = disabled
 ktlint_standard_value-argument-comment = disabled
 ktlint_function_naming_ignore_when_annotated_with = Composable
 ktlint_standard_annotation = disabled
+ktlint_standard_when-entry-bracing = disabled
+ktlint_standard_blank-line-between-when-conditions = disabled
 max_line_length = 200
 
 [**/test/**/*.kt]

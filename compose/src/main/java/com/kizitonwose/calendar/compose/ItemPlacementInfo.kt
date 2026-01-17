@@ -6,8 +6,8 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.unit.round
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
-import kotlin.coroutines.coroutineContext
 
 @Immutable
 internal data class ItemCoordinates(
@@ -25,7 +25,7 @@ internal class ItemPlacementInfo {
 
     suspend fun awaitFistDayOffsetAndSize(orientation: Orientation): OffsetSize? {
         var itemCoordinates = this.itemCoordinates
-        while (coroutineContext.isActive && itemCoordinates == null) {
+        while (currentCoroutineContext().isActive && itemCoordinates == null) {
             withFrameNanos {}
             itemCoordinates = this.itemCoordinates
         }

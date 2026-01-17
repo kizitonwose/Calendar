@@ -278,8 +278,10 @@ private fun getMonthWithYear(
                 // Ensure the Month + Year text can fit.
                 firstItem.size < daySizePx * 3 ||
                 // Ensure the week row size - 1 is visible.
-                firstItem.offset < layoutInfo.viewportStartOffset &&
-                (layoutInfo.viewportStartOffset - firstItem.offset > daySizePx)
+                (
+                    firstItem.offset < layoutInfo.viewportStartOffset &&
+                        layoutInfo.viewportStartOffset - firstItem.offset > daySizePx
+                )
             ) {
                 visibleItemsInfo[1].month.yearMonth
             } else {

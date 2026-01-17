@@ -3,26 +3,26 @@ package com.kizitonwose.calendar.core.deprecated
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.YearMonth
 
+/**
+ * Returns the first day of the year-month.
+ */
 @Deprecated(
     message = "Please use the `firstDay` property instead. " +
         "This is only available for migration purposes.",
     level = DeprecationLevel.ERROR,
     replaceWith = ReplaceWith("firstDay"),
 )
-/**
- * Returns the first day of the year-month.
- */
 public fun YearMonth.atStartOfMonth(): LocalDate = firstDay
 
+/**
+ * Returns the last day of the year-month.
+ */
 @Deprecated(
     message = "Please use the `lastDay` property instead. " +
         "This is only available for migration purposes.",
     level = DeprecationLevel.ERROR,
     replaceWith = ReplaceWith("lastDay"),
 )
-/**
- * Returns the last day of the year-month.
- */
 public fun YearMonth.atEndOfMonth(): LocalDate = lastDay
 
 // public fun YearMonth.lengthOfMonth(): Int = numberOfDays

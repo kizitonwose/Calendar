@@ -1,4 +1,3 @@
-
 import androidx.compose.ui.graphics.Color
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
