@@ -29,7 +29,6 @@ import com.kizitonwose.calendar.compose.yearcalendar.rememberYearCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.CalendarYear
-import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import java.time.DayOfWeek
@@ -369,7 +368,6 @@ public fun HeatMapCalendar(
  * The actual container content is provided in the block and must be called after your desired
  * customisations are rendered.
  */
-@ExperimentalCalendarApi
 @Composable
 public fun HorizontalYearCalendar(
     modifier: Modifier = Modifier,
@@ -473,7 +471,6 @@ public fun HorizontalYearCalendar(
  * The actual container content is provided in the block and must be called after your desired
  * customisations are rendered.
  */
-@ExperimentalCalendarApi
 @Composable
 public fun VerticalYearCalendar(
     modifier: Modifier = Modifier,

@@ -20,7 +20,7 @@ object Version {
 private const val VERSION_NO_PUBLISH = "NO_PUBLISH"
 
 object Android {
-    const val minSdk = 21
+    const val minSdk = 23
     const val targetSdk = 36
     const val compileSdk = 36
 }

@@ -43,7 +43,6 @@ import com.kizitonwose.calendar.compose.yearcalendar.rememberYearCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.sample.shared.displayText
 import com.kizitonwose.calendar.sample.shared.yearsUntil
@@ -51,7 +50,6 @@ import kotlinx.coroutines.launch
 import java.time.Year
 import kotlin.math.abs
 
-@OptIn(ExperimentalCalendarApi::class)
 @Composable
 fun Example10Page(adjacentYears: Long = 50) {
     val currentYear = remember { Year.now() }

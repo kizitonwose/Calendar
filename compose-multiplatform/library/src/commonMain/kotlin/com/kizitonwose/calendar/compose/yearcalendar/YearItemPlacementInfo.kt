@@ -7,8 +7,8 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.unit.round
 import com.kizitonwose.calendar.core.CalendarMonth
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
-import kotlin.coroutines.coroutineContext
 
 @Immutable
 internal data class YearItemCoordinates(
@@ -34,7 +34,7 @@ internal class YearItemPlacementInfo {
 
     suspend fun awaitFistMonthDayOffsetAndSize(orientation: Orientation): OffsetSize? {
         var itemCoordinates = this.itemCoordinates
-        while (coroutineContext.isActive && itemCoordinates == null) {
+        while (currentCoroutineContext().isActive && itemCoordinates == null) {
             withFrameNanos {}
             itemCoordinates = this.itemCoordinates
         }

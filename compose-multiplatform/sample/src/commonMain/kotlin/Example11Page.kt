@@ -31,7 +31,6 @@ import com.kizitonwose.calendar.compose.yearcalendar.rememberYearCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.ExperimentalCalendarApi
 import com.kizitonwose.calendar.core.Year
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.now
@@ -39,7 +38,6 @@ import com.kizitonwose.calendar.core.plusYears
 import kotlinx.datetime.YearMonth
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalCalendarApi::class)
 @Composable
 fun Example11Page(adjacentYears: Int = 50) {
     val currentMonth = remember { YearMonth.now() }

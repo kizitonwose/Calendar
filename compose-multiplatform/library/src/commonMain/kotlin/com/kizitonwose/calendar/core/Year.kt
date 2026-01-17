@@ -119,7 +119,7 @@ public fun Year.length(): Int = if (isLeap()) 366 else 365
 public fun Year.onDay(dayOfYear: Int): LocalDate {
     require(
         dayOfYear >= 1 &&
-            (dayOfYear <= 365 || isLeap() && dayOfYear <= 366),
+            (dayOfYear <= 365 || (isLeap() && dayOfYear <= 366)),
     ) {
         "Invalid dayOfYear value '$dayOfYear' for year '$year"
     }
