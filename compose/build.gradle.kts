@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.kotlin.stdlib)
 
     implementation(libs.compose.ui.ui)
-    implementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.runtime)
 

@@ -56,7 +56,8 @@ dependencies {
     implementation(libs.material.view)
 
     implementation(libs.compose.ui.ui)
-    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.runtime)
     implementation(libs.compose.material3)

@@ -37,6 +37,7 @@ test-junit-platform-launcher = { group = "org.junit.platform", name = "junit-pla
 compose-ui-ui = { module = "androidx.compose.ui:ui", version.ref = "composeAndroid" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "composeAndroid" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeAndroid" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeAndroid" }
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "composeAndroid" }
 compose-material3 = { module = "androidx.compose.material3:material3", version = "1.4.0" }
 compose-material-icons = { module = "androidx.compose.material:material-icons-core", version = "1.7.8" }
