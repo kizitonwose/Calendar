@@ -10,7 +10,7 @@ import time
 import xml.etree.ElementTree as ET
 
 OUT = os.environ.get("SMOKE_OUT", "smoke")
-PKG = "io.github.ceniorpomidor.workcalendar"
+PKG = os.environ.get("PKG", "io.github.ceniorpomidor.workcalendar.preview")
 
 
 def adb(*args, check=False):
@@ -348,7 +348,7 @@ def cmd_show(text, attempts="6"):
 
 def cmd_route(route):
     # The command line is run by the device shell: quote the route ("&" would end the command).
-    adb("shell", f"am start -n {PKG}/.MainActivity -a android.intent.action.VIEW --es route {shlex.quote(route)}")
+    adb("shell", f"am start -n {PKG}/io.github.ceniorpomidor.workcalendar.MainActivity -a android.intent.action.VIEW --es route {shlex.quote(route)}")
     print(f">> route {route}")
     time.sleep(2)
 

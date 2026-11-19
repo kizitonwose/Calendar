@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Рабочий календарь</string>
-    <string name="widget_name">Рабочий календарь</string>
+    <string name="app_name">Календарь · Бета</string>
+    <string name="widget_name">Календарь · Бета</string>
     <string name="widget_description">Месяц, ближайшая смена и быстрые действия</string>
     <string name="channel_shifts">Окончание смен</string>
     <string name="channel_shifts_description">Предложение отметить отработанные часы после смены</string>

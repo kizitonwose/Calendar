@@ -78,7 +78,7 @@ enum class NavLabels {
 
 @Serializable
 data class AppearanceSettings(
-    val palette: ColorPalette = ColorPalette.BLUE,
+    val palette: ColorPalette = ColorPalette.TEAL,
     /** Hue (0–359°) of the [ColorPalette.CUSTOM] palette. */
     val customHue: Int = 258,
     /** Black background in the dark theme (saves power on OLED screens). */
@@ -124,6 +124,7 @@ data class CalendarSettings(
     val showDayEarnings: Boolean = false,
     val showHolidays: Boolean = true,
     val showMonthSummary: Boolean = true,
+    val compactDays: Boolean = true,
 )
 
 @Serializable
@@ -197,7 +198,7 @@ data class AppSettings(
     val trackingStartDate: LocalDate? = null,
     val currency: String = "₽",
     val theme: ThemeMode = ThemeMode.SYSTEM,
-    val dynamicColor: Boolean = true,
+    val dynamicColor: Boolean = false,
     val appearance: AppearanceSettings = AppearanceSettings(),
     val alarm: AlarmSettings = AlarmSettings(),
     val calendar: CalendarSettings = CalendarSettings(),

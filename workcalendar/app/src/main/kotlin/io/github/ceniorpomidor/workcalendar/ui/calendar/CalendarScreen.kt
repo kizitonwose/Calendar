@@ -1,31 +1,33 @@
 package io.github.ceniorpomidor.workcalendar.ui.calendar
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -40,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -63,7 +66,6 @@ import io.github.ceniorpomidor.workcalendar.ui.components.LocalSnackbar
 import io.github.ceniorpomidor.workcalendar.ui.components.launchSafely
 import io.github.ceniorpomidor.workcalendar.ui.components.money
 import io.github.ceniorpomidor.workcalendar.ui.theme.AppIcons
-import io.github.ceniorpomidor.workcalendar.ui.theme.AppTheme
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -102,6 +104,7 @@ fun CalendarScreen(
     val scope = rememberCoroutineScope()
     val today = container.clock.today()
     val currentMonth = remember { YearMonth.from(today) }
+    var menuOpen by remember { mutableStateOf(false) }
     var legend by rememberSaveable { mutableStateOf(false) }
 
     // The state is created once: new inputs of rememberCalendarState would recreate it and reset the position.
@@ -195,7 +198,7 @@ fun CalendarScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(Formats.monthTitle(visibleMonth), fontWeight = FontWeight.SemiBold)
+                    Text(Formats.monthTitle(visibleMonth), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 },
                 actions = {
                     IconButton(onClick = { scope.launch { calendarState.animateScrollToMonth(visibleMonth.minusMonths(1)) } }) {
@@ -208,8 +211,25 @@ fun CalendarScreen(
                         vm.select(today)
                         scope.launch { calendarState.animateScrollToMonth(currentMonth) }
                     }) { Icon(AppIcons.Today, contentDescription = "Сегодня") }
-                    IconButton(onClick = onSearch) { Icon(AppIcons.Search, contentDescription = "Поиск") }
-                    IconButton(onClick = { legend = true }) { Icon(AppIcons.Help, contentDescription = "Обозначения") }
+                    Box {
+                        IconButton(onClick = { menuOpen = true }) { Icon(AppIcons.MoreVert, contentDescription = "Ещё") }
+                        DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                            DropdownMenuItem(
+                                text = { Text("Поиск") }, leadingIcon = { Icon(AppIcons.Search, null) },
+                                onClick = {
+                                    menuOpen = false
+                                    onSearch()
+                                },
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Обозначения") }, leadingIcon = { Icon(AppIcons.Help, null) },
+                                onClick = {
+                                    menuOpen = false
+                                    legend = true
+                                },
+                            )
+                        }
+                    }
                 },
             )
         },
@@ -232,6 +252,7 @@ fun CalendarScreen(
                             selected = day.date == selected,
                             today = today,
                             showHolidays = state.settings.calendar.showHolidays,
+                            compact = state.settings.calendar.compactDays,
                             height = cellHeight,
                             onClick = {
                                 vm.select(day.date)
@@ -315,7 +336,7 @@ fun CalendarScreen(
             confirmButton = { TextButton(onClick = { choosingPayout = false }) { Text("Закрыть") } },
         )
     }
-    if (legend) LegendDialog { legend = false }
+    if (legend) LegendDialog(state.settings.calendar.compactDays) { legend = false }
     if (editing) {
         DayEditSheet(dayInfo, selected, state.calc?.zone ?: java.time.ZoneId.systemDefault(), dayAlarms, editActions, onDismiss = { editing = false })
     }
@@ -396,37 +417,27 @@ private fun CalendarState.isAligned(): Boolean {
 /** Totals of the month; a month that is not loaded yet keeps the same layout with dashes. */
 @Composable
 private fun MonthSummaryRow(summary: PeriodSummary?, onClick: () -> Unit) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 12.dp, vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    val colors = MaterialTheme.colorScheme
+    Surface(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
+        shape = RoundedCornerShape(18.dp),
+        color = colors.surfaceContainerLow,
     ) {
-        val none = "—"
-        SummaryTile(
-            "Часы: факт / план",
-            summary?.let { "${Formats.hoursDecimal(it.workedMinutes)} / ${Formats.hoursDecimal(it.plannedMinutes)}" } ?: none,
-            onClick,
-        )
-        SummaryTile("Подтверждено", summary?.let { money(it.confirmedEarnings) } ?: none, onClick, AppTheme.status.positive)
-        SummaryTile("Смены", summary?.let { "${it.workedShifts} из ${it.scheduledShifts}" } ?: none, onClick)
+        Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            SummaryValue("Часы / план", summary?.let { "${Formats.hoursDecimal(it.workedMinutes)} / ${Formats.hoursDecimal(it.plannedMinutes)}" } ?: "—", Modifier.weight(1f))
+            VerticalDivider(Modifier.height(26.dp), color = colors.outlineVariant)
+            SummaryValue("Заработано", summary?.let { money(it.confirmedEarnings) } ?: "—", Modifier.weight(1.2f), colors.primary)
+            VerticalDivider(Modifier.height(26.dp), color = colors.outlineVariant)
+            SummaryValue("Смены", summary?.let { "${it.workedShifts} из ${it.scheduledShifts}" } ?: "—", Modifier.weight(1f))
+        }
     }
 }
 
 @Composable
-private fun SummaryTile(label: String, value: String, onClick: () -> Unit, valueColor: Color = Color.Unspecified) {
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
-        shape = RoundedCornerShape(14.dp),
-    ) {
-        Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), horizontalAlignment = Alignment.Start) {
-            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(value, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = valueColor)
-                Spacer(Modifier.width(2.dp))
-            }
-        }
+private fun SummaryValue(label: String, value: String, modifier: Modifier, color: Color = MaterialTheme.colorScheme.onSurface) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = color, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
     }
 }

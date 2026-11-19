@@ -1,5 +1,6 @@
 package io.github.ceniorpomidor.workcalendar.ui.calendar
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -71,7 +75,7 @@ fun ShiftDisplayState.shortTitle(): String = when (this) {
 
 /**
  * The main facts about the selected day and two buttons: "Изменить" opens the list of changes,
- * "Отметить" enters the hours. Fits the space under the calendar: the facts are cut, the buttons
+ * "Отметить" enters the hours. Fits the space under the calendar: the facts can scroll, the buttons
  * always stay visible.
  */
 @Composable
@@ -93,8 +97,12 @@ fun DayPanel(
     onSetupSchedule: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp)) {
-        Column(Modifier.weight(1f, fill = true), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(
+        modifier.fillMaxWidth().padding(start = 10.dp, end = 10.dp, top = 6.dp, bottom = 4.dp)
+            .background(MaterialTheme.colorScheme.surfaceContainerLow, RoundedCornerShape(20.dp))
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+    ) {
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     Formats.dayTitle(date).replaceFirstChar { it.uppercase() },

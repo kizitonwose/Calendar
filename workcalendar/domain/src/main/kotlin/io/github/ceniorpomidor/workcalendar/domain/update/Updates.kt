@@ -5,23 +5,30 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 
-/** Version like `1.3.0`; a suffix such as `-debug` is ignored. */
-data class AppVersion(val parts: List<Int>) : Comparable<AppVersion> {
+/** A stable version or a numbered beta. Debug builds follow their release channel. */
+data class AppVersion(val parts: List<Int>, val beta: Int? = null) : Comparable<AppVersion> {
     override fun compareTo(other: AppVersion): Int {
         for (i in 0 until maxOf(parts.size, other.parts.size)) {
             val diff = parts.getOrElse(i) { 0 } - other.parts.getOrElse(i) { 0 }
             if (diff != 0) return diff
         }
-        return 0
+        if (beta == other.beta) return 0
+        if (beta == null) return 1
+        if (other.beta == null) return -1
+        return beta.compareTo(other.beta)
     }
 
-    override fun toString(): String = parts.joinToString(".")
+    override fun toString(): String = parts.joinToString(".") + (beta?.let { "-beta.$it" } ?: "")
 
     companion object {
         fun parse(text: String): AppVersion? {
-            val core = text.trim().removePrefix("v").substringBefore('-').substringBefore('+')
-            val parts = core.split('.').map { it.toIntOrNull() ?: return null }
-            return if (parts.isEmpty()) null else AppVersion(parts)
+            val version = text.trim().removePrefix("v").substringBefore('+').removeSuffix("-debug")
+            val parts = version.substringBefore('-').split('.').map { it.toIntOrNull() ?: return null }
+            val suffix = version.substringAfter('-', "")
+            if (suffix.isEmpty()) return AppVersion(parts)
+            if (!suffix.startsWith("beta.")) return null
+            val beta = suffix.removePrefix("beta.").toIntOrNull()?.takeIf { it > 0 } ?: return null
+            return AppVersion(parts, beta)
         }
     }
 }
@@ -64,9 +71,10 @@ object UpdateCheck {
     /** The newest published release with an APK that is newer than [current]; null when there is none. */
     fun newest(releases: List<GitHubRelease>, current: AppVersion): AvailableUpdate? = releases
         .asSequence()
-        .filter { !it.draft && !it.prerelease && it.tag.startsWith(TAG_PREFIX) }
+        .filter { !it.draft && it.prerelease == (current.beta != null) && it.tag.startsWith(TAG_PREFIX) }
         .mapNotNull { release ->
             val version = AppVersion.parse(release.tag.removePrefix(TAG_PREFIX)) ?: return@mapNotNull null
+            if ((version.beta != null) != (current.beta != null)) return@mapNotNull null
             val apk = release.assets.firstOrNull { it.name.endsWith(".apk") } ?: return@mapNotNull null
             AvailableUpdate(version, release, apk)
         }

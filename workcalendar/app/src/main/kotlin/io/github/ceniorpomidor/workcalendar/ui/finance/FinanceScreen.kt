@@ -51,6 +51,7 @@ import io.github.ceniorpomidor.workcalendar.ui.components.LocalSnackbar
 import io.github.ceniorpomidor.workcalendar.ui.components.NumberField
 import io.github.ceniorpomidor.workcalendar.ui.components.ScrollColumn
 import io.github.ceniorpomidor.workcalendar.ui.components.SectionCard
+import io.github.ceniorpomidor.workcalendar.ui.components.SettingRow
 import io.github.ceniorpomidor.workcalendar.ui.components.SubScreen
 import io.github.ceniorpomidor.workcalendar.ui.components.Tag
 import io.github.ceniorpomidor.workcalendar.ui.components.ThinDivider
@@ -78,6 +79,7 @@ fun FinanceScreen(
 ) {
     val vm: FinanceViewModel = viewModel { FinanceViewModel(container) }
     val state by vm.state.collectAsStateWithLifecycle()
+    var showBreakdown by rememberSaveable { mutableStateOf(false) }
     var pickRange by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf<PayoutInstance?>(null) }
     val snackbar = LocalSnackbar.current
@@ -155,8 +157,6 @@ fun FinanceScreen(
                 )
             }
             HeroCard(summary, state.previous, monthMode = period.mode == PeriodMode.MONTH)
-            AccrualsCard(summary)
-            HoursCard(summary)
             if (period.mode == PeriodMode.MONTH) {
                 PayoutsCard(state, onEdit = { editing = it }, onRules = onPayoutRules)
                 if (state.forecast.isNotEmpty()) ForecastCard(state.forecast, onMonth = { vm.setMonth(it) })
@@ -165,6 +165,14 @@ fun FinanceScreen(
                 SectionCard(title = "Ближайшие выплаты", icon = AppIcons.Event) {
                     state.upcoming.take(4).forEach { PayoutRow(it, state.today, onClick = { onPayout(it.key) }) }
                 }
+            }
+            SettingRow(
+                "Часы и начисления", icon = AppIcons.Schedule, onClick = { showBreakdown = !showBreakdown },
+                trailing = { Icon(if (showBreakdown) AppIcons.ExpandLess else AppIcons.ExpandMore, if (showBreakdown) "Свернуть" else "Развернуть") },
+            )
+            if (showBreakdown) {
+                AccrualsCard(summary)
+                HoursCard(summary)
             }
             if (state.absencePayments.isNotEmpty()) {
                 SectionCard(title = "Отпускные и больничные", icon = AppIcons.Vacation) {
@@ -353,11 +361,6 @@ private fun PayoutsCard(state: FinanceUiState, onEdit: (PayoutInstance) -> Unit,
             Text("Правила выплат не настроены", style = MaterialTheme.typography.bodyMedium)
             return@SectionCard
         }
-        Text(
-            "Нажмите на выплату, чтобы внести или исправить сумму, которая пришла.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
         state.payouts.forEach { PayoutAmountsRow(it, state.today, onClick = { onEdit(it) }) }
         ThinDivider()
         ValueRow("Ожидается за месяц", state.expectedTotal?.let { money(it) } ?: "недостаточно данных")

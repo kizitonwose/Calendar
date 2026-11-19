@@ -14,11 +14,11 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "io.github.ceniorpomidor.workcalendar"
+        applicationId = "io.github.ceniorpomidor.workcalendar.preview"
         minSdk = 26
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.5.0"
+        versionCode = 8
+        versionName = "1.6.0-beta.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

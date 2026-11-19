@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -116,6 +120,7 @@ fun DayCell(
     selected: Boolean,
     today: LocalDate,
     showHolidays: Boolean,
+    compact: Boolean,
     height: Dp,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
@@ -128,99 +133,149 @@ fun DayCell(
     val isToday = day.date == today
     val holiday = showHolidays && info?.specialDayOff == true
     val payday = info?.payouts?.isNotEmpty() == true
-    // A day off with a payout takes the payday color; a working day keeps its state color and gets a payday frame.
     val fill = when {
+        compact && selected -> MaterialTheme.colorScheme.primaryContainer
+        compact -> Color.Transparent
         state == DayState.OFF && payday -> palette.payday
-        state == DayState.OFF -> Color.Transparent
         else -> bg
     }
+    val shape = RoundedCornerShape(14.dp)
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(height)
             .padding(2.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(fill.copy(alpha = if (inMonth) fill.alpha else 0.45f * fill.alpha))
-            .then(
-                if (selected) {
-                    Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
-                } else if (payday) {
-                    Modifier.border(2.dp, palette.paydayAccent.copy(alpha = if (inMonth) 1f else 0.45f), RoundedCornerShape(12.dp))
-                } else if (state == DayState.OFF && inMonth) {
-                    Modifier.border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
-                } else {
-                    Modifier
-                },
-            )
-            .semantics { if (payday) contentDescription = "День выплаты, ${Formats.date(day.date)}" }
+            .clip(shape)
+            .background(fill.copy(alpha = fill.alpha * alpha))
+            .then(if (!compact && selected) Modifier.border(1.dp, MaterialTheme.colorScheme.primary, shape) else Modifier)
+            .semantics {
+                this.selected = selected
+                if (info != null) {
+                    stateDescription = when (state) {
+                        DayState.OFF -> "Выходной"
+                        DayState.PLANNED -> "Запланирована смена"
+                        DayState.IN_PROGRESS -> "Идёт смена"
+                        DayState.AWAITING -> "Часы не отмечены"
+                        DayState.CONFIRMED -> "Часы подтверждены"
+                        DayState.MISSED -> "Смена не состоялась"
+                        DayState.CANCELLED -> "Смена отменена"
+                        DayState.MOVED -> "Смена перенесена"
+                        DayState.EXTRA -> "Дополнительная смена"
+                        else -> info.absence?.displayTitle().orEmpty()
+                    }
+                }
+                if (payday) contentDescription = "День выплаты, ${Formats.date(day.date)}"
+            }
             .combinedClickable(onClickLabel = if (payday) "Внести полученную сумму" else null, onClick = onClick, onLongClick = onLongClick),
     ) {
-        Column(Modifier.fillMaxSize().padding(horizontal = 3.dp, vertical = 3.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val numberColor = when {
-                    isToday -> MaterialTheme.colorScheme.onPrimary
-                    holiday -> palette.holiday
-                    state == DayState.OFF && payday -> palette.onPayday
-                    state == DayState.OFF -> MaterialTheme.colorScheme.onSurface
-                    else -> fg
+        if (compact) {
+            val numberColor = when {
+                isToday -> MaterialTheme.colorScheme.onPrimary
+                holiday -> palette.holiday
+                selected -> MaterialTheme.colorScheme.onPrimaryContainer
+                else -> MaterialTheme.colorScheme.onSurface
+            }
+            Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(1.dp)) {
+                    Box(
+                        Modifier.size(if (height < 40.dp) 20.dp else 28.dp).clip(CircleShape)
+                            .background(if (isToday) MaterialTheme.colorScheme.primary else Color.Transparent),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            day.date.dayOfMonth.toString(), style = MaterialTheme.typography.titleSmall,
+                            fontWeight = if (selected || isToday) FontWeight.Bold else FontWeight.Medium,
+                            color = numberColor.copy(alpha = alpha), maxLines = 1,
+                        )
+                    }
+                    if (payday) Text("₽", style = MaterialTheme.typography.labelSmall, color = palette.onPayday.copy(alpha = alpha))
                 }
-                Box(
-                    modifier = Modifier
-                        .size(22.dp)
-                        .clip(CircleShape)
-                        .background(if (isToday) MaterialTheme.colorScheme.primary else Color.Transparent),
-                    contentAlignment = Alignment.Center,
+                Row(
+                    Modifier.height(7.dp),
+                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(3.dp),
                 ) {
-                    Text(
-                        day.date.dayOfMonth.toString(),
-                        fontSize = 12.sp,
-                        fontWeight = if (isToday || holiday) FontWeight.Bold else FontWeight.Medium,
-                        color = numberColor.copy(alpha = alpha),
-                    )
+                    if (state != DayState.OFF) {
+                        Spacer(Modifier.size(width = 13.dp, height = 3.dp).clip(CircleShape).background(fg.copy(alpha = alpha)))
+                    }
+                    if (info?.note != null) {
+                        Spacer(Modifier.size(4.dp).clip(CircleShape).background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = alpha)))
+                    }
+                    if (info?.hasExtra == true && state != DayState.EXTRA) {
+                        Spacer(Modifier.size(4.dp).clip(CircleShape).background(palette.onExtra.copy(alpha = alpha)))
+                    }
+                }
+                info?.earned?.takeIf { height >= 52.dp }?.let {
+                    Text(compactMoney(it), style = MaterialTheme.typography.labelSmall, color = palette.positive.copy(alpha = alpha), maxLines = 1)
+                }
+            }
+        } else {
+            Column(Modifier.fillMaxSize().padding(horizontal = 3.dp, vertical = 3.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val numberColor = when {
+                        isToday -> MaterialTheme.colorScheme.onPrimary
+                        holiday -> palette.holiday
+                        state == DayState.OFF && payday -> palette.onPayday
+                        state == DayState.OFF -> MaterialTheme.colorScheme.onSurface
+                        else -> fg
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(22.dp)
+                            .clip(CircleShape)
+                            .background(if (isToday) MaterialTheme.colorScheme.primary else Color.Transparent),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            day.date.dayOfMonth.toString(),
+                            fontSize = 12.sp,
+                            fontWeight = if (isToday || holiday) FontWeight.Bold else FontWeight.Medium,
+                            color = numberColor.copy(alpha = alpha),
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                    if (payday) {
+                        Text("₽", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = (if (state == DayState.OFF) palette.onPayday else fg).copy(alpha = alpha))
+                    }
+                    if (info?.hasExtra == true) {
+                        Text("+", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = palette.onExtra.copy(alpha = alpha))
+                    }
+                    if (info?.note != null) {
+                        Box(Modifier.padding(start = 1.dp).size(5.dp).clip(CircleShape).background(fg.copy(alpha = 0.8f * alpha)))
+                    }
                 }
                 Spacer(Modifier.weight(1f))
-                if (payday) {
-                    Text("₽", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = (if (state == DayState.OFF) palette.onPayday else fg).copy(alpha = alpha))
+                val lines = info?.lines.orEmpty()
+                // Low cells (small screens, landscape) show fewer lines instead of cutting them.
+                val maxLines = when {
+                    height >= 64.dp -> 3
+                    height >= 52.dp -> 2
+                    else -> 1
                 }
-                if (info?.hasExtra == true) {
-                    Text("+", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = palette.onExtra.copy(alpha = alpha))
-                }
-                if (info?.note != null) {
-                    Box(Modifier.padding(start = 1.dp).size(5.dp).clip(CircleShape).background(fg.copy(alpha = 0.8f * alpha)))
-                }
-            }
-            Spacer(Modifier.weight(1f))
-            val lines = info?.lines.orEmpty()
-            // Low cells (small screens, landscape) show fewer lines instead of cutting them.
-            val maxLines = when {
-                height >= 64.dp -> 3
-                height >= 52.dp -> 2
-                else -> 1
-            }
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(0.dp)) {
-                for (line in lines.take(maxLines)) {
-                    Text(
-                        line,
-                        fontSize = 10.sp,
-                        lineHeight = 11.sp,
-                        maxLines = 1,
-                        color = fg.copy(alpha = alpha),
-                        textDecoration = if (state == DayState.CANCELLED) TextDecoration.LineThrough else null,
-                        fontWeight = if (state == DayState.CONFIRMED) FontWeight.SemiBold else FontWeight.Normal,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                info?.earned?.takeIf { height >= 60.dp }?.let {
-                    Text(
-                        compactMoney(it),
-                        fontSize = 9.sp,
-                        lineHeight = 10.sp,
-                        maxLines = 1,
-                        color = fg.copy(alpha = 0.85f * alpha),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                    )
+                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(0.dp)) {
+                    for (line in lines.take(maxLines)) {
+                        Text(
+                            line,
+                            fontSize = 10.sp,
+                            lineHeight = 11.sp,
+                            maxLines = 1,
+                            color = fg.copy(alpha = alpha),
+                            textDecoration = if (state == DayState.CANCELLED) TextDecoration.LineThrough else null,
+                            fontWeight = if (state == DayState.CONFIRMED) FontWeight.SemiBold else FontWeight.Normal,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    info?.earned?.takeIf { height >= 60.dp }?.let {
+                        Text(
+                            compactMoney(it),
+                            fontSize = 9.sp,
+                            lineHeight = 10.sp,
+                            maxLines = 1,
+                            color = fg.copy(alpha = 0.85f * alpha),
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                 }
             }
         }
@@ -229,16 +284,16 @@ fun DayCell(
 
 /** Explains colors and marks of the calendar. */
 @Composable
-fun LegendDialog(onDismiss: () -> Unit) {
+fun LegendDialog(compact: Boolean, onDismiss: () -> Unit) {
     val p = AppTheme.status
     val items = listOf(
         Triple(p.planned, p.onPlanned, "Смена запланирована"),
         Triple(p.inProgress, p.onInProgress, "Смена идёт сейчас"),
         Triple(p.awaiting, p.onAwaiting, "Смена завершена — отметьте часы"),
-        Triple(p.confirmed, p.onConfirmed, "Часы подтверждены (в ячейке — отработанные часы)"),
-        Triple(p.extra, p.onExtra, "Дополнительная смена («+» в углу)"),
+        Triple(p.confirmed, p.onConfirmed, "Часы подтверждены"),
+        Triple(p.extra, p.onExtra, "Дополнительная смена"),
         Triple(p.missed, p.onMissed, "Смена не состоялась"),
-        Triple(p.cancelled, p.onCancelled, "Смена отменена или перенесена (→ дата)"),
+        Triple(p.cancelled, p.onCancelled, "Смена отменена или перенесена"),
         Triple(p.vacation, p.onVacation, "Отпуск"),
         Triple(p.sick, p.onSick, "Больничный"),
         Triple(p.otherAbsence, p.onOtherAbsence, "Другое отсутствие"),
@@ -247,11 +302,18 @@ fun LegendDialog(onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         title = { Text("Обозначения") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 for ((bg, fg, text) in items) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(Modifier.size(28.dp).clip(RoundedCornerShape(8.dp)).background(bg), contentAlignment = Alignment.Center) {
-                            Text("12", fontSize = 10.sp, color = fg)
+                        Box(
+                            Modifier.size(28.dp).clip(RoundedCornerShape(8.dp)).background(if (compact) Color.Transparent else bg),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            if (compact) {
+                                Spacer(Modifier.size(13.dp, 3.dp).clip(CircleShape).background(fg))
+                            } else {
+                                Text("12", fontSize = 10.sp, color = fg)
+                            }
                         }
                         Spacer(Modifier.width(12.dp))
                         Text(text, style = MaterialTheme.typography.bodyMedium)
@@ -259,13 +321,13 @@ fun LegendDialog(onDismiss: () -> Unit) {
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
-                        Modifier.size(28.dp).clip(RoundedCornerShape(8.dp)).background(p.payday).border(2.dp, p.paydayAccent, RoundedCornerShape(8.dp)),
+                        Modifier.size(28.dp).clip(RoundedCornerShape(8.dp)).background(p.payday),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text("₽", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = p.onPayday)
                     }
                     Spacer(Modifier.width(12.dp))
-                    Text("День выплаты аванса или зарплаты (рабочий день — в рамке)", style = MaterialTheme.typography.bodyMedium)
+                    Text("День выплаты. Нажмите на дату, чтобы внести сумму.", style = MaterialTheme.typography.bodyMedium)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.size(28.dp), contentAlignment = Alignment.Center) {

@@ -31,6 +31,17 @@ class UpdateCheckTest {
     }
 
     @Test
+    fun `side by side beta and stable packages only see upgrades on their own channel`() {
+        val stable = releases.first { it.tag == "workcalendar-v1.4.0" }.copy(tag = "workcalendar-v2.0.0")
+        val beta = stable.copy(tag = "workcalendar-v1.6.0-beta.10", prerelease = true)
+        val candidates = listOf(beta, stable, beta.copy(tag = "workcalendar-v1.6.0-beta.9"))
+        assertEquals("1.6.0-beta.10", UpdateCheck.newest(candidates, AppVersion.parse("1.6.0-beta.2-debug")!!)?.version.toString())
+        assertNull(UpdateCheck.newest(candidates, AppVersion.parse("1.6.0-beta.10")!!))
+        assertNull(UpdateCheck.newest(listOf(beta), AppVersion.parse("1.5.0")!!))
+        assertEquals("2.0.0", UpdateCheck.newest(candidates, AppVersion.parse("1.5.0")!!)?.version.toString())
+    }
+
+    @Test
     fun `newest published release with an apk`() {
         val update = UpdateCheck.newest(releases, AppVersion.parse("1.3.0-debug")!!)!!
         assertEquals("1.4.0", update.version.toString())

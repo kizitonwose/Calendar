@@ -141,4 +141,6 @@ jobs:
           name: Рабочий календарь ${{ inputs.version }}
           target_commitish: ${{ github.sha }}
           body_path: workcalendar/RELEASE_NOTES.md
+          prerelease: true
+          make_latest: false
           files: dist/*.apk

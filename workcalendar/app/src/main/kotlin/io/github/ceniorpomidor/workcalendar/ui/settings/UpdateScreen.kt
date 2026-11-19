@@ -106,7 +106,7 @@ fun UpdateScreen(container: AppContainer, settings: AppSettings, onBack: () -> U
         ScrollColumn(padding) {
             SectionCard(title = "Версия ${updater.currentVersion}", icon = AppIcons.Info) {
                 Text(
-                    "Новые версии публикуются на GitHub. Обновление ставится поверх установленной версии, все данные сохраняются.",
+                    "Здесь появляются новые бета-версии. Обновление сохраняет данные тестовой сборки.",
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 when (val s = state) {

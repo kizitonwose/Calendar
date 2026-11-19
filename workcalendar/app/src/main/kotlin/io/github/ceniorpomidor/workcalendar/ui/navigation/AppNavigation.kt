@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.SnackbarHostState
@@ -445,7 +447,8 @@ private fun AppNavHost(container: AppContainer, settingsState: State<AppSettings
             }
         }
         if (showBottomBar) {
-            NavigationBar {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f))
+            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 for (item in navItems) {
                     val info = item.info
                     val selected = currentRoute == info.route

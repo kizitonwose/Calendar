@@ -26,6 +26,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -33,7 +36,9 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -86,40 +91,72 @@ private val rainbow = Brush.sweepGradient(listOf(Color.Red, Color.Yellow, Color.
 fun AppearanceScreen(container: AppContainer, settings: AppSettings, onBack: () -> Unit) {
     val update = rememberSettingsUpdater(container)
     val c = settings.calendar
+    var section by rememberSaveable { mutableIntStateOf(0) }
     SubScreen(title = "Оформление", onBack = onBack) { padding ->
         ScrollColumn(padding) {
-            SectionCard(title = "Тема", icon = AppIcons.Contrast) {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf(ThemeMode.SYSTEM to "Как в системе", ThemeMode.LIGHT to "Светлая", ThemeMode.DARK to "Тёмная").forEach { (mode, label) ->
-                        FilterChip(selected = settings.theme == mode, onClick = { update { it.copy(theme = mode) } }, label = { Text(label) })
+            val sections = listOf("Цвета", "Календарь", "Меню")
+            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                sections.forEachIndexed { index, name ->
+                    SegmentedButton(
+                        selected = section == index,
+                        onClick = { section = index },
+                        shape = SegmentedButtonDefaults.itemShape(index, sections.size),
+                    ) { Text(name) }
+                }
+            }
+            when (section) {
+                0 -> {
+                    SectionCard(title = "Тема", icon = AppIcons.Contrast) {
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf(ThemeMode.SYSTEM to "Как в системе", ThemeMode.LIGHT to "Светлая", ThemeMode.DARK to "Тёмная").forEach { (mode, label) ->
+                                FilterChip(selected = settings.theme == mode, onClick = { update { it.copy(theme = mode) } }, label = { Text(label) })
+                            }
+                        }
+                        SwitchRow("Чёрный фон в тёмной теме", "Экономит заряд на OLED-экранах", settings.appearance.pureBlack) { v ->
+                            update { it.copy(appearance = it.appearance.copy(pureBlack = v)) }
+                        }
+                    }
+                    SectionCard(title = "Цветовая палитра", icon = AppIcons.Palette) {
+                        PalettePicker(settings, update)
                     }
                 }
-                SwitchRow("Чёрный фон в тёмной теме", "Экономит заряд на OLED-экранах", settings.appearance.pureBlack) { v ->
-                    update { it.copy(appearance = it.appearance.copy(pureBlack = v)) }
-                }
-            }
-            SectionCard(title = "Цветовая палитра", icon = AppIcons.Palette) {
-                PalettePicker(settings, update)
-            }
-            SectionCard(title = "Нижнее меню", icon = AppIcons.Tune) {
-                NavItemsEditor(settings, update)
-            }
-            SectionCard(title = "Календарь", icon = AppIcons.CalendarMonth) {
-                Text("Первый день недели", style = MaterialTheme.typography.bodyMedium)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY).forEach { day ->
-                        FilterChip(
-                            selected = c.firstDayOfWeek == day,
-                            onClick = { update { it.copy(calendar = it.calendar.copy(firstDayOfWeek = day)) } },
-                            label = { Text(Formats.weekdayFull(day).replaceFirstChar { ch -> ch.uppercase() }) },
-                        )
+                1 -> {
+                    SectionCard(title = "Календарь", icon = AppIcons.CalendarMonth) {
+                        val modes = listOf("Компактный", "Подробный")
+                        Text("Вид месяца", style = MaterialTheme.typography.bodyMedium)
+                        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+                            modes.forEachIndexed { index, label ->
+                                SegmentedButton(
+                                    selected = c.compactDays == (index == 0),
+                                    onClick = { update { it.copy(calendar = it.calendar.copy(compactDays = index == 0)) } },
+                                    shape = SegmentedButtonDefaults.itemShape(index, modes.size),
+                                ) { Text(label) }
+                            }
+                        }
+                        Text("Первый день недели", style = MaterialTheme.typography.bodyMedium)
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf(DayOfWeek.MONDAY, DayOfWeek.SUNDAY, DayOfWeek.SATURDAY).forEach { day ->
+                                FilterChip(
+                                    selected = c.firstDayOfWeek == day,
+                                    onClick = { update { it.copy(calendar = it.calendar.copy(firstDayOfWeek = day)) } },
+                                    label = { Text(Formats.weekdayFull(day).replaceFirstChar { ch -> ch.uppercase() }) },
+                                )
+                            }
+                        }
+                        if (!c.compactDays) {
+                            SwitchRow("Время смен в ячейках", null, c.showShiftTimes) { v -> update { it.copy(calendar = it.calendar.copy(showShiftTimes = v)) } }
+                            SwitchRow("Отработанные часы после подтверждения", null, c.showWorkedHours) { v -> update { it.copy(calendar = it.calendar.copy(showWorkedHours = v)) } }
+                        }
+                        SwitchRow("Заработок за день в ячейках", null, c.showDayEarnings) { v -> update { it.copy(calendar = it.calendar.copy(showDayEarnings = v)) } }
+                        SwitchRow("Выделять праздники", null, c.showHolidays) { v -> update { it.copy(calendar = it.calendar.copy(showHolidays = v)) } }
+                        SwitchRow("Сводка месяца над календарём", null, c.showMonthSummary) { v -> update { it.copy(calendar = it.calendar.copy(showMonthSummary = v)) } }
                     }
                 }
-                SwitchRow("Время смен в ячейках", null, c.showShiftTimes) { v -> update { it.copy(calendar = it.calendar.copy(showShiftTimes = v)) } }
-                SwitchRow("Отработанные часы после подтверждения", null, c.showWorkedHours) { v -> update { it.copy(calendar = it.calendar.copy(showWorkedHours = v)) } }
-                SwitchRow("Заработок за день в ячейках", null, c.showDayEarnings) { v -> update { it.copy(calendar = it.calendar.copy(showDayEarnings = v)) } }
-                SwitchRow("Выделять праздники", null, c.showHolidays) { v -> update { it.copy(calendar = it.calendar.copy(showHolidays = v)) } }
-                SwitchRow("Сводка месяца над календарём", null, c.showMonthSummary) { v -> update { it.copy(calendar = it.calendar.copy(showMonthSummary = v)) } }
+                else -> {
+                    SectionCard(title = "Нижнее меню", icon = AppIcons.Tune) {
+                        NavItemsEditor(settings, update)
+                    }
+                }
             }
         }
     }

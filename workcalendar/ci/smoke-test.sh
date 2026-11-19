@@ -3,7 +3,7 @@
 # Prints UI texts of every screen and small inline screenshots of key screens to the log.
 set -u
 APK=$(ls "$1"/*.apk | head -1)
-PKG=io.github.ceniorpomidor.workcalendar
+export PKG=io.github.ceniorpomidor.workcalendar.preview
 UI="python3 workcalendar/ci/ui.py"
 export SMOKE_OUT=smoke
 mkdir -p smoke
@@ -11,7 +11,7 @@ mkdir -p smoke
 adb install -r "$APK" || { echo "install failed"; exit 1; }
 adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS || true
 adb logcat -c
-adb shell am start -W -n $PKG/.MainActivity
+adb shell am start -W -n $PKG/io.github.ceniorpomidor.workcalendar.MainActivity
 sleep 8
 $UI dump onboarding-1 1 || exit 1
 # A slow emulator can lose a tap (or show "isn't responding" over the app): tap until the page changes.
@@ -118,7 +118,12 @@ $UI dump history 0 || exit 1
 
 $UI tap "Настройки" 1
 $UI route "settings"
-$UI dump settings 1 || exit 1
+$UI dump settings 1 "Найти настройку" || exit 1
+$UI tap "Найти настройку" || exit 1
+$UI type "csv"
+$UI hide-keyboard
+$UI dump settings-search 1 "Резервная копия и экспорт" || exit 1
+$UI tap "Очистить поиск" || exit 1
 $UI route "settings/templates"
 $UI dump templates 1 || exit 1
 $UI route "settings/rates"
@@ -151,6 +156,11 @@ $UI dump search 0 || exit 1
 $UI route "settings/display"
 $UI dump appearance 1 "Цветовая палитра" || exit 1
 $UI tap "Зелёный" 1
+$UI tap "Календарь" 1 || exit 1
+$UI tap "Подробный" 1 || exit 1
+$UI dump calendar-options 1 "Время смен в ячейках" || exit 1
+$UI tap "Компактный" 1 || exit 1
+$UI tap "Меню" 1 || exit 1
 $UI tap "Будильник" 1
 sleep 2
 $UI dump appearance-after 0 || exit 1
