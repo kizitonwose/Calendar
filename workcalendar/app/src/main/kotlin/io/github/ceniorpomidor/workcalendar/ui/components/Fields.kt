@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -193,18 +194,40 @@ fun NumberField(
 /** Integer input with − and + buttons. */
 @Composable
 fun StepperField(label: String, value: Int, onChange: (Int) -> Unit, range: IntRange, modifier: Modifier = Modifier, suffix: String? = null, step: Int = 1) {
+    val signed = range.first < 0
+    var focused by remember { mutableStateOf(false) }
+    var draft by rememberSaveable { mutableStateOf(value.toString()) }
+    fun stepBy(delta: Int) {
+        val next = ((draft.toIntOrNull()?.takeIf { focused } ?: value) + delta).coerceIn(range)
+        draft = next.toString()
+        onChange(next)
+    }
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         OutlinedTextField(
-            value = value.toString(),
-            onValueChange = { text -> text.filter { it.isDigit() }.toIntOrNull()?.let { onChange(it.coerceIn(range)) } },
+            value = if (focused) draft else value.toString(),
+            onValueChange = { input ->
+                val text = input.replace('−', '-')
+                val digits = if (signed) text.removePrefix("-") else text
+                if (digits.all { it.isDigit() }) {
+                    draft = text
+                    text.toIntOrNull()?.let { number ->
+                        val bounded = number.coerceIn(range)
+                        if (bounded != number) draft = bounded.toString()
+                        onChange(bounded)
+                    }
+                }
+            },
             label = { Text(label) },
             suffix = suffix?.let { { Text(it) } },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.weight(1f),
+            keyboardOptions = KeyboardOptions(keyboardType = if (signed) KeyboardType.Ascii else KeyboardType.Number),
+            modifier = Modifier.weight(1f).onFocusChanged {
+                if (it.isFocused && !focused) draft = value.toString()
+                focused = it.isFocused
+            },
         )
-        IconButton(onClick = { onChange((value - step).coerceIn(range)) }) { Icon(AppIcons.Remove, contentDescription = "Меньше") }
-        IconButton(onClick = { onChange((value + step).coerceIn(range)) }) { Icon(AppIcons.Add, contentDescription = "Больше") }
+        IconButton(onClick = { stepBy(-step) }) { Icon(AppIcons.Remove, contentDescription = "Меньше") }
+        IconButton(onClick = { stepBy(step) }) { Icon(AppIcons.Add, contentDescription = "Больше") }
     }
 }
 

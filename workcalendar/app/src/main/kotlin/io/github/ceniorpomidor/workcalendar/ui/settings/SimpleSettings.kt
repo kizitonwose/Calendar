@@ -144,7 +144,14 @@ fun NotificationSettingsScreen(container: AppContainer, settings: AppSettings, o
                 SwitchRow("Предлагать отметить часы", "С кнопками «Полностью», «Ввести часы» и «Отложить»", n.shiftEnd) { v ->
                     update { it.copy(notifications = it.notifications.copy(shiftEnd = v)) }
                 }
-                StepperField("Через минут после окончания", n.shiftEndDelayMinutes, { v -> update { it.copy(notifications = it.notifications.copy(shiftEndDelayMinutes = v)) } }, 0..240, step = 5)
+                StepperField(
+                    "Смещение, мин",
+                    n.shiftEndDelayMinutes,
+                    { v -> update { it.copy(notifications = it.notifications.copy(shiftEndDelayMinutes = v)) } },
+                    -240..240,
+                    step = 5,
+                )
+                Text("−15 — за 15 минут до конца смены, 0 — в момент окончания, 15 — через 15 минут после.")
             }
             SectionCard(title = "Неподтверждённые часы") {
                 SwitchRow("Ежедневное напоминание", "Если есть смены без отмеченных часов", n.unconfirmedReminder) { v ->

@@ -39,7 +39,7 @@ class AppContainer(val context: Context) {
     val schedule: ScheduleRepository = ScheduleRepository(db, settings, calc, log, changes, clock)
     val shifts: ShiftRepository = ShiftRepository(db, calc, log, changes, clock)
     val absences: AbsenceRepository = AbsenceRepository(db, schedule, calc, log, changes, clock)
-    val finance: FinanceRepository = FinanceRepository(db, log, changes, clock)
+    val finance: FinanceRepository = FinanceRepository(db, calc, log, changes, clock)
     val backup: BackupRepository = BackupRepository(context, db, settings, calc, log, changes, clock)
     val notifications: NotificationScheduler = NotificationScheduler(context, db, calc, absences, clock)
     val wakeAlarms: WakeAlarmScheduler = WakeAlarmScheduler(context, db, settings, clock)

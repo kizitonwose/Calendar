@@ -234,12 +234,16 @@ if [ "$(adb shell date +%F | tr -d '\r')" = "$D1" ]; then
   $UI notification-action "Полностью" "Смена завершена" || exit 1
   $UI notifications "Часы сохранены" 10 || exit 1
   adb shell cmd statusbar collapse
-  # Next working day: enter the hours right in the notification.
-  $UI set-time "${D2}T18:05:00"
-  $UI notifications "Смена завершена" || exit 1
+  # Remind five minutes before the next shift ends, then enter hours in the shade.
+  $UI route "settings/notifications"
+  $UI tap "Меньше" 1 || exit 1
+  $UI dump signed-offset 0 "=-5" || exit 1
+  adb shell input keyevent 3
+  $UI set-time "${D2}T17:55:10"
+  $UI notifications "Отметьте часы смены" || exit 1
   adb shell cmd statusbar expand-notifications
   sleep 2
-  if $UI notification-action "Ввести часы" "Смена завершена"; then
+  if $UI notification-action "Ввести часы" "Отметьте часы смены"; then
     $UI type "7,5"
     $UI dump shade-reply 1 || exit 1
     adb shell input keyevent 66
@@ -273,6 +277,32 @@ if [ "$(adb shell date +%F | tr -d '\r')" = "$D1" ]; then
     echo "!! the app has set a system alarm clock"
     exit 1
   fi
+  # The next month's advance has a full period of shifts. Read the actual (possibly moved)
+  # payday from the calendar. Record it in the shade, then edit that same payment from its date.
+  NOMINAL=$(date -d "${D3:0:7}-01 +1 month +24 days" +%F)
+  $UI route "day/$NOMINAL"
+  PAYDAY=$($UI advance-date "$NOMINAL") || exit 1
+  adb shell input keyevent 3
+  $UI set-time "${PAYDAY}T10:01:00"
+  $UI notifications "Аванс сегодня" 45 || exit 1
+  adb shell cmd statusbar expand-notifications
+  $UI notification-action "Внести сумму" "Аванс сегодня" || exit 1
+  $UI type "12500,50"
+  $UI send-reply || exit 1
+  $UI notifications "Выплата получена" 10 || exit 1
+  adb shell cmd statusbar collapse
+  $UI route "day/$PAYDAY"
+  PAYDAY_RU=$(date -d "$PAYDAY" +%d.%m.%Y)
+  $UI tap "День выплаты, $PAYDAY_RU" 1 || exit 1
+  $UI dump calendar-receipt 1 "Фактическая сумма" "12500,50" || exit 1
+  $UI tap "Фактическая сумма" || exit 1
+  adb shell input keycombination 113 29
+  $UI type "13000,75"
+  $UI hide-keyboard
+  $UI tap "Сохранить" 1 || exit 1
+  $UI wait calendar-receipt-saved "Изменить" 20 || exit 1
+  $UI tap "День выплаты, $PAYDAY_RU" 1 || exit 1
+  $UI dump calendar-receipt-edited 0 "13000,75" || exit 1
 else
   echo "!! the emulator clock could not be changed, notification flow skipped"
 fi

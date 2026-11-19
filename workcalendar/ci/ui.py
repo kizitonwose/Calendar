@@ -297,6 +297,33 @@ def cmd_notification_action(action, title):
     sys.exit(3)
 
 
+def cmd_advance_date(nominal):
+    """Find the late-month payout marker on the displayed calendar."""
+    from datetime import date, datetime
+    month = date.fromisoformat(nominal)
+    for _ in range(5):
+        root = dump_xml()
+        for node in nodes(root) if root is not None else ():
+            match = re.search(r"День выплаты, (\d{2}\.\d{2}\.\d{4})", node.get("content-desc", ""))
+            if match:
+                day = datetime.strptime(match[1], "%d.%m.%Y").date()
+                if (day.year, day.month) == (month.year, month.month) and day.day > 15:
+                    print(day.isoformat())
+                    return
+        time.sleep(1)
+    sys.exit("Advance payday marker not found")
+
+
+def cmd_send_reply():
+    root = dump_xml()
+    for node in nodes(root) if root is not None else ():
+        if node.get("resource-id", "").endswith("/remote_input_send"):
+            x, y = center(node)
+            adb("shell", "input", "tap", str(x), str(y))
+            return
+    adb("shell", "input", "keyevent", "66")
+
+
 def cmd_type(text):
     adb("shell", "input", "text", text.replace(" ", "%s"))
     time.sleep(0.5)
@@ -340,6 +367,8 @@ if __name__ == "__main__":
         "tap": cmd_tap,
         "tap-until": cmd_tap_until,
         "type": cmd_type,
+        "send-reply": cmd_send_reply,
+        "advance-date": cmd_advance_date,
         "route": cmd_route,
         "back": cmd_back,
         "hide-keyboard": cmd_hide_keyboard,

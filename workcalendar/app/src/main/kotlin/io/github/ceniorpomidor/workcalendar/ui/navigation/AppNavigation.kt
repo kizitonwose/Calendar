@@ -320,10 +320,14 @@ private fun AppNavHost(container: AppContainer, settingsState: State<AppSettings
                         },
                     ),
                 ) { entry ->
-                    PaymentEditScreen(container, paymentId = null, payoutKey = entry.arguments?.getString("key").orEmpty(), onDone = { nav.popBackStack() })
+                    FinanceLockGate(container, settingsState.value ?: AppSettings()) {
+                        PaymentEditScreen(container, paymentId = null, payoutKey = entry.arguments?.getString("key").orEmpty(), onDone = { nav.popBackStack() })
+                    }
                 }
                 composable("payment/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) { entry ->
-                    PaymentEditScreen(container, paymentId = entry.arguments?.getLong("id"), payoutKey = "", onDone = { nav.popBackStack() })
+                    FinanceLockGate(container, settingsState.value ?: AppSettings()) {
+                        PaymentEditScreen(container, paymentId = entry.arguments?.getLong("id"), payoutKey = "", onDone = { nav.popBackStack() })
+                    }
                 }
                 composable("accrual/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) { entry ->
                     AccrualEditScreen(container, accrualId = entry.arguments?.getLong("id")?.takeIf { it > 0 }, onDone = { nav.popBackStack() })
