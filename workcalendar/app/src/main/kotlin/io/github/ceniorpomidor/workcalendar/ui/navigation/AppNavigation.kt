@@ -479,7 +479,8 @@ private fun navigateTopLevel(nav: NavHostController, route: String) {
     nav.navigate(target) {
         popUpTo(CALENDAR_ROUTE) { saveState = true }
         launchSingleTop = true
-        restoreState = true
+        // Restoring the root can reopen a saved child screen over the calendar.
+        restoreState = route != "calendar"
     }
 }
 

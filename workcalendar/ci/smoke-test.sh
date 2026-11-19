@@ -167,6 +167,17 @@ $UI dump appearance-after 0 || exit 1
 $UI route "calendar"
 $UI dump calendar-green 1 "=Будильник" || exit 1
 
+# Switch each calendar skin through Settings and verify the month is still interactive.
+for theme in "Синие ленты" "Пастель" "Комикс" "Граффити" "Офисные стикеры" "Текущее оформление"; do
+  $UI route "settings/display"
+  $UI tap "Календарь" 1 || exit 1
+  $UI tap "Тема календаря ·" 0 1 15 || exit 1
+  $UI tap-until "$theme" "Тема календаря · $theme" || exit 1
+  $UI route "calendar"
+  $UI tap "Сегодня" 1 || exit 1
+  $UI dump "theme-$theme" 0 "Изменить" || exit 1
+done
+
 # ---- Alarms: before every shift, one more at 06:30 on working days, one on a day off, test ring ----
 $UI tap "Будильник" 1
 $UI dump alarm 0 "Будильников нет" || exit 1
@@ -329,15 +340,5 @@ for screen in swipe-slow update-check finance-forecast day-edit cut-restored ala
     echo "!! step was not reached: $screen"
     exit 1
   fi
-done
-# Switch each calendar skin through Settings and verify the month is still interactive.
-for theme in "Синие ленты" "Пастель" "Комикс" "Граффити" "Офисные стикеры" "Текущее оформление"; do
-  $UI route "settings/display"
-  $UI tap "Календарь" 1 || exit 1
-  $UI tap "Тема календаря ·" 0 1 15 || exit 1
-  $UI tap "$theme" 1 || exit 1
-  $UI route "calendar"
-  $UI tap "Сегодня" 1 || exit 1
-  $UI dump "theme-$theme" 0 "Изменить" || exit 1
 done
 echo "SMOKE TEST PASSED"
