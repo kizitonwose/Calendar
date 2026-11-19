@@ -31,12 +31,12 @@ import io.github.ceniorpomidor.workcalendar.domain.model.PaymentType
 import io.github.ceniorpomidor.workcalendar.domain.pay.PayoutAmount
 import io.github.ceniorpomidor.workcalendar.domain.pay.PayoutCalculator
 import io.github.ceniorpomidor.workcalendar.domain.pay.PayoutInstance
-import io.github.ceniorpomidor.workcalendar.domain.time.DateRange
 import io.github.ceniorpomidor.workcalendar.domain.util.Formats
 import io.github.ceniorpomidor.workcalendar.ui.components.Banner
 import io.github.ceniorpomidor.workcalendar.ui.components.BannerKind
 import io.github.ceniorpomidor.workcalendar.ui.components.ConfirmDialog
 import io.github.ceniorpomidor.workcalendar.ui.components.DateField
+import io.github.ceniorpomidor.workcalendar.ui.components.LocalCurrency
 import io.github.ceniorpomidor.workcalendar.ui.components.LocalSnackbar
 import io.github.ceniorpomidor.workcalendar.ui.components.NumberField
 import io.github.ceniorpomidor.workcalendar.ui.components.ScrollColumn
@@ -55,7 +55,8 @@ fun PaymentEditScreen(container: AppContainer, paymentId: Long?, payoutKey: Stri
     val scope = rememberCoroutineScope()
     var existing by remember { mutableStateOf<Payment?>(null) }
     var payout by remember { mutableStateOf<PayoutInstance?>(null) }
-    var loaded by rememberSaveable { mutableStateOf(false) }
+    var loaded by remember { mutableStateOf(false) }
+    var initialized by rememberSaveable { mutableStateOf(false) }
     var type by rememberSaveable { mutableStateOf(PaymentType.SALARY) }
     var amountText by rememberSaveable { mutableStateOf("") }
     var date by rememberSaveable { mutableStateOf(container.clock.today()) }
@@ -63,44 +64,19 @@ fun PaymentEditScreen(container: AppContainer, paymentId: Long?, payoutKey: Stri
     var askDelete by remember { mutableStateOf(false) }
 
     LaunchedEffect(paymentId, payoutKey) {
-        if (paymentId != null) {
-            val p = container.finance.getPayment(paymentId)
-            existing = p
-            if (p != null && !loaded) {
-                type = p.type
-                amountText = p.amount.toString().replace('.', ',')
-                date = p.date
-                note = p.note
-            }
-            loaded = true
-        } else if (payoutKey.isNotBlank()) {
-            val parsed = PayoutInstance.parseKey(payoutKey)
-            if (parsed != null) {
-                val (_, month) = parsed
-                val calc = container.calc.current()
-                val shifts = container.shifts.getRange(DateRange.month(month))
-                val instance = calc.payouts.forMonth(
-                    month,
-                    container.finance.getRules(),
-                    shifts,
-                    container.finance.getAccruals(),
-                    container.finance.getPayments(),
-                    container.clock.now(),
-                ).firstOrNull { it.key == payoutKey }
-                payout = instance
-                if (instance != null && !loaded) {
-                    type = PayoutCalculator.paymentTypeFor(instance.rule.kind)
-                    val p = instance.payment
-                    existing = p
-                    amountText = (p?.amount ?: instance.expectedNet)?.toString()?.replace('.', ',') ?: ""
-                    date = p?.date ?: if (instance.payDate.isAfter(container.clock.today())) container.clock.today() else instance.payDate
-                    note = p?.note ?: ""
-                }
-            }
-            loaded = true
-        } else {
-            loaded = true
+        loaded = false
+        val instance = payoutKey.takeIf { it.isNotBlank() }?.let { container.finance.findPayout(it) }
+        val payment = paymentId?.let { container.finance.getPayment(it) } ?: instance?.payment
+        payout = instance
+        existing = payment
+        if (!initialized) {
+            type = payment?.type ?: instance?.rule?.let { PayoutCalculator.paymentTypeFor(it.kind) } ?: PaymentType.SALARY
+            amountText = (payment?.amount ?: instance?.expectedNet)?.toString()?.replace('.', ',').orEmpty()
+            date = payment?.date ?: minOf(instance?.payDate ?: container.clock.today(), container.clock.today())
+            note = payment?.note.orEmpty()
+            initialized = true
         }
+        loaded = true
     }
     val amount = Money.parse(amountText)
 
@@ -110,18 +86,10 @@ fun PaymentEditScreen(container: AppContainer, paymentId: Long?, payoutKey: Stri
         actions = { if (existing != null) IconButton(onClick = { askDelete = true }) { Icon(AppIcons.Delete, contentDescription = "Удалить") } },
     ) { padding ->
         ScrollColumn(padding) {
-            payout?.let { p ->
-                SectionCard(title = "Ожидаемая выплата", icon = AppIcons.Event) {
-                    ValueRow("Дата по правилу", "${Formats.weekdayShort(p.payDate.dayOfWeek)}, ${Formats.date(p.payDate)}")
-                    ValueRow("Период", Formats.period(p.period.start, p.period.endInclusive))
-                    when (val a = p.amount) {
-                        is PayoutAmount.Calculated -> {
-                            ValueRow("Расчётная сумма", (if (a.isEstimate) "≈ " else "") + money(a.net), emphasize = true)
-                            a.explanation.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-                        }
-                        is PayoutAmount.Insufficient -> Banner(a.reason, BannerKind.WARNING)
-                    }
-                }
+            if (!loaded) return@ScrollColumn
+            if ((payoutKey.isNotBlank() && payout == null) || (paymentId != null && existing == null)) {
+                Banner("Эта выплата больше недоступна", BannerKind.WARNING)
+                return@ScrollColumn
             }
             SectionCard(title = "Получено", icon = AppIcons.Savings) {
                 if (payout == null) {
@@ -131,7 +99,7 @@ fun PaymentEditScreen(container: AppContainer, paymentId: Long?, payoutKey: Stri
                         }
                     }
                 }
-                NumberField("Фактическая сумма", amountText, { amountText = it }, suffix = "₽", isError = amountText.isNotBlank() && amount == null)
+                NumberField("Фактическая сумма", amountText, { amountText = it }, suffix = LocalCurrency.current, isError = amountText.isNotBlank() && amount == null)
                 DateField("Дата получения", date, { date = it })
                 TextInput("Комментарий", note, { note = it }, singleLine = false)
                 Text(
@@ -158,6 +126,19 @@ fun PaymentEditScreen(container: AppContainer, paymentId: Long?, payoutKey: Stri
                         }
                     },
                 ) { Text("Сохранить") }
+            }
+            payout?.let { p ->
+                SectionCard(title = "Ожидаемая выплата", icon = AppIcons.Event) {
+                    ValueRow("Дата по правилу", "${Formats.weekdayShort(p.payDate.dayOfWeek)}, ${Formats.date(p.payDate)}")
+                    ValueRow("Период", Formats.period(p.period.start, p.period.endInclusive))
+                    when (val a = p.amount) {
+                        is PayoutAmount.Calculated -> {
+                            ValueRow("Расчётная сумма", (if (a.isEstimate) "≈ " else "") + money(a.net), emphasize = true)
+                            a.explanation.forEach { Text("• $it", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+                        }
+                        is PayoutAmount.Insufficient -> Banner(a.reason, BannerKind.WARNING)
+                    }
+                }
             }
         }
     }

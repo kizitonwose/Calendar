@@ -130,13 +130,13 @@ class NotificationPlanner(
     }
 
     fun unconfirmedCount(shifts: List<Shift>, at: LocalDateTime): Int =
-        shifts.count { it.status == ShiftStatus.PLANNED && !at.isBefore(it.plannedEnd.plusMinutes(settings.shiftEndDelayMinutes.toLong())) }
+        shifts.count { it.status == ShiftStatus.PLANNED && !at.isBefore(it.plannedEnd.plusMinutes(settings.shiftEndDelayMinutes.coerceAtLeast(0).toLong())) }
 
     /** Unconfirmed shifts for the daily reminder; a shift that has just ended has its own notification. */
     private fun remindableCount(shifts: List<Shift>, at: LocalDateTime): Int {
         val fresh = if (settings.shiftEnd) FRESH_SHIFT_MINUTES else 0L
         return shifts.count {
-            it.status == ShiftStatus.PLANNED && !at.isBefore(it.plannedEnd.plusMinutes(settings.shiftEndDelayMinutes.toLong() + fresh))
+            it.status == ShiftStatus.PLANNED && !at.isBefore(it.plannedEnd.plusMinutes((settings.shiftEndDelayMinutes.toLong() + fresh).coerceAtLeast(0)))
         }
     }
 
@@ -151,7 +151,7 @@ class NotificationPlanner(
                 key = key,
                 kind = NotificationKind.SHIFT_END,
                 triggerAt = if (trigger.isBefore(now)) now else trigger,
-                title = "Смена завершена — отметьте часы",
+                title = if (maxOf(now, trigger) < shift.plannedEnd) "Отметьте часы смены" else "Смена завершена — отметьте часы",
                 text = "${Formats.weekdayShort(shift.date.dayOfWeek)}, ${Formats.shortDate(shift.date)}: " +
                     "${Formats.timeRange(shift.plannedStart, shift.plannedEnd)}, по плану ${Formats.hours(minutes)}",
                 shiftId = shift.id,

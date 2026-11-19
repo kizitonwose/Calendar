@@ -32,6 +32,7 @@ object Notifications {
     const val CHANNEL_ALARM_STATUS = "wake_alarm_status"
 
     const val KEY_HOURS = "hours"
+    const val KEY_AMOUNT = "amount"
     const val EXTRA_ROUTE = "route"
 
     fun createChannels(context: Context) {
@@ -104,7 +105,7 @@ object Notifications {
     fun routeFor(n: PlannedNotification): String = when (n.kind) {
         NotificationKind.SHIFT_END -> n.shiftId?.let { "confirm/$it" } ?: "unconfirmed"
         NotificationKind.UNCONFIRMED -> "unconfirmed"
-        NotificationKind.PAYOUT -> "finance"
+        NotificationKind.PAYOUT -> n.payoutKey?.let { "payment/new?key=$it" } ?: "finance"
         NotificationKind.VACATION_PAY, NotificationKind.SICK_PAY -> n.absenceId?.let { "absence/$it" } ?: "finance"
     }
 
@@ -115,7 +116,7 @@ object Notifications {
         NotificationKind.VACATION_PAY, NotificationKind.SICK_PAY -> CHANNEL_ABSENCES
     }
 
-    fun build(context: Context, n: PlannedNotification, errorText: String? = null): Notification {
+    fun build(context: Context, n: PlannedNotification, errorText: String? = null, allowPayoutReply: Boolean = false): Notification {
         val id = idFor(n.key)
         val builder = NotificationCompat.Builder(context, channelFor(n.kind))
             .setSmallIcon(R.drawable.ic_notification)
@@ -140,13 +141,25 @@ object Notifications {
                     .build(),
             )
         }
+        val payoutKey = n.payoutKey
+        if (n.kind == NotificationKind.PAYOUT && payoutKey != null) {
+            val action = if (allowPayoutReply) {
+                NotificationCompat.Action.Builder(0, "Внести сумму", actionIntent(context, NotificationActionReceiver.ACTION_REPLY_AMOUNT, payoutKey, null, mutable = true))
+                    .addRemoteInput(RemoteInput.Builder(KEY_AMOUNT).setLabel("Полученная сумма, например 12 500,50").build())
+                    .setAllowGeneratedReplies(false)
+                    .setAuthenticationRequired(true)
+            } else {
+                NotificationCompat.Action.Builder(0, "Внести сумму", openAppIntent(context, routeFor(n), id))
+            }
+            builder.addAction(action.build())
+        }
         builder.addAction(NotificationCompat.Action.Builder(0, "Отложить", actionIntent(context, NotificationActionReceiver.ACTION_SNOOZE, n.key, n.shiftId)).build())
         return builder.build()
     }
 
-    /** Short confirmation shown after the hours were saved from the notification. */
-    fun buildSaved(context: Context, key: String, title: String, text: String, route: String): Notification =
-        NotificationCompat.Builder(context, CHANNEL_SHIFTS)
+    /** Short feedback for a notification action. */
+    fun buildSaved(context: Context, key: String, title: String, text: String, route: String, channel: String = CHANNEL_SHIFTS): Notification =
+        NotificationCompat.Builder(context, channel)
             .setSmallIcon(R.drawable.ic_notification)
             .setColor(ContextCompat.getColor(context, R.color.notification_accent))
             .setContentTitle(title)

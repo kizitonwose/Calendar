@@ -50,6 +50,25 @@ class NotificationPlannerTest {
     }
 
     @Test
+    fun `signed offset applies to the end of an overnight shift and keeps ongoing shifts out of daily reminders`() {
+        val night = shift(10, "2026-10-05", start = "16:00", end = "00:10")
+        val start = night.plannedStart
+        val shifts = listOf(night)
+        for (offset in listOf(-240, -15, 0, 15, 240)) {
+            val expected = night.plannedEnd.plusMinutes(offset.toLong())
+            val planner = NotificationPlanner(NotificationSettings(shiftEndDelayMinutes = offset), TestData.zone)
+            val n = planner.plan(start, expected, shifts, emptyList(), emptyList(), emptySet()).single { it.kind == NotificationKind.SHIFT_END }
+            assertEquals(expected, n.triggerAt)
+            assertEquals(n, planner.findDue(n.key, expected, shifts, emptyList(), emptyList(), snoozed = false))
+            if (offset < 0) {
+                assertTrue(!n.title.contains("завершена"))
+                assertEquals(0, planner.unconfirmedCount(shifts, expected))
+                assertNull(planner.unconfirmedNow("daily", night.plannedEnd.minusMinutes(1), shifts))
+            }
+        }
+    }
+
+    @Test
     fun `no reminder after confirmation or delivery`() {
         val now = dateTime("2026-10-05T08:00")
         val confirmed = shift(10, "2026-10-05", status = ShiftStatus.CONFIRMED, worked = 480)

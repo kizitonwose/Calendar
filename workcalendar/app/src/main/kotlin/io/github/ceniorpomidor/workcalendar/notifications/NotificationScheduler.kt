@@ -49,7 +49,8 @@ class NotificationScheduler(
         val context = calc.current()
         val settings = context.settings
         val today = now.toLocalDate()
-        val shifts = db.shiftDao().getPlannedEndedBefore(until).map { it.toDomain() }
+        val latestEnd = until.minusMinutes(settings.notifications.shiftEndDelayMinutes.coerceAtMost(0).toLong())
+        val shifts = db.shiftDao().getPlannedEndedBefore(latestEnd).map { it.toDomain() }
         val periodShifts = db.shiftDao().getRange(today.minusMonths(3).withDayOfMonth(1), until.toLocalDate().plusMonths(2)).map { it.toDomain() }
         val rules = db.financeDao().getRules().map { it.toDomain() }
         val payments = db.financeDao().getPayments().map { it.toDomain() }
@@ -105,7 +106,7 @@ class NotificationScheduler(
                 if (state != null) db.miscDao().upsertNotificationState(state.copy(scheduled = false))
                 return@withLock false
             }
-            Notifications.show(context, key, Notifications.build(context, n))
+            Notifications.show(context, key, Notifications.build(context, n, allowPayoutReply = !inputs.context.settings.security.financeLock))
             db.miscDao().upsertNotificationState(NotificationStateEntity(key, n.triggerAt, scheduled = false, deliveredAt = now))
             true
         }

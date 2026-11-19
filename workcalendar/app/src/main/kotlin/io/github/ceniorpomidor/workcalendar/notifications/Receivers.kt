@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
 import io.github.ceniorpomidor.workcalendar.appContainer
+import io.github.ceniorpomidor.workcalendar.domain.model.Money
 import io.github.ceniorpomidor.workcalendar.domain.util.Formats
 import io.github.ceniorpomidor.workcalendar.domain.util.HoursParser
 import io.github.ceniorpomidor.workcalendar.work.MaintenanceWorker
@@ -74,6 +75,7 @@ class NotificationActionReceiver : BroadcastReceiver() {
                     Notifications.show(context, savedKey, Notifications.buildSaved(context, savedKey, "Не удалось сохранить", e.message ?: "Ошибка", "confirm/$shiftId"))
                 }
             }
+            ACTION_REPLY_AMOUNT -> runAsync { receiveAmount(context, key, intent) }
             ACTION_REPLY_HOURS -> runAsync {
                 if (shiftId <= 0) return@runAsync
                 val text = RemoteInput.getResultsFromIntent(intent)?.getCharSequence(Notifications.KEY_HOURS)?.toString().orEmpty()
@@ -106,7 +108,37 @@ class NotificationActionReceiver : BroadcastReceiver() {
         }
     }
 
+    private suspend fun receiveAmount(context: Context, key: String, intent: Intent) {
+        val container = context.appContainer
+        val text = RemoteInput.getResultsFromIntent(intent)?.getCharSequence(Notifications.KEY_AMOUNT)?.toString().orEmpty()
+        val amount = Money.parse(text)
+        val route = "payment/new?key=$key"
+        val savedKey = "$key:saved"
+        val error = if (amount == null || amount.isNegative) {
+            "Введите сумму от нуля, например 12 500,50"
+        } else {
+            try {
+                val saved = container.finance.receivePayoutReply(key, amount)
+                container.notifications.dismiss(key)
+                val body = if (saved) Formats.money(amount, container.settings.get().currency) else "Эта выплата уже отмечена"
+                Notifications.show(context, savedKey, Notifications.buildSaved(context, savedKey, "Выплата получена", body, route, Notifications.CHANNEL_PAYOUTS))
+                return
+            } catch (e: Exception) {
+                e.message ?: "Не удалось сохранить выплату"
+            }
+        }
+        val current = container.notifications.current(key)
+        if (current != null) {
+            val inline = !container.settings.get().security.financeLock
+            Notifications.show(context, key, Notifications.build(context, current, error, allowPayoutReply = inline))
+        } else {
+            Notifications.cancel(context, key)
+            Notifications.show(context, savedKey, Notifications.buildSaved(context, savedKey, "Проверьте выплату", error, route, Notifications.CHANNEL_PAYOUTS))
+        }
+    }
+
     companion object {
+        const val ACTION_REPLY_AMOUNT = "io.github.ceniorpomidor.workcalendar.REPLY_AMOUNT"
         const val ACTION_CONFIRM_FULL = "io.github.ceniorpomidor.workcalendar.CONFIRM_FULL"
         const val ACTION_REPLY_HOURS = "io.github.ceniorpomidor.workcalendar.REPLY_HOURS"
         const val ACTION_SNOOZE = "io.github.ceniorpomidor.workcalendar.SNOOZE"

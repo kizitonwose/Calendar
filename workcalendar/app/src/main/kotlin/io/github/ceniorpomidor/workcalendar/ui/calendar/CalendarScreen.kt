@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -22,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -154,6 +157,7 @@ fun CalendarScreen(
         dayAlarmsUi(container, state.settings.alarm, selected, dayInfo, today, scope, snackbar, onEditAlarm, onAddAlarm)
     }
 
+    var choosingPayout by rememberSaveable { mutableStateOf(false) }
     var editing by rememberSaveable { mutableStateOf(false) }
     val actions = ShiftActions(
         edit = { onEditShift(it.id) },
@@ -221,14 +225,20 @@ fun CalendarScreen(
                 HorizontalCalendar(
                     state = calendarState,
                     dayContent = { day ->
+                        val info = state.days[day.date]
                         DayCell(
                             day = day,
-                            info = state.days[day.date],
+                            info = info,
                             selected = day.date == selected,
                             today = today,
                             showHolidays = state.settings.calendar.showHolidays,
                             height = cellHeight,
-                            onClick = { vm.select(day.date) },
+                            onClick = {
+                                vm.select(day.date)
+                                val payouts = info?.payouts.orEmpty()
+                                if (payouts.size == 1) onOpenPayout(payouts.single().key)
+                                if (payouts.size > 1) choosingPayout = true
+                            },
                             onLongClick = {
                                 vm.select(day.date)
                                 onNewShift(day.date, state.days[day.date]?.shifts?.any { it.isActive } == true)
@@ -287,6 +297,23 @@ fun CalendarScreen(
                 }
             }
         }
+    }
+    if (choosingPayout && !dayInfo?.payouts.isNullOrEmpty()) {
+        AlertDialog(
+            onDismissRequest = { choosingPayout = false },
+            title = { Text("Выплаты за ${Formats.shortDate(selected)}") },
+            text = {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    dayInfo?.payouts.orEmpty().forEach { payout ->
+                        TextButton(onClick = {
+                            choosingPayout = false
+                            onOpenPayout(payout.key)
+                        }) { Text(payout.title.replaceFirstChar { it.uppercase() }) }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { choosingPayout = false }) { Text("Закрыть") } },
+        )
     }
     if (legend) LegendDialog { legend = false }
     if (editing) {

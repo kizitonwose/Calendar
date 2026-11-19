@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -150,7 +152,8 @@ fun DayCell(
                     Modifier
                 },
             )
-            .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+            .semantics { if (payday) contentDescription = "День выплаты, ${Formats.date(day.date)}" }
+            .combinedClickable(onClickLabel = if (payday) "Внести полученную сумму" else null, onClick = onClick, onLongClick = onLongClick),
     ) {
         Column(Modifier.fillMaxSize().padding(horizontal = 3.dp, vertical = 3.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {

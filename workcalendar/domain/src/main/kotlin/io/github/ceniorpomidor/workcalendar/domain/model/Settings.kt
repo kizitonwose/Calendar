@@ -158,7 +158,7 @@ data class AbsenceRules(
 @Serializable
 data class NotificationSettings(
     val shiftEnd: Boolean = true,
-    /** Delay after the planned end before asking for hours. */
+    /** Signed offset from the planned end. Negative values remind before the shift ends. */
     val shiftEndDelayMinutes: Int = 0,
     val unconfirmedReminder: Boolean = true,
     val unconfirmedReminderMinute: Int = 20 * 60,

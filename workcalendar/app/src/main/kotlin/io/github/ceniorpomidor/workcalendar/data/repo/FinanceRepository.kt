@@ -1,5 +1,6 @@
 package io.github.ceniorpomidor.workcalendar.data.repo
 
+import androidx.room.withTransaction
 import io.github.ceniorpomidor.workcalendar.data.db.AppDatabase
 import io.github.ceniorpomidor.workcalendar.data.db.toDomain
 import io.github.ceniorpomidor.workcalendar.data.db.toEntity
@@ -14,6 +15,7 @@ import io.github.ceniorpomidor.workcalendar.domain.model.RatePeriod
 import io.github.ceniorpomidor.workcalendar.domain.notify.AbsencePayment
 import io.github.ceniorpomidor.workcalendar.domain.pay.PayoutCalculator
 import io.github.ceniorpomidor.workcalendar.domain.pay.PayoutInstance
+import io.github.ceniorpomidor.workcalendar.domain.time.DateRange
 import io.github.ceniorpomidor.workcalendar.domain.util.Formats
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -21,6 +23,7 @@ import java.time.LocalDate
 
 class FinanceRepository(
     private val db: AppDatabase,
+    private val calc: CalcRepository,
     private val log: ChangeLogger,
     private val changes: DataChanges,
     private val clock: AppClock,
@@ -98,8 +101,27 @@ class FinanceRepository(
         changes.notifyChanged()
     }
 
+    suspend fun findPayout(key: String): PayoutInstance? = findPayout(key, calc.current().payouts)
+
+    private suspend fun findPayout(key: String, calculator: PayoutCalculator): PayoutInstance? {
+        val (_, month) = PayoutInstance.parseKey(key) ?: return null
+        val range = DateRange.month(month)
+        val shifts = db.shiftDao().getRange(range.start, range.endInclusive).map { it.toDomain() }
+        return calculator.forMonth(month, getRules(), shifts, getAccruals(), getPayments(), clock.now()).firstOrNull { it.key == key }
+    }
+
+    /** A reply to an old notification may arrive after the same payout was recorded elsewhere. */
+    suspend fun receivePayoutReply(key: String, amount: Money): Boolean = db.withTransaction {
+        val context = calc.current()
+        if (context.settings.security.financeLock) throw ValidationException("Откройте выплату и разблокируйте финансы")
+        val payout = findPayout(key, context.payouts) ?: throw ValidationException("Правило выплаты больше недоступно")
+        if (payout.isReceived) return@withTransaction false
+        markPayoutReceived(payout, amount, clock.today(), "")
+        true
+    }
+
     /** Registers money received for an expected payout; repeated calls update the same record. */
-    suspend fun markPayoutReceived(payout: PayoutInstance, amount: Money, date: LocalDate, note: String): Long {
+    suspend fun markPayoutReceived(payout: PayoutInstance, amount: Money, date: LocalDate, note: String): Long = db.withTransaction {
         val existing = dao.getPaymentByKey(payout.key)?.toDomain()
         val now = clock.now()
         val payment = Payment(
@@ -115,7 +137,7 @@ class FinanceRepository(
             createdAt = existing?.createdAt ?: now,
             updatedAt = now,
         )
-        return savePayment(payment)
+        savePayment(payment)
     }
 
     suspend fun markAbsencePaymentReceived(item: AbsencePayment, amount: Money, date: LocalDate, note: String): Long {
