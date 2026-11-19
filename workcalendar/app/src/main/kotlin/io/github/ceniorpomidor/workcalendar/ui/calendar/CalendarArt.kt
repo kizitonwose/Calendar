@@ -154,8 +154,9 @@ internal fun ArtDay(
                 contentDescription = name
             }
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            .then(if (chosen) Modifier.border(1.5.dp, if (street) Color.White else MaterialTheme.colorScheme.primary, RoundedCornerShape(9.dp)) else Modifier),
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
+            .then(if (chosen) Modifier.border(1.5.dp, if (street) Color.White else MaterialTheme.colorScheme.primary, RoundedCornerShape(9.dp)) else Modifier)
+            .padding(top = if (height >= 46.dp) 3.dp else 1.dp),
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top,
     ) {
         Box(Modifier.fillMaxWidth().height(if (height < 41.dp) 21.dp else 30.dp), contentAlignment = Alignment.Center) {
             Canvas(Modifier.fillMaxSize().padding(horizontal = if (art == CalendarArt.BANDS) 0.dp else 3.dp)) {
