@@ -98,7 +98,7 @@ fun compactMoney(value: Money): String {
 val WEEK_HEADER_HEIGHT = 24.dp
 
 @Composable
-fun WeekHeader(days: List<DayOfWeek>) {
+fun WeekHeader(days: List<DayOfWeek>, street: Boolean = false) {
     Row(Modifier.fillMaxWidth().height(WEEK_HEADER_HEIGHT), verticalAlignment = Alignment.CenterVertically) {
         for (day in days) {
             val weekend = day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY
@@ -107,7 +107,7 @@ fun WeekHeader(days: List<DayOfWeek>) {
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelMedium,
-                color = if (weekend) AppTheme.status.holiday.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (street) { if (weekend) Color(0xFFFFA9D7) else Color.White } else if (weekend) AppTheme.status.holiday.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

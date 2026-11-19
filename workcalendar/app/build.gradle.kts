@@ -17,8 +17,8 @@ android {
         applicationId = "io.github.ceniorpomidor.workcalendar.preview"
         minSdk = 26
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.6.0-beta.1"
+        versionCode = 9
+        versionName = "1.6.0-beta.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

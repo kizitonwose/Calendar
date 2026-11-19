@@ -117,6 +117,16 @@ enum class ApplyFromDefault {
 }
 
 @Serializable
+enum class CalendarArt(val title: String) {
+    CLASSIC("Текущее оформление"),
+    BANDS("Синие ленты"),
+    AURORA("Пастель"),
+    COMIC("Комикс"),
+    GRAFFITI("Граффити"),
+    OFFICE("Офисные стикеры"),
+}
+
+@Serializable
 data class CalendarSettings(
     val firstDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
     val showShiftTimes: Boolean = true,
@@ -124,6 +134,7 @@ data class CalendarSettings(
     val showDayEarnings: Boolean = false,
     val showHolidays: Boolean = true,
     val showMonthSummary: Boolean = true,
+    val art: CalendarArt = CalendarArt.CLASSIC,
     val compactDays: Boolean = true,
 )
 

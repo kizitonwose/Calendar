@@ -12,6 +12,7 @@ import io.github.ceniorpomidor.workcalendar.data.repo.SettingsRepository
 import io.github.ceniorpomidor.workcalendar.domain.update.AppVersion
 import io.github.ceniorpomidor.workcalendar.domain.update.AvailableUpdate
 import io.github.ceniorpomidor.workcalendar.domain.update.UpdateCheck
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -33,11 +34,18 @@ class AppUpdater(private val context: Context, private val settings: SettingsRep
 
     /** The newest release if it is newer than the installed version, otherwise null. */
     suspend fun check(): AvailableUpdate? = withContext(Dispatchers.IO) {
-        val text = request(RELEASES_URL, accept = "application/vnd.github+json").use { connection ->
-            connection.inputStream.bufferedReader().readText()
+        val releases = try {
+            readReleases(FEED_URL)
+        } catch (e: IOException) {
+            readReleases(RELEASES_URL)
         }
+        val update = UpdateCheck.newest(releases, currentVersion)
         prefs.edit().putLong(KEY_LAST_CHECK, System.currentTimeMillis()).apply()
-        UpdateCheck.newest(UpdateCheck.parseReleases(text), currentVersion)
+        update
+    }
+
+    private fun readReleases(url: String) = request(url, accept = "application/json").use { connection ->
+        UpdateCheck.parseReleases(connection.inputStream.bufferedReader().use { it.readText() })
     }
 
     /** Downloads the APK of [update]; [onProgress] gets 0..1. Returns the checked file. */
@@ -106,6 +114,8 @@ class AppUpdater(private val context: Context, private val settings: SettingsRep
         if (System.currentTimeMillis() - prefs.getLong(KEY_LAST_CHECK, 0L) < OPEN_CHECK_INTERVAL_MS) return null
         val update = try {
             check()
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             android.util.Log.w("WorkCalendar", "Update check failed: ${e.message}")
             return null
@@ -138,8 +148,13 @@ class AppUpdater(private val context: Context, private val settings: SettingsRep
                 return@repeat
             }
             if (code != HttpURLConnection.HTTP_OK) {
+                val limited = code == 429 || (code == 403 && (connection.getHeaderField("X-RateLimit-Remaining") == "0" || connection.getHeaderField("Retry-After") != null))
                 connection.disconnect()
-                throw IOException(if (code == 403) "GitHub временно ограничил запросы, попробуйте позже" else "Ошибка сервера: $code")
+                throw IOException(when {
+                    limited -> "GitHub временно ограничил запросы. Попробуйте позже."
+                    code == 403 -> "GitHub отклонил запрос (HTTP 403). Откройте страницу релизов в браузере."
+                    else -> "Ошибка сервера: $code"
+                })
             }
             return connection
         }
@@ -154,6 +169,7 @@ class AppUpdater(private val context: Context, private val settings: SettingsRep
 
     companion object {
         const val RELEASES_PAGE = "https://github.com/cenior-pomidor/Calendar/releases"
+        private const val FEED_URL = "https://raw.githubusercontent.com/cenior-pomidor/Calendar/calendar-updates/feeds/beta.json"
         private const val RELEASES_URL = "https://api.github.com/repos/cenior-pomidor/Calendar/releases?per_page=20"
         private const val APK_TYPE = "application/vnd.android.package-archive"
         private const val PREFS = "updates"

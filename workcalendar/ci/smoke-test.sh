@@ -330,4 +330,14 @@ for screen in swipe-slow update-check finance-forecast day-edit cut-restored ala
     exit 1
   fi
 done
+# Switch each calendar skin through Settings and verify the month is still interactive.
+for theme in "Синие ленты" "Пастель" "Комикс" "Граффити" "Офисные стикеры" "Текущее оформление"; do
+  $UI route "settings/display"
+  $UI tap "Календарь" 1 || exit 1
+  $UI tap "Тема календаря ·" 0 1 15 || exit 1
+  $UI tap "$theme" 1 || exit 1
+  $UI route "calendar"
+  $UI tap "Сегодня" 1 || exit 1
+  $UI dump "theme-$theme" 0 "Изменить" || exit 1
+done
 echo "SMOKE TEST PASSED"

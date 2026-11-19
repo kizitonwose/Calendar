@@ -29,6 +29,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -146,8 +149,10 @@ private fun AppNavHost(container: AppContainer, settingsState: State<AppSettings
 
     // A newer version is looked for only when the app is opened (Settings → Обновление приложения).
     var newVersion by rememberSaveable { mutableStateOf<String?>(null) }
-    LaunchedEffect(Unit) {
-        if (settingsState.value?.onboardingDone == true) {
+    val owner = LocalLifecycleOwner.current
+    val checkOnOpen = settingsState.value?.let { it.onboardingDone && it.autoUpdateCheck } == true
+    LaunchedEffect(owner, checkOnOpen) {
+        if (checkOnOpen) owner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             container.updater.checkOnOpen()?.let { newVersion = it.version.toString() }
         }
     }

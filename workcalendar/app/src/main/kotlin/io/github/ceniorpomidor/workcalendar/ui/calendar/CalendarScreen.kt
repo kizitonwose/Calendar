@@ -54,6 +54,7 @@ import com.kizitonwose.calendar.core.OutDateStyle
 import com.kizitonwose.calendar.core.daysOfWeek
 import io.github.ceniorpomidor.workcalendar.AppContainer
 import io.github.ceniorpomidor.workcalendar.domain.alarm.AlarmPlanner
+import io.github.ceniorpomidor.workcalendar.domain.model.CalendarArt
 import io.github.ceniorpomidor.workcalendar.domain.model.AbsenceType
 import io.github.ceniorpomidor.workcalendar.domain.model.AlarmItem
 import io.github.ceniorpomidor.workcalendar.domain.model.AlarmRepeat
@@ -235,36 +236,51 @@ fun CalendarScreen(
         },
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
+        val art = state.settings.calendar.art
         val showSummary = state.settings.calendar.showMonthSummary
         val summaryRow: @Composable () -> Unit = {
             MonthSummaryRow(state.summaries[visibleMonth], onOpenFinance)
         }
         val calendar: @Composable (Dp) -> Unit = { cellHeight ->
-            Column(Modifier.padding(horizontal = 6.dp)) {
-                WeekHeader(daysOfWeek(firstDayOfWeek))
+            Column(Modifier.padding(horizontal = 6.dp).monthSheet(art)) {
+                WeekHeader(daysOfWeek(firstDayOfWeek), street = art == CalendarArt.GRAFFITI)
                 HorizontalCalendar(
                     state = calendarState,
                     dayContent = { day ->
                         val info = state.days[day.date]
-                        DayCell(
-                            day = day,
-                            info = info,
-                            selected = day.date == selected,
-                            today = today,
-                            showHolidays = state.settings.calendar.showHolidays,
-                            compact = state.settings.calendar.compactDays,
-                            height = cellHeight,
-                            onClick = {
-                                vm.select(day.date)
-                                val payouts = info?.payouts.orEmpty()
-                                if (payouts.size == 1) onOpenPayout(payouts.single().key)
-                                if (payouts.size > 1) choosingPayout = true
-                            },
-                            onLongClick = {
-                                vm.select(day.date)
-                                onNewShift(day.date, state.days[day.date]?.shifts?.any { it.isActive } == true)
-                            },
-                        )
+                        val click: () -> Unit = {
+                            vm.select(day.date)
+                            val payouts = info?.payouts.orEmpty()
+                            if (payouts.size == 1) onOpenPayout(payouts.single().key)
+                            if (payouts.size > 1) choosingPayout = true
+                        }
+                        val longClick: () -> Unit = {
+                            vm.select(day.date)
+                            onNewShift(day.date, state.days[day.date]?.shifts?.any { it.isActive } == true)
+                        }
+                        if (art == CalendarArt.CLASSIC) {
+                            DayCell(
+                                day = day,
+                                info = info,
+                                selected = day.date == selected,
+                                today = today,
+                                showHolidays = state.settings.calendar.showHolidays,
+                                compact = state.settings.calendar.compactDays,
+                                height = cellHeight,
+                                onClick = click,
+                                onLongClick = longClick,
+                            )
+                        } else {
+                            val date = day.date
+                            val band = art == CalendarArt.BANDS
+                            ArtDay(
+                                art, day, info, date == selected, today, state.settings.calendar.showHolidays, cellHeight,
+                                state.settings.calendar.compactDays,
+                                joinsLeft = band && date.dayOfWeek != firstDayOfWeek && state.days[date.minusDays(1)]?.shifts?.any { it.isActive } == true,
+                                joinsRight = band && date.plusDays(1).dayOfWeek != firstDayOfWeek && state.days[date.plusDays(1)]?.shifts?.any { it.isActive } == true,
+                                onClick = click, onLongClick = longClick,
+                            )
+                        }
                     },
                 )
             }
@@ -288,11 +304,11 @@ fun CalendarScreen(
                 onOpenPayout = { onOpenPayout(it.key) },
                 onOpenUnconfirmed = onOpenUnconfirmed,
                 onSetupSchedule = onSetupSchedule,
-                modifier = modifier,
+                modifier = if (art == CalendarArt.CLASSIC) modifier else modifier.monthSheet(if (art == CalendarArt.GRAFFITI) CalendarArt.BANDS else art),
             )
         }
 
-        BoxWithConstraints(Modifier.fillMaxSize().padding(padding)) {
+        BoxWithConstraints(Modifier.fillMaxSize().padding(padding).calendarBackdrop(art)) {
             if (maxWidth > maxHeight) {
                 // Landscape and large screens: the calendar on the left, the day on the right.
                 val calendarWidth = maxWidth * 0.55f

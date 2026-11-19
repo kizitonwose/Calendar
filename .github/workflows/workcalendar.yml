@@ -144,3 +144,19 @@ jobs:
           prerelease: true
           make_latest: false
           files: dist/*.apk
+      - name: Refresh public update feed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHANNEL: beta
+        run: |
+          set -euo pipefail
+          path="repos/$GITHUB_REPOSITORY/contents/feeds/$CHANNEL.json"
+          for attempt in 1 2 3; do
+            sha=$(gh api "$path?ref=calendar-updates" --jq .sha)
+            gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" |
+              jq -se --arg channel "$CHANNEL" '[.[][] | select(.draft == false and .prerelease == ($channel == "beta") and (.tag_name | startswith("workcalendar-v"))) | {tag_name,prerelease,body,html_url,assets:[.assets[] | select(.name|endswith(".apk")) | {name,size,browser_download_url}]}] | select(length > 0)' > feed.json
+            if gh api -X PUT "$path" -f branch=calendar-updates -f sha="$sha" -f message="Refresh $CHANNEL Android releases" -f content="$(base64 -w0 feed.json)" --silent; then
+              exit 0
+            fi
+          done
+          exit 1
