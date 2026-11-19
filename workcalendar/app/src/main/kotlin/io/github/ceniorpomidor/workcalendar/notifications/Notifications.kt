@@ -141,9 +141,10 @@ object Notifications {
                     .build(),
             )
         }
-        if (n.kind == NotificationKind.PAYOUT && n.payoutKey != null) {
+        val payoutKey = n.payoutKey
+        if (n.kind == NotificationKind.PAYOUT && payoutKey != null) {
             val action = if (allowPayoutReply) {
-                NotificationCompat.Action.Builder(0, "Внести сумму", actionIntent(context, NotificationActionReceiver.ACTION_REPLY_AMOUNT, n.payoutKey, null, mutable = true))
+                NotificationCompat.Action.Builder(0, "Внести сумму", actionIntent(context, NotificationActionReceiver.ACTION_REPLY_AMOUNT, payoutKey, null, mutable = true))
                     .addRemoteInput(RemoteInput.Builder(KEY_AMOUNT).setLabel("Полученная сумма, например 12 500,50").build())
                     .setAllowGeneratedReplies(false)
                     .setAuthenticationRequired(true)
