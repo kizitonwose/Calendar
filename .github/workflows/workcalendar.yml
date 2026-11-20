@@ -1,0 +1,144 @@
+name: Work Calendar app
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Publish a GitHub release with the APK'
+        type: boolean
+        default: false
+      version:
+        description: 'Release version (e.g. 1.0.0)'
+        type: string
+        default: '1.0.0'
+  push:
+    branches:
+      - main
+      - 'ccr-**'
+    paths:
+      - 'workcalendar/**'
+      - 'core/**'
+      - 'data/**'
+      - 'compose/**'
+      - 'gradle/**'
+      - 'buildSrc/**'
+      - '*.gradle.kts'
+      - 'gradle.properties'
+      - '.github/workflows/workcalendar.yml'
+  pull_request:
+    paths:
+      - 'workcalendar/**'
+      - 'gradle/**'
+      - '.github/workflows/workcalendar.yml'
+
+concurrency:
+  group: workcalendar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
+      - name: Unit tests (business logic)
+        run: ./gradlew :workcalendar:domain:test
+      - name: Build release APK
+        run: |
+          ./gradlew :workcalendar:app:assembleRelease --console=plain 2>&1 | tee build.log || {
+            echo "===== COMPILE ERRORS ====="
+            grep -E "^e: " build.log | head -100
+            exit 1
+          }
+      - name: Print Room schema
+        run: |
+          for f in workcalendar/app/schemas/*/*.json; do
+            echo "=====SCHEMA $f====="
+            base64 -w 0 "$f"
+            echo
+            echo "=====END SCHEMA====="
+          done
+      - name: Collect APK
+        run: |
+          mkdir -p dist
+          cp workcalendar/app/build/outputs/apk/release/app-release.apk "dist/WorkCalendar-${{ github.run_number }}.apk"
+          ls -la dist
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: WorkCalendar-apk
+          path: dist/*.apk
+          if-no-files-found: error
+      - name: Ktlint
+        continue-on-error: true
+        run: ./gradlew :workcalendar:domain:lintKotlin :workcalendar:app:lintKotlin
+
+  smoke-test:
+    name: Emulator smoke test
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: WorkCalendar-apk
+          path: dist
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install ImageMagick
+        run: command -v convert || (sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick > /dev/null) || true
+      - name: Run smoke test on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
+          script: bash workcalendar/ci/smoke-test.sh dist
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-screenshots
+          path: smoke/
+          if-no-files-found: ignore
+
+  release:
+    name: Publish release
+    needs: [build, smoke-test]
+    if: github.event_name == 'workflow_dispatch' && (inputs.release == true || inputs.release == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: WorkCalendar-apk
+          path: dist
+      - name: Rename APK
+        run: |
+          mv dist/*.apk "dist/WorkCalendar-${{ inputs.version }}.apk"
+          ls -la dist
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: workcalendar-v${{ inputs.version }}
+          name: Рабочий календарь ${{ inputs.version }}
+          target_commitish: ${{ github.sha }}
+          body_path: workcalendar/RELEASE_NOTES.md
+          files: dist/*.apk

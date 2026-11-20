@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Calendar sheet -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M38,36 H70 A6,6 0 0 1 76,42 V70 A6,6 0 0 1 70,76 H38 A6,6 0 0 1 32,70 V42 A6,6 0 0 1 38,36 Z"
+        android:strokeWidth="4"
+        android:strokeColor="@color/launcher_foreground" />
+    <path
+        android:fillColor="@color/launcher_foreground"
+        android:pathData="M38,36 H70 A6,6 0 0 1 76,42 V47 H32 V42 A6,6 0 0 1 38,36 Z" />
+    <!-- Rings -->
+    <path
+        android:fillColor="@color/launcher_foreground"
+        android:pathData="M42.5,29 a2.5,2.5 0 0 1 2.5,2.5 v8 a2.5,2.5 0 0 1 -5,0 v-8 a2.5,2.5 0 0 1 2.5,-2.5 Z M65.5,29 a2.5,2.5 0 0 1 2.5,2.5 v8 a2.5,2.5 0 0 1 -5,0 v-8 a2.5,2.5 0 0 1 2.5,-2.5 Z" />
+    <!-- Check mark -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M43,61 L50,68 L65,53"
+        android:strokeWidth="5"
+        android:strokeColor="@color/launcher_foreground"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

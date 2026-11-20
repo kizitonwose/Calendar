@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android Auto Backup (Android 11 and lower): the database and its settings. -->
+<full-backup-content>
+    <include domain="database" path="." />
+</full-backup-content>

@@ -6,6 +6,11 @@ composeMultiplatform = "1.10.0"
 espresso = "3.7.0"
 junit5 = "6.0.2"
 kotlinxSerialization = "1.9.0"
+ksp = "2.3.4"
+room = "2.8.4"
+work = "2.11.0"
+lifecycle = "2.10.0"
+glance = "1.1.1"
 
 [libraries]
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -14,6 +19,8 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.7.1" }
 desugar = { module = "com.android.tools:desugar_jdk_libs", version = "2.1.5" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.10.2" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.2" }
 
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.9.1" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
@@ -42,6 +49,17 @@ compose-material3 = { module = "androidx.compose.material3:material3", version =
 compose-material-icons = { module = "androidx.compose.material:material-icons-core", version = "1.7.8" }
 compose-activity = { module = "androidx.activity:activity-compose", version = "1.12.2" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version = "2.9.6" }
+compose-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+compose-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+androidx-glance-appwidget = { module = "androidx.glance:glance-appwidget", version.ref = "glance" }
+androidx-glance-material3 = { module = "androidx.glance:glance-material3", version.ref = "glance" }
+androidx-biometric = { module = "androidx.biometric:biometric", version = "1.1.0" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version = "1.8.9" }
 
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeAndroid" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeAndroid" }
@@ -63,3 +81,7 @@ versionCheck = { id = "com.github.ben-manes.versions", version = "0.53.0" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+# Work calendar app
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }

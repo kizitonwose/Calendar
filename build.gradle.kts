@@ -23,6 +23,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.jetbrainsCompose) apply false
     alias(libs.plugins.kotlinSerialization) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.room) apply false
     alias(libs.plugins.versionCheck)
 }
 
@@ -37,7 +39,8 @@ allprojects {
     plugins.withType<KotlinBasePlugin> {
         @OptIn(ExperimentalAbiValidation::class)
         extensions.configure<KotlinProjectExtension> {
-            if ("sample" !in project.name) {
+            // Sample and app projects have no public API to validate.
+            if ("sample" !in project.name && !project.path.startsWith(":workcalendar")) {
                 when (this) {
                     is KotlinJvmProjectExtension -> extensions.configure<AbiValidationExtension> {
                         enabled = true
