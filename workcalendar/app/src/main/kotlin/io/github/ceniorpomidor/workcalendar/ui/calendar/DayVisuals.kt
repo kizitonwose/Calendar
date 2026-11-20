@@ -112,7 +112,7 @@ internal enum class CalendarMark(
 
     fun ink(style: CalendarStyle) = Color(if (style.dark) nightInk else dayInk)
 
-    fun fill(style: CalendarStyle) = lerp(style.paper, ink(style), if (style.dark) 0.22f else 0.14f)
+    fun fill(style: CalendarStyle) = lerp(style.paper, ink(style), if (style.dark) 0.16f else 0.14f)
 }
 
 internal fun DayInfo?.calendarMark(): CalendarMark? = when (this?.state) {
@@ -331,15 +331,16 @@ internal fun CalendarMarkTag(mark: CalendarMark, style: CalendarStyle, symbolOnl
 @Composable
 internal fun PayoutTag(label: String, received: Boolean, style: CalendarStyle, symbolOnly: Boolean = false) {
     val ink = if (style.dark) Color(0xFFE7C897) else Color(0xFF775123)
-    val fill = if (received) lerp(style.paper, ink, 0.3f) else style.paper
+    val fill = if (received) ink else style.paper
+    val foreground = if (received) style.onAccent else ink
     Box(
         Modifier.widthIn(min = 13.dp).background(fill, tagShape).border(0.75.dp, ink.copy(alpha = 0.72f), tagShape).padding(horizontal = 2.dp),
         contentAlignment = Alignment.Center,
     ) {
         if (symbolOnly) {
-            Icon(AppIcons.Wallet, contentDescription = null, modifier = Modifier.size(10.dp), tint = ink)
+            Icon(AppIcons.Wallet, contentDescription = null, modifier = Modifier.size(10.dp), tint = foreground)
         } else {
-            Text(label, style = markerText, color = ink, maxLines = 1)
+            Text(label, style = markerText, color = foreground, maxLines = 1)
         }
     }
 }
