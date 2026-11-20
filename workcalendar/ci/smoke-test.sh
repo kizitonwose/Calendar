@@ -172,6 +172,9 @@ for theme in "Синие ленты" "Пастель" "Комикс" "Графф
   $UI route "settings/display"
   $UI tap "Календарь" 1 || exit 1
   $UI tap "Тема календаря ·" 0 1 15 || exit 1
+  if [ "$theme" = "Синие ленты" ]; then
+    $UI dump theme-picker 0 "Тема календаря" "Офисные стикеры" || exit 1
+  fi
   $UI tap-until "$theme" "Тема календаря · $theme" || exit 1
   $UI route "calendar"
   $UI tap "Сегодня" 1 || exit 1
@@ -255,12 +258,17 @@ if [ "$(adb shell date +%F | tr -d '\r')" = "$D1" ]; then
   $UI notification-action "Полностью" "Смена завершена" || exit 1
   $UI notifications "Часы сохранены" 10 || exit 1
   adb shell cmd statusbar collapse
-  # Remind five minutes before the next shift ends, then enter hours in the shade.
+  # Remind twelve hours before the next shift ends, then enter hours in the shade.
   $UI route "settings/notifications"
   $UI tap "Меньше" 1 || exit 1
   $UI dump signed-offset 0 "=-5" || exit 1
+  $UI tap "Смещение, мин" 1 || exit 1
+  adb shell input keycombination 113 29
+  $UI type "-720"
+  $UI hide-keyboard
+  $UI dump signed-offset-limit 0 "=-720" || exit 1
   adb shell input keyevent 3
-  $UI set-time "${D2}T17:55:10"
+  $UI set-time "${D2}T06:00:10"
   $UI notifications "Отметьте часы смены" || exit 1
   adb shell cmd statusbar expand-notifications
   sleep 2

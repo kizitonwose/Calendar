@@ -1,5 +1,7 @@
 package io.github.ceniorpomidor.workcalendar.ui.calendar
 
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -27,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kizitonwose.calendar.compose.CalendarState
@@ -195,11 +199,25 @@ fun CalendarScreen(
     }
     val otherUnconfirmed = if (markShift != null) state.unconfirmedTotal - (if (markAwaiting) 1 else 0) else 0
 
+    val art = state.settings.calendar.art
+    val style = calendarStyle(art)
     Scaffold(
+        containerColor = style.background,
+        contentColor = style.ink,
         topBar = {
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = style.background,
+                    titleContentColor = style.ink,
+                    actionIconContentColor = style.ink,
+                ),
                 title = {
-                    Text(Formats.monthTitle(visibleMonth), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    BasicText(
+                        Formats.monthTitle(visibleMonth),
+                        style = style.titleStyle.copy(color = style.ink),
+                        maxLines = 2,
+                        autoSize = TextAutoSize.StepBased(14.sp, style.titleStyle.fontSize, 1.sp),
+                    )
                 },
                 actions = {
                     IconButton(onClick = { scope.launch { calendarState.animateScrollToMonth(visibleMonth.minusMonths(1)) } }) {
@@ -236,14 +254,13 @@ fun CalendarScreen(
         },
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
-        val art = state.settings.calendar.art
         val showSummary = state.settings.calendar.showMonthSummary
         val summaryRow: @Composable () -> Unit = {
-            MonthSummaryRow(state.summaries[visibleMonth], onOpenFinance)
+            MonthSummaryRow(state.summaries[visibleMonth], style, onOpenFinance)
         }
         val calendar: @Composable (Dp) -> Unit = { cellHeight ->
-            Column(Modifier.padding(horizontal = 6.dp).monthSheet(art)) {
-                WeekHeader(daysOfWeek(firstDayOfWeek), street = art == CalendarArt.GRAFFITI)
+            Column(Modifier.padding(horizontal = 12.dp).calendarSheet(style, textured = true)) {
+                WeekHeader(daysOfWeek(firstDayOfWeek), style)
                 HorizontalCalendar(
                     state = calendarState,
                     dayContent = { day ->
@@ -258,29 +275,24 @@ fun CalendarScreen(
                             vm.select(day.date)
                             onNewShift(day.date, state.days[day.date]?.shifts?.any { it.isActive } == true)
                         }
-                        if (art == CalendarArt.CLASSIC) {
-                            DayCell(
-                                day = day,
-                                info = info,
-                                selected = day.date == selected,
-                                today = today,
-                                showHolidays = state.settings.calendar.showHolidays,
-                                compact = state.settings.calendar.compactDays,
-                                height = cellHeight,
-                                onClick = click,
-                                onLongClick = longClick,
-                            )
-                        } else {
-                            val date = day.date
-                            val band = art == CalendarArt.BANDS
-                            ArtDay(
-                                art, day, info, date == selected, today, state.settings.calendar.showHolidays, cellHeight,
-                                state.settings.calendar.compactDays,
-                                joinsLeft = band && date.dayOfWeek != firstDayOfWeek && state.days[date.minusDays(1)]?.shifts?.any { it.isActive } == true,
-                                joinsRight = band && date.plusDays(1).dayOfWeek != firstDayOfWeek && state.days[date.plusDays(1)]?.shifts?.any { it.isActive } == true,
-                                onClick = click, onLongClick = longClick,
-                            )
-                        }
+                        val date = day.date
+                        val isBand = art == CalendarArt.BANDS && info.calendarMark()?.isWork == true
+                        DayCell(
+                            day = day,
+                            info = info,
+                            selected = date == selected,
+                            today = today,
+                            showHolidays = state.settings.calendar.showHolidays,
+                            compact = state.settings.calendar.compactDays,
+                            height = cellHeight,
+                            style = style,
+                            onClick = click,
+                            onLongClick = longClick,
+                            joinsLeft = isBand && date.dayOfWeek != firstDayOfWeek &&
+                                state.days[date.minusDays(1)].calendarMark()?.isWork == true,
+                            joinsRight = isBand && date.plusDays(1).dayOfWeek != firstDayOfWeek &&
+                                state.days[date.plusDays(1)].calendarMark()?.isWork == true,
+                        )
                     },
                 )
             }
@@ -304,15 +316,16 @@ fun CalendarScreen(
                 onOpenPayout = { onOpenPayout(it.key) },
                 onOpenUnconfirmed = onOpenUnconfirmed,
                 onSetupSchedule = onSetupSchedule,
-                modifier = if (art == CalendarArt.CLASSIC) modifier else modifier.monthSheet(if (art == CalendarArt.GRAFFITI) CalendarArt.BANDS else art),
+                headingStyle = style.titleStyle.copy(fontSize = if (art == CalendarArt.OFFICE) 23.sp else 16.sp),
+                modifier = modifier.padding(horizontal = 12.dp).padding(top = 6.dp, bottom = 4.dp).calendarSheet(style),
             )
         }
 
-        BoxWithConstraints(Modifier.fillMaxSize().padding(padding).calendarBackdrop(art)) {
+        BoxWithConstraints(Modifier.fillMaxSize().padding(padding).calendarBackdrop(style)) {
             if (maxWidth > maxHeight) {
                 // Landscape and large screens: the calendar on the left, the day on the right.
                 val calendarWidth = maxWidth * 0.55f
-                val byWidth = (calendarWidth - 12.dp) / 7 * 1.25f
+                val byWidth = (calendarWidth - 24.dp) / 7 * 1.25f
                 val byHeight = (maxHeight - WEEK_HEADER_HEIGHT - 8.dp) / 6
                 val cellHeight = minOf(byWidth, byHeight).coerceAtLeast(28.dp)
                 Row(Modifier.fillMaxSize()) {
@@ -323,7 +336,7 @@ fun CalendarScreen(
                     }
                 }
             } else {
-                val byWidth = (maxWidth - 12.dp) / 7 * 1.25f
+                val byWidth = (maxWidth - 24.dp) / 7 * 1.25f
                 val summaryHeight = if (showSummary) SUMMARY_ROW_HEIGHT else 0.dp
                 val byHeight = (maxHeight - summaryHeight - WEEK_HEADER_HEIGHT - MIN_PANEL_HEIGHT) / 6
                 val cellHeight = minOf(byWidth, byHeight).coerceIn(40.dp, 96.dp)
@@ -432,28 +445,28 @@ private fun CalendarState.isAligned(): Boolean {
 
 /** Totals of the month; a month that is not loaded yet keeps the same layout with dashes. */
 @Composable
-private fun MonthSummaryRow(summary: PeriodSummary?, onClick: () -> Unit) {
-    val colors = MaterialTheme.colorScheme
+private fun MonthSummaryRow(summary: PeriodSummary?, style: CalendarStyle, onClick: () -> Unit) {
     Surface(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
         shape = RoundedCornerShape(18.dp),
-        color = colors.surfaceContainerLow,
+        color = style.paper,
+        contentColor = style.ink,
     ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-            SummaryValue("Часы / план", summary?.let { "${Formats.hoursDecimal(it.workedMinutes)} / ${Formats.hoursDecimal(it.plannedMinutes)}" } ?: "—", Modifier.weight(1f))
-            VerticalDivider(Modifier.height(26.dp), color = colors.outlineVariant)
-            SummaryValue("Заработано", summary?.let { money(it.confirmedEarnings) } ?: "—", Modifier.weight(1.2f), colors.primary)
-            VerticalDivider(Modifier.height(26.dp), color = colors.outlineVariant)
-            SummaryValue("Смены", summary?.let { "${it.workedShifts} из ${it.scheduledShifts}" } ?: "—", Modifier.weight(1f))
+            SummaryValue("Часы / план", summary?.let { "${Formats.hoursDecimal(it.workedMinutes)} / ${Formats.hoursDecimal(it.plannedMinutes)}" } ?: "—", Modifier.weight(1f), style)
+            VerticalDivider(Modifier.height(26.dp), color = style.rule)
+            SummaryValue("Заработано", summary?.let { money(it.confirmedEarnings) } ?: "—", Modifier.weight(1.2f), style, style.accent)
+            VerticalDivider(Modifier.height(26.dp), color = style.rule)
+            SummaryValue("Смены", summary?.let { "${it.workedShifts} из ${it.scheduledShifts}" } ?: "—", Modifier.weight(1f), style)
         }
     }
 }
 
 @Composable
-private fun SummaryValue(label: String, value: String, modifier: Modifier, color: Color = MaterialTheme.colorScheme.onSurface) {
+private fun SummaryValue(label: String, value: String, modifier: Modifier, style: CalendarStyle, color: Color = style.ink) {
     Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = color, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = style.secondaryInk, maxLines = 1)
     }
 }

@@ -148,10 +148,10 @@ fun NotificationSettingsScreen(container: AppContainer, settings: AppSettings, o
                     "Смещение, мин",
                     n.shiftEndDelayMinutes,
                     { v -> update { it.copy(notifications = it.notifications.copy(shiftEndDelayMinutes = v)) } },
-                    -240..240,
+                    -720..240,
                     step = 5,
                 )
-                Text("−15 — за 15 минут до конца смены, 0 — в момент окончания, 15 — через 15 минут после.")
+                Text("Укажите от −720 до 240 минут. При −720 напоминание придёт за 12 часов до конца смены, при 0 — в момент окончания.")
             }
             SectionCard(title = "Неподтверждённые часы") {
                 SwitchRow("Ежедневное напоминание", "Если есть смены без отмеченных часов", n.unconfirmedReminder) { v ->

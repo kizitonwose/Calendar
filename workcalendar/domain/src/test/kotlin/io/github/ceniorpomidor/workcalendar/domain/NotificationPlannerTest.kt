@@ -54,10 +54,11 @@ class NotificationPlannerTest {
         val night = shift(10, "2026-10-05", start = "16:00", end = "00:10")
         val start = night.plannedStart
         val shifts = listOf(night)
-        for (offset in listOf(-240, -15, 0, 15, 240)) {
+        for (offset in listOf(-720, -240, -15, 0, 15, 240)) {
             val expected = night.plannedEnd.plusMinutes(offset.toLong())
             val planner = NotificationPlanner(NotificationSettings(shiftEndDelayMinutes = offset), TestData.zone)
-            val n = planner.plan(start, expected, shifts, emptyList(), emptyList(), emptySet()).single { it.kind == NotificationKind.SHIFT_END }
+            val n = planner.plan(start.minusHours(12), expected, shifts, emptyList(), emptyList(), emptySet())
+                .single { it.kind == NotificationKind.SHIFT_END }
             assertEquals(expected, n.triggerAt)
             assertEquals(n, planner.findDue(n.key, expected, shifts, emptyList(), emptyList(), snoozed = false))
             if (offset < 0) {
