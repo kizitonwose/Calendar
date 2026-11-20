@@ -365,7 +365,7 @@ fun CalendarScreen(
             confirmButton = { TextButton(onClick = { choosingPayout = false }) { Text("Закрыть") } },
         )
     }
-    if (legend) LegendDialog(state.settings.calendar.compactDays) { legend = false }
+    if (legend) LegendDialog(style) { legend = false }
     if (editing) {
         DayEditSheet(dayInfo, selected, state.calc?.zone ?: java.time.ZoneId.systemDefault(), dayAlarms, editActions, onDismiss = { editing = false })
     }
