@@ -32,5 +32,7 @@ include(":compose")
 include(":sample")
 include(":compose-multiplatform:library")
 include(":compose-multiplatform:sample")
+include(":workcalendar:domain")
+include(":workcalendar:app")
 
 rootProject.name = "Calendar"

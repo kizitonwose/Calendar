@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Календарь · Бета</string>
+    <string name="widget_name">Календарь · Бета</string>
+    <string name="widget_description">Месяц, ближайшая смена и быстрые действия</string>
+    <string name="channel_shifts">Окончание смен</string>
+    <string name="channel_shifts_description">Предложение отметить отработанные часы после смены</string>
+    <string name="channel_reminders">Неподтверждённые часы</string>
+    <string name="channel_reminders_description">Ежедневное напоминание о сменах без отмеченных часов</string>
+    <string name="channel_payouts">Аванс и зарплата</string>
+    <string name="channel_payouts_description">Напоминания о предстоящих выплатах с расчётной суммой</string>
+    <string name="channel_absences">Отпускные и больничные</string>
+    <string name="channel_absences_description">Напоминания о выплате отпускных и пособия</string>
+    <string name="channel_alarm">Будильник</string>
+    <string name="channel_alarm_description">Звонок будильника перед сменой и в выбранные дни. Здесь можно выбрать мелодию и вибрацию</string>
+    <string name="channel_alarm_status">Отложенный будильник</string>
+    <string name="channel_alarm_status_description">Время повторного звонка с кнопкой «Выключить»</string>
+</resources>

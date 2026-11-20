@@ -7,9 +7,12 @@ on:
     branches:
       - main
 
+# Checks of the calendar library run in the original repository only: in this fork the
+# Work Calendar app has its own workflow (workcalendar.yml) with lint, tests and an emulator run.
 jobs:
   ktlint:
     name: Ktlint
+    if: github.repository == 'kizitonwose/Calendar'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -24,6 +27,7 @@ jobs:
 
   api-check:
     name: API Check
+    if: github.repository == 'kizitonwose/Calendar'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,6 +40,7 @@ jobs:
 
   unit-tests:
     name: Unit tests
+    if: github.repository == 'kizitonwose/Calendar'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -50,6 +55,7 @@ jobs:
 
   instrumentation-tests:
     name: Instrumentation tests
+    if: github.repository == 'kizitonwose/Calendar'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
